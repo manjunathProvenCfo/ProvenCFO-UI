@@ -1,0 +1,211 @@
+﻿@model  ProvenCfoUI.Models.RolesViewModel
+
+@{
+    ViewBag.Title = "";
+}
+
+
+@using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card mb-3">
+        <div class="card-body overflow-hidden">
+            @if (@ViewBag.ErrorMessage != null)
+            {
+                @Html.Hidden("RoleCreateOrUpdate", (object)@ViewBag.ErrorMessage, new { @id = "RoleCreateOrUpdate" });
+            }
+            @if (@ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    <p>@ViewBag.Message</p>
+                </div>
+
+            }
+
+            @if (Model.id == null)
+            {
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create New User Role</h3>
+            }
+            else
+            {
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit User Role</h3>
+            }
+
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <form method="post" action="CreateRole">
+
+                        <div class="row form-group custom-form-width">
+                            <div class="col-12 col-lg-8 col-xl-5">
+                                @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+
+                                @Html.HiddenFor(x => x.id, "id")
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-create-name">Role Name</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
+                                        @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
+                                        <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="roleexist" class=""></span></span>
+                                    </div>
+                                    @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Status</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                    </div>
+                                    @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                </div>
+
+
+                                @*<div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+                                    </div>*@
+
+                                <div class="row align-items-center form-group mb-0">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
+                                        @if (Model.id == null)
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateRole", "Role")">Create</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateRole", "Role")">Update</button>
+                                        }
+                                        @Html.ActionLink("Cancel", "Role", "Role", new { }, new { @class = "btn btn-primary ml-2" })
+                                    </div>
+                                    @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
+                                    @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
+                                    @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+<div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        
+        document.getElementById("roleexist").style.display = "none";
+        function CheckExistValidation() {
+            if ($("#name").val() === "" && $("#roleexist").html() !== "") {
+                $('#roleexist').hide();
+                $("#roleexist").html('');
+            }
+        }
+
+
+        $(document).ready(function () {
+
+            //
+            var msg = $('#RoleCreateOrUpdate') != undefined ? $('#RoleCreateOrUpdate').val() : '';
+
+            if (msg != undefined && msg != '' && msg == "Created") {
+                AddAlertRole();
+                $('#RoleCreateOrUpdate').val('');
+            }
+            else if (msg != undefined && msg != '' && msg == "Updated") {
+                UpdateAlertRole();
+                $('#RoleCreateOrUpdate').val('');
+            }
+            else if (msg != undefined && msg != '' && msg == "Exist") {
+
+                $('#roleexist').show();
+                $('#roleexist').html('This User Role has been already taken.')
+                //ExistAlertRole();
+                $('#RoleCreateOrUpdate').val('');
+            }
+
+            $("#btnClear").click(function () {
+                $('select').val("Active");
+                $(this).closest('form').find("input[type=text], textarea").val("");
+            });
+        });
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    //use window.location.href for redirect to download action for download the file
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
+
+        function AddAlertRole() {
+            sweetAlert
+                ({
+                    title: "Created!",
+                    text: "New User Role created successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Role/Role'
+                    });
+        }
+
+        function UpdateAlertRole() {
+            sweetAlert
+                ({
+                    title: "Updated!",
+                    text: "User Role updated successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Role/Role'
+                    });
+        }
+        function ExistAlertRole() {
+            sweetAlert
+                ({
+                    title: "Exist!",
+                    text: "This User Role is exist!",
+                    type: "warning"
+                },
+                    function () {
+                        //window.location.href = '/Role/Role'
+                    });
+        }
+
+
+
+    </script>
+    
+}

@@ -1,0 +1,110 @@
+﻿@model ProvenCfoUI.Models.InviteStaffViewModel
+@{
+    ViewBag.Title = "InviteStaff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData.ModelState.IsValid)
+{
+    if (@ViewBag.Name != null)
+    {
+        <b>
+            Name : @ViewBag.Name<br />
+            Email : @ViewBag.Email<br />
+            Role : @ViewBag.Role<br />
+            SessionTimeout : @ViewBag.SessionTimeout
+        </b>
+    }
+}
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <div class="card">
+        <div class="card-body overflow-hidden pt-5">
+            <div class="row justify-content-center">
+                <div class="col-7 col-md-5">
+                    <img class="img-fluid" src="~/assets/img/illustrations/gifts.png" alt="" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h3 class="mt-3 font-weight-normal fs-2 mt-md-4 fs-md-3">Invite a Staff by sending an Invitation mail.</h3>
+                <p class="lead mx-auto invite-info">
+                    Invite your Staff and start working together in seconds. Invited staffs will receive a welcome email with register link.
+                </p>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 col-md-7 mb-4">
+                    <form>
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-6">
+                                <label for="split-login-email">Name</label>
+                                <div>
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="split-login-email">Email-Address</label>
+                                <div>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-6">
+                                <label for="split-login-email">Role</label><br />-->
+                                <select id="sltCustomers" name="sltCustomers">
+                                    @foreach (var item in Model.Name)
+                                    {
+                                        <option>@item</option>
+                                    }
+                                </select>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="inputGroupSelect01">
+                                        <option selected>Choose...</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2">Partner</option>
+                                        <option value="3">Controller</option>
+                                        <option value="4">Accountant</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="split-login-email">SessionTimeout</label><br />
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="inputGroupSelect01">
+                                        <option selected>Choose...</option>
+                                        <option value="1">6 Hours</option>
+                                        <option value="2">12 hours</option>
+                                        <option value="3">18 Hours</option>
+                                        <option value="4">24 Hours</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center">
+                            <button class="btn btn-primary" type="submit">Send Invitation</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+

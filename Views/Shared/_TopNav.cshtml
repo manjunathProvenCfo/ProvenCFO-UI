@@ -1,0 +1,51 @@
+﻿
+<nav class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand">
+
+    <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button" data-toggle="collapse" data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+    <a class="navbar-brand mr-1 mr-sm-3" href=@Url.Action("Index","Home")>
+        <div class="d-flex align-items-center">
+            @* <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="40" /><span class="text-sans-serif">falcon</span>*@
+            <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="30" /><span class="text-sans-serif" style="font-size:1.2rem">ProvenCFO</span>
+        </div>
+    </a>
+    <div>
+        @{
+            Html.RenderAction("AgencySelection", "AgencyService");
+        }
+    </div>
+    
+    <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
+        @*<li class="nav-item d-none d-md-block">
+                <a class="nav-link px-3 py-0" href="https://prium.github.io/falcon/v3.0.0-beta5/" target="_blank"><img src="assets/img/logos/bootstrap-5.png" alt="" height="35" /></a>
+            </li>*@
+
+        @*@{
+                Html.RenderAction("AgencySelection", "AgencyService");
+            }*@
+        <li class="nav-item dropdown dropdown-on-hover">
+
+            <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                <div class="avatar avatar-xl">
+                    <img class="rounded-circle" id="topProfilePicture" src="@(!string.IsNullOrEmpty(ViewBag.ProfileUrl)?  ViewBag.ProfileUrl:"../assets/img/team/default-logo.png")" alt="" />
+
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="navbarDropdownUser">
+                <div class="bg-white rounded-soft py-2">
+                    @*<a class="dropdown-item font-weight-bold text-warning" href="#!"><span class="fas fa-crown mr-1"></span><span>Go Pro</span></a>*@
+
+                    @*<div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#!">Set status</a>
+                        <a class="dropdown-item" href="pages/profile.html">Profile &amp; account</a>
+                        <a class="dropdown-item" href="#!">Feedback</a>*@
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href=@Url.Action("ChangePassword","Home")>Change Password </a>
+                    <a class="dropdown-item" href=@Url.Action("Profilesetup","Home")>My Profile</a>
+                    <a class="dropdown-item" href=@Url.Action("Logout","Home")>Logout</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,215 @@
+﻿@model ProvenCfoUI.Models.CreateClientVM
+@{
+    ViewBag.Title = "CreateClient";
+}
+
+
+
+@if (ViewData.ModelState.IsValid)
+{
+    if (@ViewBag.Name != null)
+    {
+        <b>
+            ClientName : @ViewBag.ClientName<br />
+            Email : @ViewBag.Email<br />
+            PhoneNumber : @ViewBag.PhoneNumber<br />
+            Address : @ViewBag.Address<br />
+            ContactPersonName : @ViewBag.ContactPersonName
+        </b>
+    }
+}
+
+<script>
+   // document.getElementById("clientExist").style.display = "none";
+</script>
+
+
+@using (Html.BeginForm("CreateClient", "Client", FormMethod.Post))
+{
+
+    @Html.ValidationSummary(true)
+
+    <div class="card">
+        <div class="card-body overflow-hidden">
+            @if (@ViewBag.ErrorMessage != null)
+            {
+                @Html.Hidden("CreateOrUpdate", (object)@ViewBag.ErrorMessage, new { @id = "CreateOrUpdate" });
+            }
+            @if (@ViewBag.Message != null)
+            {
+                <div class="alert alert-success mb-4">
+                    <p class="mb-0">@ViewBag.Message</p>
+                </div>
+            }
+            @if (Model.Id == null || Model.Id == 0)
+            {
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client Agency</h3>
+            }
+            else
+            {
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client Agency</h3>
+            }
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <form method="post" action="createclient">
+                        <div class="row form-group custom-form-width">
+                            <div class="col-12 col-lg-8 col-xl-5">
+                                <div class="row align-items-center form-group">
+                                    @Html.HiddenFor(x => x.Id, "id")
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-create-name" class="mb-0">Client Agency Name</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.ClientName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
+                                        @*@Html.ValidationMessageFor(model => model.ClientName, "", new { @class = "text-danger" })*@
+                                        <span class="text-danger field-validation-error" data-valmsg-for="ClientName" data-valmsg-replace="true"><span id="clientExist" class=""></span></span>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Team</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.TeamList, "Id", "TeamName"), "Select team", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.TeamId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> City</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.CityName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-create-phonenumber" class="mb-0">State</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.StateId, new SelectList(Model.StateList, "Id", "StateName"), "Select state", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                <label for="split-create-phonenumber" class="mb-0">Address </label>
+            </div>
+            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>*@
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Status</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
+            </div>
+            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
+            </div>*@
+                                </div>
+
+
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @if (Model.Id == null || Model.Id == 0)
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Create</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
+                                        }
+                                        @Html.ActionLink("Cancel", "ClientList", "Client", new { }, new { @class = "btn btn-primary ml-2" })
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+
+    <script>
+        $("#clientExist").addClass('d-none');
+        $("#clientExist").html('');
+
+        function CheckExistValidation() {
+            if ($("#ClientName").val() === "" && $("#clientExist").html() !== "") {
+                $('#clientExist').hide();
+                $("#clientExist").addClass('d-none');
+                $("#clientExist").html('');
+            }
+        }
+       // document.getElementById("clientExist").style.display = "none";
+        var msg = $('#CreateOrUpdate') != undefined ? $('#CreateOrUpdate').val() : '';
+
+        if (msg != undefined && msg != '' && msg == "Created") {
+            AddAlertRole();
+            $('#CreateOrUpdate').val('');
+        }
+        else if (msg != undefined && msg != '' && msg == "Updated") {
+            UpdateAlertRole();
+            $('#CreateOrUpdate').val('');
+        }
+        else if (msg != undefined && msg != '' && msg == "Exist") {
+            $('#clientExist').show();           
+            $("#clientExist").removeClass('d-none');
+            $("#clientExist").html('This Client Agency name has been already taken.');
+            $('#CreateOrUpdate').val('');
+        }
+        function AddAlertRole() {
+            sweetAlert
+                ({
+                    title: "Created!",
+                    text: "New Client Agency created successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Client/ClientList'
+                    });
+        }
+        function UpdateAlertRole() {
+            sweetAlert
+                ({
+                    title: "Updated!",
+                    text: "Client Agency updated successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Client/ClientList'
+                    });
+        }
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+
+
+

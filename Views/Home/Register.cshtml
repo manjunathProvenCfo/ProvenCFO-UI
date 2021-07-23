@@ -1,0 +1,255 @@
+﻿@model ProvenCfoUI.Models.RegisterViewModel
+@{ ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProvenCFO</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:100,200,300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/img/favicons/favicon-16x16.png">
+    @*<link rel="shortcut icon" type="image/x-icon" href="~/assets/img/favicons/favicon.ico">*@
+    <link rel="manifest" href="~/assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="~/assets/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    @Styles.Render("~/bundles/customcss")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/customjquery")
+<script type="text/javascript">
+    $(document).ready(function () {
+     
+        //var email = $('#txtEmail').val();
+        //if (email != null && email != '') {
+        //    $('#txtEmail').attr("disabled", "disabled");
+        //}
+    });
+    $('form').on("submit", function () {
+        Validate(null, this);
+    });
+
+    function Validate(ctl, event) {
+        
+        event.preventDefault();
+        swal({
+            title: "Do you want to save it?",
+            text: "Please check Information before Submiting!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Save",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                   
+                        $("#CreateForm").submit();
+                   
+                } else {
+                    swal("Cancelled", "You have Cancelled Form Submission!", "error");
+                }
+            });
+    }
+</script>
+
+@if (ViewData.ModelState.IsValid)
+{
+    if (@ViewBag.Name != null)
+    {
+        <b>
+            firstname : @ViewBag.firstname<br />
+            lastname : @ViewBag.lastname<br />
+            email : @ViewBag.email<br />
+            password : @ViewBag.passwordhash<br />
+            confirmpassword : @ViewBag.confirmpassword
+        </b>}
+}
+
+@using (Html.BeginForm("Register", "Home", FormMethod.Post, new { name = "frm", id = "CreateForm" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="container" data-layout="container">
+        <div class="row flex-center min-vh-100 py-6">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="d-flex flex-center mb-4"><img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="180" />@*<span class="text-sans-serif font-weight-extra-bold fs-5 d-inline-block">ProvenCFO</span>*@</div>
+                <div class="card">
+                    <div class="card-body p-4 p-sm-5">
+                        @Html.HiddenFor(x => x.UserType, "UserType")
+                        @Html.HiddenFor(x => x.AgencyID, "AgencyID")
+                        @Html.HiddenFor(x => x.email, "email")
+                        <div class="row text-left justify-content-between align-items-center mb-2">
+                            <div class="col-auto">
+                                <h5> Register</h5>
+                            </div>
+                            <div class="col-auto">
+                                <p class="fs--1 text-600 mb-0">Have an account? <a href="@Url.Action("Login","Home")">Login</a></p>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="form-group">
+                                @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                <label for="split-login-email">First Name</label>
+                                @Html.EditorFor(model => model.firstname, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.firstname, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                <label for="split-login-email">Last Name</label>
+                                @Html.EditorFor(model => model.lastname, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.lastname, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                <label for="split-login-email">Email address</label>
+                                @if (Model != null && (Model.email == null || Model.email == ""))
+                                {
+                                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @id = "txtEmail" } })
+                                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @id = "txtEmail", @readonly = "readonly" } })
+                                }
+
+
+
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    @*<input class="form-control" type="password" placeholder="Password" id="txtPassword" />*@
+                                    <label for="split-login-password">Password</label>
+                                    @Html.PasswordFor(model => model.passwordhash, new { @class = "form-control text-box single-line" })
+                                    @Html.ValidationMessageFor(model => model.passwordhash, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-6">
+                                    @*<input class="form-control" type="password" placeholder="Confirm Password" id="txtConfirmPassword" />*@
+                                    <label for="split-login-confirmpassword">Confirm Password</label>
+                                    @Html.PasswordFor(model => model.confirmpassword, new { @class = "form-control text-box single-line" })
+                                    @Html.ValidationMessageFor(model => model.confirmpassword, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block mt-3" type="submit" id="btnRegister" onclick="" name="submit">Register</button>
+
+
+                            </div>
+                        </form>
+                        @*<div class="form-group mb-0">
+            <div class="row no-gutters">
+                <div class="col-sm-6 pr-sm-1"><a class="btn btn-outline-google-plus btn-sm btn-block mt-2" href="#"><span class="fab fa-google-plus-g mr-2" data-fa-transform="grow-8"></span> google</a></div>
+                <div class="col-sm-6 pl-sm-1"><a class="btn btn-outline-facebook btn-sm btn-block mt-2" href="#"><span class="fab fa-facebook-square mr-2" data-fa-transform="grow-8"></span> facebook</a></div>
+            </div>
+        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+
+
+
+        $(document).ready(function () {
+         
+            var email = $('#txtEmail').val();
+            if (email != null && email != '') {
+                $('#txtEmail').attr("disabled", "disabled");
+            }
+        });
+    </script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript">
+
+        function Validate(ctl, event) {
+          
+            event.preventDefault();
+            swal({
+                title: "Do you want to save it?",
+                text: "Please check Information before Submiting!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Save",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        if (validateData() == true) {
+                            $("#CreateForm").submit();
+                        }
+                    } else {
+                        swal("Cancelled", "You have Cancelled Form Submission!", "error");
+                    }
+                });
+        }
+    </script>
+}
+
+
+@*@section scripts {
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+
+                $('#linkClose').click(function () {
+                    $('#divError').hide('fade');
+                });
+
+
+                $('#btnRegister').click(function () {
+
+                    var data ={
+                        email: $('#txtEmail').val(),
+                            password: $('#txtPassword').val(),
+                                confirmPassword: $('#txtConfirmPassword').val()
+                    }
+
+                    console.log(data);
+                    $.ajax({
+                        url: 'https://localhost:44341/api/account/register',
+                        method: 'POST',
+                        data: {
+                            email: $('#txtEmail').val(),
+                            password: $('#txtPassword').val(),
+                            confirmPassword: $('#txtConfirmPassword').val()
+                        },
+                        success: function () {
+                            alert('Succecussful')
+                            //$('#successModal').modal('show');
+                        },
+                        error: function (jqXHR) {
+                            $('#divErrorText').text(jqXHR.responseText);
+                            $('#divError').show('fade');
+                        }
+                    });
+                });
+            });
+        </script>
+
+    }*@

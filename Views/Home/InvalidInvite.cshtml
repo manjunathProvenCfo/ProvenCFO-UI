@@ -1,0 +1,50 @@
+﻿@*<!DOCTYPE html>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Error</title>
+    </head>
+    <body>
+        <hgroup>
+            <h1>Error.</h1>
+            <h2>An error occurred while processing your request.</h2>
+        </hgroup>
+    </body>
+    </html>*@
+@{ 
+    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+}
+@Styles.Render("~/bundles/customcss")
+@Scripts.Render("~/bundles/modernizr")
+
+
+<div class="container" data-layout="container">
+    <div class="row flex-center min-vh-100 py-6 text-center">
+        <div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5">
+            <a class="d-flex flex-center mb-4" href=@Url.Action("Index","Home")><img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="150" />@*<span class="text-sans-serif font-weight-extra-bold fs-5 d-inline-block">falcon</span>*@</a>
+            <div class="card">
+                <div class="card-body p-4 p-sm-5">
+                    <div class="display-1 text-500 fs-error"></div>
+                    @if (TempData["InviteType"] != null && TempData["InviteType"].ToString() == "InvalidInvite")
+                    {
+                        <p class="lead mt-4 text-800 text-sans-serif font-weight-semi-bold">Sorry, the invitation in this link is expired.</p>
+                        <p class="lead mt-4 text-800 text-sans-serif">Please contact the administrators of the ProvenCFO Management Application to receive a new application.</p>
+
+                    }
+                    else if (TempData["InviteType"] == null && TempData["InviteType"].ToString() == "InviteRegisterd")
+                    {
+                        <p class="lead mt-4 text-800 text-sans-serif font-weight-semi-bold">This email-id is already registered ..</p>
+                    }
+
+                    <hr />
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,216 @@
+﻿using Proven.Model;
+using Proven.Service;
+using ProvenCfoUI.Comman;
+using ProvenCfoUI.Helper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace ProvenCfoUI.Controllers
+{
+    //abcd
+    [CustomAuthenticationFilter]
+    public class SetupController : Controller
+    {
+        // GET: Setup
+        string errorMessage = string.Empty;
+        string errorDescription = string.Empty;
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CheckSession]
+        public ActionResult JobTitle()
+        {
+            using (SetupService obj = new SetupService())
+            {
+                var objResult = obj.GetJobTitleList();
+                return View(objResult.ResultData);
+            }
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public ActionResult CreateJobTitle(JobTitleModel jobTitleModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (SetupService obj = new SetupService())
+                    {
+                        JobTitleModel JobTitleVM = new JobTitleModel();
+                        var LoginUserid = Session["UserId"].ToString();
+                        var result = new JobTitleModel();
+
+                        if (jobTitleModel.Id == 0)
+                        {
+                            var Existresult = obj.GetJobTitleByTitle(jobTitleModel.Title);
+                            if (Existresult != null)
+                            {
+                                ViewBag.ErrorMessage = "Exist";
+                                return View("AddJobTitle", JobTitleVM);
+                            }
+
+                            result = obj.AddJobTitle(jobTitleModel.Title, jobTitleModel.JobCode, jobTitleModel.Status.ToString().Trim(), LoginUserid);
+                            ViewBag.ErrorMessage = "Created";
+                        }
+
+                        else
+                        {
+                            var Existresult = obj.GetJobTitleByTitle(jobTitleModel.Title);
+                            JobTitleVM.Id = jobTitleModel.Id;
+                            JobTitleVM.Title = jobTitleModel.Title;
+                            JobTitleVM.JobCode = jobTitleModel.JobCode;
+                            JobTitleVM.Status = jobTitleModel.Status;
+                            JobTitleVM.CreatedBy = jobTitleModel.CreatedBy;
+                            JobTitleVM.CreatedDate = jobTitleModel.CreatedDate;
+                            if (Existresult != null && Existresult.Id != jobTitleModel.Id)
+                            {
+                                ViewBag.ErrorMessage = "Exist";
+                                return View("AddJobTitle", JobTitleVM);
+                            }
+                            result = obj.UpdateJobTitle(Convert.ToString(jobTitleModel.Id), jobTitleModel.Title, jobTitleModel.JobCode, jobTitleModel.Status.ToString().Trim(),Convert.ToString(jobTitleModel.IsDeleted), LoginUserid);
+                            ViewBag.ErrorMessage = "Updated";
+                            return View("AddJobTitle", JobTitleVM);
+                        }
+
+                        if (result == null)
+                            ViewBag.ErrorMessage = "";
+                        //return RedirectToAction("Role");
+
+                        return View("AddJobTitle", JobTitleVM);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    //return RedirectToAction("Role");
+                }
+            }
+            return View("AddJobTitle", jobTitleModel);
+        }
+
+        [CheckSession]
+        public ActionResult UpdateJobTitle(JobTitleModel jobTitleModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (SetupService obj = new SetupService())
+                    {
+                        var LoginUserid = Session["UserId"].ToString();
+                        var result = obj.UpdateJobTitle(Convert.ToString(jobTitleModel.Id), jobTitleModel.Title, jobTitleModel.JobCode, Convert.ToString(jobTitleModel.Status), Convert.ToString(jobTitleModel.IsDeleted), LoginUserid);
+                        if (result == null)
+                            ViewBag.ErrorMessage = "";
+                        return RedirectToAction("jobTitleModel");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View();
+                }
+            }
+            // return View();
+            return JavaScript("AlertJobTitle");
+        }
+
+        [CheckSession]
+        public ActionResult AddJobTitle()
+        {
+            JobTitleModel result = new JobTitleModel();
+            return View(result);
+        }
+
+        [CheckSession]
+        public ActionResult EditJobTitle(int? id)
+        {
+            using (SetupService service = new SetupService())
+            {
+                JobTitleModel result = new JobTitleModel();
+
+                if (id > 0)
+                {
+                    result = service.GetJobTitleList().ResultData.Where(w => w.Id == id).FirstOrDefault();
+                }
+                return View("AddJobTitle", result);
+            }
+
+        }
+
+        [CheckSession]
+        public ActionResult SaveJobTilte(JobTitleModel model)
+        {
+            using (SetupService service = new SetupService())
+            {
+                var result = service.SaveJobTitle(model);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [CheckSession]
+        public JsonResult DeleteJobTitle(int id)
+        {
+            using (SetupService objInvite = new SetupService())
+            {
+                var result = objInvite.DeleteJobTitle(id);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [CheckSession]
+        public ActionResult DeactivateJobTitle(int Id)
+        {
+            try
+            {
+                using (SetupService obj = new SetupService())
+                {
+                    var result = obj.RetireJobTitle(Id);
+                    if (result == null)
+                        ViewBag.ErrorMessage = "Can't deacactivte";
+                    return RedirectToAction("JobTitle");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "";
+                //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
+                return View();
+            }
+        }
+
+        [CheckSession]
+        public JsonResult ExportToExcel()
+        {
+            try
+            {
+                using (SetupService objsetup = new SetupService())
+                {
+
+                    Utltity obj = new Utltity();
+                    var objResult = objsetup.GetJobTitleList().ResultData.Select(s => new
+                    {
+                        Job_Title_ID = s.Id,
+                        Job_Title = s.Title,
+                        Job_Code = s.JobCode,
+                        Status = s.Status == "0" ? "Inactive" : "Active",
+                        Created_By = s.CreatedByUser,
+                        Created_Date = (s.CreatedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.CreatedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.CreatedDate.ToString("MM/dd/yyyy").Replace("-", "/"),
+                        Modified_By = s.ModifiedByUser,
+                        Modified_Date = (s.ModifiedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.ModifiedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.ModifiedDate.ToString("MM/dd/yyyy").Replace("-", "/")
+                    }).ToList();
+                    string filename = obj.ExportTOExcel("JobTitlesList", obj.ToDataTable(objResult));
+                    return Json(filename, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
+                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
+                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                throw ex;
+            }
+        }
+
+    }
+}

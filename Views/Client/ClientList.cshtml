@@ -1,0 +1,220 @@
+﻿@model IEnumerable<Proven.Model.ClientModel>
+
+@{
+    ViewBag.Title = "ClientList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<div>@Html.Partial("_Header")</div>*@
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Client Agencies</h5>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm"> 
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions">
+                    <button class="btn btn-falcon-default btn-sm" type="button">
+                        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create New Client Agency</a></span>
+                    </button>
+                    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+                    </button>
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ml-1">
+                        <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span>
+                    </button>
+                </div>
+              </div>
+        </div>
+    </div>
+              
+              
+                        <div class="card-body px-0 pt-0">
+                            <div class="dashboard-data-table">
+                                <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                                    <thead class="bg-200 text-900">
+                                        <tr>
+                                            <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                                </div>
+                                            </th>
+                                            <th class="sort pr-1 align-middle"> Client Agency Name</th>
+                                            <th class="sort pr-1 align-middle">
+                                                City
+                                            </th>
+                                            <th class="sort pr-1 align-middle">
+                                                State
+                                            </th>
+                                            <th class="sort pr-1 align-middle">
+                                                Status
+                                            </th>
+                                            <th class="sort pr-1 align-middle">
+                                                Created Date
+                                            </th>
+                                            <th class="no-sort pr-1 align-middle text-center">Action</th>
+
+                                            @*<th class="sort pr-1 align-middle text-center">Action</th>*@
+
+                                            @*<th class="no-sort pr-1 align-middle data-table-row-action">
+                                                    Action
+                                                </th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="purchases">
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr class="btn-reveal-trigger">
+                                                <td class="align-middle">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
+                                                        <label class="custom-control-label" for="@item.Id"></label>
+                                                    </div>
+                                                </td>
+
+                                                <td class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                </td>
+                                                <th class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.CityName)
+                                                </th>
+                                                <th class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.StateName)
+                                                </th>
+                                                <th class="align-middle">
+                                                    @if (item.Status == true)
+                                                    {
+                                                        <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
+                                                    }
+                                                  
+                                                </th>
+                                                <th class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.CreatedDate, "{0:MM/dd/yyyy}")                                                  
+                                                </th>                                               
+                                                <td class="align-middle text-center pr-3">
+                                                    <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>
+                                                            <i class="far fa-edit"> </i>
+                                                        </a>
+                                                    </span>
+                                                    <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <a href="#" onclick="deleteClient('@item.Id')">
+                                                            <i class="far fa-trash-alt"> </i>
+                                                        </a>
+                                                    </span>
+                                                    <span class="d-none d-sm-inline-block ml-2">
+                                                        @if (item.Status == true)
+                                                        {
+                                                            <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Inactive"})'>
+                                                                <i class="far far fas fa-power-off"> </i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Active"})'>
+                                                                <i class="far far fas fa-plug"> </i>
+                                                            </a>
+                                                        }
+
+                                                    </span>
+                                                    @*<input id="Delete" onclick="deleteClient('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
+                                                    @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+@section Scripts {
+    <script>
+        var ExportToExcel = function () {
+           
+            ExportFileReq("Client", "ExportToExcel");
+        }
+
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    //use window.location.href for redirect to download action for download the file
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
+
+        function deleteClient(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Do you really want to delete this Client Agency?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonColor: "#ec6c62"
+            },
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Client/DeleteClient/' + Id,
+                        //data: { id: id },
+                    })
+                        .done(function (data) {
+                          
+                            sweetAlert
+                                ({
+                                    title: "Deleted!",
+                                    text: "Client Agency successfully deleted!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.reload();
+                                    });
+                        })
+                        .error(function (data) {
+                          
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        });
+                });
+        }
+
+    </script>
+}
+

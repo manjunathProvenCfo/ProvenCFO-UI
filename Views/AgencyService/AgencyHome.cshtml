@@ -1,0 +1,989 @@
+﻿@model ProvenCfoUI.Models.AgencyClient
+@{
+    ViewBag.Title = "AgencyHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="dashboard-frame">
+   
+  <!--<div class="card mb-4 ">
+        @*@{
+            Html.RenderAction("AgencySelection", "AgencyService");
+        }*@
+        <!--<!--<div class="card-header">
+            <div class="row align-items-center justify-content-between">-->
+                <!--@*<div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agency Home</h5>
+                    </div>*@-->
+                <!--<!--<div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                    <div class="d-none" id="purchases-actions">
+                        <div class="input-group input-group-sm">
+                            <select class="custom-select cus" aria-label="Bulk actions">
+                                <option selected="">Bulk actions</option>
+                                <option value="Delete">Delete</option>
+                                <option value="Archive">Archive</option>
+                            </select>
+                            <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                        </div>
+                    </div>
+                    <div id="dashboard-actions">-->
+                        <!--@*<button class="btn btn-falcon-default btn-sm" type="button">
+                                <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                                <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+                            </button>*@
+                        @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+                        @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                                <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                                <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+                            </button>*@-->
+                        <!--<!--<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ml-1">--><!---->
+                        <!---->@*<a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>*@<!---->
+                        <!--</span>
+                        </button>-->
+                    <!--</div>
+                </div>
+            </div>
+        </div>-->
+        <!--@*@Html.Partial("_AgencySelection")*@
+        @*@{
+                Html.RenderAction("AgencySelection", "AgencyService");
+            }*@
+    </div>-->
+
+    <!--<div class="card px-0 pt-0">
+        <div class="row no-gutters">
+
+            <div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
+                <div class="bg-holder d-none d-xl-block bg-card">
+                </div>-->
+    <!--/.bg-holder-->
+    @*<div class="card-body">
+            <h5>Agency Details: <span id="spClientName"></span></h5>
+            <p class="fs--1" id="spClientAddress"></p>
+            <div>
+                <strong class="mr-2">Status: </strong>
+                <div class="badge badge-pill badge-soft-success fs--2 d-none">Active<span class="fas fa-check ml-1" data-fa-transform="shrink-2"></span></div>
+            </div>
+        </div>*@               @*Commented By Amit From line 61 to 67*@
+
+
+        <div class="row no-gutters">
+            <div class="col-md-6 col-lg-3 mb-3">
+                <div class="card h-md-100">
+                    <div class="card-body">
+                        <div class="row h-100 justify-content-between no-gutters">
+                            <div class="col-auto pr-2">
+                                <h6 class="mt-1">Not in Bank</h6>
+                                <div class="fs--2 mt-3">
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-primary"></span><span class="font-weight-semi-bold">Samsung</span></div>
+                                        <div class="d-xxl-none">93%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5 col-sm-4">
+                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 pl-md-3 mb-3">
+                <div class="card h-md-100">
+                    <div class="card-body">
+                        <div class="row h-100 justify-content-between no-gutters">
+                            <div class="col-auto pr-2">
+                                <h6 class="mt-1">Not in Book</h6>
+                                <div class="fs--2 mt-3">
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-primary"></span><span class="font-weight-semi-bold">Samsung</span></div>
+                                        <div class="d-xxl-none">100%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5 col-sm-4">
+                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":50,"strokeWidth":5,"trailWidth":5}'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 pl-md-3 mb-3">
+                <div class="card h-md-100">
+                    <div class="card-body">
+                        <div class="row h-100 justify-content-between no-gutters">
+                            <div class="col-5 col-sm-6 col-xxl pr-2">
+                                <h6 class="mt-1">Need List</h6>
+                                <div class="fs--2 mt-3">
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Urgent</span></div>
+                                        <div class="d-xxl-none">20%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-orange"></span><span class="font-weight-semi-bold">High</span></div>
+                                        <div class="d-xxl-none"> 30%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Medium</span></div>
+                                        <div class="d-xxl-none"> 35%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-green"></span><span class="font-weight-semi-bold">Low</span></div>
+                                        <div class="d-xxl-none"> 15%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="position-relative">
+                                    <div class="echart-doughnut" data-echart-responsive="true"></div>
+                                    <div class="absolute-centered font-weight-medium text-dark fs-2">26</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 pl-md-3 mb-3">
+                <div class="card h-md-100">
+                    <div class="card-body">
+                        <div class="row h-100 justify-content-between no-gutters">
+                            <div class="col-5 col-sm-6 col-xxl pr-2">
+                                <h6 class="mt-1">Notes</h6>
+                                <div class="fs--2 mt-3">
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Income</span></div>
+                                        <div class="d-xxl-none">15%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-orange"></span><span class="font-weight-semi-bold">Expenses</span></div>
+                                        <div class="d-xxl-none"> 25%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Assest</span></div>
+                                        <div class="d-xxl-none"> 30%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-green"></span><span class="font-weight-semi-bold">Liabilities</span></div>
+                                        <div class="d-xxl-none"> 15%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-blue"></span><span class="font-weight-semi-bold">Equity</span></div>
+                                        <div class="d-xxl-none"> 15%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="position-relative">
+                                    <div class="echart-doughnut" data-echart-responsive="true"></div>
+                                    <div class="absolute-centered font-weight-medium text-dark fs-2">14</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row no-gutters">
+            <div class="col-lg-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-header d-flex flex-between-center bg-light py-2">
+                        <h6 class="mb-0">Overview</h6>
+                        <div class="dropdown text-sans-serif btn-reveal-trigger">
+                            <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-active-user" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="dropdown-active-user">
+                                <div class="bg-white py-2">
+                                    <a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body py-2 overview-content">
+                        <h5 class="mb-3"> <span class="spClientName"></span></h5>
+                        @*I have Did Some Changes Here*@
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Billable Entity</p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span class="spClientName"></span></p>
+                        </div>
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Start Date</p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span id="spCreatedDate"></span></p>
+                        </div>
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Partnership</p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span id="spTeamName"></span></p>
+                        </div>
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Status</p>
+                            <p class="badge badge-success font-weight-normal">Active</p>
+                            <!--<p class="col-md-7 col-xl-8 mb-2 color-gray-shades">-->
+                            @*<san href="#" class="badge badge-success font-weight-normal"><span id="spStatus"></span></san>*@
+                            <!--</p>-->
+                        </div>
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Months as Client</p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades">40</p>
+                        </div>
+                        <div class="row no-gutters mb-2 mb-md-0">
+                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Outstanding Balance</p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades">
+                                $950 <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 pl-lg-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-header d-flex flex-between-center bg-light py-2 mb-4">
+                        <h6 class="mb-0">Your Team</h6>
+                        <div class="dropdown text-sans-serif btn-reveal-trigger">
+                            <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-active-user" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="dropdown-active-user">
+                                <div class="bg-white py-2">
+                                    <a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body py-2 overview-content">
+                        <h5 class="mb-3"> <span class="spClientName"></span></h5>
+
+                        <div class="media align-items-center mb-3">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between align-items-center flex-row">
+                                    <div class="avatar avatar-2xl status-online">
+                                        <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+
+                                    </div>
+                                    <div class="media-body ml-3">
+                                        <p class="mb-2 color-gray-shades"><span id="spStaffName1"></span></p>
+                                        <p class="text-500 fs--2 mb-0"><span id="spJobTitle1"></span></p>
+                                    </div>
+                                </div>
+                                <div class="action-icons">
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fa-envelope'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-rocketchat'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fas fa-phone'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-linkedin'></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between align-items-center flex-row">
+                                    <div class="avatar avatar-2xl status-online">
+                                        <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+
+                                    </div>
+                                    <div class="media-body ml-3">
+                                        <p class="mb-2 color-gray-shades"><span id="spStaffName2"></span></p>
+                                        <p class="text-500 fs--2 mb-0"><span id="spJobTitle2"></span></p>
+                                    </div>
+                                </div>
+                                <div class="action-icons">
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fa-envelope'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-rocketchat'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fas fa-phone'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-linkedin'></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between align-items-center flex-row">
+                                    <div class="avatar avatar-2xl status-online">
+                                        <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+
+                                    </div>
+                                    <div class="media-body ml-3">
+                                        <p class="mb-2 color-gray-shades"><span id="spStaffName3"></span></p>
+                                        <p class="text-500 fs--2 mb-0"><span id="spJobTitle3"></span></p>
+                                    </div>
+                                </div>
+                                <div class="action-icons">
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fa-envelope'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-rocketchat'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fas fa-phone'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-linkedin'></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light p-0">
+                        <a class="btn btn-sm btn-link btn-block py-2" href=@Url.Action("CommunicationMain", "Communication")>
+                            Chat With Team<span class="fas fa-chevron-right ml-1 fs--2"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row no-gutters">
+            <div class="col-lg-6 mb-3">
+                <div class="card h-lg-100">
+                    <div class="card-header">
+                        <div class="row flex-between-center">
+                            <div class="col-auto">
+                                <h6 class="mb-0">Gross Revenue</h6>
+                            </div>
+                            <div class="col-auto d-flex">
+                                <select class="custom-select custom-select-sm select-month mr-2">
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">Jun</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">September</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body h-100 pr-0">
+                        <div class="echart-line-total-sales h-100" data-echart-responsive="true"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pl-lg-3 mb-3">
+                <div class="card h-lg-100">
+                    <div class="card-header">
+                        <div class="row flex-between-center">
+                            <div class="col-auto">
+                                <h6 class="mb-0">Net Income</h6>
+                            </div>
+                            <div class="col-auto d-flex">
+                                <select class="custom-select custom-select-sm select-month mr-2">
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">Jun</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">September</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body h-100 pr-0">
+                        <div class="echart-line-total-sales-2" style="min-height: 300px;" data-echart-responsive="true"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row no-gutters">
+            <div class="col-lg-6 mb-3">
+                <div class="card">
+                    <div class="card-header d-flex flex-between-center bg-light py-4">
+                        <h6 class="mb-0">Monthly Financials</h6>
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">June 2021</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">June 05, 2021</span></p>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">May 2021</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">May 15, 2021</span></p>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-away">
+                                <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">April 2021</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">April 20, 2021</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light p-0">
+                        <a class="btn btn-sm btn-link btn-block py-2" href=@Url.Action("About", "Home")>
+                            Show All<span clas111s="fas fa-chevron-right ml-1 fs--2"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pl-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-header d-flex flex-between-center bg-light py-4">
+                        <h6 class="mb-0">Annual Financials</h6>
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">2020</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">April 20, 2021</span></p>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-online">
+                                <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">2019</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">April 20, 2021</span></p>
+                            </div>
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="avatar avatar-2xl status-away">
+                                <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+
+                            </div>
+                            <div class="media-body ml-3">
+                                <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">2018</a></h6>
+                                <p class="text-500 fs--2 mb-0">Updated <span class="ml-2 d-inline-block">April 20, 2021</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light p-0">
+                        <a class="btn btn-sm btn-link btn-block py-2" href=@Url.Action("About", "Home")>
+                            Show All<span class="fas fa-chevron-right ml-1 fs--2"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/customjquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        <script>
+            $('divClientDetials').addClass('d-none');
+            $(document).ready(function () {
+                AgencyDropdownPartialViewChange();
+                totalSalesInit();
+                totalSalesInitTwo();
+            });
+
+            function AgencyDropdownPartialViewChange() {
+                var ClientID = $("#ddlclient option:selected").val();
+
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+
+                            $('#roleexist').show();
+                            $('.spClientName').html(String(data.Name));
+                            $('#spCreatedDate').html(String(new Date(data.CreatedDate.match(/\d+/)[0] * 1).toDateString()));
+                            $('#spTeamName').html(String(data.TeamName));
+                            $('#spStaffName1').html(String(data.TeamMemberId1));
+                            $('#spStaffName2').html(String(data.TeamMemberId2));
+                            $('#spStaffName3').html(String(data.TeamMemberId3));
+                            $('#spJobTitle1').html(String(data.JobtitleId1));
+                            $('#spJobTitle2').html(String(data.JobtitleId2));
+                            $('#spJobTitle3').html(String(data.JobtitleId3));
+                            $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                            $('#spClientAddress').html(data.CityName + ',' + data.StateName);
+                            $('.badge-soft-success').removeClass('d-none');
+                            SetUserPreferencesForAgency();
+                        }
+                        else {
+
+                            $('#roleexist').hide();
+                            $('#spClientName').html('');
+                            $('#spCreatedDate').html('');
+                            $('#spTeamName').html('');
+                            $('#spStaffName1').html('');
+                            $('#spStaffName2').html('');
+                            $('#spStaffName3').html('');
+                            $('#spJobTitle1').html('');
+                            $('#spJobTitle2').html('');
+                            $('#spJobTitle3').html('');
+                            $('#spStatus').html('');
+                            $('#spClientAddress').html('');
+                            $('.badge-soft-success').addClass('d-none');
+                        }
+                    },
+                    error: function () {
+                        $('#roleexist').hide();
+                        $('#spClientName').html('');
+                        $('#spCreatedDate').html('');
+                        $('#spTeamName').html('');
+                        $('#spStaffName1').html('');
+                        $('#spStaffName2').html('');
+                        $('#spStaffName3').html('');
+                        $('#spJobTitle1').html('');
+                        $('#spJobTitle2').html('');
+                        $('#spJobTitle3').html('');
+                        $('#spStatus').html('');
+                        $('#spClientAddress').html('');
+                        $('.badge-soft-success').addClass('d-none');
+                    }
+                });
+            }
+
+
+            //$.ajax({
+            //    url: '/AgencyService/GetTeamDetails?id=' + ClientID,
+            //    type: "GET",
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (data) {
+            //        if (data != null) {
+
+            //            $('#teamexist').show();
+            //            $('.spteamName').html(String(data.Name));
+            //            $('.badge-soft-success').removeClass('d-none');
+            //            SetUserPreferencesForAgency();
+            //        }
+            //        else {
+
+            //            $('#teamexist').hide();
+            //            $('#spteamName').html('');
+            //            $('.badge-soft-success').addClass('d-none');
+            //        }
+            //    },
+            //    error: function () {
+            //        $('#teamexist').hide();
+            //        $('#spteamName').html('');
+            //        $('.badge-soft-success').addClass('d-none');
+            //    }
+            //});
+
+            var totalSalesInit = function totalSalesInit() {
+                var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales';
+                var SELECT_MONTH = '.select-month';
+                var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                function getFormatter(params) {
+                    var _params$ = params[0],
+                        name = _params$.name,
+                        value = _params$.value;
+                    var date = new Date(name);
+                    return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
+                }
+
+                if ($echartsLineTotalSales) {
+                    // Get options from data attribute
+                    var userOptions = utils.getData($echartsLineTotalSales, 'options');
+                    var chart = window.echarts.init($echartsLineTotalSales);
+                    var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
+
+                    var getDefaultOptions = function getDefaultOptions() {
+                        return {
+                            color: utils.getGrays()['100'],
+                            tooltip: {
+                                trigger: 'axis',
+                                padding: [7, 10],
+                                backgroundColor: utils.getGrays()['100'],
+                                borderColor: utils.getGrays()['300'],
+                                textStyle: {
+                                    color: utils.getColors().dark
+                                },
+                                borderWidth: 1,
+                                formatter: function formatter(params) {
+                                    return getFormatter(params);
+                                },
+                                transitionDuration: 0,
+                                position: function position(pos, params, dom, rect, size) {
+                                    return getPosition(pos, params, dom, rect, size);
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: ['2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16'],
+                                boundaryGap: false,
+                                axisPointer: {
+                                    lineStyle: {
+                                        color: utils.getGrays()['300'],
+                                        type: 'dashed'
+                                    }
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        // color: utils.getGrays()['300'],
+                                        color: utils.rgbaColor('#000', 0.01),
+                                        type: 'dashed'
+                                    }
+                                },
+                                axisTick: {
+                                    show: false
+                                },
+                                axisLabel: {
+                                    color: utils.getGrays()['400'],
+                                    formatter: function formatter(value) {
+                                        var date = new Date(value);
+                                        return "".concat(months[date.getMonth()], " ").concat(date.getDate());
+                                    },
+                                    margin: 15
+                                }
+                            },
+                            yAxis: {
+                                type: 'value',
+                                axisPointer: {
+                                    show: false
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: utils.getGrays()['300'],
+                                        type: 'dashed'
+                                    }
+                                },
+                                boundaryGap: false,
+                                axisLabel: {
+                                    show: true,
+                                    color: utils.getGrays()['400'],
+                                    margin: 15
+                                },
+                                axisTick: {
+                                    show: false
+                                },
+                                axisLine: {
+                                    show: false
+                                }
+                            },
+                            series: [{
+                                type: 'line',
+                                data: monthsnumber[0],
+                                lineStyle: {
+                                    color: utils.getColors().primary
+                                },
+                                itemStyle: {
+                                    borderColor: utils.getColors().primary,
+                                    borderWidth: 2
+                                },
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                smooth: false,
+                                hoverAnimation: true,
+                                areaStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0,
+                                            color: utils.rgbaColor(utils.getColors().primary, 0.2)
+                                        }, {
+                                            offset: 1,
+                                            color: utils.rgbaColor(utils.getColors().primary, 0)
+                                        }]
+                                    }
+                                }
+                            }],
+                            grid: {
+                                right: '28px',
+                                left: '40px',
+                                bottom: '15%',
+                                top: '5%'
+                            }
+                        };
+                    };
+
+                    echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+
+                    var monthSelect = document.querySelector(SELECT_MONTH);
+
+                    if (monthSelect) {
+                        monthSelect.addEventListener('change', function (e) {
+                            var month = e.currentTarget.value;
+                            var data = monthsnumber[month];
+                            chart.setOption({
+                                tooltip: {
+                                    formatter: function formatter(params) {
+                                        var _params$2 = params[0],
+                                            name = _params$2.name,
+                                            value = _params$2.value;
+                                        var date = new Date(name);
+                                        return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
+                                    }
+                                },
+                                xAxis: {
+                                    axisLabel: {
+                                        formatter: function formatter(value) {
+                                            var date = new Date(value);
+                                            return "".concat(months[month], " ").concat(date.getDate());
+                                        },
+                                        margin: 15
+                                    }
+                                },
+                                series: [{
+                                    data: data
+                                }]
+                            });
+                        });
+                    }
+                }
+            };
+            var totalSalesInitTwo = function totalSalesInitTwo() {
+                var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales-2';
+                var SELECT_MONTH = '.select-month';
+                var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                function getFormatter(params) {
+                    var _params$ = params[0],
+                        name = _params$.name,
+                        value = _params$.value;
+                    var date = new Date(name);
+                    return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
+                }
+
+                if ($echartsLineTotalSales) {
+                    // Get options from data attribute
+                    var userOptions = utils.getData($echartsLineTotalSales, 'options');
+                    var chart = window.echarts.init($echartsLineTotalSales);
+                    var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
+
+                    var getDefaultOptions = function getDefaultOptions() {
+                        return {
+                            color: utils.getGrays()['100'],
+                            tooltip: {
+                                trigger: 'axis',
+                                padding: [7, 10],
+                                backgroundColor: utils.getGrays()['100'],
+                                borderColor: utils.getGrays()['300'],
+                                textStyle: {
+                                    color: utils.getColors().dark
+                                },
+                                borderWidth: 1,
+                                formatter: function formatter(params) {
+                                    return getFormatter(params);
+                                },
+                                transitionDuration: 0,
+                                position: function position(pos, params, dom, rect, size) {
+                                    return getPosition(pos, params, dom, rect, size);
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: ['2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16'],
+                                boundaryGap: false,
+                                axisPointer: {
+                                    lineStyle: {
+                                        color: utils.getGrays()['300'],
+                                        type: 'dashed'
+                                    }
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        // color: utils.getGrays()['300'],
+                                        color: utils.rgbaColor('#000', 0.01),
+                                        type: 'dashed'
+                                    }
+                                },
+                                axisTick: {
+                                    show: false
+                                },
+                                axisLabel: {
+                                    color: utils.getGrays()['400'],
+                                    formatter: function formatter(value) {
+                                        var date = new Date(value);
+                                        return "".concat(months[date.getMonth()], " ").concat(date.getDate());
+                                    },
+                                    margin: 15
+                                }
+                            },
+                            yAxis: {
+                                type: 'value',
+                                axisPointer: {
+                                    show: false
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: utils.getGrays()['300'],
+                                        type: 'dashed'
+                                    }
+                                },
+                                boundaryGap: false,
+                                axisLabel: {
+                                    show: true,
+                                    color: utils.getGrays()['400'],
+                                    margin: 15
+                                },
+                                axisTick: {
+                                    show: false
+                                },
+                                axisLine: {
+                                    show: false
+                                }
+                            },
+                            series: [{
+                                type: 'line',
+                                data: monthsnumber[0],
+                                lineStyle: {
+                                    color: utils.getColors().primary
+                                },
+                                itemStyle: {
+                                    borderColor: utils.getColors().primary,
+                                    borderWidth: 2
+                                },
+                                symbol: 'circle',
+                                symbolSize: 10,
+                                smooth: false,
+                                hoverAnimation: true,
+                                areaStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0,
+                                            color: utils.rgbaColor(utils.getColors().primary, 0.2)
+                                        }, {
+                                            offset: 1,
+                                            color: utils.rgbaColor(utils.getColors().primary, 0)
+                                        }]
+                                    }
+                                }
+                            }],
+                            grid: {
+                                right: '28px',
+                                left: '40px',
+                                bottom: '15%',
+                                top: '5%'
+                            }
+                        };
+                    };
+
+                    echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+
+                    var monthSelect = document.querySelector(SELECT_MONTH);
+
+                    if (monthSelect) {
+                        monthSelect.addEventListener('change', function (e) {
+                            var month = e.currentTarget.value;
+                            var data = monthsnumber[month];
+                            chart.setOption({
+                                tooltip: {
+                                    formatter: function formatter(params) {
+                                        var _params$2 = params[0],
+                                            name = _params$2.name,
+                                            value = _params$2.value;
+                                        var date = new Date(name);
+                                        return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
+                                    }
+                                },
+                                xAxis: {
+                                    axisLabel: {
+                                        formatter: function formatter(value) {
+                                            var date = new Date(value);
+                                            return "".concat(months[month], " ").concat(date.getDate());
+                                        },
+                                        margin: 15
+                                    }
+                                },
+                                series: [{
+                                    data: data
+                                }]
+                            });
+                        });
+                    }
+                }
+            };
+
+                                                                                                                //function SetUserPreferences() {
+                                                                                                                //    var ClientID = $("#ddlclient option:selected").val();
+
+                                                                                                                //    $.ajax({
+                                                                                                                //        url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
+                                                                                                                //        type: "POST",
+                                                                                                                //        //data: '{model: ' + JSON.stringify(model) + '}',
+                                                                                                                //        contentType: "application/json; charset=utf-8",
+                                                                                                                //        dataType: "json",
+                                                                                                                //        success: function (data) {
+                                                                                                                //            if (data != null) {
+
+                                                                                                                //            }
+                                                                                                                //            else {
+
+                                                                                                                //            }
+                                                                                                                //        },
+                                                                                                                //        error: function (d) {
+
+                                                                                                                //        }
+                                                                                                                //    });
+
+        </script>
+        <script src="~/assets/js/jquery.min.js"></script>
+        <script src="~/assets/js/popper.min.js"></script>
+        <script src="~/assets/js/bootstrap.min.js"></script>
+        <script src="~/assets/lib/fortawesome/all.min.js"></script>
+        <script src="~/assets/lib/stickyfilljs/stickyfill.min.js"></script>
+        <script src="~/assets/lib/sticky-kit/sticky-kit.min.js"></script>
+        <script src="~/assets/lib/is_js/is.min.js"></script>
+        <script src="~/assets/lib/lodash/lodash.min.js"></script>
+        <script src="~/assets/lib/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <script src="~/assets/js/theme.js"></script>
+
+    }

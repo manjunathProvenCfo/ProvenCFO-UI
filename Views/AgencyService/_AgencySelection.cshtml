@@ -1,0 +1,20 @@
+﻿@model ProvenCfoUI.Models.AgencyClient
+@{
+    ViewBag.Title = "AgencySelection";
+}
+
+
+
+
+@*<div class="card-body bg-light">*@
+    @*<div class="row">*@
+        @*<div class="col-12">*@
+            @*<div class="form-group">*@
+                @*<label for="basic-example">Select an Agency</label>*@
+                <div>
+                    @Html.DropDownListFor(model => model.SelectedClientNameID, new SelectList(Model.ClientList, "Id", "DisplayName"), "Select Agency...", new { @class = "form-control selectpicker", @id = "ddlclient", @onchange = "AgencyDropdownPartialViewChange();" })
+                </div>
+            @*</div>*@
+        @*</div>*@
+    @*</div>*@
+@*</div>*@

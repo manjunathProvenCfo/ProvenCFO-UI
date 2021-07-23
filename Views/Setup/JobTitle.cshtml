@@ -1,0 +1,198 @@
+﻿@model IEnumerable<Proven.Model.JobTitleModel>
+
+
+@{
+    ViewBag.Title = "JobTitleList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+        @*<div>@Html.Partial("_Header")</div>*@
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Job Titles </h5>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm">
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
+
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions">
+                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddJobTitle","SetUp")> Create New Job Title </a></span></button>
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-0 pt-0">
+        <div class="dashboard-data-table">
+            <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                <thead class="bg-200 text-900">
+                    <tr>
+                        @*<th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                </div>
+                            </th>*@
+                        <th class="sort pr-1 align-middle"  width="30%"> Job Title</th>
+
+                        <th class="sort pr-1 align-middle" width="30%"> Job Code</th>
+
+                        <th class="sort pr-1 align-middle" width="30%">Status</th>
+
+                        <th class="no-sort align-middle text-center" width="10%">Actions</th>
+
+                        @*<th class="sort pr-1 align-middle text-center">Delete</th>*@
+
+                        @*<th class="no-sort pr-1 align-middle data-table-row-action">
+                                Action
+                            </th>*@
+                    </tr>
+                </thead>
+                <tbody id="purchases">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="btn-reveal-trigger">
+                            @*<td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
+                                        <label class="custom-control-label" for="@item.Id"></label>
+                                    </div>
+                                </td>*@
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.JobCode)
+                            </td>
+                            <td class="align-middle">
+                                @if (item.Status == "1")
+                                {
+                                    <span class="badge badge-pill badge-success"> Active </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-secondary"> Inactive </span>
+                                }
+                            </td>
+
+                            @*<th><span class="d-none d-sm-inline-block ml-1"><a href="AddJobTitle" onclick="Setup( @item.Id )"> <i class="fas fa-pencil-alt"></i> </a></span>  </th>
+                                <th><span class="d-none d-sm-inline-block ml-1"><a href="#" onclick="deleteJobTitle('@item.Id')"> <i class="far fa-trash-alt"></i> </a></span>  </th>*@
+
+                            <td class="align-middle  text-center">
+                                <span class="d-none d-sm-inline-block"><a href="@Url.Action("EditJobTitle", "Setup", new { id = item.Id })"><i class="fas fa-pencil-alt"></i></a></span>
+                                <span class="d-none d-sm-inline-block ml-2"><a href="#" onclick="deleteJobTitle('@item.Id')"> <i class="far fa-trash-alt"></i> </a></span>
+
+                                <span class="d-none d-sm-inline-block ml-2">
+
+
+                                    @if (item.Status == "1")
+                                    {
+                                        <a href='@Url.Action("DeactivateJobTitle", "Setup", new { Id = item.Id, Status = "true"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+
+                                        <a href='@Url.Action("DeactivateJobTitle", "Setup", new { Id = item.Id, Status = "false"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
+                                </span>
+
+                                @*For Buttons*@
+                                @*<input id="Delete" onclick="deleteJobTitle('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
+
+                                @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
+                            </td>
+                            @*<td class="align-middle">
+                                <span class="d-none d-sm-inline-block ml-1"><a href="#" onclick="deleteJobTitle('@item.Id')"> <i class="far fa-trash-alt"></i> </a></span>
+                                </td>*@
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+    
+
+
+@section Scripts {
+    <script>
+        var ExportToExcel = function () {
+           
+            ExportFileReq("Setup", "ExportToExcel");
+        }
+
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    //use window.location.href for redirect to download action for download the file
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
+
+        function deleteJobTitle(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: " Do you really want to delete this Job Title?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonColor: "#ec6c62"
+            },
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Setup/DeleteJobTitle/' + Id,
+                        //data: { id: id },
+                    })
+                        .done(function (data) {
+                            debugger
+                            sweetAlert
+                                ({
+                                    title: "Deleted!",
+                                    text: "Job Title is successfully deleted!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.reload();
+                                    });
+                        })
+                        .error(function (data) {
+                            debugger
+                            swal("Oops", "We couldn't connect to the server! Please try again", "error");
+                        });
+                });
+        }
+
+    </script>
+}

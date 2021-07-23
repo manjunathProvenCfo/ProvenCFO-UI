@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "CommunicationMain";
+}
+<!--<div class=" mb-4 ">
+    <div class="card-header border-bottom">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Communication</h5>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm">
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions">-->
+                    @*<button class="btn btn-falcon-default btn-sm" type="button">
+                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+                        </button>*@
+                    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+                        </button>*@
+                    <!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ml-1">
+                            <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+
+    <div class="card-body px-0 pt-0">
+        @Html.Partial("_communication")
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(document).ready(function () {
+            AgencyDropdownPartialViewChange();
+
+        });
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+
+            $.ajax({
+                url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        // Write here what should happend once client selected
+                        SetUserPreferencesForAgency();
+                    }
+                    else {
+                        // Write here what should happend once selected client is null
+                    }
+                },
+                error: function () {
+                    // Write here what should happend when action result is errored.
+                }
+            });
+        }
+
+    </script>
+
+}
+
+
+
+

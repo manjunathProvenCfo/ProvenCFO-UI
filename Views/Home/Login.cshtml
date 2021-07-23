@@ -1,0 +1,120 @@
+﻿@model Proven.Model.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+}
+@Styles.Render("~/bundles/customcss")
+@Scripts.Render("~/bundles/modernizr")
+
+
+@if (ViewData.ModelState.IsValid)
+{
+    if (@ViewBag.Name != null)
+    {
+        <b>
+            UserName : @ViewBag.UserName<br />
+            PasswordHash : @ViewBag.PasswordHash
+        </b>
+    }
+}
+
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        @using (Html.BeginForm(null, null, FormMethod.Post))
+        {
+            @Html.ValidationSummary(true)
+
+            <div class="row flex-center min-vh-100 py-6">
+                <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    @if (@ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">
+                            <p>@ViewBag.ErrorMessage</p>
+                        </div>
+                    }
+
+                    @if (@ViewBag.Sucess != null)
+                    {
+                        <div class="alert alert-success">
+                            <p>@ViewBag.Sucess</p> 
+                        </div>
+
+                    }
+
+                    <div class="d-flex flex-center mb-4">
+                        <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="160" />
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3>Login</h3>
+                            </div>
+                            <div class="form-group">
+                                <label for="split-login-email" id='username'>Email Address</label>
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" , @id= "username" } })
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                               
+                            </div>
+                            <div class="form-group">
+                                <div class="d-flex justify-content-between">
+                                    <label for="split-login-password">Password</label>
+                                </div>
+
+                                @Html.PasswordFor(model => model.PasswordHash, new { @class = "form-control text-box single-line"})
+                                @Html.ValidationMessageFor(model => model.PasswordHash, "", new { @class = "text-danger" })
+
+                                <a class="fs--1" style="float:right" href=@Url.Action("ForgotPassword", "Home")>Forgot Password?</a>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                @*<input class="custom-control-input" type="checkbox" id="split-checkbox"  />
+                                <label class="custom-control-label" for="split-checkbox" id="remember_me">Remember me</label>*@
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block mt-3" type="submit" name="submit">Log in</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</main>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+       // $('#frmlogin').submit(function (event) { event.preventDefault(); });
+        $(function () {
+
+            if (localStorage.chkbx && localStorage.chkbx != '') {
+                $('#remember_me').attr('checked', 'checked');
+                $('#username').val(localStorage.usrname);
+                $('#pass').val(localStorage.pass);
+            } else {
+                $('#remember_me').removeAttr('checked');
+                $('#username').val('');
+                $('#pass').val('');
+            }
+
+            $('#remember_me').click(function () {
+
+                if ($('#remember_me').is(':checked')) {
+                  
+                    localStorage.usrname = $('#username').val();
+                    localStorage.pass = $('#pass').val();
+                    localStorage.chkbx = $('#remember_me').val();
+                } else {
+                    localStorage.usrname = '';
+                    localStorage.pass = '';
+                    localStorage.chkbx = '';
+                }
+            });
+        });
+    </script>
+
+}
+
+

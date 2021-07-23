@@ -1,0 +1,206 @@
+﻿@model  Proven.Model.JobTitleModel
+@{
+
+    ViewBag.Title = "";
+   
+}
+
+
+@using (Html.BeginForm("CreateJobTitle", "Setup", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+    <div class="card mb-3">
+    <div class="card-body overflow-hidden pt-2">
+        @if (@ViewBag.ErrorMessage != null)
+        {
+            @Html.Hidden("JobTitleCreateOrUpdate", (object)@ViewBag.ErrorMessage, new { @Id = "JobTitleCreateOrUpdate" });
+        }
+
+        @if (@ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <p>@ViewBag.Message</p>
+            </div>
+
+        }
+    </div>
+
+    <div>
+        <div class="card-header">
+            <div class="row align-items-center justify-content-between">
+
+                <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                    @if (Model.Id == 0)
+                    {
+                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Create New Job Title</h5> }
+                    else
+                    {
+                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Edit Job Title</h5>
+                    }
+
+                </div>
+                <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                    <div class="d-none" id="purchases-actions">
+                        <div class="input-group input-group-sm">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-12 col-md-7 mb-4">
+                <form method="post" action="CreateJobTitle">
+                    <div class="row form-group">
+                        <div class="col-12 col-sm-6">
+                            @Html.HiddenFor(w => w.Id, "Id")
+                            <div class="form-group">
+                                <label for="split-create-name">Job Title Name</label>
+                                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", onfocusout = "CheckExistValidation()" })
+                                @*@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })*@
+                                <span class="text-danger field-validation-error " data-valmsg-for="Title" data-valmsg-replace="true"><span id="JobTitleExist" class=""></span></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="split-login-jobtitlecode"> Job Title Code </label>
+                                @Html.TextBoxFor(model => model.JobCode, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.JobCode, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label for="split-login-Status"> Status</label>
+                                @Html.DropDownListFor(model => model.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "1" }, new SelectListItem { Text = "Inactive", Value = "0" } }, new { @class = "form-control text-box single-line", @Id = "JobStatus" })
+                                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group row">
+                                @if (Model.Id == 0)
+                                {
+                                    <button class="btn btn-primary btn-block mt-2 col-5" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateJobTitle", "Setup")">Create</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-block mt-2 col-5" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateJobTitle", "Setup")">Update</button>
+                                }
+
+                                <div class="float-right">&nbsp;</div>
+                                @Html.ActionLink("Cancel", "JobTitle", "Setup", new { }, new { @class = "btn btn-primary btn-block mt-2 col-5" })
+                            </div>
+                            @*<div class="form-group">
+                        <button class="btn btn-primary" onclick="SaveJobTitle()" id="btnCreate">Save</button>
+
+                        <a class="btn btn-primary ml-3" href="/Setup/JobTitle">Cancel</a>
+                    </div>*@
+
+                        </div>
+                    </div>
+
+            </div>
+
+
+        </div>
+    </div>
+ </div>
+
+ }
+
+
+@section Scripts 
+    {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $("#JobTitleExist").addClass('d-none');
+        $("#JobTitleExist").html('');
+        /* document.getElementById("JobTitleExist").style.display = "none";*/   
+
+        function CheckExistValidation() {
+            if ($("#Title").val() === "" && $("#JobTitleExist").html() !== "") {
+                $('#JobTitleExist').hide();
+                $("#JobTitleExist").addClass('d-none');
+                $("#JobTitleExist").html('');
+            }
+        }
+        $(document).ready(function () {
+
+            //
+            var msg = $('#JobTitleCreateOrUpdate') != undefined ? $('#JobTitleCreateOrUpdate').val() : '';
+           
+            if (msg != undefined && msg != '' && msg == "Created") {
+                AddAlertJobTitle();
+                $('#JobTitleCreateOrUpdate').val('');
+            }
+            else if (msg != undefined && msg != '' && msg == "Updated") {
+                UpdateAlertJobTitle();
+                $('#JobTitleCreateOrUpdate').val('');
+            }
+            else if (msg != undefined && msg != '' && msg == "Exist") {
+                $('#JobTitleExist').show();
+                $("#JobTitleExist").removeClass('d-none');
+                $("#JobTitleExist").html('This Job Title Name has been already taken.');
+                $('#JobTitleCreateOrUpdate').val('');
+            }
+
+            $("#btnClear").click(function () {
+                $('select').val("Active");    //edit kie hai
+                $(this).closest('form').find("input[type=text], textarea").val("");
+            });
+        });
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    //use window.location.href for redirect to download action for download the file
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
+        function AddAlertJobTitle() {
+            sweetAlert
+                ({
+                    title: "Created!",
+                    text: "New Job Title created successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Setup/JobTitle'
+                    });
+        }
+
+        function UpdateAlertJobTitle() {
+            sweetAlert
+                ({
+                    title: "Updated!",
+                    text: "Job Title updated successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Setup/JobTitle'
+                    });
+        }
+        //function ExistAlertJobTitle() {
+        //    sweetAlert
+        //        ({
+        //            title: "Exist!",
+        //            text: "This Job Title already Exists !",
+        //            type: "warning"
+        //        },
+        //            function () {
+        //                window.location.href = '/Setup/JobTitle'
+        //            });
+        //}
+
+
+
+    </script>
+   
+}

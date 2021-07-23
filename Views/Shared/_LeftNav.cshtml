@@ -1,0 +1,180 @@
+﻿@using ProvenCfoUI.Comman
+
+
+<nav class="navbar navbar-vertical navbar-expand-xl navbar-light">
+    <div class="d-flex align-items-center">
+        <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Toggle Navigation">
+                <span class="navbar-toggle-icon"><span class="toggle-line"></span></span>
+            </button>
+
+        </div><a class="navbar-brand" href=@Url.Action("AgencyHome", "AgencyService")>
+            <div class="d-flex align-items-center py-3">
+                <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="120" />
+            </div>
+        </a>
+
+    </div>
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <div class="navbar-vertical-content perfect-scrollbar scrollbar">
+            <ul class="navbar-nav flex-column">
+                @if (Common.IsModuleAccessable("CLS"))
+                {
+                    if (Common.IsFeatureAccessable("AGH"))
+                    {
+                        <li class="nav-item active">
+                            <a class="nav-link" href=@Url.Action("AgencyHome", "AgencyService")>
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><span class="fas fa-home"></span></span><span class="nav-link-text"> Home</span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                    if (Common.IsFeatureAccessable("RCN"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation")>
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><span class="fas fa-handshake"></span></span>
+                                    <span class="nav-link-text"> Reconciliation  <span class="badge badge-pill badge-soft-danger ml-3">36</span></span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-indicator" href="#intelligence" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="intelligence">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-chart-line"></span></span><span class="nav-link-text">Intelligence</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="intelligence" data-parent="#navbarVerticalCollapse">
+                            @if (Common.IsFeatureAccessable("AGH"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("About", "Home")>Dashboards</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("RPT"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("ReportMain", "Reports")>Reports</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("About", "Home")>Notes <span class="badge badge-pill badge-soft-danger ml-3">14</span> </a>
+                                </li>
+                            }
+
+
+
+
+                        </ul>
+                    </li>
+                }
+                @if (Common.IsModuleAccessable("CLS"))
+                {
+                    <li class="nav-item">
+
+                        <a class="nav-link dropdown-indicator" href="#communication" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="communication">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-comments"></span></span><span class="nav-link-text">Communication</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="communication" data-parent="#navbarVerticalCollapse">
+
+                            @if (Common.IsFeatureAccessable("NDS"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("NeedsMain", "Needs")>Needs</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("COM"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("CommunicationMain", "Communication")>Chat</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+
+                @if (Common.IsFeatureAccessable("URS"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href=@Url.Action("RegisteredUserList", "Invitation") )>
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-users"></span></span><span class="nav-link-text"> Users</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+                @if (Common.IsModuleAccessable("ADM"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-indicator" href="#administration" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="administration">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-copy"></span></span><span class="nav-link-text">Administration</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="administration" data-parent="#navbarVerticalCollapse">
+                            @if (Common.IsFeatureAccessable("SUR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("InviteStaffList","Invitation")>Staff Users</a>
+                                </li>
+
+                            }
+                            @if (Common.IsFeatureAccessable("CAG"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("ClientList", "Client")>Client Agencies</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("TEM"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("TeamsList", "Teams")>Teams</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+
+                @if (Common.IsModuleAccessable("STP"))
+                {
+                    <li class="nav-item">
+
+                        <a class="nav-link dropdown-indicator" href="#setup" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="setup">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-fire"></span></span><span class="nav-link-text">Setup</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="setup" data-parent="#navbarVerticalCollapse">
+                            @if (Common.IsFeatureAccessable("JTL"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("JobTitle", "Setup")>Job Titles</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("URL"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("Role", "Role")>User Roles</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("SYS"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href=@Url.Action("About", "Home")>System Settings</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+        </div>
+    </div>
+</nav>
+
