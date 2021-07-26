@@ -81,7 +81,7 @@
                                                             <ul class="nav avatar-group mb-0">
                                                                 @if (Tasks.KanbanAssigneesList != null)
                                                                 {
-                                                                @foreach (var assignee in Tasks.KanbanAssigneesList)
+                                                                foreach (var assignee in Tasks.KanbanAssigneesList)
                                                                 {
                                                                    <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)">
                                                                         <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
