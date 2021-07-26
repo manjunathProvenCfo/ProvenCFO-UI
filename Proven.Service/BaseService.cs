@@ -16,7 +16,7 @@ namespace Proven.Service
         {
 
             //client.BaseAddress = new Uri("http://localhost:27754/Api/");
-           client.BaseAddress = new Uri("http://provencfo.codewarriorsllc.com:27754/Api/");
+           client.BaseAddress = new Uri("http://provencfoapi.codewarriorsllc.com/Api/");
 
 
 
