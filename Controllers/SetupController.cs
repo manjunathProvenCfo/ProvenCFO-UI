@@ -149,12 +149,21 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
-        public JsonResult DeleteJobTitle(int id)
+        public string DeleteJobTitle(int id)
         {
-            using (SetupService objInvite = new SetupService())
+            using (SetupService objJobTitle = new SetupService())
             {
-                var result = objInvite.DeleteJobTitle(id);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                var results = objJobTitle.GetJobUserRoleById(id);
+                if(results != null)
+                {
+                    return results.Status;
+                }
+                else
+                {
+                    var result = objJobTitle.DeleteJobTitle(id);
+                    return (result.Status);
+                }
+                return (results.Status);
             }
         }
 

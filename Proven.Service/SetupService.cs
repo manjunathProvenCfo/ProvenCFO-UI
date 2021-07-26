@@ -218,5 +218,25 @@ namespace Proven.Service
             isDisposed = true;
         }
 
+        public JobTitleModel GetJobUserRoleById(int Id)
+        {
+            response = client.GetAsync("Setup/GetJobUserRoleById?id=" + Id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+
+                var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
+
+                return val;
+
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+
+            }
+        }
+
     }
 }

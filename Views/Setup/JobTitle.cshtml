@@ -159,7 +159,7 @@
         };
 
         function deleteJobTitle(Id) {
-
+            
             swal({
                 title: "Are you sure?",
                 text: " Do you really want to delete this Job Title?",
@@ -176,16 +176,29 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                            debugger
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "Job Title is successfully deleted!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
+                           
+                            if (data = 1) {
+                                swal
+                                    ({
+                                        title: "Not Deleted!",
+                                        text: "Job Title cannot be deleted because of some dependency.",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "Job Title is successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
                         })
                         .error(function (data) {
                             debugger

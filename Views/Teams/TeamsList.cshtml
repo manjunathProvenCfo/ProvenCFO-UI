@@ -6,6 +6,7 @@
 }
 
 
+
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -17,7 +18,6 @@
                     <div class="input-group input-group-sm">
                         <select class="custom-select cus" aria-label="Bulk actions">
                             <option selected="">Bulk actions</option>
-
                             <option value="Delete">Delete</option>
                             <option value="Archive">Archive</option>
                         </select>
@@ -33,73 +33,73 @@
                 </div>
             </div>
         </div>
-        <div class="card-body px-0 pt-0">
-            <div class="dashboard-data-table">
-                <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
-                    <thead class="bg-200 text-900">
-                        <tr>
+    </div>
+    <div class="card-body px-0 pt-0">
+        <div class="dashboard-data-table">
+            <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                <thead class="bg-200 text-900">
+                    <tr>
 
-                            <th class="sort pr-1 align-middle" width="45%">Team Name</th>
-                            <th class="sort pr-1 align-middle" width="45%">Status</th>
-                            <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="purchases">
-                        @foreach (var item in Model)
-                        {
-                            <tr class="btn-reveal-trigger">
+                        <th class="sort pr-1 align-middle" width="45%">Team Name</th>
+                        <th class="sort pr-1 align-middle" width="45%">Status</th>
+                        <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="purchases">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="btn-reveal-trigger">
 
-                                <td class="align-middle">
-                                    @Html.DisplayFor(modelItem => item.TeamName)
-                                </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.TeamName)
+                            </td>
 
-                                <td class="align-middle">
+                            <td class="align-middle">
+                                @if (item.Status == "Active")
+                                {
+                                    <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
+                                }
+                            </td>
+
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block">
+                                    <a href='@Url.Action("EditTeam", "Teams", new { id = item.Id})'>
+                                        <i class="far fa-edit"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    <a href="#" onclick="deleteTeam('@item.Id')">
+                                        <i class="far fa-trash-alt"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-2">
+
                                     @if (item.Status == "Active")
                                     {
-                                        <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
+                                        <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
                                     }
                                     else
                                     {
-                                        <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
+                                        <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
                                     }
-                                </td>
 
-                                <td class="align-middle text-center pr-3">
-                                    <span class="d-none d-sm-inline-block">
-                                        <a href='@Url.Action("EditTeam", "Teams", new { id = item.Id})'>
-                                            <i class="far fa-edit"> </i>
-                                        </a>
-                                    </span>
-                                    <span class="d-none d-sm-inline-block ml-2">
-                                        <a href="#" onclick="deleteTeam('@item.Id')">
-                                            <i class="far fa-trash-alt"> </i>
-                                        </a>
-                                    </span>
-                                    <span class="d-none d-sm-inline-block ml-2">
-
-                                        @if (item.Status == "Active")
-                                        {
-                                            <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Inactive"})'>
-                                                <i class="far far fas fa-plug"> </i>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Active"})'>
-                                                <i class="far far fas fa-power-off"> </i>
-                                            </a>
-                                        }
-
-                                    </span>
-                                </td>
+                                </span>
+                            </td>
 
 
-                            </tr>
-                        }
-                    </tbody>
+                        </tr>
+                    }
+                </tbody>
 
-                </table>
-            </div>
+            </table>
         </div>
     </div>
 </div>

@@ -68,6 +68,25 @@ namespace Proven.Service
 
             }
         }
+        public RolesViewModel GetRoleStatus(string id)
+        {
+            response = client.GetAsync("Role/GetRoleStatus?id=" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+
+                var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
+                //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
+                return val;
+                // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+
+            }
+        }
         public RolesViewModel GetRoleByName(string roleName)
         {
            response = client.GetAsync("Role/GetRoleByName?roleName=" + roleName).Result;
@@ -143,6 +162,8 @@ namespace Proven.Service
             var form = new Dictionary<string, string>
            {
                {"Id", id}
+
+
            };
             content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             response = client.PostAsync("Role/DeleteRole", content).Result;

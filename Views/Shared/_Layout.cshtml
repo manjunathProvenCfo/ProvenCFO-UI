@@ -66,27 +66,25 @@
 </html>
 <script>
     $(document).ready(function () {
-
-        //$('ul.navbar-nav li').on('click', function () {
-        //    $(this).parent().find('li.active').removeClass('active');
-        //    $(this).parent().addClass('active');
-        //});
-        if (localStorage.getItem('SelectedMenu') == null || localStorage.getItem('SelectedMenu') == '') {
+       
+        if ((localStorage.getItem('SelectedMenu') == null || localStorage.getItem('SelectedMenu') == '') && (localStorage.getItem('SelectedSubMenu') == null || localStorage.getItem('SelectedSubMenu') == '')  ) {
             $("#home").addClass("show");
         }
-        $("#" + localStorage.getItem('SelectedMenu')).addClass("show");
-        $('#navbarVerticalCollapse li a').click(function (event) {
-           
-            //event.currentTarget.parentNode.className = (event.currentTarget.parentNode.className).removeClass('active');
-            //event.currentTarget.parentNode.className = (event.currentTarget.parentNode.className).AddClass('active');
-            
+        else {      
+            HighlightMenu();
+        }
+        
+        $('#navbarVerticalCollapse li a').click(function (event) {                       
+            localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
             if (event.currentTarget.parentNode.parentNode.id == '') {
-                localStorage.setItem('SelectedMenu', event.currentTarget.nextElementSibling.id)    
+                localStorage.setItem('SelectedMenu', event.currentTarget.name)    
             }
             else {
                 localStorage.setItem('SelectedMenu', event.currentTarget.parentNode.parentNode.id)   
-            }          
-        });
+            }   
+            HighlightMenu();
+            
+        });      
     });
     function SetUserPreferencesForAgency() {
         var ClientID = $("#ddlclient option:selected").val();
@@ -110,6 +108,20 @@
             }
         });
 
+    }
+    function HighlightMenu() {
+        var activeTabs = $('.nav-item.active');
+        if (activeTabs != null && activeTabs.length > 0) {
+            $.each(activeTabs, function (key, value) {
+                if (value != null) {
+                    $(value).removeClass('active');
+                }
+            });
+        }
+
+        $('#' + localStorage.getItem('SelectedMenu'))[0].className = $('#' + localStorage.getItem('SelectedMenu'))[0].className + ' active';
+        $('#' + localStorage.getItem('SelectedSubMenu'))[0].className = $('#' + localStorage.getItem('SelectedSubMenu'))[0].className + ' active';
+        $("#" + localStorage.getItem('SelectedMenu')).addClass("show");
     }
 
    
