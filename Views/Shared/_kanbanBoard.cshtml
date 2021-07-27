@@ -81,29 +81,30 @@
                                                             <ul class="nav avatar-group mb-0">
                                                                 @if (Tasks.KanbanAssigneesList != null)
                                                                 {
-                                                                foreach (var assignee in Tasks.KanbanAssigneesList)
-                                                                {
-                                                                   <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)">
-                                                                        <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
-                                                                            <div class="avatar avatar-xl">
-                                                                                <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
-
-                                                                            </div>
-                                                                        </a>
-                                                                        <div class="dropdown-menu dropdown-md px-0 py-3">
-                                                                            <div class="d-flex align-items-center position-relative px-3">
-                                                                                <div class="avatar avatar-2xl me-2">
+                                                                    foreach (var assignee in Tasks.KanbanAssigneesList)
+                                                                    {
+                                                                        <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)">
+                                                                            <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
+                                                                                <div class="avatar avatar-xl">
                                                                                     <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
 
                                                                                 </div>
-                                                                                <div class="flex-1">
-                                                                                    <h6 class="mb-0"><a class="stretched-link text-900" href="#">Anna Karinina</a></h6>
+                                                                            </a>
+                                                                            <div class="dropdown-menu dropdown-md px-0 py-3">
+                                                                                <div class="d-flex align-items-center position-relative px-3">
+                                                                                    <div class="avatar avatar-2xl me-2">
+                                                                                        <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
+
+                                                                                    </div>
+                                                                                    <div class="flex-1">
+                                                                                        <h6 class="mb-0"><a class="stretched-link text-900" href="#">Anna Karinina</a></h6>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </li>
+                                                                        </li>
+                                                                    }
                                                                 }
-                                                                }
+
                                                             </ul>
                                                         </div>
                                                     </div>

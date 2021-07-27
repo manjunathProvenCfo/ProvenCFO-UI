@@ -4,7 +4,122 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .modalattPreview {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: black;
+    }
 
+    /* Modal Content */
+    .modal-content1Preview {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        width: 90%;
+        max-width: 1200px;
+    }
+
+   
+    /* The Close Button */
+    .close {
+        color: white;
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        font-size: 35px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #999;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    /* Hide the slides by default */
+    .mySlides {
+        display: none;
+        margin-left: 15%;
+        margin-right: 15%;
+        margin-bottom: 15%;
+    }
+
+    /* Next & previous buttons */
+    .prev,
+    .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -50px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+        color: #f2f2f2;
+        font-size: 12px;
+        padding: 8px 12px;
+        position: absolute;
+        top: 0;
+    }
+
+    /* Caption text */
+    .caption-container {
+        text-align: center;
+        background-color: black;
+        padding: 2px 16px;
+        color: white;
+    }
+
+    img.demo {
+        opacity: 0.6;
+    }
+
+    .active,
+    .demo:hover {
+        opacity: 1;
+    }
+
+    img.hover-shadow {
+        transition: 0.3s;
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    
+</style>
 <!--<div class="card mb-4 ">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">-->
@@ -71,7 +186,7 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
 
-
+        
 
 
 
@@ -726,6 +841,7 @@
                 $.each(attachmentsList, function (key, item) {
                     if (item != null) {
                         var bgimage = item.FilePath;
+                        var Openimage = item.FilePath;
                         var uploadedTime = item.CreatedDateForDisplay == null ? '0d: 0h: 0m: 1s age ' : item.CreatedDateForDisplay;
                         if (item.FileType.toUpperCase() == 'PDF') {
                             bgimage = '../../assets/img/kanban/I_PDF.png';
@@ -747,13 +863,13 @@
                         }
                         if (IsViewMode == true && $('#attachmentContainer #att_' + item.Id).length == 0) {
                             var singlCode = "'";
-                            var att = '<div class="media align-items-center mb-3" id="att_' + item.Id + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
+                            var att = '<div class="media align-items-center mb-3" id="att_' + item.Id + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
                             $('#attachmentContainer').prepend(att);
                         }
                         else {
                             var singlCode = "'";
                             var TempAttchmentID = ($('#attachmentContainer_Add media').length) + 1;
-                            var att = '<div class="media align-items-center mb-3" id="att_' + TempAttchmentID + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemovveFileOnCreate(' + TempAttchmentID + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime +  '</p></div></div>';
+                            var att = '<div class="media align-items-center mb-3" id="att_' + TempAttchmentID + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemovveFileOnCreate(' + TempAttchmentID + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime +  '</p></div></div>';
                             $('#attachmentContainer_Add').prepend(att);
                         }
                       
@@ -866,6 +982,52 @@
                     function () {
                         //window.location.href = '/Role/Role'
                     });
+        }
+
+
+        function openModal(filepath, IsShow) {
+            
+
+            var extension = filepath.substr((filepath.lastIndexOf('.') + 1));
+            switch (extension.toLowerCase()) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif': 
+                case 'jfif': 
+                    if (IsShow != undefined && IsShow == true) {
+                        $("#myModal").css("display", "block");
+                        $(".mySlides").css("display", "block");
+                        $("#imgPreview").attr("src", filepath);
+                        setTimeout(function () { $('.fancybox-button--close').click(); }, 100); 
+                    }
+                    break; 
+                case 'zip':
+                case 'rar':                 
+                case 'pdf':
+                case 'txt':
+                case 'xls':
+                case 'xlsx':
+                case 'csv':
+
+                    window.open(filepath, '_blank');
+                    setTimeout(function () { $('.fancybox-button--close').click(); }, 500); 
+                    
+                    break;
+                default:
+                    break;
+            }
+
+
+
+
+        }
+
+        function closeModal() {
+            $("#myModal").css("display", "none");
+            $(".mySlides").css("display", "none");
+            $("#imgPreview").attr("src", "");
+            //document.getElementById("myModal").style.display = "none";
         }
     </script>
 

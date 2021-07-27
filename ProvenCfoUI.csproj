@@ -480,6 +480,8 @@
     <Content Include="assets\lib\fortawesome\all.min.js" />
     <Content Include="assets\lib\fullcalendar\main.min.css" />
     <Content Include="assets\lib\fullcalendar\main.min.js" />
+    <Content Include="assets\lib\glightbox\glightbox.min.css" />
+    <Content Include="assets\lib\glightbox\glightbox.min.js" />
     <Content Include="assets\lib\is_js\is.min.js" />
     <Content Include="assets\lib\jquery-countdown\jquery.countdown.min.js" />
     <Content Include="assets\lib\jquery-validation\jquery.validate.min.js" />
