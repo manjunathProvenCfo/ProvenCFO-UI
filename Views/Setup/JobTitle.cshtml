@@ -176,12 +176,13 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                           
+                            console.log(data);
                             if (data = 1) {
+                                
                                 swal
                                     ({
-                                        title: "Not Deleted!",
-                                        text: "Job Title cannot be deleted because of some dependency.",
+                                        title: "Couldn't Delete!",
+                                        text: "This Job Title is associated with Staff User.",
                                         type: "warning"
                                     },
                                         function () {

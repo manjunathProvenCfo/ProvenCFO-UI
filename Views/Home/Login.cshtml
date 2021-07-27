@@ -4,6 +4,7 @@
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_LayoutDefault.cshtml";
 }
+@Styles.Render("~/assets/AvertaWebFont/provencfo.css")
 @Styles.Render("~/bundles/customcss")
 @Scripts.Render("~/bundles/modernizr")
 
@@ -37,7 +38,7 @@
                     @if (@ViewBag.Sucess != null)
                     {
                         <div class="alert alert-success">
-                            <p>@ViewBag.Sucess</p> 
+                            <p>@ViewBag.Sucess</p>
                         </div>
 
                     }
@@ -53,23 +54,23 @@
                             </div>
                             <div class="form-group">
                                 <label for="split-login-email" id='username'>Email Address</label>
-                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" , @id= "username" } })
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @id = "username" } })
                                 @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                               
+
                             </div>
                             <div class="form-group">
                                 <div class="d-flex justify-content-between">
                                     <label for="split-login-password">Password</label>
                                 </div>
 
-                                @Html.PasswordFor(model => model.PasswordHash, new { @class = "form-control text-box single-line"})
+                                @Html.PasswordFor(model => model.PasswordHash, new { @class = "form-control text-box single-line" })
                                 @Html.ValidationMessageFor(model => model.PasswordHash, "", new { @class = "text-danger" })
 
                                 <a class="fs--1" style="float:right" href=@Url.Action("ForgotPassword", "Home")>Forgot Password?</a>
                             </div>
                             <div class="custom-control custom-checkbox">
                                 @*<input class="custom-control-input" type="checkbox" id="split-checkbox"  />
-                                <label class="custom-control-label" for="split-checkbox" id="remember_me">Remember me</label>*@
+                                    <label class="custom-control-label" for="split-checkbox" id="remember_me">Remember me</label>*@
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary btn-block mt-3" type="submit" name="submit">Log in</button>
@@ -86,7 +87,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-       // $('#frmlogin').submit(function (event) { event.preventDefault(); });
+        // $('#frmlogin').submit(function (event) { event.preventDefault(); });
         $(function () {
 
             if (localStorage.chkbx && localStorage.chkbx != '') {
@@ -102,7 +103,7 @@
             $('#remember_me').click(function () {
 
                 if ($('#remember_me').is(':checked')) {
-                  
+
                     localStorage.usrname = $('#username').val();
                     localStorage.pass = $('#pass').val();
                     localStorage.chkbx = $('#remember_me').val();
