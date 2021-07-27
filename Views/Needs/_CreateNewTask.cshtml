@@ -105,52 +105,59 @@
                                             </div>
                                         </div>
                                     </div>
-                                        <div id="attachmentContainer_Add">
+                                    <div id="attachmentContainer_Add">
                                     </div>
-                                        <div class="media align-items-center mb-3">
-                                            <div class="table table-striped" class="files" id="previews" style="margin-top:40px">
+                                    <div class="media align-items-center mb-3">
+                                        <div class="table table-striped" class="files" id="previews" style="margin-top:40px">
 
-                                                <div id="template" class="file-row">
-                                                    <!-- This is used as the file preview template -->
-                                                    <div>
-                                                        <span class="preview"><img data-dz-thumbnail /></span>
+                                            <div id="template" class="file-row">
+                                                <!-- This is used as the file preview template -->
+                                                <div>
+                                                    <span class="preview"><img data-dz-thumbnail /></span>
+                                                </div>
+                                                <div>
+                                                    <p class="name" data-dz-name></p>
+                                                    <strong class="error text-danger" data-dz-errormessage></strong>
+                                                </div>
+                                                <div>
+                                                    <p class="size" data-dz-size></p>
+                                                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
                                                     </div>
-                                                    <div>
-                                                        <p class="name" data-dz-name></p>
-                                                        <strong class="error text-danger" data-dz-errormessage></strong>
-                                                    </div>
-                                                    <div>
-                                                        <p class="size" data-dz-size></p>
-                                                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="actions">
-                                                        <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;">
-                                                            <i class="glyphicon glyphicon-upload"></i>
-                                                            <span>Upload</span>
-                                                        </button>
-                                                        <span class="mx-1">|</span>
-                                                        <button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
-                                                            <i class="glyphicon glyphicon-ban-circle"></i>
-                                                            <input type="hidden" name="" value="" class="name" data-dz-name />
-                                                            <span>Cancel</span>
-                                                        </button>
-                                                        <span class="mx-1">|</span>
-                                                        <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
-                                                            <i class="glyphicon glyphicon-trash"></i>
-                                                            <input type="hidden" name="" value="" class="name" data-dz-name />
-                                                            <span>Remove</span>
-                                                        </button>
+                                                </div>
+                                                <div id="actions">
+                                                    <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;">
+                                                        <i class="glyphicon glyphicon-upload"></i>
+                                                        <span>Upload</span>
+                                                    </button>
+                                                    <span class="mx-1">|</span>
+                                                    <button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                                        <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                        <span>Cancel</span>
+                                                    </button>
+                                                    <span class="mx-1">|</span>
+                                                    <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                                        <i class="glyphicon glyphicon-trash"></i>
+                                                        <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                        <span>Remove</span>
+                                                    </button>
 
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                      
-                                        
+                                    </div>
 
-                                    
+                                    <div id="myModal" class="modalattPreview">
+                                        <span class="close cursor" onclick="closeModal()">&times;</span>
+                                        <div class="modal-content1Preview">
+
+                                            <div class="mySlides">
+                                                <div class="numbertext">1 / 4</div>
+                                                <img id="imgPreview" src="../assets/img/team/default-logo.png" style="width:100%">
+                                            </div>
+                                        </div>
+                                    </div>                                    
                                     <hr class="my-4" />
                                 </div>
                             </div>

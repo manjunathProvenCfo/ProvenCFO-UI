@@ -118,10 +118,15 @@
                 }
             });
         }
-
-        $('#' + localStorage.getItem('SelectedMenu'))[0].className = $('#' + localStorage.getItem('SelectedMenu'))[0].className + ' active';
-        $('#' + localStorage.getItem('SelectedSubMenu'))[0].className = $('#' + localStorage.getItem('SelectedSubMenu'))[0].className + ' active';
-        $("#" + localStorage.getItem('SelectedMenu')).addClass("show");
+        if (location.href.indexOf('AgencyHome') != -1) {
+            $('#menu_home').addClass('active');
+        }
+        else {
+            $('#' + localStorage.getItem('SelectedMenu'))[0].className = $('#' + localStorage.getItem('SelectedMenu'))[0].className + ' active';
+            $('#' + localStorage.getItem('SelectedSubMenu'))[0].className = $('#' + localStorage.getItem('SelectedSubMenu'))[0].className + ' active';
+            $("#" + localStorage.getItem('SelectedMenu')).addClass("show");
+        }
+        
     }
 
    

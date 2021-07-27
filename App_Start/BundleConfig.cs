@@ -99,7 +99,8 @@ namespace ProvenCfoUI
                     "~/assets/css/theme.css",
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
-                     "~/assets/lib/dropzone/dropzone.min.css"
+                     "~/assets/lib/dropzone/dropzone.min.css",                     
+                     "~/assets/lib/fancybox/jquery.fancybox.min.css"
 
                     ));
 
