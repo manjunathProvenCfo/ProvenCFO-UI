@@ -828,15 +828,16 @@
         }
         function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
             var singlCode = "'";
+            var attachmentContainer = IsViewMode == true ? $('#attachmentContainer') : $('#attachmentContainer_Add');
+            if (IsClearExisting == true) {
+                $.each(attachmentContainer.children(), function (key, item) {
+                    if (item != null && item.attributes['id'] != undefined) {
+                        item.remove();
+                    }
+                });
+            }
             if (attachmentsList != null && attachmentsList.length > 0) {
-                var attachmentContainer = IsViewMode == true ? $('#attachmentContainer') : $('#attachmentContainer_Add');                
-                if (IsClearExisting == true) {
-                    $.each(attachmentContainer.children(), function (key, item) {
-                        if (item != null && item.attributes['id'] != undefined) {
-                            item.remove();
-                        }
-                    });
-                }
+               
                
                 $.each(attachmentsList, function (key, item) {
                     if (item != null) {
