@@ -163,7 +163,7 @@ namespace ProvenCfoUI.Controllers
                     var result = objJobTitle.DeleteJobTitle(id);
                     return (result.Status);
                 }
-                return (results.Status);
+                return results.Status;
             }
         }
 

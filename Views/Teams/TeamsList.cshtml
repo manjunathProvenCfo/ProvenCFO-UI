@@ -141,6 +141,7 @@
                 closeOnConfirm: false,
                 confirmButtonText: "Yes, delete it!",
                 confirmButtonColor: "#ec6c62"
+
             },
                 function () {
                     $.ajax({
@@ -149,16 +150,29 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                            debugger
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "Team is successfully deleted!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
+                            if (data == 'Active') {
+                                sweetAlert
+                                    ({
+                                        title: "Couldn't Delete!",
+                                        text: "This Team is associated with Client",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "Team is successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+
                         })
                         .error(function (data) {
                             debugger

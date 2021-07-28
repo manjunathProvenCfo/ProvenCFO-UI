@@ -206,6 +206,22 @@ namespace Proven.Service
             isDisposed = true;
         }
 
+        public TeamsVM GetTeamClientById(int Id)
+        {
+            response = client.GetAsync("Teams/GetTeamClientById?Id=" + Id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
+                return val;
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+            }
+        }
+
     }
 
 }

@@ -23,7 +23,7 @@ namespace ProvenCfoUI.Controllers
             using (TeamsService obj = new TeamsService())
             {
                 var objResult = obj.GetTeamsList();
-                
+
                 return View(objResult.ResultData);
             }
         }
@@ -38,7 +38,7 @@ namespace ProvenCfoUI.Controllers
                 result.StaffList = obj.GetRegisteredStaffUserList().resultData;
             }
 
-                return View(result);
+            return View(result);
         }
 
         [CheckSession]
@@ -65,7 +65,7 @@ namespace ProvenCfoUI.Controllers
                     objvm.ModifiedDate = result.ModifiedDate;
                     return View("AddTeams", objvm);
                 }
-                    
+
             }
 
         }
@@ -110,7 +110,7 @@ namespace ProvenCfoUI.Controllers
                                 teamsVM.CreatedBy = team.CreatedBy;
                                 teamsVM.CreatedDate = team.CreatedDate;
                                 teamsVM.IsDeleted = team.IsDeleted;
-                                
+
                                 if (Existresult != null && Existresult.Id != team.Id)
                                 {
                                     ViewBag.ErrorMessage = "Exist";
@@ -170,23 +170,23 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
-        public ActionResult DeleteTeam(int Id)
+        public string DeleteTeam(int Id)
         {
-            try
+            using (TeamsService objTeams = new TeamsService())
             {
-                using (TeamsService obj = new TeamsService())
+                var results = objTeams.GetTeamClientById(Id);
+                if (results != null)
                 {
-                    var result = obj.DeleteTeams(Id);
-                    if (result == null)
-                        ViewBag.ErrorMessage = "Can't Delete";
-
-                    return RedirectToAction("TeamsList");
+                    return results.Status;
                 }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "";
-                return View();
+                else
+                {
+                    var result = objTeams.DeleteTeams(Id);
+                    return result.Status;
+                    //if (result == null)
+                    //    ViewBag.ErrorMessage = "Can't Delete"; 
+                }
+                return results.Status;
             }
         }
 
