@@ -47,10 +47,6 @@ namespace Proven.Model
         public string JobtitleId1 { get; set; }
         public string JobtitleId2 { get; set; }
         public string JobtitleId3 { get; set; }
-        public string ProfileImage { get; set; }
-        public string ProfileImage1 { get; set; }
-        public string ProfileImage2 { get; set; }
-        public string ProfileImage3 { get; set; }
 
 
         public int? TeamId { get; set; }
