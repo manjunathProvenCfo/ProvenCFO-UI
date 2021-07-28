@@ -12,7 +12,7 @@ namespace ProvenCfoUI
                         "~/Scripts/jquery-{version}.js"));
 
             //bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
-                       
+
             //         "~/assets/js/jquery.min.js" ,
             //         "~/assets/js/popper.min.js", 
             //         "~/assets/js/bootstrap.min.js" ,
@@ -29,28 +29,28 @@ namespace ProvenCfoUI
 
             bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
              "~/assets/js/jquery.min.js",
-             "~/assets/js/popper.min.js" ,
-             "~/assets/js/bootstrap.min.js" ,
+             "~/assets/js/popper.min.js",
+             "~/assets/js/bootstrap.min.js",
              "~/assets/lib/fortawesome/all.min.js",
-             "~/assets/lib/stickyfilljs/stickyfill.min.js" ,
-             "~/assets/lib/sticky-kit/sticky-kit.min.js" ,
-             "~/assets/lib/is_js/is.min.js" ,
-             "~/assets/lib/lodash/lodash.min.js" ,
-             "~/assets/lib/perfect-scrollbar/perfect-scrollbar.js" ,
+             "~/assets/lib/stickyfilljs/stickyfill.min.js",
+             "~/assets/lib/sticky-kit/sticky-kit.min.js",
+             "~/assets/lib/is_js/is.min.js",
+             "~/assets/lib/lodash/lodash.min.js",
+             "~/assets/lib/perfect-scrollbar/perfect-scrollbar.js",
              "~/assets/lib/chart.js/Chart.min.js",
-             "~/assets/lib/datatables/js/jquery.dataTables.min.js" ,
-             "~/assets/lib/datatables-bs4/dataTables.bootstrap4.min.js" ,
-             "~/assets/lib/datatables.net-responsive/dataTables.responsive.js" ,
-             "~/assets/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js" ,
+             "~/assets/lib/datatables/js/jquery.dataTables.min.js",
+             "~/assets/lib/datatables-bs4/dataTables.bootstrap4.min.js",
+             "~/assets/lib/datatables.net-responsive/dataTables.responsive.js",
+             "~/assets/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js",
              "~/assets/lib/leaflet/leaflet.js",
-             "~/assets/lib/leaflet.markercluster/leaflet.markercluster.js" ,
-             "~/assets/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js" ,
+             "~/assets/lib/leaflet.markercluster/leaflet.markercluster.js",
+             "~/assets/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js",
              "~/assets/js/theme.js",
              "~/assets/lib/select2/select2.min.js",
              "~/assets/lib/shopify-draggable/draggable.bundle.js",
              "~/assets/lib/lightbox2/js/lightbox.min.js",
              "~/assets/lib/fancybox/jquery.fancybox.min.js",
-             "~/assets/lib/echarts/echarts.min.js", 
+             "~/assets/lib/echarts/echarts.min.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/anchor.min.js",
              "~/assets/lib/prismjs/prism.js",
@@ -88,7 +88,7 @@ namespace ProvenCfoUI
             //         ));
 
             bundles.Add(new StyleBundle("~/bundles/customcss").Include(
-                  "~/assets/css/common.css" ,
+                  "~/assets/css/common.css",
                   "~/assets/js/config.navbar-vertical.js",
                    "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
                     "~/assets/lib/datatables-bs4/dataTables.bootstrap4.min.css",
@@ -99,7 +99,7 @@ namespace ProvenCfoUI
                     "~/assets/css/theme.css",
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
-                     "~/assets/lib/dropzone/dropzone.min.css",                     
+                     "~/assets/lib/dropzone/dropzone.min.css",
                      "~/assets/lib/fancybox/jquery.fancybox.min.css"
 
                     ));
