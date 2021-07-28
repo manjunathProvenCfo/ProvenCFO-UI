@@ -259,7 +259,7 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl status-online">
-                                        <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+                                        <img class="rounded-circle" id="spProfileImage1"/>
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -287,7 +287,8 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl status-online">
-                                        <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+                                        @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
+                                        <img class="rounded-circle" id="spProfileImage2" />
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -315,7 +316,8 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl status-online">
-                                        <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+                                        @*<img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />*@
+                                        <img class="rounded-circle" id="spProfileImage3" />
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -541,6 +543,9 @@
                             $('#spJobTitle1').html(String(data.JobtitleId1));
                             $('#spJobTitle2').html(String(data.JobtitleId2));
                             $('#spJobTitle3').html(String(data.JobtitleId3));
+                            $('#spProfileImage1').attr('src', data.ProfileImage1);
+                            $('#spProfileImage2').attr('src', data.ProfileImage2);
+                            $('#spProfileImage3').attr('src', data.ProfileImage3);
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                             $('.badge-soft-success').removeClass('d-none');
@@ -558,6 +563,9 @@
                             $('#spJobTitle1').html('');
                             $('#spJobTitle2').html('');
                             $('#spJobTitle3').html('');
+                            $('#spProfileImage1').html('');
+                            $('#spProfileImage2').html('');
+                            $('#spProfileImage3').html('');
                             $('#spStatus').html('');
                             $('#spClientAddress').html('');
                             $('.badge-soft-success').addClass('d-none');
@@ -574,6 +582,9 @@
                         $('#spJobTitle1').html('');
                         $('#spJobTitle2').html('');
                         $('#spJobTitle3').html('');
+                        $('#spProfileImage1').html('');
+                        $('#spProfileImage2').html('');
+                        $('#spProfileImage3').html('');
                         $('#spStatus').html('');
                         $('#spClientAddress').html('');
                         $('.badge-soft-success').addClass('d-none');
