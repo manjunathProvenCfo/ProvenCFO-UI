@@ -383,21 +383,20 @@
         }
         function ValidationSuccessMessage1(message) {
             swal({
-                title: "Sucess",
+                title: "Success!",
                 text: message,
-                type: "success",
-                timer: 3000
+                type: "success"
             },
                 function () {
                     window.location.href = '/Home/ProfileSetup'
+                    /*window.location.reload();*/
                 });
         }
         function ValidationSuccessMessage(message) {
             swal({
-                title: "Sucess",
+                title: "Success!",
                 text: message,
-                type: "success",
-                timer: 3000
+                type: "success"
             },
                 function () {
                     window.location.href = '/Home/Login'
@@ -407,8 +406,7 @@
             swal({
                 title: "Error",
                 text: message,
-                type: "error",
-                timer: 3000
+                type: "error"
             });
 
         }
