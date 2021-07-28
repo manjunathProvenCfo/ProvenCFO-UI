@@ -282,6 +282,30 @@ namespace Proven.Service
             }           
         }
 
+        public ReturnModel UpdateLableForKanbanTask(int TaskID, string DescriptionText, string LoginUserID)
+        {
+            KanbanTasksVM kbvm = new KanbanTasksVM();
+            kbvm.Id = TaskID;
+            kbvm.Labels = DescriptionText;
+            kbvm.ModifiedBy = LoginUserID;
+
+
+            content = new StringContent(JsonConvert.SerializeObject(kbvm), Encoding.UTF8, "application/json");
+            response = client.PostAsync("Needs/UpdateLableForKanbanTask", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<ReturnModel>(_content);
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+
+            }
+        }
+
         public KanbanAttachmentsListMainModel AddAttachmentTaskTask(List<KanbanAttachmentsVM> KanbanAttachments)
         {
 

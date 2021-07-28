@@ -121,6 +121,25 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        public JsonResult UpdateLableForKanbanTask(KanbanTasksModel Task)
+        {
+            using (NeedsService objNeeds = new NeedsService())
+            {
+                var LoginUserid = Session["UserId"].ToString();
+                var result = objNeeds.UpdateLableForKanbanTask(Task.Id.Value, Task.Labels, LoginUserid).resultData;
+                if (result == true)
+                {
+                    return Json(new { Task = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Task = result, Message = "Error" }, JsonRequestBehavior.AllowGet);
+                }
+                //return PartialView("_OpenTask", result);
+            }
+        }
+
+        [CheckSession]
         public JsonResult addNewAssigneeToKanbanTask(Proven.Model.KanbanTaskAssigneeAsssociationModel Assignee)
         {
             using (NeedsService objNeeds = new NeedsService())
