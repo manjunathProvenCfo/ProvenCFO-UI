@@ -18,8 +18,6 @@ namespace Proven.Service
             //client.BaseAddress = new Uri("http://localhost:27754/Api/");
             client.BaseAddress = new Uri("http://provencfoapi.codewarriorsllc.com/Api/");
 
-
-
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 

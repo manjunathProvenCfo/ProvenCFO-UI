@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-lg mt-6" role="document">
         <div class="modal-content border-0">
             <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
-                <button class="close btn btn-sm close-circle d-flex flex-center transition-base" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span></button>
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
             </div>
             <div class="modal-body p-0">
                 <div class="bg-light rounded-soft-top px-4 py-3">
@@ -55,24 +55,19 @@
                                 <div class="media-body">
                                     <h5 class="mb-2 fs-0">Tags</h5>
                                     <div class="d-flex" id="divTag">
-                                        <span class="badge mr-1 py-2 badge-soft-success">New</span><span class="badge mr-1 py-2 badge-soft-primary">Goal</span><span class="badge mr-1 py-2 badge-soft-info">Enhancement</span>
                                         <div class="dropdown dropright">
                                             <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle dropdown-caret-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-plus"></span></button>
                                             <div class="dropdown-menu">
                                                 <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
                                                 <div class="dropdown-divider"></div>
                                                 <div class="px-3">
-                                                    <button class="badge-soft-success dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-success','New');">New</button>
-                                                    <button class="badge-soft-primary dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-primary','Goal');">Goal</button>
-                                                    <button class="badge-soft-info dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-info', 'Enhancement');">Enhancement</button>
-                                                    <button class="badge-soft-danger dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-danger','Bug');">Bug</button>
-                                                    <button class="badge-soft-secondary dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-secondary','Documentation');">Documentation</button>
-                                                    <button class="badge-soft-warning dropdown-item rounded mb-2" type="button" onclick="addTag('badge-soft-warning','Helper');">Helper</button>
+                                                    <button class="badge-soft-success dropdown-item rounded mb-2 bg-red" type="button" onclick="addTag('badge-soft-success bg-red','Urgent');">Urgent</button>
+                                                    <button class="badge-soft-primary dropdown-item rounded mb-2 bg-orange" type="button" onclick="addTag('badge-soft-primary bg-orange','High');">High</button>
+                                                    <button class="badge-soft-info dropdown-item rounded mb-2 bg-light-blue " type="button" onclick="addTag('badge-soft-info bg-light-blue', 'Medium');">Medium</button>
+                                                    <button class="badge-soft-danger dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag('badge-soft-danger bg-green','Low');">Low</button>
                                                 </div>
                                                 <div class="dropdown-divider"></div>
-                                                <div class="px-3">
-                                                    <button class="btn btn-sm btn-block btn-outline-secondary border-400">Create Label</button>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
