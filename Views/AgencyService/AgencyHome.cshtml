@@ -4,53 +4,53 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="dashboard-frame">
-   
-  <!--<div class="card mb-4 ">
-        @*@{
-            Html.RenderAction("AgencySelection", "AgencyService");
-        }*@
-        <!--<!--<div class="card-header">
-            <div class="row align-items-center justify-content-between">-->
-                <!--@*<div class="col-6 col-sm-auto d-flex align-items-center pr-0">
-                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agency Home</h5>
-                    </div>*@-->
-                <!--<!--<div class="col-6 col-sm-auto ml-auto text-right pl-0">
-                    <div class="d-none" id="purchases-actions">
-                        <div class="input-group input-group-sm">
-                            <select class="custom-select cus" aria-label="Bulk actions">
-                                <option selected="">Bulk actions</option>
-                                <option value="Delete">Delete</option>
-                                <option value="Archive">Archive</option>
-                            </select>
-                            <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
-                        </div>
-                    </div>
-                    <div id="dashboard-actions">-->
-                        <!--@*<button class="btn btn-falcon-default btn-sm" type="button">
-                                <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                                <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-                            </button>*@
-                        @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                        @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                                <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                                <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-                            </button>*@-->
-                        <!--<!--<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1">--><!---->
-                        <!---->@*<a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>*@<!---->
-                        <!--</span>
-                        </button>-->
-                    <!--</div>
-                </div>
+
+    <!--<div class="card mb-4 ">
+          @*@{
+              Html.RenderAction("AgencySelection", "AgencyService");
+          }*@
+          <!--<!--<div class="card-header">
+              <div class="row align-items-center justify-content-between">-->
+    <!--@*<div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+            <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agency Home</h5>
+        </div>*@-->
+    <!--<!--<div class="col-6 col-sm-auto ml-auto text-right pl-0">
+        <div class="d-none" id="purchases-actions">
+            <div class="input-group input-group-sm">
+                <select class="custom-select cus" aria-label="Bulk actions">
+                    <option selected="">Bulk actions</option>
+                    <option value="Delete">Delete</option>
+                    <option value="Archive">Archive</option>
+                </select>
+                <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
             </div>
-        </div>-->
-        <!--@*@Html.Partial("_AgencySelection")*@
+        </div>
+        <div id="dashboard-actions">-->
+    <!--@*<button class="btn btn-falcon-default btn-sm" type="button">
+            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+        </button>*@
+    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+            <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+        </button>*@-->
+    <!--<!--<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+    <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+    <span class="d-none d-sm-inline-block ml-1">-->
+    <!---->
+    <!---->@*<a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>*@<!---->
+    <!--</span>
+    </button>-->
+    <!--</div>
+            </div>
+        </div>
+    </div>-->
+    <!--@*@Html.Partial("_AgencySelection")*@
         @*@{
                 Html.RenderAction("AgencySelection", "AgencyService");
             }*@
     </div>-->
-
     <!--<div class="card px-0 pt-0">
         <div class="row no-gutters">
 
@@ -259,7 +259,7 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl status-online">
-                                        <img class="rounded-circle" id="spProfileImage1"/>
+                                        <img class="rounded-circle" id="spProfileImage1" />
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -543,10 +543,25 @@
                             $('#spJobTitle1').html(String(data.JobtitleId1));
                             $('#spJobTitle2').html(String(data.JobtitleId2));
                             $('#spJobTitle3').html(String(data.JobtitleId3));
-                            $('#spProfileImage1').attr('src', data.ProfileImage1);
-                            $('#spProfileImage2').attr('src', data.ProfileImage2);
-                            $('#spProfileImage3').attr('src', data.ProfileImage3);
-                            $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                            if (data.ProfileImage1 != null) {
+                                $('#spProfileImage1').attr('src', data.ProfileImage1);
+                            }
+                            else {
+                                $('#spProfileImage1').attr('src', "../assets/img/team/default-logo.png")
+                            }
+                            if (data.ProfileImage2 != null) {
+                                $('#spProfileImage2').attr('src', data.ProfileImage2);
+                            }
+                            else {
+                                $('#spProfileImage2').attr('src', "../assets/img/team/default-logo.png")
+                            }
+                            if (data.ProfileImage3 != null) {
+                                $('#spProfileImage3').attr('src', data.ProfileImage3);
+                            }
+                            else {
+                                $('#spProfileImage3').attr('src', "../assets/img/team/default-logo.png")
+                            }
+                                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                             $('.badge-soft-success').removeClass('d-none');
                             SetUserPreferencesForAgency();
@@ -563,9 +578,9 @@
                             $('#spJobTitle1').html('');
                             $('#spJobTitle2').html('');
                             $('#spJobTitle3').html('');
-                            $('#spProfileImage1').html('');
-                            $('#spProfileImage2').html('');
-                            $('#spProfileImage3').html('');
+                            $('#spProfileImage1').attr('');
+                            $('#spProfileImage2').attr('');
+                            $('#spProfileImage3').attr('');
                             $('#spStatus').html('');
                             $('#spClientAddress').html('');
                             $('.badge-soft-success').addClass('d-none');
@@ -582,9 +597,9 @@
                         $('#spJobTitle1').html('');
                         $('#spJobTitle2').html('');
                         $('#spJobTitle3').html('');
-                        $('#spProfileImage1').html('');
-                        $('#spProfileImage2').html('');
-                        $('#spProfileImage3').html('');
+                        $('#spProfileImage1').attr('');
+                        $('#spProfileImage2').attr('');
+                        $('#spProfileImage3').attr('');
                         $('#spStatus').html('');
                         $('#spClientAddress').html('');
                         $('.badge-soft-success').addClass('d-none');
@@ -963,27 +978,27 @@
                 }
             };
 
-                                                                                                                //function SetUserPreferences() {
-                                                                                                                //    var ClientID = $("#ddlclient option:selected").val();
+                                                                                                                        //function SetUserPreferences() {
+                                                                                                                        //    var ClientID = $("#ddlclient option:selected").val();
 
-                                                                                                                //    $.ajax({
-                                                                                                                //        url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
-                                                                                                                //        type: "POST",
-                                                                                                                //        //data: '{model: ' + JSON.stringify(model) + '}',
-                                                                                                                //        contentType: "application/json; charset=utf-8",
-                                                                                                                //        dataType: "json",
-                                                                                                                //        success: function (data) {
-                                                                                                                //            if (data != null) {
+                                                                                                                        //    $.ajax({
+                                                                                                                        //        url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
+                                                                                                                        //        type: "POST",
+                                                                                                                        //        //data: '{model: ' + JSON.stringify(model) + '}',
+                                                                                                                        //        contentType: "application/json; charset=utf-8",
+                                                                                                                        //        dataType: "json",
+                                                                                                                        //        success: function (data) {
+                                                                                                                        //            if (data != null) {
 
-                                                                                                                //            }
-                                                                                                                //            else {
+                                                                                                                        //            }
+                                                                                                                        //            else {
 
-                                                                                                                //            }
-                                                                                                                //        },
-                                                                                                                //        error: function (d) {
+                                                                                                                        //            }
+                                                                                                                        //        },
+                                                                                                                        //        error: function (d) {
 
-                                                                                                                //        }
-                                                                                                                //    });
+                                                                                                                        //        }
+                                                                                                                        //    });
 
         </script>
         <script src="~/assets/js/jquery.min.js"></script>
