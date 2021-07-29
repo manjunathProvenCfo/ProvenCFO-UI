@@ -68,9 +68,9 @@ namespace Proven.Service
 
             }
         }
-        public RolesViewModel GetRoleStatus(string id)
+        public RolesViewModel GetUserRoleById(string id)
         {
-            response = client.GetAsync("Role/GetRoleStatus?id=" + id).Result;
+            response = client.GetAsync("Role/GetUserRoleById?id=" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var _content = response.Content.ReadAsStringAsync().Result;

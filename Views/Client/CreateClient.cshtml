@@ -43,11 +43,11 @@
             }
             @if (Model.Id == null || Model.Id == 0)
             {
-                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client Agency</h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client </h3>
             }
             else
             {
-                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client Agency</h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client </h3>
             }
 
             <div class="row mt-4">
@@ -58,7 +58,7 @@
                                 <div class="row align-items-center form-group">
                                     @Html.HiddenFor(x => x.Id, "id")
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-create-name" class="mb-0">Client Agency Name</label>
+                                        <label for="split-create-name" class="mb-0">Client Name</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.ClientName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
@@ -186,7 +186,7 @@
             sweetAlert
                 ({
                     title: "Created!",
-                    text: "New Client Agency created successfully!",
+                    text: "New Client  created successfully!",
                     type: "success"
                 },
                     function () {
@@ -197,7 +197,7 @@
             sweetAlert
                 ({
                     title: "Updated!",
-                    text: "Client Agency updated successfully!",
+                    text: "Client  updated successfully!",
                     type: "success"
                 },
                     function () {

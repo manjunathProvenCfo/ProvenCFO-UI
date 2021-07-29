@@ -202,26 +202,39 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                            debugger
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "User Role is successfully deleted!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
+                           
+                            if (data == 1) {
+                                swal
+                                    ({
+                                        title: "can Not be Deleted!",
+                                        text: "This userRole is associate with User ",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+
+                            }
+                            else {
+                                
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "User Role is successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
                         })
+
                         .error(function (data) {
                             debugger
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
         }
-
-
-
 
     </script>
 }

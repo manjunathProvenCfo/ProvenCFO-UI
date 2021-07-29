@@ -164,12 +164,27 @@ namespace ProvenCfoUI.Controllers
             {
                 try
                 {
+
                     using (RoleService objRole = new RoleService())
-                    {                        
-                        var result = objRole.DeleteRoles(id);
-                        if (result == null)
-                            ViewBag.ErrorMessage = "";
-                        return RedirectToAction("Role");
+                    {
+
+                        var results = objRole.GetUserRoleById(id)
+;
+                        if (results != null)
+                        {
+                            return RedirectToAction("Role");
+                        }
+
+                        else
+                        {
+                            var result = objRole.DeleteRoles(id)
+
+      ;
+                            if (result == null)
+                                ViewBag.ErrorMessage = "";
+                            return RedirectToAction("Role");
+                        }
+
                     }
                 }
                 catch (Exception ex)
