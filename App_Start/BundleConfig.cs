@@ -88,6 +88,7 @@ namespace ProvenCfoUI
             //         ));
 
             bundles.Add(new StyleBundle("~/bundles/customcss").Include(
+                "~/assets/css/theme.css?v=1.1",
                   "~/assets/css/common.css",
                   "~/assets/js/config.navbar-vertical.js",
                    "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
@@ -96,7 +97,7 @@ namespace ProvenCfoUI
                     "~/assets/lib/leaflet/leaflet.css",
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.css",
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
-                    "~/assets/css/theme.css",
+                    
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/dropzone/dropzone.min.css",
