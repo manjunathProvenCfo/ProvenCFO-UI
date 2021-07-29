@@ -88,7 +88,7 @@ namespace ProvenCfoUI
             //         ));
 
             bundles.Add(new StyleBundle("~/bundles/customcss").Include(
-                "~/assets/css/theme.css?v=1.1",
+                "~/assets/css/theme.css",
                   "~/assets/css/common.css",
                   "~/assets/js/config.navbar-vertical.js",
                    "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
