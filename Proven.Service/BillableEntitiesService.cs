@@ -90,7 +90,7 @@ namespace Proven.Service
 
         public BillableEntitiesVM UpdateBillableEntity(string Id, string EntityName, string ProvenCFOXeroContactID, string Clients, string status, string IsDeleted, string userid)
         {
-            var form = new Dictionary<string, string>
+            var form = new Dictionary<string, object>
            {
                {"Id", Id},
                {"EntityName", EntityName},
@@ -98,8 +98,7 @@ namespace Proven.Service
                 {"Clients", Clients },
                 {"Status", status },
                {"ModifiedBy", userid},
-               {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true).ToString()}
-
+               {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true)}
            };
             content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             response = client.PostAsync("BillableEntities/UpdateBillableEntity", content).Result;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,14 @@ namespace Proven.Model
     public class BillableEntitiesVM
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "Entity Name is a required field.")]
+        [RegularExpression(@"^[a-zA-Z0-9_ ]*$", ErrorMessage = "Please Enter a valid Team Name")]
+        [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
         public string EntityName { get; set; }
         public string  ProvenCFOXeroContactID { get; set; }
+
+        [Required(ErrorMessage = "Clients is a required field.")]
+        [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
         public string Clients { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
