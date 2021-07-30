@@ -1,7 +1,7 @@
 ﻿@model List<Proven.Model.BillableEntitiesVM>
 
 @{
-    ViewBag.Title = "BillableEntities.";
+    ViewBag.Title = "BillableEntities";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,8 +26,8 @@
                 </div>
                 <div id="dashboard-actions">
 
-                    @*<button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddTeams", "Teams")>Create New Team</a></span></button>
-                        <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>*@
+                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddBillableEntity", "BillableEntities")>Create New Billable Entity</a></span></button>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
                     <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
 
                 </div>
@@ -76,12 +76,12 @@
 
                             <td class="align-middle text-center pr-3">
                                 <span class="d-none d-sm-inline-block">
-                                    <a href='@Url.Action("EditTeam", "Teams", new { id = item.Id})'>
+                                    <a href='@Url.Action("EditBillableEntity", "BillableEntities", new { id = item.Id})'>
                                         <i class="far fa-edit"> </i>
                                     </a>
                                 </span>
                                 <span class="d-none d-sm-inline-block ml-2">
-                                    <a href="#" onclick="deleteTeam('@item.Id')">
+                                    <a href="#" onclick="deleteBillableEntity('@item.Id')">
                                         <i class="far fa-trash-alt"> </i>
                                     </a>
                                 </span>
@@ -89,13 +89,13 @@
 
                                     @if (item.Status == "Active")
                                     {
-                                        <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Inactive"})'>
+                                        <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Inactive"})'>
                                             <i class="far far fas fa-plug"> </i>
                                         </a>
                                     }
                                     else
                                     {
-                                        <a href='@Url.Action("DeactivateTeams", "Teams", new { Id = item.Id, Status = "Active"})'>
+                                        <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Active"})'>
                                             <i class="far far fas fa-power-off"> </i>
                                         </a>
                                     }
@@ -140,11 +140,11 @@
             });
         };
 
-        function deleteTeam(Id) {
+        function deleteBillableEntity(Id) {
 
             swal({
                 title: "Are you sure?",
-                text: "Do you really want to delete this Team?",
+                text: "Do you really want to delete this Billable Entity?",
                 type: "warning",
                 showCancelButton: true,
                 closeOnConfirm: false,
@@ -155,33 +155,19 @@
                 function () {
                     $.ajax({
                         type: "POST",
-                        url: '/Teams/DeleteTeam/' + Id,
+                        url: '/BillableEntities/DeleteBillableEntity/' + Id,
                         //data: { id: id },
                     })
                         .done(function (data) {
-                            if (data == 'Active') {
-                                sweetAlert
-                                    ({
-                                        title: "Couldn't Delete!",
-                                        text: "This Team is associated with Client",
-                                        type: "warning"
-                                    },
-                                        function () {
-                                            window.location.reload();
-                                        });
-                            }
-                            else {
-                                sweetAlert
+                               sweetAlert
                                     ({
                                         title: "Deleted!",
-                                        text: "Team is successfully deleted!",
+                                        text: "Billable Entity is successfully deleted!",
                                         type: "success"
                                     },
                                         function () {
                                             window.location.reload();
                                         });
-                            }
-
                         })
                         .error(function (data) {
                             debugger

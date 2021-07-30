@@ -979,6 +979,7 @@
     <Content Include="Views\Shared\_kanbanBoard.cshtml" />
     <Content Include="Views\Home\_SetPasswordSuccessfully.cshtml" />
     <Content Include="Views\BillableEntities\GetAllBillableEntitiesList.cshtml" />
+    <Content Include="Views\BillableEntities\AddBillableEntity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

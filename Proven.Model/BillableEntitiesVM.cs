@@ -8,9 +8,9 @@ namespace Proven.Model
 {
     public class BillableEntitiesVM
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string EntityName { get; set; }
-        public string ProvenCFOXeroContactID { get; set; }
+        public string  ProvenCFOXeroContactID { get; set; }
         public string Clients { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
@@ -19,6 +19,8 @@ namespace Proven.Model
         public string ModifiedByUser { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public bool? IsDeleted { get; set; }
+        public string UserId { get; set; }
         public int MyProperty { get; set; }
     }
     public class BillableEntitiesMainModel
