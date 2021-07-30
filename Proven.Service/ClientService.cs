@@ -129,7 +129,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId)
         {
             var from = new Dictionary<string, string>
             {
@@ -142,7 +142,8 @@ namespace Proven.Service
                 {"Status",Status },
                 {"CityName",CityName },
                 {"CreatedBy",LoginUserid },
-                 {"TeamId",TeamId }
+                 {"TeamId",TeamId },
+                {"EntityName" ,EntityId}
 
             };
             content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
@@ -163,7 +164,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId)
         {
             var from = new Dictionary<string, string>
             {
@@ -173,7 +174,8 @@ namespace Proven.Service
                 {"Status",Status },
                 {"CityName",CityName },
                 {"ModifiedBy",LoginUserid},
-                {"TeamId",TeamId }
+                {"TeamId",TeamId },
+                {"EntityId",EntityId }
                 //{"Email",Email },
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },

@@ -88,13 +88,16 @@ namespace ProvenCfoUI.Controllers
             {
                 using (TeamsService objTeams = new TeamsService())
                 {
-                    CreateClientVM Clientvm = new CreateClientVM();
-                    Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                    Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
-                    return View(Clientvm);
+                    using (BillableEntitiesService objEntities = new BillableEntitiesService())
+                    {
+                        CreateClientVM Clientvm = new CreateClientVM();
+                        Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                        Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
+                        Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status=="Active").ToList();
+                        return View(Clientvm);
+                    }
                 }
             }
-
         }
 
         [CheckSession]
@@ -106,29 +109,32 @@ namespace ProvenCfoUI.Controllers
             {
                 using (TeamsService objTeamService = new TeamsService())
                 {
-                    CreateClientVM Clientvm = new CreateClientVM();
-                    var client = objClientService.GetClientById(Id);
-                    Clientvm.Id = client.Id;
-                    Clientvm.PhoneNumber = client.PhoneNumber;
-                    Clientvm.StateId = client.StateId;
-                    Clientvm.Status = client.Status == true ? "Active" : "Inactive";
-                    Clientvm.Email = client.Email;
-                    Clientvm.ClientName = client.Name;
-                    Clientvm.CityName = client.CityName;
-                    Clientvm.CityId = client.CityId;
-                    Clientvm.Address = client.Address;
-                    Clientvm.StateId = client.State;
-                    Clientvm.TeamId = Convert.ToInt32(client.TeamId);
-                    Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
-                    Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                    Clientvm.ContactPersonName = client.ContactPersonName;
-                    client.StateList = objClientService.GetAllStates().ResultData.ToList();
-                   
+                    using (BillableEntitiesService objEntities = new BillableEntitiesService())
+                    {
+                        CreateClientVM Clientvm = new CreateClientVM();
+                        var client = objClientService.GetClientById(Id);
+                        Clientvm.Id = client.Id;
+                        Clientvm.PhoneNumber = client.PhoneNumber;
+                        Clientvm.StateId = client.StateId;
+                        Clientvm.Status = client.Status == true ? "Active" : "Inactive";
+                        Clientvm.Email = client.Email;
+                        Clientvm.ClientName = client.Name;
+                        Clientvm.CityName = client.CityName;
+                        Clientvm.CityId = client.CityId;
+                        Clientvm.Address = client.Address;
+                        Clientvm.StateId = client.State;
+                        Clientvm.TeamId = Convert.ToInt32(client.TeamId);
+                        Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
+                        Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                        Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
+                        Clientvm.ContactPersonName = client.ContactPersonName;
+                        client.StateList = objClientService.GetAllStates().ResultData.ToList();
 
-                    return View("CreateClient", Clientvm);
+
+                        return View("CreateClient", Clientvm);
+                    }
                 }
             }
-
         }
 
         [CheckSession]
@@ -143,45 +149,49 @@ namespace ProvenCfoUI.Controllers
                     {
                         using (TeamsService objTeams = new TeamsService())
                         {
-
-                            CreateClientVM Clientvm = new CreateClientVM();
-                            var LoginUserid = Session["UserId"].ToString();
-                            Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
-                            Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                            if (createClientVM.Id == 0)
+                            using (BillableEntitiesService objEntities=new BillableEntitiesService())
                             {
-                                var ClientExist = obj.GetClientByName(createClientVM.ClientName);
-                                if (ClientExist != null)
+                                CreateClientVM Clientvm = new CreateClientVM();
+                                var LoginUserid = Session["UserId"].ToString();
+                                Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
+                                Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
+                                if (createClientVM.Id == 0)
                                 {
-                                    ViewBag.ErrorMessage = "Exist";
-                                    return View("CreateClient", Clientvm);
+                                    var ClientExist = obj.GetClientByName(createClientVM.ClientName);
+                                    if (ClientExist != null)
+                                    {
+                                        ViewBag.ErrorMessage = "Exist";
+                                        return View("CreateClient", Clientvm);
+                                    }
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(),createClientVM.EntityId.ToString());
+                                    if (result == null)
+                                        ViewBag.ErrorMessage = "";
+                                    ViewBag.ErrorMessage = "Created";
                                 }
-                                var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString());
-                                if (result == null)
-                                    ViewBag.ErrorMessage = "";
-                                ViewBag.ErrorMessage = "Created";
-                            }
-                            else
-                            {
-                                var ClientExist = obj.GetClientByName(createClientVM.ClientName);
-                                createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
-                                createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                if (ClientExist != null && ClientExist.Id != createClientVM.Id)
+                                else
                                 {
-                                    ViewBag.ErrorMessage = "Exist";
+                                    var ClientExist = obj.GetClientByName(createClientVM.ClientName);
+                                    createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
+                                    createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                    createClientVM.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
+                                    if (ClientExist != null && ClientExist.Id != createClientVM.Id)
+                                    {
+                                        ViewBag.ErrorMessage = "Exist";
+                                        return View("CreateClient", createClientVM);
+                                    }
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(),createClientVM.EntityId.ToString());
+                                    if (result == null)
+                                        ViewBag.ErrorMessage = "";
+                                    ViewBag.ErrorMessage = "Updated";
                                     return View("CreateClient", createClientVM);
                                 }
-                                var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString());
-                                if (result == null)
-                                    ViewBag.ErrorMessage = "";
-                                ViewBag.ErrorMessage = "Updated";
-                                return View("CreateClient", createClientVM);
+                                return View("CreateClient", Clientvm);
+                                return RedirectToAction("ClientList");
                             }
-                            return View("CreateClient", Clientvm);
-                            return RedirectToAction("ClientList");
+
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -200,7 +210,7 @@ namespace ProvenCfoUI.Controllers
 
                 var client = objClientService.GetClientById(id);
 
-                var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString());
+                var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(),client.EntityId.ToString());
                 if (result == null)
                     ViewBag.ErrorMessage = "";
                 return RedirectToAction("ClientList");

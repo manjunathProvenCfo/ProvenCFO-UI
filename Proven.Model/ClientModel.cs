@@ -29,6 +29,8 @@ namespace Proven.Model
 
         public string CityName { get; set; }
         public string StateName { get; set; }
+        public int EntityId { get; set; }
+        public string EntityName { get; set; }
         public string CreatedByUser { get; set; }
         public string ModifiedBy { get; set; }
         public string ModifiedByUser { get; set; }
@@ -37,7 +39,7 @@ namespace Proven.Model
 
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
-
+        public List<BillableEntitiesVM> billableEntitiesList { get; set; }
         public List<TeamsVM> TeamList { get; set; }
         public string TeamName { get; set; }
         public string TeamMemberId1 { get; set; }

@@ -29,12 +29,12 @@ namespace ProvenCfoUI.Models
         public string CityName { get; set; }
         [Required(ErrorMessage = "State is a required field.")]
         public int StateId { get; set; }
-        [Required(ErrorMessage ="Team is a required field")]
+        [Required(ErrorMessage = "Team is a required field")]
         public int TeamId { get; set; }
-
+        public int EntityId { get; set; }
         public List<City> CityList { get; set; }
-
         public List<State> StateList { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
+        public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
     }
 }

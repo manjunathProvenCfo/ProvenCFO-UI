@@ -208,7 +208,7 @@
                         @*I have Did Some Changes Here*@
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Billable Entity</p>
-                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span class="spClientName"></span></p>
+                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span class="spEntityName"></span></p>
                         </div>
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Start Date</p>
@@ -535,6 +535,7 @@
 
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
+                            $('.spEntityName').html(String(data.EntityName));
                             $('#spCreatedDate').html(String(new Date(data.CreatedDate.match(/\d+/)[0] * 1).toDateString()));
                             $('#spTeamName').html(String(data.TeamName));
                             $('#spStaffName1').html(String(data.TeamMemberId1));
@@ -570,6 +571,7 @@
 
                             $('#roleexist').hide();
                             $('#spClientName').html('');
+                            $('#spEntityName').html('');
                             $('#spCreatedDate').html('');
                             $('#spTeamName').html('');
                             $('#spStaffName1').html('');
@@ -589,6 +591,7 @@
                     error: function () {
                         $('#roleexist').hide();
                         $('#spClientName').html('');
+                        $('#spEntityName').html('');
                         $('#spCreatedDate').html('');
                         $('#spTeamName').html('');
                         $('#spStaffName1').html('');
