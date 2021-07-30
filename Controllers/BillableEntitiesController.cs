@@ -142,7 +142,8 @@ namespace ProvenCfoUI.Controllers
                     return View();
                 }
             }
-            return JavaScript("AlertBillableEntity");
+            return RedirectToAction("GetAllBillableEntitiesList");
+            //return JavaScript("AlertBillableEntity");
 
         }
 
