@@ -95,7 +95,11 @@
                                                     <div class="text-500 z-index-2">
                                                         @if (Tasks.NumberofAttachment > 0)
                                                         {
-                                                            <span class="me-2" id="@string.Concat("attCount_",Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
+                                                            <span class="me-2" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="me-2 d-none" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
                                                         }
                                                     </div>
                                                     <div class="z-index-2">

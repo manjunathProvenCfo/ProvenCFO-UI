@@ -75,12 +75,14 @@
         }
         
         $('#navbarVerticalCollapse li a').click(function (event) {                       
-            localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
-            if (event.currentTarget.parentNode.parentNode.id == '') {
-                localStorage.setItem('SelectedMenu', event.currentTarget.name)    
+            //localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
+            if (event.currentTarget.parentNode.parentNode.parentNode.id == '') {
+                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
+                sessionStorage.setItem('SelectedSubMenu', '');  
             }
             else {
-                localStorage.setItem('SelectedMenu', event.currentTarget.parentNode.parentNode.id)   
+                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.parentNode.parentNode.id);   
+                sessionStorage.setItem('SelectedSubMenu', event.currentTarget.parentNode.id);   
             }   
             HighlightMenu();
             
@@ -118,13 +120,27 @@
                 }
             });
         }
-        if (location.href.indexOf('AgencyHome') != -1) {
+        var activeTabs = $('.nav-item.show');
+        if (activeTabs != null && activeTabs.length > 0) {
+            $.each(activeTabs, function (key, value) {
+                if (value != null) {
+                    $(value).removeClass('show');
+                }
+            });
+        }
+        if (location.href.indexOf('AgencyHome') != -1 || (sessionStorage.getItem('SelectedMenu') == undefined && sessionStorage.getItem('SelectedSubMenu') == undefined)) {
             $('#menu_home').addClass('active');
         }
         else {
-            $('#' + localStorage.getItem('SelectedMenu'))[0].className = $('#' + localStorage.getItem('SelectedMenu'))[0].className + ' active';
-            $('#' + localStorage.getItem('SelectedSubMenu'))[0].className = $('#' + localStorage.getItem('SelectedSubMenu'))[0].className + ' active';
-            $("#" + localStorage.getItem('SelectedMenu')).addClass("show");
+            if (sessionStorage.getItem('SelectedMenu') != undefined && sessionStorage.getItem('SelectedMenu') != null && sessionStorage.getItem('SelectedMenu') != '') {               
+                $("#" + sessionStorage.getItem('SelectedMenu')).addClass("show");
+            }
+            if (sessionStorage.getItem('SelectedSubMenu') != undefined && sessionStorage.getItem('SelectedSubMenu') != null && sessionStorage.getItem('SelectedSubMenu') != '') {
+                $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className = $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className + ' active';
+                $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className = $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className + ' show';
+               
+            }
+           
         }
         
     }

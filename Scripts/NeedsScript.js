@@ -52,10 +52,17 @@ $(document).ready(function () {
             });
             if (IsCanAddfiles == true) {
                 myDropzone_view.enqueueFile(file);
-                var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
-                if (AttachmentCount != undefined && AttachmentCount != '') {
-                    $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
+                var attachmentSpan = $('#attCount_' + gCurrentViewTaskId + ' span');
+                if (attachmentSpan.length > 0) {
+                    $('#attCount_' + gCurrentViewTaskId).removeClass('d-none');
+                    var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
+                    var IsattachmentsysmbolAvil = $('#attCount_' + gCurrentViewTaskId + ' .fa-paperclip');
+                    if (AttachmentCount != undefined && AttachmentCount != '') {
+                        $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
+                    }
+                   
                 }
+                
             }
             else {
                 ShowAlertBox('Exist!', 'Selected file is already attached.', 'warning');
@@ -418,6 +425,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
                 var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
                 if (AttachmentCount != undefined && AttachmentCount != '') {
                     $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) - 1;
+                   
                 }
                 return true;
             }
@@ -718,15 +726,16 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
                 else if (item.FileType.toUpperCase() == 'CSV' || item.FileType.toUpperCase() == 'csv') {
                     bgimage = '../../assets/img/kanban/I_CSV.png';
                 }
+               
                 if (IsViewMode == true && $('#attachmentContainer #att_' + item.Id).length == 0) {
                     var singlCode = "'";
-                    var att = '<div class="media align-items-center mb-3" id="att_' + item.Id + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
+                    var att = '<div class="media align-items-center mb-3" id="att_' + item.Id + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage.replace(/ /g, '%20') + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
                     $('#attachmentContainer').prepend(att);
                 }
                 else {
                     var singlCode = "'";
                     var TempAttchmentID = ($('#attachmentContainer_Add media').length) + 1;
-                    var att = '<div class="media align-items-center mb-3" id="att_' + TempAttchmentID + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemovveFileOnCreate(' + TempAttchmentID + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
+                    var att = '<div class="media align-items-center mb-3" id="att_' + TempAttchmentID + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage.replace(/ /g, '%20') + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="RemovveFileOnCreate(' + TempAttchmentID + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
                     $('#attachmentContainer_Add').prepend(att);
                 }
 
