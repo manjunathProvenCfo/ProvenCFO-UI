@@ -7,6 +7,7 @@ using ProvenCfoUI.Models;
 using ProvenCfoUI.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -474,6 +475,46 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        public ActionResult CallApi()
+        {
+            using (AccountService obj = new AccountService())
+            {
+                UserModel model = new UserModel();
+                string path = Server.MapPath("~/UploadedFiles/export_CW-ReconLines_2021-07-21_21-54-16.csv");
+                string connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                DataTable dt = Common.ConvertCSVtoDataTable(path);
+
+
+                for (int i = 0; i < dt.Rows.Count ; i++)
+                {
+                    string id = Convert.ToString(dt.Rows[i][17]);
+                    string account_name = Convert.ToString(dt.Rows[i][0]);
+                    string amount = Convert.ToString(dt.Rows[i][1] );
+                    string company = Convert.ToString(dt.Rows[i][2]);
+                    string date = Convert.ToString(dt.Rows[i][3]).Replace(".",",");
+                    string description = Convert.ToString(dt.Rows[i][4]);
+                    string gl_account = Convert.ToString(dt.Rows[i][5]);
+                    string reconciled = Convert.ToString(dt.Rows[i][7]);
+                    string reference = Convert.ToString(dt.Rows[i][8]);
+                    string rule = Convert.ToString(dt.Rows[i][9]);
+                    string type = Convert.ToString(dt.Rows[i][12]);
+                    var result = obj.CreateReconciliation(id, account_name, amount, company, date, description, gl_account, reconciled, reference, rule, type).ResultData;
+                    if (result != null)
+                    {
+                        string msg = result.ToString();
+                    }
+                    else
+                    {
+                        string error = result.ToString();
+                    }
+
+                }
+                return View();
+
+            }
+        }
+
+        [CheckSession]
         public ActionResult TopNavigation()
         {
             using (AccountService obj = new AccountService())
@@ -527,6 +568,25 @@ namespace ProvenCfoUI.Controllers
                     if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
                     string PathfileName = Path.Combine(path, replacefile);
                     file.SaveAs(PathfileName);
+                    using (AccountService obj = new AccountService())
+                    {
+                        string userid = Session["UserId"].ToString();
+                        var user = obj.GetUserDetail(userid).resultData;
+                        if (user != null)
+                        {
+                            if (uploadFile == "Profile")
+                            {
+                                user.ProfileImage = "../Upload/Profile/" + replacefile;
+                            }
+                            else
+                            {
+                                user.CoverImage = "../Upload/CoverProfile/" + replacefile;
+                            }
+                            obj.UpdateUserDetail(user);
+                                
+                        }
+
+                    }
                 }
 
             }

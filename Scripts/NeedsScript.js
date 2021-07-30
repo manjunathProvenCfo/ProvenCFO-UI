@@ -696,7 +696,10 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
             if (item != null) {
                 var bgimage = item.FilePath;
                 var Openimage = item.FilePath;
-                var uploadedTime = item.CreatedDateForDisplay == null ? '0d: 0h: 0m: 1s age ' : item.CreatedDateForDisplay;
+                var d = new Date($.now());
+                var currentdatetime = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' + formatAMPM(d);
+               
+                var uploadedTime = item.CreatedDateForDisplay == null ? currentdatetime : item.CreatedDateForDisplay;
                 if (item.FileType.toUpperCase() == 'PDF') {
                     bgimage = '../../assets/img/kanban/I_PDF.png';
                 }
@@ -730,6 +733,16 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
             }
         });
     }
+}
+function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
 }
 
 function addNewAssigneeToKanbanTask(UserID) {
@@ -775,8 +788,8 @@ function addcommentsList(data) {
 function addComment(data, UserFullName) {
     var commentobj = $('#divCommantsList');
     if (commentobj != null) {
-        var profilePic = data.ProfileImage != undefined && data.ProfileImage != null && data.ProfileImage != '' ? data.ProfileImage : '../assets/img/team/avatar.png';
-        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName + '  : </a>' + data.CommentText + '</p><a href="#!">Like</a> &bull;  &bull;' + data.CommentDuration + ' ago</div></div>';
+        var profilePic = data.UserProfilePic != undefined && data.UserProfilePic != null && data.UserProfilePic != '' ? data.UserProfilePic : '../assets/img/team/avatar.png';
+        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName + '  : </a>' + data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
         commentobj.prepend(commentHTMLelement);
         $('#txtComments').val('');
     }
@@ -854,17 +867,17 @@ function addTag(className, TagName, Isview = false) {
     
    // }
     if (TaskId != null && TaskId !== "" && Isview == false) {
-        $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Member</a></div></li></ul>');
+        $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
         UpdateLableForKanbanTask(TaskId, TagName);
         $('#' + TaskId + ' .card-body .badge').empty();
         $('#' + TaskId + ' .card-body').prepend('<div class="mb-2"><span class="badge py-2 me-1 mb-1 ' + className + '">' + TagName + '</span></div>')
     } else if (TaskId != null && TaskId !== "" && Isview == true) {
 
-        $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Member</a></div></li></ul>');
+        $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
     }
     else {
 
-        $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Member</a></div></li></ul>');
+        $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
     }
     
 

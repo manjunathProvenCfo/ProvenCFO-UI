@@ -79,7 +79,7 @@
 
                                 @*<button class="btn btn-primary btn-block mt-3" type="submit" id="btnUpdate" name="submit" href="@Url.Action("EditInvitation", "Invitation")">Update</button>*@
 
-
+                                @Html.ActionLink("Click here to load Reconcilation data into DB", "CallApi", "Home", new { area = "" }, new { @class = "navbar-brand d-none" })
                                 <button class="btn btn-primary" type="button" onclick="updateProfile()">Update </button>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
 
             $("#upload-cover-image").change(function () {
                 var ext = $('#upload-cover-image').val().split('.').pop().toLowerCase();
-                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg','.jif']) == -1) {
 
                     ValidationErrorMessage("Invalid file extension");
                     return;
