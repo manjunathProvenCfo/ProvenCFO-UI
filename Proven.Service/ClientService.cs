@@ -143,7 +143,7 @@ namespace Proven.Service
                 {"CityName",CityName },
                 {"CreatedBy",LoginUserid },
                  {"TeamId",TeamId },
-                {"EntityName" ,EntityId}
+                {"EntityId" ,EntityId}
 
             };
             content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
