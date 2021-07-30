@@ -71,7 +71,7 @@
                                         <label for="split-login-email" class="mb-0"> Entity Name</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.EntityId, new SelectList(Model.billableEntitiesList, "Entityid", "EntityName"), "Select entity", new { @class = "form-control" })
+                                        @Html.DropDownListFor(model => model.EntityId, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select entity", new { @class = "form-control" })
                                         @Html.ValidationMessageFor(model => model.EntityId, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
