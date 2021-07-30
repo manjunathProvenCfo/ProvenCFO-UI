@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AccountService.cs" />
     <Compile Include="BaseService.cs" />
+    <Compile Include="BillableEntitiesService.cs" />
     <Compile Include="ClientService.cs" />
     <Compile Include="CommonService.cs" />
     <Compile Include="InvitationServices.cs" />

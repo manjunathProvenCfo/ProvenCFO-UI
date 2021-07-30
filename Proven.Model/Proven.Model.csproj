@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillableEntitiesVM.cs" />
     <Compile Include="City.cs" />
     <Compile Include="ClientModel.cs" />
     <Compile Include="ClientUserAssociationModel.cs" />
