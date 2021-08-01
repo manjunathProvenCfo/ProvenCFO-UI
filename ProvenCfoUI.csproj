@@ -177,6 +177,7 @@
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TwilioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -434,12 +435,15 @@
     <Content Include="assets\img\team\default-logo.png" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\js\chat.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
+    <Content Include="assets\js\twilio.js" />
+    <Content Include="assets\js\wrapper.js" />
     <Content Include="assets\lib\anchor.min.js" />
     <Content Include="assets\lib\chart.js\Chart.bundle.min.js" />
     <Content Include="assets\lib\chart.js\Chart.min.js" />
@@ -532,6 +536,8 @@
     <Content Include="assets\lib\sticky-kit\sticky-kit.js" />
     <Content Include="assets\lib\sticky-kit\sticky-kit.min.js" />
     <Content Include="assets\lib\stickyfilljs\stickyfill.min.js" />
+    <Content Include="assets\lib\superagent\dist\superagent.js" />
+    <Content Include="assets\lib\superagent\dist\superagent.min.js" />
     <Content Include="assets\lib\tinymce\changelog.txt" />
     <Content Include="assets\lib\tinymce\icons\default\icons.js" />
     <Content Include="assets\lib\tinymce\icons\default\icons.min.js" />
@@ -718,6 +724,8 @@
     <Content Include="assets\lib\toastr\toastr.css" />
     <Content Include="assets\lib\toastr\toastr.min.css" />
     <Content Include="assets\lib\toastr\toastr.min.js" />
+    <Content Include="assets\lib\twilio\conversations\dist\twilio-conversations.js" />
+    <Content Include="assets\lib\twilio\conversations\dist\twilio-conversations.min.js" />
     <Content Include="assets\lib\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\lib\typed.js\typed.js" />
     <Content Include="assets\video\beach.jpg" />
@@ -901,6 +909,7 @@
     <Content Include="assets\AvertaWebFont\woff\Averta Semibold.woff" />
     <Content Include="assets\AvertaWebFont\woff\Averta Thin Italic.woff" />
     <Content Include="assets\AvertaWebFont\woff\Averta Thin.woff" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -980,6 +989,7 @@
     <Content Include="Views\Home\_SetPasswordSuccessfully.cshtml" />
     <Content Include="Views\BillableEntities\GetAllBillableEntitiesList.cshtml" />
     <Content Include="Views\BillableEntities\AddBillableEntity.cshtml" />
+    <Content Include="Views\Communication\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -988,6 +998,7 @@
     <Folder Include="Authorization\" />
     <Folder Include="Scripts\Custom\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Twilio\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

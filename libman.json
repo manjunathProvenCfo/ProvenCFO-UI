@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "superagent@6.1.0",
+      "destination": "assets/lib/superagent/",
+      "files": [
+        "dist/superagent.js",
+        "dist/superagent.min.js"
+      ]
+    },
+    {
+      "library": "@twilio/conversations@1.2.3",
+      "destination": "assets/lib/twilio/conversations/",
+      "files": [
+        "dist/twilio-conversations.js",
+        "dist/twilio-conversations.min.js"
+      ]
+    }
+  ]
+}
