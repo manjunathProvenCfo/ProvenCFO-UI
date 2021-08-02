@@ -17,7 +17,7 @@ namespace Proven.Service
         {
             //TODO:Make it dynamic from AppSettings
             //client.BaseAddress = new Uri("http://localhost:27754/Api/");
-            client.BaseAddress = new Uri("http://provencfo.codewarriorsllc.com:27754/Api/");
+            client.BaseAddress = new Uri("http://provencfoapi.codewarriorsllc.com/swagger/index.html");
 
 
 
