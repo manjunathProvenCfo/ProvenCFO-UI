@@ -132,9 +132,12 @@
                             {
                                 <li class="nav-item" id="submenu_teams">
                                     <a class="nav-link" href=@Url.Action("TeamsList", "Teams") name="submenu_teams">Teams</a>
-                                </li>
-                                <li class="nav-item" id="submenu_teams">
-                                    <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_bills"> Billable Entity</a>
+                                </li>                                
+                            }
+                            @if (Common.IsFeatureAccessable("BET"))
+                            {                                
+                                <li class="nav-item" id="submenu_billableentities">
+                                    <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
                                 </li>
                             }
                         </ul>

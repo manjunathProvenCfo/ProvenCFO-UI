@@ -40,7 +40,7 @@
                 <div class="kanban-container scrollbar perfect-scrollbar mr-n3" data-options='{"suppressScrollY":true,"suppressScrollX":false}' style="max-height:670px; overflow: scroll;">
                     @foreach (var Segments in (IEnumerable<kanbanSegmentTypesModel>)TempData["SegmentsAndTasks"])
                     {
-                    <div class="kanban-column ml-3" style="width:30.75% !important;" id="@Segments.SegmentDisplayName.ToString().Replace(" ","_")">
+                    <div class="kanban-column ml-0" style="width:32% !important;" id="@Segments.SegmentDisplayName.ToString().Replace(" ","_")">
                         <div class="kanban-column-header">
                             <h5 class="text-serif fs-0 mb-0">
                                 @Segments.SegmentDisplayName
