@@ -2,6 +2,8 @@
 
 var twilioClient;
 var activeChannel;
+var activeChannelPage;
+const Chat_Page_Size = 30;
 
 var getToken = function () {
     postAjaxSync("/twilio/token?identity=" + chat.userEmail, null, function (response) {
@@ -33,9 +35,9 @@ var createTwilioClient = function () {
                 updateChannels();
             });
 
-            //twilioClient.on('channelInvited', updateChannels);
-            //twilioClient.on('channelAdded', updateChannels);
-            //twilioClient.on('channelUpdated', updateChannels);
+            twilioClient.on('channelInvited', updateChannels);
+            twilioClient.on('channelAdded', updateChannels);
+            twilioClient.on('channelUpdated', updateChannels);
             //twilioClient.on('channelLeft', leaveChannel);
             //twilioClient.on('channelRemoved', leaveChannel);
         });
@@ -73,10 +75,10 @@ var joinChannel = function (channel) {
 
 var setActiveChannel = function (channel) {
     if (activeChannel) {
-        //activeChannel.removeListener('messageAdded', addMessage);
-        //activeChannel.removeListener('messageRemoved', removeMessage);
-        //activeChannel.removeListener('messageUpdated', updateMessage);
-        activeChannel.removeListener('updated', updateActiveChannel);
+        activeChannel.removeListener('messageAdded', addMessage);
+        activeChannel.removeListener('messageRemoved', removeMessage);
+        activeChannel.removeListener('messageUpdated', updateMessage);
+        //activeChannel.removeListener('updated', updateActiveChannel);
         activeChannel.removeListener('memberUpdated', updateMember);
     }
 
@@ -85,20 +87,53 @@ var setActiveChannel = function (channel) {
     let participant = getParticipantByChannelIndex();
     addParticipant(activeChannel, participant.Email); //Replace this function;On page load create all conversation and participants
 
-    $('#send-message').off('click');
-    $('#send-message').on('click', function () {
-        var body = $('#message-body-input').val();
+    $btnSendMessage.off('click');
+    $btnSendMessage.on('click', function () {
+        var body = $messageBodyInput.val();
         channel.sendMessage(body).then(function () {
-            $('#message-body-input').val('').focus();
-            $('#channel-messages').scrollTop($('#channel-messages ul').height());
-            $('#channel-messages li.last-read').removeClass('last-read');
+            $messageBodyInput.val('').focus();
+            $messageBodyInput.trigger('change');
+            setScrollPosition();
+            //TODO: $('#channel-messages li.last-read').removeClass('last-read');
         });
     });
 
-    activeChannel.on('updated', updateActiveChannel);
+    //TODO
+    //if (channel.status !== 'joined') {
+    //    $('#channel').addClass('view-only');
+    //    return;
+    //} else {
+    //    $('#channel').removeClass('view-only');
+    //}
+
+    $channelMessages.empty();
+    channel.getMessages(Chat_Page_Size).then(function (page) {
+        debugger
+        activeChannelPage = page;
+        page.items.forEach(addMessage);
+
+        channel.on('messageAdded', addMessage);
+        channel.on('messageUpdated', updateMessage);
+        channel.on('messageRemoved', removeMessage);
+
+        var newestMessageIndex = page.items.length ? page.items[page.items.length - 1].index : 0;
+        var lastIndex = channel.lastConsumedMessageIndex;
+        if (lastIndex && lastIndex !== newestMessageIndex) {
+            var $li = $('li[data-index=' + lastIndex + ']');
+            var top = $li.position() && $li.position().top;
+            $li.addClass('last-read');
+            $('#channel-messages').scrollTop(top + $('#channel-messages').scrollTop());
+        }
+
+        if ($('#channel-messages ul').height() <= $('#channel-messages').height()) {
+            channel.updateLastConsumedMessageIndex(newestMessageIndex).then(updateChannels);
+        }
+
+        return channel.getMembers();
+    });
 }
 
-function updateChannels() {
+var updateChannels = function updateChannels() {
     twilioClient.getSubscribedConversations()
         .then(page => {
             subscribedChannels = page.items.sort(function (a, b) {
@@ -120,6 +155,10 @@ function updateChannels() {
         });
 }
 
+var updateActiveChannel = function () {
+
+}
+
 var addJoinedChannel = function (channel) {
     var updateableParticipants = chat.participants.filter(obj => isEmptyOrBlank(obj.ChannelUniqueName))
     for (var i = 0; i < updateableParticipants.length; i++) {
@@ -136,18 +175,14 @@ var addJoinedChannel = function (channel) {
 }
 
 var addParticipant = function (channel, identity) {
-    debugger
     channel.getParticipantByIdentity(identity)
         .then(function (obj) {
-            debugger
             console.log(obj)
         })
         .catch(function (e) {
             channel.add(identity).then(function (member) {
-                debugger
                 console.log(member);
             }).catch(function (err) {
-                debugger
                 console.log(err);
             })
         })
@@ -165,4 +200,85 @@ var updateUnreadMessages = function updateUnreadMessages(message) {
             default:
         }
     }
+}
+
+var addTimestampRow = function (time) {
+    let row = $(`#${moment(time).format("YYYYMMDD")}`);
+    if (row.length < 1) {
+        let rowHTML = `<div id="${moment(time).format("YYYYMMDD")}" class="text-center fs--2 text-500"><span>${moment(time).format("MMM DD, YYYY")}</span></div>`;
+        $channelMessages.prepend(rowHTML);
+    }
+    row = $(`#${moment(time).format("YYYYMMDD")}`);
+    return row;
+}
+var prepareMessageRow = function (message) {
+    let msg = message.state;
+    let timestamp = msg.timestamp;
+    let time = moment(timestamp, "HH:mm:ss").format("hh:mm A");
+    let msgHTML = "";
+    let row = "";
+
+    switch (msg.type) {
+        case "text":
+            msgHTML = msg.body;
+            break;
+        default:
+    }
+    if (msg.author.toLowerCase() == chat.userEmail) {
+        row = `<div class='media p-3' id="${msg.sid}">
+                                <div class='media-body d-flex justify-content-end'>
+                                    <div class='w-100 w-xxl-75'>
+                                        <div class='hover-actions-trigger d-flex align-items-center justify-content-end'>
+                                            <div class='bg-primary text-white p-2 rounded-soft chat-message'>
+                                                ${msgHTML}
+                                            </div>
+                                        </div>
+                                        <div class='text-400 fs--2 text-right'>
+                                            ${time}<span class='fas fa-check ml-2 text-success'></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+    } else {
+        row = `<div class='media p-3' id="${msg.sid}">
+        <div class='avatar avatar-l mr-2'>
+            <img class='rounded-circle' src='https://randomuser.me/api/portraits/men/${chat.channelIndex}.jpg' alt='' />
+        </div>
+        <div class='media-body'>
+            <div class='w-xxl-75'>
+                <div class='hover-actions-trigger d-flex align-items-center'>
+                    <div class='chat-message bg-200 p-2 rounded-soft'>
+                    ${msgHTML}
+                    </div>
+                </div>
+                <div class='text-400 fs--2'>
+                    <span>${time}</span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    }
+    return row;
+    //<ul class="hover-actions position-relative list-inline mb-0 text-400 ml-2">
+    //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Forward"><span class="fas fa-share"></span></a></li>
+    //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Archive"><span class="fas fa-archive"></span></a></li>
+    //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Edit"><span class="fas fa-edit"></span></a></li>
+    //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Remove"><span class="fas fa-trash-alt"></span></a></li>
+    //</ul>
+}
+
+var addMessage = function (message) {
+    let msg = message.state;
+    var timestampRow = addTimestampRow(msg.timestamp);
+    var messageRow = prepareMessageRow(message)
+    timestampRow.after(messageRow);
+}
+
+var removeMessage = function (message) { }
+
+var updateMessage = function (args) {
+
+}
+var createMessage = function (message, $el) {
+
 }

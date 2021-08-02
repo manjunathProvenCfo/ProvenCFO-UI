@@ -2,6 +2,11 @@
 var $participantFirst;
 var $participants;
 var $channelName;
+var $messageBodyInput;
+var $btnSendMessage;
+var $channelMessages;
+
+var Default_Profile_Image = "/assets/img/team/default-logo.png";
 
 var chat = {
     userId: "",
@@ -15,6 +20,9 @@ var loadPage = function () {
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
+    $messageBodyInput = $("#message-body-input");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
 
     getChatParticipants();
     createTwilioClient();
@@ -38,7 +46,7 @@ var renderParticipants = function () {
     for (var i = 0; i < obj.length; i++) {
         participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
                         <div class="avatar avatar-xl status-online">
-                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ProfileImage) == true ? "https://randomuser.me/api/portraits/men/" + i + ".jpg" : "https://randomuser.me/api/portraits/men/" + i + ".jpg") + `" alt="" />
+                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ProfileImage) == true ? Default_Profile_Image : obj[i].ProfileImage) + `" alt="" />
 
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -121,4 +129,8 @@ var getChannelUniqueName = function (userEmail, participantEmail) {
         return userEmail + "_" + participantEmail;
     else
         return participantEmail + "_" + userEmail;
+}
+
+var setScrollPosition = function () {
+    $channelMessages.scrollTop($channelMessages[0].scrollHeight)
 }
