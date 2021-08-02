@@ -360,6 +360,8 @@ function RemoveFile(e) {
         dataType: "json",
         success: function (response) {
             if (response.Message == 'Success') {
+                ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
+                   
 
             }
             else {
@@ -390,7 +392,8 @@ function RemovveFileOnCreate(attachmentId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            if (response.Message == 'Success') {
+            debugger;
+            if (response.Message == 'Success') {            
 
             }
             else {
@@ -421,7 +424,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
         dataType: "json",
         success: function (response) {
             if (response.Message == 'Success') {
-
+                ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
                 var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
                 if (AttachmentCount != undefined && AttachmentCount != '') {
                     $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) - 1;
