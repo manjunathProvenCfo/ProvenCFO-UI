@@ -45,7 +45,6 @@ namespace ProvenCfoUI
              "~/assets/lib/leaflet/leaflet.js",
              "~/assets/lib/leaflet.markercluster/leaflet.markercluster.js",
              "~/assets/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js",
-             "~/assets/js/theme.js",
              "~/assets/lib/select2/select2.min.js",
              "~/assets/lib/shopify-draggable/draggable.bundle.js",
              "~/assets/lib/lightbox2/js/lightbox.min.js",
@@ -56,8 +55,9 @@ namespace ProvenCfoUI
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/list.min.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
-              "~/assets/lib/flatpickr/flatpickr.min.js",
               "~/assets/lib/dropzone/dropzone.min.js",
+              "~/assets/lib/emojionearea/emojionearea.min.js",
+             "~/assets/js/theme.js",
               "~/assets/js/wrapper.js"
     ));
 
@@ -94,7 +94,6 @@ namespace ProvenCfoUI
             //         ));
 
             bundles.Add(new StyleBundle("~/bundles/customcss").Include(
-                "~/assets/css/theme.css",
                   "~/assets/css/common.css",
                   "~/assets/js/config.navbar-vertical.js",
                    "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
@@ -103,12 +102,13 @@ namespace ProvenCfoUI
                     "~/assets/lib/leaflet/leaflet.css",
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.css",
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
-                    
+
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/dropzone/dropzone.min.css",
-                     "~/assets/lib/fancybox/jquery.fancybox.min.css"
-
+                     "~/assets/lib/fancybox/jquery.fancybox.min.css",
+                     "~/assets/lib/emojionearea/emojionearea.min.css",
+                "~/assets/css/theme.css"
                     ));
 
             BundleTable.EnableOptimizations = true;

@@ -1,16 +1,11 @@
 ﻿@{
     ViewBag.Title = "Chat";
 }
-
 <div class="card-body px-0 pt-0">
     @Html.Partial("_communication")
 </div>
 
 @section Scripts {
-    @*<script src="~/Content/js/theme/config.dark-mode.js" type="text/javascript"></script>
-        <script src="~/Content/js/theme/Utils.js" type="text/javascript"></script>
-        <script src="~/assets/lib/emojionearea/emojionearea.min.js"></script>
-        <script src="~/Content/js/theme/chat.min.js"></script>*@
     <script src="~/assets/lib/superagent/dist/superagent.min.js"></script>
     <script src="~/assets/lib/twilio/conversations/dist/twilio-conversations.js"></script>
     @Scripts.Render("~/bundles/js/twilio-chat")

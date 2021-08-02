@@ -23,6 +23,7 @@
     @Styles.Render("~/assets/AvertaWebFont/provencfo.css")
     @Styles.Render("~/bundles/customcss")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles",required:false)
 
 </head>
 <body>
@@ -32,13 +33,13 @@
 
         <div class="container-fluid" data-layout="container">
             @*@if (!User.Identity.IsAuthenticated)
-            {
-                @Html.Partial("_LeftNav")
+                {
+                    @Html.Partial("_LeftNav")
 
-            }*@
+                }*@
             @if (Request.Url.AbsoluteUri.Contains("~/ChangePassword"))
             {
-            <p>HI</p>
+                <p>HI</p>
 
             }
             else
@@ -46,19 +47,21 @@
                 @Html.Partial("_LeftNav")
             }
 
-        <div class="content">
+            <div class="content">
 
-       
-            @Html.Action("TopNavigation", "Home")
 
-            @RenderBody()
+                @Html.Action("TopNavigation", "Home")
 
-        </div>
+                @RenderBody()
+
+            </div>
 
         </div>
     </main>
 
     @Scripts.Render("~/bundles/customjquery")
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @RenderSection("scripts", required: false)
 
 
