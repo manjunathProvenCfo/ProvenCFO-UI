@@ -32,6 +32,7 @@ namespace ProvenCfoUI.Models
         [Required(ErrorMessage = "Team is a required field")]
         public int TeamId { get; set; }
         public int EntityId { get; set; }
+        public DateTime? StartDate { get; set; }
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }

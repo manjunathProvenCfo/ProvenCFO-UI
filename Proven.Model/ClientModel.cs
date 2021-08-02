@@ -26,6 +26,7 @@ namespace Proven.Model
         public int State { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? CreatedDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         public string CityName { get; set; }
         public string StateName { get; set; }
