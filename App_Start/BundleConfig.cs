@@ -57,7 +57,8 @@ namespace ProvenCfoUI
              "~/assets/lib/list.min.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
               "~/assets/lib/flatpickr/flatpickr.min.js",
-              "~/assets/lib/dropzone/dropzone.min.js"
+              "~/assets/lib/dropzone/dropzone.min.js",
+              "~/assets/js/wrapper.js"
     ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -70,6 +71,11 @@ namespace ProvenCfoUI
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
+
+            bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
+                        "~/assets/js/chat.js",
+                        "~/assets/js/twilio.js"));
+            //Css Start
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
