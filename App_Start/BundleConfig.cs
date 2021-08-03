@@ -112,7 +112,7 @@ namespace ProvenCfoUI
                 "~/assets/css/theme.css"
                     ));
 
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
 
         }
     }

@@ -46,7 +46,7 @@ namespace ProvenCfoUI.Controllers
                 objvm.Id = result.Id;
                 objvm.EntityName = result.EntityName;
                 objvm.ProvenCFOXeroContactID = result.ProvenCFOXeroContactID;
-                objvm.Clients = result.Clients;
+
                 objvm.Status = result.Status;
                 objvm.CreatedBy = result.CreatedBy;
                 objvm.CreatedDate = result.CreatedDate;
@@ -61,6 +61,7 @@ namespace ProvenCfoUI.Controllers
         [HttpPost]
         public ActionResult CreateBillableEntity(BillableEntitiesVM bill)
         {
+            ModelState.Remove("Clients");
             if (ModelState.IsValid)
             {
                 try

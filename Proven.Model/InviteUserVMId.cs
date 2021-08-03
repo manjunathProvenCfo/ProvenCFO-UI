@@ -16,15 +16,15 @@ namespace Proven.Model
         public string RoleName { get; set; }
         public int? JobId { get; set; }
         public string RoleId { get; set; }
-        public int? IsActive { get; set; }       
+        public int? IsActive { get; set; }
         public string AgencyId { get; set; }
         public Guid? ActivationCode { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string SessionTimeout { get; set; }
-        public int? IsRegistered { get; set; }        
+        public int? IsRegistered { get; set; }
         public DateTime? ExpiryTime { get; set; }
-
+        public string UserId { get; set; }
         public string CreatedBy { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? LastLogin { get; set; }

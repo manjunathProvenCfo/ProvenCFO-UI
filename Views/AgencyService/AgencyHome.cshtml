@@ -220,7 +220,7 @@
                         </div>
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Status</p>
-                            <p class="badge badge-success font-weight-normal">Active</p>
+                            <p class="badge badge-success font-weight-normal"><span id="spStatus"></span></p>
                             <!--<p class="col-md-7 col-xl-8 mb-2 color-gray-shades">-->
                             @*<san href="#" class="badge badge-success font-weight-normal"><span id="spStatus"></span></san>*@
                             <!--</p>-->
@@ -258,7 +258,7 @@
                         <div class="media align-items-center mb-3">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
-                                    <div class="avatar avatar-2xl status-online">
+                                    <div class="avatar avatar-2xl">
                                         <img class="rounded-circle" id="spProfileImage1" />
 
                                     </div>
@@ -286,7 +286,7 @@
                         <div class="media align-items-center mb-3">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
-                                    <div class="avatar avatar-2xl status-online">
+                                    <div class="avatar avatar-2xl">
                                         @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
                                         <img class="rounded-circle" id="spProfileImage2" />
 
@@ -315,7 +315,7 @@
                         <div class="media align-items-center mb-3">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
-                                    <div class="avatar avatar-2xl status-online">
+                                    <div class="avatar avatar-2xl">
                                         @*<img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />*@
                                         <img class="rounded-circle" id="spProfileImage3" />
 
@@ -538,6 +538,7 @@
                             $('.spEntityName').html(String(data.EntityName));
                             $('#spCreatedDate').html(String(new Date(data.CreatedDate.match(/\d+/)[0] * 1).toDateString()));
                             $('#spTeamName').html(String(data.TeamName));
+                            $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spStaffName1').html(String(data.TeamMemberId1));
                             $('#spStaffName2').html(String(data.TeamMemberId2));
                             $('#spStaffName3').html(String(data.TeamMemberId3));
@@ -562,16 +563,17 @@
                             else {
                                 $('#spProfileImage3').attr('src', "../assets/img/team/default-logo.png")
                             }
-                                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                             $('.badge-soft-success').removeClass('d-none');
+                            $('.badge-success').removeClass('d-none');
+                            $('.rounded-circle').removeClass('d-none');
                             SetUserPreferencesForAgency();
                         }
                         else {
 
                             $('#roleexist').hide();
-                            $('#spClientName').html('');
-                            $('#spEntityName').html('');
+                            $('.spClientName').html('');
+                            $('.spEntityName').html('');
                             $('#spCreatedDate').html('');
                             $('#spTeamName').html('');
                             $('#spStaffName1').html('');
@@ -580,18 +582,20 @@
                             $('#spJobTitle1').html('');
                             $('#spJobTitle2').html('');
                             $('#spJobTitle3').html('');
-                            $('#spProfileImage1').attr('');
-                            $('#spProfileImage2').attr('');
-                            $('#spProfileImage3').attr('');
+                            $('#spProfileImage1').removeAttr('');
+                            $('#spProfileImage2').removeAttr('');
+                            $('#spProfileImage3').removeAttr('');
                             $('#spStatus').html('');
                             $('#spClientAddress').html('');
                             $('.badge-soft-success').addClass('d-none');
+                            $('.badge-success').removeClass('d-none');
+                            $('.rounded-circle').removeClass('d-none');
                         }
                     },
                     error: function () {
                         $('#roleexist').hide();
-                        $('#spClientName').html('');
-                        $('#spEntityName').html('');
+                        $('.spClientName').html('');
+                        $('.spEntityName').html('');
                         $('#spCreatedDate').html('');
                         $('#spTeamName').html('');
                         $('#spStaffName1').html('');
@@ -600,43 +604,18 @@
                         $('#spJobTitle1').html('');
                         $('#spJobTitle2').html('');
                         $('#spJobTitle3').html('');
-                        $('#spProfileImage1').attr('');
-                        $('#spProfileImage2').attr('');
-                        $('#spProfileImage3').attr('');
+                        $('#spProfileImage1').removeAttr('src');
+                        $('#spProfileImage2').removeAttr('src');
+                        $('#spProfileImage3').removeAttr('src');
                         $('#spStatus').html('');
                         $('#spClientAddress').html('');
                         $('.badge-soft-success').addClass('d-none');
+                        $('.badge-success').addClass('d-none');
+                        $('.rounded-circle').addClass('d-none');
                     }
                 });
             }
 
-
-            //$.ajax({
-            //    url: '/AgencyService/GetTeamDetails?id=' + ClientID,
-            //    type: "GET",
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: function (data) {
-            //        if (data != null) {
-
-            //            $('#teamexist').show();
-            //            $('.spteamName').html(String(data.Name));
-            //            $('.badge-soft-success').removeClass('d-none');
-            //            SetUserPreferencesForAgency();
-            //        }
-            //        else {
-
-            //            $('#teamexist').hide();
-            //            $('#spteamName').html('');
-            //            $('.badge-soft-success').addClass('d-none');
-            //        }
-            //    },
-            //    error: function () {
-            //        $('#teamexist').hide();
-            //        $('#spteamName').html('');
-            //        $('.badge-soft-success').addClass('d-none');
-            //    }
-            //});
 
             var totalSalesInit = function totalSalesInit() {
                 var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales';

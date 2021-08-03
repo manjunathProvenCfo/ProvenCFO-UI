@@ -42,7 +42,6 @@
 
                         <th class="sort pr-1 align-middle" width="45%">Entity Name</th>
                         <th class="sort pr-1 align-middle" width="45%">Xero ID</th>
-                        @*<th class="sort pr-1 align-middle" width="45%">Clients</th>*@
                         <th class="sort pr-1 align-middle" width="45%">Status</th>
                         <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
                     </tr>
@@ -59,10 +58,6 @@
                             <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.ProvenCFOXeroContactID)
                             </td>
-                            @*<td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Clients)
-                            </td>*@
-
                             <td class="align-middle">
                                 @if (item.Status == "Active")
                                 {
@@ -75,17 +70,17 @@
                             </td>
 
                             <td class="align-middle text-center pr-3">
-                                <span class="d-none d-sm-inline-block">
+                                <span class="d-sm-inline-block">
                                     <a href='@Url.Action("EditBillableEntity", "BillableEntities", new { id = item.Id})'>
                                         <i class="far fa-edit"> </i>
                                     </a>
                                 </span>
-                                <span class="d-none d-sm-inline-block ml-2">
+                                <span class="d-sm-inline-block ml-2">
                                     <a href="#" onclick="deleteBillableEntity('@item.Id')">
                                         <i class="far fa-trash-alt"> </i>
                                     </a>
                                 </span>
-                            <span class="d-none d-sm-inline-block ml-2">
+                            <span class="d-sm-inline-block ml-2">
 
                                     @if (item.Status == "Active")
                                     {
