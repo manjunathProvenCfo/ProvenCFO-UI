@@ -31,7 +31,7 @@ namespace ProvenCfoUI
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
              "~/assets/js/bootstrap.min.js",
-             "~/assets/lib/moment.js/moment.min.js",
+             "~/assets/lib/moment/dist/moment.min.js",
              "~/assets/lib/fortawesome/all.min.js",
              "~/assets/lib/stickyfilljs/stickyfill.min.js",
              "~/assets/lib/sticky-kit/sticky-kit.min.js",

@@ -19,9 +19,12 @@
       ]
     },
     {
-      "provider": "cdnjs",
-      "library": "moment.js@2.29.1",
-      "destination": "assets/lib/moment.js/"
+      "library": "moment@2.29.1",
+      "destination": "assets/lib/moment/",
+      "files": [
+        "dist/moment.js",
+        "dist/moment.min.js"
+      ]
     }
   ]
 }
