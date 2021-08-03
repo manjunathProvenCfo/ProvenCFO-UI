@@ -116,7 +116,10 @@
 
                             </th>
                             <th class="align-middle">
-                                @Html.DisplayFor(modelItem => item.StartDate, "{0:mm/dd/yyyy}")
+                                @if (item.StartDate.HasValue)
+                                {
+                                    @item.StartDate.Value.ToString("MM/dd/yyyy")
+                                }
                             </th>
                             <td class="align-middle text-center pr-3">
                                 <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
