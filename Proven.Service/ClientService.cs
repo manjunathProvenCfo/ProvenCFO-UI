@@ -129,7 +129,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime DateTime)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime StartDate)
         {
             var from = new Dictionary<string, object>
             {
@@ -143,7 +143,7 @@ namespace Proven.Service
                 {"CityName",CityName },
                 {"CreatedBy",LoginUserid },
                  {"TeamId",TeamId },
-                {"EntityId" ,EntityId}
+                {"EntityId" ,EntityId},
                 {"StartDate",StartDate }
 
 
@@ -166,7 +166,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, string StartDate)
         {
             var from = new Dictionary<string, string>
             {
@@ -177,8 +177,8 @@ namespace Proven.Service
                 {"CityName",CityName },
                 {"ModifiedBy",LoginUserid},
                 {"TeamId",TeamId },
-                {"EntityId",EntityId }
-                //{"Email",Email },
+                {"BillableEntityId",BillableEntityId },
+                 {"StartDate", StartDate }
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },
                 //{"ContactPersonName",ContactPersonName },
