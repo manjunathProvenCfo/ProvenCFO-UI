@@ -2360,7 +2360,7 @@ utils.$document.ready(function () {
   datetimepicker.length && datetimepicker.each(function (index, value) {
     var $this = $(value);
     var options = $.extend({
-      dateFormat: 'd/m/y',
+      dateFormat: 'Y/m/d',
       disableMobile: true
     }, $this.data('options'));
     $this.flatpickr(options);

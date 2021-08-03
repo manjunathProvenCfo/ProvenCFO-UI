@@ -132,7 +132,6 @@ namespace ProvenCfoUI.Controllers
                         Clientvm.BillableEntityId = client.BillableEntityId;
                         Clientvm.ContactPersonName = client.ContactPersonName;
                         Clientvm.StartDate = client.StartDate;
-                        client.StateList = objClientService.GetAllStates().ResultData.ToList();
 
 
                         return View("CreateClient", Clientvm);
@@ -184,7 +183,7 @@ namespace ProvenCfoUI.Controllers
                                         ViewBag.ErrorMessage = "Exist";
                                         return View("CreateClient", createClientVM);
                                     }
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(),createClientVM.BillableEntityId.ToString(),createClientVM.StartDate.ToString());
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(),createClientVM.BillableEntityId.ToString(),Convert.ToDateTime(createClientVM.StartDate));
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Updated";
@@ -214,7 +213,7 @@ namespace ProvenCfoUI.Controllers
 
                 var client = objClientService.GetClientById(id);
 
-                var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(),client.BillableEntityId.ToString(), client.StartDate.ToString());
+                var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(),client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate));
                 if (result == null)
                     ViewBag.ErrorMessage = "";
                 return RedirectToAction("ClientList");

@@ -166,9 +166,9 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, string StartDate)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate)
         {
-            var from = new Dictionary<string, string>
+            var from = new Dictionary<string, object>
             {
                 {"Id", Convert.ToString(id)},
                 {"Name", ClientName},
@@ -177,7 +177,7 @@ namespace Proven.Service
                 {"CityName",CityName },
                 {"ModifiedBy",LoginUserid},
                 {"TeamId",TeamId },
-                {"BillableEntityId",BillableEntityId },
+                {"EntityId",BillableEntityId },
                  {"StartDate", StartDate }
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },

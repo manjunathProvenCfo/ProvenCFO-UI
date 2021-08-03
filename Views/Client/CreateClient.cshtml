@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @*<input class="form-control datetimepicker" id="datepicker" type="text" placeholder="dd/mm/yy" data-options='{"dateFormat":"d/m/y"}'>*@
-                                        @Html.EditorFor(model => model.StartDate, new{htmlAttributes = new{ @class = "form-control datetimepicker", id = "datepicker", type = "text", placeholder = "mm/dd/yy"}})
+                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "text", placeholder = "mm/dd/yy" } })
                                         @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 
                                     </div>
