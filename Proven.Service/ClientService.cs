@@ -129,9 +129,9 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime DateTime)
         {
-            var from = new Dictionary<string, string>
+            var from = new Dictionary<string, object>
             {
                 {"Name", ClientName},
                 {"Email",Email },
@@ -144,6 +144,8 @@ namespace Proven.Service
                 {"CreatedBy",LoginUserid },
                  {"TeamId",TeamId },
                 {"EntityId" ,EntityId}
+                {"StartDate",StartDate }
+
 
             };
             content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");

@@ -30,7 +30,7 @@ namespace Proven.Model
 
         public string CityName { get; set; }
         public string StateName { get; set; }
-        public int EntityId { get; set; }
+        public int BillableEntityId { get; set; }
         public string EntityName { get; set; }
         public string CreatedByUser { get; set; }
         public string ModifiedBy { get; set; }
