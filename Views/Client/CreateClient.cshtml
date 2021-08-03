@@ -20,7 +20,7 @@
 }
 
 <script>
-   // document.getElementById("clientExist").style.display = "none";
+    // document.getElementById("clientExist").style.display = "none";
 </script>
 
 
@@ -71,8 +71,8 @@
                                         <label for="split-login-email" class="mb-0"> Entity Name</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.EntityId, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select entity", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.EntityId, "", new { @class = "text-danger" })
+                                        @Html.DropDownListFor(model => model.BillableEntityId, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select Entity", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.BillableEntityId, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="row align-items-center form-group">
@@ -106,13 +106,25 @@
                                 </div>
 
                                 <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="datepicker" class="mb-0">Start Date</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @*<input class="form-control datetimepicker" id="datepicker" type="text" placeholder="dd/mm/yy" data-options='{"dateFormat":"d/m/y"}'>*@
+                                        @Html.EditorFor(model => model.StartDate, new{htmlAttributes = new{ @class = "form-control datetimepicker", id = "datepicker", type = "text", placeholder = "mm/dd/yy"}})
+                                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
                                     @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Address </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-            </div>*@
+                                            <label for="split-create-phonenumber" class="mb-0">Address </label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                        </div>*@
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
                                     </div>
@@ -124,12 +136,12 @@
 
                                 <div class="row align-items-center form-group">
                                     @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
-            </div>*@
+                                            <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
+                                        </div>*@
                                 </div>
 
 
@@ -164,6 +176,8 @@
 @section Scripts {
 
     <script>
+
+
         $("#clientExist").addClass('d-none');
         $("#clientExist").html('');
 
@@ -174,7 +188,7 @@
                 $("#clientExist").html('');
             }
         }
-       // document.getElementById("clientExist").style.display = "none";
+        // document.getElementById("clientExist").style.display = "none";
         var msg = $('#CreateOrUpdate') != undefined ? $('#CreateOrUpdate').val() : '';
 
         if (msg != undefined && msg != '' && msg == "Created") {
@@ -186,7 +200,7 @@
             $('#CreateOrUpdate').val('');
         }
         else if (msg != undefined && msg != '' && msg == "Exist") {
-            $('#clientExist').show();           
+            $('#clientExist').show();
             $("#clientExist").removeClass('d-none');
             $("#clientExist").html('This Client Agency name has been already taken.');
             $('#CreateOrUpdate').val('');
@@ -213,7 +227,10 @@
                         window.location.href = '/Client/ClientList'
                     });
         }
+
     </script>
+
+    <script src="assets/lib/flatpickr/flatpickr.min.js"></script>
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 }

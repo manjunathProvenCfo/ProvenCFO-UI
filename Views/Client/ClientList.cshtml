@@ -70,7 +70,7 @@
                             Status
                         </th>
                         <th class="sort pr-1 align-middle">
-                            Created Date
+                            Start Date
                         </th>
                         <th class="no-sort pr-1 align-middle text-center">Action</th>
 
@@ -116,7 +116,7 @@
 
                             </th>
                             <th class="align-middle">
-                                @Html.DisplayFor(modelItem => item.CreatedDate, "{0:MM/dd/yyyy}")
+                                @Html.DisplayFor(modelItem => item.StartDate@*, "{0:MM/dd/yyyy}"*@)
                             </th>
                             <td class="align-middle text-center pr-3">
                                 <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
@@ -160,6 +160,8 @@
 
 @section Scripts {
     <script>
+
+
         var ExportToExcel = function () {
 
             ExportFileReq("Client", "ExportToExcel");
