@@ -27,7 +27,7 @@ namespace ProvenCfoUI
             //        "~/assets/js/theme.js" 
             //           ));
 
-            bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
+            bundles.Add(new Bundle("~/bundles/customjquery").Include(
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
              "~/assets/js/bootstrap.min.js",
