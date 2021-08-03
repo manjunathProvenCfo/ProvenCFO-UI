@@ -143,7 +143,7 @@ namespace Proven.Service
                 {"CityName",CityName },
                 {"CreatedBy",LoginUserid },
                  {"TeamId",TeamId },
-                {"EntityId" ,EntityId}
+                {"EntityId" ,EntityId},
                 {"StartDate",StartDate }
 
 
