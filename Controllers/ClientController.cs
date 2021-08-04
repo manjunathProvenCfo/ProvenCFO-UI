@@ -48,6 +48,7 @@ namespace ProvenCfoUI.Controllers
                     City = s.CityName,
                     State = s.StateName,
                     Status = s.Status == true ? "Active" : "Inactive",
+                    Entity_Name = s.EntityName,
                     Start_Date = s.StartDate,
                     Created_Date = s.CreatedDate.HasValue == false || (((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
                     Created_By = s.CreatedByUser,

@@ -1,6 +1,7 @@
 ﻿using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
+using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,6 +179,29 @@ namespace ProvenCfoUI.Controllers
             {
                 ViewBag.ErrorMessage = "";
                 return View();
+            }
+        }
+
+        [CheckSession]
+        public JsonResult ExportToExcel()
+        {
+            using (BillableEntitiesService objBills = new BillableEntitiesService())
+            {
+                Utltity obj = new Utltity();
+                var objResult = objBills.GetAllBillableEntitiesList().ResultData.Select(b => new
+                {
+                    Billable_Entity_Id = b.Id,
+                   Entity_Name = b.EntityName,
+                    Xero_ID = b.ProvenCFOXeroContactID,
+                    Status = b.Status == "Active" ? "Active" : "Inactive",
+                    Created_By = b.CreatedByUser,
+                    Created_Date = b.CreatedDate.ToString() == "Inactive" || (((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
+                    Modified_By = b.ModifiedByUser,
+                    Modified_Date = b.ModifiedDate.ToString() == "Inactive" || (((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy").Replace("-", "/")
+
+                }).ToList();
+                string filename = obj.ExportTOExcel("BillableEntitiesList", obj.ToDataTable(objResult));
+                return Json(filename, JsonRequestBehavior.AllowGet);
             }
         }
 

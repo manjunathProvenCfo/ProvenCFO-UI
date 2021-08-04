@@ -71,16 +71,6 @@
                                         @Html.ValidationMessageFor(model => model.ProvenCFOXeroContactID, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                @*<div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-create-name">Client</label>
-                                        </div>
-
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.Clients, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.Clients, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>*@
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
@@ -90,15 +80,6 @@
                                         @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-
-
-
-
-
-                                @*<div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-                                    </div>*@
 
                                 <div class="row align-items-center form-group mb-0">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
@@ -115,9 +96,6 @@
                                         }
                                         @Html.ActionLink("Cancel", "GetAllBillableEntitiesList", "BillableEntities", new { }, new { @class = "btn btn-primary ml-2" })
                                     </div>
-                                    @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
-                                    @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
-                                    @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
                                 </div>
 
                             </div>
