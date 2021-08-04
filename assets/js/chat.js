@@ -31,6 +31,11 @@ var loadPage = function () {
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
     }
+
+    $messageBodyInput.on('keydown', function (e) {
+        if (e.keyCode === 13) { $sendmessge.click(); }
+        else if (activeChannel) { activeChannel.typing(); }
+    });
 }
 
 var getChatParticipants = function () {
@@ -99,6 +104,7 @@ var handleParticipantClick = function (event) {
         createOrJoinExistingChannel(channelName, channelName, true, attributes);
     }
 }
+
 //Database Queries Start
 var updateTwilioUserId = function (userId, twiliouserId) {
     postAjaxSync("/Twilio/UpdateTwilioUserId?userId=" + userId + "&twiliouserId=" + twiliouserId, null, function (response) {

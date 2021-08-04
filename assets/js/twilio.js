@@ -90,12 +90,14 @@ var setActiveChannel = function (channel) {
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
         var body = $messageBodyInput.val();
-        channel.sendMessage(body).then(function () {
-            $messageBodyInput.val('').focus();
-            $messageBodyInput.trigger('change');
-            setScrollPosition();
-            //TODO: $('#channel-messages li.last-read').removeClass('last-read');
-        });
+        if (validateMessage()) {
+            channel.sendMessage(body).then(function () {
+                $messageBodyInput.val('').focus();
+                $messageBodyInput.trigger('change');
+                setScrollPosition();
+                //TODO: $('#channel-messages li.last-read').removeClass('last-read');
+            });
+        }
     });
 
     //TODO
@@ -180,7 +182,7 @@ var addParticipant = function (channel, identity) {
             console.log(obj)
         })
         .catch(function (e) {
-            channel.add(identity).then(function (member) {
+            activeChannel.add(identity).then(function (member) {
                 console.log(member);
             }).catch(function (err) {
                 console.log(err);
@@ -200,6 +202,15 @@ var updateUnreadMessages = function updateUnreadMessages(message) {
             default:
         }
     }
+}
+
+var validateMessage = function () {
+    let isValid = false;
+    let body = $messageBodyInput.val(); 
+    if (isEmptyOrBlank(body)) {
+        //show error alert
+    }
+    return isValid;
 }
 
 var addTimestampRow = function (time) {
