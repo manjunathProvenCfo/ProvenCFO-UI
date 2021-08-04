@@ -439,8 +439,6 @@
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
     <Content Include="assets\js\jquery.min.js" />
-    <Content Include="assets\js\jquery.validate.min.js" />
-    <Content Include="assets\js\jquery.validate.unobtrusive.min.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
