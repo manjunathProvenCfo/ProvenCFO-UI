@@ -83,19 +83,19 @@ namespace ProvenCfoUI.Controllers
                     using (AccountService obj = new AccountService())
                     {
                         CommonService commSrv;
-                        var result = obj.LoginAccess(loginVM.username, loginVM.PasswordHash);
+                        var result = obj.LoginAccess(loginVM.UserName, loginVM.PasswordHash);
                         if (result.resultData != null && !string.IsNullOrEmpty(result.resultData.Id) && result.status == true)
                         {
                             commSrv = new CommonService();
                             Session["UserId"] = result.resultData.Id.ToString();
                             Session["UserName"] = result.resultData.FirstName;
-                            Session["LoginName"] = loginVM.username.ToString();
+                            Session["LoginName"] = loginVM.UserName.ToString();
                             Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
                             Session["UserType"] = result.resultData.UserType;
                             ViewBag.Sucess = "Login Sucessfully";
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
-                            var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.username.ToString());
+                            var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
                             Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
                             return RedirectToAction("AgencyHome", "AgencyService");
                         }
