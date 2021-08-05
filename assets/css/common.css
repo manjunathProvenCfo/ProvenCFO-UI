@@ -10,130 +10,148 @@ namespace ProvenCfoUI.assets.css
 	}
 }*/
 
-body, .alert, .badge, .blockquote-footer, .btn, .falcon-data-table .paging_first_last_numbers .page-link, .falcon-data-table .paging_full .page-link, .falcon-data-table .paging_full_numbers.page-link, 
+body, .alert, .badge, .blockquote-footer, .btn, .falcon-data-table .paging_first_last_numbers .page-link, .falcon-data-table .paging_full .page-link, .falcon-data-table .paging_full_numbers.page-link,
 .falcon-data-table .paging_numbers .page-link, .falcon-data-table .paging_simple_numbers .page-link, .invalid-feedback, .navbar, .pagination, .valid-feedback, button, input, label,
 optgroup, select, textarea, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-	font-family: 'Averta' !important;
+    font-family: 'Averta' !important;
 }
 
 .navbar-light .navbar-nav .active > .nav-link,
 .navbar-light .navbar-nav .nav-link.active,
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .show > .nav-link {
-	color: #00BE82 !important;
+    color: #00BE82 !important;
 }
 
 body, .navbar-glass,
 .navbar-vertical .navbar-collapse {
-	background-color: #F5F5F5 !important;
+    background-color: #F5F5F5 !important;
 }
 
+.notification-indicator-primary::before {
+    background-color: #E63756 !important;
+}
+#navbarDropdownSetting {
+    color: #00BE82 !important;
+}
 .invite-info {
-	font-size: 12px;
-	max-width: 420px;
+    font-size: 12px;
+    max-width: 420px;
 }
 
 .table {
-	width: 100% !important;
+    width: 100% !important;
 }
 
-.table td, .table th {
-	padding-top: 10px !important;
-	padding-bottom: 10px !important;
-}
+    .table td, .table th {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
 
-.table td a {
-	color: #5e6e82;
-}
+        .table td a {
+            color: #5e6e82;
+        }
 
-.table td a:hover {
-	color: #000;
-}
+            .table td a:hover {
+                color: #000;
+            }
 
 .btn-falcon-default span {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .btn-falcon-default a {
-	color: #4d5969;
+    color: #4d5969;
 }
 
-.btn-falcon-default a:hover {
-	color: #000;
-	text-decoration: none
-}
+    .btn-falcon-default a:hover {
+        color: #000;
+        text-decoration: none
+    }
 
 .card-header .btn:hover,
 .card-header .btn-falcon-default:hover:not(.disabled):not(:disabled) {
-	background-color: #e6e6e6 !important;
-	border-color: #dfdfdf !important;
-	color: #000 !important
+    background-color: #e6e6e6 !important;
+    border-color: #dfdfdf !important;
+    color: #000 !important
 }
 
 .field-validation-error {
-	font-size: 12px;
+    font-size: 12px;
 }
+
 .overview-content p {
-	font-size: .83333rem;
+    font-size: .83333rem;
 }
+
 .color-dark {
-	color: #181818;
+    color: #181818;
 }
+
 .color-gray-shades {
-	color: #5D6E82;
+    color: #5D6E82;
 }
 
 .dashboard-frame .progress-circle {
-	height: 100%;
+    height: 100%;
 }
 
-.dashboard-frame .progress-circle .progressbar-text .value {
-	font-size: 1.44rem;
-}
+    .dashboard-frame .progress-circle .progressbar-text .value {
+        font-size: 1.44rem;
+    }
 
-.dashboard-frame .progress-circle .progressbar-text b {
-	font-size: 1.15rem;
-}
+    .dashboard-frame .progress-circle .progressbar-text b {
+        font-size: 1.15rem;
+    }
+
 .bg-red {
-	background-color: #E63756 !important;
+    background-color: #E63756 !important;
 }
+
 .bg-light-blue {
-	background-color: #27BCFE !important;
+    background-color: #27BCFE !important;
 }
+
 .bg-blue {
-	background-color: #235EE8 !important;
+    background-color: #235EE8 !important;
 }
+
 .bg-green {
-	background-color: #00BE82 !important;
+    background-color: #00BE82 !important;
 }
+
 .bg-orange {
-	background-color: #F68F57 !important;
+    background-color: #F68F57 !important;
 }
+
 .action-icons a {
-	color: #181818;
-	transition: all .25s ease;
+    color: #181818;
+    transition: all .25s ease;
 }
-.action-icons a:hover {
-	color: #00BE82;
-}
+
+    .action-icons a:hover {
+        color: #00BE82;
+    }
+
 .btn-link {
-	color: #00BE82 !important;
+    color: #00BE82 !important;
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1680px) {
-	.custom-form-width .col-xl-5 {
-		flex: 0 0 70%;
-		max-width: 70%;
-	}
+    .custom-form-width .col-xl-5 {
+        flex: 0 0 70%;
+        max-width: 70%;
+    }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
-	.custom-form-width .col-lg-8 {
-		flex: 0 0 90%;
-		max-width: 90%;
-	}
+    .custom-form-width .col-lg-8 {
+        flex: 0 0 90%;
+        max-width: 90%;
+    }
 }
+
 .navbar-top {
-	font-weight: 400 !important;
-	font-size : 16px !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
 }
