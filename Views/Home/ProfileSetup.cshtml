@@ -68,11 +68,21 @@
                                     @Html.TextBoxFor(w => w.PhoneNumber, new { @class = "form-control" })
                                 </div>
                             </div>
+                            @if (Model.UserType == "1")
+                            {
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="phone">LinkedIn Profile</label>
+                                    @Html.TextBoxFor(w => w.LinkedInProfile, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(w => w.LinkedInProfile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            }
 
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="intro">Notes</label>
-                                    @Html.TextAreaFor(w => w.AboutUs, new { @class = "form-control", cols = "30", rows = "13" , MaxLength = "1000" })
+                                    @Html.TextAreaFor(w => w.AboutUs, new { @class = "form-control", cols = "30", rows = "13", MaxLength = "1000" })
                                 </div>
                             </div>
                             <div class="col-12 d-flex justify-content-end">
@@ -240,6 +250,7 @@
             model.CoverImage = $("#CoverImage").val();
             model.ProfileImage = $("#ProfileImage").val();
             model.Id = $("#Id").val();
+            model.LinkedInProfile = $("#LinkedInProfile").val();
 
 
             if (model.FirstName == null || model.FirstName == "") {

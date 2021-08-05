@@ -33,7 +33,7 @@ namespace Proven.Service
 
         public InviteUserVMId GetInvitationById(int id)
         {
-            response = client.GetAsync("Invitation/GetuserById?Id=" + id).Result;
+            response = client.GetAsync("Invitation/GetInvitation?id=" + id).Result;
             if (response.IsSuccessStatusCode)
             {
                 var _content = response.Content.ReadAsStringAsync().Result;
@@ -193,19 +193,20 @@ namespace Proven.Service
         }
 
 
-        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string LoginUserid)
+        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status,string UserID, string LoginUserid, string LinkedInProfile)
 
         {
             var form = new Dictionary<string, string>
            {
                  {"Id", id.ToString()},
-               {"FirstName", firstname},
+                 {"FirstName", firstname},
                 {"LastName" ,lastname},
-              {"RoleName",rolename },
+                {"RoleName",rolename },
                 {"JobTitle",jobtitle },
                 {"IsActive",status.ToString()},
-                {"UserId",LoginUserid },
-                {"ModifiedBy",LoginUserid}
+                {"UserId",UserID },
+                {"ModifiedBy",LoginUserid},
+                {"LinkedInProfile",LinkedInProfile}
            };
             content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             response = client.PostAsync("Invitation/UpdateUserInvite", content).Result;

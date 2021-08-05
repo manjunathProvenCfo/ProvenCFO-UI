@@ -372,22 +372,24 @@ namespace ProvenCfoUI.Controllers
                 {
                     using (SetupService objJob = new SetupService())
                     {
-                        InviteUserModel jobj1 = new InviteUserModel();
+                        InviteUserModel InvitationUsers = new InviteUserModel();
                         var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
-                        jobj1.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                        jobj1.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
-                        jobj1.Id = Convert.ToInt32(result.Id);
-                        jobj1.FirstName = result.FirstName;
-                        jobj1.LastName = result.LastName;
-                        jobj1.JobTitle = result.JobTitle;
-                        jobj1.RoleName = result.RoleName;
-                        jobj1.IsActive = result.IsActive.ToString();
-                        jobj1.RoleId = result.RoleId;
-                        jobj1.JobId = Convert.ToInt32(result.JobId);
-                        jobj1.Email = result.Email;
+                        InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                        InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
+                        InvitationUsers.Id = Convert.ToInt32(result.Id);
+                        InvitationUsers.FirstName = result.FirstName;
+                        InvitationUsers.LastName = result.LastName;
+                        InvitationUsers.JobTitle = result.JobTitle;
+                        InvitationUsers.RoleName = result.RoleName;
+                        InvitationUsers.IsActive = result.IsActive.ToString();
+                        InvitationUsers.RoleId = result.RoleId;
+                        InvitationUsers.JobId = Convert.ToInt32(result.JobId);
+                        InvitationUsers.Email = result.Email;
+                        InvitationUsers.UserId = result.UserId;
+                        InvitationUsers.LinkedInProfile = result.LinkedInProfile;
 
 
-                        return View("EditInvitation", jobj1);
+                        return View("EditInvitation", InvitationUsers);
                     }
 
                 }
@@ -483,7 +485,7 @@ namespace ProvenCfoUI.Controllers
                             {
                                 var LoginUserid = Session["UserId"].ToString();
 
-                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), LoginUserid);
+                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive),Invite.UserId, LoginUserid, Invite.LinkedInProfile);
                                 result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                                 result.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                                 if (result == null)

@@ -38,6 +38,8 @@ namespace Proven.Model
         public string DisplayName { get; set; }
         public string StaffId { get; set; }
 
+        public string LinkedInProfile { get; set; }
+
     }
     public class InviteUserVMMainModel
     {
