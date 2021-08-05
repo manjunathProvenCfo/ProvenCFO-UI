@@ -327,6 +327,7 @@ namespace Proven.Service
                {"CoverImage", model.CoverImage},
                {"ProfileImage", model.ProfileImage},
                 {"PhoneNumber", model.PhoneNumber},
+                {"LinkedInProfile", model.LinkedInProfile},
                {"Id", model.Id}
            };
             content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");

@@ -54,6 +54,11 @@ namespace Proven.Model
         public List<JobTitleModel> JobTitlelist { get; set; }
         public string DisplayName { get; set; }
         public string Status { get; set; }
+        [RegularExpression(@"((http(s?)://)*([a-zA-Z0-9\-])*\.|[linkedin])[linkedin/~\-]+\.[a-zA-Z0-9/~\-_,&=\?\.;]+[^\.,\s<]",
+                           ErrorMessage = "Please Enter a valid LinkedIn profile URL.")]
+        public string LinkedInProfile { get; set; }
+
+        public string UserType { get; set; }
 
     }
     public class UserMainModel

@@ -126,9 +126,16 @@ body, .navbar-glass,
 
 .action-icons a {
     color: #181818;
-    transition: all .25s ease;
+	transition: all .25s ease;
 }
-
+.disabled-action-icons {
+	color: #f2e8e8 !important;
+	transition: all .25s ease;
+	pointer-events: none !important;
+}
+.action-icons a:hover {
+	color: #00BE82;
+}
     .action-icons a:hover {
         color: #00BE82;
     }
