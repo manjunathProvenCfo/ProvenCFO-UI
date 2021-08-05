@@ -6,7 +6,7 @@
 }
 
 
-@*<div>@Html.Partial("_Header")</div>*@
+
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -37,8 +37,8 @@
     </div>
     @*@Html.Partial("_AgencySelection")*@
     @*@{
-        Html.RenderAction("AgencySelection", "AgencyService");
-    }*@
+            Html.RenderAction("AgencySelection", "AgencyService");
+        }*@
 
 
     <div class="card-body px-0 pt-0">
@@ -59,7 +59,7 @@
                         <td class="sort pr-1 align-middle">Last Name</td>
                         <td class="sort pr-1 align-middle">Email Address</td>
                         @*<td class="sort pr-1 align-middle">Job Title</td>
-        <td class="sort pr-1 align-middle">Role</td>*@
+                            <td class="sort pr-1 align-middle">Role</td>*@
                         <td class="sort pr-1 align-middle">Status </td>
 
                         <td class="sort pr-1 align-middle">Last Login (UTC)</td>
@@ -69,98 +69,98 @@
                 <tbody id="agencyuserlist">
                     @foreach (var item in Model)
                     {
-                    <tr id="trUseragency" class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id=@item.Id value="@item.Id" />
-                                <label class="custom-control-label" for=@item.Id></label>
-                            </div>
-                        </td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
-                        @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
-        <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
+                        <tr id="trUseragency" class="btn-reveal-trigger">
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id=@item.Id value="@item.Id" />
+                                    <label class="custom-control-label" for=@item.Id></label>
+                                </div>
+                            </td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
+                                <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
 
 
 
-                        <td class="align-middle">
+                            <td class="align-middle">
 
 
-                            @if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
-                            {
-                                <span class="badge badge-pill badge-primary">Invited</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
-                            {
-                                <span class="badge badge-pill badge-success">Active</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
-                            {
-                                <span class="badge badge-pill badge-secondary">Inactive</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
-                            {
-                                <span class="badge badge-pill badge-secondary">Inactive</span>
-                            }
-                        </td>
-                        <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
-
-
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-none d-sm-inline-block ml-1">
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                @if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Edit" href='@Url.Action("EditToInviteStaffByAgency", "Invitation", new { id = item.Id })'>
-                                        <i class="far fa-edit"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-primary">Invited</span>
                                 }
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-1">
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 0)
+                                else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Cancel Invitation" href="#" onclick=" cancelInvite('@item.Id')">
-                                        <i class="fas fa-dot-circle"></i>
-                                    </a>
-                                }
-                                else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
-                                {
-                                    <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
-                                        <i class="far fa-trash-alt"> </i>
-                                    </a>
-                                }
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-1">
-
-
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
-                                {
-                                    <a data-toggle="tooltip" data-placement="top" title="Deactivate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success">Active</span>
                                 }
                                 else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
-
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
                                 else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
+                            </td>
+                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+
+
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block ml-1">
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Edit" href='@Url.Action("EditToInviteStaffByAgency", "Invitation", new { id = item.Id })'>
+                                            <i class="far fa-edit"> </i>
+                                        </a>
+                                    }
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-1">
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 0)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Cancel Invitation" href="#" onclick=" cancelInvite('@item.Id')">
+                                            <i class="fas fa-dot-circle"></i>
+                                        </a>
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
+                                            <i class="far fa-trash-alt"> </i>
+                                        </a>
+                                    }
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-1">
+
+
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Deactivate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
 
 
 
-                            </span>
+                                </span>
 
-                        </td>
+                            </td>
 
 
-                    </tr>
+                        </tr>
 
                     }
 
@@ -172,6 +172,7 @@
 
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
 
         var ExportToExcel = function () {
@@ -344,8 +345,8 @@
                         });
                 });
         }
-        function refreshgrid(ClientID) {           
-           window.location = '/Invitation/RefreshRegisteredUserList?AgencyID=' + ClientID;           
+        function refreshgrid(ClientID) {
+            window.location = '/Invitation/RefreshRegisteredUserList?AgencyID=' + ClientID;
         }
 
         function AgencyDropdownPartialViewChange() {
@@ -378,7 +379,7 @@
                 });
             }
 
-               
+
         }
 
     </script>

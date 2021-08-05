@@ -729,7 +729,7 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
                     bgimage = '../../assets/img/kanban/I_Zip.png';
                 }
                 else if (item.FileType.toUpperCase() == 'XLSX' || item.FileType.toUpperCase() == 'XLS') {
-                    bgimage = '../../assets/img/kanban/I_XLS.jpg';
+                    bgimage = '../../assets/img/kanban/I_XLS.png';
                 }
                 else if (item.FileType.toUpperCase() == 'TXT' || item.FileType.toUpperCase() == 'txt') {
                     bgimage = '../../assets/img/kanban/I_TXT.png';

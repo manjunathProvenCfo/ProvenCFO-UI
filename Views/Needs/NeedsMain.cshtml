@@ -3,187 +3,11 @@
     ViewBag.Title = "NeedsMain";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Styles.Render("~/bundles/css/kanban")
+@*<link href="~/Style/NeedStyle.css" rel="stylesheet" />*@
 <style>
-    .modalattPreview {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        padding-top: 100px;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: black;
-    }
-
-    /* Modal Content */
-    .modal-content1Preview {
-        position: relative;
-        background-color: #fefefe;
-        margin: auto;
-        padding: 0;
-        width: 90%;
-        max-width: 1200px;
-    }
-
-
-    /* The Close Button */
-    .close {
-        color: white;
-        position: absolute;
-        top: 10px;
-        right: 25px;
-        font-size: 35px;
-        font-weight: bold;
-    }
-
-        .close:hover,
-        .close:focus {
-            color: #999;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-    /* Hide the slides by default */
-    .mySlides {
-        display: none;
-        margin-left: 15%;
-        margin-right: 15%;
-        margin-bottom: 15%;
-    }
-
-    /* Next & previous buttons */
-    .prev,
-    .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        width: auto;
-        padding: 16px;
-        margin-top: -50px;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-        transition: 0.6s ease;
-        border-radius: 0 3px 3px 0;
-        user-select: none;
-        -webkit-user-select: none;
-    }
-
-    /* Position the "next button" to the right */
-    .next {
-        right: 0;
-        border-radius: 3px 0 0 3px;
-    }
-
-        /* On hover, add a black background color with a little bit see-through */
-        .prev:hover,
-        .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-    /* Number text (1/3 etc) */
-    .numbertext {
-        color: #f2f2f2;
-        font-size: 12px;
-        padding: 8px 12px;
-        position: absolute;
-        top: 0;
-    }
-
-    /* Caption text */
-    .caption-container {
-        text-align: center;
-        background-color: black;
-        padding: 2px 16px;
-        color: white;
-    }
-
-    img.demo {
-        opacity: 0.6;
-    }
-
-    .active,
-    .demo:hover {
-        opacity: 1;
-    }
-
-    img.hover-shadow {
-        transition: 0.3s;
-    }
-
-    .hover-shadow:hover {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-    .dropdown-content-removetag {
-        display: none;
-        position: absolute;
-        background-color: #f1f1f1;
-        min-width: 160px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-    }
-        .dropdown-content-removetag a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
 </style>
-<!--<div class="card mb-4 ">
-    <div class="card-header">
-        <div class="row align-items-center justify-content-between">-->
-@*<div class="col-6 col-sm-auto d-flex align-items-center pr-0">
-        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Needs</h5>
-    </div>*@
-<!--<div class="col-6 col-sm-auto ml-auto text-right pl-0">
-    <div class="d-none" id="purchases-actions">
-        <div class="input-group input-group-sm">
-            <select class="custom-select cus" aria-label="Bulk actions">
-                <option selected="">Bulk actions</option>
-                <option value="Delete">Delete</option>
-                <option value="Archive">Archive</option>
-            </select>
-            <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
-        </div>
-    </div>-->
-@*<div id="dashboard-actions">
-        <button class="btn btn-falcon-default btn-sm" type="button">
-                <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-            </button>
-        <button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>
-        <button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-            </button>
-        <button class="btn btn-falcon-default btn-sm ml-2" type="button">
-            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-            <span class="d-none d-sm-inline-block ml-1">
-                <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
-            </span>
-        </button>
-    </div>*@
-<!--</div>
-        </div>
-</div>
 
-
-    <!--<div class="card-body px-0 pt-0">
-        <div class="row no-gutters">-->
-<!--@*@Html.Partial("_AgencySelection")*@-->
-<!--@{
-            Html.RenderAction("AgencySelection", "AgencyService");
-        }
-        <div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
-
-        </div>
-    </div>
-</div>-->
-<!--</div>-->
 
 <div class="card mb-4 ">
     <div class="card-body px-0 pt-0">
@@ -196,8 +20,7 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-
+    @Scripts.Render("~/bundles/js/kanban")
     <script src="~/Scripts/NeedsScript.js"></script>
 }
 

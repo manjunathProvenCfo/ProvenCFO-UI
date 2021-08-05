@@ -1,6 +1,7 @@
 ﻿@model ProvenCfoUI.Models.CreateClientVM
 @{
     ViewBag.Title = "CreateClient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -173,7 +174,7 @@
 
 
 @section Scripts {
-
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
 
 
@@ -229,9 +230,7 @@
 
     </script>
 
-    <script src="assets/lib/flatpickr/flatpickr.min.js"></script>
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+   
 }
 
 

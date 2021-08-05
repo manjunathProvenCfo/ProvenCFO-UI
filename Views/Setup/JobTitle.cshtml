@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-        @*<div>@Html.Partial("_Header")</div>*@
+
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -44,7 +44,7 @@
                                     <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                                 </div>
                             </th>*@
-                        <th class="sort pr-1 align-middle"  width="30%"> Job Title</th>
+                        <th class="sort pr-1 align-middle" width="30%"> Job Title</th>
 
                         <th class="sort pr-1 align-middle" width="30%"> Job Code</th>
 
@@ -129,13 +129,14 @@
         </div>
     </div>
 </div>
-    
+
 
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
         var ExportToExcel = function () {
-           
+
             ExportFileReq("Setup", "ExportToExcel");
         }
 
@@ -159,7 +160,7 @@
         };
 
         function deleteJobTitle(Id) {
-            
+
             swal({
                 title: "Are you sure?",
                 text: " Do you really want to delete this Job Title?",
@@ -177,7 +178,7 @@
                     })
                         .done(function (data) {
                             if (data == 1) {
-                                
+
                                 swal
                                     ({
                                         title: "Couldn't Delete!",
