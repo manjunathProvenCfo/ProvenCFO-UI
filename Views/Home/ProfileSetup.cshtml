@@ -276,8 +276,8 @@
                     ValidationSuccessMessage1("Record updated successfully!")
                     return false;
                 },
-                error: function () {
-                    alert("error");
+                error: function (e) {
+                    alert("error :" + e.message);
                 }
             });
 
