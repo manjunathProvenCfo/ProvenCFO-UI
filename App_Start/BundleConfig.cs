@@ -12,6 +12,7 @@ namespace ProvenCfoUI
                         "~/Scripts/jquery-{version}.js"));            
 
             bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
+             "~/Scripts/jquery-{version}.js",
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
              "~/assets/js/bootstrap.min.js",
@@ -26,6 +27,8 @@ namespace ProvenCfoUI
              "~/assets/lib/prismjs/prism.js",             
              "~/assets/lib/flatpickr/flatpickr.min.js",              
              "~/assets/js/theme.js",
+             "~/assets/lib/progressbar.js/progressbar.min.js",
+             "~/assets/lib/select2/select2.min.js",
               "~/assets/js/wrapper.js"
     ));
 
@@ -33,9 +36,9 @@ namespace ProvenCfoUI
                "~/assets/lib/select2/select2.min.js"
                ));
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
-               "~/assets/lib/echarts/echarts.min.js",
-               "~/assets/lib/progressbar.js/progressbar.min.js",
-               "~/assets/lib/chart.js/Chart.min.js"
+               "~/assets/lib/echarts/echarts.min.js",               
+               "~/assets/lib/chart.js/Chart.min.js",
+               "~/Content/js/theme/Utils.js"
                ));
             bundles.Add(new ScriptBundle("~/bundles/js/table").Include(
               "~/assets/lib/datatables/js/jquery.dataTables.min.js",
@@ -93,9 +96,9 @@ namespace ProvenCfoUI
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.css",
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
                      "~/assets/lib/select2/select2.min.css",
-                     "~/assets/lib/flatpickr/flatpickr.min.css",                     
+                     "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
-                "~/assets/css/theme.css"
+                     "~/assets/css/theme.css"
                     ));
 
             bundles.Add(new StyleBundle("~/bundles/css/kanban").Include(               
