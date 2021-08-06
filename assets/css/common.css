@@ -14,7 +14,9 @@ body, .alert, .badge, .blockquote-footer, .btn, .falcon-data-table .paging_first
 .falcon-data-table .paging_numbers .page-link, .falcon-data-table .paging_simple_numbers .page-link, .invalid-feedback, .navbar, .pagination, .valid-feedback, button, input, label,
 optgroup, select, textarea, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-family: 'Averta' !important;
+   
 }
+ 
 
 .navbar-light .navbar-nav .active > .nav-link,
 .navbar-light .navbar-nav .nav-link.active,
@@ -31,6 +33,7 @@ body, .navbar-glass,
 .notification-indicator-primary::before {
     background-color: #E63756 !important;
 }
+
 #navbarDropdownSetting {
     color: #00BE82 !important;
 }
@@ -161,4 +164,131 @@ body, .navbar-glass,
 .navbar-top {
     font-weight: 400 !important;
     font-size: 16px !important;
+}
+
+
+
+.navbar-glass-shadow + .container-fluid .sticky-top {
+    top: 5rem !important;
+}
+
+.right-nav-pills {
+    padding: 35px 50px !important;
+    border-radius: 6px;
+    box-shadow: 0px 7px 14px rgba(65, 69, 88, 0.1), 0px 3px 6px rgba(0, 0, 0, 0.07);
+}
+.right-nav-pills .nav-pills {
+    position: relative;
+}
+.right-nav-pills .nav-pills:before {
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background-color: #F5F5F5;
+}
+
+.right-nav-pills .nav-link {
+    padding: 0;
+    font-weight: 600;
+    color: #9DA8BA;
+    position: relative;
+}
+.right-nav-pills .nav-link:before {
+    content: "";
+    position: absolute;
+    left: -30px;
+    top: 7px;
+    width: 10px;
+    height: 10px;
+    border-radius: 15px;
+    background-color: #D8E2EE;
+    border: 3px solid #D8E2EE;
+}
+.right-nav-pills .nav-link:hover,
+.right-nav-pills .nav-pills .nav-link.active,
+.right-nav-pills .nav-pills .show > .nav-link.active {
+    color: #00BE82;
+    background: transparent;
+}
+
+.right-nav-pills .nav-link:hover:before,
+.right-nav-pills .nav-pills .nav-link.active:before,
+.right-nav-pills .nav-pills .show > .nav-link:before {
+    background-color: #00BE82;
+    border-color: rgba(0, 190, 130, 0.1);
+}
+
+
+.right-nav-pills .nav-link + .nav-link {
+    margin-top: 25px;
+}
+
+.nav-pills.right-nav-pills .nav-link.active, .nav-pills.right-nav-pills .show > .nav-link {
+    color: #00BE82;
+}
+
+.scrollspy-listing .card {
+    border: none !important;
+    box-shadow: 0px 7px 14px rgba(65, 69, 88, 0.1), 0px 3px 6px rgba(0, 0, 0, 0.07) !important;
+    border-radius: 6px !important;
+}
+
+.scrollspy-listing .card-header {
+    padding: 11px 15px 11px 22px;
+    background: #F9FAFD;
+    min-height: 50px;
+}
+
+.scrollspy-listing .card-header h3 {
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.scrollspy-listing .card-header .btn-light {
+    width: 28px;
+    height: 28px;
+    line-height: 26px;
+    background: #FFFFFF !important;
+    border: 1px solid #FFFFFF !important;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 1px 1.5px rgba(0, 0, 0, 0.07), 0px 2px 5px rgba(43, 45, 80, 0.08), 0px 0px 0px 1px rgba(43, 45, 80, 0.1) !important;
+    border-radius: 3px !important;
+}
+.scrollspy-listing .card-header .btn-light:hover {
+    background: #F8F8F8 !important;
+    border: 1px solid #F8F8F8 !important;
+}
+
+.scrollspy-listing .card-header i {
+    font-size: 13px;
+}
+
+.eligibility {
+    float: left; 
+
+
+}
+
+.dots-dropdown .dropdown-menu.show {
+    left: auto !important;
+    right: 0;
+}
+
+a {
+    color: #344050 !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #00BE82;
+   /* border-radius: 8px;*/
+    background-color: #00BE82 !important;
+}
+.Words {
+    text-align: right !important;
+    color: #748194 !important;
+    font-size: 11px !important;
+    line-height: 17px !important;
 }

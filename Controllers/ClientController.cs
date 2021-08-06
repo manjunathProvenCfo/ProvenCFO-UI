@@ -45,7 +45,7 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objClientUser.GetClientList().ResultData.Select(s => new
                 {
                     Client_Agency_ID = s.Id,
-                    Client_Agency_Name = s.Name,
+                    Client_Name = s.Name,
                     City = s.CityName,
                     Entity_Name = s.EntityName, 
                     State = s.StateName,
