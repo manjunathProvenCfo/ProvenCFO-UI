@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProvenCfoUI.Comman;
+using System.Globalization;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -131,9 +132,9 @@ namespace ProvenCfoUI.Controllers
                         Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                         Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
                         Clientvm.BillableEntityId = client.BillableEntityId;
-                        Clientvm.ContactPersonName = client.ContactPersonName;
-                        Clientvm.StartDate = client.StartDate;
-
+                        Clientvm.ContactPersonName = client.ContactPersonName;                                               
+                        Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
+                        Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
 
                         return View("CreateClient", Clientvm);
                     }
@@ -145,6 +146,7 @@ namespace ProvenCfoUI.Controllers
         [HttpPost]
         public ActionResult CreateClient(CreateClientVM createClientVM)
         {
+            
             if (ModelState.IsValid)
             {
                 try
@@ -160,6 +162,12 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
+                                if (!string.IsNullOrEmpty(createClientVM.StartDateText))
+                                {
+                                    CultureInfo provider = CultureInfo.InvariantCulture;
+                                    createClientVM.StartDate = DateTime.ParseExact(createClientVM.StartDateText, "MM/dd/yyyy", provider);
+                                }
+                                
                                 if (createClientVM.Id == 0)
                                 {
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);

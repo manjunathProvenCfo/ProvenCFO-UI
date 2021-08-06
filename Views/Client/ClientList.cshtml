@@ -116,7 +116,7 @@
 
                             </th>
                             <th class="align-middle">
-                                @if (item.StartDate.HasValue)
+                                @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
                                 {
                                     @item.StartDate.Value.ToString("MM/dd/yyyy")
                                 }
