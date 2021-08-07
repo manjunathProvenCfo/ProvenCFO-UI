@@ -5,6 +5,9 @@ var $channelName;
 var $messageBodyInput;
 var $btnSendMessage;
 var $channelMessages;
+var $typingIndicator;
+var $typingIndicatorMessage;
+var $newMessagesDiv;
 
 var Default_Profile_Image = "/assets/img/team/default-logo.png";
 
@@ -24,6 +27,9 @@ var loadPage = function () {
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
 
+    $channelMessages.empty();
+
+    //addTypingIndicatorDiv();
     getChatParticipants();
     createTwilioClient();
     if (chat.participants.length > 0) {
@@ -97,6 +103,8 @@ var handleParticipantClick = function (event) {
     let participant = getParticipantByChannelIndex();
     $channelName.text(participant.FirstName + " " + participant.LastName)
 
+    /*$channelMessages.empty();*/
+
     //Twilio
     if (isEmptyOrBlank(participant.ChannelId)) {
         let attributes = { "type": "private" }
@@ -120,6 +128,13 @@ var insertUpdateTwilioConversation = function (objTwilioConversations) {
 }
 
 
+var getParticipantByEmail = function (email) {
+    let participant = chat.participants.filter(x => x.Email.toLowerCase() == email.toLowerCase());
+    if (participant.length > 0)
+        return participant[0];
+    else
+        null;
+}
 
 var getParticipantByChannelIndex = function () {
     return chat.participants[chat.channelIndex];
@@ -135,6 +150,13 @@ var getChannelUniqueName = function (userEmail, participantEmail) {
         return userEmail + "_" + participantEmail;
     else
         return participantEmail + "_" + userEmail;
+}
+
+var addTypingIndicatorDiv = function () {
+    let typingDiv = `<div class='media px-3 d-none' id="typing-indicator"><div class="media-body"> <div class="w-xxl-75"> <div class="hover-actions-trigger d-flex align-items-center"> <div class="chat-message typing-message bg-200 p-2 rounded-soft"> typing </div> </div> </div> </div></div>`;
+    $channelMessages.append(typingDiv);
+    $typingIndicator = $("#typing-indicator");
+    $typingIndicatorMessage = $("#typing-indicator .typing-message");
 }
 
 var setScrollPosition = function () {

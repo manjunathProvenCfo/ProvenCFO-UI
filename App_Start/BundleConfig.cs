@@ -9,7 +9,7 @@ namespace ProvenCfoUI
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));            
+                        "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
              "~/Scripts/jquery-{version}.js",
@@ -22,10 +22,11 @@ namespace ProvenCfoUI
              "~/assets/lib/sticky-kit/sticky-kit.min.js",
              "~/assets/lib/is_js/is.min.js",
              "~/assets/lib/lodash/lodash.min.js",
-             "~/assets/lib/perfect-scrollbar/perfect-scrollbar.js",                         
+             "~/assets/lib/perfect-scrollbar/perfect-scrollbar.js",
              "~/assets/lib/anchor.min.js",
-             "~/assets/lib/prismjs/prism.js",             
-             "~/assets/lib/flatpickr/flatpickr.min.js",              
+             "~/assets/lib/prismjs/prism.js",
+             "~/assets/lib/flatpickr/flatpickr.min.js",
+             "~/assets/lib/emojionearea/emojionearea.min.js",
              "~/assets/js/theme.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
@@ -36,7 +37,7 @@ namespace ProvenCfoUI
                "~/assets/lib/select2/select2.min.js"
                ));
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
-               "~/assets/lib/echarts/echarts.min.js",               
+               "~/assets/lib/echarts/echarts.min.js",
                "~/assets/lib/chart.js/Chart.min.js",
                "~/Content/js/theme/Utils.js"
                ));
@@ -49,10 +50,10 @@ namespace ProvenCfoUI
               "~/assets/lib/leaflet.markercluster/leaflet.markercluster.js",
               "~/assets/lib/leaflet.tilelayer.colorfilter/leaflet-tilelayer-colorfilter.min.js"
               ));
-            bundles.Add(new ScriptBundle("~/bundles/js/kanban").Include(                                  
+            bundles.Add(new ScriptBundle("~/bundles/js/kanban").Include(
              "~/assets/lib/shopify-draggable/draggable.bundle.js",
              "~/assets/lib/lightbox2/js/lightbox.min.js",
-             "~/assets/lib/fancybox/jquery.fancybox.min.js",          
+             "~/assets/lib/fancybox/jquery.fancybox.min.js",
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/list.min.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
@@ -62,8 +63,8 @@ namespace ProvenCfoUI
               "~/assets/js/wrapper.js"
                 ));
 
-           bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                         "~/Scripts/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -84,7 +85,7 @@ namespace ProvenCfoUI
 
             bundles.Add(new StyleBundle("~/Content/theme").Include(
                      "~/Content/bootstrap.css",
-                     "~/Content/site.css"));           
+                     "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/bundles/customcss").Include(
                   "~/assets/css/common.css",
@@ -101,13 +102,13 @@ namespace ProvenCfoUI
                      "~/assets/css/theme.css"
                     ));
 
-            bundles.Add(new StyleBundle("~/bundles/css/kanban").Include(               
+            bundles.Add(new StyleBundle("~/bundles/css/kanban").Include(
                     "~/assets/lib/dropzone/dropzone.min.css",
                     "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/Style/NeedStyle.css"
                    ));
 
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
 
         }
     }

@@ -3,6 +3,8 @@
 var twilioClient;
 var activeChannel;
 var activeChannelPage;
+var typingMembers = new Set();
+
 const Chat_Page_Size = 30;
 
 var getToken = function () {
@@ -46,7 +48,6 @@ var createTwilioClient = function () {
 var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate, attributes) {
     //check If Channel Existss
     twilioClient.getConversationByUniqueName(uniqueName).then(function (conv) {
-        joinChannel(conv);
         setActiveChannel(conv);
     }).catch(function (e) {
         twilioClient.createConversation({
@@ -60,16 +61,7 @@ var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate,
 }
 
 var joinChannel = function (channel) {
-    //channel.getParticipantByIdentity("test1@mailinator.com")
-    //    .then(function (obj) {
-    //        debugger
-    //        console.log(obj)
-    //    })
-    //    .catch(function (e) {
-    //        debugger
-    //    })
     channel.join().catch(function (e) {
-        console.log(e);
     });
 }
 
@@ -85,6 +77,7 @@ var setActiveChannel = function (channel) {
     activeChannel = channel;
 
     let participant = getParticipantByChannelIndex();
+
     addParticipant(activeChannel, participant.Email); //Replace this function;On page load create all conversation and participants
 
     $btnSendMessage.off('click');
@@ -108,9 +101,7 @@ var setActiveChannel = function (channel) {
     //    $('#channel').removeClass('view-only');
     //}
 
-    $channelMessages.empty();
     channel.getMessages(Chat_Page_Size).then(function (page) {
-        debugger
         activeChannelPage = page;
         page.items.forEach(addMessage);
 
@@ -118,20 +109,41 @@ var setActiveChannel = function (channel) {
         channel.on('messageUpdated', updateMessage);
         channel.on('messageRemoved', removeMessage);
 
+        //setScrollPosition();
+        debugger
         var newestMessageIndex = page.items.length ? page.items[page.items.length - 1].index : 0;
-        var lastIndex = channel.lastConsumedMessageIndex;
-        if (lastIndex && lastIndex !== newestMessageIndex) {
-            var $li = $('li[data-index=' + lastIndex + ']');
-            var top = $li.position() && $li.position().top;
-            $li.addClass('last-read');
-            $('#channel-messages').scrollTop(top + $('#channel-messages').scrollTop());
+        var lastIndex = channel.lastReadMessageIndex;
+        if (!isEmpty(lastIndex) && lastIndex !== newestMessageIndex) {
+            let $lastReadMessageDiv = $channelMessages.children(`div.media[data-index='${lastIndex}']`);
+            $lastReadMessageDiv.before(`<div class="text-center fs--2 text-500 separator"><span>New Messages</span></div>`);
+            $newMessagesDiv = $channelMessages.children('.separator');
+            //var top = $newMessagesDiv.position() && $newMessagesDiv.position().top;
+            //$channelMessages.scrollTop(top + $channelMessages.scrollTop());
+            $newMessagesDiv[0].scrollIntoView(true);
+
+        }
+        else {
+            setScrollPosition();
         }
 
-        if ($('#channel-messages ul').height() <= $('#channel-messages').height()) {
-            channel.updateLastConsumedMessageIndex(newestMessageIndex).then(updateChannels);
-        }
+        //if ($('#channel-messages ul').height() <= $('#channel-messages').height()) {
+        //    channel.updateLastConsumedMessageIndex(newestMessageIndex).then(updateChannels);
+        //}
 
-        return channel.getMembers();
+        //return channel.getMembers();
+    });
+    channel.on('typingStarted', function (member) {
+        member.getUser().then(user => {
+            typingMembers.add(member.identity);
+            updateTypingIndicator();
+        });
+    });
+
+    channel.on('typingEnded', function (member) {
+        member.getUser().then(user => {
+            typingMembers.delete(member.identity);
+            updateTypingIndicator();
+        });
     });
 }
 
@@ -179,17 +191,14 @@ var addJoinedChannel = function (channel) {
 var addParticipant = function (channel, identity) {
     channel.getParticipantByIdentity(identity)
         .then(function (obj) {
-            console.log(obj)
         })
         .catch(function (e) {
             activeChannel.add(identity).then(function (member) {
-                console.log(member);
             }).catch(function (err) {
-                console.log(err);
-            })
-        })
+            });
+        });
 }
-
+//region start
 var updateUnreadMessages = function updateUnreadMessages(message) {
     var channel = message.channel;
     if (channel !== activeChannel) {
@@ -205,10 +214,11 @@ var updateUnreadMessages = function updateUnreadMessages(message) {
 }
 
 var validateMessage = function () {
-    let isValid = false;
-    let body = $messageBodyInput.val(); 
+    let isValid = true;
+    let body = $messageBodyInput.val();
     if (isEmptyOrBlank(body)) {
-        //show error alert
+        //TODO//show error alert
+        isValid = false;
     }
     return isValid;
 }
@@ -222,7 +232,8 @@ var addTimestampRow = function (time) {
     row = $(`#${moment(time).format("YYYYMMDD")}`);
     return row;
 }
-var prepareMessageRow = function (message) {
+
+var prepareMessageRow = function (message, timeStampRowId) {
     let msg = message.state;
     let timestamp = msg.timestamp;
     let time = moment(timestamp, "HH:mm:ss").format("hh:mm A");
@@ -236,7 +247,7 @@ var prepareMessageRow = function (message) {
         default:
     }
     if (msg.author.toLowerCase() == chat.userEmail) {
-        row = `<div class='media p-3' id="${msg.sid}">
+        row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
                                 <div class='media-body d-flex justify-content-end'>
                                     <div class='w-100 w-xxl-75'>
                                         <div class='hover-actions-trigger d-flex align-items-center justify-content-end'>
@@ -251,9 +262,10 @@ var prepareMessageRow = function (message) {
                                 </div>
                             </div>`;
     } else {
-        row = `<div class='media p-3' id="${msg.sid}">
+        let participant = getParticipantByEmail(msg.author);
+        row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
         <div class='avatar avatar-l mr-2'>
-            <img class='rounded-circle' src='https://randomuser.me/api/portraits/men/${chat.channelIndex}.jpg' alt='' />
+            <img class='rounded-circle' src='`+ (isEmptyOrBlank(participant?.ProfileImage) == true ? Default_Profile_Image : participant?.ProfileImage) + `' alt='' />
         </div>
         <div class='media-body'>
             <div class='w-xxl-75'>
@@ -281,8 +293,15 @@ var prepareMessageRow = function (message) {
 var addMessage = function (message) {
     let msg = message.state;
     var timestampRow = addTimestampRow(msg.timestamp);
-    var messageRow = prepareMessageRow(message)
-    timestampRow.after(messageRow);
+    let timeStampRowId = timestampRow.attr("id");
+    var messageRow = prepareMessageRow(message, timeStampRowId)
+    let msgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:last`);
+    if (msgDiv.length > 0)
+        $channelMessages.find(`[data-timestamp='${timeStampRowId}']:last`).after(messageRow)
+    else {
+
+    }
+        timestampRow.after(messageRow);
 }
 
 var removeMessage = function (message) { }
@@ -292,4 +311,31 @@ var updateMessage = function (args) {
 }
 var createMessage = function (message, $el) {
 
+}
+//region end
+
+var updateMember = function myfunction() {
+
+}
+
+function updateTypingIndicator() {
+    var message = 'Typing: ';
+    var names = Array.from(typingMembers).slice(0, 3);
+
+    if (typingMembers.size) {
+        message += names.join(', ');
+    }
+
+    if (typingMembers.size > 3) {
+        message += ', and ' + (typingMembers.size - 3) + 'more';
+    }
+
+    if (typingMembers.size) {
+        message += '...';
+    } else {
+        message = '';
+    }
+    //$typingIndicator.removeClass("d-none");
+    //$typingIndicatorMessage.text(message);
+    $('#typing-indicator span').text(message);
 }
