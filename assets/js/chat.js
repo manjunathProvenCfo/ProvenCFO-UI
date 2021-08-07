@@ -28,10 +28,11 @@ var loadPage = function () {
     $channelMessages = $("#channel-messages");
 
     $channelMessages.empty();
+    addChannelMessagesScrollEvent();
 
-    //addTypingIndicatorDiv();
     getChatParticipants();
     createTwilioClient();
+
     if (chat.participants.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
         $participants.on('click', handleParticipantClick);
@@ -39,14 +40,20 @@ var loadPage = function () {
     }
 
     $messageBodyInput.on('keydown', function (e) {
-        if (e.keyCode === 13) { $sendmessge.click(); }
-        else if (activeChannel) { activeChannel.typing(); }
+        //if (e.keyCode === 13) { $sendmessge.click(); }
+        //else if (activeChannel) { activeChannel.typing(); }
+        if (activeChannel) { activeChannel.typing(); }
     });
 }
 
 var getChatParticipants = function () {
     getAjaxSync("/Communication/ChatParticipants?UserId=" + chat.userId, null, function (response) {
         chat.participants = response;
+        chat.participants.forEach(x => {
+            if (isEmpty(onlineOfflineMembers[x.Email])) {
+                onlineOfflineMembers[x.Email] = false;
+            }
+        });
 
         renderParticipants();
     });
@@ -55,8 +62,9 @@ var renderParticipants = function () {
     let obj = chat.participants;
     var participants = '';
     for (var i = 0; i < obj.length; i++) {
+        chat.participants[i]["Index"] = i;
         participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
-                        <div class="avatar avatar-xl status-online">
+                        <div class="avatar avatar-xl status-offline">
                             <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ProfileImage) == true ? Default_Profile_Image : obj[i].ProfileImage) + `" alt="" />
 
                         </div>
@@ -160,5 +168,5 @@ var addTypingIndicatorDiv = function () {
 }
 
 var setScrollPosition = function () {
-    $channelMessages.scrollTop($channelMessages[0].scrollHeight)
+    $channelMessages.scrollTop($channelMessages[0].scrollHeight);
 }
