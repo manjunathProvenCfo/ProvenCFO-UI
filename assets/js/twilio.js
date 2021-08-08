@@ -5,7 +5,7 @@ var activeChannel;
 var activeChannelPage;
 var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
-const Chat_Page_Size = 6;
+const Chat_Page_Size = 30;
 
 var getToken = function () {
     postAjaxSync("/twilio/token?identity=" + chat.userEmail, null, function (response) {
@@ -21,10 +21,11 @@ var createTwilioClient = function () {
             twilioClient = createdClient;
             //twilioClient.getUser(chat.userEmail).then(function (user) { console.log(user) });
 
-            //click First Paticipant
-            $participants.eq(0).click();
-
             twilioClient.getSubscribedConversations().then(updateChannels);
+
+            //click First Paticipant
+            setTimeout(function () { $participants.eq(0).click(); }, 500);
+
 
             setTimeout(registerUserUpdatedEventHandlers, 200);
 
@@ -47,12 +48,32 @@ var createTwilioClient = function () {
         });
 }
 
-var createAllConversationsAndAddParticipants = function () {
+var createAllChannels = function () {
+    debugger
+    let participantsToCreate = chat.participants.filter(x => isEmptyOrBlank(x.ChannelId));
+    if (participantsToCreate.length == 0)
+        return;
+    participantsToCreate.forEach(function (participant) {
+        let attributes = { "type": "private" }
+        let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+        twilioClient.createConversation({
+            friendlyName: channelName,
+            isPrivate: true,
+            uniqueName: channelName,
+            attributes: attributes
+        }).then(joinChannel).then(updateChannels);
+    });
+}
 
+var getChannelBySidAndJoin = function (channelId) {
+    twilioClient.getConversationBySid(channelId).then(function (conv) {
+        setActiveChannel(conv);
+    });
 }
 
 var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate, attributes) {
     //check If Channel Existss
+    debugger
     twilioClient.getConversationByUniqueName(uniqueName).then(function (conv) {
         setActiveChannel(conv);
     }).catch(function (e) {
@@ -61,13 +82,16 @@ var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate,
             isPrivate: isPrivate,
             uniqueName: uniqueName,
             attributes: attributes
-        }).then(joinChannel).then(setActiveChannel);
+        }).then(joinChannel).catch(res => {
+        }).then(setActiveChannel);
     })
 
 }
 
 var joinChannel = function (channel) {
+    debugger
     channel.join().catch(function (e) {
+        debugger
     });
 }
 
@@ -77,14 +101,16 @@ var setActiveChannel = function (channel) {
         activeChannel.removeListener('messageRemoved', removeMessage);
         activeChannel.removeListener('messageUpdated', updateMessage);
         //activeChannel.removeListener('updated', updateActiveChannel);
-        activeChannel.removeListener('memberUpdated', updateMember);
+        //activeChannel.removeListener('memberUpdated', updateMember);
     }
 
     activeChannel = channel;
 
     let participant = getParticipantByChannelIndex();
 
-    addParticipant(activeChannel, participant.Email); //TODO //Replace this function;On page load create all conversation and participants
+    setTimeout(function () {
+        addParticipant(participant.Email)
+    }, 200)
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
@@ -94,7 +120,8 @@ var setActiveChannel = function (channel) {
                 $messageBodyInput.val('').focus();
                 $messageBodyInput.trigger('change');
                 setScrollPosition();
-                $newMessagesDiv.remove();
+                if ($newMessagesDiv && $newMessagesDiv.length > 0)
+                    $newMessagesDiv.remove();
             });
         }
     });
@@ -120,12 +147,12 @@ var setActiveChannel = function (channel) {
         var lastIndex = channel.lastReadMessageIndex;
         if (!isEmpty(lastIndex) && lastIndex !== newestMessageIndex) {
             let $lastReadMessageDiv = $channelMessages.children(`div.media[data-index='${lastIndex}']`);
-            //$lastReadMessageDiv.before(`<div class="text-center fs--2 text-500 separator"><span>New Messages</span></div>`);
-            //$newMessagesDiv = $channelMessages.children('.separator');
-            //if ($newMessagesDiv)
-            //    $newMessagesDiv[0].scrollIntoView(true);
-            setScrollPosition();
-
+            if ($lastReadMessageDiv.length === 0)
+                $lastReadMessageDiv = $channelMessages.children(`div.media:first`);
+            $lastReadMessageDiv.before(`<div class="text-center fs--2 text-500 separator"><span>New Messages</span></div>`);
+            $newMessagesDiv = $channelMessages.children('.separator');
+            if ($newMessagesDiv)
+                $newMessagesDiv[0].scrollIntoView();
         }
         else {
             setScrollPosition();
@@ -176,8 +203,13 @@ var updateChannels = function updateChannels() {
                 return a.friendlyName > b.friendlyName;
             });
             subscribedChannels.forEach(function (channel) {
+                debugger
                 switch (channel.status) {
                     case 'joined':
+                        addJoinedChannel(channel);
+                        break;
+                    case 'notParticipating':
+                        joinChannel(channel);
                         addJoinedChannel(channel);
                         break;
                     //case 'invited':
@@ -188,6 +220,7 @@ var updateChannels = function updateChannels() {
                     //    break;
                 }
             });
+            createAllChannels();
         });
 }
 
@@ -209,8 +242,8 @@ var addJoinedChannel = function (channel) {
     }
 }
 
-var addParticipant = function (channel, identity) {
-    channel.getParticipantByIdentity(identity)
+var addParticipant = function (identity) {
+    activeChannel.getParticipantByIdentity(identity)
         .then(function (obj) {
         })
         .catch(function (e) {
@@ -278,7 +311,7 @@ var prepareMessageRow = function (message, timeStampRowId) {
             break;
         default:
     }
-    if (msg.author.toLowerCase() == chat.userEmail) {
+    if (msg.author.toLowerCase() == chat.userEmail.toLowerCase()) {
         row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
                                 <div class='media-body d-flex justify-content-end'>
                                     <div class='w-100 w-xxl-75'>
@@ -344,6 +377,9 @@ var addMessage = function (message) {
     else {
         timestampRow.after(messageRow);
     }
+
+    if (lastMsgDiv && lastMsgDiv.length > 0 && isElementInView(lastMsgDiv))
+        setScrollPosition();
 }
 
 var removeMessage = function (message) { }
@@ -358,18 +394,48 @@ var createMessage = function (message, $el) {
 var addChannelMessagesScrollEvent = function () {
     var isUpdatingConsumption = false;
     $channelMessages.on('scroll', function (e) {
-        if ($channelMessages.height() - 50 < $channelMessages.scrollTop() + $channelMessages.height()) {
-            activeChannel.getMessages(Chat_Page_Size).then(messages => {
-                var newestMessageIndex = messages.length ? messages[0].index : 0;
-                if (!isUpdatingConsumption && activeChannel.lastConsumedMessageIndex !== newestMessageIndex) {
-                    isUpdatingConsumption = true;
-                    activeChannel.updateLastReadMessageIndex(newestMessageIndex).then(function () {
-                        isUpdatingConsumption = false;
-                    });
+        //if ($channelMessages.height() - 50 < $channelMessages.scrollTop() + $channelMessages.height()) {
+        //    activeChannel.getMessages(Chat_Page_Size).then(messages => {
+        //        var newestMessageIndex = messages.length ? messages[0].index : 0;
+        //        if (!isUpdatingConsumption && activeChannel.lastConsumedMessageIndex !== newestMessageIndex) {
+        //            isUpdatingConsumption = true;
+        //            activeChannel.updateLastReadMessageIndex(newestMessageIndex).then(function () {
+        //                isUpdatingConsumption = false;
+        //            });
+        //        }
+        //    });
+        //}
+        let lastIndex = activeChannel.lastReadMessageIndex;
+        lastIndex = 0;
+        let newestMessageIndex = $channelMessages.children('.media:last').attr('data-index');
+
+        if (!isEmpty(lastIndex) && lastIndex != newestMessageIndex) {
+            let maxReadMessageIndex = lastIndex;
+            let $messages;
+
+            let lastIndexDiv = $channelMessages.children(`.media[data-index=${lastIndex}]`);
+
+            if (lastIndexDiv == 0)
+                $messages = $channelMessages.children('.media');
+            else
+                $messages = lastIndexDiv.nextAll('.media');
+
+            $messages.each(function (i, obj) {
+                let index = obj.attributes["data-index"].value;
+                try {
+                    if (index > lastIndex && isElementInView(obj)) {
+                        maxReadMessageIndex = index;
+                    }
+                } catch (e) {
+
                 }
             });
+
+            if (lastIndex != maxReadMessageIndex) {
+                activeChannel.updateLastReadMessageIndex(parseInt(maxReadMessageIndex));
+            }
         }
-        //ReCheck this below code
+
         if ($channelMessages.scrollTop() < 50 && activeChannelPage && activeChannelPage.hasPrevPage) {
             var lowestMessageIndex = $channelMessages.children('.media:first').attr('data-index');
             activeChannelPage.prevPage().then(page => {
@@ -402,18 +468,18 @@ var updateParticipants = function () {
 var setOnlineOfflineStatus = function () {
     Object.keys(onlineOfflineMembers).forEach(key => {
         let participant = getParticipantByEmail(key);
-        debugger
-        participant["Online"] = onlineOfflineMembers[key];
-        var elParticipant = $participants.filter(function (index, obj) {
-            return obj.attributes['data-index'].value == participant.Index;
-        });
-        if (participant.Online) {
-            elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
+        if (isEmptyOrBlank(participant) === false) {
+            participant["Online"] = onlineOfflineMembers[key];
+            var elParticipant = $participants.filter(function (index, obj) {
+                return obj.attributes['data-index'].value == participant.Index;
+            });
+            if (participant.Online) {
+                elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
+            }
+            else {
+                elParticipant.children('.avatar').removeClass('status-online').addClass('status-offline');
+            }
         }
-        else {
-            elParticipant.children('.avatar').removeClass('status-online').addClass('status-offline');
-        }
-
     });
 }
 
@@ -443,7 +509,7 @@ function updateTypingIndicator() {
 var isElementInView = function (element, fullyInView) {
     var pageTop = $(window).scrollTop();
     var pageBottom = pageTop + $(window).height();
-    var elementTop = $(element).offset().top;
+    var elementTop = $(element).offset()?.top;
     var elementBottom = elementTop + $(element).height();
 
     if (fullyInView === true) {
@@ -466,7 +532,6 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
 
 var handleUserUpdate = function (user, updateReasons) {
     // loop over each reason and check for reachability change
-    debugger
     updateReasons.forEach(reason => {
         if (reason == 'online') {
             //do something

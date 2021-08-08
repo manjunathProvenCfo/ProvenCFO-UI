@@ -107,17 +107,21 @@ var handleParticipantClick = function (event) {
 
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
-    }
-    let participant = getParticipantByChannelIndex();
-    $channelName.text(participant.FirstName + " " + participant.LastName)
 
-    /*$channelMessages.empty();*/
+        let participant = getParticipantByChannelIndex();
+        $channelName.text(participant.FirstName + " " + participant.LastName)
 
-    //Twilio
-    if (isEmptyOrBlank(participant.ChannelId)) {
-        let attributes = { "type": "private" }
-        let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
-        createOrJoinExistingChannel(channelName, channelName, true, attributes);
+        $channelMessages.empty();
+
+        //Twilio
+        if (isEmptyOrBlank(participant.ChannelId)) {
+            let attributes = { "type": "private" }
+            let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+            createOrJoinExistingChannel(channelName, channelName, true, attributes);
+        }
+        else {
+            getChannelBySidAndJoin(participant.ChannelId);
+        }
     }
 }
 
