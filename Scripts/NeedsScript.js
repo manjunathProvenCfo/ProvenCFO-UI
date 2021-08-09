@@ -60,9 +60,9 @@ $(document).ready(function () {
                     if (AttachmentCount != undefined && AttachmentCount != '') {
                         $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
                     }
-                   
+
                 }
-                
+
             }
             else {
                 ShowAlertBox('Exist!', 'Selected file is already attached.', 'warning');
@@ -232,13 +232,13 @@ $(document).ready(function () {
             if (assigne != null && assigne.attributes['id'] != undefined && assigne.attributes['id'].value != undefined && assigne.attributes['id'].value != '') {
                 if (assigne.attributes['id'].value.indexOf('li_') != -1) {
                     assigne.remove();
-                }                
+                }
             }
         });
         $('#txtTaskTitle').val('');
-        $.each($('#attachmentContainer_Add .media'), function (key, attachment) {           
+        $.each($('#attachmentContainer_Add .media'), function (key, attachment) {
             attachment.remove();
-            
+
         });
         $('#txtTaskTitle').val('');
         $('#previews').empty();
@@ -359,10 +359,10 @@ function RemoveFile(e) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
-           
+
             if (response.Message == 'Success') {
-              
-                   
+                ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
+
 
             }
             else {
@@ -379,13 +379,13 @@ function RemoveFile(e) {
 }
 
 function RemoveAttchment(attachmentId) {
-   
+
     $('#att_' + attachmentId)[0].remove();
 
 }
 function RemovveFileOnCreate(attachmentId) {
-    
-   
+
+
     RemoveAttchment(attachmentId);
     var fileToRemove = $('#att_' + attachmentId + ' h6')[0].innerText;
 
@@ -397,7 +397,7 @@ function RemovveFileOnCreate(attachmentId) {
         dataType: "json",
         success: function (response) {
             debugger;
-            if (response.Message == 'Success') {      
+            if (response.Message == 'Success') {
                 ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
 
             }
@@ -434,7 +434,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
                 var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
                 if (AttachmentCount != undefined && AttachmentCount != '') {
                     $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) - 1;
-                   
+
                 }
                 return true;
             }
@@ -463,7 +463,7 @@ function RemoveMember_view(UserID) {
         dataType: "json",
         success: function (response) {
             if (response.Message == 'Success') {
-                
+
                 return true;
             }
             else {
@@ -660,7 +660,7 @@ function getAgencyMembersList(ClientId) {
                 sessionStorage.setItem('getAgencyMembersList', JSON.stringify(response.TeamMembers));
                 response.TeamMembers.forEach(function (item) {
                     $('#ulTeamMembersList').append('<li onclick="addMembers(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
-                    $('#ulTeamMembersList_view').append('<li onclick="addMembers_view(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
+                    $('#ulTeamMembersList_view').append('<li onclick="addMember_view(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
                 });
                 return true;
             }
@@ -686,7 +686,7 @@ function addMembersOnviewLoad(AssigneeList) {
     });
     if (AssigneeList != null && AssigneeList.length > 0) {
         var singlCode = "'";
-        
+
         $.each(AssigneeList, function (key, item) {
             if (item != null) {
 
@@ -716,7 +716,7 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
                 var Openimage = item.FilePath;
                 var d = new Date($.now());
                 var currentdatetime = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() + ' ' + formatAMPM(d);
-               
+
                 var uploadedTime = item.CreatedDateForDisplay == null ? currentdatetime : item.CreatedDateForDisplay;
                 if (item.FileType.toUpperCase() == 'PDF') {
                     bgimage = '../../assets/img/kanban/I_PDF.png';
@@ -736,7 +736,7 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
                 else if (item.FileType.toUpperCase() == 'CSV' || item.FileType.toUpperCase() == 'csv') {
                     bgimage = '../../assets/img/kanban/I_CSV.png';
                 }
-               
+
                 if (IsViewMode == true && $('#attachmentContainer #att_' + item.Id).length == 0) {
                     var singlCode = "'";
                     var att = '<div class="media align-items-center mb-3" id="att_' + item.Id + '"><a class="text-decoration-none mr-3" href="' + bgimage + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + bgimage.replace(/ /g, '%20') + ');background-size:115px 60px" onclick="openModal(' + singlCode + Openimage + singlCode + ', false);"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="openModal(' + singlCode + Openimage + singlCode + ', true);" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + uploadedTime + '</p></div></div>';
@@ -763,11 +763,16 @@ function formatAMPM(date) {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
 }
-
-function addNewAssigneeToKanbanTask(UserID) {
-
+function addNewAssigneeToKanbanTask(UserID, singleMember = false) {
     var TaskId = gCurrentViewTaskId;
-    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID };
+    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID, Single_Member: singleMember };
+    if (isEmptyOrBlank(singleMember)) {
+        singleMember = false;
+    }
+
+    if (singleMember = true) {
+        TaskId.empty && UserID.empty
+    }
     $.ajax({
         type: "POST",
         url: "/Needs/addNewAssigneeToKanbanTask",
@@ -814,7 +819,7 @@ function addComment(data, UserFullName) {
     }
 }
 function addMembers(e) {
-
+    debugger;
     var element = $('#' + e.currentTarget.id + ' h6');
     var IsExistelement = $('#ulAddedMembers #li_' + e.currentTarget.id);
     if (IsExistelement.length > 0) {
@@ -824,10 +829,14 @@ function addMembers(e) {
     var singlCode = "'";
     var getAgencyMembersList = JSON.parse(sessionStorage.getItem('getAgencyMembersList'));
     var SelectMember = getAgencyMembersList.find(x => x.Id === e.currentTarget.id);
-
+    let assignedMembers = $('#ulAddedMembers > li:not(:last)');
+    if (assignedMembers.length > 0) {
+        assignedMembers.remove();
+    }
     $('#ulAddedMembers').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
 }
-function addMembers_view(e) {
+function addMember_view(e) {
+    debugger;
     var element = $('#' + e.currentTarget.id + ' h6');
     var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
     var singlCode = "'";
@@ -838,13 +847,35 @@ function addMembers_view(e) {
     }
     var getAgencyMembersList = JSON.parse(sessionStorage.getItem('getAgencyMembersList'));
     var SelectMember = getAgencyMembersList.find(x => x.Id === e.currentTarget.id);
+    let assignedMembers = $('#ulAddedMembers_view > li:not(:last)');
+    if (assignedMembers.length > 0) {
+        assignedMembers.remove();
+    }
 
+    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
+
+    MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
+    addNewAssigneeToKanbanTask(SelectMember.Id, true);
+}
+
+function addMembers_view(e) {
+    debugger;
+    var element = $('#' + e.currentTarget.id + ' h6');
+    var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
+    var singlCode = "'";
+    var IsExistelement = $('#ulAddedMembers_view #li_' + e.currentTarget.id);
+    if (IsExistelement.length > 0) {
+        ShowAlertBox('Exist!', 'Selected member is already added.', 'warning');
+        return;
+    }
+    var getAgencyMembersList = JSON.parse(sessionStorage.getItem('getAgencyMembersList'));
+    var SelectMember = getAgencyMembersList.find(x => x.Id === e.currentTarget.id);
     $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
     MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
     addNewAssigneeToKanbanTask(SelectMember.Id);
 }
 
-function addTagOnView(TagNames) {  
+function addTagOnView(TagNames) {
     $('#divTag ul').empty();
     $('#divTagView ul').empty();
     if (TagNames != null) {
@@ -882,9 +913,9 @@ function addTag(className, TagName, Isview = false) {
     //    }
     //});
     //if (IsNotDuplicate == false) {
-        //$('#divTag').prepend('<span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true">' + TagName + '</span> <div class="dropdown-menu dropdown-md px-0 py-3 show" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start"><span class="input-group-btn"><a class="dropdown-item" href="#!"></a><div class="dropdown-item text-danger" onclick="EnterComments();">Remove Member</div></span></div>');
-    
-   // }
+    //$('#divTag').prepend('<span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true">' + TagName + '</span> <div class="dropdown-menu dropdown-md px-0 py-3 show" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start"><span class="input-group-btn"><a class="dropdown-item" href="#!"></a><div class="dropdown-item text-danger" onclick="EnterComments();">Remove Member</div></span></div>');
+
+    // }
     if (TaskId != null && TaskId !== "" && Isview == false) {
         $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
         UpdateLableForKanbanTask(TaskId, TagName);
@@ -898,18 +929,18 @@ function addTag(className, TagName, Isview = false) {
 
         $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
     }
-    
+
 
 }
 function taggaleRemoveOption() {
-   
+
     $('#divShowRemove').show();
     var TaskId = gCurrentViewTaskId;
-    if (TaskId != null && TaskId !== "" ) {
+    if (TaskId != null && TaskId !== "") {
         UpdateLableForKanbanTask(TaskId, '');
         $('#' + TaskId + ' .card-body .badge').empty();
     }
-    
+
 }
 function RemoveTags() {
     $('#divTag ul').empty();
