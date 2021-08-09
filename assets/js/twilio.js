@@ -48,6 +48,7 @@ var createTwilioClient = function () {
         });
 }
 
+
 var createAllChannels = function () {
     debugger
     let participantsToCreate = chat.participants.filter(x => isEmptyOrBlank(x.ChannelId));
@@ -222,7 +223,7 @@ var updateChannels = function updateChannels() {
                     //    break;
                 }
             });
-            createAllChannels();
+            //createAllChannels();
         });
 }
 
