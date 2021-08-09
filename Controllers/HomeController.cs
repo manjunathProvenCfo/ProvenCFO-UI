@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
@@ -25,7 +26,6 @@ namespace ProvenCfoUI.Controllers
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
-
         public HomeController()
         {
 
@@ -102,6 +102,7 @@ namespace ProvenCfoUI.Controllers
                         else
                         {
                             ViewBag.ErrorMessage = "Email or Password not correct";
+                            Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
                             return View("Login");
                         }
                     }
@@ -109,6 +110,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "Email or Password not correct.";
+                    Utltity.Log4NetExceptionLog(ex);
                 }
             }
             return View();
@@ -116,116 +118,137 @@ namespace ProvenCfoUI.Controllers
 
         public ActionResult Register(int id, string ActiveCode)
         {
-            InvitationServices obj = new InvitationServices();
-            ViewBag.Sucess = false;
-            ViewBag.ErrorMessage = string.Empty;
-            var invitation = obj.GetInvitationForVlidationStaff(id, Guid.Parse(ActiveCode));
-            if (invitation == null)
+            try
             {
-                TempData["InviteType"] = "InvalidInvite";
-                return PartialView("InvalidInvite");
-            }
-            else if (invitation != null && invitation.IsActive == 0)
-            {
-                ViewBag.ErrorMessage = "Inactive invitation Link";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-            else if (invitation != null && DateTime.Now > invitation.ExpiryTime)
-            {
-                //ViewBag.ErrorMessage = "The user invitation link has been expired!";
-                ViewBag.ErrorMessage = "Sorry, the Invitation in this link is expired " +              
-                            " Please contact the administrators of the ProvenCFO Management Application to recive a new application";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-            else if (invitation != null && invitation.IsActive == 1 && invitation.IsRegistered == 1)
-            {
-                ViewBag.ShowLoginButton = true;
-                ViewBag.ErrorMessage = "User already accepted the invitation.";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-
-            using (AccountService objStaff = new AccountService())
-            {
-                RegisterViewModel model = new RegisterViewModel();
-                if (id > 0)
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    var IsValied = objStaff.IsInviteValied(id).resultData;
-                    if (!IsValied)
+
+                    ViewBag.Sucess = false;
+                    ViewBag.ErrorMessage = string.Empty;
+                    var invitation = obj.GetInvitationForVlidationStaff(id, Guid.Parse(ActiveCode));
+                    if (invitation == null)
                     {
                         TempData["InviteType"] = "InvalidInvite";
                         return PartialView("InvalidInvite");
                     }
+                    else if (invitation != null && invitation.IsActive == 0)
+                    {
+                        ViewBag.ErrorMessage = "Inactive invitation Link";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
+                    else if (invitation != null && DateTime.Now > invitation.ExpiryTime)
+                    {
+                        //ViewBag.ErrorMessage = "The user invitation link has been expired!";
+                        ViewBag.ErrorMessage = "Sorry, the Invitation in this link is expired " +
+                                    " Please contact the administrators of the ProvenCFO Management Application to recive a new application";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
+                    else if (invitation != null && invitation.IsActive == 1 && invitation.IsRegistered == 1)
+                    {
+                        ViewBag.ShowLoginButton = true;
+                        ViewBag.ErrorMessage = "User already accepted the invitation.";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
 
-                    var userdetail = objStaff.GetUserById(id).resultData;
-                    model.firstname = userdetail.FirstName;
-                    model.email = userdetail.Email;
-                    model.lastname = userdetail.LastName;
-                    model.UserType = 1;
+                    using (AccountService objStaff = new AccountService())
+                    {
+                        RegisterViewModel model = new RegisterViewModel();
+                        if (id > 0)
+                        {
+                            var IsValied = objStaff.IsInviteValied(id).resultData;
+                            if (!IsValied)
+                            {
+                                TempData["InviteType"] = "InvalidInvite";
+                                return PartialView("InvalidInvite");
+                            }
+
+                            var userdetail = objStaff.GetUserById(id).resultData;
+                            model.firstname = userdetail.FirstName;
+                            model.email = userdetail.Email;
+                            model.lastname = userdetail.LastName;
+                            model.UserType = 1;
+                        }
+                        return View(model);
+                    }
                 }
-                return View(model);
             }
+            catch (Exception ex)
+            {
+                Utltity.Log4NetExceptionLog(ex);
+            }
+            return View();
         }
 
         [HttpGet]
         public ActionResult RegisterAgencyUser(int id, string ActiveCode, int AgencyId)
         {
-            InvitationServices obj = new InvitationServices();
-            ViewBag.Sucess = false;
-            ViewBag.ShowLoginButton = false;
-            ViewBag.ErrorMessage = string.Empty;
-            var invitation = obj.GetInvitationForVlidation(id, AgencyId, Guid.Parse(ActiveCode));
-            if (invitation == null)
+            try
             {
-                TempData["InviteType"] = "InvalidInvite";
-                return PartialView("InvalidInvite");
-            }
-            else if (invitation != null && invitation.IsActive == 0)
-            {
-                ViewBag.ErrorMessage = "Inactive invitation Link";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-            else if (invitation == null && DateTime.Now > invitation.ExpiryTime)
-            {
-                ViewBag.ErrorMessage = "Sorry, the Invitation in this link is expired " +
-                             "Please contact the administrators of the ProvenCFO Management Application to recive a new application";
-                //ViewBag.ErrorMessage = "The agency user invitation link has been expired..!";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-            else if (invitation != null && invitation.IsActive == 1 && invitation.IsRegistered == 1)
-            {
-                ViewBag.ShowLoginButton = true;
-                ViewBag.ErrorMessage = "User already accepted the invitation.";
-                return PartialView("_UserAcceptAgencyInvite");
-            }
-
-            using (AccountService objAccount = new AccountService())
-            {
-                RegisterViewModel model = new RegisterViewModel();
-                if (id > 0)
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    var IsValied = objAccount.IsInviteValied(id).resultData;
-                    if (!IsValied)
+                    ViewBag.Sucess = false;
+                    ViewBag.ShowLoginButton = false;
+                    ViewBag.ErrorMessage = string.Empty;
+                    var invitation = obj.GetInvitationForVlidation(id, AgencyId, Guid.Parse(ActiveCode));
+                    if (invitation == null)
                     {
                         TempData["InviteType"] = "InvalidInvite";
                         return PartialView("InvalidInvite");
                     }
+                    else if (invitation != null && invitation.IsActive == 0)
+                    {
+                        ViewBag.ErrorMessage = "Inactive invitation Link";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
+                    else if (invitation == null && DateTime.Now > invitation.ExpiryTime)
+                    {
+                        ViewBag.ErrorMessage = "Sorry, the Invitation in this link is expired " +
+                                     "Please contact the administrators of the ProvenCFO Management Application to recive a new application";
+                        //ViewBag.ErrorMessage = "The agency user invitation link has been expired..!";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
+                    else if (invitation != null && invitation.IsActive == 1 && invitation.IsRegistered == 1)
+                    {
+                        ViewBag.ShowLoginButton = true;
+                        ViewBag.ErrorMessage = "User already accepted the invitation.";
+                        return PartialView("_UserAcceptAgencyInvite");
+                    }
 
-                    var userdetail = objAccount.GetUserById(id).resultData;
+                    using (AccountService objAccount = new AccountService())
+                    {
+                        RegisterViewModel model = new RegisterViewModel();
+                        if (id > 0)
+                        {
+                            var IsValied = objAccount.IsInviteValied(id).resultData;
+                            if (!IsValied)
+                            {
+                                TempData["InviteType"] = "InvalidInvite";
+                                return PartialView("InvalidInvite");
+                            }
 
-                    //var isRegisterd = obj.IsInviteRegisterd(userdetail.Email).resultData;
-                    //if (!isRegisterd)
-                    //{
-                    //    TempData["InviteType"] = "InviteRegisterd";
-                    //    return PartialView("InvalidInvite");
-                    //}
-                    model.firstname = userdetail.FirstName;
-                    model.email = userdetail.Email;
-                    model.lastname = userdetail.LastName;
-                    model.UserType = 2;
-                    model.AgencyID = AgencyId;
+                            var userdetail = objAccount.GetUserById(id).resultData;
+
+                            //var isRegisterd = obj.IsInviteRegisterd(userdetail.Email).resultData;
+                            //if (!isRegisterd)
+                            //{
+                            //    TempData["InviteType"] = "InviteRegisterd";
+                            //    return PartialView("InvalidInvite");
+                            //}
+                            model.firstname = userdetail.FirstName;
+                            model.email = userdetail.Email;
+                            model.lastname = userdetail.LastName;
+                            model.UserType = 2;
+                            model.AgencyID = AgencyId;
+                        }
+                        return View("Register", model);
+                    }
                 }
-                return View("Register", model);
             }
+            catch (Exception ex)
+            {
+                Utltity.Log4NetExceptionLog(ex);
+            }
+            return View();
         }
 
 
@@ -256,8 +279,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    //ViewBag.ErrorMessage = "Email or Password not correct.Please check and try again.";
-                    //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
+                    Utltity.Log4NetExceptionLog(ex);
                     return View();
                 }
             }
@@ -296,6 +318,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
+                    Utltity.Log4NetExceptionLog(ex);
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
                 }
@@ -330,9 +353,9 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.ErrorMessage = "";
                             return View();
-                        }                      
+                        }
                     }
-                    
+
                     ViewBag.Sucess = "Reset Password Successfully";
                     return PartialView("_SetPasswordSuccessfully");
                     //return RedirectToAction("Login");
@@ -343,7 +366,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
-
+                Utltity.Log4NetExceptionLog(ex);
                 return View();
             }
         }
@@ -388,6 +411,8 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "";
+                    Utltity.Log4NetExceptionLog(ex);
+                    throw ex;
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
                 }
@@ -405,7 +430,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     var id = Session["UserId"].ToString();
                     changePasswordVM.id = id;
-                    
+
                     var IsValidOldpassword = obj.LoginAccess(Session["LoginName"].ToString(), changePasswordVM.OldPassword);
                     if (IsValidOldpassword.resultData != null && !string.IsNullOrEmpty(IsValidOldpassword.resultData.Id))
                     {
@@ -435,7 +460,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     else
                     {
-                        return Json(new { sucess = false, ErrorMsg = "Old Password is not valid.", Target="OldPassword"}, JsonRequestBehavior.AllowGet);
+                        return Json(new { sucess = false, ErrorMsg = "Old Password is not valid.", Target = "OldPassword" }, JsonRequestBehavior.AllowGet);
                     }
                     return Json(new { result = "", sucess = false, ErrorMsg = "" }, JsonRequestBehavior.AllowGet);
                     //Content("Sucess");
@@ -443,17 +468,11 @@ namespace ProvenCfoUI.Controllers
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                Utltity.Log4NetExceptionLog(ex);
                 throw ex;
             }
-
-
-
-
         }
 
 
@@ -463,12 +482,21 @@ namespace ProvenCfoUI.Controllers
             using (AccountService obj = new AccountService())
             {
                 UserModel model = new UserModel();
-
-                if (/*Session["UserId"] != null && */!string.IsNullOrEmpty(Session["UserId"].ToString()))
+                try
                 {
-                    string userid = Session["UserId"].ToString();
-                    model = obj.GetUserDetail(userid).resultData;
-                    ViewBag.ProfileUrl = model.ProfileImage;
+
+
+                    if (/*Session["UserId"] != null && */!string.IsNullOrEmpty(Session["UserId"].ToString()))
+                    {
+                        string userid = Session["UserId"].ToString();
+                        model = obj.GetUserDetail(userid).resultData;
+                        ViewBag.ProfileUrl = model.ProfileImage;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utltity.Log4NetExceptionLog(ex);
+                    throw ex;
                 }
                 return View(model);
             }
@@ -479,35 +507,45 @@ namespace ProvenCfoUI.Controllers
         {
             using (AccountService obj = new AccountService())
             {
-                UserModel model = new UserModel();
-                string path = Server.MapPath("~/UploadedFiles/export_CW-ReconLines_2021-07-21_21-54-16.csv");
-                string connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
-                DataTable dt = Common.ConvertCSVtoDataTable(path);
-
-
-                for (int i = 0; i < dt.Rows.Count ; i++)
+                try
                 {
-                    string id = Convert.ToString(dt.Rows[i][17]);
-                    string account_name = Convert.ToString(dt.Rows[i][0]);
-                    string amount = Convert.ToString(dt.Rows[i][1] );
-                    string company = Convert.ToString(dt.Rows[i][2]);
-                    string date = Convert.ToString(dt.Rows[i][3]).Replace(".",",");
-                    string description = Convert.ToString(dt.Rows[i][4]);
-                    string gl_account = Convert.ToString(dt.Rows[i][5]);
-                    string reconciled = Convert.ToString(dt.Rows[i][7]);
-                    string reference = Convert.ToString(dt.Rows[i][8]);
-                    string rule = Convert.ToString(dt.Rows[i][9]);
-                    string type = Convert.ToString(dt.Rows[i][12]);
-                    var result = obj.CreateReconciliation(id, account_name, amount, company, date, description, gl_account, reconciled, reference, rule, type).ResultData;
-                    if (result != null)
-                    {
-                        string msg = result.ToString();
-                    }
-                    else
-                    {
-                        string error = result.ToString();
-                    }
 
+
+                    UserModel model = new UserModel();
+                    string path = Server.MapPath("~/UploadedFiles/export_CW-ReconLines_2021-07-21_21-54-16.csv");
+                    string connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                    DataTable dt = Common.ConvertCSVtoDataTable(path);
+
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        string id = Convert.ToString(dt.Rows[i][17]);
+                        string account_name = Convert.ToString(dt.Rows[i][0]);
+                        string amount = Convert.ToString(dt.Rows[i][1]);
+                        string company = Convert.ToString(dt.Rows[i][2]);
+                        string date = Convert.ToString(dt.Rows[i][3]).Replace(".", ",");
+                        string description = Convert.ToString(dt.Rows[i][4]);
+                        string gl_account = Convert.ToString(dt.Rows[i][5]);
+                        string reconciled = Convert.ToString(dt.Rows[i][7]);
+                        string reference = Convert.ToString(dt.Rows[i][8]);
+                        string rule = Convert.ToString(dt.Rows[i][9]);
+                        string type = Convert.ToString(dt.Rows[i][12]);
+                        var result = obj.CreateReconciliation(id, account_name, amount, company, date, description, gl_account, reconciled, reference, rule, type).ResultData;
+                        if (result != null)
+                        {
+                            string msg = result.ToString();
+                        }
+                        else
+                        {
+                            string error = result.ToString();
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utltity.Log4NetExceptionLog(ex);
+                    throw ex;
                 }
                 return View();
 
@@ -519,17 +557,26 @@ namespace ProvenCfoUI.Controllers
         {
             using (AccountService obj = new AccountService())
             {
-                UserModel model = new UserModel();
+                try
+                {
 
-                if (Session["UserId"] != null && !string.IsNullOrEmpty(Session["UserId"].ToString()))
-                {
-                    string userid = Session["UserId"].ToString();
-                    model = obj.GetUserDetail(userid).resultData;
-                    ViewBag.ProfileUrl = model.ProfileImage;
+                    UserModel model = new UserModel();
+
+                    if (Session["UserId"] != null && !string.IsNullOrEmpty(Session["UserId"].ToString()))
+                    {
+                        string userid = Session["UserId"].ToString();
+                        model = obj.GetUserDetail(userid).resultData;
+                        ViewBag.ProfileUrl = model.ProfileImage;
+                    }
+                    else
+                    {
+                        ViewBag.ProfileUrl = string.Empty;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ViewBag.ProfileUrl = string.Empty;
+                    Utltity.Log4NetExceptionLog(ex);
+                    throw ex;
                 }
                 return PartialView("_TopNav");
             }
@@ -542,53 +589,62 @@ namespace ProvenCfoUI.Controllers
         {
             string replacefile = string.Empty;
             string fileName = string.Empty, path = string.Empty;
-
-            if (Request.Files.Count != 0)
+            try
             {
-                for (int i = 0; i < Request.Files.Count; i++)
+
+
+                if (Request.Files.Count != 0)
                 {
-
-                    var uploadFile = Request["FIleUpload"].ToString();
-
-                    var file = Request.Files[i];
-                    fileName = Path.GetFileName(file.FileName);
-
-                    String ret = Regex.Replace(fileName.Trim(), "[^A-Za-z0-9_. ]+", "");
-
-
-                    replacefile = ret.Replace(" ", String.Empty);
-
-
-                    if (uploadFile == "Profile")
-                        path = Server.MapPath("~/Upload/Profile/");
-                    else
-                        path = Server.MapPath("~/Upload/CoverProfile/");
-
-
-                    if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
-                    string PathfileName = Path.Combine(path, replacefile);
-                    file.SaveAs(PathfileName);
-                    using (AccountService obj = new AccountService())
+                    for (int i = 0; i < Request.Files.Count; i++)
                     {
-                        string userid = Session["UserId"].ToString();
-                        var user = obj.GetUserDetail(userid).resultData;
-                        if (user != null)
+
+                        var uploadFile = Request["FIleUpload"].ToString();
+
+                        var file = Request.Files[i];
+                        fileName = Path.GetFileName(file.FileName);
+
+                        String ret = Regex.Replace(fileName.Trim(), "[^A-Za-z0-9_. ]+", "");
+
+
+                        replacefile = ret.Replace(" ", String.Empty);
+
+
+                        if (uploadFile == "Profile")
+                            path = Server.MapPath("~/Upload/Profile/");
+                        else
+                            path = Server.MapPath("~/Upload/CoverProfile/");
+
+
+                        if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
+                        string PathfileName = Path.Combine(path, replacefile);
+                        file.SaveAs(PathfileName);
+                        using (AccountService obj = new AccountService())
                         {
-                            if (uploadFile == "Profile")
+                            string userid = Session["UserId"].ToString();
+                            var user = obj.GetUserDetail(userid).resultData;
+                            if (user != null)
                             {
-                                user.ProfileImage = "../Upload/Profile/" + replacefile;
+                                if (uploadFile == "Profile")
+                                {
+                                    user.ProfileImage = "../Upload/Profile/" + replacefile;
+                                }
+                                else
+                                {
+                                    user.CoverImage = "../Upload/CoverProfile/" + replacefile;
+                                }
+                                obj.UpdateUserDetail(user);
+
                             }
-                            else
-                            {
-                                user.CoverImage = "../Upload/CoverProfile/" + replacefile;
-                            }
-                            obj.UpdateUserDetail(user);
-                                
+
                         }
-
                     }
-                }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Utltity.Log4NetExceptionLog(ex);
+                throw ex;
             }
             return Json(replacefile, JsonRequestBehavior.AllowGet);
 
@@ -599,15 +655,24 @@ namespace ProvenCfoUI.Controllers
         {
             using (AccountService service = new AccountService())
             {
-                var result = service.UpdateUserDetail(model);
-                if (result.resultData != null)
+                try
                 {
-                    Session["UserId"] = result.resultData.Id.ToString();
-                    Session["UserName"] = result.resultData.FirstName;
-                    Session["LoginName"] = result.resultData.FirstName.ToString();
-                    Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;                   
+                    var result = service.UpdateUserDetail(model);
+                    if (result.resultData != null)
+                    {
+                        Session["UserId"] = result.resultData.Id.ToString();
+                        Session["UserName"] = result.resultData.FirstName;
+                        Session["LoginName"] = result.resultData.FirstName.ToString();
+                        Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
+                    }
+
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
-                return Json(result, JsonRequestBehavior.AllowGet);
+                catch (Exception ex)
+                {
+                    Utltity.Log4NetExceptionLog(ex);
+                    throw ex;
+                }
             }
 
 
@@ -616,8 +681,16 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult ChangePasswordFromProfile()
         {
-            UserModel objuser = new UserModel();
-            return PartialView("_ChangePasswordFromProfile", objuser);
+            try
+            {
+                UserModel objuser = new UserModel();
+                return PartialView("_ChangePasswordFromProfile", objuser);
+            }
+            catch (Exception ex)
+            {
+                Utltity.Log4NetExceptionLog(ex);
+                throw ex;
+            }
         }
 
 
@@ -625,12 +698,20 @@ namespace ProvenCfoUI.Controllers
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult GetRegisterdStaffUserList()
         {
-            using (AccountService obj = new AccountService())
+            try
             {
-                var objResult = obj.GetRegisteredStaffUserList();
-                //objResult.StaffList = obj.GetRegisterdStaffUserList().ResultData;
-                return View(objResult.resultData);
+                using (AccountService obj = new AccountService())
+                {
+                    var objResult = obj.GetRegisteredStaffUserList();
+                    //objResult.StaffList = obj.GetRegisterdStaffUserList().ResultData;
+                    return View(objResult.resultData);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Utltity.Log4NetExceptionLog(ex);
+                throw ex;
             }
 
         }
