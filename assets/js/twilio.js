@@ -86,6 +86,7 @@ var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate,
             uniqueName: uniqueName,
             attributes: attributes
         }).then(joinChannel).catch(res => {
+            location.reload();
         }).then(setActiveChannel);
     })
 
@@ -111,9 +112,7 @@ var setActiveChannel = function (channel) {
 
     let participant = getParticipantByChannelIndex();
 
-    setTimeout(function () {
-        addParticipant(participant.Email)
-    }, 200)
+    addParticipant(participant.Email);
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
