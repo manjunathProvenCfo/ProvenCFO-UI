@@ -24,7 +24,7 @@ var createTwilioClient = function () {
             twilioClient.getSubscribedConversations().then(updateChannels);
 
             //click First Paticipant
-            setTimeout(function () { $participants.eq(0).click(); }, 500);
+            setTimeout(function () { $participants.eq(0).click(); }, 200);
 
 
             setTimeout(registerUserUpdatedEventHandlers, 200);
@@ -56,12 +56,14 @@ var createAllChannels = function () {
     participantsToCreate.forEach(function (participant) {
         let attributes = { "type": "private" }
         let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
-        twilioClient.createConversation({
-            friendlyName: channelName,
-            isPrivate: true,
-            uniqueName: channelName,
-            attributes: attributes
-        }).then(joinChannel).then(updateChannels);
+        setTimeout(function () {
+            twilioClient.createConversation({
+                friendlyName: channelName,
+                isPrivate: true,
+                uniqueName: channelName,
+                attributes: attributes
+            }).then(joinChannel).then(updateChannels);
+        },1000);
     });
 }
 
