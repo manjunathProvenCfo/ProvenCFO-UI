@@ -125,7 +125,8 @@
                                             {
                                                 <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateTeam", "Teams")" onclick="return UniqueTeams()">Update</button>
                                             }
-                                            @Html.ActionLink("Cancel", "TeamsList", "Teams", new { }, new { @class = "btn btn-primary ml-2" })
+                                            <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("TeamsList", "Teams")'" />
+                                            
                                         </div>
                                         @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
                                         @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@

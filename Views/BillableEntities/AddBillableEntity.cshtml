@@ -94,7 +94,8 @@
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateBillableEntity", "BillableEntities")">Update</button>
                                         }
-                                        @Html.ActionLink("Cancel", "GetAllBillableEntitiesList", "BillableEntities", new { }, new { @class = "btn btn-primary ml-2" })
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("GetAllBillableEntitiesList", "BillableEntities")'" />
+                                        
                                     </div>
                                 </div>
 

@@ -128,7 +128,8 @@
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateInviteStaffByAgency", "Invitation")">Update</button>
                                         }
-                                        @Html.ActionLink("Cancel", "RegisteredUserList", "Invitation", new { }, new { @class = "btn btn-primary ml-2" })
+                                        @*@Html.ActionLink("Cancel", "RegisteredUserList", "Invitation", new { }, new { @class = "btn btn-primary ml-2" })*@
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("RegisteredUserList", "Invitation")'" />
 
                                     </div>
                                 </div>

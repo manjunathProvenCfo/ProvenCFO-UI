@@ -44,11 +44,11 @@
             }
             @if (Model.Id == null || Model.Id == 0)
             {
-            <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client </h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client </h3>
             }
             else
             {
-            <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client </h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client </h3>
             }
 
             <div class="row mt-4">
@@ -113,20 +113,20 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.StartDateText, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker" } })
-                                        @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@                                       
-                                       
+                                        @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@
+
 
                                     </div>
                                 </div>
 
                                 <div class="row align-items-center form-group">
                                     @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                    <label for="split-create-phonenumber" class="mb-0">Address </label>
-                                </div>
-                                <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-                                </div>*@
+                                            <label for="split-create-phonenumber" class="mb-0">Address </label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                        </div>*@
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
                                     </div>
@@ -138,12 +138,12 @@
 
                                 <div class="row align-items-center form-group">
                                     @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                    <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
-                                </div>
-                                <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                    @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
-                                </div>*@
+                                            <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
+                                        </div>*@
                                 </div>
 
 
@@ -159,7 +159,7 @@
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
                                         }
-                                        @Html.ActionLink("Cancel", "ClientList", "Client", new { }, new { @class = "btn btn-primary ml-2" })
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
                                     </div>
 
                                 </div>
@@ -182,9 +182,9 @@
 
         $("#clientExist").addClass('d-none');
         $("#clientExist").html('');
-        $('#datepicker').attr('data-options', '{"dateFormat":"m/d/Y"}'); 
-        
-        
+        $('#datepicker').attr('data-options', '{"dateFormat":"m/d/Y"}');
+
+
         function CheckExistValidation() {
             if ($("#ClientName").val() === "" && $("#clientExist").html() !== "") {
                 $('#clientExist').hide();
@@ -234,7 +234,7 @@
 
     </script>
 
-   
+
 }
 
 
