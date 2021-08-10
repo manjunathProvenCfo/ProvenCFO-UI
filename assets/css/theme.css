@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
  * Bootstrap v4.6.0 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
@@ -6083,8 +6083,8 @@ input[type="button"].btn-block {
   z-index: 2;
   color: #fff;
   text-decoration: none;
-  background-color: #000;
-  border-color: #000;
+  /*background-color: #000;
+  border-color: #000;*/
 }
 
 .page-link:focus {
@@ -6108,8 +6108,8 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 3;
   color: #fff;
-  background-color: #000;
-  border-color: #000;
+ /* background-color: #000;
+  border-color: #000;*/
 }
 
 .page-item.disabled .page-link {
