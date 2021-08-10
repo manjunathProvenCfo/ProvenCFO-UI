@@ -24,7 +24,7 @@ var createTwilioClient = function () {
             twilioClient.getSubscribedConversations().then(updateChannels);
 
             //click First Paticipant
-            setTimeout(function () { $participants.eq(0).click(); }, 200);
+            setTimeout(function () { $participants.eq(0).click(); }, 1500);
 
 
             setTimeout(registerUserUpdatedEventHandlers, 200);
@@ -50,7 +50,6 @@ var createTwilioClient = function () {
 
 
 var createAllChannels = function () {
-    debugger
     let participantsToCreate = chat.participants.filter(x => isEmptyOrBlank(x.ChannelId));
     if (participantsToCreate.length == 0)
         return;
@@ -64,19 +63,23 @@ var createAllChannels = function () {
                 uniqueName: channelName,
                 attributes: attributes
             }).then(joinChannel).then(updateChannels);
-        },1000);
+        }, 1000);
     });
 }
 
 var getChannelBySidAndJoin = function (channelId) {
-    twilioClient.getConversationBySid(channelId).then(function (conv) {
-        setActiveChannel(conv);
-    });
+    let existingChannel = twilioClient.conversations.conversations.get(channelId);
+    if (isEmptyOrBlank(existingChannel)) {
+        twilioClient.getConversationBySid(channelId).then(function (conv) {
+            setActiveChannel(conv);
+        });
+    } else {
+        setActiveChannel(existingChannel);
+    }
 }
 
 var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate, attributes) {
     //check If Channel Existss
-    debugger
     twilioClient.getConversationByUniqueName(uniqueName).then(function (conv) {
         setActiveChannel(conv);
     }).catch(function (e) {
@@ -93,9 +96,7 @@ var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate,
 }
 
 var joinChannel = function (channel) {
-    debugger
     channel.join().catch(function (e) {
-        debugger
     });
 }
 
@@ -205,9 +206,9 @@ var updateChannels = function updateChannels() {
                 return a.friendlyName > b.friendlyName;
             });
             subscribedChannels.forEach(function (channel) {
-                debugger
                 switch (channel.status) {
                     case 'joined':
+                        addJoinedChannel(channel);
                         addJoinedChannel(channel);
                         break;
                     case 'notParticipating':
@@ -231,7 +232,8 @@ var updateActiveChannel = function () {
 }
 
 var addJoinedChannel = function (channel) {
-    var updateableParticipants = chat.participants.filter(obj => isEmptyOrBlank(obj.ChannelUniqueName))
+    //var updateableParticipants = chat.participants.filter(obj => isEmptyOrBlank(obj.ChannelUniqueName))
+    var updateableParticipants = chat.participants;
     for (var i = 0; i < updateableParticipants.length; i++) {
         if (channel?.uniqueName?.toLowerCase() == getChannelUniqueName(chat.userEmail, updateableParticipants[i].Email)) {
             updateableParticipants[i].ChannelId = channel.sid;
@@ -535,8 +537,17 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
 var handleUserUpdate = function (user, updateReasons) {
     // loop over each reason and check for reachability change
     updateReasons.forEach(reason => {
-        if (reason == 'online') {
-            //do something
+        if (reason == 'reachabilityOnline') {
+            debugger
+            let participant = getParticipantByEmail(user.state.identity);
+            if (!isEmptyOrBlank(participant)) {
+                participant["Online"] = isEmptyOrBlank(user?.state?.online) ? false : user?.state?.online;
+                let elParticipant = $participantsContainer.children(`[data-index=${participant.Index}]`)
+                if (participant["Online"])
+                    elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
+                else
+                    elParticipant.children('.avatar').removeClass('status-online').addClass('status-offline');
+            }
         }
     });
 }

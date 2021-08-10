@@ -40,14 +40,13 @@ var loadPage = function () {
     }
 
     $messageBodyInput.on('keydown', function (e) {
-        //if (e.keyCode === 13) { $sendmessge.click(); }
-        //else if (activeChannel) { activeChannel.typing(); }
+        debugger
         if (activeChannel) { activeChannel.typing(); }
     });
 }
 
 var getChatParticipants = function () {
-    getAjaxSync("/Communication/ChatParticipants?UserId=" + chat.userId, null, function (response) {
+    getAjaxSync(`/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}`, null, function (response) {
         chat.participants = response;
         chat.participants.forEach(x => {
             if (isEmpty(onlineOfflineMembers[x.Email])) {

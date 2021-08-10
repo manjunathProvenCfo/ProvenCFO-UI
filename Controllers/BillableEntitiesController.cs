@@ -185,10 +185,17 @@ namespace ProvenCfoUI.Controllers
             {
                 using (BillableEntitiesService objBills = new BillableEntitiesService())
                 {
-                    var result = objBills.DeleteBillableEntity(Id);
-                    return result.Status;
-                    if (result == null)
-                        ViewBag.ErrorMessage = "Can't Delete";
+                    var results = objBills.GetClientBillsAssociationById(Id);
+                    if (results != null)
+                    {
+                        return results.Status;
+                    }
+                    else
+                    {
+                        var result = objBills.DeleteBillableEntity(Id);
+                        return result.Status;
+                    }
+                    return results.Status;
                 }
             }
             catch (Exception ex)
