@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -15,6 +16,7 @@ namespace ProvenCfoUI.Controllers
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: AgencyService
         [CheckSession]
         public ActionResult AgencyHome()
@@ -38,9 +40,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
         }
@@ -51,40 +51,50 @@ namespace ProvenCfoUI.Controllers
         public ActionResult AgencySelection()
         {
             AgencyClient objAgy = new AgencyClient();
-            using (ClientService objClient = new ClientService())
+            try
             {
-                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                if (TempData["ClientListActived"] == null)
+
+
+                using (ClientService objClient = new ClientService())
                 {
-                    var objResult = new List<ClientModel>();
-                    var LoginUserid = Session["UserId"].ToString();
-                    if (Session["UserType"] != null && Session["UserType"].ToString().Trim() == "2")
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (TempData["ClientListActived"] == null)
                     {
-                        objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
+                        var objResult = new List<ClientModel>();
+                        var LoginUserid = Session["UserId"].ToString();
+                        if (Session["UserType"] != null && Session["UserType"].ToString().Trim() == "2")
+                        {
+                            objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
+                        }
+                        else
+                        {
+                            objResult = objClient.GetClientListByStatus(true, false).ResultData;
+                        }
+
+                        TempData["ClientListActived"] = objResult;
+                        objAgy.ClientList = objResult;
                     }
                     else
                     {
-                        objResult = objClient.GetClientListByStatus(true, false).ResultData;
+                        objAgy.ClientList = (List<ClientModel>)TempData["ClientListActived"];
                     }
 
-                    TempData["ClientListActived"] = objResult;
-                    objAgy.ClientList = objResult;
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        objAgy.SelectedClientNameID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    else
+                    {
+                        objAgy.SelectedClientNameID = objAgy.ClientList[0].Id;
+                    }
+                    return PartialView("_AgencySelection", objAgy);
                 }
-                else
-                {
-                    objAgy.ClientList = (List<ClientModel>)TempData["ClientListActived"];
-                }
-
-                if (UserPref != null && UserPref.Count() > 0)
-                {
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    objAgy.SelectedClientNameID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                }
-                else
-                {
-                    objAgy.SelectedClientNameID = objAgy.ClientList[0].Id;
-                }
-                return PartialView("_AgencySelection", objAgy);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -113,9 +123,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
 

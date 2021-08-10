@@ -26,6 +26,7 @@ namespace ProvenCfoUI.Controllers
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public HomeController()
         {
 
@@ -109,8 +110,8 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.ErrorMessage = "Email or Password not correct.";
-                    Utltity.Log4NetExceptionLog(ex);
+                    ViewBag.ErrorMessage = "Email or Password not correct.";                    
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                 }
             }
             return View();
@@ -174,7 +175,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
             }
             return View();
         }
@@ -246,7 +247,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
             }
             return View();
         }
@@ -279,7 +280,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -318,7 +319,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
                 }
@@ -366,7 +367,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 return View();
             }
         }
@@ -411,7 +412,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "";
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     throw ex;
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
@@ -470,7 +471,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
         }
@@ -495,7 +496,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     throw ex;
                 }
                 return View(model);
@@ -544,7 +545,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     throw ex;
                 }
                 return View();
@@ -575,7 +576,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     throw ex;
                 }
                 return PartialView("_TopNav");
@@ -643,7 +644,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
             return Json(replacefile, JsonRequestBehavior.AllowGet);
@@ -670,7 +671,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Utltity.Log4NetExceptionLog(ex);
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     throw ex;
                 }
             }
@@ -688,7 +689,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
         }
@@ -710,7 +711,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                Utltity.Log4NetExceptionLog(ex);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
 

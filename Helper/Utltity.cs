@@ -99,13 +99,13 @@ namespace ProvenCfoUI.Helper
             }
         }
 
-        public static void Log4NetExceptionLog(Exception Exception)
+        public static string Log4NetExceptionLog(Exception Exception)
         {
             var msg = string.Empty;
             var errorMessage = "Message= " + Exception.Message.ToString() + ". Method= " + Exception.TargetSite.Name.ToString();
             var errorDescription = " StackTrace : " + Exception.StackTrace.ToString() + " Source = " + Exception.Source.ToString();
             msg = errorMessage + " " + errorMessage;
-            log.Error(msg);
+            return msg;           
         }
         public static void Log4NetInfoLog(string Info)
         {            

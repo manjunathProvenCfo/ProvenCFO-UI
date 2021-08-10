@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -15,16 +16,23 @@ namespace ProvenCfoUI.Controllers
     public class SetupController : Controller
     {
         // GET: Setup
-        string errorMessage = string.Empty;
-        string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         [CheckSession]
         public ActionResult JobTitle()
         {
-            using (SetupService obj = new SetupService())
+            try
             {
-                var objResult = obj.GetJobTitleList();
-                return View(objResult.ResultData);
+                using (SetupService obj = new SetupService())
+                {
+                    var objResult = obj.GetJobTitleList();
+                    return View(objResult.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -69,7 +77,7 @@ namespace ProvenCfoUI.Controllers
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddJobTitle", JobTitleVM);
                             }
-                            result = obj.UpdateJobTitle(Convert.ToString(jobTitleModel.Id), jobTitleModel.Title, jobTitleModel.JobCode, jobTitleModel.Status.ToString().Trim(),Convert.ToString(jobTitleModel.IsDeleted), LoginUserid);
+                            result = obj.UpdateJobTitle(Convert.ToString(jobTitleModel.Id), jobTitleModel.Title, jobTitleModel.JobCode, jobTitleModel.Status.ToString().Trim(), Convert.ToString(jobTitleModel.IsDeleted), LoginUserid);
                             ViewBag.ErrorMessage = "Updated";
                             return View("AddJobTitle", JobTitleVM);
                         }
@@ -84,6 +92,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     //return RedirectToAction("Role");
                 }
             }
@@ -108,6 +117,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -118,53 +128,85 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult AddJobTitle()
         {
-            JobTitleModel result = new JobTitleModel();
-            return View(result);
+            try
+            {
+                JobTitleModel result = new JobTitleModel();
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return View();
+            }
         }
 
         [CheckSession]
         public ActionResult EditJobTitle(int? id)
         {
-            using (SetupService service = new SetupService())
+            try
             {
-                JobTitleModel result = new JobTitleModel();
-
-                if (id > 0)
+                using (SetupService service = new SetupService())
                 {
-                    result = service.GetJobTitleList().ResultData.Where(w => w.Id == id).FirstOrDefault();
-                }
-                return View("AddJobTitle", result);
-            }
+                    JobTitleModel result = new JobTitleModel();
 
+                    if (id > 0)
+                    {
+                        result = service.GetJobTitleList().ResultData.Where(w => w.Id == id).FirstOrDefault();
+                    }
+                    return View("AddJobTitle", result);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         public ActionResult SaveJobTilte(JobTitleModel model)
         {
-            using (SetupService service = new SetupService())
+            try
             {
-                var result = service.SaveJobTitle(model);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (SetupService service = new SetupService())
+                {
+                    var result = service.SaveJobTitle(model);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
             }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }            
         }
 
         [CheckSession]
         public string DeleteJobTitle(int id)
         {
-            using (SetupService objJobTitle = new SetupService())
+            try
             {
-                var results = objJobTitle.GetJobUserRoleById(id);
-                if(results != null)
+                using (SetupService objJobTitle = new SetupService())
                 {
+                    var results = objJobTitle.GetJobUserRoleById(id);
+                    if (results != null)
+                    {
+                        return results.Status;
+                    }
+                    else
+                    {
+                        var result = objJobTitle.DeleteJobTitle(id);
+                        return (result.Status);
+                    }
                     return results.Status;
                 }
-                else
-                {
-                    var result = objJobTitle.DeleteJobTitle(id);
-                    return (result.Status);
-                }
-                return results.Status;
             }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+            
         }
 
         [CheckSession]
@@ -182,6 +224,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                 return View();
@@ -214,12 +257,9 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
         }
-
     }
 }

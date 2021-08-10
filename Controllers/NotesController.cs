@@ -1,4 +1,6 @@
-﻿using ProvenCfoUI.Comman;
+﻿using log4net;
+using ProvenCfoUI.Comman;
+using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +12,21 @@ namespace ProvenCfoUI.Controllers
     [CustomAuthenticationFilter]
     public class NotesController : Controller
     {
-        string errorMessage = string.Empty;
-        string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Notes
         [CheckSession]
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
     }
 }

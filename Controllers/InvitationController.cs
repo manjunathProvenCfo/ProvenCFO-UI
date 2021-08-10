@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using log4net;
+using OfficeOpenXml;
 using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Areas.Model;
@@ -22,26 +23,32 @@ namespace ProvenCfoUI.Controllers
 
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [CheckSession]
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult InviteStaffList()
         {
-            using (InvitationServices obj = new InvitationServices())
+            try
             {
-
-                using (RoleService objrole = new RoleService())
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    using (SetupService objJob = new SetupService())
+                    using (RoleService objrole = new RoleService())
                     {
-                        var objResult = obj.GetInvitation();
-                        objResult.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                        objResult.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
-                        return View(objResult.ResultData);
+                        using (SetupService objJob = new SetupService())
+                        {
+                            var objResult = obj.GetInvitation();
+                            objResult.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            objResult.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
+                            return View(objResult.ResultData);
+                        }
                     }
-
                 }
-
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -49,15 +56,23 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult InviteStaff()
         {
-            using (RoleService objrole = new RoleService())
+            try
             {
-                using (SetupService objJob = new SetupService())
+                using (RoleService objrole = new RoleService())
                 {
-                    InviteStaffViewModel emptyobj = new InviteStaffViewModel();
-                    emptyobj.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                    emptyobj.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
-                    return View(emptyobj);
+                    using (SetupService objJob = new SetupService())
+                    {
+                        InviteStaffViewModel emptyobj = new InviteStaffViewModel();
+                        emptyobj.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                        emptyobj.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
+                        return View(emptyobj);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -107,6 +122,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "Unable to Send Invitation.";
                 Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                 return View();
@@ -117,14 +133,22 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult InviteStaffByAgency(InviteUserModel InviteUser)
         {
-            using (InvitationServices obj = new InvitationServices())
+            try
             {
-                if (InviteUser.Id > 0)
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    var data = obj.GetInvitation().ResultData.Where(x => x.Id == InviteUser.Id).FirstOrDefault();
-                    return View(data);
+                    if (InviteUser.Id > 0)
+                    {
+                        var data = obj.GetInvitation().ResultData.Where(x => x.Id == InviteUser.Id).FirstOrDefault();
+                        return View(data);
+                    }
+                    return View();
                 }
-                return View();
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -133,43 +157,56 @@ namespace ProvenCfoUI.Controllers
         public ActionResult NavigateToInviteStaffByAgency()
         {
             InviteUserModel objInvite = new InviteUserModel();
-            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-            if (UserPref != null && UserPref.Count() > 0)
+            try
             {
-                var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                objInvite.AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                using (ClientService objClient = new ClientService())
+                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                if (UserPref != null && UserPref.Count() > 0)
                 {
-                    var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
-                    objInvite.AgencyName = objResult.Name;
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    objInvite.AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    using (ClientService objClient = new ClientService())
+                    {
+                        var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
+                        objInvite.AgencyName = objResult.Name;
+                    }
                 }
+                return View("InviteStaffByAgency", objInvite);
             }
-
-            return View("InviteStaffByAgency", objInvite);
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         public ActionResult EditToInviteStaffByAgency(int Id)
         {
             InviteUserModel objInvite = new InviteUserModel();
-
-            using (InvitationServices obj = new InvitationServices())
+            try
             {
-                var result = obj.GetInvitationById(Id);
-                objInvite.Id = result.Id.Value;
-                objInvite.FirstName = result.FirstName;
-                objInvite.LastName = result.LastName;
-                objInvite.Email = result.Email;
-                objInvite.AgencyID = Convert.ToInt32(result.AgencyId);
-                objInvite.IsActive = Convert.ToString(result.IsActive);
-                using (ClientService objClient = new ClientService())
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
-                    objInvite.AgencyName = objResult.Name;
+                    var result = obj.GetInvitationById(Id);
+                    objInvite.Id = result.Id.Value;
+                    objInvite.FirstName = result.FirstName;
+                    objInvite.LastName = result.LastName;
+                    objInvite.Email = result.Email;
+                    objInvite.AgencyID = Convert.ToInt32(result.AgencyId);
+                    objInvite.IsActive = Convert.ToString(result.IsActive);
+                    using (ClientService objClient = new ClientService())
+                    {
+                        var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
+                        objInvite.AgencyName = objResult.Name;
+                    }
                 }
-
+                return View("InviteStaffByAgency", objInvite);
             }
-            return View("InviteStaffByAgency", objInvite);
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
@@ -235,6 +272,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     catch (Exception ex)
                     {
+                        log.Error(Utltity.Log4NetExceptionLog(ex));
                         throw;
                     }
                 }
@@ -273,6 +311,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "Unable to Send Invitation.";
                 //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                 return View();
@@ -298,6 +337,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -319,6 +359,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -327,37 +368,52 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult RegisteredUserList()
         {
-
-            using (AccountService obj = new AccountService())
+            try
             {
-                List<InviteUserModel> user = new List<InviteUserModel>();
-                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                if (UserPref != null && UserPref.Count > 0)
+                using (AccountService obj = new AccountService())
                 {
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    if (selectedAgency != null && selectedAgency.Id != 0)
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count > 0)
                     {
-                        var result = obj.RegisteredUserListbyAgency(Convert.ToString(selectedAgency.PreferanceValue));
-                        return View(result.ResultData);
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        if (selectedAgency != null && selectedAgency.Id != 0)
+                        {
+                            var result = obj.RegisteredUserListbyAgency(Convert.ToString(selectedAgency.PreferanceValue));
+                            return View(result.ResultData);
+                        }
+                        return View(user);
+                    }
+                    else
+                    {
+
                     }
                     return View(user);
                 }
-                else
-                {
-
-                }
-                return View(user);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
         [CheckSession]
         public ActionResult RefreshRegisteredUserList(string AgencyID)
         {
-            using (AccountService obj = new AccountService())
+            try
             {
-                UserModel user = new UserModel();
-                var result = obj.RegisteredUserListbyAgency(Convert.ToString(AgencyID));
-                return View("RegisteredUserList", result.ResultData);
+                using (AccountService obj = new AccountService())
+                {
+                    UserModel user = new UserModel();
+                    var result = obj.RegisteredUserListbyAgency(Convert.ToString(AgencyID));
+                    return View("RegisteredUserList", result.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -365,37 +421,43 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult EditInvitation()
         {
-
-            using (InvitationServices obj = new InvitationServices())
+            try
             {
-                using (RoleService objrole = new RoleService())
+                using (InvitationServices obj = new InvitationServices())
                 {
-                    using (SetupService objJob = new SetupService())
+                    using (RoleService objrole = new RoleService())
                     {
-                        InviteUserModel InvitationUsers = new InviteUserModel();
-                        var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
-                        InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                        InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
-                        InvitationUsers.Id = Convert.ToInt32(result.Id);
-                        InvitationUsers.FirstName = result.FirstName;
-                        InvitationUsers.LastName = result.LastName;
-                        InvitationUsers.JobTitle = result.JobTitle;
-                        InvitationUsers.RoleName = result.RoleName;
-                        InvitationUsers.IsActive = result.IsActive.ToString();
-                        InvitationUsers.RoleId = result.RoleId;
-                        InvitationUsers.JobId = Convert.ToInt32(result.JobId);
-                        InvitationUsers.Email = result.Email;
-                        InvitationUsers.UserId = result.UserId;
-                        InvitationUsers.LinkedInProfile = result.LinkedInProfile;
+                        using (SetupService objJob = new SetupService())
+                        {
+                            InviteUserModel InvitationUsers = new InviteUserModel();
+                            var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
+                            InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
+                            InvitationUsers.Id = Convert.ToInt32(result.Id);
+                            InvitationUsers.FirstName = result.FirstName;
+                            InvitationUsers.LastName = result.LastName;
+                            InvitationUsers.JobTitle = result.JobTitle;
+                            InvitationUsers.RoleName = result.RoleName;
+                            InvitationUsers.IsActive = result.IsActive.ToString();
+                            InvitationUsers.RoleId = result.RoleId;
+                            InvitationUsers.JobId = Convert.ToInt32(result.JobId);
+                            InvitationUsers.Email = result.Email;
+                            InvitationUsers.UserId = result.UserId;
+                            InvitationUsers.LinkedInProfile = result.LinkedInProfile;
 
 
-                        return View("EditInvitation", InvitationUsers);
+                            return View("EditInvitation", InvitationUsers);
+                        }
+
                     }
 
                 }
-
             }
-
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
 
@@ -448,7 +510,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -460,13 +522,20 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult NavigateToEdit(int id)
         {
-
-            if (id > 0)
+            try
             {
+                if (id > 0)
+                {
 
-                TempData["SelectediD"] = id.ToString();
+                    TempData["SelectediD"] = id.ToString();
+                }
+                return RedirectToAction("EditInvitation");
             }
-            return RedirectToAction("EditInvitation");
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
@@ -485,7 +554,7 @@ namespace ProvenCfoUI.Controllers
                             {
                                 var LoginUserid = Session["UserId"].ToString();
 
-                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive),Invite.UserId, LoginUserid, Invite.LinkedInProfile);
+                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile);
                                 result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                                 result.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                                 if (result == null)
@@ -498,6 +567,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -508,36 +578,41 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult ExportToExcel()
         {
-            using (InvitationServices objInviteUser = new InvitationServices())
+            try
             {
-
-                Utltity obj = new Utltity();
-                var objResult = objInviteUser.GetInvitation().ResultData;
-                foreach (var item in objResult)
+                using (InvitationServices objInviteUser = new InvitationServices())
                 {
-                    if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
+                    Utltity obj = new Utltity();
+                    var objResult = objInviteUser.GetInvitation().ResultData;
+                    foreach (var item in objResult)
                     {
-                        item.Status = "Invited";
+                        if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
+                        {
+                            item.Status = "Invited";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                        {
+                            item.Status = "Active";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                        {
+                            item.Status = "Inactive";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                        {
+                            item.Status = "Inactive";
+                        }
                     }
-                    else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
-                    {
-                        item.Status = "Active";
-                    }
-                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
-                    {
-                        item.Status = "Inactive";
-                    }
-                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
-                    {
-                        item.Status = "Inactive";
-                    }
+                    var obj1 = objResult.Select(s => new
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, ModifiedDate = s.ModifiedDate, CreatedBy = s.CreatedByUser, ModifiedBy = s.ModifiedByUser }).ToList();
+                    string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
+                    return Json(filename, JsonRequestBehavior.AllowGet);
                 }
-                var obj1 = objResult.Select(s => new
-                { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, ModifiedDate = s.ModifiedDate, CreatedBy = s.CreatedByUser, ModifiedBy = s.ModifiedByUser }).ToList();
-                string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
-                return Json(filename, JsonRequestBehavior.AllowGet);
-
-
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw;
             }
 
         }
@@ -546,55 +621,70 @@ namespace ProvenCfoUI.Controllers
         public JsonResult ExportToExcelAgencyUsers()
         {
             string filename = string.Empty;
-            using (AccountService objInviteUser = new AccountService())
+            try
             {
-                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                if (UserPref != null && UserPref.Count > 0)
+                using (AccountService objInviteUser = new AccountService())
                 {
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    if (selectedAgency != null && selectedAgency.Id != 0)
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count > 0)
                     {
-                        Utltity obj = new Utltity();
-                        var objResult = objInviteUser.RegisteredUserListbyAgency(Convert.ToString(selectedAgency.PreferanceValue)).ResultData;
-                        foreach (var s in objResult)
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        if (selectedAgency != null && selectedAgency.Id != 0)
                         {
-                            if (s.IsRegistered == 0 && Convert.ToString(s.IsActive) == "1")
+                            Utltity obj = new Utltity();
+                            var objResult = objInviteUser.RegisteredUserListbyAgency(Convert.ToString(selectedAgency.PreferanceValue)).ResultData;
+                            foreach (var s in objResult)
                             {
-                                s.Status = "Invited";
+                                if (s.IsRegistered == 0 && Convert.ToString(s.IsActive) == "1")
+                                {
+                                    s.Status = "Invited";
+                                }
+                                else if (Convert.ToString(s.IsActive) == "1" && s.IsRegistered == 1)
+                                {
+                                    s.Status = "Active";
+                                }
+                                else if (Convert.ToString(s.IsActive) == "0" && s.IsRegistered == 0)
+                                {
+                                    s.Status = "Inactive";
+                                }
+                                else if (Convert.ToString(s.IsActive) == "0" && s.IsRegistered == 1)
+                                {
+                                    s.Status = "Inactive";
+                                }
                             }
-                            else if (Convert.ToString(s.IsActive) == "1" && s.IsRegistered == 1)
-                            {
-                                s.Status = "Active";
-                            }
-                            else if (Convert.ToString(s.IsActive) == "0" && s.IsRegistered == 0)
-                            {
-                                s.Status = "Inactive";
-                            }
-                            else if (Convert.ToString(s.IsActive) == "0" && s.IsRegistered == 1)
-                            {
-                                s.Status = "Inactive";
-                            }
+                            var obj1 = objResult.Select(s => new
+                            { AgencyName = s.AgencyName, FirstName = s.FirstName, LastName = s.LastName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                            filename = obj.ExportTOExcel("Agency Users List", obj.ToDataTable(obj1));
+                            return Json(filename, JsonRequestBehavior.AllowGet);
                         }
-                        var obj1 = objResult.Select(s => new
-                        { AgencyName = s.AgencyName, FirstName = s.FirstName, LastName = s.LastName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
-                        filename = obj.ExportTOExcel("Agency Users List", obj.ToDataTable(obj1));
-                        return Json(filename, JsonRequestBehavior.AllowGet);
+
                     }
 
                 }
-
+                return Json(filename, JsonRequestBehavior.AllowGet);
             }
-            return Json(filename, JsonRequestBehavior.AllowGet);
-
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         public JsonResult DeleteUser(string id)
         {
-            using (InvitationServices objInvite = new InvitationServices())
+            try
             {
-                var result = objInvite.DeleteUser(id);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (InvitationServices objInvite = new InvitationServices())
+                {
+                    var result = objInvite.DeleteUser(id);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -602,10 +692,18 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult DeleteInvite(int id)
         {
-            using (InvitationServices objInvite = new InvitationServices())
+            try
             {
-                var result = objInvite.DeleteInvite(id);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (InvitationServices objInvite = new InvitationServices())
+                {
+                    var result = objInvite.DeleteInvite(id);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -613,25 +711,36 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult IsInviteValied(int id)
         {
-            using (InvitationServices objInvite = new InvitationServices())
+            try
             {
-                var result = objInvite.IsInviteValied(id);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                using (InvitationServices objInvite = new InvitationServices())
+                {
+                    var result = objInvite.IsInviteValied(id);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
             }
-
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
-
-
         [CheckSession]
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult GetRegisterdStaffUserList()
         {
-            using (InvitationServices obj = new InvitationServices())
+            try
             {
-                var objResult = obj.GetRegisteredStaffUserList();
-                //objResult.StaffList = obj.GetRegisterdStaffUserList().ResultData;
-                return View(objResult.ResultData);
-
+                using (InvitationServices obj = new InvitationServices())
+                {
+                    var objResult = obj.GetRegisteredStaffUserList();                    
+                    return View(objResult.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -15,17 +16,26 @@ namespace ProvenCfoUI.Controllers
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: BillableEntities
 
         [CheckSession]
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult GetAllBillableEntitiesList()
         {
-            using (BillableEntitiesService obj = new BillableEntitiesService())
+            try
             {
-                var objResult = obj.GetAllBillableEntitiesList();
+                using (BillableEntitiesService obj = new BillableEntitiesService())
+                {
+                    var objResult = obj.GetAllBillableEntitiesList();
 
-                return View(objResult.ResultData);
+                    return View(objResult.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -33,27 +43,43 @@ namespace ProvenCfoUI.Controllers
         [HttpGet]
         public ActionResult AddBillableEntity()
         {
-            BillableEntitiesVM result = new BillableEntitiesVM();
-            return View(result);
+            try
+            {
+                BillableEntitiesVM result = new BillableEntitiesVM();
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         public ActionResult EditBillableEntity(int Id)
         {
-            using (BillableEntitiesService obj = new BillableEntitiesService())
+            try
             {
-                BillableEntitiesVM objvm = new BillableEntitiesVM();
-                var result = obj.GetBillableEntitiesById(Id);
-                objvm.Id = result.Id;
-                objvm.EntityName = result.EntityName;
-                objvm.ProvenCFOXeroContactID = result.ProvenCFOXeroContactID;
+                using (BillableEntitiesService obj = new BillableEntitiesService())
+                {
+                    BillableEntitiesVM objvm = new BillableEntitiesVM();
+                    var result = obj.GetBillableEntitiesById(Id);
+                    objvm.Id = result.Id;
+                    objvm.EntityName = result.EntityName;
+                    objvm.ProvenCFOXeroContactID = result.ProvenCFOXeroContactID;
 
-                objvm.Status = result.Status;
-                objvm.CreatedBy = result.CreatedBy;
-                objvm.CreatedDate = result.CreatedDate;
-                objvm.ModifiedBy = result.ModifiedBy;
-                objvm.ModifiedDate = result.ModifiedDate;
-                return View("AddBillableEntity", objvm);
+                    objvm.Status = result.Status;
+                    objvm.CreatedBy = result.CreatedBy;
+                    objvm.CreatedDate = result.CreatedDate;
+                    objvm.ModifiedBy = result.ModifiedBy;
+                    objvm.ModifiedDate = result.ModifiedDate;
+                    return View("AddBillableEntity", objvm);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
 
         }
@@ -115,6 +141,7 @@ namespace ProvenCfoUI.Controllers
 
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -141,6 +168,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -153,12 +181,20 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public string DeleteBillableEntity(int Id)
         {
-            using (BillableEntitiesService objBills = new BillableEntitiesService())
+            try
             {
-                var result = objBills.DeleteBillableEntity(Id);
-                return result.Status;
-                if (result == null)
-                    ViewBag.ErrorMessage = "Can't Delete";
+                using (BillableEntitiesService objBills = new BillableEntitiesService())
+                {
+                    var result = objBills.DeleteBillableEntity(Id);
+                    return result.Status;
+                    if (result == null)
+                        ViewBag.ErrorMessage = "Can't Delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -177,6 +213,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -185,23 +222,31 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult ExportToExcel()
         {
-            using (BillableEntitiesService objBills = new BillableEntitiesService())
+            try
             {
-                Utltity obj = new Utltity();
-                var objResult = objBills.GetAllBillableEntitiesList().ResultData.Select(b => new
+                using (BillableEntitiesService objBills = new BillableEntitiesService())
                 {
-                    Billable_Entity_Id = b.Id,
-                   Entity_Name = b.EntityName,
-                    Xero_ID = b.ProvenCFOXeroContactID,
-                    Status = b.Status == "Active" ? "Active" : "Inactive",
-                    Created_By = b.CreatedByUser,
-                    Created_Date = b.CreatedDate.ToString() == "Inactive" || (((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
-                    Modified_By = b.ModifiedByUser,
-                    Modified_Date = b.ModifiedDate.ToString() == "Inactive" || (((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy").Replace("-", "/")
+                    Utltity obj = new Utltity();
+                    var objResult = objBills.GetAllBillableEntitiesList().ResultData.Select(b => new
+                    {
+                        Billable_Entity_Id = b.Id,
+                        Entity_Name = b.EntityName,
+                        Xero_ID = b.ProvenCFOXeroContactID,
+                        Status = b.Status == "Active" ? "Active" : "Inactive",
+                        Created_By = b.CreatedByUser,
+                        Created_Date = b.CreatedDate.ToString() == "Inactive" || (((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
+                        Modified_By = b.ModifiedByUser,
+                        Modified_Date = b.ModifiedDate.ToString() == "Inactive" || (((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.ModifiedDate).ToString("MM/dd/yyyy").Replace("-", "/")
 
-                }).ToList();
-                string filename = obj.ExportTOExcel("BillableEntitiesList", obj.ToDataTable(objResult));
-                return Json(filename, JsonRequestBehavior.AllowGet);
+                    }).ToList();
+                    string filename = obj.ExportTOExcel("BillableEntitiesList", obj.ToDataTable(objResult));
+                    return Json(filename, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
