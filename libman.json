@@ -17,17 +17,21 @@
         "dist/twilio-conversations.js",
         "dist/twilio-conversations.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "moment.js@2.29.1",
+      "destination": "assets/lib/moment.js/",
+      "files": [
+        "moment.min.js",
+        "moment.js",
+        "moment.min.js.map"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "blueimp-file-upload@10.31.0",
+      "destination": "assets/lib/blueimp-file-upload/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "moment.js@2.29.1",
-  "destination": "assets/lib/moment.js/",
-  "files": [
-    "moment.min.js",
-    "moment.js",
-    "moment.min.js.map"
   ]
-}
-]
 }

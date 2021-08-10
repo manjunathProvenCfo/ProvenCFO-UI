@@ -23,8 +23,19 @@ var createTwilioClient = function () {
 
             twilioClient.getSubscribedConversations().then(updateChannels);
 
+            twilioClient.on("connectionStateChanged", function (state) {
+                //connectionInfo
+                //    .removeClass("online offline connecting denied")
+                //    .addClass(client.connectionState);
+                $participants.eq(0).click();
+            });
+
+            twilioClient.on("channelJoined", function (channel) {
+                channel.on("messageAdded", updateUnreadMessages);
+                channel.on("messageAdded", updateChannels);
+            });
             //click First Paticipant
-            setTimeout(function () { $participants.eq(0).click(); }, 1500);
+            setTimeout(function () { $participants.eq(0).click(); }, 3000);
 
 
             setTimeout(registerUserUpdatedEventHandlers, 200);
@@ -125,6 +136,10 @@ var setActiveChannel = function (channel) {
                 setScrollPosition();
                 if ($newMessagesDiv && $newMessagesDiv.length > 0)
                     $newMessagesDiv.remove();
+                debugger
+                let lastMessage = $channelMessages.children('.media:last')
+                if (lastMessage && lastMessage.length > 0)
+                    channel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
             });
         }
     });
@@ -275,7 +290,6 @@ var validateMessage = function () {
     let isValid = true;
     let body = $messageBodyInput.val();
     if (isEmptyOrBlank(body)) {
-        //TODO//show error alert
         isValid = false;
     }
     return isValid;
@@ -537,8 +551,7 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
 var handleUserUpdate = function (user, updateReasons) {
     // loop over each reason and check for reachability change
     updateReasons.forEach(reason => {
-        if (reason == 'reachabilityOnline') {
-            debugger
+        if (reason == 'reachabilityOnline') {s
             let participant = getParticipantByEmail(user.state.identity);
             if (!isEmptyOrBlank(participant)) {
                 participant["Online"] = isEmptyOrBlank(user?.state?.online) ? false : user?.state?.online;

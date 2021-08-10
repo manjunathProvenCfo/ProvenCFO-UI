@@ -25,6 +25,7 @@
                                 <h5 class="mb-0 text-truncate fs-0"><span class="channelName"></span></h5>
                                 <div class="fs--2 text-400">
                                     <span class="channelParticipantActive"></span>
+                                    <span class="channelParticipantEmail"></span>
                                 </div>
                             </div>
                         </div>
@@ -90,11 +91,35 @@
             </div>
             <form class="chat-editor-area">
                 <div class="w-100"><div id="typing-indicator"><span></span></div></div>
-                <input class="d-none" type="file" id="chat-file-upload">
+                <input class="d-none" type="file" multiple id="chat-file-upload" accept="image/*,application/pdf,.csv,.CSV, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain">
                 <label class="mb-0 p-1 chat-file-upload cursor-pointer" for="chat-file-upload"><span class="fas fa-paperclip"></span></label>
-                <textarea id="message-body-input" class="emojiarea border-0 outline-none shadow-none" data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false}'></textarea>
+                <textarea id="message-body-input" class="border-0 outline-none shadow-none"></textarea>
+                @*data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false}'*@
                 <button id="send-message" class="btn btn-sm btn-send outline-none ml-2" type="button">Send</button>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1" aria-hidden="true" id="chat-file-previewer-modal">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="bg-light rounded-soft-top px-4 py-3">
+                    <h4 class="mb-1" id="kanban-modal-label-title">Uplaod and Preview Files</h4>
+                    @*<p class="fs--2 mb-0">Added by <a class="text-600 font-weight-semi-bold" href="#!" id="Reporter">Antony</a></p>*@
+                </div>
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="file" multiple id="fileupload" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

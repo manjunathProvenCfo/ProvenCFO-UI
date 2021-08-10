@@ -36,7 +36,7 @@ function getAjax(url, data, response) {
     baseAjaxCall('GET', url, data, response);
 }
 function getAjaxSync(url, data, response) {
-    baseAjaxCall('GET', url, data, response,false);
+    baseAjaxCall('GET', url, data, response, false);
 }
 function postAjax(url, data, response) {
     baseAjaxCall('POST', url, data, response);
@@ -55,7 +55,30 @@ function patchAjax(url, data, response) {
 }
 //Ajax wrapper end
 
-//TODO:Implement
-function showErrorAlert() {
+//Alerts Start
+function ShowAlertBoxBase(title, text, type, callback) {
+    if (isEmptyOrBlank(callback))
+        callback = function () { }
 
+    sweetAlert
+        ({
+            title: title, //"Exist!",
+            text: text,//"This User Role is Exist !",
+            type: type //"warning"
+        },callback);
 }
+function ShowAlertBoxInfo(title, text, callback = null) {
+    ShowAlertBoxBase(title, text, 'info',callback);
+}
+function ShowAlertBoxSuccess(title, text, callback = null) {
+    ShowAlertBoxBase(title, text, 'success', callback);
+}
+function ShowAlertBoxWarning(title, text, callback = null) {
+    ShowAlertBoxBase(title, text, 'warning', callback);
+}
+function ShowAlertBoxError(title, text, callback = null) {
+    ShowAlertBoxBase(title, text, 'error', callback);
+}
+//Alerts End
+
+

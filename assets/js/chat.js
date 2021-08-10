@@ -2,7 +2,10 @@
 var $participantFirst;
 var $participants;
 var $channelName;
+var $channelParticipantEmail;
 var $messageBodyInput;
+var $messageBodyFileUploader;
+var $messageBodyFilePreviewerModal;
 var $btnSendMessage;
 var $channelMessages;
 var $typingIndicator;
@@ -23,7 +26,10 @@ var loadPage = function () {
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
     $messageBodyInput = $("#message-body-input");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
 
@@ -39,22 +45,63 @@ var loadPage = function () {
         $participantFirst = $("#chatParticipants .chat-contact:first");
     }
 
-    $messageBodyInput.on('keydown', function (e) {
-        debugger
-        if (activeChannel) { activeChannel.typing(); }
+    $messageBodyInput.emojioneArea({
+        "placeholder": "Type your message", "emojiPlaceholder": ":smile_cat:", "search": true, "tones": false, "filtersPosition": "bottom", "recentEmojis": false, events: {
+            keydown: function (editor, event) {
+                if (event.keyCode === 13) {
+                    $btnSendMessage.click();
+                } else if (activeChannel) {
+                    activeChannel.typing();
+                }
+            }
+        }
     });
+
+    $messageBodyFileUploader.on("change", function (e) {
+        debugger
+        var files = $(this)[0].files;
+        if (files.length === 0) {
+            ShowAlertBoxError("File uploader", "Select atleast one file.");
+            return;
+        }
+
+        if (files.length > 5) {
+            ShowAlertBoxError("File uploader", "You can upload max 5 files at a time.");
+            return;
+        }
+
+        //TODO//Add Functionality to Preview files before upload using fancy Box
+
+        //Upload
+        files.forEach(function (file) {
+            let uploader = new Uploader(file);
+            let size = uploader.getSizeInMB();
+            if (size > 4) {
+                ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
+            }
+            else {
+
+            }
+        })
+    });
+
 }
 
 var getChatParticipants = function () {
     getAjaxSync(`/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}`, null, function (response) {
-        chat.participants = response;
-        chat.participants.forEach(x => {
-            if (isEmpty(onlineOfflineMembers[x.Email])) {
-                onlineOfflineMembers[x.Email] = false;
-            }
-        });
+        if (response.length > 0) {
+            chat.participants = response;
+            chat.participants.forEach(x => {
+                if (isEmpty(onlineOfflineMembers[x.Email])) {
+                    onlineOfflineMembers[x.Email] = false;
+                }
+            });
 
-        renderParticipants();
+            renderParticipants();
+        }
+        else {
+            ShowAlertBoxWarning("No participant exists for chat");
+        }
     });
 }
 var renderParticipants = function () {
@@ -108,7 +155,8 @@ var handleParticipantClick = function (event) {
         chat.channelIndex = index;
 
         let participant = getParticipantByChannelIndex();
-        $channelName.text(participant.FirstName + " " + participant.LastName)
+        $channelName.text(participant.FirstName + " " + participant.LastName);
+        $channelParticipantEmail.text(participant.Email);
 
         $channelMessages.empty();
 
@@ -127,15 +175,13 @@ var handleParticipantClick = function (event) {
 //Database Queries Start
 var updateTwilioUserId = function (userId, twiliouserId) {
     postAjaxSync("/Twilio/UpdateTwilioUserId?userId=" + userId + "&twiliouserId=" + twiliouserId, null, function (response) {
-        debugger
+
     })
 }
 
 var insertUpdateTwilioConversation = function (objTwilioConversations) {
-    debugger
     postAjax("/Twilio/InsertUpdateTwilioConversation", JSON.stringify(objTwilioConversations), function (response) {
-        debugger
-    })
+    });
 }
 
 
@@ -173,3 +219,17 @@ var addTypingIndicatorDiv = function () {
 var setScrollPosition = function () {
     $channelMessages.scrollTop($channelMessages[0].scrollHeight);
 }
+
+var Uploader = function (file) {
+    this.file = file;
+};
+
+Uploader.prototype.getType = function () {
+    return this.file.type;
+};
+Uploader.prototype.getSizeInMB = function () {
+    return parseFloat(parseFloat(this.file.size / 1024) / 1024).toFixed(2);
+};
+Uploader.prototype.getName = function () {
+    return this.file.name;
+};
