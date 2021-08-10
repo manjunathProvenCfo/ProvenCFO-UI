@@ -27,7 +27,7 @@
                 <div id="dashboard-actions">
 
                     <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddBillableEntity", "BillableEntities")>Create New Billable Entity</a></span></button>
-                        <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
                     <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
 
                 </div>
@@ -80,7 +80,7 @@
                                         <i class="far fa-trash-alt"> </i>
                                     </a>
                                 </span>
-                            <span class="d-sm-inline-block ml-2">
+                                <span class="d-sm-inline-block ml-2">
 
                                     @if (item.Status == "Active")
                                     {
@@ -155,7 +155,9 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                               sweetAlert
+
+                            if (data == "true") {
+                                sweetAlert
                                     ({
                                         title: "Deleted!",
                                         text: "Billable Entity is successfully deleted!",
@@ -164,6 +166,20 @@
                                         function () {
                                             window.location.reload();
                                         });
+
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Couldn't Delete!",
+                                        text: "This Billable Entity is associated with Client",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+
+                            }
                         })
                         .error(function (data) {
                             debugger

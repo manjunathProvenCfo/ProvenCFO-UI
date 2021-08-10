@@ -182,5 +182,21 @@ namespace Proven.Service
             }
             isDisposed = true;
         }
+
+        public BillableEntitiesVM GetClientBillsAssociationById(int Id)
+        {
+            response = client.GetAsync("BillableEntities/GetClientBillsAssociationById?Id=" + Id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
+                return val;
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+            }
+        }
     }
 }
