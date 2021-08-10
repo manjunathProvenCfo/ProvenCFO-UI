@@ -16,9 +16,9 @@ namespace Proven.Service
         private HttpResponseMessage response;
         private StringContent content;
 
-        public async Task<List<ChatParticipants>> GetChatParticipants(string UserID)
+        public async Task<List<ChatParticipants>> GetChatParticipants(string UserID, string userEmail)
         {
-            response = await client.GetAsync("Communication/GetChatParticipants?userId=" + UserID).ConfigureAwait(false);
+            response = await client.GetAsync($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}").ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
