@@ -6083,8 +6083,6 @@ input[type="button"].btn-block {
   z-index: 2;
   color: #fff;
   text-decoration: none;
-  /*background-color: #000;
-  border-color: #000;*/
 }
 
 .page-link:focus {
@@ -6108,8 +6106,6 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 3;
   color: #fff;
- /* background-color: #000;
-  border-color: #000;*/
 }
 
 .page-item.disabled .page-link {

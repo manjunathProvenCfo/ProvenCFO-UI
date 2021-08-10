@@ -548,10 +548,12 @@
                             $.each(data.TeamMembers, function (key, object) {
                                 if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
                                     $('#aLinkedInProfile' + count).attr("href", object.LinkedInProfile);
+                                    $('#aLinkedInProfile' + count).prop('disabled', false);
+                                    $('#aLinkedInProfile' + count).removeClass('disabled-action-icons');
                                 }
                                 else {
                                     $('#aLinkedInProfile' + count)[0].className = $('#aLinkedInProfile' + count)[0].className + ' disabled-action-icons';
-                                    $('#aLinkedInProfile' + count).attr("disabled", "disabled");
+                                    $('#aLinkedInProfile' + count).prop('disabled', true);
                                 }
                                 if (object.Username != null && object.Username != '') {
                                     $('#spStaffName' + count).html(String(object.Username));
