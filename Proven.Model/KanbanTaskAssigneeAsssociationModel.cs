@@ -16,6 +16,8 @@ namespace Proven.Model
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public bool IsDeleted { get; set; }
+
+        public bool SingleMember { get; set; }
     }
     public class KanbanTaskAssigneeAsssociationShortVM
     {

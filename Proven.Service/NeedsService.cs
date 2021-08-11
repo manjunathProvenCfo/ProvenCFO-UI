@@ -158,7 +158,7 @@ namespace Proven.Service
         public ReturnModel addNewAssigneeToKanbanTask(KanbanTaskAssigneeAsssociationModel asssignee)
         {
             content = new StringContent(JsonConvert.SerializeObject(asssignee), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Needs/addNewAssigneeToKanbanTask", content).Result;
+            response = client.PostAsync("Needs/addNewAssigneeToKanbanTask?SingleMember=" + asssignee.SingleMember, content).Result;
 
             if (response.IsSuccessStatusCode)
             {
@@ -194,7 +194,7 @@ namespace Proven.Service
         public KanbanTaskCommentsListMainModel GetCommentsByTaskId(int TaskId)
         {
 
-            response = client.GetAsync("Needs/GetCommentsByTaskId?TaskId=" + TaskId ).Result;
+            response = client.GetAsync("Needs/GetCommentsByTaskId?TaskId=" + TaskId).Result;
             if (response.IsSuccessStatusCode)
             {
                 var _content = response.Content.ReadAsStringAsync().Result;
@@ -258,7 +258,7 @@ namespace Proven.Service
             }
 
         }
-        public ReturnModel UpdateTaskDescription(int TaskID, string DescriptionText,string LoginUserID)
+        public ReturnModel UpdateTaskDescription(int TaskID, string DescriptionText, string LoginUserID)
         {
             KanbanTasksVM kbvm = new KanbanTasksVM();
             kbvm.Id = TaskID;
@@ -279,7 +279,7 @@ namespace Proven.Service
                 string msg = response.ReasonPhrase;
                 throw new Exception(msg);
 
-            }           
+            }
         }
 
         public ReturnModel UpdateLableForKanbanTask(int TaskID, string DescriptionText, string LoginUserID)
