@@ -80,13 +80,13 @@
         
         $('#navbarVerticalCollapse li a').click(function (event) {                       
             //localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
-            if (event.currentTarget.parentNode.parentNode.parentNode.id == '') {
-                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
-                sessionStorage.setItem('SelectedSubMenu', '');  
+            if (event.currentTarget.parentNode.id != '' && event.currentTarget.parentNode.id.indexOf('submenu') != -1) {
+                //sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
+                sessionStorage.setItem('SelectedSubMenu', event.currentTarget.parentNode.id);  
             }
             else {
-                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.parentNode.parentNode.id);   
-                sessionStorage.setItem('SelectedSubMenu', event.currentTarget.parentNode.id);   
+                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);   
+                sessionStorage.setItem('SelectedSubMenu', '');   
             }   
             HighlightMenu();
             
