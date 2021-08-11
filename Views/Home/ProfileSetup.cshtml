@@ -133,17 +133,23 @@
             $('#valLinkedInProfile').hide();
             var expression = '(?:https?:)?\/\/(?:[\w]+\.)?linkedin\.com\/(?P<company_type>(company)|(school))\/(?P<company_permalink>[A-z0-9-À-ÿ\.]+)\/?';
             
-            $('#LinkedInProfile').on('keyup', function () {               
-                if ($(this).val().toLowerCase().indexOf('linkedin.') == -1) {
-                    // there is a mismatch, hence show the error message                   
-                    $('#valLinkedInProfile').show();
-                    $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+            $('#LinkedInProfile').on('keyup', function () { 
+                if ($(this).val() != '') {
+
+                    if ($(this).val().toLowerCase().indexOf('linkedin.') == -1) {
+                        // there is a mismatch, hence show the error message                   
+                        $('#valLinkedInProfile').show();
+                        $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+                    }
+                    else {
+                        // else, do not display message                  
+                        $('#valLinkedInProfile').hide();
+                        $('#valLinkedInProfile').text('');
+                    }
                 }
                 else {
-                    // else, do not display message                  
                     $('#valLinkedInProfile').hide();
-                    $('#valLinkedInProfile').text('');
-                }
+                    $('#valLinkedInProfile').text('');}
             });
             $("#profile-image").change(function () {
                 var ext = $('#profile-image').val().split('.').pop().toLowerCase();
@@ -260,15 +266,20 @@
             model.Id = $("#Id").val();
             model.LinkedInProfile = $("#LinkedInProfile").val();
 
-
-            if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == -1) {
-                // there is a mismatch, hence show the error message                   
-                $('#valLinkedInProfile').show();
-                $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
-                return false;
+            if (model.LinkedInProfile != '') {
+                if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == -1) {
+                    // there is a mismatch, hence show the error message                   
+                    $('#valLinkedInProfile').show();
+                    $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+                    return false;
+                }
+                else {
+                    // else, do not display message                  
+                    $('#valLinkedInProfile').hide();
+                    $('#valLinkedInProfile').text('');
+                }
             }
             else {
-                // else, do not display message                  
                 $('#valLinkedInProfile').hide();
                 $('#valLinkedInProfile').text('');
             }
