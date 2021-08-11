@@ -765,7 +765,7 @@ function formatAMPM(date) {
 }
 function addNewAssigneeToKanbanTask(UserID, singleMember = false) {
     var TaskId = gCurrentViewTaskId;
-    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID, Single_Member: singleMember };
+    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID, SingleMember: singleMember };
     if (isEmptyOrBlank(singleMember)) {
         singleMember = false;
     }
