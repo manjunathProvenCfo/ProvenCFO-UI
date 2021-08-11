@@ -204,9 +204,6 @@ namespace ProvenCfoUI.Controllers
                     {
                         var result = objRole.DeleteRoles(id);
                         return result.Status;
-                        //if (result == null)
-                        //    ViewBag.ErrorMessage = "";
-                        //return RedirectToAction("Role");
                     }
                     return results.Status;
                 }
