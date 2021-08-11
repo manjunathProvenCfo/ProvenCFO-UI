@@ -263,6 +263,21 @@ namespace Proven.Service
                 throw new Exception(msg);
             }
         }
+        public bool IsClientInvitationAssociationByIdExists(int id)
+        {
+            response = client.GetAsync("Client/IsClientInvitationAssociationByIdExists?Id=" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                var val = Convert.ToBoolean(JObject.Parse(_content)["resultData"]);
+                return val;
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+            }
+        }
 
     }
 }

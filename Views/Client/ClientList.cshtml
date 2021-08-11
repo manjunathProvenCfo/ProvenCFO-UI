@@ -202,27 +202,18 @@
                 confirmButtonColor: "#ec6c62"
             },
                 function () {
-                    $.ajax({
-                        type: "POST",
-                        url: '/Client/DeleteClient/' + Id,
-                        //data: { id: id },
-                    })
-                        .done(function (data) {
 
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "Client deleted successfully.",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
-                        })
-                        .error(function (data) {
+                    postAjax('/Client/DeleteClient/' + Id, null, function (data) {
 
-                            swal("Oops", "We couldn't connect to the server!", "error");
-                        });
+                        if (data === false) {
+                            ShowAlertBoxError("Couldn't Delete!", "This Team is associated with Client", function () { window.location.reload(); });
+                           
+                        }
+                        else {
+                            ShowAlertBoxSuccess("Deleted!", "This Team is deleted successfully!", function () { window.location.reload(); });
+                        }
+
+                    });
                 });
         }
 

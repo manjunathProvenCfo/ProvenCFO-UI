@@ -300,10 +300,21 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
-                using (ClientService objInvite = new ClientService())
+                using (ClientService objClient = new ClientService())
                 {
-                    var result = objInvite.DeleteClient(id);
-                    return Json(result, JsonRequestBehavior.AllowGet);
+                    var results = objClient.IsClientInvitationAssociationByIdExists(id);
+                    if (results == false)
+                    {
+                        var result = objClient.DeleteClient(id);
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "This user is associated with client.";
+                        Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -312,6 +323,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-    }
 
+
+    }
 }
