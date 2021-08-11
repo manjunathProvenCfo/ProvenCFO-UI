@@ -419,36 +419,49 @@ function RemoveMember(UserID) {
 
 }
 function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
-    $('#att_' + attachmentId)[0].remove();
+   /* $('#att_' + attachmentId)[0].remove();*/
     var TaskId = gCurrentViewTaskId;
-    $.ajax({
-        type: "POST",
-        url: "/Needs/RemoveAttachmentFromKanbanTask?TaskId=" + TaskId + "&FileName=" + FileName + '&IsTaskAttachment=' + IsTaskAttachment,
-        // data: JSON.stringify({ TaskID: pdata }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            debugger;
-            if (response.Message == 'Success') {
-                ShowAlertBox('', 'Selected attachment is removed.', 'warning');
-                var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
-                if (AttachmentCount != undefined && AttachmentCount != '') {
-                    $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) - 1;
+    swal({
+        title: "Are you sure?",
+        text: "Do you really want to delete this attachment?",
+        type: "warning",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonText: "Yes, delete it!",
+        confirmButtonColor: "#ec6c62"
+    },
+       
+        function () {
+            $.ajax({
+                type: "POST",
+                url: "/Needs/RemoveAttachmentFromKanbanTask?TaskId=" + TaskId + "&FileName=" + FileName + '&IsTaskAttachment=' + IsTaskAttachment + '&attachmentId' + attachmentId,
+                // data: JSON.stringify({ TaskID: pdata }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
 
+                success: function (response) {
+                    $('#att_' + attachmentId)[0].remove();                  
+                    if (response.Message == 'Success') {
+                        ShowAlertBox('', 'Selected attachment is removed.', 'warning');
+                        var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
+                        if (AttachmentCount != undefined && AttachmentCount != '') {
+                            $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) - 1;
+
+                        }
+                        return true;
+                    }
+                    else {
+                        ShowAlertBox("Error", response.Message, 'error');
+                    }
+                },
+                failure: function (response) {
+                    ShowAlertBox("Error", response.Message, 'error');
+                },
+                error: function (response) {
+                    ShowAlertBox("Error", response.Message, 'error');
                 }
-                return true;
-            }
-            else {
-                ShowAlertBox("Error", response.Message, 'error');
-            }
-        },
-        failure: function (response) {
-            ShowAlertBox("Error", response.Message, 'error');
-        },
-        error: function (response) {
-            ShowAlertBox("Error", response.Message, 'error');
-        }
-    });
+            });
+        });
 }
 function RemoveMember_view(UserID) {
     $('#li_' + UserID).remove();
