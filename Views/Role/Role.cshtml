@@ -204,25 +204,25 @@
                     })
                         .done(function (data) {
                            
-                            if (data == 1) {
-                                swal
+                            if (data == "true") {
+                                sweetAlert
                                     ({
-                                        title: "can not be deleted!",
-                                        text: "This User Role is associate with Staff User ",
-                                        type: "warning"
+                                        title: "Deleted!",
+                                        text: "User Role is successfully deleted!",
+                                        type: "success"
                                     },
                                         function () {
                                             window.location.reload();
                                         });
 
+                                
                             }
                             else {
-                                
                                 sweetAlert
                                     ({
-                                        title: "Couldn't Deleted!",
+                                        title: "Couldn't Delete!",
                                         text: "This User Role is associate with Staff User",
-                                        type: "success"
+                                        type: "warning"
                                     },
                                         function () {
                                             window.location.reload();
