@@ -15,7 +15,7 @@ namespace ProvenCfoUI.Controllers
     [CustomAuthenticationFilter]
     public class RoleController : Controller
     {
-        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);        
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Role
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         [CheckSession]
@@ -189,36 +189,33 @@ namespace ProvenCfoUI.Controllers
         }
         //[HttpPut]
         [CheckSession]
-        public ActionResult DeleteRole(string id)
+        public string DeleteRole(string id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                using (RoleService objRole = new RoleService())
                 {
-                    using (RoleService objRole = new RoleService())
+                    var results = objRole.GetUserRoleById(id);
+                    if (results != null)
                     {
-                        var results = objRole.GetUserRoleById(id);
-                        if (results != null)
-                        {
-                            return RedirectToAction("Role");
-                        }
-                        else
-                        {
-                            var result = objRole.DeleteRoles(id);
-                            if (result == null)
-                                ViewBag.ErrorMessage = "";
-                            return RedirectToAction("Role");
-                        }
+                        return results.Status;
                     }
+                    else
+                    {
+                        var result = objRole.DeleteRoles(id);
+                        return result.Status;
+                        //if (result == null)
+                        //    ViewBag.ErrorMessage = "";
+                        //return RedirectToAction("Role");
+                    }
+                    return results.Status;
                 }
-                catch (Exception ex)
-                {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
-                    return View();
-                }
-
             }
-            return View();
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
@@ -266,7 +263,7 @@ namespace ProvenCfoUI.Controllers
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
-            
+
         }
 
 

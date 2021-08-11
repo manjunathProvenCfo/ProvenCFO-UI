@@ -247,5 +247,22 @@ namespace Proven.Service
         }
         #endregion
 
+
+        public ClientModel GetClientInvitationAssociationById(int id)
+        {
+            response = client.GetAsync("Client/GetClientInvitationAssociationById?Id=" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                var val = JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
+                return val;
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+            }
+        }
+
     }
 }
