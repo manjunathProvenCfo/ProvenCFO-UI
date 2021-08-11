@@ -447,6 +447,7 @@
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
     <Content Include="assets\js\twilio.js" />
+    <Content Include="assets\js\utils.js" />
     <Content Include="assets\js\wrapper.js" />
     <Content Include="assets\lib\anchor.min.js" />
     <Content Include="assets\lib\blueimp-file-upload\css\jquery.fileupload-noscript.css" />

@@ -24,7 +24,8 @@
     @Styles.Render("~/assets/AvertaWebFont/provencfo.css")
     @Styles.Render("~/bundles/customcss")
     @Scripts.Render("~/bundles/modernizr")
-    @RenderSection("styles",required:false)
+    @RenderSection("styles", required: false)
+    @RenderSection("scripts", required: false)
 
 </head>
 <body>
@@ -60,95 +61,102 @@
         </div>
     </main>
 
-    @Scripts.Render("~/bundles/customjquery")
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    @RenderSection("scripts", required: false)
 
+
+
+
+   
+        @Scripts.Render("~/bundles/customjquery")
+        @Scripts.Render("~/bundles/js/select")
+
+        @*<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
+       
+        <script>
+            $(document).ready(function () {
+
+                if ((localStorage.getItem('SelectedMenu') == null || localStorage.getItem('SelectedMenu') == '') && (localStorage.getItem('SelectedSubMenu') == null || localStorage.getItem('SelectedSubMenu') == '')) {
+                    $("#home").addClass("show");
+                }
+                else {
+                    HighlightMenu();
+                }
+
+                $('#navbarVerticalCollapse li a').click(function (event) {
+                    //localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
+                    if (event.currentTarget.parentNode.id != '' && event.currentTarget.parentNode.id.indexOf('submenu') != -1) {
+                        //sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
+                        sessionStorage.setItem('SelectedSubMenu', event.currentTarget.parentNode.id);
+                    }
+                    else {
+                        sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
+                        sessionStorage.setItem('SelectedSubMenu', '');
+                    }
+                    HighlightMenu();
+
+                });
+            });
+            function SetUserPreferencesForAgency() {
+                var ClientID = $("#ddlclient option:selected").val();
+
+                $.ajax({
+                    url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
+                    type: "POST",
+                    //data: '{model: ' + JSON.stringify(model) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+
+                        }
+                        else {
+
+                        }
+                    },
+                    error: function (d) {
+
+                    }
+                });
+
+            }
+            function HighlightMenu() {
+                var activeTabs = $('.nav-item.active');
+                if (activeTabs != null && activeTabs.length > 0) {
+                    $.each(activeTabs, function (key, value) {
+                        if (value != null) {
+                            $(value).removeClass('active');
+                        }
+                    });
+                }
+                var activeTabs = $('.nav-item.show');
+                if (activeTabs != null && activeTabs.length > 0) {
+                    $.each(activeTabs, function (key, value) {
+                        if (value != null) {
+                            $(value).removeClass('show');
+                        }
+                    });
+                }
+                if (location.href.indexOf('AgencyHome') != -1 || (sessionStorage.getItem('SelectedMenu') == undefined && sessionStorage.getItem('SelectedSubMenu') == undefined)) {
+                    $('#menu_home').addClass('active');
+                }
+                else {
+                    if (sessionStorage.getItem('SelectedMenu') != undefined && sessionStorage.getItem('SelectedMenu') != null && sessionStorage.getItem('SelectedMenu') != '') {
+                        $("#" + sessionStorage.getItem('SelectedMenu')).addClass("show");
+                    }
+                    if (sessionStorage.getItem('SelectedSubMenu') != undefined && sessionStorage.getItem('SelectedSubMenu') != null && sessionStorage.getItem('SelectedSubMenu') != '') {
+                        $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className = $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className + ' active';
+                        $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className = $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className + ' show';
+
+                    }
+
+                }
+
+            }
+
+
+
+        </script>
+    
 
 </body>
 </html>
-<script>
-    $(document).ready(function () {
-       
-        if ((localStorage.getItem('SelectedMenu') == null || localStorage.getItem('SelectedMenu') == '') && (localStorage.getItem('SelectedSubMenu') == null || localStorage.getItem('SelectedSubMenu') == '')  ) {
-            $("#home").addClass("show");
-        }
-        else {      
-            HighlightMenu();
-        }
-        
-        $('#navbarVerticalCollapse li a').click(function (event) {                       
-            //localStorage.setItem('SelectedSubMenu', event.currentTarget.name);
-            if (event.currentTarget.parentNode.parentNode.parentNode.id == '') {
-                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.id);
-                sessionStorage.setItem('SelectedSubMenu', '');  
-            }
-            else {
-                sessionStorage.setItem('SelectedMenu', event.currentTarget.parentNode.parentNode.parentNode.id);   
-                sessionStorage.setItem('SelectedSubMenu', event.currentTarget.parentNode.id);   
-            }   
-            HighlightMenu();
-            
-        });      
-    });
-    function SetUserPreferencesForAgency() {
-        var ClientID = $("#ddlclient option:selected").val();
-
-        $.ajax({
-            url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
-            type: "POST",
-            //data: '{model: ' + JSON.stringify(model) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                if (data != null) {
-
-                }
-                else {
-
-                }
-            },
-            error: function (d) {
-
-            }
-        });
-
-    }
-    function HighlightMenu() {
-        var activeTabs = $('.nav-item.active');
-        if (activeTabs != null && activeTabs.length > 0) {
-            $.each(activeTabs, function (key, value) {
-                if (value != null) {
-                    $(value).removeClass('active');
-                }
-            });
-        }
-        var activeTabs = $('.nav-item.show');
-        if (activeTabs != null && activeTabs.length > 0) {
-            $.each(activeTabs, function (key, value) {
-                if (value != null) {
-                    $(value).removeClass('show');
-                }
-            });
-        }
-        if (location.href.indexOf('AgencyHome') != -1 || (sessionStorage.getItem('SelectedMenu') == undefined && sessionStorage.getItem('SelectedSubMenu') == undefined)) {
-            $('#menu_home').addClass('active');
-        }
-        else {
-            if (sessionStorage.getItem('SelectedMenu') != undefined && sessionStorage.getItem('SelectedMenu') != null && sessionStorage.getItem('SelectedMenu') != '') {               
-                $("#" + sessionStorage.getItem('SelectedMenu')).addClass("show");
-            }
-            if (sessionStorage.getItem('SelectedSubMenu') != undefined && sessionStorage.getItem('SelectedSubMenu') != null && sessionStorage.getItem('SelectedSubMenu') != '') {
-                $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className = $('#' + sessionStorage.getItem('SelectedSubMenu'))[0].className + ' active';
-                $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className = $("#" + sessionStorage.getItem('SelectedSubMenu'))[0].parentElement.className + ' show';
-               
-            }
-           
-        }
-        
-    }
-
-   
-   
-</script>

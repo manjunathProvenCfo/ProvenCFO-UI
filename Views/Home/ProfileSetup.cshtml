@@ -74,7 +74,8 @@
                                 <div class="form-group">
                                     <label for="phone">LinkedIn Profile</label>
                                     @Html.TextBoxFor(w => w.LinkedInProfile, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(w => w.LinkedInProfile, "", new { @class = "text-danger" })
+                                <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="valLinkedInProfile" class=""></span></span>
+                                    @*@Html.ValidationMessageFor(w => w.LinkedInProfile, "", new { @class = "text-danger" })*@
                                 </div>
                             </div>
                             }
@@ -125,18 +126,25 @@
 </div>
 
 
-
-
-
-
-
-
 @section Scripts {
     <script>
 
         $(document).ready(function () {
-
-
+            $('#valLinkedInProfile').hide();
+            var expression = '(?:https?:)?\/\/(?:[\w]+\.)?linkedin\.com\/(?P<company_type>(company)|(school))\/(?P<company_permalink>[A-z0-9-À-ÿ\.]+)\/?';
+            
+            $('#LinkedInProfile').on('keyup', function () {               
+                if ($(this).val().toLowerCase().indexOf('linkedin.') == -1) {
+                    // there is a mismatch, hence show the error message                   
+                    $('#valLinkedInProfile').show();
+                    $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+                }
+                else {
+                    // else, do not display message                  
+                    $('#valLinkedInProfile').hide();
+                    $('#valLinkedInProfile').text('');
+                }
+            });
             $("#profile-image").change(function () {
                 var ext = $('#profile-image').val().split('.').pop().toLowerCase();
                 if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
@@ -218,7 +226,7 @@
             $("#txtOldPassword").keyup(function () {
                 if (!this.value || this.value.length > 0 ) {
                     $('#oldpasswordexist').hide();
-                    $('#oldpasswordexist').html('');   
+                    $('#oldpasswordexist').html('');
                 }
             });
             $("#txtNewPassword").keyup(function () {
@@ -251,6 +259,20 @@
             model.ProfileImage = $("#ProfileImage").val();
             model.Id = $("#Id").val();
             model.LinkedInProfile = $("#LinkedInProfile").val();
+
+
+            if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == -1) {
+                // there is a mismatch, hence show the error message                   
+                $('#valLinkedInProfile').show();
+                $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+                return false;
+            }
+            else {
+                // else, do not display message                  
+                $('#valLinkedInProfile').hide();
+                $('#valLinkedInProfile').text('');
+            }
+
 
 
             if (model.FirstName == null || model.FirstName == "") {
@@ -302,7 +324,7 @@
             var validation = true;
             if (model.OldPassword != undefined && model.OldPassword == '') {
                 $('#oldpasswordexist').show();
-                $('#oldpasswordexist').html('Old password is a required field'); 
+                $('#oldpasswordexist').html('Old password is a required field');
                 validation = false;
             }
             if (model.NewPassword != undefined && model.NewPassword == '') {
@@ -331,24 +353,24 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    
+
                     if (response.sucess == true) {
                         ValidationSuccessMessage("Password changed successfully!")
                     }
-                    else {   
+                    else {
                         ChangePasswordClear();
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'OldPassword') {
-                           
+
                             $('#oldpasswordexist').show();
-                            $('#oldpasswordexist').html(response.ErrorMsg);                                                      
-                        }    
+                            $('#oldpasswordexist').html(response.ErrorMsg);
+                        }
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'BOTH') {
                             $('#valNewPassword').show();
                             $('#valNewPassword').html(response.ErrorMsg);
 
                             $('#valConfirmPassword').show();
                             $('#valConfirmPassword').html(response.ErrorMsg);
-                        }  
+                        }
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'ConfirmPassword') {
                             $('#valConfirmPassword').show();
                             $('#valConfirmPassword').html(response.ErrorMsg);
@@ -363,7 +385,7 @@
         }
         function ChangePasswordClear() {
             $('#oldpasswordexist').hide();
-            $('#oldpasswordexist').html('');   
+            $('#oldpasswordexist').html('');
             $('#valNewPassword').hide();
             $('#valNewPassword').html('');
             $('#valConfirmPassword').hide();

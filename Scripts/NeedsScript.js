@@ -737,7 +737,7 @@ function addAttachmentOnviewLoad(attachmentsList, IsClearExisting, IsViewMode) {
                 else if (item.FileType.toUpperCase() == 'DOCX' || item.FileType.toUpperCase() == 'DOC') {
                     bgimage = '../../assets/img/kanban/I_Doc.png';
                 }
-                else if (item.FileType.toUpperCase() == 'RAR' || item.FileType.toUpperCase() == 'ZIP') {
+                else if (item.FileType.toUpperCase() == 'RAR' || item.FileType.toUpperCase() == 'ZIP' || item.FileType.toUpperCase() == '7Z') {
                     bgimage = '../../assets/img/kanban/I_Zip.png';
                 }
                 else if (item.FileType.toUpperCase() == 'XLSX' || item.FileType.toUpperCase() == 'XLS') {
@@ -778,7 +778,7 @@ function formatAMPM(date) {
 }
 function addNewAssigneeToKanbanTask(UserID, singleMember = false) {
     var TaskId = gCurrentViewTaskId;
-    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID, Single_Member: singleMember };
+    var pdata = { TaskId_Ref: TaskId, UserId_Ref: UserID, SingleMember: singleMember };
     if (isEmptyOrBlank(singleMember)) {
         singleMember = false;
     }
@@ -991,6 +991,7 @@ function openModal(filepath, IsShow) {
             }
             break;
         case 'zip':
+        case '7z':
         case 'rar':
         case 'pdf':
         case 'txt':

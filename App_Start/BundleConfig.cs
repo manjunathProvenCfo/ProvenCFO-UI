@@ -38,8 +38,10 @@ namespace ProvenCfoUI
                ));
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
                "~/assets/lib/echarts/echarts.min.js",
-               "~/assets/lib/chart.js/Chart.min.js",
-               "~/Content/js/theme/Utils.js"
+               "~/assets/lib/flatpickr/flatpickr.min.js"
+               //"~/assets/lib/chart.js/Chart.bundle.min.js",
+               //"~/Content/js/theme/Utils.js"
+               //"~/assets/js/utils.js"
                ));
             bundles.Add(new ScriptBundle("~/bundles/js/table").Include(
               "~/assets/lib/datatables/js/jquery.dataTables.min.js",

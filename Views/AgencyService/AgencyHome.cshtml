@@ -6,6 +6,7 @@
         pointer-events: none;
     }
 </style>
+
 <div class="dashboard-frame">
 
     <!--<div class="card mb-4 ">
@@ -369,17 +370,17 @@
                                     <option value="4">May</option>
                                     <option value="5">Jun</option>
                                     <option value="6">July</option>
-                                    <option value="7">August</option>
+                                    @*<option value="7">August</option>
                                     <option value="8">September</option>
                                     <option value="9">October</option>
                                     <option value="10">November</option>
-                                    <option value="11">December</option>
+                                    <option value="11">December</option>*@
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="card-body h-100 pr-0">
-                        <div class="echart-line-total-sales h-100" data-echart-responsive="true"></div>
+                        <div class="echart-line-total-sales h-100" data-echart-responsive="true" id="container1"></div>
                     </div>
                 </div>
             </div>
@@ -410,7 +411,7 @@
                         </div>
                     </div>
                     <div class="card-body h-100 pr-0">
-                        <div class="echart-line-total-sales-2" style="min-height: 300px;" data-echart-responsive="true"></div>
+                        <div class="echart-line-total-sales" style="min-height: 300px;" data-echart-responsive="true" id="container2"></div>
                     </div>
                 </div>
             </div>
@@ -513,17 +514,19 @@
 
 
     @section Scripts {
+        @*@Scripts.Render("~/bundles/jqueryval");*@
         @Scripts.Render("~/bundles/customjquery");
-        @Scripts.Render("~/bundles/jqueryval");
+
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
         <script>
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
-
-                totalSalesInit();
-                totalSalesInitTwo();
+                Chart1();
+                Chart2();
+               // totalSalesInit();
+                //totalSalesInitTwo();
             });
 
             //function GetMonthDifference(data.StartDate, Enddate) {
@@ -533,7 +536,73 @@
             //    return months;
             //}
 
+            function Chart1() {
+                var dom = document.getElementById("container1");
+                var myChart = echarts.init(dom);
+                var app = {};
 
+                var option;
+
+
+
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [150, 230, 224, 218, 135, 147, 260],
+                        type: 'line'
+                    }]
+                };
+
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+            }
+            function Chart2() {
+                var dom = document.getElementById("container2");
+                var myChart = echarts.init(dom);
+                var app = {};
+
+                var option;
+
+
+
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [150, 230, 224, 218, 135, 147, 260],
+                        type: 'line',
+                        lineStyle: {
+                            color: '#2c7be5'
+                        },
+                        symbol: 'circle',
+                        symbolSize: 10,
+                        smooth: false,
+                        hoverAnimation: true,
+                    }],
+                    grid: {
+                        right: '28px',
+                        left: '40px',
+                        bottom: '15%',
+                        top: '5%'
+                    }
+                };
+
+                if (option && typeof option === 'object') {
+                    myChart.setOption(option);
+                }
+            }
 
             function getTeamMembersList() {
                 var ClientID = $("#ddlclient option:selected").val();
@@ -600,12 +669,10 @@
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
                             $('.spEntityName').html(String(data.EntityName));
-                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                           // $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
-                            if (String(data.TeamName) != null) {
-                                $('#spTeamName').html(String(data.TeamName));
-                            }
+                            $('#spTeamName').html(String(data.TeamName));
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                             $('.badge-soft-success').removeClass('d-none');
@@ -655,12 +722,67 @@
                 });
 
             }
+            const camelize = (str) => {
+                const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
+                    c ? c.toUpperCase() : ""
+                );
+                return `${text.substr(0, 1).toLowerCase()}${text.substr(1)}`;
+            };
 
-
-
-
-
-
+            const getData = (el, data) => {
+                try {
+                    return JSON.parse(el.dataset[camelize(data)]);
+                } catch (e) {
+                    return el.dataset[camelize(data)];
+                }
+            };
+            const getGrays = (dom) => ({
+                white: getColor("white", dom),
+                100: getColor("100", dom),
+                200: getColor("200", dom),
+                300: getColor("300", dom),
+                400: getColor("400", dom),
+                500: getColor("500", dom),
+                600: getColor("600", dom),
+                700: getColor("700", dom),
+                800: getColor("800", dom),
+                900: getColor("900", dom),
+                1000: getColor("1000", dom),
+                1100: getColor("1100", dom),
+                black: getColor("black", dom),
+            });
+            const getColors = (dom) => ({
+                primary: getColor("primary", dom),
+                secondary: getColor("secondary", dom),
+                success: getColor("success", dom),
+                info: getColor("info", dom),
+                warning: getColor("warning", dom),
+                danger: getColor("danger", dom),
+                light: getColor("light", dom),
+                dark: getColor("dark", dom),
+            });
+            const getColor = (name, dom = document.documentElement) =>
+                getComputedStyle(dom).getPropertyValue(`--falcon-${name}`).trim();
+            const rgbaColor = (color = "#fff", alpha = 0.5) =>
+                `rgba(${hexToRgb(color)}, ${alpha})`;
+            const hexToRgb = (hexValue) => {
+                let hex;
+                hexValue.indexOf("#") === 0
+                    ? (hex = hexValue.substring(1))
+                    : (hex = hexValue);
+                // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+                const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
+                    hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b)
+                );
+                return result
+                    ? [
+                        parseInt(result[1], 16),
+                        parseInt(result[2], 16),
+                        parseInt(result[3], 16),
+                    ]
+                    : null;
+            };
             var totalSalesInit = function totalSalesInit() {
                 var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales';
                 var SELECT_MONTH = '.select-month';
@@ -677,20 +799,19 @@
 
                 if ($echartsLineTotalSales) {
                     // Get options from data attribute
-                    var userOptions = utils.getData($echartsLineTotalSales, 'options');
+                    var userOptions = getData($echartsLineTotalSales, 'options');
                     var chart = window.echarts.init($echartsLineTotalSales);
                     var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
 
-                    var getDefaultOptions = function getDefaultOptions() {
-                        return {
-                            color: utils.getGrays()['100'],
+                    var getDefaultOptions =  {
+                            color: getGrays()['100'],
                             tooltip: {
                                 trigger: 'axis',
                                 padding: [7, 10],
-                                backgroundColor: utils.getGrays()['100'],
-                                borderColor: utils.getGrays()['300'],
+                                backgroundColor: getGrays()['100'],
+                                borderColor: getGrays()['300'],
                                 textStyle: {
-                                    color: utils.getColors().dark
+                                    color: getColors().dark
                                 },
                                 borderWidth: 1,
                                 formatter: function formatter(params) {
@@ -707,7 +828,7 @@
                                 boundaryGap: false,
                                 axisPointer: {
                                     lineStyle: {
-                                        color: utils.getGrays()['300'],
+                                        color: getGrays()['300'],
                                         type: 'dashed'
                                     }
                                 },
@@ -717,7 +838,7 @@
                                 axisLine: {
                                     lineStyle: {
                                         // color: utils.getGrays()['300'],
-                                        color: utils.rgbaColor('#000', 0.01),
+                                        color: rgbaColor('#000', 0.01),
                                         type: 'dashed'
                                     }
                                 },
@@ -725,7 +846,7 @@
                                     show: false
                                 },
                                 axisLabel: {
-                                    color: utils.getGrays()['400'],
+                                    color: getGrays()['400'],
                                     formatter: function formatter(value) {
                                         var date = new Date(value);
                                         return "".concat(months[date.getMonth()], " ").concat(date.getDate());
@@ -740,14 +861,14 @@
                                 },
                                 splitLine: {
                                     lineStyle: {
-                                        color: utils.getGrays()['300'],
+                                        color: getGrays()['300'],
                                         type: 'dashed'
                                     }
                                 },
                                 boundaryGap: false,
                                 axisLabel: {
                                     show: true,
-                                    color: utils.getGrays()['400'],
+                                    color: getGrays()['400'],
                                     margin: 15
                                 },
                                 axisTick: {
@@ -761,10 +882,10 @@
                                 type: 'line',
                                 data: monthsnumber[0],
                                 lineStyle: {
-                                    color: utils.getColors().primary
+                                    color: getColors().primary
                                 },
                                 itemStyle: {
-                                    borderColor: utils.getColors().primary,
+                                    borderColor: getColors().primary,
                                     borderWidth: 2
                                 },
                                 symbol: 'circle',
@@ -780,10 +901,10 @@
                                         y2: 1,
                                         colorStops: [{
                                             offset: 0,
-                                            color: utils.rgbaColor(utils.getColors().primary, 0.2)
+                                            color: rgbaColor(getColors().primary, 0.2)
                                         }, {
                                             offset: 1,
-                                            color: utils.rgbaColor(utils.getColors().primary, 0)
+                                            color: rgbaColor(getColors().primary, 0)
                                         }]
                                     }
                                 }
@@ -794,10 +915,13 @@
                                 bottom: '15%',
                                 top: '5%'
                             }
-                        };
-                    };
+                        };                   
 
-                    echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+                    if (getDefaultOptions) { // && typeof getDefaultOptions === 'object'
+                        chart.setOption(getDefaultOptions);
+                    }
+
+                    $echartsLineTotalSales.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
 
                     var monthSelect = document.querySelector(SELECT_MONTH);
 
@@ -848,20 +972,19 @@
 
                 if ($echartsLineTotalSales) {
                     // Get options from data attribute
-                    var userOptions = utils.getData($echartsLineTotalSales, 'options');
+                    var userOptions = getData($echartsLineTotalSales, 'options');
                     var chart = window.echarts.init($echartsLineTotalSales);
                     var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
 
-                    var getDefaultOptions = function getDefaultOptions() {
-                        return {
-                            color: utils.getGrays()['100'],
+                    var getDefaultOptions =  {
+                            color: getGrays()['100'],
                             tooltip: {
                                 trigger: 'axis',
                                 padding: [7, 10],
-                                backgroundColor: utils.getGrays()['100'],
-                                borderColor: utils.getGrays()['300'],
+                                backgroundColor: getGrays()['100'],
+                                borderColor: getGrays()['300'],
                                 textStyle: {
-                                    color: utils.getColors().dark
+                                    color: getColors().dark
                                 },
                                 borderWidth: 1,
                                 formatter: function formatter(params) {
@@ -878,7 +1001,7 @@
                                 boundaryGap: false,
                                 axisPointer: {
                                     lineStyle: {
-                                        color: utils.getGrays()['300'],
+                                        color: getGrays()['300'],
                                         type: 'dashed'
                                     }
                                 },
@@ -887,8 +1010,8 @@
                                 },
                                 axisLine: {
                                     lineStyle: {
-                                        // color: utils.getGrays()['300'],
-                                        color: utils.rgbaColor('#000', 0.01),
+                                       color: getGrays()['300'],
+                                        //color: utils.rgbaColor('#000', 0.01),
                                         type: 'dashed'
                                     }
                                 },
@@ -896,7 +1019,7 @@
                                     show: false
                                 },
                                 axisLabel: {
-                                    color: utils.getGrays()['400'],
+                                    //color: utils.getGrays()['400'],
                                     formatter: function formatter(value) {
                                         var date = new Date(value);
                                         return "".concat(months[date.getMonth()], " ").concat(date.getDate());
@@ -911,14 +1034,14 @@
                                 },
                                 splitLine: {
                                     lineStyle: {
-                                        color: utils.getGrays()['300'],
+                                        color: getGrays()['300'],
                                         type: 'dashed'
                                     }
                                 },
                                 boundaryGap: false,
                                 axisLabel: {
                                     show: true,
-                                    color: utils.getGrays()['400'],
+                                    color: getGrays()['400'],
                                     margin: 15
                                 },
                                 axisTick: {
@@ -932,10 +1055,10 @@
                                 type: 'line',
                                 data: monthsnumber[0],
                                 lineStyle: {
-                                    color: utils.getColors().primary
+                                    color: getColors().primary
                                 },
                                 itemStyle: {
-                                    borderColor: utils.getColors().primary,
+                                    borderColor: getColors().primary,
                                     borderWidth: 2
                                 },
                                 symbol: 'circle',
@@ -951,10 +1074,10 @@
                                         y2: 1,
                                         colorStops: [{
                                             offset: 0,
-                                            color: utils.rgbaColor(utils.getColors().primary, 0.2)
+                                            color: rgbaColor(getColors().primary, 0.2)
                                         }, {
                                             offset: 1,
-                                            color: utils.rgbaColor(utils.getColors().primary, 0)
+                                            color: rgbaColor(getColors().primary, 0)
                                         }]
                                     }
                                 }
@@ -966,9 +1089,12 @@
                                 top: '5%'
                             }
                         };
-                    };
+                    
 
-                    echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+                    //chart.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+                    if (getDefaultOptions && typeof getDefaultOptions === 'object') {
+                        chart.setOption(getDefaultOptions);
+                    }
 
                     var monthSelect = document.querySelector(SELECT_MONTH);
 
@@ -1004,38 +1130,5 @@
                 }
             };
 
-                                                                                                                                                                                //function SetUserPreferences() {
-                                                                                                                                                                                //    var ClientID = $("#ddlclient option:selected").val();
-
-                                                                                                                                                                                //    $.ajax({
-                                                                                                                                                                                //        url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
-                                                                                                                                                                                //        type: "POST",
-                                                                                                                                                                                //        //data: '{model: ' + JSON.stringify(model) + '}',
-                                                                                                                                                                                //        contentType: "application/json; charset=utf-8",
-                                                                                                                                                                                //        dataType: "json",
-                                                                                                                                                                                //        success: function (data) {
-                                                                                                                                                                                //            if (data != null) {
-
-                                                                                                                                                                                //            }
-                                                                                                                                                                                //            else {
-
-                                                                                                                                                                                //            }
-                                                                                                                                                                                //        },
-                                                                                                                                                                                //        error: function (d) {
-
-                                                                                                                                                                                //        }
-                                                                                                                                                                                //    });
-
         </script>
-        <script src="~/assets/js/jquery.min.js"></script>
-        <script src="~/assets/js/popper.min.js"></script>
-        <script src="~/assets/js/bootstrap.min.js"></script>
-        <script src="~/assets/lib/fortawesome/all.min.js"></script>
-        <script src="~/assets/lib/stickyfilljs/stickyfill.min.js"></script>
-        <script src="~/assets/lib/sticky-kit/sticky-kit.min.js"></script>
-        <script src="~/assets/lib/is_js/is.min.js"></script>
-        <script src="~/assets/lib/lodash/lodash.min.js"></script>
-        <script src="~/assets/lib/perfect-scrollbar/perfect-scrollbar.js"></script>
-        <script src="~/assets/js/theme.js"></script>
-
-    }
+        }
