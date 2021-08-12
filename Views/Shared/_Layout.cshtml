@@ -80,7 +80,7 @@
 <script>
     $(document).ready(function () {
 
-        if ((localStorage.getItem('SelectedMenu') == null || localStorage.getItem('SelectedMenu') == '') && (localStorage.getItem('SelectedSubMenu') == null || localStorage.getItem('SelectedSubMenu') == '')) {
+        if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
             $("#home").addClass("show");
         }
         else {
