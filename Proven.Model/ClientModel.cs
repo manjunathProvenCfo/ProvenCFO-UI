@@ -27,7 +27,7 @@ namespace Proven.Model
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
-
+        public string XeroID { get; set; }
         public string CityName { get; set; }
         public string StateName { get; set; }
         public int BillableEntityId { get; set; }
