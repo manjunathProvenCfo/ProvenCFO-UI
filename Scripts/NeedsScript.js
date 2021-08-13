@@ -384,34 +384,44 @@ function RemoveAttchment(attachmentId) {
 
 }
 function RemovveFileOnCreate(attachmentId) {
-
-
-    RemoveAttchment(attachmentId);
     var fileToRemove = $('#att_' + attachmentId + ' h6')[0].innerText;
+    swal({
+        title: "Are you sure?",
+        text: "Do you really want to delete this attachment?",
+        type: "warning",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonText: "Yes, delete it!",
+        confirmButtonColor: "#ec6c62"
+    },
+        /* RemoveAttchment(attachmentId);*/
+        function () {
 
-    $.ajax({
-        type: "POST",
-        url: "/Needs/RemoveFile?fileName=" + fileToRemove,
-        // data: JSON.stringify({ TaskID: pdata }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            debugger;
-            if (response.Message == 'Success') {
-                ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
+            $.ajax({
+                type: "POST",
+                url: "/Needs/RemoveFile?fileName=" + fileToRemove,
+                // data: JSON.stringify({ TaskID: pdata }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    RemoveAttchment(attachmentId);
+                    debugger;
+                    if (response.Message == 'Success') {
+                        ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
 
-            }
-            else {
-                alert("Error while upload");
-            }
-        },
-        failure: function (response) {
-            alert(response.responseText);
-        },
-        error: function (response) {
-            alert(response.responseText);
-        }
-    });
+                    }
+                    else {
+                        alert("Error while upload");
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
 }
 
 function RemoveMember(UserID) {
@@ -440,6 +450,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
                 dataType: "json",
 
                 success: function (response) {
+                    debugger;
                     $('#att_' + attachmentId)[0].remove();                  
                     if (response.Message == 'Success') {
                         ShowAlertBox('', 'Selected attachment is removed.', 'warning');
