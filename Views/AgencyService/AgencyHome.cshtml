@@ -669,7 +669,7 @@
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
                             $('.spEntityName').html(String(data.EntityName));
-                           // $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
                             $('#spTeamName').html(String(data.TeamName));
