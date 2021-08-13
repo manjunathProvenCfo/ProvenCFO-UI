@@ -129,7 +129,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime StartDate)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime StartDate,string XeroID)
         {
             var from = new Dictionary<string, object>
             {
@@ -144,7 +144,8 @@ namespace Proven.Service
                 {"CreatedBy",LoginUserid },
                  {"TeamId",TeamId },
                 {"EntityId" ,EntityId},
-                {"StartDate",StartDate }
+                {"StartDate",StartDate },
+                {"XeroID",XeroID }
 
 
             };
@@ -166,7 +167,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate,string XeroID)
         {
             var from = new Dictionary<string, object>
             {
@@ -178,7 +179,8 @@ namespace Proven.Service
                 {"ModifiedBy",LoginUserid},
                 {"TeamId",TeamId },
                 {"EntityId",BillableEntityId },
-                 {"StartDate", StartDate }
+                 {"StartDate", StartDate },
+                {"XeroID", XeroID }
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },
                 //{"ContactPersonName",ContactPersonName },
