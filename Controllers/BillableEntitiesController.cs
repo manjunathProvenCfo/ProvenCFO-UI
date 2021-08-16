@@ -84,7 +84,7 @@ namespace ProvenCfoUI.Controllers
 
         }
 
-        [CheckSession]
+[CheckSession]
         [HttpPost]
         public ActionResult CreateBillableEntity(BillableEntitiesVM bill)
         {
@@ -112,7 +112,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            var Existresult = obj.GetBillableEntitiesByName(billsVM.EntityName);
+                            var Existresult = obj.GetBillableEntitiesByName(bill.EntityName);
                             billsVM.Id = bill.Id;
                             billsVM.EntityName = bill.EntityName;
                             billsVM.ProvenCFOXeroContactID = bill.ProvenCFOXeroContactID;
