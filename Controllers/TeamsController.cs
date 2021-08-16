@@ -123,7 +123,7 @@ namespace ProvenCfoUI.Controllers
                             }
                             else
                             {
-                                var Existresult = obj.GetTeamsByName(teamsVM.TeamName);
+                                var Existresult = obj.GetTeamsByName(team.TeamName);
                                 teamsVM.Id = team.Id;
                                 teamsVM.TeamName = team.TeamName;
                                 teamsVM.Status = team.Status;
