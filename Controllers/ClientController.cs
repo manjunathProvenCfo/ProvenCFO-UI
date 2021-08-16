@@ -70,7 +70,8 @@ namespace ProvenCfoUI.Controllers
                         Entity_Name = s.EntityName,
                         State = s.StateName,
                         Status = s.Status == true ? "Active" : "Inactive",
-                        Start_Date = s.StartDate,                      
+                        Start_Date = s.StartDate,   
+                        XeroID = s.XeroID,
                         Created_Date = s.CreatedDate.HasValue == false || (((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
                         Created_By = s.CreatedByUser,
                         Modified_Date = s.ModifiedDate.HasValue == false || (((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
@@ -186,7 +187,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.ContactPersonName = client.ContactPersonName;
                             Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
                             Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                            Clientvm.XeroID = Clientvm.XeroID;
+                            Clientvm.XeroID = client.XeroID;
 
                             return View("CreateClient", Clientvm);
                         }
