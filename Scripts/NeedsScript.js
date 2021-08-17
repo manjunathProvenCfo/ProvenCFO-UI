@@ -361,7 +361,7 @@ function RemoveFile(e) {
         success: function (response) {
 
             if (response.Message == 'Success') {
-                ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
+                ShowAlertBox('', 'Selected attachment is removed.', 'warning');
 
 
             }

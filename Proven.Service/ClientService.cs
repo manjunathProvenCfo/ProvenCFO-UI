@@ -129,7 +129,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime StartDate,string XeroID)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string EntityId, DateTime StartDate,string XeroID, string XeroScope, string XeroClientID,string XeroClientSecret)
         {
             var from = new Dictionary<string, object>
             {
@@ -145,7 +145,11 @@ namespace Proven.Service
                  {"TeamId",TeamId },
                 {"EntityId" ,EntityId},
                 {"StartDate",StartDate },
-                {"XeroID",XeroID }
+                {"XeroID",XeroID },
+                {"XeroScope",XeroScope },
+                {"XeroClientID",XeroClientID },
+                {"XeroClientSecret",XeroClientSecret }
+                
 
 
             };
@@ -167,7 +171,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate,string XeroID)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate,string XeroID, string XeroScope ,string XeroClientID, string XeroClientSecret)
         {
             var from = new Dictionary<string, object>
             {
@@ -180,7 +184,11 @@ namespace Proven.Service
                 {"TeamId",TeamId },
                 {"EntityId",BillableEntityId },
                  {"StartDate", StartDate },
-                {"XeroID", XeroID }
+                {"XeroID", XeroID },
+                 {"XeroScope",XeroScope },
+                 {"XeroClientID",XeroClientID },
+                {"XeroClientSecret",XeroClientSecret },
+               
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },
                 //{"ContactPersonName",ContactPersonName },

@@ -96,84 +96,160 @@
                                     </div>
                                 </div>
 
-
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-create-phonenumber" class="mb-0">State</label>
+                                        <label for="split-login-email" class="mb-0"> XeroScope</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.StateId, new SelectList(Model.StateList, "Id", "StateName"), "Select state", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+                                        @if (Model.Id == null || Model.Id == 0)
+                                        {
+                                            <select name="XeroScope" class="selectpicker form-control" id="multiple-select" multiple data-options=  '{"placeholder":"Select scope"}'  >
+                                                <option>projects.read</option>
+                                                <option>projects</option>
+                                                <option>accounting.transactions</option>
+                                                <option>accounting.transactions.read</option>
+                                                <option>accounting.reports.read</option>
+                                                <option>accounting.reports.tenninetynine.read</option>
+                                                <option>accounting.budgets.read</option>
+                                                <option>accounting.journals.read</option>
+                                                <option>accounting.settings</option>
+                                                <option>accounting.settings.read</option>
+                                                <option>accounting.contacts</option>
+                                                <option>accounting.contacts.read</option>
+                                                <option>accounting.attachments</option>
+                                                <option>accounting.attachments.read</option>
+                                                <option>assets</option>
+                                                <option>assets.read</option>
+                                                <option>files</option>
+                                                <option>files.read</option>
+                                                <option>payroll.employees</option>
+                                                <option>payroll.employees.read</option>
+                                                <option>payroll.payruns</option>
+                                                <option>payroll.payruns.read</option>
+                                                <option>payroll.payslip</option>
+                                                <option>payroll.payslip.read</option>
+                                                <option>payroll.settings</option>
+                                                <option>payroll.settings.read</option>
+                                                <option>payroll.timesheets</option>
+                                                <option>payroll.timesheets.read</option>
+
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                        }
+                                        else
+                                        {
+                                    
+                                            @Html.EditorFor(model => model.XeroScope, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                        }
+
                                     </div>
                                 </div>
-                                <div class="row align-items-center form-group">
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0"> XeroID</label>
+                                    @*<div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email" class="mb-0"> XeroScope</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.XeroScope, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email" class="mb-0"> XeroClientID</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.XeroClientID, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroClientID, "", new { @class = "text-danger" })
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email" class="mb-0"> XeroClientSecret</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.XeroClientSecret, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroClientSecret, "", new { @class = "text-danger" })
+                                        </div>
                                     </div>
-                                </div>
 
-
-                                <div class="row align-items-center form-group">
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="datepicker" class="mb-0">Start Date</label>
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-create-phonenumber" class="mb-0">State</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.DropDownListFor(model => model.StateId, new SelectList(Model.StateList, "Id", "StateName"), "Select state", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.EditorFor(model => model.StartDateText, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker" } })
-                                        @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@
-
-
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email" class="mb-0"> XeroID</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row align-items-center form-group">
-                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
+
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="" class="mb-0">Start Date</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.StartDateText, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker" } })
+                                            @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row align-items-center form-group">
+                                        @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
                 <label for="split-create-phonenumber" class="mb-0">Address </label>
             </div>
             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                 @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
             </div>*@
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email">Status</label>
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email">Status</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
-                                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
 
-                                <div class="row align-items-center form-group">
-                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                    <div class="row align-items-center form-group">
+                                        @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
                 <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
             </div>
             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                 @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
             </div>*@
-                                </div>
-
-
-
-                                <div class="row align-items-center form-group">
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @if (Model.Id == null || Model.Id == 0)
-                                        {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Create</button>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
-                                        }
-                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
                                     </div>
 
+
+
+                                    <div class="row align-items-center form-group">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @if (Model.Id == null || Model.Id == 0)
+                                            {
+                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Create</button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
+                                            }
+                                            <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </form>
                 </div>
