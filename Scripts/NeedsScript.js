@@ -394,6 +394,7 @@ function RemovveFileOnCreate(attachmentId) {
         confirmButtonText: "Yes, delete it!",
         confirmButtonColor: "#ec6c62"
     },
+      
         /* RemoveAttchment(attachmentId);*/
         function () {
 
@@ -407,7 +408,7 @@ function RemovveFileOnCreate(attachmentId) {
                     RemoveAttchment(attachmentId);
                     debugger;
                     if (response.Message == 'Success') {
-                        ShowAlertBox('', 'Selected attachment is Removed.', 'warning');
+                        ShowAlertBox('', 'Selected attachment is removed.', 'warning');
 
                     }
                     else {
