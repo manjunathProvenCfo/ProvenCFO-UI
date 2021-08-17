@@ -66,6 +66,9 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e7877f4675df049f, processorArchitecture=MSIL">
+      <HintPath>packages\IdentityModel.4.0.0\lib\net461\IdentityModel.dll</HintPath>
+    </Reference>
     <Reference Include="JsonSubTypes, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\JsonSubTypes.1.5.2\lib\net47\JsonSubTypes.dll</HintPath>
     </Reference>
@@ -99,6 +102,9 @@
       <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -163,8 +169,7 @@
       <HintPath>packages\Xero.NetStandard.OAuth2.3.19.0\lib\netstandard2.0\Xero.NetStandard.OAuth2.dll</HintPath>
     </Reference>
     <Reference Include="Xero.NetStandard.OAuth2Client, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\Xero.NetStandard.OAuth2Client.dll</HintPath>
+      <HintPath>packages\Xero.NetStandard.OAuth2Client.1.5.0\lib\netstandard2.0\Xero.NetStandard.OAuth2Client.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
