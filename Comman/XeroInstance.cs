@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Web;
 using Xero.NetStandard.OAuth2;
 using Xero.NetStandard.OAuth2.Token;
+using Xero.NetStandard.OAuth2.Config;
+using Xero.NetStandard.OAuth2.Models;
+
 
 namespace ProvenCfoUI.Comman
 {
