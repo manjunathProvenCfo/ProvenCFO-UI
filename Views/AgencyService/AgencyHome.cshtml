@@ -236,7 +236,7 @@
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Outstanding Balance</p>
                             <p class="col-md-7 col-xl-8 mb-2 color-gray-shades">
-                                $950 <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
+                                <span id="spOutSanding"></span> <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
                             </p>
                         </div>
                     </div>
@@ -655,7 +655,38 @@
                 });
             }
 
+           function getBankSummary()
+            {
+
+                $.ajax({
+                    url: '/AgencyService/GetBankSummary' ,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $('#spOutSanding').html(data.Total);
+                        }
+                        else {
+                            $('#spOutSanding').html(0);
+                           
+                        }
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+
+
+                });
+            }
+
             function AgencyDropdownPartialViewChange() {
+
+
+                
+
+
+
                 var ClientID = $("#ddlclient option:selected").val();
 
                 $.ajax({
@@ -679,6 +710,8 @@
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
                             SetUserPreferencesForAgency();
+
+                            getBankSummary();
                         }
                         else {
 

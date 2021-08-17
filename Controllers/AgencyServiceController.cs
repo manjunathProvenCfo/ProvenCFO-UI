@@ -7,6 +7,7 @@ using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,7 +45,27 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [CheckSession]
+        public async Task<JsonResult> GetBankSummary()
+        {
+            try
+            {
+                var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken);
+                var Total = result._Invoices.Sum(x => x.Total);                
+                var returnData = new Dictionary<string, dynamic>
+                   {
+                       {"data",result},
+                       {"Total",Total}
+                   }; 
+                return Json(returnData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+           
+        }
 
         [CheckSession]
         [ChildActionOnly]
@@ -53,7 +74,6 @@ namespace ProvenCfoUI.Controllers
             AgencyClient objAgy = new AgencyClient();
             try
             {
-
 
                 using (ClientService objClient = new ClientService())
                 {
@@ -70,6 +90,15 @@ namespace ProvenCfoUI.Controllers
                         {
                             objResult = objClient.GetClientListByStatus(true, false).ResultData;
                         }
+
+                        string scope = "accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                        XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
+                        XeroInstance.Instance.XeroService = Xero;
+                        Task.Run(async () =>
+                        {
+                            var token = await Xero.LoginXeroAccess();
+                            XeroInstance.Instance.XeroToken = token;
+                        });
 
                         TempData["ClientListActived"] = objResult;
                         objAgy.ClientList = objResult;
