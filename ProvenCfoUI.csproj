@@ -1053,7 +1053,7 @@
     <Content Include="Views\BillableEntities\GetAllBillableEntitiesList.cshtml" />
     <Content Include="Views\BillableEntities\AddBillableEntity.cshtml" />
     <Content Include="Views\Communication\Chat.cshtml" />
-    <Content Include="Views\Notes\Index.cshtml" />
+    <Content Include="Views\Notes\GetNotesPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
