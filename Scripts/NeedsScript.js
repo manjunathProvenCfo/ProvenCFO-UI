@@ -860,8 +860,7 @@ function addMembers(e) {
     }
     $('#ulAddedMembers').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
 }
-function addMember_view(e) {
-    debugger;
+function addMember_view(e) {    
     var element = $('#' + e.currentTarget.id + ' h6');
     var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
     var singlCode = "'";
@@ -884,7 +883,7 @@ function addMember_view(e) {
 }
 
 function addMembers_view(e) {
-    debugger;
+    
     var element = $('#' + e.currentTarget.id + ' h6');
     var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
     var singlCode = "'";

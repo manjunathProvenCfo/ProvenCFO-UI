@@ -59,10 +59,7 @@ namespace ProvenCfoUI
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/list.min.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
-             "~/assets/lib/dropzone/dropzone.min.js",
-             "~/assets/lib/emojionearea/emojionearea.min.js",
-             "~/assets/js/theme.js",
-              "~/assets/js/wrapper.js"
+             "~/assets/lib/dropzone/dropzone.min.js"             
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
