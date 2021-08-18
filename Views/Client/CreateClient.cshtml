@@ -101,44 +101,66 @@
                                         <label for="split-login-email" class="mb-0"> XeroScope</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
+
+
                                         @if (Model.Id == null || Model.Id == 0)
                                         {
-                                            <select name="XeroScope" class="selectpicker form-control" id="multiple-select" multiple data-options=  '{"placeholder":"Select scope"}'  >
-                                                <option>projects.read</option>
-                                                <option>projects</option>
-                                                <option>accounting.transactions</option>
-                                                <option>accounting.transactions.read</option>
-                                                <option>accounting.reports.read</option>
-                                                <option>accounting.reports.tenninetynine.read</option>
-                                                <option>accounting.budgets.read</option>
-                                                <option>accounting.journals.read</option>
-                                                <option>accounting.settings</option>
-                                                <option>accounting.settings.read</option>
-                                                <option>accounting.contacts</option>
-                                                <option>accounting.contacts.read</option>
-                                                <option>accounting.attachments</option>
-                                                <option>accounting.attachments.read</option>
-                                                <option>assets</option>
-                                                <option>assets.read</option>
-                                                <option>files</option>
-                                                <option>files.read</option>
-                                                <option>payroll.employees</option>
-                                                <option>payroll.employees.read</option>
-                                                <option>payroll.payruns</option>
-                                                <option>payroll.payruns.read</option>
-                                                <option>payroll.payslip</option>
-                                                <option>payroll.payslip.read</option>
-                                                <option>payroll.settings</option>
-                                                <option>payroll.settings.read</option>
-                                                <option>payroll.timesheets</option>
-                                                <option>payroll.timesheets.read</option>
 
-                                            </select>
+                                            @Html.DropDownListFor(m => m.XeroScope, new List<SelectListItem>() { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
+                                            new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
+                                            new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            new SelectListItem { Text = "projects", Value = "projects" },
+                                            }, new { @class = "selectpicker form-control", @multiple = "multiple" })
+                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                            @*<select name="XeroScope" class="selectpicker form-control" id="multiple-select" multiple="multiple" data-options='{"placeholder":"Select scope"}'>
+                <option>projects.read</option>
+                <option>projects</option>
+                <option>accounting.transactions</option>
+                <option>accounting.transactions.read</option>
+                <option>accounting.reports.read</option>
+                <option>accounting.reports.tenninetynine.read</option>
+                <option>accounting.budgets.read</option>
+                <option>accounting.journals.read</option>
+                <option>accounting.settings</option>
+                <option>accounting.settings.read</option>
+                <option>accounting.contacts</option>
+                <option>accounting.contacts.read</option>
+                <option>accounting.attachments</option>
+                <option>accounting.attachments.read</option>
+                <option>assets</option>
+                <option>assets.read</option>
+                <option>files</option>
+                <option>files.read</option>
+                <option>payroll.employees</option>
+                <option>payroll.employees.read</option>
+                <option>payroll.payruns</option>
+                <option>payroll.payruns.read</option>
+                <option>payroll.payslip</option>
+                <option>payroll.payslip.read</option>
+                <option>payroll.settings</option>
+                <option>payroll.settings.read</option>
+                <option>payroll.timesheets</option>
+                <option>payroll.timesheets.read</option>
+
+            </select>*@
                                             @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
                                         }
                                         else
                                         {
-                                    
+
                                             @Html.EditorFor(model => model.XeroScope, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
                                         }

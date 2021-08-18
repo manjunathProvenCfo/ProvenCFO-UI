@@ -192,7 +192,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
                             Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
                             Clientvm.XeroID = client.XeroID;
-                            Clientvm.XeroScope = client.XeroScope;
+                            //Clientvm.XeroScope = client.XeroScope;
                             Clientvm.XeroClientID = client.XeroClientID;
                             Clientvm.XeroClientSecret = client.XeroClientSecret;
 
@@ -291,7 +291,7 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objClientService.GetClientById(id);
 
-                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate),client.XeroID,client.XeroClientID,client.XeroClientSecret,client.XeroScope);
+                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate),client.XeroID,client.XeroScope,client.XeroClientSecret,client.XeroClientSecret);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");
