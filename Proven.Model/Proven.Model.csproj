@@ -59,6 +59,8 @@
     <Compile Include="KanbanTaskCommentsModel.cs" />
     <Compile Include="KanbanTasksModel.cs" />
     <Compile Include="LoginModel.cs" />
+    <Compile Include="NotesCategoriesModel.cs" />
+    <Compile Include="NotesDescriptionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="reconciliationVM.cs" />
     <Compile Include="RegisteredUserModel.cs" />

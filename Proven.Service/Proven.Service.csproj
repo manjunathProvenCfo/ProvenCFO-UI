@@ -66,6 +66,7 @@
     <Compile Include="CommunicationService.cs" />
     <Compile Include="InvitationServices.cs" />
     <Compile Include="NeedsService.cs" />
+    <Compile Include="NotesService.cs" />
     <Compile Include="SetupService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleService.cs" />

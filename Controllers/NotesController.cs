@@ -1,4 +1,6 @@
 ﻿using log4net;
+using Proven.Model;
+using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
 using System;
@@ -15,12 +17,23 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Notes
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
-        public ActionResult Index()
+        public ActionResult GetNotesPage()
         {
             try
             {
-                return View();
+                using (NotesService objNotes = new NotesService())
+                {
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreference"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
+                    TempData["CategoriesAndNotes"] = Categories;
+                }
+                    return View();
             }
             catch (Exception ex)
             {
@@ -28,5 +41,6 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
     }
 }

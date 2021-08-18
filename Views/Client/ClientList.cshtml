@@ -206,11 +206,11 @@
                     postAjax('/Client/DeleteClient/' + Id, null, function (data) {
 
                         if (data === false) {
-                            ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () { window.location.reload(); });
+                            ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () {});
                            
                         }
                         else {
-                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () { window.location.reload(); });
+                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () {});
                         }
 
                     });
