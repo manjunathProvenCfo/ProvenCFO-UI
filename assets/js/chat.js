@@ -53,6 +53,16 @@ var loadPage = function () {
                 } else if (activeChannel) {
                     activeChannel.typing();
                 }
+            },
+            keyup: function (editor, event) {
+                let val = "";
+                if (editor && editor.length > 0)
+                    val = editor[0].innerText;
+
+                if (isEmptyOrBlank(val))
+                    $btnSendMessage.removeClass('text-primary');
+                else
+                    $btnSendMessage.addClass('text-primary');
             }
         }
     });
@@ -74,13 +84,14 @@ var loadPage = function () {
 
         //Upload
         files.forEach(function (file) {
-            let uploader = new Uploader(file);
+            debugger
+            var uploader = new Uploader(file);
             let size = uploader.getSizeInMB();
-            if (size > 4) {
+            if (size > 20) {
                 ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
             }
             else {
-
+                addMediaMessage(file);
             }
         })
     });

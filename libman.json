@@ -27,11 +27,6 @@
         "moment.js",
         "moment.min.js.map"
       ]
-    },
-    {
-      "provider": "cdnjs",
-      "library": "blueimp-file-upload@10.31.0",
-      "destination": "assets/lib/blueimp-file-upload/"
     }
   ]
 }

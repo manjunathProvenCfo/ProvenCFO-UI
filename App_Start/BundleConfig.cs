@@ -27,6 +27,7 @@ namespace ProvenCfoUI
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
              "~/assets/lib/emojionearea/emojionearea.min.js",
+             "~/assets/lib/jquery.fancybox.min.js",
              "~/assets/js/theme.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",

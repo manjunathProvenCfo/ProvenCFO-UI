@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "Chat";
 }
+<link href="~/assets/lib/blueimp-file-upload/css/jquery.fileupload.min.css" rel="stylesheet" />
+<link href="~/assets/lib/blueimp-file-upload/css/jquery.fileupload-ui.min.css" rel="stylesheet" />
 <style type="text/css">
     .separator {
         display: flex;
@@ -26,13 +28,11 @@
 
 <div class="card-body px-0 pt-0">
     @Html.Partial("_communication")
-</div>
+</div>  
 
 @section Scripts {
     <script src="~/assets/lib/superagent/dist/superagent.min.js"></script>
     <script src="~/assets/lib/twilio/conversations/dist/twilio-conversations.js"></script>
-    <script src="~/assets/lib/blueimp-file-upload/js/jquery.fileupload-ui.min.js"></script>
-    <script src="~/assets/lib/blueimp-file-upload/js/jquery.fileupload.min.js"></script>
     @Scripts.Render("~/bundles/js/twilio-chat")
     @*@Scripts.Render("~/bundles/js/select")*@
     <script>
@@ -43,5 +43,5 @@
             chat.userEmail = "@ViewBag.UserEmail";
             loadPage();
         });
-</script>
+    </script>
 }
