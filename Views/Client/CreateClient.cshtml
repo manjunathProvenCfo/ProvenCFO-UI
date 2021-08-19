@@ -107,62 +107,42 @@
                                         @if (Model.Id == null || Model.Id == 0)
                                         {
 
-                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>() { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
                                             new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
                                             new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
                                             new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
                                             new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            new SelectListItem { Text = "projects", Value = "projects" },
-                                            }, new { @class = "selectpicker form-control", @multiple = "multiple" })
-                                            @*@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })*@
-                                            @*<select name="XeroScope" class="selectpicker form-control" id="multiple-select" multiple="multiple" data-options='{"placeholder":"Select scope"}'>
-                <option>projects.read</option>
-                <option>projects</option>
-                <option>accounting.transactions</option>
-                <option>accounting.transactions.read</option>
-                <option>accounting.reports.read</option>
-                <option>accounting.reports.tenninetynine.read</option>
-                <option>accounting.budgets.read</option>
-                <option>accounting.journals.read</option>
-                <option>accounting.settings</option>
-                <option>accounting.settings.read</option>
-                <option>accounting.contacts</option>
-                <option>accounting.contacts.read</option>
-                <option>accounting.attachments</option>
-                <option>accounting.attachments.read</option>
-                <option>assets</option>
-                <option>assets.read</option>
-                <option>files</option>
-                <option>files.read</option>
-                <option>payroll.employees</option>
-                <option>payroll.employees.read</option>
-                <option>payroll.payruns</option>
-                <option>payroll.payruns.read</option>
-                <option>payroll.payslip</option>
-                <option>payroll.payslip.read</option>
-                <option>payroll.settings</option>
-                <option>payroll.settings.read</option>
-                <option>payroll.timesheets</option>
-                <option>payroll.timesheets.read</option>
+                                            new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                                            new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings" },
+                                            new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                                            new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                                            new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                                            new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                                            new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                                            new SelectListItem { Text = "assets", Value = "assets" },
+                                            new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                                            new SelectListItem { Text = "files", Value = "files" },
+                                            new SelectListItem { Text = "files.read", Value = "files.read" },
+                                            new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                                            new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                                            new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                                            new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                                            new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                                            new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                                            new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                                            new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                                            new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                                            new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                                            }, new { @class = " selectpicker form-control", @multiple = "multiple" })
 
-            </select>*@
                                             @Html.ValidationMessageFor(model => model.XeroScopeArray, "", new { @class = "text-danger" })
                                         }
                                         else
-                                        {
+                                        {                                          
 
-                                            @Html.EditorFor(model => model.XeroScope, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(model => model.XeroScopeArray, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.XeroScopeArray, "", new { @class = "text-danger" })
                                         }
 
                                     </div>
