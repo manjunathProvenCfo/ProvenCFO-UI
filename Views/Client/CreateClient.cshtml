@@ -98,7 +98,7 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0"> XeroScope</label>
+                                        <label for="split-login-email" class="mb-0"> Xero Scope</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
@@ -107,7 +107,7 @@
                                         @if (Model.Id == null || Model.Id == 0)
                                         {
 
-                                            @Html.DropDownListFor(m => m.XeroScope, new List<SelectListItem>() { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>() { new SelectListItem { Text = "projects.read", Value = "projects.read" },
                                             new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
                                             new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
                                             new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
@@ -124,7 +124,7 @@
                                             new SelectListItem { Text = "projects", Value = "projects" },
                                             new SelectListItem { Text = "projects", Value = "projects" },
                                             }, new { @class = "selectpicker form-control", @multiple = "multiple" })
-                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                            @*@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })*@
                                             @*<select name="XeroScope" class="selectpicker form-control" id="multiple-select" multiple="multiple" data-options='{"placeholder":"Select scope"}'>
                 <option>projects.read</option>
                 <option>projects</option>
@@ -156,7 +156,7 @@
                 <option>payroll.timesheets.read</option>
 
             </select>*@
-                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(model => model.XeroScopeArray, "", new { @class = "text-danger" })
                                         }
                                         else
                                         {
@@ -167,18 +167,10 @@
 
                                     </div>
                                 </div>
-                                    @*<div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> XeroScope</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.XeroScope, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>*@
+                                   
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> XeroClientID</label>
+                                            <label for="split-login-email" class="mb-0"> Xero Client ID</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                             @Html.EditorFor(model => model.XeroClientID, new { htmlAttributes = new { @class = "form-control" } })
@@ -187,7 +179,7 @@
                                     </div>
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> XeroClientSecret</label>
+                                            <label for="split-login-email" class="mb-0"> Xero Client Secret</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                             @Html.EditorFor(model => model.XeroClientSecret, new { htmlAttributes = new { @class = "form-control" } })
@@ -206,7 +198,7 @@
                                     </div>
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> XeroID</label>
+                                            <label for="split-login-email" class="mb-0"> Xero ID</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                             @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control" } })
@@ -228,13 +220,7 @@
                                     </div>
 
                                     <div class="row align-items-center form-group">
-                                        @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Address </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-            </div>*@
+                                     
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email">Status</label>
                                         </div>
@@ -245,13 +231,7 @@
                                     </div>
 
                                     <div class="row align-items-center form-group">
-                                        @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
-            </div>*@
+                              
                                     </div>
 
 

@@ -35,8 +35,10 @@ namespace ProvenCfoUI.Models
         public DateTime? StartDate { get; set; }
         public string XeroID { get; set; }
         public string XeroClientID { get; set; }
-        public string XeroClientSecret { get; set; }
-        public string[] XeroScope { get; set; }
+       public string XeroClientSecret { get; set; }
+        public string[] XeroScopeArray { get; set; }
+        //public string[] XeroScope { get; set; }
+        public string XeroScope { get; set; }
         public string StartDateText { get; set; }
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
