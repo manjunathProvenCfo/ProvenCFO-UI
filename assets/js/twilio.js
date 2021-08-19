@@ -3,9 +3,10 @@
 var twilioClient;
 var activeChannel;
 var activeChannelPage;
+var activeChannelMessages;
 var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
-const Chat_Page_Size = 30;
+const Chat_Page_Size = 5;
 
 var getToken = function () {
     postAjaxSync("/twilio/token?identity=" + chat.userEmail, null, function (response) {
@@ -111,6 +112,21 @@ var joinChannel = function (channel) {
     });
 }
 
+var addMediaMessage = function (file) {
+    debugger
+    const formData = new FormData();
+    formData.append('file', file);
+    activeChannel.sendMessage(formData).then(function (msg) {
+        debugger
+        setScrollPosition();
+        if ($newMessagesDiv && $newMessagesDiv.length > 0)
+            $newMessagesDiv.remove();
+        let lastMessage = $channelMessages.children('.media:last')
+        if (lastMessage && lastMessage.length > 0)
+            channel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
+    });
+}
+
 var setActiveChannel = function (channel) {
     if (activeChannel) {
         activeChannel.removeListener('messageAdded', addMessage);
@@ -136,7 +152,6 @@ var setActiveChannel = function (channel) {
                 setScrollPosition();
                 if ($newMessagesDiv && $newMessagesDiv.length > 0)
                     $newMessagesDiv.remove();
-                debugger
                 let lastMessage = $channelMessages.children('.media:last')
                 if (lastMessage && lastMessage.length > 0)
                     channel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
@@ -155,6 +170,7 @@ var setActiveChannel = function (channel) {
 
     channel.getMessages(Chat_Page_Size).then(function (page) {
         activeChannelPage = page;
+        activeChannelMessages = page.items;
         page.items.forEach(addMessage);
 
         channel.on('messageAdded', addMessage);
@@ -329,8 +345,9 @@ var prepareMessageRow = function (message, timeStampRowId) {
             break;
         default:
     }
-    if (msg.author.toLowerCase() == chat.userEmail.toLowerCase()) {
-        row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
+    if (msg.type.toLowerCase() == "text") {
+        if (msg.author.toLowerCase() == chat.userEmail.toLowerCase()) {
+            row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
                                 <div class='media-body d-flex justify-content-end'>
                                     <div class='w-100 w-xxl-75'>
                                         <div class='hover-actions-trigger d-flex align-items-center justify-content-end'>
@@ -344,9 +361,9 @@ var prepareMessageRow = function (message, timeStampRowId) {
                                     </div>
                                 </div>
                             </div>`;
-    } else {
-        let participant = getParticipantByEmail(msg.author);
-        row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
+        } else {
+            let participant = getParticipantByEmail(msg.author);
+            row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}">
         <div class='avatar avatar-l mr-2'>
             <img class='rounded-circle' src='`+ (isEmptyOrBlank(participant?.ProfileImage) == true ? Default_Profile_Image : participant?.ProfileImage) + `' alt='' />
         </div>
@@ -363,7 +380,46 @@ var prepareMessageRow = function (message, timeStampRowId) {
             </div>
         </div>
     </div>`;
+        }
     }
+    else if (msg.type.toLowerCase() == "media") {
+        if (msg.author.toLowerCase() == chat.userEmail.toLowerCase()) {
+            row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}" data-media-sid="${message.media.sid}">
+                                <div class="media-body d-flex justify-content-end">
+                                    <div class="w-100 w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                                            <div class="chat-message chat-gallery justify-content-end">
+                                                <div class="row mx-n1 justify-content-end">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='text-400 fs--2 text-right'>
+                                            ${time}<span class='fas fa-check ml-2 text-success'></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+        }
+        else {
+            row = `<div class='media p-3' id="${msg.sid}" data-index="${message.index}" data-sid="${message.sid}" data-timestamp="${timeStampRowId}" data-media-sid="${message.media.sid}">
+                                <div class="media-body">
+                                    <div class="w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center">
+                                            <div class="chat-message chat-gallery">
+                                                <div class="row mx-n1 justify-content-start">
+                                                </div>
+                                            </div>
+                                        </div>
+                                     <div class='text-400 fs--2'>
+                                         <span>${time}</span>
+                                     </div>
+                                    </div>
+                                </div>
+                            </div>`;
+        }
+    }
+
     return row;
     //<ul class="hover-actions position-relative list-inline mb-0 text-400 ml-2">
     //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Forward"><span class="fas fa-share"></span></a></li>
@@ -372,6 +428,19 @@ var prepareMessageRow = function (message, timeStampRowId) {
     //<li class="list-inline-item"><a class="chat-option" href="#!" data-toggle="tooltip" data-placement="top" title="Remove"><span class="fas fa-trash-alt"></span></a></li>
     //</ul>
 }
+
+var prepareImageMessageBody = function (url) {
+    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" target="_blank" data-fancybox="twilio-gallery"><img src="${url}" alt="" class="img-fluid rounded mb-2"></a></div>`;
+    return messageBody;
+}
+
+var prepareDocMessageBody = function (url, filename) {
+    if (isEmptyOrBlank(filename))
+        filename = "Download Link";
+    let messageBody = `<a href="${url}" target="_blank" data-fancybox="twilio-gallery">${filename}</a>`;
+    return messageBody;
+}
+
 var addMessagePrepand = function (message) {
     addMessage(message, true);
 }
@@ -382,6 +451,7 @@ var addMessage = function (message) {
     let msg = message.state;
     var timestampRow = addTimestampRow(msg.timestamp);
     let timeStampRowId = timestampRow.attr("id");
+
     var messageRow = prepareMessageRow(message, timeStampRowId);
     let firstMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:first`);
     let lastMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:last`);
@@ -394,6 +464,38 @@ var addMessage = function (message) {
     }
     else {
         timestampRow.after(messageRow);
+    }
+    //
+    if (msg.type == "media") {
+        msg.media.getContentTemporaryUrl().then(function (mediaURL, msg) {
+            // log media temporary URL
+            if (!isEmptyOrBlank(mediaURL)) {
+                let url = new URL(mediaURL);
+                let urlPathnames = url.pathname.split('/')
+                if (urlPathnames.length > 0) {
+                    let mediaId = urlPathnames[urlPathnames.length - 1];
+                    var elMsg = $channelMessages.children(`.media[data-media-sid=${mediaId}]`);
+                    elMsg.find(".chat-message").addClass("chat-gallery");
+                    let mediaMessage = activeChannelMessages.filter(x => x?.media?.sid == mediaId)
+                    if (mediaMessage.length > 0) {
+                        mediaMessage = mediaMessage[0]
+                        if (mediaMessage) {
+                            if (mediaMessage.media.state.contentType.indexOf("image") != -1) {
+
+                                elMsg.find(".row").append(prepareImageMessageBody(mediaURL));
+                            }
+                            else {
+                                elMsg.find(".chat-message").addClass("bg-primary text-white p-2 rounded-soft");
+                                //elMsg.find(".row").remove();
+                                //elMsg.html(prepareDocMessageBody(mediaURL, mediaMessage.media.state.filename));
+
+                                elMsg.find(".row").append(prepareDocMessageBody(mediaURL, mediaMessage.media.state.filename));
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     if (lastMsgDiv && lastMsgDiv.length > 0 && isElementInView(lastMsgDiv))
@@ -414,6 +516,8 @@ var addChannelMessagesScrollEvent = function () {
     $channelMessages.on('scroll', function (e) {
         //if ($channelMessages.height() - 50 < $channelMessages.scrollTop() + $channelMessages.height()) {
         //    activeChannel.getMessages(Chat_Page_Size).then(messages => {
+        //        debugger
+        //        messages.items.map(x => activeChannelMessages.push(x));
         //        var newestMessageIndex = messages.length ? messages[0].index : 0;
         //        if (!isUpdatingConsumption && activeChannel.lastConsumedMessageIndex !== newestMessageIndex) {
         //            isUpdatingConsumption = true;
@@ -457,6 +561,7 @@ var addChannelMessagesScrollEvent = function () {
         if ($channelMessages.scrollTop() < 50 && activeChannelPage && activeChannelPage.hasPrevPage) {
             var lowestMessageIndex = $channelMessages.children('.media:first').attr('data-index');
             activeChannelPage.prevPage().then(page => {
+                page.items.forEach(x => activeChannelMessages.push(x));
                 page.items.reverse().forEach(addMessage);
                 activeChannelPage = page;
                 if (lowestMessageIndex) {
@@ -551,7 +656,7 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
 var handleUserUpdate = function (user, updateReasons) {
     // loop over each reason and check for reachability change
     updateReasons.forEach(reason => {
-        if (reason == 'reachabilityOnline') {s
+        if (reason == 'reachabilityOnline') {
             let participant = getParticipantByEmail(user.state.identity);
             if (!isEmptyOrBlank(participant)) {
                 participant["Online"] = isEmptyOrBlank(user?.state?.online) ? false : user?.state?.online;
