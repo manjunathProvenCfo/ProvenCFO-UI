@@ -51,12 +51,12 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken);
-                var Total = result._Invoices.Sum(x => x.Total);                
+                var Total = result._Invoices.Sum(x => x.Total);
                 var returnData = new Dictionary<string, dynamic>
                    {
                        {"data",result},
                        {"Total",Total}
-                   }; 
+                   };
                 return Json(returnData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace ProvenCfoUI.Controllers
 
                 throw ex;
             }
-           
+
         }
 
         [CheckSession]

@@ -70,12 +70,11 @@ namespace ProvenCfoUI.Controllers
                         Entity_Name = s.EntityName,
                         State = s.StateName,
                         Status = s.Status == true ? "Active" : "Inactive",
-                        Start_Date = s.StartDate,   
+                        Start_Date = s.StartDate,
                         XeroID = s.XeroID,
                         XeroClientID = s.XeroClientID,
                         XeroClientSecret = s.XeroClientSecret,
                         XeroScope = s.XeroScope,
-                       
                         Created_Date = s.CreatedDate.HasValue == false || (((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)s.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
                         Created_By = s.CreatedByUser,
                         Modified_Date = s.ModifiedDate.HasValue == false || (((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)s.ModifiedDate).ToString("MM/dd/yyyy").Replace("-", "/"),
@@ -189,8 +188,20 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList();
                             Clientvm.BillableEntityId = client.BillableEntityId;
                             Clientvm.ContactPersonName = client.ContactPersonName;
-                            Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
+                            if (client.StartDate != null)
+                            {
+                                Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
+                               // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
+                                //Clientvm.StartDate = client.StartDate;
+                            }
+                            //else
+                            //{
+                            //    Clientvm.StartDate = client.StartDate;
+                            //   // Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
+                            //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
+                            //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
+                            //}
+
                             Clientvm.XeroID = client.XeroID;
                             Clientvm.XeroScope = client.XeroScope;
                             Clientvm.XeroClientID = client.XeroClientID;
@@ -247,9 +258,9 @@ namespace ProvenCfoUI.Controllers
                                     //string result = string.Join(".", array);
                                     //string.Join(",", Client);
 
-                                   createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
-                              
-                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), Convert.ToDateTime(createClientVM.StartDate),createClientVM.XeroID,createClientVM.XeroScope, createClientVM.XeroClientID,createClientVM.XeroClientSecret);
+                                    createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                    //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), Convert.ToDateTime(createClientVM.StartDate), createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Created";
@@ -265,10 +276,11 @@ namespace ProvenCfoUI.Controllers
                                         ViewBag.ErrorMessage = "Exist";
                                         return View("CreateClient", createClientVM);
                                     }
-                                    
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), Convert.ToDateTime(createClientVM.StartDate),createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
-                                    if (result == null)
-                                        ViewBag.ErrorMessage = "";
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
+
+
+
+                                    ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Updated";
                                     return View("CreateClient", createClientVM);
                                 }

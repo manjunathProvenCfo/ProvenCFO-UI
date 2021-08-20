@@ -105,8 +105,8 @@
 
 
 
-                                        @if (Model.Id == null || Model.Id == 0)
-                                        {
+                                        @*@if (Model.Id == null || Model.Id == 0)
+                                        {*@
 
                                         @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
                                         new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
@@ -138,13 +138,13 @@
                                         }, new { @class = " selectpicker form-control", @multiple = "multiple" })
 
                                         @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                        }
+                                        @*}
                                         else
                                         {
 
                                             @Html.EditorFor(model => model.XeroScope,"readonly", new { htmlAttributes = new { @class = "form-control",  @readonly = "readonly" } })
                                                 @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
-                                            }
+                                            }*@
 
                                     </div>
                                 </div>
@@ -249,6 +249,9 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
 
+        $(function () {
+            addMultipleSelectValues('[name=XeroScopeArray]','@Model.XeroScope')
+        })
 
         $("#clientExist").addClass('d-none');
         $("#clientExist").html('');

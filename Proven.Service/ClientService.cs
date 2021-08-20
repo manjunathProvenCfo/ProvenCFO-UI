@@ -172,7 +172,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime StartDate,string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId,string BillableEntityId, DateTime? StartDate,string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret)
         {
             var from = new Dictionary<string, object>
             {
@@ -195,6 +195,7 @@ namespace Proven.Service
                 //{"ContactPersonName",ContactPersonName },
 
             };
+            
             var content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
             response = client.PostAsync("Client/UpdateClientAgency", content).Result;
             if (response.IsSuccessStatusCode)

@@ -81,4 +81,14 @@ function ShowAlertBoxError(title, text, callback = null) {
 }
 //Alerts End
 
+//select2 start
+function addMultipleSelectValues(selector, valuesSpaceSeprated) {
+    if (!isEmptyOrBlank(valuesSpaceSeprated)) {
+        let el = $(selector);
+        el.val(valuesSpaceSeprated.split(' '));
+        el.trigger('change');
+    }
+}
+//select2 end
+
 
