@@ -292,3 +292,55 @@ a {
     font-size: 11px !important;
     line-height: 17px !important;
 }
+.report-card-header {
+    background-color: #F9FAFD !important;
+    padding: 16px 20px !important;
+}
+.report-card-header .btn-light {
+    margin-left: 10px;
+    height: 28px;
+    width: 28px;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 1px 1.5px rgba(0, 0, 0, 0.07), 0px 2px 5px rgba(43, 45, 80, 0.08), 0px 0px 0px 1px rgba(43, 45, 80, 0.1);
+    border-radius: 3px;
+ }
+.report-card-header .form-group {
+    margin-left: 10px;
+}
+.report-card-header .form-group .form-control {
+    height: 39px;
+    padding-left: 35px;
+}
+.report-card-header .btn {
+    font-size: 13px;
+}
+.report-card-header .search-icon {
+    left: 14px;
+    color: #B6C2D2;
+    top: 9px;
+}
+.book-cover {
+    margin-bottom: 20px;
+}
+.book-title {
+    color: #00BE82;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 19px;
+    margin-bottom: 0;
+}
+.publish-year {
+    color: #748194;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+.report-card-body .dropdown {
+    right: 15px;
+    top: 15px;
+}
+.report-card-body .dropdown-toggle::after {
+    content: none;
+}
