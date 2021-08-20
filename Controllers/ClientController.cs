@@ -265,7 +265,7 @@ namespace ProvenCfoUI.Controllers
                                         ViewBag.ErrorMessage = "Exist";
                                         return View("CreateClient", createClientVM);
                                     }
-                                    createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                    
                                     var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), Convert.ToDateTime(createClientVM.StartDate),createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
