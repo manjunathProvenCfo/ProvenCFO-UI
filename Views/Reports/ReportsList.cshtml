@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "ReportsList";
+}
+
+<div class="container-fluid p-0" data-layout="container">
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card mb-1">
+                <div class="card-header report-card-header d-flex justify-content-between align-items-center">
+                    <h5>Reports</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex">
+                            <button class="btn btn-light"><i class="far fa-file"></i></button>
+                            <button class="btn btn-light"><i class="far fa-envelope"></i></button>
+                            <button class="btn btn-light"><i class="fas fa-filter"></i></button>
+                        </div>
+                        <div class="form-group position-relative mb-0">
+                            <input type="text" class="form-control" id="inputGroup" placeholder="Search">
+                            <div class="search-icon position-absolute">
+                                <i class="fab fa-sistrix"></i>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <select class="form-control pl-2">
+                                <option value="1">2021</option>
+                                <option value="2">2020</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body report-card-body position-relative">
+                    <div class="dropdown position-absolute">
+                        <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Download All</a>
+                            <a class="dropdown-item" href="#">Upload</a>
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center ">Year End 2020</div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Income Statement</h2>
+                            <p class="publish-year mb-0">Year End 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Balance Sheet</h2>
+                            <p class="publish-year mb-0">Year End 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image1.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Account Transactions</h2>
+                            <p class="publish-year mb-0">Year End 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Tax Document</h2>
+                            <p class="publish-year mb-0">Year End 2020</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1">
+                <div class="card-body report-card-body position-relative">
+                    <div class="dropdown position-absolute">
+                        <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Download All</a>
+                            <a class="dropdown-item" href="#">Upload</a>
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center ">Q4 2020</div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Financials</h2>
+                            <p class="publish-year mb-0">Q4 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image1.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Account Transactions</h2>
+                            <p class="publish-year mb-0">Q4 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">KPI’s</h2>
+                            <p class="publish-year mb-0">Q4 2020</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1">
+                <div class="card-body report-card-body position-relative">
+                    <div class="dropdown position-absolute">
+                        <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Download All</a>
+                            <a class="dropdown-item" href="#">Upload</a>
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center ">December 2020</div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Monthly Financials</h2>
+                            <p class="publish-year mb-0">December 2020</p>
+                        </div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Account Transactions</h2>
+                            <p class="publish-year mb-0">December 2020</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1">
+                <div class="card-body report-card-body position-relative">
+                    <div class="dropdown position-absolute">
+                        <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Download All</a>
+                            <a class="dropdown-item" href="#">Upload</a>
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center ">November 2020</div>
+                        <div class="col-2 text-center">
+                            <figure class="book-cover">
+                                <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                            </figure>
+                            <h2 class="book-title">Monthly Financials</h2>
+                            <p class="publish-year mb-0">November 2020</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    @*leftDownload Pane*@
+
+
+
+</div>
+
+<footer>
+    <div class="row no-gutters justify-content-between fs--1 mt-4 mb-3">
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 text-600">2021 © ProvenCFO<span class="d-none d-sm-inline-block"> </span><br class="d-sm-none" /></p>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 text-600">v 0.1.2</p>
+        </div>
+    </div>
+</footer>
+</div>
+
+
+
+

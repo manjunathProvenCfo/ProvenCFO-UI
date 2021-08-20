@@ -458,6 +458,9 @@
     <Content Include="assets\img\products\7.jpg" />
     <Content Include="assets\img\products\8.jpg" />
     <Content Include="assets\img\products\9.jpg" />
+    <Content Include="assets\img\Reports\Avatar Image.png" />
+    <Content Include="assets\img\Reports\Avatar Image1.png" />
+    <Content Include="assets\img\Reports\Avatar Image3.png" />
     <Content Include="assets\img\team\default-logo.png" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
@@ -1022,6 +1025,7 @@
     <Content Include="Views\BillableEntities\AddBillableEntity.cshtml" />
     <Content Include="Views\Communication\Chat.cshtml" />
     <Content Include="Views\Notes\GetNotesPage.cshtml" />
+    <Content Include="Views\Reports\ReportsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
