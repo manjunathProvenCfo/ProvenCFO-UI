@@ -66,7 +66,7 @@
                         <th class="sort pr-1 align-middle">
                             State
                         </th>
-                       
+
                         <th class="sort pr-1 align-middle">
                             Status
                         </th>
@@ -78,82 +78,87 @@
                         @*<th class="sort pr-1 align-middle text-center">Action</th>*@
 
                         @*<th class="no-sort pr-1 align-middle data-table-row-action">
-            Action
-        </th>*@
+                                Action
+                            </th>*@
                     </tr>
                 </thead>
                 <tbody id="purchases">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
-                                <label class="custom-control-label" for="@item.Id"></label>
-                            </div>
-                        </td>
+                        <tr class="btn-reveal-trigger">
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
+                                    <label class="custom-control-label" for="@item.Id"></label>
+                                </div>
+                            </td>
 
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <th class="align-middle">
-                            @Html.DisplayFor(modelItem => item.EntityName)
-                        </th>
-                        <th class="align-middle">
-                            @Html.DisplayFor(modelItem => item.CityName)
-                        </th>
-                        <th class="align-middle">
-                            @Html.DisplayFor(modelItem => item.StateName)
-                        </th>
-                        
-                        <th class="align-middle">
-                            @if (item.Status == true)
-                            {
-                                <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
-                            }
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <th class="align-middle">
+                                @Html.DisplayFor(modelItem => item.EntityName)
+                            </th>
+                            <th class="align-middle">
+                                @Html.DisplayFor(modelItem => item.CityName)
+                            </th>
+                            <th class="align-middle">
+                                @Html.DisplayFor(modelItem => item.StateName)
+                            </th>
 
-                        </th>
-                        <th class="align-middle">
-                            @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
-                            {
-                                @item.StartDate.Value.ToString("MM/dd/yyyy")
-                            }
-                        </th>
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
-                                <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>
-                                    <i class="far fa-edit"> </i>
-                                </a>
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
-                                <a href="#" onclick="deleteClient('@item.Id')">
-                                    <i class="far fa-trash-alt"> </i>
-                                </a>
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-2">
+                            <th class="align-middle">
                                 @if (item.Status == true)
                                 {
-                                    <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
                                 }
 
-                            </span>
-                            @*<input id="Delete" onclick="deleteClient('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
-                            @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
-                        </td>
+                            </th>
+                            <th class="align-middle">
+                                @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
+                                {
+                                    @item.StartDate.Value.ToString("MM/dd/yyyy")
+                                }
+                            </th>
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>
+                                        <i class="far fa-edit"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    <a href="#" onclick="deleteClient('@item.Id')">
+                                        <i class="far fa-trash-alt"> </i>
+                                    </a>
+                                </span>
+                                @*<span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <a href="#" onclick="deleteClient('@item.Id')">
+                                            <i class="far fa-trash-alt"> </i>
+                                        </a>
+                                    </span>*@
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    @if (item.Status == true)
+                                    {
+                                        <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
 
-                    </tr>
+                                </span>
+                                @*<input id="Delete" onclick="deleteClient('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
+                                @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
+                            </td>
+
+                        </tr>
                     }
                 </tbody>
 
@@ -208,17 +213,17 @@
                     postAjax('/Client/DeleteClient/' + Id, null, function (data) {
 
                         if (data === false) {
-                            ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () {});
-                           
+                            ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () { window.location.reload(); });
+                            
                         }
                         else {
-                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () {});
+                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () { window.location.reload();});
                         }
-
+                        
                     });
                 });
+
         }
 
     </script>
 }
-
