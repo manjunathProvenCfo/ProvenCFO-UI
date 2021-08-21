@@ -27,20 +27,22 @@ namespace Proven.Service
                {"UserRole",UserPref.UserRole},
                {"CreatedBy",LoggedInUser}             
            };
-            var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Common/SetUserPreferences", content).Result;
+            //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            var content = PreparePostContent(form);
+            return PostAsync<UserPreferencesVM>("Common/SetUserPreferences", content).Result;
+            //response = client.PostAsync("Common/SetUserPreferences", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserPreferencesVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserPreferencesVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public List<UserPreferencesVM> GetUserPreferences(string UserID)

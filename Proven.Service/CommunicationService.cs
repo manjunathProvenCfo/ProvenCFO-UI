@@ -18,18 +18,19 @@ namespace Proven.Service
 
         public async Task<List<ChatParticipants>> GetChatParticipants(string UserID, string userEmail)
         {
-            response = await client.GetAsync($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}").ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return await GetAsync<List<ChatParticipants>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}");
+            //response = await client.GetAsync($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}").ConfigureAwait(false);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                return JsonConvert.DeserializeObject<List<ChatParticipants>>(content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //    return JsonConvert.DeserializeObject<List<ChatParticipants>>(content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public void Dispose()

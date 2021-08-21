@@ -17,18 +17,19 @@ namespace Proven.Service
         private StringContent content;
         public InviteUserMainModel GetInvitation()
         {
-            response = client.GetAsync("Invitation/GetALLInvitation").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<InviteUserMainModel>("Invitation/GetALLInvitation").Result;
+            //response = client.GetAsync("Invitation/GetALLInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public InviteUserVMId GetInvitationById(int id)
@@ -97,21 +98,22 @@ namespace Proven.Service
                {"CreatedBy", LoginUserid}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            content = PreparePostContent(form);
+            return PostAsync<InviteUserModel>("Invitation/SendInvitation/SendInvitation", content).Result;
+            //response = client.PostAsync("Invitation/SendInvitation/SendInvitation", content).Result;
 
-            response = client.PostAsync("Invitation/SendInvitation/SendInvitation", content).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
-            }
+            //}
         }
 
         public InviteUserModel UpdateInvitationAgency(string firstname, string lastname, string email, string status, string LoginUserid, string agencyid)
@@ -125,18 +127,20 @@ namespace Proven.Service
                 {"IsActive",status },
                {"ModifiedBy", LoginUserid}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Invitation/UpdateInvitatedAgencyUser", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            content = PreparePostContent(form);
+            return PostAsync<InviteUserModel>("Invitation/UpdateInvitatedAgencyUser", content).Result;
+            //response = client.PostAsync("Invitation/UpdateInvitatedAgencyUser", content).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public InviteUserModel AddInvitationAgency(string firstname, string lastname, string email, string sessiontimeout, string agencyid, string LoginUserid)
         {
@@ -151,49 +155,50 @@ namespace Proven.Service
                {"AgencyID",agencyid }
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            content = PreparePostContent(form);
+            return PostAsync<InviteUserModel>("Invitation/SendInvitationAgency", content).Result;
+            //response = client.PostAsync("Invitation/SendInvitationAgency", content).Result;
 
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            response = client.PostAsync("Invitation/SendInvitationAgency", content).Result;
-
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
-            }
+            //}
         }
 
         public InviteUserModel DeactivateInvitation(int id)
         {
-            var form = new Dictionary<string, string>
-           {
+           // var form = new Dictionary<string, string>
+           //{
 
-               {"id", id.ToString()}
-           };
+           //    {"id", id.ToString()}
+           //};
             string result = string.Format("Invitation/DeactivateInvitation?id={0}", id);
-            response = client.PostAsync(result, null).Result;
+            return PostAsync<InviteUserModel>(result).Result;
+            //response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
-        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status,string UserID, string LoginUserid, string LinkedInProfile)
+        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile)
 
         {
             var form = new Dictionary<string, string>

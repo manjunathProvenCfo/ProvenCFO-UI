@@ -18,18 +18,19 @@ namespace Proven.Service
 
         public BillableEntitiesMainModel GetAllBillableEntitiesList()
         {
-            response = client.GetAsync("BillableEntities/GetAllBillableEntitiesList").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BillableEntitiesMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<BillableEntitiesMainModel>("BillableEntities/GetAllBillableEntitiesList").Result;
+            //response = client.GetAsync("BillableEntities/GetAllBillableEntitiesList").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<BillableEntitiesMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public BillableEntitiesVM GetBillableEntitiesById(int Id)
@@ -73,19 +74,21 @@ namespace Proven.Service
                 {"Status", status },
                 {"CreatedBy", userid}
             };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("BillableEntities/CreateBillableEntity", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            content = PreparePostContent(form);
+            return PostAsync<BillableEntitiesVM>("BillableEntities/CreateBillableEntity", content).Result;
+            //response = client.PostAsync("BillableEntities/CreateBillableEntity", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public BillableEntitiesVM UpdateBillableEntity(string Id, string EntityName, string ProvenCFOXeroContactID, string Clients, string status, string IsDeleted, string userid)
@@ -100,63 +103,67 @@ namespace Proven.Service
                {"ModifiedBy", userid},
                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true)}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("BillableEntities/UpdateBillableEntity", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            content = PreparePostContent(form);
+            return PostAsync<BillableEntitiesVM>("BillableEntities/UpdateBillableEntity", content).Result;
+            //response = client.PostAsync("BillableEntities/UpdateBillableEntity", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public BillableEntitiesVM DeleteBillableEntity(int Id)
         {
-            var form = new Dictionary<string, string>
-            {
-               {"Id", Id.ToString()}
-            };
+            //var form = new Dictionary<string, string>
+            //{
+            //   {"Id", Id.ToString()}
+            //};
             string result = string.Format("BillableEntities/DeleteBillableEntity?Id={0}", Id);
-            HttpResponseMessage response = client.PostAsync(result, null).Result;
+            return PostAsync<BillableEntitiesVM>(result, null).Result;
+            //HttpResponseMessage response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public BillableEntitiesVM RetireBillableEntity(int Id)
         {
-            var form = new Dictionary<string, string>
-            {
-                {"Id", Id.ToString()}
-            };
+            //var form = new Dictionary<string, string>
+            //{
+            //    {"Id", Id.ToString()}
+            //};
             string result = string.Format("BillableEntities/DeactivateBillableEntity?Id={0}", Id);
-            response = client.PostAsync(result, null).Result;
+            return PostAsync<BillableEntitiesVM>(result, null).Result;
+            //response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<BillableEntitiesVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public void Dispose()
