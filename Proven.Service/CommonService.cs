@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Service
 {
-    public class CommonService : BaseService , IDisposable
+    public class CommonService : BaseService, IDisposable
     {
         private bool isDisposed = false;
         private HttpResponseMessage response;
@@ -25,11 +25,10 @@ namespace Proven.Service
                {"PreferanceValue", UserPref.PreferanceValue},
                {"UserID",UserPref.UserID},
                {"UserRole",UserPref.UserRole},
-               {"CreatedBy",LoggedInUser}             
+               {"CreatedBy",LoggedInUser}
            };
             //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            var content = PreparePostContent(form);
-            return PostAsync<UserPreferencesVM>("Common/SetUserPreferences", content).Result;
+            return PostAsync<UserPreferencesVM, Dictionary<string, string>>("Common/SetUserPreferences", form).Result;
             //response = client.PostAsync("Common/SetUserPreferences", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -47,38 +46,40 @@ namespace Proven.Service
 
         public List<UserPreferencesVM> GetUserPreferences(string UserID)
         {
-            response = client.GetAsync("Common/GetUserPreferences?UserID=" + UserID).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<List<UserPreferencesVM>>("Common/GetUserPreferences?UserID=" + UserID, true).Result;
+            //response = client.GetAsync("Common/GetUserPreferences?UserID=" + UserID).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<List<UserPreferencesVM>>((JObject.Parse(_content)["resultData"]).ToString());
+            //    var val = JsonConvert.DeserializeObject<List<UserPreferencesVM>>((JObject.Parse(_content)["resultData"]).ToString());
 
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public List<UserSecurityVM> GetUserSecurityModels(string UserEmail)
         {
-            response = client.GetAsync("Common/GetUserSecurityModels?userEmail=" + UserEmail).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<List<UserSecurityVM>>("Common/GetUserSecurityModels?userEmail=" + UserEmail, true).Result;
+            //response = client.GetAsync("Common/GetUserSecurityModels?userEmail=" + UserEmail).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<List<UserSecurityVM>>((JObject.Parse(_content)["resultData"]).ToString());
+            //    var val = JsonConvert.DeserializeObject<List<UserSecurityVM>>((JObject.Parse(_content)["resultData"]).ToString());
 
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public void Dispose()
         {
@@ -94,11 +95,11 @@ namespace Proven.Service
             {
                 if (response != null)
                     response.Dispose();
-                if(content != null)
+                if (content != null)
                 {
                     content.Dispose();
                 }
-               
+
                 // free managed resources               
             }
             isDisposed = true;

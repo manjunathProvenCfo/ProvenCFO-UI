@@ -35,33 +35,35 @@ namespace Proven.Service
 
         public BillableEntitiesVM GetBillableEntitiesById(int Id)
         {
-            response = client.GetAsync("BillableEntities/GetBillableEntitiesById?Id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<BillableEntitiesVM>("BillableEntities/GetBillableEntitiesById?Id=" + Id, true).Result;
+            //response = client.GetAsync("BillableEntities/GetBillableEntitiesById?Id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public BillableEntitiesVM GetBillableEntitiesByName(string EntityName)
         {
-            response = client.GetAsync("BillableEntities/GetBillableEntitiesByName?EntityName=" + EntityName).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<BillableEntitiesVM>("BillableEntities/GetBillableEntitiesByName?EntityName=" + EntityName, true).Result;
+            //response = client.GetAsync("BillableEntities/GetBillableEntitiesByName?EntityName=" + EntityName).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public BillableEntitiesVM AddBillableEntity(string EntityName, string ProvenCFOXeroContactID, string Clients, string status, string userid)
@@ -75,8 +77,7 @@ namespace Proven.Service
                 {"CreatedBy", userid}
             };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<BillableEntitiesVM>("BillableEntities/CreateBillableEntity", content).Result;
+            return PostAsync<BillableEntitiesVM, Dictionary<string, string>>("BillableEntities/CreateBillableEntity", form).Result;
             //response = client.PostAsync("BillableEntities/CreateBillableEntity", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -104,8 +105,7 @@ namespace Proven.Service
                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true)}
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<BillableEntitiesVM>("BillableEntities/UpdateBillableEntity", content).Result;
+            return PostAsync<BillableEntitiesVM, Dictionary<string, object>>("BillableEntities/UpdateBillableEntity", form).Result;
             //response = client.PostAsync("BillableEntities/UpdateBillableEntity", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -192,18 +192,19 @@ namespace Proven.Service
 
         public BillableEntitiesVM GetClientBillsAssociationById(int Id)
         {
-            response = client.GetAsync("BillableEntities/GetClientBillsAssociationById?Id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<BillableEntitiesVM>("BillableEntities/GetClientBillsAssociationById?Id=" + Id, true).Result;
+            //response = client.GetAsync("BillableEntities/GetClientBillsAssociationById?Id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<BillableEntitiesVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
     }
 }

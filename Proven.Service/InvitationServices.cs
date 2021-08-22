@@ -34,53 +34,56 @@ namespace Proven.Service
 
         public InviteUserVMId GetInvitationById(int id)
         {
-            response = client.GetAsync("Invitation/GetInvitation?id=" + id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitation?id=" + id, true).Result;
+            //response = client.GetAsync("Invitation/GetInvitation?id=" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public InviteUserVMId GetInvitationByEmail(string Email)
         {
-            response = client.GetAsync("Invitation/GetInvitationByEmail?Email=" + Email).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitationByEmail?Email=" + Email, true).Result;
+            //response = client.GetAsync("Invitation/GetInvitationByEmail?Email=" + Email).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //    var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public InviteUserVMId GetAgencyUserInvitationByEmail(string Email)
         {
-            response = client.GetAsync("Invitation/GetAgencyUserInvitationByEmail?Email=" + Email).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<InviteUserVMId>("Invitation/GetAgencyUserInvitationByEmail?Email=" + Email, true).Result;
+            //response = client.GetAsync("Invitation/GetAgencyUserInvitationByEmail?Email=" + Email).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //    var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public InviteUserModel AddInvitation(string firstname, string lastname, string email, string roleid, string jobid, string sessiontimeout, string LoginUserid)
@@ -99,8 +102,7 @@ namespace Proven.Service
 
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<InviteUserModel>("Invitation/SendInvitation/SendInvitation", content).Result;
+            return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/SendInvitation/SendInvitation", form).Result;
             //response = client.PostAsync("Invitation/SendInvitation/SendInvitation", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -128,8 +130,7 @@ namespace Proven.Service
                {"ModifiedBy", LoginUserid}
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<InviteUserModel>("Invitation/UpdateInvitatedAgencyUser", content).Result;
+            return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/UpdateInvitatedAgencyUser", form).Result;
             //response = client.PostAsync("Invitation/UpdateInvitatedAgencyUser", content).Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -156,8 +157,7 @@ namespace Proven.Service
 
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<InviteUserModel>("Invitation/SendInvitationAgency", content).Result;
+            return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/SendInvitationAgency", form).Result;
             //response = client.PostAsync("Invitation/SendInvitationAgency", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -175,11 +175,11 @@ namespace Proven.Service
 
         public InviteUserModel DeactivateInvitation(int id)
         {
-           // var form = new Dictionary<string, string>
-           //{
+            // var form = new Dictionary<string, string>
+            //{
 
-           //    {"id", id.ToString()}
-           //};
+            //    {"id", id.ToString()}
+            //};
             string result = string.Format("Invitation/DeactivateInvitation?id={0}", id);
             return PostAsync<InviteUserModel>(result).Result;
             //response = client.PostAsync(result, null).Result;
@@ -213,56 +213,59 @@ namespace Proven.Service
                 {"ModifiedBy",LoginUserid},
                 {"LinkedInProfile",LinkedInProfile}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Invitation/UpdateUserInvite", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/UpdateUserInvite", form).Result;
+            //response = client.PostAsync("Invitation/UpdateUserInvite", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public InviteUserVMId GetInvitationForVlidation(int InvitationId, int AgencyId, Guid ActivationCode)
         {
-            response = client.GetAsync("Invitation/GetInvitationForVlidation?InvitationId=" + InvitationId + "&AgencyId=" + AgencyId + "&ActivationCode=" + ActivationCode).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitationForVlidation?InvitationId=" + InvitationId + "&AgencyId=" + AgencyId + "&ActivationCode=" + ActivationCode, true).Result;
+            //response = client.GetAsync("Invitation/GetInvitationForVlidation?InvitationId=" + InvitationId + "&AgencyId=" + AgencyId + "&ActivationCode=" + ActivationCode).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public InviteUserVMId GetInvitationForVlidationStaff(int InvitationId, Guid ActivationCode)
         {
-            response = client.GetAsync("Invitation/GetInvitationForVlidationStaff?InvitationId=" + InvitationId + "&ActivationCode=" + ActivationCode).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitationForVlidationStaff?InvitationId=" + InvitationId + "&ActivationCode=" + ActivationCode, true).Result;
+            //response = client.GetAsync("Invitation/GetInvitationForVlidationStaff?InvitationId=" + InvitationId + "&ActivationCode=" + ActivationCode).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<InviteUserVMId>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         #region "UserAgencyLink"
@@ -276,21 +279,22 @@ namespace Proven.Service
                {"ActivationCode", ActiveCode}
 
             };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            //content = PreparePostContent(form);
+            return PostAsync<ReturnModel, Dictionary<string, string>>("Invitation/ExistingAgencyUserInvitation", form).Result;
+            //response = client.PostAsync("Invitation/ExistingAgencyUserInvitation", content).Result;
 
-            response = client.PostAsync("Invitation/ExistingAgencyUserInvitation", content).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<ReturnModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ReturnModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
-            }
+            //}
         }
 
 

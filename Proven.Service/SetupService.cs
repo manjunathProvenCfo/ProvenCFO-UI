@@ -17,93 +17,98 @@ namespace Proven.Service
         private StringContent content;
         public JobTitleModel GetJobTitleById(int Id)
         {
-            response = client.GetAsync("Setup/GetJobTitleById?id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<JobTitleModel>("Setup/GetJobTitleById?id=" + Id, true).Result;
+            //response = client.GetAsync("Setup/GetJobTitleById?id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
-               
-                return val;
-               
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
 
-            }
+            //    return val;
+
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+
+            //}
         }
         public JobTitleModel GetJobTitleByTitle(string jobTitle)
         {
-            response = client.GetAsync("Setup/GetJobTitleByTitle?jobTitle=" + jobTitle).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<JobTitleModel>("Setup/GetJobTitleByTitle?jobTitle=" + jobTitle, true).Result;
+            //response = client.GetAsync("Setup/GetJobTitleByTitle?jobTitle=" + jobTitle).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
 
-                return val;
+            //    return val;
 
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public JobTitleMainModel GetJobTitleList()
         {
-            response = client.GetAsync("Setup/GetJobTitleList").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<JobTitleMainModel>("Setup/GetJobTitleList").Result;
+            //response = client.GetAsync("Setup/GetJobTitleList").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public JobTitleMainModel GetJobTitleListInvitation()
         {
-            response = client.GetAsync("Setup/GetJobTitleListInvitation").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<JobTitleMainModel>("Setup/GetJobTitleListInvitation").Result;
+            //response = client.GetAsync("Setup/GetJobTitleListInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public JobTitleModel SaveJobTitle(JobTitleModel model)
         {
 
-            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Setup/AddNewJobTitle", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            return PostAsync<JobTitleModel, JobTitleModel>("Setup/AddNewJobTitle", model).Result;
+            //response = client.PostAsync("Setup/AddNewJobTitle", content).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
-        public JobTitleModel AddJobTitle(string title, string jobCode, string status,  string userid)
+        public JobTitleModel AddJobTitle(string title, string jobCode, string status, string userid)
         {
             var form = new Dictionary<string, string>
            {
@@ -112,20 +117,21 @@ namespace Proven.Service
                {"Status",status },
                {"CreatedBy", userid}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Setup/CreateJobTitles", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<JobTitleModel, Dictionary<string, string>>("Setup/CreateJobTitles", form).Result;
+            //response = client.PostAsync("Setup/CreateJobTitles", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public JobTitleModel UpdateJobTitle(string Id, string title, string jobCode, string status, string IsDeleted, string loginuser)
@@ -140,59 +146,62 @@ namespace Proven.Service
                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true).ToString()}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Setup/UpdateJobTitle", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<JobTitleModel, Dictionary<string, string>>("Setup/UpdateJobTitle", form).Result;
+            //response = client.PostAsync<JobTitleModel, Dictionary<string, string>>("Setup/UpdateJobTitle", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public JobTitleModel DeleteJobTitle(int id)
         {
             string result = string.Format("Setup/DeleteJobTitle?id={0}", id);
-            response = client.PostAsync(result, null).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return PostAsync<JobTitleModel>(result).Result;
+            //response = client.PostAsync(result, null).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public JobTitleModel RetireJobTitle(int id)
         {
-            var form = new Dictionary<string, string>
-            {
+            //var form = new Dictionary<string, string>
+            //{
 
-                {"Id", id.ToString()}
-            };
+            //    {"Id", id.ToString()}
+            //};
             string result = string.Format("Setup/DeactivateJobTitles?id={0}", id);
-            response = client.PostAsync(result, null).Result;
+            return PostAsync<JobTitleModel>(result).Result;
+            //response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<JobTitleModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<JobTitleModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public void Dispose()
         {
@@ -220,22 +229,23 @@ namespace Proven.Service
 
         public JobTitleModel GetJobUserRoleById(int Id)
         {
-            response = client.GetAsync("Setup/GetJobUserRoleById?id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<JobTitleModel>("Setup/GetJobUserRoleById?id=" + Id, true).Result;
+            //response = client.GetAsync("Setup/GetJobUserRoleById?id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    var val = JsonConvert.DeserializeObject<JobTitleModel>((JObject.Parse(_content)["resultData"]).ToString());
 
-                return val;
+            //    return val;
 
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
     }

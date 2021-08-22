@@ -86,34 +86,36 @@ namespace Proven.Service
 
         public ClientModel GetClientByName(string ClientName)
         {
-            response = client.GetAsync("Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26")).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<ClientModel>("Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26"), true).Result;
+            //response = client.GetAsync("Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26")).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public ClientModel GetClientById(int ClientID)
         {
-            response = client.GetAsync("Client/GetClientById?ClientId=" + ClientID).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<ClientModel>("Client/GetClientById?ClientId=" + ClientID, true).Result;
+            //response = client.GetAsync("Client/GetClientById?ClientId=" + ClientID).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
@@ -158,8 +160,7 @@ namespace Proven.Service
             };
 
             //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<ClientModel>("Client/CreateClientUser", content).Result;
+            return PostAsync<ClientModel, Dictionary<string, object>>("Client/CreateClientUser", form).Result;
             //response = client.PostAsync("Client/CreateClientUser", content).Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -202,8 +203,7 @@ namespace Proven.Service
             };
 
             //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            content = PreparePostContent(form);
-            return PostAsync<ClientModel>("Client/UpdateClientAgency", content).Result;
+            return PostAsync<ClientModel, Dictionary<string, object>>("Client/UpdateClientAgency", form).Result;
             //response = client.PostAsync("Client/UpdateClientAgency", content).Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -270,21 +270,23 @@ namespace Proven.Service
 
         public ClientModel GetClientInvitationAssociationById(int id)
         {
-            response = client.GetAsync("Client/GetClientInvitationAssociationById?Id=" + id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<ClientModel>("Client/GetClientInvitationAssociationById?Id=" + id, true).Result;
+            //response = client.GetAsync("Client/GetClientInvitationAssociationById?Id=" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<ClientModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public bool IsClientInvitationAssociationByIdExists(int id)
         {
+            //return GetAsync("Client/IsClientInvitationAssociationByIdExists?Id=" + id).Result;
             response = client.GetAsync("Client/IsClientInvitationAssociationByIdExists?Id=" + id).Result;
             if (response.IsSuccessStatusCode)
             {
