@@ -113,7 +113,6 @@ var joinChannel = function (channel) {
 }
 
 var addMediaMessage = function (file) {
-    debugger
     const formData = new FormData();
     formData.append('file', file);
     activeChannel.sendMessage(formData).then(function (msg) {
@@ -123,7 +122,7 @@ var addMediaMessage = function (file) {
             $newMessagesDiv.remove();
         let lastMessage = $channelMessages.children('.media:last')
         if (lastMessage && lastMessage.length > 0)
-            channel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
+            activeChannel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
     });
 }
 
@@ -467,6 +466,10 @@ var addMessage = function (message) {
     }
     //
     if (msg.type == "media") {
+        let checkMediaMessage = activeChannelMessages.filter(x => x?.media?.sid == message.media.sid);
+        if (checkMediaMessage.length == 0) {
+            activeChannelMessages.push(message);
+        }
         msg.media.getContentTemporaryUrl().then(function (mediaURL, msg) {
             // log media temporary URL
             if (!isEmptyOrBlank(mediaURL)) {
