@@ -695,22 +695,26 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
+                           
                             getTeamMembersList();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
                             $('.spEntityName').html(String(data.EntityName));
-                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
-                            let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
-                            $('#spMonths').html(month);
                             $('#spTeamName').html(String(data.TeamName));
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                            getBankSummary();
+                            SetUserPreferencesForAgency();
+                            let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
+                            $('#spMonths').html(month);
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
+                            debugger;
+                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));                                                                             
                             $('.badge-soft-success').removeClass('d-none');
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
-                            SetUserPreferencesForAgency();
+                          
 
-                            getBankSummary();
+                           
                         }
                         else {
 
