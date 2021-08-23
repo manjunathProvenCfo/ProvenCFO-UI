@@ -27,14 +27,14 @@ namespace Proven.Service
         {
             return new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
         }
-        private async Task<HttpResponseMessage> GetBase(string url)
+        private HttpResponseMessage GetBase(string url)
         {
-            return await client.GetAsync(url).ConfigureAwait(false);
+            return client.GetAsync(url).Result;
         }
 
         public async Task<T> GetAsync<T>(string url, bool readResultDataProp = false)
         {
-            var response = await GetBase(url);
+            var response = GetBase(url);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -50,9 +50,9 @@ namespace Proven.Service
             }
         }
 
-        private async Task<HttpResponseMessage> PostBase(string url, HttpContent httpContent)
+        private HttpResponseMessage PostBase(string url, HttpContent httpContent)
         {
-            return await client.PostAsync(url, httpContent).ConfigureAwait(false);
+            return client.PostAsync(url, httpContent).Result;
         }
         public async Task<T> PostAsync<T>(string url)
         {
@@ -66,7 +66,7 @@ namespace Proven.Service
         }
         public async Task<T> PostAsync<T>(string url, HttpContent httpContent = null, bool readResultDataProp = false)
         {
-            var response = await PostBase(url, httpContent);
+            var response = PostBase(url, httpContent);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
