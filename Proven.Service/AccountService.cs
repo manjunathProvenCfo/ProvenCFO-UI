@@ -17,18 +17,19 @@ namespace Proven.Service
         private StringContent content;
         public LoginMainModel LoginAccess(string username, string password)
         {
-            response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<LoginMainModel>("Account/Login?username=" + username + "&Password=" + password).Result;
+            //response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public LoginModel Register(string email, string passwordhash, string confirmpassword, string firstname, string lastname, int? UserType, int? AgencyID)
@@ -43,20 +44,21 @@ namespace Proven.Service
                {"UserType", UserType.HasValue == true? Convert.ToString(UserType.Value): ""},
                {"AgencyID", AgencyID.HasValue == true? Convert.ToString(AgencyID.Value): ""},
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/Register/register", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<LoginModel, Dictionary<string, string>>("Account/Register/register", form).Result;
+            //response = client.PostAsync("Account/Register/register", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public ReconciliationMainModel CreateReconciliation(string id, string account_name, string amount, string company, string date, string description, string gl_account, string reconciled, string reference, string rule, string type)
@@ -92,7 +94,7 @@ namespace Proven.Service
             client.DefaultRequestHeaders.Authorization
                          = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWNvbmNpbGlhdGlvblNlcnZpY2VBY2Nlc3NUb2tlbiIsImp0aSI6ImM5MDdlM2RmLWY2YzgtNDg5MC05Y2RlLThiZmM5Zjg2ZjQyZCIsIklkIjoiNDBjZTQxYmItNTkzNi00MGMxLTk3ZjktYjk4YTJmZmY2MDM3IiwiRmlyc3ROYW1lIjoicGxhbmEiLCJMYXN0TmFtZSI6ImRhdGEiLCJVc2VyTmFtZSI6ImluZm9AcGxlbmFkYXRhLmNvbSIsIkVtYWlsIjoiaW5mb0BwbGVuYWRhdGEuY29tIiwiZXhwIjoxNjI3NjQzNTk0LCJpc3MiOiJQcm92ZW5DRk9BdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IlRoaXJkUGFydHlTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.Zurze_b-v8hSmWrSUDLd4R7vF7agchYMLfEZJTzPC7Q");
             response = client.PostAsync("Reconciliation/CreateReconciliation", content).Result;
-           
+
 
             if (response.IsSuccessStatusCode)
             {
@@ -115,20 +117,21 @@ namespace Proven.Service
                {"Email", email},
 
            };
-            var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/ForgotPassword/ForgotPassword", content).Result;
+            //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<LoginModel, Dictionary<string, string>>("Account/ForgotPassword/ForgotPassword", form).Result;
+            //response = client.PostAsync("Account/ForgotPassword/ForgotPassword", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public LoginProfileMainModel ChangePasswordForProfile(string oldpassword, string newpassword, string confirmpassword, string id)
@@ -141,20 +144,21 @@ namespace Proven.Service
                 {"Id", id}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/ResetPassword/ResetPassword", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<LoginProfileMainModel, Dictionary<string, string>>("Account/ResetPassword/ResetPassword", form).Result;
+            //response = client.PostAsync("Account/ResetPassword/ResetPassword", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginProfileMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginProfileMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public LoginMainModel ChangePassword(string oldpassword, string newpassword, string confirmpassword, string id)
@@ -167,20 +171,21 @@ namespace Proven.Service
                 {"Id", id}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/ResetPassword/ResetPassword", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<LoginMainModel, Dictionary<string, string>>("Account/ResetPassword/ResetPassword", form).Result;
+            //response = client.PostAsync("Account/ResetPassword/ResetPassword", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public LoginModel SetPassword(string id, string newpassword, string confirmpassword, string ActivationCode)
@@ -193,126 +198,133 @@ namespace Proven.Service
                {"confirmpassword", confirmpassword}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/SetPassword/SetPassword", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<LoginModel, Dictionary<string, string>>("Account/SetPassword/SetPassword", form).Result; 
+            //response = client.PostAsync("Account/SetPassword/SetPassword", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<LoginModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<LoginModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public UserMainModel RegisteredUserList()
         {
-            response = client.GetAsync("Account/GetRegisteredUsers").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<UserMainModel>("Account/GetRegisteredUsers").Result;
+            //response = client.GetAsync("Account/GetRegisteredUsers").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public InviteUserMainModel RegisteredUserListbyAgency(string selectedAgency)
         {
-            response = client.GetAsync("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<InviteUserMainModel>("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;
+            //response = client.GetAsync("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
         public UserDetailMainModel GetUserDetail(string id)
         {
             string result = string.Format("Account/GetUserDetail?id={0}", id);
-            response = client.GetAsync(result).Result;
+            return GetAsync<UserDetailMainModel>(result).Result;
+            //response = client.GetAsync(result).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public UserDetailMainModel GetUserById(int Invite_id)
         {
             string result = string.Format("Invitation/GetUserById?id={0}", Invite_id);
-            response = client.GetAsync(result).Result;
-            //HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
+            return GetAsync<UserDetailMainModel>(result).Result;
+            //response = client.GetAsync(result).Result;
+            ////HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public ReturnModel IsInviteValied(int Invite_id)
         {
             string result = string.Format("Invitation/IsInviteValied?id={0}", Invite_id);
-            response = client.GetAsync(result).Result;
-            //HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
+            return GetAsync<ReturnModel>(result).Result;
+            //response = client.GetAsync(result).Result;
+            ////HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ReturnModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<ReturnModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public ReturnModel IsInviteRegisterd(string Invite_email)
         {
             string result = string.Format("Invitation/IsInviteRegisterd?email={0}", Invite_email);
-            response = client.GetAsync(result).Result;
-            //HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
+            return GetAsync<ReturnModel>(result).Result;
+            //response = client.GetAsync(result).Result;
+            ////HttpResponseMessage response = client.GetAsync("Account/Login?username=" + username + "&Password=" + password).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ReturnModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<ReturnModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
@@ -330,20 +342,21 @@ namespace Proven.Service
                 {"LinkedInProfile", model.LinkedInProfile},
                {"Id", model.Id}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Account/UpdateUserDetail", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<UserDetailMainModel, Dictionary<string, string>>("Account/UpdateUserDetail", form).Result;
+            //response = client.PostAsync("Account/UpdateUserDetail", content).Result;
 
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.Content.ReadAsStringAsync().Result;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserDetailMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.Content.ReadAsStringAsync().Result;
+            //    throw new Exception(msg);
+            //}
         }
         public void Dispose()
         {
@@ -371,17 +384,18 @@ namespace Proven.Service
 
         public UserMainModel GetRegisteredStaffUserList()
         {
-            response = client.GetAsync("Account/GetRegisterdStaffUserList").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<UserMainModel>(content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<UserMainModel>("Account/GetRegisterdStaffUserList").Result;
+            //response = client.GetAsync("Account/GetRegisterdStaffUserList").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<UserMainModel>(content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
     }
 }

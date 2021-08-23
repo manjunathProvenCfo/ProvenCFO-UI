@@ -17,44 +17,46 @@ namespace Proven.Service
         private StringContent content;
         public async Task<string> GetToken(string identity)
         {
-            response = await client.PostAsync("Twilio/Token?identity=" + identity, null).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<string>(content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return await PostAsync<string>("Twilio/Token?identity=" + identity);
+            //response = await client.PostAsync("Twilio/Token?identity=" + identity, null).ConfigureAwait(false);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            //    return JsonConvert.DeserializeObject<string>(content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public async Task<bool> UpdateTwilioUserId(string UserId, string TwilioUserId)
         {
             string queryString = $"UserId={UserId}&TwilioUserId={TwilioUserId}";
-            response = await client.PostAsync($"Twilio/UpdateTwilioUserId?{queryString}", null);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<bool>(content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return await PostAsync<bool>($"Twilio/UpdateTwilioUserId?{queryString}");
+            //response = await client.PostAsync($"Twilio/UpdateTwilioUserdId?{queryString}", null);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            //    return JsonConvert.DeserializeObject<bool>(content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public async Task InsertUpdateTwilioConversation(TwilioConversations twilioConversations)
         {
-
-            response = await client.PostAsync($"Twilio/InsertUpdateTwilioConversation", PreparePostContent(twilioConversations));
-            if (!response.IsSuccessStatusCode)
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            await client.PostAsync($"Twilio/InsertUpdateTwilioConversation", PreparePostContent(twilioConversations));
+            //response = await client.PostAsync($"Twilio/InsertUpdateTwilioConversation", PreparePostContent(twilioConversations));
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public void Dispose()

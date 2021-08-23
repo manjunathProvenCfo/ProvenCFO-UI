@@ -17,76 +17,79 @@ namespace Proven.Service
         private StringContent content;
         public TeamsMainModel GetTeamsList()
         {
+            return GetAsync<TeamsMainModel>("Teams/GetAllTeams").Result;
+            //response = client.GetAsync("Teams/GetAllTeams").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamsMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            response = client.GetAsync("Teams/GetAllTeams").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamsMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
-            }
+            //}
         }
 
         public TeamsVM GetTeamsById(int Id)
         {
-            response = client.GetAsync("Teams/GetTeamsById?Id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<TeamsVM>("Teams/GetTeamsById?Id=" + Id, true).Result;
+            //response = client.GetAsync("Teams/GetTeamsById?Id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public TeamsVM GetTeamsByName(string TeamName)
         {
-            response = client.GetAsync("Teams/GetTeamByName?TeamName=" + TeamName).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<TeamsVM>("Teams/GetTeamByName?TeamName=" + TeamName, true).Result;
+            //response = client.GetAsync("Teams/GetTeamByName?TeamName=" + TeamName).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public TeamsVM AddTeam(string TeamName, string status, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string userid)
         {
             var form = new Dictionary<string, string>
             {
-                {"TeamName", TeamName}, 
+                {"TeamName", TeamName},
                 {"Status", status },
                 {"TeamMemberId1", TeamMemberId1 },
                 {"TeamMemberId2", TeamMemberId2 },
                 {"TeamMemberId3", TeamMemberId3 },
                 {"CreatedBy", userid}
             };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Teams/CreateTeam", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<TeamsVM, Dictionary<string, string>>("Teams/CreateTeam", form).Result;
+            //response = client.PostAsync("Teams/CreateTeam", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamsVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamsVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
         public TeamsVM UpdateTeam(string Id, string TeamName, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string status, string IsDeleted, string userid)
         {
@@ -102,85 +105,89 @@ namespace Proven.Service
                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true).ToString()}
 
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Teams/UpdateTeam", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<TeamsVM, Dictionary<string, string>>("Teams/UpdateTeam", form).Result;
+            //response = client.PostAsync("Teams/UpdateTeam", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamsVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamsVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public TeamsVM DeleteTeams(int Id)
         {
-            var form = new Dictionary<string, string>
-           {
-               {"Id", Id.ToString()}
-           };
+            // var form = new Dictionary<string, string>
+            //{
+            //    {"Id", Id.ToString()}
+            //};
             string result = string.Format("Teams/DeleteTeam?Id={0}", Id);
-            HttpResponseMessage response = client.PostAsync(result, null).Result;
+            return PostAsync<TeamsVM>(result).Result;
+            //HttpResponseMessage response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamsVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamsVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public TeamUserAssociationVM DeleteTeamUserAssociation(int Id)
         {
-            var form = new Dictionary<string, string>
-           {
-               {"Id", Id.ToString()}
-           };
+            // var form = new Dictionary<string, string>
+            //{
+            //    {"Id", Id.ToString()}
+            //};
             string result = string.Format("Teams/DeleteTeamUserAssociation?Id={0}", Id);
-            HttpResponseMessage response = client.PostAsync(result, null).Result;
+            return PostAsync<TeamUserAssociationVM>(result).Result;
+            //HttpResponseMessage response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamUserAssociationVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamUserAssociationVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
         public TeamsVM RetireTeams(int Id)
         {
-            var form = new Dictionary<string, string>
-            {
+            //var form = new Dictionary<string, string>
+            //{
 
-                {"Id", Id.ToString()}
-            };
+            //    {"Id", Id.ToString()}
+            //};
             string result = string.Format("Teams/DeactivateTeams?Id={0}", Id);
-            response = client.PostAsync(result, null).Result;
+            return PostAsync<TeamsVM>(result).Result;
+            //response = client.PostAsync(result, null).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<TeamsVM>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<TeamsVM>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public void Dispose()
@@ -208,18 +215,19 @@ namespace Proven.Service
 
         public TeamsVM GetTeamClientById(int Id)
         {
-            response = client.GetAsync("Teams/GetTeamClientById?Id=" + Id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
-                return val;
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-            }
+            return GetAsync<TeamsVM>("Teams/GetTeamClientById?Id=" + Id, true).Result;
+            //response = client.GetAsync("Teams/GetTeamClientById?Id=" + Id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    var val = JsonConvert.DeserializeObject<TeamsVM>((JObject.Parse(_content)["resultData"]).ToString());
+            //    return val;
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+            //}
         }
 
     }

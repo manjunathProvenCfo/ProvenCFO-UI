@@ -10,134 +10,138 @@ using System.Threading.Tasks;
 
 namespace Proven.Service
 {
-    public class RoleService : BaseService , IDisposable
+    public class RoleService : BaseService, IDisposable
     {
         private bool isDisposed = false;
         private HttpResponseMessage response;
         private StringContent content;
         public RoleMainModel GetRoles()
         {
-            
-          response = client.GetAsync("Role/GetAllRole").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<RoleMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<RoleMainModel>("Role/GetAllRole").Result;
+            //response = client.GetAsync("Role/GetAllRole").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<RoleMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
         public RoleMainModel GetAllRoleInvitation()
         {
+            return GetAsync<RoleMainModel>("Role/GetAllRoleInvitation").Result;
+            //response = client.GetAsync("Role/GetAllRoleInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<RoleMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            response = client.GetAsync("Role/GetAllRoleInvitation").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<RoleMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
-            }
+            //}
         }
 
         public RolesViewModel GetRoleById(string id)
         {
-       response = client.GetAsync("Role/GetRole?id="+id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<RolesViewModel>("Role/GetRole?id=" + id, true).Result;
+            //response = client.GetAsync("Role/GetRole?id=" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
-                //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
-                return val;
-                // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
+            //    return val;
+            //    // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
         public RolesViewModel GetUserRoleById(string id)
         {
-            response = client.GetAsync("Role/GetUserRoleById?Id=" + id).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<RolesViewModel>("Role/GetUserRoleById?Id=" + id, true).Result;
+            //response = client.GetAsync("Role/GetUserRoleById?Id=" + id).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
-                //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
-                return val;
-                // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
+            //    return val;
+            //    // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
 
         public RolesViewModel GetRoleByName(string roleName)
         {
-           response = client.GetAsync("Role/GetRoleByName?roleName=" + roleName).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
+            return GetAsync<RolesViewModel>("Role/GetRoleByName?roleName=" + roleName, true).Result;
+            //response = client.GetAsync("Role/GetRoleByName?roleName=" + roleName).Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
 
-                var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
-                //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
-                return val;
-                // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //    var val = JsonConvert.DeserializeObject<RolesViewModel>((JObject.Parse(_content)["resultData"]).ToString());
+            //    //var val = JsonConvert.DeserializeObject<RoleMainModel>(_content);
+            //    return val;
+            //    // model = JsonConvert.DeserializeObject<List<RoleModel>>(_content.Result);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
-        public RolesViewModel AddRoles(string name,string status,string userid)
+        public RolesViewModel AddRoles(string name, string status, string userid)
         {
-            
-            
+
+
             var form = new Dictionary<string, string>
            {
                {"name", name},
                {"Status",status },
-               {"CreatedBy", userid}               
+               {"CreatedBy", userid}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Role/CreateRole", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/CreateRole", form).Result;
+            //response = client.PostAsync("Role/CreateRole", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<RolesViewModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<RolesViewModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
 
-        public RolesViewModel UpdateRoles(string id,string name, string status, string userid)
+        public RolesViewModel UpdateRoles(string id, string name, string status, string userid)
         {
             var form = new Dictionary<string, string>
            {
@@ -146,20 +150,21 @@ namespace Proven.Service
                {"Status",status },
                {"ModifiedBy", userid}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Role/UpdateRole", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/UpdateRole", form).Result;
+            //response = client.PostAsync("Role/UpdateRole", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<RolesViewModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<RolesViewModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public RolesViewModel DeleteRoles(string id)
         {
@@ -167,20 +172,21 @@ namespace Proven.Service
            {
                {"Id", id}
            };
-            content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            response = client.PostAsync("Role/DeleteRole", content).Result;
+            //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/DeleteRole", form).Result;
+            //response = client.PostAsync("Role/DeleteRole", content).Result;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<RolesViewModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<RolesViewModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public void Dispose()
         {
