@@ -285,35 +285,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="media align-items-center mb-4">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <div class="d-flex justify-content-between align-items-center flex-row">
-                                    <div class="avatar avatar-2xl">
-                                        @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
-                                        <img class="rounded-circle" id="spProfileImage2" />
-
-                                    </div>
-                                    <div class="media-body ml-3">
-                                        <p class="mb-0 color-gray-shades"><span id="spStaffName2"></span></p>
-                                        <p class="text-500 fs--2 mb-0"><span id="spJobTitle2"></span></p>
-                                    </div>
-                                </div>
-                                <div class="action-icons">
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope'></span>
-                                    </a>
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fab fa-rocketchat'></span>
-                                    </a>
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fas fa-phone'></span>
-                                    </a>
-                                    <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile2">
-                                        <span class='far fab fa-linkedin'></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="media align-items-center mb-4">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
@@ -338,6 +310,35 @@
                                         <span class='far fas fa-phone'></span>
                                     </a>
                                     <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile3">
+                                        <span class='far fab fa-linkedin'></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="media align-items-center mb-4">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between align-items-center flex-row">
+                                    <div class="avatar avatar-2xl">
+                                        @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
+                                        <img class="rounded-circle" id="spProfileImage2" />
+
+                                    </div>
+                                    <div class="media-body ml-3">
+                                        <p class="mb-0 color-gray-shades"><span id="spStaffName2"></span></p>
+                                        <p class="text-500 fs--2 mb-0"><span id="spJobTitle2"></span></p>
+                                    </div>
+                                </div>
+                                <div class="action-icons">
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fa-envelope'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fab fa-rocketchat'></span>
+                                    </a>
+                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                        <span class='far fas fa-phone'></span>
+                                    </a>
+                                    <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile2">
                                         <span class='far fab fa-linkedin'></span>
                                     </a>
                                 </div>
@@ -612,6 +613,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
+                        
                         if (data != null) {
                             var count = 1;
                             $.each(data.TeamMembers, function (key, object) {
@@ -629,7 +631,7 @@
                                 }
                                 else {
                                     $('#spStaffName' + count).html(String(''));
-                                }
+                                }                              
                                 if (object.Jobtitle != null && object.Jobtitle != '') {
                                     $('#spJobTitle' + count).html(String(object.Jobtitle));
                                 }
@@ -695,22 +697,27 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
+                           
                             getTeamMembersList();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
-                            $('.spEntityName').html(String(data.EntityName));
-                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                            $('.spEntityName').html(String(data.EntityName));                            
+                            $('#spTeamName').html(String(data.TeamName));                          
+                            
+                            $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                            getBankSummary();
+                            SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
-                            $('#spTeamName').html(String(data.TeamName));
-                            $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
+                            
+                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));                                                                             
                             $('.badge-soft-success').removeClass('d-none');
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
-                            SetUserPreferencesForAgency();
+                          
 
-                            getBankSummary();
+                           
                         }
                         else {
 
