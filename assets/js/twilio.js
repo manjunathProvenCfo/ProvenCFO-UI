@@ -6,7 +6,7 @@ var activeChannelPage;
 var activeChannelMessages;
 var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
-const Chat_Page_Size = 5;
+const Chat_Page_Size = 30;
 
 var getToken = function () {
     postAjaxSync("/twilio/token?identity=" + chat.userEmail, null, function (response) {
