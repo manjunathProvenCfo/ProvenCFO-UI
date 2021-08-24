@@ -256,9 +256,11 @@ namespace ProvenCfoUI.Controllers
                                     }
                                     // createClientVM.XeroScope = createClientVM.XeroScopeArray.ToString();
                                     //string result = string.Join(".", array);
-                                    //string.Join(",", Client);
-
-                                    createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                    //string.Join(",", Client);s
+                                    if (Clientvm.XeroScopeArray != null)
+                                    {
+                                        createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                    }
                                     //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), Convert.ToDateTime(createClientVM.StartDate), createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
                                     if (result == null)
@@ -275,6 +277,10 @@ namespace ProvenCfoUI.Controllers
                                     {
                                         ViewBag.ErrorMessage = "Exist";
                                         return View("CreateClient", createClientVM);
+                                    }
+                                    if (Clientvm.XeroScopeArray != null)
+                                    {
+                                        createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
                                     var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
 
