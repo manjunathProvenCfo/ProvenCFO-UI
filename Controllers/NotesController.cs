@@ -3,6 +3,7 @@ using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,9 @@ namespace ProvenCfoUI.Controllers
             {
                 using (NotesService objNotes = new NotesService())
                 {
-                    int AgencyID = 77;
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreference"];
+
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
@@ -41,6 +43,26 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+        [CheckSession]
+        [HttpGet]
+        public ActionResult CreateNewNotes()
+        {
+            try
+            {
+                NotesDescriptionModel result = new NotesDescriptionModel();
+                result.CreatedBy = Session["UserFullName"].ToString();
+                return PartialView("CreateNewNotes", result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
+
 
     }
 }
