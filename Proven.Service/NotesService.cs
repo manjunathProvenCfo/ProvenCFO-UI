@@ -51,7 +51,7 @@ namespace Proven.Service
         }
 
 
-        public NotesDescriptionMainModel CreateNotes(NotesDescriptionModel notesDescription, string LoginUserID)
+        public NotesDescriptionMainModel CreateNewNotes(NotesDescriptionModel notesDescription, string LoginUserID)
         {
             var form = new Dictionary<string, dynamic>
            {

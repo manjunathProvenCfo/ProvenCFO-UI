@@ -61,6 +61,100 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult CreatNewTask(KanbanTasksViewModel Task)
+        {
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+                    int AgencyID = 0;
+                    string Assignee = string.Empty;
+                    var LoginUserid = Session["UserId"].ToString();
+                    KanbanTasksModel NewTasks = new KanbanTasksModel();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+
+
+
+                    NewTasks.TaskTitle = Task.TaskTitle;
+                    NewTasks.TaskDescription = Task.TaskDescription;
+                    NewTasks.SegmentTypeID_Ref = 1;
+                    if (Task.dpStartDate != null && Task.dpStartDate != "")
+                    {
+                        NewTasks.StartDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpStartDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
+                    }
+                    if (Task.dpEndDate != null && Task.dpEndDate != "")
+                    {
+                        NewTasks.EndDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpEndDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
+                    }
+                    if (Task.dpDueDate != null && Task.dpDueDate != "")
+                    {
+                        NewTasks.DueDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpDueDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
+                    }
+                    NewTasks.Priority = Task.Priority;
+                    NewTasks.Reporter = LoginUserid;
+                    NewTasks.Assignee = Task.Assignee;
+                    NewTasks.AgencyId_Ref = AgencyID;
+                    NewTasks.Labels = Task.Labels;
+                    NewTasks.Status = "Active";
+                    NewTasks.CreatedBy = LoginUserid;
+                    NewTasks.IsDeleted = false;
+                    NewTasks.EstimatedHours = Task.EstimatedHours;
+                    NewTasks.TaskType = Task.TaskType;
+                    var _AddedFiles = TempData["FileAttaching"] as List<KanbanAttachmentsVM>;
+                    NewTasks.KanbanAttachments = _AddedFiles;
+                    using (NeedsService objNeeds = new NeedsService())
+                    {
+                        var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
+                        if (result.Status == true)
+                        {
+                            if (result.ResultData != null && result.ResultData.Count > 0)
+                            {
+                                var _AddedFilesStream = TempData["FilesStream"] as List<KanbanAttachmentsStream>;
+                                //var TaskId = result.ResultData[0].Id;
+                                //foreach (var item in _AddedFiles)
+                                //{
+                                //    var filestream = _AddedFilesStream.Where(x => x.AttachedFileName == item.AttachedFileName).FirstOrDefault();
+                                //    if (filestream != null)
+                                //    { 
+                                //        item.FilePath = item.FilePath + @"\" + TaskId + @"\" + item.AttachedFileName;
+
+                                //    }
+
+                                //}
+
+                            }
+                            ViewBag.ErrorMessage = "Created";
+                            return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "Exist";
+                            return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Exist";
+                    return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = "Task title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
         [CheckSession]
         public ActionResult OpenTask()
         {
@@ -386,98 +480,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        [CheckSession]
-        [HttpPost]
-        public JsonResult CreatNewTask(KanbanTasksViewModel Task)
-        {
-            try
-            {
-
-                if (ModelState.IsValid)
-                {
-                    int AgencyID = 0;
-                    string Assignee = string.Empty;
-                    var LoginUserid = Session["UserId"].ToString();
-                    KanbanTasksModel NewTasks = new KanbanTasksModel();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    if (UserPref != null && UserPref.Count() > 0)
-                    {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    }
-
-
-
-                    NewTasks.TaskTitle = Task.TaskTitle;
-                    NewTasks.TaskDescription = Task.TaskDescription;
-                    NewTasks.SegmentTypeID_Ref = 1;
-                    if (Task.dpStartDate != null && Task.dpStartDate != "")
-                    {
-                        NewTasks.StartDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpStartDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
-                    }
-                    if (Task.dpEndDate != null && Task.dpEndDate != "")
-                    {
-                        NewTasks.EndDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpEndDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
-                    }
-                    if (Task.dpDueDate != null && Task.dpDueDate != "")
-                    {
-                        NewTasks.DueDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpDueDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
-                    }
-                    NewTasks.Priority = Task.Priority;
-                    NewTasks.Reporter = LoginUserid;
-                    NewTasks.Assignee = Task.Assignee;
-                    NewTasks.AgencyId_Ref = AgencyID;
-                    NewTasks.Labels = Task.Labels;
-                    NewTasks.Status = "Active";
-                    NewTasks.CreatedBy = LoginUserid;
-                    NewTasks.IsDeleted = false;
-                    NewTasks.EstimatedHours = Task.EstimatedHours;
-                    NewTasks.TaskType = Task.TaskType;
-                    var _AddedFiles = TempData["FileAttaching"] as List<KanbanAttachmentsVM>;
-                    NewTasks.KanbanAttachments = _AddedFiles;
-                    using (NeedsService objNeeds = new NeedsService())
-                    {
-                        var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
-                        if (result.Status == true)
-                        {
-                            if (result.ResultData != null && result.ResultData.Count > 0)
-                            {
-                                var _AddedFilesStream = TempData["FilesStream"] as List<KanbanAttachmentsStream>;
-                                //var TaskId = result.ResultData[0].Id;
-                                //foreach (var item in _AddedFiles)
-                                //{
-                                //    var filestream = _AddedFilesStream.Where(x => x.AttachedFileName == item.AttachedFileName).FirstOrDefault();
-                                //    if (filestream != null)
-                                //    { 
-                                //        item.FilePath = item.FilePath + @"\" + TaskId + @"\" + item.AttachedFileName;
-
-                                //    }
-
-                                //}
-
-                            }
-                            ViewBag.ErrorMessage = "Created";
-                            return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
-                        }
-                        else
-                        {
-                            ViewBag.ErrorMessage = "Exist";
-                            return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Exist";
-                    return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = "Task title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
-                throw ex;
-            }
-        }
+        
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase file)
         {
