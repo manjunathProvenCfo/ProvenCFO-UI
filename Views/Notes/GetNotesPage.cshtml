@@ -42,24 +42,24 @@
         <div class="col-9 order-1">
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
-                if (Categories.NotesCategoriesList != null)
-                {
-                    foreach (var Category in Categories.NotesCategoriesList)
-                    {
-
-                        <div class="mb-3" id="v-pills-@Categories.NoteCategory">
-                            <div class="card">
-                                <div class="card-header d-flex align-items-center justify-content-between">
-                                    <h3>@Categories.NoteCategory</h3>
-                                    @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
-                                    @*Here I am writing new line for add button for testing*@
-                                    <div class="dropdown">
-                                        <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" data-toggle="modal" id="notes-create-new-btn" data-target="#notes-modal-new">
-                                            <span class="fas fa-plus"></span>
-                                        </div>
-                                    </div>
-
+                <div class="mb-3" id="v-pills-@Categories.NoteCategory">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h3>@Categories.NoteCategory</h3>
+                            @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
+                            @*Here I am writing new line for add button for testing*@
+                            <div class="dropdown">
+                                <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" data-toggle="modal" id="notes-create-new-btn" data-target="#notes-modal-new">
+                                    <span class="fas fa-plus"></span>
                                 </div>
+                            </div>
+
+                        </div>
+                        @if (Categories.NotesCategoriesList != null)
+                        {
+                            foreach (var Category in Categories.NotesCategoriesList)
+                            {
+
                                 <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h6 style="color: #00BE82; "> @Category.Title</h6>
@@ -97,11 +97,12 @@
                                         @*<hr>*@
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    }
 
-                }
+                            }
+
+                        }
+                    </div>
+                </div>
             }
             @{ Html.RenderAction("CreateNewNotes", "Notes"); }
         </div>
@@ -151,12 +152,12 @@
                 var Description = tinyMCE.activeEditor.getContent();
                 var IsPublished = '';
                 var Status = '',
-               
-               
-               
-                
-               
-                
+
+
+
+
+
+
 
                 var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
 
