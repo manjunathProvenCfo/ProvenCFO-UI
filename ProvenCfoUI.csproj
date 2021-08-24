@@ -1026,6 +1026,7 @@
     <Content Include="Views\Communication\Chat.cshtml" />
     <Content Include="Views\Notes\GetNotesPage.cshtml" />
     <Content Include="Views\Reports\ReportsList.cshtml" />
+    <Content Include="Views\Notes\CreateNewNotes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

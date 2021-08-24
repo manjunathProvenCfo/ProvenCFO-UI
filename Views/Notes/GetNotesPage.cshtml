@@ -9,6 +9,8 @@
         </div>
         <!--/.bg-holder-->
 
+
+
         <div class="card-body" id="v-pills-Summary">
             <div class="row">
                 <div class="col-lg-9">
@@ -49,7 +51,14 @@
                             <div class="card">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h3>@Categories.NoteCategory</h3>
-                                    <div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>
+                                    @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
+                                    @*Here I am writing new line for add button for testing*@
+                                    <div class="dropdown">
+                                        <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" data-toggle="modal" id="notes-create-new-btn" data-target="#notes-modal-new">
+                                            <span class="fas fa-plus"></span>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -82,7 +91,7 @@
                                         </div>
                                     </div>
                                     <p> @Category.Description</p>
-                                   
+
                                     <div class="Words">
                                         Created by: @Category.CreatedByUser , @Category.CreatedDate | Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate
                                         @*<hr>*@
@@ -94,8 +103,9 @@
 
                 }
             }
-
+            @{ Html.RenderAction("CreateNewNotes", "Notes"); }
         </div>
+
     </div>
 
     <footer>
@@ -109,6 +119,31 @@
         </div>
     </footer>
 </div>
+
+@section Scripts
+    {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $('#notes-create-new-btn').click(function (e) {
+            tinymce.get("txtDescription").getContent()
+            tinymce.get("txtDescription").setContent("");
+            tinyMCE.activeEditor.setContent("");
+            gCurrentViewTaskId = '';
+            $('#divTagView ul').empty();
+            $('#divTag ul').empty();
+
+            $('#txtTaskTitle').val('');
+            $.each($('#attachmentContainer_Add .media'), function (key, attachment) {
+                attachment.remove();
+
+            });
+            $('#txtTaskTitle').val('');
+            $('#previews').empty();
+
+        });
+
+    </script>
+}
 
 
 
