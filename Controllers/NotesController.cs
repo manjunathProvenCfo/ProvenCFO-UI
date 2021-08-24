@@ -24,7 +24,6 @@ namespace ProvenCfoUI.Controllers
             {
                 using (NotesService objNotes = new NotesService())
                 {
-
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
