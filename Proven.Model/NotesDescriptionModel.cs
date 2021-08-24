@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,10 @@ namespace Proven.Model
         public int? Id { get; set; }
         public string NoteCatId { get; set; }
         public string AgencyId { get; set; }
+        public string IsPublished { get; set; }
+        public string Position { get; set; }
+        [Required(ErrorMessage = "Notes Title has a required field.")]
+        [StringLength(250, ErrorMessage = "Maximum 250 characters exceeded")]
         public string Title { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
