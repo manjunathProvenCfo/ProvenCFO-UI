@@ -33,7 +33,7 @@
                 <div class="nav flex-column nav-pills" @*id="@Categories.NoteCategory.ToString().Replace(" ", "_")"*@>
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
-                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
+                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
                     }
                 </div>
             </div>
@@ -42,14 +42,14 @@
         <div class="col-9 order-1">
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
-                <div class="mb-3" id="v-pills-@Categories.NoteCategory">
+                <div class="mb-3 v-pills-div" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
                     <div class="card">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
                             @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
                             @*Here I am writing new line for add button for testing*@
                             <div class="dropdown">
-                                <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" data-toggle="modal" id="notes-create-new-btn" data-target="#notes-modal-new">
+                                <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
                                     <span class="fas fa-plus"></span>
                                 </div>
                             </div>
@@ -121,92 +121,78 @@
     </footer>
 </div>
 
-@section Scripts
-    {
+@section Scripts{
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
-    @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        $(document).ready({
-            $('#notes-create-new-btn').click(function (e) {
+
+    <script type="text/javascript">
+        $(function () {
+            $("[id='notes-create-new-btn']").click(function (e) {
+                let btnAdd = $(this);
+                let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
+                $("#NoteCatId").val(categoryId);
                 tinymce.get("txtDescription").getContent()
                 tinymce.get("txtDescription").setContent("");
                 tinyMCE.activeEditor.setContent("");
-                gCurrentViewTaskId = '';
-                $('#divTagView ul').empty();
-                $('#divTag ul').empty();
 
-                $('#txtNotesTitle').val('');
-                $('#txtTaskTitle').val('');
-                $('#previews').empty();
+                $("#notes-modal-new").modal("show");
+                /*gCurrentViewTaskId = '';*/
+                //$('#divTagView ul').empty();
+                //$('#divTag ul').empty();
+
+                //$('#txtNotesTitle').val('');
+                //$('#txtTaskTitle').val('');
+                //$('#previews').empty();
 
             });
-
             $("#btnCreateNewNotesDescription").click(function () {
-
-                var Title = $('#txtNotesTitle').val();
-                var NoteCatId = $('#txtNotesCatId').val();
-                var AgencyId = $('#txtAgencyId').val();
-                var Description = tinyMCE.activeEditor.getContent();
-                var Status = $('#txtNotesStatus').val('Active');
-                var IsPublished = '';
-                var Status = '',
-
-            //        ndm.Title = notesDescription.Title;
-            //ndm.NoteCatId = notesDescription.NoteCatId;
-            //ndm.AgencyId = notesDescription.AgencyId;
-            //ndm.Description = notesDescription.Description;
-            //ndm.Status = notesDescription.Status;
-            //ndm.CreatedBy = LoginUserID;
-            //ndm.IsDeleted = false;
-
-
-
-
-
-
-
-                var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Needs/CreatNewTask",
-                    data: JSON.stringify({ Task: pdata }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.Message == 'Success') {
-                            window.location.reload();
-                            $('.close-circle').click();
-                            $('.modal-backdrop').remove();
-                        }
-                        else {
-                            if (response.Message == 'Exist') {
-                                ShowAlertBox('Required!', response.Message, 'warning');
-                            }
-                            else {
-                                ShowAlertBox('Exist!', response.Message, 'warning');
-
-                            }
-                        }
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                });
-
+                var title = $('#txtNotesTitle').val();
+                var noteCatId = $('#NoteCatId').val();
+                var agencyId = $('#txtAgencyId').val();
+                var description = tinyMCE.activeEditor.getContent();
+                var status = $('#txtNotesStatus').val('Active');
+                var isPublished = '';
+                debugger
+                //var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
+                var pdata = { Title: title, Description: description, NoteCatId: noteCatId };
+                let json = JSON.stringify({ Notes: pdata });
+                postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (res) {
+                    debugger
+                })
             });
-
-
         });
-
-
-
-
     </script>
 }
 
 
 
+@*notes-modal-new*@
+@*$.ajax({
+        type: "POST",
+        url: "/Needs/CreatNewTask",
+        data: JSON.stringify({ Task: pdata }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.Message == 'Success') {
+                window.location.reload();
+                $('.close-circle').click();
+                $('.modal-backdrop').remove();
+            }
+            else {
+                if (response.Message == 'Exist') {
+                    ShowAlertBox('Required!', response.Message, 'warning');
+                }
+                else {
+                    ShowAlertBox('Exist!', response.Message, 'warning');
+
+                }
+            }
+        },
+        failure: function (response) {
+            alert(response.responseText);
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });*@

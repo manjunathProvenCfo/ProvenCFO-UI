@@ -17,6 +17,7 @@ function baseAjaxCall(type, url, data, response, async) {
         url: url,
         data: data,
         async: async,
+        contentType: "application/json; charset=utf-8",
         datatype: 'json',
         success: function (data) {
             response(data);
