@@ -1,5 +1,6 @@
 ﻿using log4net;
 using ProvenCfoUI.Comman;
+using ProvenCfoUI.Controllers;
 using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace SweetAlert.Controllers
 {
-    public class SweetController : Controller
+    public class SweetController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Sweet

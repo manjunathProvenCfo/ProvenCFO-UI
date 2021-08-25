@@ -13,7 +13,7 @@ using log4net;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class ClientController : Controller
+    public class ClientController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Client

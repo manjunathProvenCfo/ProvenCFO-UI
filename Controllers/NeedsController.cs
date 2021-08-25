@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
-    public class NeedsController : Controller
+    public class NeedsController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Needs

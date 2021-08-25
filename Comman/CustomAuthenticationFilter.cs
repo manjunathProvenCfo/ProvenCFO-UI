@@ -14,10 +14,10 @@ namespace ProvenCfoUI.Comman
     {
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            
+
             if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
-                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false) && 
-                string.IsNullOrEmpty(Convert.ToString(filterContext.HttpContext.Session["UserName"])))
+                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false) &&
+                filterContext.HttpContext.User.Identity.IsAuthenticated == false)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }
@@ -35,6 +35,6 @@ namespace ProvenCfoUI.Comman
                 });
             }
         }
-        
+
     }
 }
