@@ -135,11 +135,7 @@
                 $('#divTagView ul').empty();
                 $('#divTag ul').empty();
 
-                $('#txtTaskTitle').val('');
-                $.each($('#attachmentContainer_Add .media'), function (key, attachment) {
-                    attachment.remove();
-
-                });
+                $('#txtNotesTitle').val('');
                 $('#txtTaskTitle').val('');
                 $('#previews').empty();
 
@@ -148,10 +144,20 @@
             $("#btnCreateNewNotesDescription").click(function () {
 
                 var Title = $('#txtNotesTitle').val();
-                var Title = $('#txtNotesStatus').val();
+                var NoteCatId = $('#txtNotesCatId').val();
+                var AgencyId = $('#txtAgencyId').val();
                 var Description = tinyMCE.activeEditor.getContent();
+                var Status = $('#txtNotesStatus').val('Active');
                 var IsPublished = '';
                 var Status = '',
+
+            //        ndm.Title = notesDescription.Title;
+            //ndm.NoteCatId = notesDescription.NoteCatId;
+            //ndm.AgencyId = notesDescription.AgencyId;
+            //ndm.Description = notesDescription.Description;
+            //ndm.Status = notesDescription.Status;
+            //ndm.CreatedBy = LoginUserID;
+            //ndm.IsDeleted = false;
 
 
 
