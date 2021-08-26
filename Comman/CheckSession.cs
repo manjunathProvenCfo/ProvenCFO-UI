@@ -46,7 +46,7 @@ namespace ProvenCfoUI.Comman
                     session["LoginName"] = userData[2];
                     session["UserFullName"] = userData[3];
                     session["UserType"] = userData[4];
-                }b
+                }
             }
 
             base.OnActionExecuting(filterContext);
