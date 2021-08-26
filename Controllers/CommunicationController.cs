@@ -47,7 +47,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    chatParticipants = await communicationService.GetChatParticipants(userId,userEmail);
+                    chatParticipants = await communicationService.GetChatParticipants(userId, userEmail);
                 }
                 return Json(chatParticipants, JsonRequestBehavior.AllowGet);
             }
