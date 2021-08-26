@@ -36,4 +36,13 @@ namespace Proven.Model
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
     }
+    public class NotesDescriptionMainModel1
+    {
+        public bool Status { get; set; }
+        public int statusCode { get; set; }
+        public NotesDescriptionModel ResultData { get; set; }
+        public string Message { get; set; }
+        public object ResourceType { get; set; }
+        public object MetaData { get; set; }
+    }
 }
