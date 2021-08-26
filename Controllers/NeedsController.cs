@@ -133,6 +133,7 @@ namespace ProvenCfoUI.Controllers
 
                             }
                             ViewBag.ErrorMessage = "Created";
+
                             return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
                         else
