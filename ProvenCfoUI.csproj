@@ -187,6 +187,7 @@
     <Compile Include="Comman\Common.cs" />
     <Compile Include="Comman\CustomAuthenticationFilter.cs" />
     <Compile Include="Comman\CustomAuthorizeAttribute.cs" />
+    <Compile Include="Comman\CustomHandleErrorAttribute.cs" />
     <Compile Include="Comman\XeroInstance.cs" />
     <Compile Include="Controllers\AgencyServiceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />

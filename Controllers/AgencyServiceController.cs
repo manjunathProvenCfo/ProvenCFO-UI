@@ -13,7 +13,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
-    public class AgencyServiceController : Controller, IDisposable
+    public class AgencyServiceController : BaseController, IDisposable
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;

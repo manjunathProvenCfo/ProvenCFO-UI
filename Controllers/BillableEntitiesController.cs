@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class BillableEntitiesController : Controller
+    public class BillableEntitiesController : BaseController
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;

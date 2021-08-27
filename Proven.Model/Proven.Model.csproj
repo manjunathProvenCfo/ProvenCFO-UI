@@ -71,6 +71,7 @@
     <Compile Include="TeamUserAssociationVM.cs" />
     <Compile Include="TwilioConversations.cs" />
     <Compile Include="UserAgencyLinkVM.cs" />
+    <Compile Include="UserContext.cs" />
     <Compile Include="UserModel.cs" />
     <Compile Include="UserPreferencesVM.cs" />
     <Compile Include="UserSecurityVM.cs" />

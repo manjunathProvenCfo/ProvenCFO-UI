@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class TeamsController : Controller
+    public class TeamsController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Teams

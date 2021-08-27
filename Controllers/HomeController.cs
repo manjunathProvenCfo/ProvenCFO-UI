@@ -19,11 +19,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace ProvenCfoUI.Controllers
 {
     //[Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
@@ -89,11 +91,13 @@ namespace ProvenCfoUI.Controllers
                         if (result.resultData != null && !string.IsNullOrEmpty(result.resultData.Id) && result.status == true)
                         {
                             commSrv = new CommonService();
-                            Session["UserId"] = result.resultData.Id.ToString();
-                            Session["UserName"] = result.resultData.FirstName;
-                            Session["LoginName"] = loginVM.UserName.ToString();
-                            Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
-                            Session["UserType"] = result.resultData.UserType;
+                            //Session["UserId"] = result.resultData.Id.ToString();
+                            //Session["UserName"] = result.resultData.FirstName;
+                            //Session["LoginName"] = loginVM.UserName.ToString();
+                            //Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
+                            //Session["UserType"] = result.resultData.UserType;
+                            string userData = $"{result.resultData.Id},{result.resultData.FirstName},{loginVM.UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
+                            FormsAuthentication.SetAuthCookie(userData, false);
                             ViewBag.Sucess = "Login Sucessfully";
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
@@ -111,7 +115,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.ErrorMessage = "Email or Password not correct.";                    
+                    ViewBag.ErrorMessage = "Email or Password not correct.";
                     log.Error(Utltity.Log4NetExceptionLog(ex));
                 }
             }
@@ -179,7 +183,7 @@ namespace ProvenCfoUI.Controllers
                 log.Error(Utltity.Log4NetExceptionLog(ex));
             }
             return View();
-        }        
+        }
         [HttpGet]
         public ActionResult RegisterAgencyUser(int id, string ActiveCode, int AgencyId)
         {
@@ -376,6 +380,7 @@ namespace ProvenCfoUI.Controllers
         public ActionResult Logout()
         {
             Session.Abandon();
+            FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 

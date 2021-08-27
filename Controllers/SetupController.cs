@@ -13,7 +13,7 @@ namespace ProvenCfoUI.Controllers
 {
     //abcd
     [CustomAuthenticationFilter]
-    public class SetupController : Controller
+    public class SetupController : BaseController
     {
         // GET: Setup
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

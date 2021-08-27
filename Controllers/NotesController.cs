@@ -13,7 +13,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class NotesController : Controller
+    public class NotesController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Notes
@@ -84,13 +84,13 @@ namespace ProvenCfoUI.Controllers
                     NewNotesDescription.Description = Notes.Description;
                     NewNotesDescription.NoteCatId = Notes.NoteCatId;
                     NewNotesDescription.IsPublished = Notes.IsPublished;
-                    NewNotesDescription.Position = Notes.Position;
+                    //NewNotesDescription.Position = Notes.Position;
                     NewNotesDescription.Status = Notes.Status;
                     NewNotesDescription.CreatedBy = LoginUserid;
                     NewNotesDescription.IsDeleted = false;
                     using (NotesService objNotes = new NotesService())
                     {
-                        var result = objNotes.CreateNewNotes(NewNotesDescription, LoginUserid);
+                        var result = objNotes.CreateNewNotes(Notes, LoginUserid);
                         if (result.Status == true)
                         {
                             ViewBag.ErrorMessage = "Created";

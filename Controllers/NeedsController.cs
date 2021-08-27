@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
-    public class NeedsController : Controller
+    public class NeedsController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Needs
@@ -133,6 +133,7 @@ namespace ProvenCfoUI.Controllers
 
                             }
                             ViewBag.ErrorMessage = "Created";
+
                             return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
                         else

@@ -20,52 +20,17 @@ namespace Proven.Service
         public NotesCategoriesMainModel GetAllNotesCategories(string Status, int AgencyID)
         {
             return GetAsync<NotesCategoriesMainModel>("Notes/GetAllNotesCategories?Status=" + Status + "&AgencyID=" + AgencyID).Result;
-            //response = client.GetAsync("Notes/GetAllNotesCategories?Status=" + Status + "&AgencyID=" + AgencyID).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<NotesCategoriesMainModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
         }
 
 
         public NotesDescriptionMainModel GetAllNotesDescription(string Status)
         {
             return GetAsync<NotesDescriptionMainModel>("Notes/GetAllNotesDescription?Status=" + Status).Result;
-            //response = client.GetAsync("Notes/GetAllNotesDescription?Status=" + Status).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<NotesDescriptionMainModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-
-            //}
         }
 
 
-        public NotesDescriptionMainModel CreateNewNotes(NotesDescriptionModel notesDescription, string LoginUserID)
+        public NotesDescriptionMainModel1 CreateNewNotes(NotesDescriptionModel notesDescription, string LoginUserID)
         {
-           // var form = new Dictionary<string, dynamic>
-           //{
-           //     {"Title", notesDescription.Title},
-           //     {"NoteCatId", Convert.ToString(notesDescription.NoteCatId)},
-           //     {"AgencyId", Convert.ToString(notesDescription.AgencyId)},
-           //     {"Description", notesDescription.Description},
-           //     {"Status", notesDescription.Status},
-           //     {"CreatedBy", LoginUserID},
-           //     {"IsDeleted", "false"},
-
-           //};
-
             NotesDescriptionModel ndm = new NotesDescriptionModel();
 
             ndm.Title = notesDescription.Title;
@@ -75,22 +40,9 @@ namespace Proven.Service
             ndm.Status = notesDescription.Status;
             ndm.CreatedBy = LoginUserID;
             ndm.IsDeleted = false;
+            ndm.IsPublished = "Published";
 
-            //content = new StringContent(JsonConvert.SerializeObject(ndm), Encoding.UTF8, "application/json");
-            return PostAsync<NotesDescriptionMainModel, NotesDescriptionModel>("Notes/CreateNotes", ndm).Result;
-            //response = client.PostAsync("Notes/CreateNotes", content).Result;
-
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<NotesDescriptionMainModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-
-            //}
+            return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", ndm).Result;
         }
 
         public void Dispose()

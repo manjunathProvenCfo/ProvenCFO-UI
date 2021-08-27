@@ -25,7 +25,9 @@ function baseAjaxCall(type, url, data, response, async) {
         error: function (err) {
             debugger
             console.log(err);
-            showErrorAlert(err);
+            if (err.status == 5000) {
+                ShowAlertBoxError("Internal server error");
+            }
             if (err.state() == "rejected") {
                 throw err;
                 //window.location.reload();

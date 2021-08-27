@@ -10,7 +10,7 @@ using Proven.Model;
 
 namespace ProvenCfoUI.Controllers
 {
-    public class TwilioController : Controller
+    public class TwilioController : BaseController
     {
         [HttpPost]
         [CheckSession]
