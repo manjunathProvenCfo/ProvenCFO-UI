@@ -28,14 +28,14 @@
                 <div class="bg-light rounded-soft-top px-4 py-3">
                     <div class="form-group mb-3">
                         <div class="row">
-                            <div class="col-md-2">
+                            @*<div class="col-md-2">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Status</span>
                             </div>
                             <div class="col-md-4">
                                 @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control" })
-                            </div>
+                            </div>*@
                             <div class="col-md-2">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Publish</span>
+                                <label>Publish</label>
                             </div>
                             <div class="col-md-4 custom-switch custom-control-inline  mr-0 ">
                                 <input class="custom-control-input" id="customSwitch2" type="checkbox" checked>
