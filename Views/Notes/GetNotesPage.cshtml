@@ -18,11 +18,19 @@
         <div class="card-body" id="v-pills-Summary">
             <div class="row">
                 <div class="col-lg-9">
-                    <h5 class="mb-0">Summary</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">Summary</h5>
+                        </div>
+                        <div class="col-md-6">
+                            
+                        </div>
+                    </div>
                     <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
                 </div>
-                <div class="col-12">
-                    <div class="Words">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21  </div>
+                <div class="col-3">
+                    <h5 class="mb-0 text-right"><span class="fas fa-edit"></span></h5>
+                    <div class="Words mt-8">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21 </div>
                 </div>
             </div>
         </div>
@@ -144,6 +152,7 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
+
                 var title = $('#txtNotesTitle').val();
                 var noteCatId = $('#NoteCatId').val();
                 var ClientID = $("#ddlclient option:selected").val();
@@ -153,44 +162,32 @@
                 var description = tinyMCE.activeEditor.getContent();
                 var status = $('#NotesStatus').val();
                 var isPublished = '';
-                
-                var pdata = { Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status,  };
+
+
+                $("#btnCreateNewNotesDescription").prop('create', 'Save');
+
+                var pdata = { Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
                 let json = JSON.stringify({ Notes: pdata });
 
-                //postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
-
-                    
-                //})
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Notes/CreateNewNotes",
-                    data: JSON.stringify({ Notes: pdata }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.Message == 'Success') {
-                            window.location.reload();
-                            $('.close-circle').click();
-                            $('.modal-backdrop').remove();
+                postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
                         }
                         else {
-                            if (response.Message == 'Exist') {
-                                ShowAlertBox('Required!', response.Message, 'warning');
-                            }
-                            else {
-                                ShowAlertBox('Exist!', response.Message, 'warning');
+                            ShowAlertBox('Exist!', response.Message, 'warning');
 
-                            }
                         }
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
                     }
-                });
+
+                })
+
+                
             });
         });
     </script>
