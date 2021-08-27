@@ -194,6 +194,7 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\CommunicationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntegrationController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\NeedsController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
@@ -1027,6 +1028,7 @@
     <Content Include="Views\Notes\GetNotesPage.cshtml" />
     <Content Include="Views\Reports\ReportsList.cshtml" />
     <Content Include="Views\Notes\CreateNewNotes.cshtml" />
+    <Content Include="Views\Integration\Integration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

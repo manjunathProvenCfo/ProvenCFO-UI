@@ -89,6 +89,7 @@
     <Compile Include="ClientService.cs" />
     <Compile Include="CommonService.cs" />
     <Compile Include="CommunicationService.cs" />
+    <Compile Include="IntigrationService.cs" />
     <Compile Include="InvitationServices.cs" />
     <Compile Include="NeedsService.cs" />
     <Compile Include="NotesService.cs" />

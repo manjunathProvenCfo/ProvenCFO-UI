@@ -49,6 +49,7 @@
     <Compile Include="City.cs" />
     <Compile Include="ClientModel.cs" />
     <Compile Include="ClientUserAssociationModel.cs" />
+    <Compile Include="CommonViewModel.cs" />
     <Compile Include="InviteUserModel.cs" />
     <Compile Include="InviteUserVMId.cs" />
     <Compile Include="JobTitleModel.cs" />
@@ -73,6 +74,8 @@
     <Compile Include="UserModel.cs" />
     <Compile Include="UserPreferencesVM.cs" />
     <Compile Include="UserSecurityVM.cs" />
+    <Compile Include="XeroGlAccountVM.cs" />
+    <Compile Include="XeroTrackingCategoriesVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

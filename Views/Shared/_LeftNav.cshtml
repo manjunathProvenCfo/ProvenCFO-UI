@@ -173,6 +173,13 @@
                                     <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_systemsettings">System Settings</a>
                                 </li>
                             }
+                            @if (Common.IsFeatureAccessable("INT"))
+                            {
+                                <li class="nav-item" id="submenu_systemsettings">
+                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">Integration</a>
+                                </li>
+                            }
+
                         </ul>
                     </li>
                 }
