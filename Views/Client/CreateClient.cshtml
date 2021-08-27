@@ -106,7 +106,7 @@
 
 
                                         @*@if (Model.Id == null || Model.Id == 0)
-                                        {*@
+                                            {*@
 
                                         @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
                                         new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
@@ -139,12 +139,12 @@
 
                                         @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                         @*}
-                                        else
-                                        {
+                                            else
+                                            {
 
-                                            @Html.EditorFor(model => model.XeroScope,"readonly", new { htmlAttributes = new { @class = "form-control",  @readonly = "readonly" } })
-                                                @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
-                                            }*@
+                                                @Html.EditorFor(model => model.XeroScope,"readonly", new { htmlAttributes = new { @class = "form-control",  @readonly = "readonly" } })
+                                                    @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                                                }*@
 
                                     </div>
                                 </div>
@@ -210,6 +210,19 @@
                                         @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Receives Quarterly Reports</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                            @Html.CheckBoxFor(x => x.ReceiveQuarterlyReports, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="ReceiveQuarterlyReports">Yes, receives quarterly reports</label>
+                                        </div>
+                                        @*@Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })*@
+                                    </div>
+                                </div>
 
                                 <div class="row align-items-center form-group">
 
@@ -250,6 +263,8 @@
     <script>
 
         $(function () {
+            $("#ReceiveQuarterlyReports").prop('cheked', @Convert.ToString(Model.ReceiveQuarterlyReports).ToLower());
+
             addMultipleSelectValues('[name=XeroScopeArray]','@Model.XeroScope')
         })
 
