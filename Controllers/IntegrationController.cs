@@ -23,8 +23,7 @@ namespace ProvenCfoUI.Controllers
             {
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    var objResult = objIntegration.GetXeroGlAccount();
-                    
+                    var objResult = objIntegration.GetXeroGlAccount();                    
                     return View(objResult.ResultData);
                 }
             }
