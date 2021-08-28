@@ -1030,6 +1030,7 @@
     <Content Include="Views\Reports\ReportsList.cshtml" />
     <Content Include="Views\Notes\CreateNewNotes.cshtml" />
     <Content Include="Views\Integration\Integration.cshtml" />
+    <Content Include="Views\Reports\_ReportPeriodPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
