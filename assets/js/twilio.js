@@ -116,7 +116,6 @@ var addMediaMessage = function (file) {
     const formData = new FormData();
     formData.append('file', file);
     activeChannel.sendMessage(formData).then(function (msg) {
-        debugger
         setScrollPosition();
         if ($newMessagesDiv && $newMessagesDiv.length > 0)
             $newMessagesDiv.remove();
