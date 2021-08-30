@@ -1030,11 +1030,8 @@
     <Content Include="Views\Reports\ReportsList.cshtml" />
     <Content Include="Views\Notes\CreateNewNotes.cshtml" />
     <Content Include="Views\Integration\Integration.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Integration\GetXeroTracking.cshtml" />
-=======
     <Content Include="Views\Reports\_ReportPeriodPartial.cshtml" />
->>>>>>> 15e3c1bdc3e0ddd3e34de229bdec47c4ac9fb87f
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
