@@ -1,0 +1,31 @@
+﻿@model string
+
+<div class="card-body report-card-body position-relative" data-year="" data-report-period="@Model" data-report-period-is-month="@(Model.Length == 3 ? true:false)" id="divReportPeriodCard">
+    <div class="dropdown position-absolute">
+        <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Download All</a>
+            <a class="dropdown-item" href="#">Upload</a>
+            <a class="dropdown-item" href="#">Edit</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-2 text-center" id="divPeriod">
+            @switch (@Model)
+            {
+                case "YearEnd":
+                    @:Year End
+                    break;
+                default:
+                    @Model
+                    break;
+            }
+            <span id="lblYear"></span>
+        </div>
+    </div>
+</div>

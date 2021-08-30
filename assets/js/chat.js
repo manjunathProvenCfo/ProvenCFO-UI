@@ -102,7 +102,7 @@ var getChatParticipants = function () {
             chat.participants = response;
             chat.participants.forEach(x => {
                 if (isEmpty(onlineOfflineMembers[x.Email])) {
-                    onlineOfflineMembers[x.Email] = false;
+                    onlineOfflineMembers[x.Email] = x.Online;
                 }
             });
 

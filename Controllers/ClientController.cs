@@ -207,6 +207,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.XeroScope = client.XeroScope;
                             Clientvm.XeroClientID = client.XeroClientID;
                             Clientvm.XeroClientSecret = client.XeroClientSecret;
+                            Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
 
                             return View("CreateClient", Clientvm);
                         }
@@ -263,7 +264,7 @@ namespace ProvenCfoUI.Controllers
                                         createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
                                     //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
-                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret, createClientVM.ReceiveQuarterlyReports);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Created";
@@ -283,7 +284,7 @@ namespace ProvenCfoUI.Controllers
                                     {
                                         createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret);
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, createClientVM.StateId.ToString(), createClientVM.Status, LoginUserid, createClientVM.TeamId.ToString(), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret,createClientVM.ReceiveQuarterlyReports);
 
 
 
@@ -318,7 +319,7 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objClientService.GetClientById(id);
 
-                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.XeroScope, client.XeroClientSecret, client.XeroClientSecret);
+                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.XeroScope, client.XeroClientSecret, client.XeroClientSecret,client.ReceiveQuarterlyReports);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

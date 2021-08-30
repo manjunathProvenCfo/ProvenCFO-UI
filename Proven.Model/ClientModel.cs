@@ -63,6 +63,7 @@ namespace Proven.Model
 
 
         public int? TeamId { get; set; }
+        public bool ReceiveQuarterlyReports { get; set; }
 
     }
 

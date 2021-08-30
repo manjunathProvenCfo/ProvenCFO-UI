@@ -19,5 +19,6 @@ namespace Proven.Model
         public string ChannelUniqueName { get; set; }
         public string TwilioUserId { get; set; }
         public bool IsPrivate { get; set; }
+        public bool Online { get; set; }
     }
 }
