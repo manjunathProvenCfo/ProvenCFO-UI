@@ -34,7 +34,7 @@
                     if (Common.IsFeatureAccessable("RCN"))
                     {
                         <li class="nav-item" id="menu_reconciliation">
-                            <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation") name="menu_reconciliation" >
+                            <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation") name="menu_reconciliation">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><span class="fas fa-handshake"></span></span>
                                     <span class="nav-link-text"> Reconciliation  <span class="badge badge-pill badge-soft-danger ml-3">36</span></span>
@@ -52,17 +52,17 @@
                             @if (Common.IsFeatureAccessable("AGH"))
                             {
                                 <li class="nav-item" id="submenu_dashboards">
-                                    <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_dashboards" >Dashboards</a>
+                                    <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_dashboards">Dashboards</a>
                                 </li>
                             }
                             @if (Common.IsFeatureAccessable("RPT"))
                             {
                                 <li class="nav-item" id="submenu_reports">
-                                    <a class="nav-link" href=@Url.Action("ReportsList", "Reports")  name="submenu_reports">Reports</a>
+                                    <a class="nav-link" href=@Url.Action("ReportsList", "Reports") name="submenu_reports">Reports</a>
                                 </li>
 
                                 <li class="nav-item" id="submenu_notes">
-                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes" >Notes <span class="badge badge-pill badge-soft-danger ml-3">14</span> </a>
+                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">Notes <span class="badge badge-pill badge-soft-danger ml-3">14</span> </a>
                                 </li>
                             }
                         </ul>
@@ -81,7 +81,7 @@
 
                             @if (Common.IsFeatureAccessable("NDS"))
                             {
-                                <li class="nav-item" id="submenu_needs" >
+                                <li class="nav-item" id="submenu_needs">
                                     <a class="nav-link" href=@Url.Action("NeedsMain", "Needs") name="submenu_needs">Needs</a>
                                 </li>
                             }
@@ -132,10 +132,11 @@
                             {
                                 <li class="nav-item" id="submenu_teams">
                                     <a class="nav-link" href=@Url.Action("TeamsList", "Teams") name="submenu_teams">Teams</a>
-                                </li>                                
+                                </li>
+
                             }
                             @if (Common.IsFeatureAccessable("BET"))
-                            {                                
+                            {
                                 <li class="nav-item" id="submenu_billableentities">
                                     <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
                                 </li>
@@ -167,22 +168,32 @@
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
+                            @if (Common.IsFeatureAccessable("INT"))
+                            {
+                                <li class="nav-item" id="submenu_systemsettings">
+                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">GL Account</a>
+                                </li>
+                            }
+
+                            @if (Common.IsFeatureAccessable("INT"))
+                            {
+                                <li class="nav-item" id="submenu_systemsettings">
+                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_integration">Tracking Categories</a>
+                                </li>
+                            }
                             @if (Common.IsFeatureAccessable("SYS"))
                             {
                                 <li class="nav-item" id="submenu_systemsettings">
                                     <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_systemsettings">System Settings</a>
                                 </li>
                             }
-                            @if (Common.IsFeatureAccessable("INT"))
-                            {
-                                <li class="nav-item" id="submenu_systemsettings">
-                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">Integration</a>
-                                </li>
-                            }
+
+
 
                         </ul>
                     </li>
                 }
+              
             </ul>
         </div>
     </div>

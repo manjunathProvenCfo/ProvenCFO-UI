@@ -50,58 +50,21 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        [CheckSession]
-        [HttpPost]
-        public ActionResult CreateXeroGlAccount(XeroGlAccountVM xeroGlAccount)
+        public ActionResult GetXeroTracking()
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    using (IntigrationService objRole = new IntigrationService())
-                    {
-                       XeroGlAccountVM RoleVM = new XeroGlAccountVM();
-                        //var LoginUserid = Session["UserId"].ToString();
-                        //var result = new Proven.Model.RolesViewModel();
-
-                        //if (Role.id == null)
-                        //{
-                        //var Existresult = objRole.GetRoleByName(Role.name);
-                        //if (Existresult != null)
-                        //{
-                        //    ViewBag.ErrorMessage = "Exist";
-                            return View("AddXeroGlAccount", RoleVM);
-                        //}
-
-                        //result = objRole.CreateXeroGlAccount();
-                        ViewBag.ErrorMessage = "Created";
-                        //}
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
-                    throw ex;
+                    var objResult = objIntegration.GetXeroTracking();
+                    return View(objResult.ResultData);
                 }
             }
-            return View();
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
-
-        //public ActionResult Integration1()
-        //{
-        //    try
-        //    {
-        //        using (IntigrationService objIntegration = new IntigrationService())
-        //        {
-        //            var objResult = objIntegration.GetXeroTracking();
-        //            return View(objResult.ResultData);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
-        //        throw ex;
-        //    }
-        //}
     }
 }
