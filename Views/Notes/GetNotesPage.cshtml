@@ -23,7 +23,7 @@
                             <h5 class="mb-0">Summary</h5>
                         </div>
                         <div class="col-md-6">
-                            
+
                         </div>
                     </div>
                     <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
@@ -42,7 +42,7 @@
 
             <div class="sticky-top sticky-kit right-nav-pills bg-white">
 
-                <div class="nav flex-column nav-pills" @*id="@Categories.NoteCategory.ToString().Replace(" ", "_")"*@>
+                <div class="nav flex-column nav-pills">
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
                         <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
@@ -88,7 +88,7 @@
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                        <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
                                                         <a class="dropdown-item" href="#">Move Up</a>
                                                         <a class="dropdown-item" href="#">Move Down</a>
                                                         <div class="dropdown-divider"></div>
@@ -116,7 +116,8 @@
                     </div>
                 </div>
             }
-            @{ Html.RenderAction("CreateNewNotes", "Notes"); }
+            @{ Html.RenderAction("CreateNewNotes", "Notes");}
+            @{ Html.RenderAction("OpenDescription", "Notes"); }
         </div>
 
     </div>
@@ -140,7 +141,7 @@
     <script type="text/javascript">
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-                debugger
+                debugger;
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -162,6 +163,7 @@
                 var description = tinyMCE.activeEditor.getContent();
                 var status = $('#NotesStatus').val();
                 var isPublished = '';
+
 
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
@@ -187,8 +189,78 @@
 
                 })
 
-                
             });
         });
+
+        function openEdit(e) {
+            debugger;
+            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $("#NoteCatId").val(NoteCatId);
+            tinymce.get("txtDescription").getContent();
+            $("#notes-modal-update").modal("show");
+            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $.ajax({
+                url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
+                //cache: false,
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                       
+                        if (response.Description != null) {
+                            debugger;
+                            var a = $('#txtNotesTitle1').val();
+
+                            //Set
+                            $('#txtNotesTitle1').val(a);
+                           $('#txtNotesTitle1').html(response.Description.Title);
+                             
+                            debugger;
+                            $('#txtDescription').html(response.Description.Description);
+                            if (response.Description.Description != null) {
+                                $('#txtDescription').html(response.Description.Description);
+                                tinyMCE.activeEditor.setContent(response.Description.Description);
+                            }
+                            //else {
+                            //    $('#txtDescription').html('');
+                            //}
+                            
+                        }
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+                        }
+                    }
+
+
+
+                }
+                //x.Description.description
+
+                //$("#txtNotesTitle").html(x.Description.Title);
+
+            });
+
+            //$('#txtNotesTitle').val()
+            //console.log(catDesId)
+            //var pdata = { Title: title, Description: catdesid, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
+            //let json = JSON.stringify({ Notes: pdata });
+            //postAjax('/Notes/OpenExistingDescription?NotesDescriptionId=" + catdesid', JSON.stringify({ Notes: pdata }), function (response) {
+            //    if (response.Message == 'Success') {
+            //        if (response.Task != null) {
+            //            $('#Notes-modal-label-title').html(response.Notes.Title);
+            //            // setTimeout(function () {
+            //            if (response.Notes.Description != null) {
+            //                $('#txtNotesTitle').html(response.Notes.Description);
+            //                tinyMCE.activeEditor.setContent(response.Notes.Description);
+            //            }
+            //            else {
+            //                $('#txtDescription').html('');
+            //            }
+            //})
+            //alert(e);
+        }
     </script>
 }
