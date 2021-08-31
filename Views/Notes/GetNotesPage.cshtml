@@ -207,13 +207,14 @@
                        
                         if (response.Description != null) {
                             debugger;
-                            var a = $('#txtNotesTitle1').val();
-
-                            //Set
-                            $('#txtNotesTitle1').val(a);
-                           $('#txtNotesTitle1').html(response.Description.Title);
+                            //var a = $('#txtNotesTitle1').val();
+                            //debugger;
+                            ////Set
+                            //$('#txtNotesTitle1').val(a);
+                            let title = response.Description.Title;
+                            $('#txtNotesTitle1').val(title);
                              
-                            debugger;
+                            
                             $('#txtDescription').html(response.Description.Description);
                             if (response.Description.Description != null) {
                                 $('#txtDescription').html(response.Description.Description);
