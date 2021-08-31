@@ -44,6 +44,46 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        public ActionResult OpenDescription()
+        {
+            try
+            {
+                NotesDescriptionModel note = new NotesDescriptionModel();
+                note.ModifiedBy = Session["UserFullName"].ToString();
+                //note.TaskType = "Task";
+               
+                return PartialView("OpenDescription", note);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        public JsonResult OpenExistingDescription(int NotesDescriptionId)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var result = objNotes.GetNotesDescriptionById(NotesDescriptionId);
+                    TempData["SelectedTitle"] = result.Title;
+                    TempData["SelectedDescription"] = result.Description;
+                    Session["SelectedDescriptionId"] = result.Id;
+                    return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
+        [CheckSession]
         [HttpGet]
         public ActionResult CreateNewNotes()
         {
@@ -108,6 +148,33 @@ namespace ProvenCfoUI.Controllers
                 {
                     ViewBag.ErrorMessage = "Exist";
                     return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = "Notes title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        public JsonResult UpdateNotesDescription(NotesDescriptionModel Notes)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var LoginUserid = Session["UserId"].ToString();
+                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description,  LoginUserid).resultData;
+                    if (result == true)
+                    {
+                        return Json(new { Notes = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { Notes = result, Message = "Error" }, JsonRequestBehavior.AllowGet);
+                    }
+                   
                 }
             }
             catch (Exception ex)
