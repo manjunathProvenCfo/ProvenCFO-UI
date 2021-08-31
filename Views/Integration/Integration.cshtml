@@ -1,4 +1,4 @@
-﻿@model List<Proven.Model.XeroGlAccountVM > 
+﻿@model List<Proven.Model.XeroGlAccountVM>
 
 @{
     ViewBag.Title = "Index";
@@ -10,8 +10,8 @@
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
-            <div class="col-6 col-sm-auto d-flex align-items-center pr-0" >               
-             
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+
             </div>
             <div class="col-6 col-sm-auto ml-auto text-right pl-0">
                 <div class="d-none" id="purchases-actions">
@@ -36,13 +36,13 @@
             <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
                 <thead class="bg-200 text-900">
                     <tr>
-                        
+
 
                         <th class="sort pr-1 align-middle" width="15%">Code</th>
                         <th class="sort pr-1 align-middle" width="15%">Name</th>
                         <th class="sort pr-1 align-middle" width="15%">Type</th>
                         <th class="sort pr-1 align-middle" width="15%">Description</th>
-                       
+
                     </tr>
                 </thead>
                 <tbody id="purchases">
@@ -71,6 +71,42 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table");
+    <script>
+
+        $(document).ready(function () {
+            AgencyDropdownPartialViewChange();
+
+        });
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+
+            $.ajax({
+                url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        // Write here what should happend once client selected
+                        SetUserPreferencesForAgency();
+                    }
+                    else {
+                        // Write here what should happend once selected client is null
+                    }
+                },
+                error: function () {
+                    // Write here what should happend when action result is errored.
+                }
+            });
+        }
+
+    </script>
+
+}
 
 
 
