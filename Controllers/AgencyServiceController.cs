@@ -35,8 +35,9 @@ namespace ProvenCfoUI.Controllers
                 using (ClientService objClient = new ClientService())
                 {
                     Utltity obj = new Utltity();
-                    var objResult = objClient.GetClientById(id);
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                    var objResultClient = objClient.GetClientById(id);
+                    Common.ConnectXeroClient(objResultClient);
+                    return Json(objResultClient, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -48,15 +49,21 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public async Task<JsonResult> GetBankSummary()
         {
+            var returnData = new Dictionary<string, dynamic>();
             try
             {
-                var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken);
-                var Total = result._Invoices.Sum(x => x.Total);
-                var returnData = new Dictionary<string, dynamic>
-                   {
-                       {"data",result},
-                       {"Total",Total}
-                   };
+                if (XeroInstance.Instance.XeroConnectionStatus  == true)
+                {
+                    var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken);
+                    var Total = result._Invoices.Sum(x => x.Total);
+                    returnData.Add("data", result);
+                    returnData.Add("Total", Total);
+                }
+                else
+                {
+                    return Json("", JsonRequestBehavior.AllowGet);
+                }
+
                 return Json(returnData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -74,7 +81,6 @@ namespace ProvenCfoUI.Controllers
             AgencyClient objAgy = new AgencyClient();
             try
             {
-
                 using (ClientService objClient = new ClientService())
                 {
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
@@ -91,14 +97,6 @@ namespace ProvenCfoUI.Controllers
                             objResult = objClient.GetClientListByStatus(true, false).ResultData;
                         }
 
-                        string scope = "accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                        XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
-                        XeroInstance.Instance.XeroService = Xero;
-                        Task.Run(async () =>
-                        {
-                            var token = await Xero.LoginXeroAccess();
-                            XeroInstance.Instance.XeroToken = token;
-                        });
 
                         TempData["ClientListActived"] = objResult;
                         objAgy.ClientList = objResult;
@@ -117,6 +115,25 @@ namespace ProvenCfoUI.Controllers
                     {
                         objAgy.SelectedClientNameID = objAgy.ClientList[0].Id;
                     }
+
+                    var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
+                    Common.ConnectXeroClient(client);
+                    //if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
+                    //{
+                    //    XeroInstance.Instance.XeroScope = client.XeroScope; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                    //    XeroInstance.Instance.XeroClientID = client.XeroClientID;
+                    //    XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
+                    //    //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
+                    //    XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope);
+                    //    XeroInstance.Instance.XeroService = Xero;
+                    //    Task.Run(async () =>
+                    //    {
+                    //        var token = await Xero.LoginXeroAccess();
+                    //        XeroInstance.Instance.XeroToken = token;
+                    //    });
+                    //}
+
+
                     return PartialView("_AgencySelection", objAgy);
                 }
             }

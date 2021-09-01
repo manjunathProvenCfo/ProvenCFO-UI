@@ -170,14 +170,14 @@
                             }
                             @if (Common.IsFeatureAccessable("INT"))
                             {
-                                <li class="nav-item" id="submenu_systemsettings">
+                                <li class="nav-item" id="submenu_glAccount">
                                     <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">GL Accounts</a>
                                 </li>
                             }
 
                             @if (Common.IsFeatureAccessable("INT"))
                             {
-                                <li class="nav-item" id="submenu_systemsettings">
+                                <li class="nav-item" id="submenu_trackingCategories">
                                     <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_integration">Tracking Categories</a>
                                 </li>
                             }

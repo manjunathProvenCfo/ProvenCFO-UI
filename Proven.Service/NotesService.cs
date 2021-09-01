@@ -28,6 +28,10 @@ namespace Proven.Service
             return GetAsync<NotesDescriptionMainModel>("Notes/GetAllNotesDescription?Status=" + Status).Result;
         }
 
+        public NotesDescriptionModel GetNotesDescriptionById(int NotesDescriptionId)
+        {
+            return GetAsync<NotesDescriptionModel>("Notes/GetNotesDescriptionById?NotesDescriptionId=" + NotesDescriptionId, true).Result;
+        }
 
         public NotesDescriptionMainModel1 CreateNewNotes(NotesDescriptionModel notesDescription, string LoginUserID)
         {
@@ -45,6 +49,17 @@ namespace Proven.Service
             return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", ndm).Result;
         }
 
+        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished,string LoginUserID)
+        {
+            NotesDescriptionModel ndm = new NotesDescriptionModel();
+            ndm.Id = DescriptionId;
+            ndm.Title = Title;
+            ndm.Description = DescriptionText;
+            ndm.IsPublished = IsPublished;
+            ndm.ModifiedBy = LoginUserID;
+
+            return PostAsync<ReturnModel, NotesDescriptionModel>("Notes/UpdateNotesDescription", ndm).Result;
+        }
         public void Dispose()
         {
             Dispose(true);

@@ -38,6 +38,11 @@ namespace ProvenCfoUI.Comman
             }
         }
         public IXeroToken XeroToken { get; set; }
+        public string XeroClientID { get; set; }
+        public string XeroClientSecret { get; set; }
+        public string XeroScope { get; set; }
+        public bool XeroConnectionStatus { get; set; }
+        public string XeroConnectionMessage { get; set; }
         public XeroService XeroService { get; set; }
     }
 }

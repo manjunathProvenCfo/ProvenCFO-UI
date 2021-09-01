@@ -23,7 +23,7 @@
                             <h5 class="mb-0">Summary</h5>
                         </div>
                         <div class="col-md-6">
-                            
+
                         </div>
                     </div>
                     <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
@@ -42,7 +42,7 @@
 
             <div class="sticky-top sticky-kit right-nav-pills bg-white">
 
-                <div class="nav flex-column nav-pills" @*id="@Categories.NoteCategory.ToString().Replace(" ", "_")"*@>
+                <div class="nav flex-column nav-pills">
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
                         <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
@@ -88,7 +88,7 @@
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                        <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
                                                         <a class="dropdown-item" href="#">Move Up</a>
                                                         <a class="dropdown-item" href="#">Move Down</a>
                                                         <div class="dropdown-divider"></div>
@@ -116,7 +116,8 @@
                     </div>
                 </div>
             }
-            @{ Html.RenderAction("CreateNewNotes", "Notes"); }
+            @{ Html.RenderAction("CreateNewNotes", "Notes");}
+            @{ Html.RenderAction("OpenDescription", "Notes"); }
         </div>
 
     </div>
@@ -138,9 +139,17 @@
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            //AgencyDropdownPartialViewChange();
+            var ClientID = $("#ddlclient option:selected").val();
+            getAgencyMembersList(ClientID);
+
+
+        });
+
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-                debugger
+                debugger;
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -162,6 +171,7 @@
                 var description = tinyMCE.activeEditor.getContent();
                 var status = $('#NotesStatus').val();
                 var isPublished = '';
+
 
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
@@ -187,8 +197,140 @@
 
                 })
 
-                
             });
         });
+
+        function openEdit(e) {
+            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $("#NoteCatId").val(NoteCatId);
+            tinymce.get("txtDescription").getContent();
+            $("#notes-modal-update").modal("show");
+            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $.ajax({
+                url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
+                //cache: false,
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                       
+                        if (response.Description != null) {
+                            let title = response.Description.Title;
+                            $('#txtNotesTitle1').val(title);
+                            
+                            $('#txtDescription').html(response.Description.Description);
+                            if (response.Description.Description != null) {
+                                $('#txtDescription').html(response.Description.Description);
+                                tinyMCE.activeEditor.setContent(response.Description.Description);
+                            }
+                        }
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+                        }
+                    }
+                }
+            
+            });
+
+            $("#btnUpdateNewNotesDescription").click(function () {
+                debugger;
+                UpdateNotesDescription(Id, Title, DescriptionText, isPublished );
+                //Description.descriptionId = $("#txtId").val();
+                //Description.Title = $("#txtNotesTitle1").val();
+                //Description.Description = $("#txtDescription").val();
+
+
+
+                $("#btnUpdateNewNotesDescription").prop('update', 'Save');
+
+                postAjax('/Notes/UpdateNotesDescription', JSON.stringify({ Notes: pdata }), function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+
+                        }
+                    }
+
+                })
+
+            });
+
+        }
+
+       
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+            //getTeamMembersList(ClientID);
+            if (ClientID != null && ClientID != undefined && ClientID != '') {
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        debugger
+                        if (data != null) {
+                            $('#Notes-create-new-btn').show();//TODO
+                            // Write here what should happend once client selected
+
+                            SetUserPreferencesForAgency();
+                            window.location.reload();
+                        }
+                        else {
+                            // Write here what should happend once selected client is null
+                        }
+                    },
+                    error: function () {
+                        // Write here what should happend when action result is errored.
+                    }
+                });
+            }
+            else {
+
+                window.location.reload();
+            }
+        }
+
+        function UpdateNotesDescription( Id, Title, DescriptionText,isPublished) {
+
+            var pdata = {
+                Id:Id, Title : Title, Description : DescriptionText, IsPublished : isPublished
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Needs/UpdateNotesDescription",
+                data: JSON.stringify({ Task: pdata }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+
     </script>
 }
