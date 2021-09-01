@@ -139,6 +139,14 @@
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            //AgencyDropdownPartialViewChange();
+            var ClientID = $("#ddlclient option:selected").val();
+            getAgencyMembersList(ClientID);
+
+
+        });
+
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
                 debugger;
@@ -193,7 +201,6 @@
         });
 
         function openEdit(e) {
-            debugger;
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
             tinymce.get("txtDescription").getContent();
@@ -206,24 +213,14 @@
                     if (response.Message == 'Success') {
                        
                         if (response.Description != null) {
-                            debugger;
-                            //var a = $('#txtNotesTitle1').val();
-                            //debugger;
-                            ////Set
-                            //$('#txtNotesTitle1').val(a);
                             let title = response.Description.Title;
                             $('#txtNotesTitle1').val(title);
-                             
                             
                             $('#txtDescription').html(response.Description.Description);
                             if (response.Description.Description != null) {
                                 $('#txtDescription').html(response.Description.Description);
                                 tinyMCE.activeEditor.setContent(response.Description.Description);
                             }
-                            //else {
-                            //    $('#txtDescription').html('');
-                            //}
-                            
                         }
                     }
                     else {
@@ -234,34 +231,106 @@
                             ShowAlertBox('Exist!', response.Message, 'warning');
                         }
                     }
-
-
-
                 }
-                //x.Description.description
+            
+            });
 
-                //$("#txtNotesTitle").html(x.Description.Title);
+            $("#btnUpdateNewNotesDescription").click(function () {
+                debugger;
+                UpdateNotesDescription(Id, Title, DescriptionText, isPublished );
+                //Description.descriptionId = $("#txtId").val();
+                //Description.Title = $("#txtNotesTitle1").val();
+                //Description.Description = $("#txtDescription").val();
+
+
+
+                $("#btnUpdateNewNotesDescription").prop('update', 'Save');
+
+                postAjax('/Notes/UpdateNotesDescription', JSON.stringify({ Notes: pdata }), function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+
+                        }
+                    }
+
+                })
 
             });
 
-            //$('#txtNotesTitle').val()
-            //console.log(catDesId)
-            //var pdata = { Title: title, Description: catdesid, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
-            //let json = JSON.stringify({ Notes: pdata });
-            //postAjax('/Notes/OpenExistingDescription?NotesDescriptionId=" + catdesid', JSON.stringify({ Notes: pdata }), function (response) {
-            //    if (response.Message == 'Success') {
-            //        if (response.Task != null) {
-            //            $('#Notes-modal-label-title').html(response.Notes.Title);
-            //            // setTimeout(function () {
-            //            if (response.Notes.Description != null) {
-            //                $('#txtNotesTitle').html(response.Notes.Description);
-            //                tinyMCE.activeEditor.setContent(response.Notes.Description);
-            //            }
-            //            else {
-            //                $('#txtDescription').html('');
-            //            }
-            //})
-            //alert(e);
         }
+
+       
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+            //getTeamMembersList(ClientID);
+            if (ClientID != null && ClientID != undefined && ClientID != '') {
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        debugger
+                        if (data != null) {
+                            $('#Notes-create-new-btn').show();//TODO
+                            // Write here what should happend once client selected
+
+                            SetUserPreferencesForAgency();
+                            window.location.reload();
+                        }
+                        else {
+                            // Write here what should happend once selected client is null
+                        }
+                    },
+                    error: function () {
+                        // Write here what should happend when action result is errored.
+                    }
+                });
+            }
+            else {
+
+                window.location.reload();
+            }
+        }
+
+        function UpdateNotesDescription( Id, Title, DescriptionText,isPublished) {
+
+            var pdata = {
+                Id:Id, Title : Title, Description : DescriptionText, IsPublished : isPublished
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Needs/UpdateNotesDescription",
+                data: JSON.stringify({ Task: pdata }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+
     </script>
 }

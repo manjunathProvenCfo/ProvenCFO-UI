@@ -165,7 +165,7 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var LoginUserid = Session["UserId"].ToString();
-                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description,  LoginUserid).resultData;
+                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished,  LoginUserid).resultData;
                     if (result == true)
                     {
                         return Json(new { Notes = result, Message = "Success" }, JsonRequestBehavior.AllowGet);

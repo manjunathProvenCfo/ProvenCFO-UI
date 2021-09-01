@@ -49,13 +49,14 @@ namespace Proven.Service
             return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", ndm).Result;
         }
 
-        public ReturnModel UpdateNotesDescription(int DescriptionId, string DescriptionText, string Title, string LoginUserID)
+        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished,string LoginUserID)
         {
             NotesDescriptionModel ndm = new NotesDescriptionModel();
-            ndm.Title = Title;
             ndm.Id = DescriptionId;
+            ndm.Title = Title;
             ndm.Description = DescriptionText;
-            ndm.CreatedBy = LoginUserID;
+            ndm.IsPublished = IsPublished;
+            ndm.ModifiedBy = LoginUserID;
 
             return PostAsync<ReturnModel, NotesDescriptionModel>("Notes/UpdateNotesDescription", ndm).Result;
         }
