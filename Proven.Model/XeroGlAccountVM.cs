@@ -8,7 +8,7 @@ namespace Proven.Model
 {
     public class XeroGlAccountVM
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string AccountId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -25,7 +25,7 @@ namespace Proven.Model
         public string HasAttachments { get; set; }
         public DateTime? UpdatedDateUTC { get; set; }
         public string AddToWatchlist { get; set; }
-        public string AgencyId { get; set; }
+        public int? AgencyId { get; set; }
     }
 
     public class XeromainGlAccountVM

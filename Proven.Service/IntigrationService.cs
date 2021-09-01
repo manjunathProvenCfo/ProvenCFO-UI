@@ -14,9 +14,9 @@ namespace Proven.Service
         private HttpResponseMessage response;
         private StringContent content;
 
-        public XeroTrackingMainCategoriesVM GetXeroTracking()
+        public XeroTrackingMainCategoriesVM GetXeroTracking(int AgencyId)
         {
-            return GetAsync<XeroTrackingMainCategoriesVM>("Xero/GetXeroTracking").Result;
+            return GetAsync<XeroTrackingMainCategoriesVM>("Xero/GetXeroTrackingById?AgencyID=" + AgencyId).Result;
             //response = client.GetAsync("Invitation/GetALLInvitation").Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -31,9 +31,9 @@ namespace Proven.Service
             //}
         }
 
-        public XeromainGlAccountVM GetXeroGlAccount()
+        public XeromainGlAccountVM GetXeroGlAccount(int AgencyID)
         {
-            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroGlAccount").Result;
+            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroGlAccount?AgencyID=" + AgencyID).Result;
             //response = client.GetAsync("Invitation/GetALLInvitation").Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -47,48 +47,17 @@ namespace Proven.Service
 
             //}
         }
-        public XeroGlAccountVM CreateXeroGlAccount(string AccountId, string Code, string Name, string Status, string Type, string TaxType, string Class, string EnablePaymentsToAccount, string ShowInExpenseClaims, string BankAccountNumber, string BankAccountType, DateTime? UpdatedDateUTC, string CurrencyCode, string ReportingCode, string HasAttachments, string AddToWatchlist,string AgencyId)
+        public XeroGlAccountVM create(XeroGlAccountVM test)
         {
-            var form = new Dictionary<string, object>
-            {
-                {"AccountId", AccountId},
-                {"Code",Code },
-                {"Name",Name },
-                {"Status",Status },
-                {"Type",Type },
-                {"TaxType",TaxType },
-                {"Status",Status },
-                {"Class",Class },
-                {"EnablePaymentsToAccount",EnablePaymentsToAccount },
-                 {"ShowInExpenseClaims",ShowInExpenseClaims },
-                {"BankAccountNumber" ,BankAccountNumber},
-                {"BankAccountType",BankAccountType },
-                {"UpdatedDateUTC",UpdatedDateUTC },
-                {"CurrencyCode",CurrencyCode },
-
-                {"ReportingCode",ReportingCode },
-                {"HasAttachments",HasAttachments },
-                {"AddToWatchlist",AddToWatchlist },
-                {"AgencyId",AgencyId }
-            };
-
-            //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
-            return PostAsync<XeroGlAccountVM, Dictionary<string, object>>("Xero/CreateXeroGlAccount", form).Result;
-            //response = client.PostAsync("Client/CreateClientUser", content).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    AccountService obj = new AccountService();
-            //    //var result = obj.Register(Email, "admin", "admin", ClientName, "");
-
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<ClientModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
-
+            return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateXeroGlAccount1", test).Result;
+        }
+        public XeroGlAccountVM CreateXeroGlAccount(List<XeroGlAccountVM> glAccounts)
+        {           
+            return PostAsync<XeroGlAccountVM, List<XeroGlAccountVM>>("Xero/CreateXeroGlAccount", glAccounts).Result;           
+        }
+        public XeroTrackingCategoriesVM CreateXeroTrackingCatogories(List<XeroTrackingCategoriesVM> TrackingCategories)
+        {
+            return PostAsync<XeroTrackingCategoriesVM, List<XeroTrackingCategoriesVM>>("Xero/CreateXeroTracking", TrackingCategories).Result;
         }
 
 

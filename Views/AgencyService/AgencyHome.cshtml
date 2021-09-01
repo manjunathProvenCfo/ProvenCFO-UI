@@ -667,7 +667,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        if (data != null) {
+                        if (data != null && data != '') {
                             $('#spOutSanding').html(data.Total);
                         }
                         else {

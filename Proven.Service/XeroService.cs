@@ -40,8 +40,36 @@ namespace Proven.Service
         }
         public async Task<IXeroToken> LoginXeroAccess()
         {
-            //return await RequestClientCredentialsTokenAsync();
-            return await XeroClient.RequestClientCredentialsTokenAsync();
+            try
+            {
+                return await XeroClient.RequestClientCredentialsTokenAsync();
+            }
+            catch (Exception ex)
+            {                              
+                throw ex;
+
+            }
+            //return await RequestClientCredentialsTokenAsync();            
+            
+        }
+        public async Task<IXeroToken> RefreshToken(IXeroToken xeroToken)
+        {
+            try
+            {
+                return await XeroClient.RefreshAccessTokenAsync(xeroToken);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+            //return await RequestClientCredentialsTokenAsync();            
+
+        }
+        public async Task<List<Tenant>> ConnnectApp(IXeroToken xeroToken)
+        {
+            //return await RequestClientCredentialsTokenAsync();            
+            return await XeroClient.GetConnectionsAsync(xeroToken);
         }
         public async Task<List<Tenant>> GetConnections()
         {
@@ -96,6 +124,16 @@ namespace Proven.Service
         public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Invoices> GetInvoices(IXeroToken xeroToken)
         {
             var obj = await _accountinstance.GetInvoicesAsync(xeroToken.AccessToken, xeroToken.Tenants[0].TenantId.ToString());
+            return obj;
+        }
+        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Accounts> GetGLAccounts(IXeroToken xeroToken)
+        {
+            var obj = await _accountinstance.GetAccountsAsync(xeroToken.AccessToken, xeroToken.Tenants[0].TenantId.ToString());
+            return obj;
+        }
+        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.TrackingCategories> GetTrackingCategories(IXeroToken xeroToken)
+        {
+            var obj = await _accountinstance.GetTrackingCategoriesAsync(xeroToken.AccessToken, xeroToken.Tenants[0].TenantId.ToString());
             return obj;
         }
 

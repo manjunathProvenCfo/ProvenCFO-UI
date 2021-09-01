@@ -10,7 +10,10 @@
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
             <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
-
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0"> Tracking categories  |  </h5>&nbsp;
+                @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+                @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+                <div class="error" id="XeroStatus"></div>
             </div>
             <div class="col-6 col-sm-auto ml-auto text-right pl-0">
                 <div class="d-none" id="purchases-actions">
@@ -25,7 +28,7 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Async From Xero </span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroTrackingCategoriesSync();" id="spanSync">Async From Xero</span></button>
                 </div>
             </div>
         </div>
@@ -47,7 +50,6 @@
                     @foreach (var item in Model)
                     {
                         <tr class="btn-reveal-trigger">
-
                             <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
@@ -67,29 +69,55 @@
     <script>
 
         $(document).ready(function () {
-            AgencyDropdownPartialViewChange();
+            setTimeout(function () {
+                XeroConnectionUpdate();
 
+            }, 2000);
         });
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+            var XMessage = $('#XeroStatusMessage');
+            var XStatus = $('#XeroStatus');
+            if (XConstatus.val() == "True") {
+                XStatus.text("Xero connected");
+                XStatus.css('color', 'green');
+                $('#btnSync').show();//prop('disabled', false);
+                //$('#spanSync').prop('disabled', false);
+            }
+            else {
+                XStatus.text('Error Connecting to Xero :' + XMessage.val());
+                XStatus.css('color', 'red');
+                $('#btnSync').hide()//prop('disabled', true);
+                // $('#spanSync').prop('disabled', true);
+            }
+        }
+
 
         function AgencyDropdownPartialViewChange() {
-            var ClientID = $("#ddlclient option:selected").val();
-
-            $.ajax({
-                url: '/AgencyService/GetClientDetails?id=' + ClientID,
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    if (data != null) {
-                        // Write here what should happend once client selected
+            setTimeout(function () {
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
+                    if (response != null) {
                         SetUserPreferencesForAgency();
+                        setTimeout(function () {
+                            window.location.reload();
+                            UpdateXeroConnectionStatus();
+
+                        }, 2000);
                     }
                     else {
-                        // Write here what should happend once selected client is null
                     }
-                },
-                error: function () {
-                    // Write here what should happend when action result is errored.
+                });
+            }, 2000);
+        }
+        function XeroTrackingCategoriesSync() {
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Integration/GetXeroTrackingCategorySync?ClientID=' + ClientID, null, function (data) {
+                if (data === false) {
+                    ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
+                }
+                else {
+                    ShowAlertBoxSuccess("Success!", "GL Account sync with Xero successfully.", function () { window.location.reload(); });
                 }
             });
         }
