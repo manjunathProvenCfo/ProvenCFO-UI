@@ -395,7 +395,9 @@ a {
 }
 
 
-
+/*
+    some css are not reflected in the theem.css file then i have writeen the those code in the common.css file
+*/
 svg.svg-inline--fa.fa-plus-circle.fa-w-16 {
     color: #00BE82;
 }
@@ -403,3 +405,15 @@ svg.svg-inline--fa.fa-plus-circle.fa-w-16 {
 svg.svg-inline--fa.fa-comment.fa-w-16 {
     color: #449DFF;
 }
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #fff;
+    text-decoration: none;
+}
+
