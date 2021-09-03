@@ -109,28 +109,38 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    int AgencyID = 0;
-                    string CreatedBy = string.Empty;
+                    //int AgencyID = User.AgencyID;//LoggedInUserPreferenced Agency Id
+                    //string CreatedBy = string.Empty;
                     var LoginUserid = Session["UserId"].ToString();
-                    NotesDescriptionModel NewNotesDescription = new NotesDescriptionModel();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    if (UserPref != null && UserPref.Count() > 0)
+                    //NotesDescriptionModel NewNotesDescription = new NotesDescriptionModel();
+                    //List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    //if (UserPref != null && UserPref.Count() > 0)
+                    //{
+                    //    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    //    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    //}
+                    if (Notes.Id != null)
                     {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        Notes.ModifiedBy = LoginUserid;
+                        Notes.ModifiedDate = DateTime.Now;
                     }
-
-                    NewNotesDescription.Title = Notes.Title;
-                    NewNotesDescription.Description = Notes.Description;
-                    NewNotesDescription.NoteCatId = Notes.NoteCatId;
-                    NewNotesDescription.IsPublished = Notes.IsPublished;
-                    //NewNotesDescription.Position = Notes.Position;
-                    NewNotesDescription.Status = Notes.Status;
-                    NewNotesDescription.CreatedBy = LoginUserid;
-                    NewNotesDescription.IsDeleted = false;
+                    else
+                    {
+                        Notes.CreatedBy = LoginUserid;
+                        Notes.IsDeleted = false;
+                    }
+                    //Notes.IsPublished = "Published";
+                    //NewNotesDescription.Title = Notes.Title;
+                    //NewNotesDescription.Description = Notes.Description;
+                    //NewNotesDescription.NoteCatId = Notes.NoteCatId;
+                    //NewNotesDescription.IsPublished = Notes.IsPublished;
+                    ////NewNotesDescription.Position = Notes.Position;
+                    //NewNotesDescription.Status = Notes.Status;
+                    //NewNotesDescription.CreatedBy = LoginUserid;
+                    //NewNotesDescription.IsDeleted = false;
                     using (NotesService objNotes = new NotesService())
                     {
-                        var result = objNotes.CreateNewNotes(Notes, LoginUserid);
+                        var result = objNotes.CreateNewNotes(Notes);
                         if (result.Status == true)
                         {
                             ViewBag.ErrorMessage = "Created";

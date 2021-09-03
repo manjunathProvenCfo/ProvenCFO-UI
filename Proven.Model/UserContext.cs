@@ -17,6 +17,10 @@ namespace Proven.Model
         public string LoginName { get; set; }
         public string UserFullName { get; set; }
         public string UserType { get; set; }
+        public List<UserPreferencesVM> UserPref { get; set; }
+        public int AgencyID { get; set; }
+
+
         public UserContext(IPrincipal user)
         {
             if (user.Identity.IsAuthenticated)
@@ -30,6 +34,16 @@ namespace Proven.Model
                 session["LoginName"] = LoginName = userData[2];
                 session["UserFullName"] = UserFullName = userData[3];
                 session["UserType"] = UserType = userData[4];
+
+                if (session["LoggedInUserPreferences"] != null)
+                {
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                }
             }
         }
     }

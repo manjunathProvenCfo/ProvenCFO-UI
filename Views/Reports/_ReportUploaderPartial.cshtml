@@ -1,0 +1,138 @@
+﻿<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="report-modal-label-1" aria-hidden="true" id="report-uploader-modal">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="bg-light rounded-soft-top px-4 py-3">
+                    <h4 class="mb-1" id="report-modal-label-title">Upload Report for <span id="lblReportPeriod">Year End 2020</span></h4>
+                </div>
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*<div class="dropzone dropzone-multiple p-0" >
+                                <div class="fallback"><input type="file" name="file2"></div>
+                                <div class="dz-message" data-dz-message> <img class="mr-2" src="../assets/img/icons/cloud-upload.svg" width="25" alt="">Drop your files here</div>
+                                <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
+                                    <div class="media align-items-center mb-3 pb-3 border-bottom btn-reveal-trigger">
+                                        <img class="dz-image" src="" alt="" data-dz-thumbnail>
+                                        <div class="media-body d-flex flex-between-center">
+                                            <div>
+                                                <h6 data-dz-name></h6>
+                                                <div class="d-flex align-items-center">
+                                                    <p class="mb-0 fs--1 text-400 line-height-1" data-dz-size></p>
+                                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown text-sans-serif">
+                                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h"></span></button>
+                                                <div class="dropdown-menu dropdown-menu-right border py-0">
+                                                    <div class="bg-white py-2"><a class="dropdown-item" href="#!" data-dz-remove>Remove File </a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                            <div id="reportUploader" class="dropzone dropzone-multiple">
+                                <div class="dz-message" data-dz-message="data-dz-message"> <img class="me-2" src="../../../assets/img/icons/cloud-upload.svg" width="25" alt="">Drop your files here</div>
+                            </div>
+                            <div id="attachmentContainer">
+                            </div>
+                            <div class="media align-items-center mb-3">
+                                <div class="table table-striped files" id="previews" style="margin-top:40px">
+
+                                    <div id="template" class="file-row">
+                                        <strong style="color: red;">Please upload the file to save.</strong>
+                                        <!-- This is used as the file preview template -->
+                                        <div>
+                                            <span class="preview"><img data-dz-thumbnail /></span>
+                                        </div>
+                                        <div>
+                                            <p class="name" data-dz-name></p>
+                                            <strong class="error text-danger" data-dz-errormessage></strong>
+                                        </div>
+                                        <div>
+                                            <p class="size" data-dz-size></p>
+                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                            </div>
+                                        </div>
+                                        <div id="actions">
+                                            <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;">
+                                                <i class="glyphicon glyphicon-upload"></i>
+                                                <span>Upload</span>
+                                            </button>
+                                            <span class="mx-1"></span>
+                                            @*<button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                                    <i class="glyphicon glyphicon-ban-circle"></i>
+                                                    <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                    <span>Cancel</span>
+                                                </button>*@
+                                            <span class="mx-1"></span>
+                                            <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                                <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                <span>Remove</span>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*---*@
+                            <!--<form id="formFileUploader" method="POST" enctype="multipart/form-data" data-url="@Url.Action("Upload", "FileUpload")>
+                                <div class="row fileupload-buttonbar">
+                                    <div class="col-lg-7">-->
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <!--<span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Add files...</span>
+                                <input type="file" name="files[]" multiple>
+                            </span>
+                            <button type="submit" class="btn btn-primary start">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span>Start upload</span>
+                            </button>
+                            <button type="reset" class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Cancel upload</span>
+                            </button>
+                            <button type="button" class="btn btn-danger delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                            <input type="checkbox" class="toggle">-->
+                            <!-- The global file processing state -->
+                            <!--<span class="fileupload-process"></span>
+                            </div>-->
+                            <!-- The global progress state -->
+                            <!--<div class="col-lg-5 fileupload-progress fade">-->
+                            <!-- The global progress bar -->
+                            <!--<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            </div>-->
+                            <!-- The extended global progress state -->
+                            <!--<div class="progress-extended">&nbsp;</div>
+                                </div>
+                            </div>-->
+                            <!-- The global progress state -->
+                            <!--<div class="col-lg-5 fileupload-progress fade">-->
+                            <!-- The global progress bar -->
+                            <!--<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            </div>-->
+                            <!-- The extended global progress state -->
+                            <!--<div class="progress-extended">&nbsp;</div>
+                            </div>-->
+                            <!-- The table listing the files available for upload/download -->
+                            <!--<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                            </form>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

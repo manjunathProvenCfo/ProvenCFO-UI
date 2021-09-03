@@ -471,6 +471,7 @@
     <Content Include="assets\js\config.navbar-vertical.min.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\popper.min.js" />
+    <Content Include="assets\js\reports.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
     <Content Include="assets\js\twilio.js" />
@@ -1032,8 +1033,8 @@
     <Content Include="Views\Integration\Integration.cshtml" />
     <Content Include="Views\Integration\GetXeroTracking.cshtml" />
     <Content Include="Views\Reports\_ReportPeriodPartial.cshtml" />
+    <Content Include="Views\Reports\_ReportUploaderPartial.cshtml" />
     <Content Include="Views\Notes\OpenDescription.cshtml" />
-
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
