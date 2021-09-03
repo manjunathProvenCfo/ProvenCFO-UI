@@ -3,6 +3,8 @@
     ViewBag.Title = "ReportsList";
 }
 
+@Styles.Render("~/Content/jQuery-File-Upload")
+
 <div class="container-fluid p-0" data-layout="container">
 
     <div class="row mb-4">
@@ -52,6 +54,8 @@
                     @Html.Partial("_ReportPeriodPartial", month)
                 </div>
             }
+
+            @Html.Partial("_ReportUploaderPartial")
 
             @*<div class="card mb-1">
                     <div class="card-body report-card-body position-relative">
@@ -121,69 +125,6 @@
 </div>
 
 @section Scripts{
-    <script type="text/javascript">
-        var $reportYears;
-        var $divPeriods;
-        var $lblYears;
-        var $divReportPeriodCard;
-        var $divReportPeriodYearEnd;
-        var $divReportPeriodQuarters;
-        var $divReportPeriodMonths;
-
-        $(function () {
-            $reportYears = $("#reportYears");
-            $divPeriods = $("div[id='divPeriod']");
-            $lblYears = $("span[id='lblYear']");
-            $divReportPeriodCard = $("div[id='divReportPeriodCard']");
-            $divReportPeriodYearEnd = $("div[data-report-period='YearEnd']");
-            $divReportPeriodQuarters = $("div[data-report-period^='Q']");
-            $divReportPeriodMonths = $("div[data-report-period-is-month='True']");
-
-            $reportYears.change(function (e) {
-                debugger
-                let year = parseInt($(this).val());
-                $lblYears.text(year);
-                $divReportPeriodCard.attr("data-year", year);
-
-                let currentYear = moment().year();
-                let currentMonth = parseInt(moment().format("MM"));
-                if (year < currentYear) {
-                    $divReportPeriodCard.show();
-                    $divReportPeriodMonths.parents(".card").show();
-                }
-                else {
-                    if (year == currentYear) {
-                        $divReportPeriodYearEnd.hide();
-
-                        for (var i = 0; i < (12 - currentMonth + 1); i++) {
-                            if (i == 0)
-                                $divReportPeriodQuarters.filter("[data-report-period='Q4']").hide();
-                            else if (i == 3)
-                                $divReportPeriodQuarters.filter("[data-report-period='Q3']").hide();
-                            else if (i == 6)
-                                $divReportPeriodQuarters.filter("[data-report-period='Q2']").hide();
-                            else if (i == 9)
-                                $divReportPeriodQuarters.filter("[data-report-period='Q1']").hide();
-
-                            $divReportPeriodMonths.eq(i).parents(".card").hide();
-                        }
-                    }
-                }
-
-            });
-
-            bindPage();
-        });
-
-        var bindPage = function () {
-            bindYears();
-            $reportYears.trigger('change');
-        }
-
-        var bindYears = function () {
-            for (var i = moment().year(); i >= 2018; i--) {
-                $reportYears.append(`<option>${i}</option>`)
-            }
-        }
-    </script>
+    @Scripts.Render("~/bundles/js/kanban")//TODO//Call only dropzone related files
+    @Scripts.Render("~/bundles/js/reports")
 }
