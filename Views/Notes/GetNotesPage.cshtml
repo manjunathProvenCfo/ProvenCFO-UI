@@ -76,10 +76,17 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h6 style="color: #00BE82; "> @Category.Title</h6>
                                         <div class="d-flex align-items-center">
-                                            <span class="mr-2" style="font-size: 14px;">Publish</span>
+                                            <span class="mr-2" style="font-size: 14px;">@Category.IsPublished</span>
                                             <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                <input class="custom-control-input" id="customSwitch1" type="checkbox" checked>
-                                                <label class="custom-control-label" for="customSwitch1"></label>
+                                                @if (@Category.IsPublished.ToLower() == "published")
+                                                {
+                                                    <input class="custom-control-input" id="chkIsPublished" type="checkbox" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input class="custom-control-input" id="chkIsPublished" type="checkbox">
+                                                }
+                                                <label class="custom-control-label" for="chkIsPublished"></label>
                                             </div>
                                             <div class="ml-2" style=" font-size : 24px">
                                                 <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
@@ -88,7 +95,7 @@
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                        <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                        <a class="dropdown-item" href="#" descriptionId="@Category.Id" isPublished="@Category.IsPublished" onclick="openEdit(event);">Edit</a>
                                                         <a class="dropdown-item" href="#">Move Up</a>
                                                         <a class="dropdown-item" href="#">Move Down</a>
                                                         <div class="dropdown-divider"></div>
@@ -142,14 +149,14 @@
         $(document).ready(function () {
             //AgencyDropdownPartialViewChange();
             var ClientID = $("#ddlclient option:selected").val();
-            getAgencyMembersList(ClientID);
+            //getAgencyMembersList(ClientID);
 
 
         });
 
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-                debugger;
+                
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -158,25 +165,29 @@
                 tinyMCE.activeEditor.setContent("");
                 $("#notes-modal-new").modal("show");
 
+                $("#btnCreateNewNotesDescription").text("Create");
+
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-
+                debugger
+                var id = $('#Id').val();
                 var title = $('#txtNotesTitle').val();
                 var noteCatId = $('#NoteCatId').val();
                 var ClientID = $("#ddlclient option:selected").val();
                 var agencyId = $('#ClientID').val();
-                var isPublished = $('#IsPublished').val();
+
+                var isPublished = "Unpublished";
+                if ($("#chkPublished").prop("checked") === true) {
+                    isPublished = "Published";
+                }
                 var position = $('#Position').val();
                 var description = tinyMCE.activeEditor.getContent();
                 var status = $('#NotesStatus').val();
-                var isPublished = '';
-
-
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
+                var pdata = { Id : id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -202,25 +213,37 @@
 
         function openEdit(e) {
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            //var isPublished = e.currentTarget.attributes["isPublished"].value;
             $("#NoteCatId").val(NoteCatId);
             tinymce.get("txtDescription").getContent();
-            $("#notes-modal-update").modal("show");
-            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $("#notes-modal-new").modal("show");
+            $("#btnCreateNewNotesDescription").text("Update");
             $.ajax({
                 url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
                 //cache: false,
                 success: function (response) {
                     if (response.Message == 'Success') {
-                       
                         if (response.Description != null) {
+                            let published = response.Description.IsPublished;
                             let title = response.Description.Title;
-                            $('#txtNotesTitle1').val(title);
-                            
+
+                            $('#Id').val(response.Description.Id);
+                            $('#txtNotesTitle').val(title);
+                            if (published.toLowerCase() == "published") {
+                                $("#chkPublished").prop('checked', true);
+                            }
+                            else
+                                $("#chkPublished").prop('checked', false);
+
                             $('#txtDescription').html(response.Description.Description);
                             if (response.Description.Description != null) {
                                 $('#txtDescription').html(response.Description.Description);
-                                tinyMCE.activeEditor.setContent(response.Description.Description);
+                                tinymce.get("txtDescription").setContent(response.Description.Description);
                             }
+
+                            $("#NoteCatId").val(response.Description.NoteCatId);
+                            $("#AgencyId").val(response.Description.AgencyId);
+                            $("#Position").val(response.Description.Position);
                         }
                     }
                     else {
@@ -232,12 +255,12 @@
                         }
                     }
                 }
-            
+
             });
 
             $("#btnUpdateNewNotesDescription").click(function () {
                 debugger;
-                UpdateNotesDescription(Id, Title, DescriptionText, isPublished );
+                UpdateNotesDescription(Id, Title, DescriptionText, isPublished);
                 //Description.descriptionId = $("#txtId").val();
                 //Description.Title = $("#txtNotesTitle1").val();
                 //Description.Description = $("#txtDescription").val();
@@ -268,7 +291,7 @@
 
         }
 
-       
+
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
@@ -303,10 +326,10 @@
             }
         }
 
-        function UpdateNotesDescription( Id, Title, DescriptionText,isPublished) {
+        function UpdateNotesDescription(Id, Title, DescriptionText, isPublished) {
 
             var pdata = {
-                Id:Id, Title : Title, Description : DescriptionText, IsPublished : isPublished
+                Id: Id, Title: Title, Description: DescriptionText, IsPublished: isPublished
             }
             $.ajax({
                 type: "POST",

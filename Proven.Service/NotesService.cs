@@ -33,20 +33,20 @@ namespace Proven.Service
             return GetAsync<NotesDescriptionModel>("Notes/GetNotesDescriptionById?NotesDescriptionId=" + NotesDescriptionId, true).Result;
         }
 
-        public NotesDescriptionMainModel1 CreateNewNotes(NotesDescriptionModel notesDescription, string LoginUserID)
+        public NotesDescriptionMainModel1 CreateNewNotes(NotesDescriptionModel notesDescription)
         {
-            NotesDescriptionModel ndm = new NotesDescriptionModel();
+            //NotesDescriptionModel ndm = new NotesDescriptionModel();
 
-            ndm.Title = notesDescription.Title;
-            ndm.NoteCatId = notesDescription.NoteCatId;
-            ndm.AgencyId = notesDescription.AgencyId;
-            ndm.Description = notesDescription.Description;
-            ndm.Status = notesDescription.Status;
-            ndm.CreatedBy = LoginUserID;
-            ndm.IsDeleted = false;
-            ndm.IsPublished = "Published";
+            //ndm.Title = notesDescription.Title;
+            //ndm.NoteCatId = notesDescription.NoteCatId;
+            //ndm.AgencyId = notesDescription.AgencyId;
+            //ndm.Description = notesDescription.Description;
+            //ndm.Status = notesDescription.Status;
+            //ndm.CreatedBy = LoginUserID;
+            //notesDescription.IsDeleted = false;
+            //notesDescription.IsPublished = "Published";
 
-            return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", ndm).Result;
+            return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", notesDescription).Result;
         }
 
         public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished,string LoginUserID)

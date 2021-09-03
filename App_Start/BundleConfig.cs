@@ -60,7 +60,7 @@ namespace ProvenCfoUI
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/list.min.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
-             "~/assets/lib/dropzone/dropzone.min.js"             
+             "~/assets/lib/dropzone/dropzone.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -77,6 +77,50 @@ namespace ProvenCfoUI
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));
+
+            bundles.Add(new Bundle("~/bundles/js/reports").Include("~/assets/js/reports.js"));
+            #region FileUploader
+
+            bundles.Add(new ScriptBundle("~/bundles/jQuery-File-Upload").Include(
+                    //<!-- The Templates plugin is included to render the upload/download listings -->
+                    "~/assets/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js",
+                    //"~/assets/lib/blueimp-file-upload/js/tmpl.min.js",
+                    //<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+                    //"~/assets/lib/blueimp-file-upload/js/load-image.all.min.js",
+                    //<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+                    //"~/assets/lib/blueimp-file-upload/js/canvas-to-blob.min.js",
+                    //"~/Scripts/file-upload/jquery.blueimp-gallery.min.js",
+                    //<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.iframe-transport.min.js",
+                    //<!-- The basic File Upload plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload.min.js",
+                    //<!-- The File Upload processing plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-process.min.js",
+                    //<!-- The File Upload image preview & resize plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-image.min.js",
+                    //<!-- The File Upload audio preview plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-audio.min.js",
+                    //<!-- The File Upload video preview plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-video.min.js",
+                    //<!-- The File Upload validation plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-validate.min.js",
+                    //!-- The File Upload user interface plugin -->
+                    "~/assets/lib/blueimp-file-upload/js/jquery.fileupload-ui.min.js",
+                    //Blueimp Gallery 2 
+                    "~/assets/lib/blueimp-gallery/js/blueimp-gallery.min.js",
+                    "~/assets/lib/blueimp-gallery/js/blueimp-gallery-video.min.js",
+                    "~/assets/lib/blueimp-gallery/js/blueimp-gallery-indicator.min.js",
+                    "~/assets/lib/blueimp-gallery/js/jquery.blueimp-gallery.min.js"
+
+));
+
+            bundles.Add(new ScriptBundle("~/bundles/Blueimp-Gallerry2").Include(//Blueimp Gallery 2 
+                        "~/assets/lib/blueimp-gallery/js/blueimp-gallery.min.js",
+                        "~/assets/lib/blueimp-gallery/js/blueimp-gallery-video.min.js",
+                        "~/assets/lib/blueimp-gallery/js/blueimp-gallery-indicator.min.js",
+                        "~/assets/lib/blueimp-gallery/js/jquery.blueimp-gallery.min.js"));
+
+            #endregion
             //Css Start
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -108,7 +152,17 @@ namespace ProvenCfoUI
                      "~/Style/NeedStyle.css"
                    ));
 
-            BundleTable.EnableOptimizations = true;
+            #region FileUploader
+            bundles.Add(new StyleBundle("~/Content/jQuery-File-Upload").Include(
+                    "~/assets/lib/blueimp-file-upload/css/jquery.fileupload.min.css",
+                   "~/assets/lib/blueimp-file-upload/css/jquery.fileupload-ui.min.css",
+                   "~/assets/lib/blueimp-gallery/css/blueimp-gallery.css",
+                    "~/assets/lib/blueimp-gallery/css/blueimp-gallery-video.css",
+                    "~/assets/lib/blueimp-gallery/css/blueimp-gallery-indicator.css"
+                   ));
+            #endregion
+
+            BundleTable.EnableOptimizations = false;
 
         }
     }

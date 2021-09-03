@@ -13,7 +13,7 @@ namespace Proven.Model
         public string NoteCatId { get; set; }
         public string AgencyId { get; set; }
         public string IsPublished { get; set; }
-        public string Position { get; set; }
+        public int Position { get; set; }
         [Required(ErrorMessage = "Notes Title has a required field.")]
         [StringLength(250, ErrorMessage = "Maximum 250 characters exceeded")]
         public string Title { get; set; }
