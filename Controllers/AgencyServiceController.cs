@@ -88,10 +88,10 @@ namespace ProvenCfoUI.Controllers
                     {
                         
                         var objResult = new List<ClientModel>();
-                        var LoginUserid = Session["UserId"].ToString();
-                        if (LoginUserid != null)
+                        var LoginUserid = Convert.ToString( Session["UserId"]);
+                        if (LoginUserid != "")
                         {
-                            if (Session["UserType"] != null && Session["UserType"].ToString().Trim() == "2")
+                            if (Session["UserType"] != null && Convert.ToString( Session["UserType"]).Trim() == "2")
                             {
                                 objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
                             }
