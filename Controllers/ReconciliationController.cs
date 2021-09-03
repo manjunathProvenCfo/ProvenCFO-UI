@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -13,16 +14,32 @@ namespace ProvenCfoUI.Controllers
     public class ReconciliationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public const string NotInBank = "Outstanding Payments";
+        public const string NotInBooks = "Unreconciled";
+
         // GET: Reconciliation
         [CheckSession]
-        public ActionResult GetReconcilation()
+        
+        public ActionResult GetReconcilation(string Type)
         {
+            string RecordsType = NotInBooks;
             try
             {
+                if (Type == "Not in Banks")
+                {
+                    RecordsType = NotInBank;
+                }               
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    var objResult = objReConcilation.GetReconciliation();
-                    return View(objResult.ResultData);
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    return View("ReconciliationMain",objResult.ResultData);
                 }
             }
             catch (Exception ex)
@@ -32,17 +49,58 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        //public ActionResult ReconciliationMain()
+        //{
+        //    try
+        //    {
+
+        //        using (ReconcilationService objReConcilation = new ReconcilationService())
+        //        {
+        //            int AgencyID = 0;
+        //            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+        //            if (UserPref != null && UserPref.Count() > 0)
+        //            {
+        //                var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+        //                AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+        //            }
+        //            var objResult = objReConcilation.GetReconciliation(AgencyID, NotInBank, 0);
+        //            return View();
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
         public ActionResult ReconciliationMain()
         {
             try
             {
-                return View();
+                string RecordsType = NotInBooks;
+                //  return View();
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    return View(objResult.ResultData);
+                }
+
             }
             catch (Exception ex)
             {
+
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
+
         }
     }
 }
