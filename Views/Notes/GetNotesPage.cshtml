@@ -9,12 +9,6 @@
         </div>
         <!--/.bg-holder-->
 
-
-
-
-
-
-
         <div class="card-body" id="v-pills-Summary">
             <div class="row">
                 <div class="col-lg-9">
@@ -29,7 +23,10 @@
                     <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
                 </div>
                 <div class="col-3">
-                    <h5 class="mb-0 text-right"><span class="fas fa-edit"></span></h5>
+                    @if (ViewBag.IsEditMode == true)
+                    {
+                        <h5 class="mb-0 text-right"><span class="fas fa-edit"></span></h5>
+                    }
                     <div class="Words mt-8">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21 </div>
                 </div>
             </div>
@@ -60,11 +57,14 @@
                             <h3>@Categories.NoteCategory</h3>
                             @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
                             @*Here I am writing new line for add button for testing*@
-                            <div class="dropdown">
-                                <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
-                                    <span class="fas fa-plus"></span>
+                            @if (ViewBag.IsEditMode == true)
+                            {
+                                <div class="dropdown">
+                                    <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
+                                        <span class="fas fa-plus"></span>
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
                         </div>
                         @if (Categories.NotesCategoriesList != null)
@@ -75,39 +75,42 @@
                                 <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h6 style="color: #00BE82; "> @Category.Title</h6>
-                                        <div class="d-flex align-items-center">
-                                            <span class="mr-2" style="font-size: 14px;">@Category.IsPublished</span>
-                                            <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                @if (@Category.IsPublished.ToLower() == "published")
-                                                {
-                                                    <input class="custom-control-input" id="chkIsPublished" type="checkbox" checked>
-                                                }
-                                                else
-                                                {
-                                                    <input class="custom-control-input" id="chkIsPublished" type="checkbox">
-                                                }
-                                                <label class="custom-control-label" for="chkIsPublished"></label>
-                                            </div>
-                                            <div class="ml-2" style=" font-size : 24px">
-                                                <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                                    <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                                        <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                                    </a>
+                                        @if (ViewBag.IsEditMode == true)
+                                        {
+                                            <div class="d-flex align-items-center">
+                                                <span class="mr-2" style="font-size: 14px;">@Category.IsPublished</span>
+                                                <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                    @if (@Category.IsPublished.ToLower() == "published")
+                                                    {
+                                                        <input class="custom-control-input" id="chkIsPublished" type="checkbox" checked>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="custom-control-input" id="chkIsPublished" type="checkbox">
+                                                    }
+                                                    <label class="custom-control-label" for="chkIsPublished"></label>
+                                                </div>
+                                                <div class="ml-2" style=" font-size : 24px">
+                                                    <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                            <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                        </a>
 
-                                                    <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                        <a class="dropdown-item" href="#" descriptionId="@Category.Id" isPublished="@Category.IsPublished" onclick="openEdit(event);">Edit</a>
-                                                        <a class="dropdown-item" href="#">Move Up</a>
-                                                        <a class="dropdown-item" href="#">Move Down</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                        <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" isPublished="@Category.IsPublished" onclick="openEdit(event);">Edit</a>
+                                                            <a class="dropdown-item" href="#">Move Up</a>
+                                                            <a class="dropdown-item" href="#">Move Down</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="ml-2" style="font-size:24px;">
-                                                <i class="fas fa-check" data-fa-transform="shrink-6"></i>
-                                            </div>
+                                                <div class="ml-2" style="font-size:24px;">
+                                                    <i class="fas fa-check" data-fa-transform="shrink-6"></i>
+                                                </div>
 
-                                        </div>
+                                            </div>
+                                        }
                                     </div>
                                     <p> @Html.Raw(Category.Description)</p>
 
@@ -147,16 +150,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            //AgencyDropdownPartialViewChange();
             var ClientID = $("#ddlclient option:selected").val();
-            //getAgencyMembersList(ClientID);
-
-
         });
 
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-                
+
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -166,7 +165,6 @@
                 $("#notes-modal-new").modal("show");
 
                 $("#btnCreateNewNotesDescription").text("Create");
-
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
@@ -187,7 +185,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id : id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -261,11 +259,6 @@
             $("#btnUpdateNewNotesDescription").click(function () {
                 debugger;
                 UpdateNotesDescription(Id, Title, DescriptionText, isPublished);
-                //Description.descriptionId = $("#txtId").val();
-                //Description.Title = $("#txtNotesTitle1").val();
-                //Description.Description = $("#txtDescription").val();
-
-
 
                 $("#btnUpdateNewNotesDescription").prop('update', 'Save');
 
