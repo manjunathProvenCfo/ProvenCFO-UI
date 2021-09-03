@@ -27,6 +27,16 @@
         "moment.js",
         "moment.min.js.map"
       ]
-    }
+    },
+    //{
+    //  "provider": "cdnjs",
+    //  "library": "blueimp-file-upload@10.31.0",
+    //  "destination": "assets/lib/blueimp-file-upload/"
+    //},
+    //{
+    //  "provider": "cdnjs",
+    //  "library": "blueimp-gallery@3.3.0",
+    //  "destination": "assets/lib/blueimp-gallery/"
+    //}
   ]
 }
