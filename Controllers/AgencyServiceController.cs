@@ -86,20 +86,28 @@ namespace ProvenCfoUI.Controllers
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (TempData["ClientListActived"] == null)
                     {
+                        
                         var objResult = new List<ClientModel>();
                         var LoginUserid = Session["UserId"].ToString();
-                        if (Session["UserType"] != null && Session["UserType"].ToString().Trim() == "2")
+                        if (LoginUserid != null)
                         {
-                            objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
+                            if (Session["UserType"] != null && Session["UserType"].ToString().Trim() == "2")
+                            {
+                                objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
+                            }
+                            else
+                            {
+                                objResult = objClient.GetClientListByStatus(true, false).ResultData;
+                            }
+
+
+                            TempData["ClientListActived"] = objResult;
+                            objAgy.ClientList = objResult;
                         }
                         else
                         {
-                            objResult = objClient.GetClientListByStatus(true, false).ResultData;
+                            return RedirectToAction("Login");
                         }
-
-
-                        TempData["ClientListActived"] = objResult;
-                        objAgy.ClientList = objResult;
                     }
                     else
                     {
