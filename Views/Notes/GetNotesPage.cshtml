@@ -69,26 +69,27 @@
                         </div>
                         @if (Categories.NotesCategoriesList != null)
                         {
+                            int counter = 0;
                             foreach (var Category in Categories.NotesCategoriesList)
                             {
-
-                                <div class="card-body">
+                                counter++;
+                                <div class="card-body" data-id="@Category.Id">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h6 style="color: #00BE82; "> @Category.Title</h6>
                                         @if (ViewBag.IsEditMode == true)
                                         {
                                             <div class="d-flex align-items-center">
-                                                <span class="mr-2" style="font-size: 14px;">@Category.IsPublished</span>
+                                                <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
                                                 <div class="custom-control custom-switch custom-control-inline  mr-0">
                                                     @if (@Category.IsPublished.ToLower() == "published")
                                                     {
-                                                        <input class="custom-control-input" id="chkIsPublished" type="checkbox" checked>
+                                                        <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
                                                     }
                                                     else
                                                     {
-                                                        <input class="custom-control-input" id="chkIsPublished" type="checkbox">
+                                                        <input class="custom-control-input" type="checkbox" id="@($"cc{counter}")" data-id="@Category.Id">
                                                     }
-                                                    <label class="custom-control-label" for="chkIsPublished"></label>
+                                                    <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
                                                 </div>
                                                 <div class="ml-2" style=" font-size : 24px">
                                                     <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
@@ -97,9 +98,9 @@
                                                         </a>
 
                                                         <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" isPublished="@Category.IsPublished" onclick="openEdit(event);">Edit</a>
-                                                            <a class="dropdown-item" href="#">Move Up</a>
-                                                            <a class="dropdown-item" href="#">Move Down</a>
+                                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                            <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                            <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
                                                             <div class="dropdown-divider"></div>
                                                             <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
                                                         </div>
@@ -131,17 +132,6 @@
         </div>
 
     </div>
-
-    <footer>
-        <div class="row no-gutters justify-content-between fs--1 mt-4 mb-3">
-            <div class="col-12 col-sm-auto text-center">
-                <p class="mb-0 text-600">2021 © ProvenCFO<span class="d-none d-sm-inline-block"> </span><br class="d-sm-none" /></p>
-            </div>
-            <div class="col-12 col-sm-auto text-center">
-                <p class="mb-0 text-600">v 0.1.2</p>
-            </div>
-        </div>
-    </footer>
 </div>
 
 @section Scripts{
@@ -150,7 +140,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            var ClientID = $("#ddlclient option:selected").val();
+            //var ClientID = $("#ddlclient option:selected").val();
+
+            $(".v-pills-div").find(".card-body:first #moveUp").remove();
+            $(".v-pills-div").find(".card-body:last #moveDown").remove();
         });
 
         $(function () {
@@ -168,7 +161,6 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-                debugger
                 var id = $('#Id').val();
                 var title = $('#txtNotesTitle').val();
                 var noteCatId = $('#NoteCatId').val();
@@ -180,7 +172,8 @@
                     isPublished = "Published";
                 }
                 var position = $('#Position').val();
-                var description = tinyMCE.activeEditor.getContent();
+                debugger
+                var description = tinyMCE.get("txtDescription").getContent();
                 var status = $('#NotesStatus').val();
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
@@ -205,15 +198,50 @@
                     }
 
                 })
+            });
+
+            $("[id^=chkIsPublished]").change(function () {
+                let el = $(this);
+                let isChecked = el[0].checked;
+                if (isChecked == true)
+                    el.parent('div').siblings("[id=lblIsPublished]").text("Published");
+                else
+                    el.parent('div').siblings("[id=lblIsPublished]").text("Unpublished");
+                //TODO//Update status in database
+                let pdata = { Id: el.data().id, IsPublished: isChecked };
+                //postAjax('', JSON.stringify({ pdata }), function (response) {
+
+                //});
 
             });
+
+            $("[Id=moveUp]").click(function () {
+                let el = $(this);
+                debugger
+                let id = el.parents(".card-body").data().id;
+                let swapId = el.parents(".card-body").prev().data().id;
+                let pdata = { Id: id, SwapId: swapId };
+                //postAjax('', JSON.stringify({ pdata }), function (response) {
+
+                //});
+            })
+
+            $("[Id=moveDown]").click(function () {
+                let el = $(this);
+                debugger
+                let id = el.parents(".card-body").data().id;
+                let swapId = el.parents(".card-body").next().data().id;
+                let pdata = { Id: id, SwapId: swapId };
+                //postAjax('', JSON.stringify({ pdata }), function (response) {
+
+                //});
+            })
+
         });
 
         function openEdit(e) {
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
-            //var isPublished = e.currentTarget.attributes["isPublished"].value;
             $("#NoteCatId").val(NoteCatId);
-            tinymce.get("txtDescription").getContent();
             $("#notes-modal-new").modal("show");
             $("#btnCreateNewNotesDescription").text("Update");
             $.ajax({
@@ -255,98 +283,7 @@
                 }
 
             });
-
-            $("#btnUpdateNewNotesDescription").click(function () {
-                debugger;
-                UpdateNotesDescription(Id, Title, DescriptionText, isPublished);
-
-                $("#btnUpdateNewNotesDescription").prop('update', 'Save');
-
-                postAjax('/Notes/UpdateNotesDescription', JSON.stringify({ Notes: pdata }), function (response) {
-                    if (response.Message == 'Success') {
-                        window.location.reload();
-                        $('.close-circle').click();
-                        $('.modal-backdrop').remove();
-                    }
-                    else {
-                        if (response.Message == 'Exist') {
-                            ShowAlertBox('Required!', response.Message, 'warning');
-                        }
-                        else {
-                            ShowAlertBox('Exist!', response.Message, 'warning');
-
-                        }
-                    }
-
-                })
-
-            });
-
         }
-
-
-
-        function AgencyDropdownPartialViewChange() {
-            var ClientID = $("#ddlclient option:selected").val();
-            //getTeamMembersList(ClientID);
-            if (ClientID != null && ClientID != undefined && ClientID != '') {
-                $.ajax({
-                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
-                    type: "GET",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        debugger
-                        if (data != null) {
-                            $('#Notes-create-new-btn').show();//TODO
-                            // Write here what should happend once client selected
-
-                            SetUserPreferencesForAgency();
-                            window.location.reload();
-                        }
-                        else {
-                            // Write here what should happend once selected client is null
-                        }
-                    },
-                    error: function () {
-                        // Write here what should happend when action result is errored.
-                    }
-                });
-            }
-            else {
-
-                window.location.reload();
-            }
-        }
-
-        function UpdateNotesDescription(Id, Title, DescriptionText, isPublished) {
-
-            var pdata = {
-                Id: Id, Title: Title, Description: DescriptionText, IsPublished: isPublished
-            }
-            $.ajax({
-                type: "POST",
-                url: "/Needs/UpdateNotesDescription",
-                data: JSON.stringify({ Task: pdata }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    if (response.Message == 'Success') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        }
-
 
     </script>
 }
