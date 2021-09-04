@@ -1,9 +1,13 @@
-﻿
+﻿@model IEnumerable<Proven.Model.reconciliationVM>
 @{
     ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .tabselect {
+        text-decoration:underline;
+    }
+</style>
 
 <!--<div class="card mb-4 ">
     <div class="card-header">
@@ -23,38 +27,36 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">-->
-                    @*<button class="btn btn-falcon-default btn-sm" type="button">
-                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                            <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-                        </button>*@
-                    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">filter</span></button>*@
-                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                            <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-                        </button>*@
-                    <!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1">
-                            <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
-                        </span>
-                    </button>
-                </div>
+@*<button class="btn btn-falcon-default btn-sm" type="button">
+        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+    </button>*@
+@*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">filter</span></button>*@
+@*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+    </button>*@
+<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                    <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                    <span class="d-none d-sm-inline-block ml-1">
+                        <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
+                    </span>
+                </button>
             </div>
         </div>
-    </div>-->
+    </div>
+</div>-->
+<!--<div class="card-body px-0 pt-0">
+    <!--<div class="row no-gutters">-->
+<!--@*@Html.Partial("_AgencySelection")*@
+@*@{
+    Html.RenderAction("AgencySelection", "AgencyService");
+}*@-->
+<!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
 
-
-    <!--<div class="card-body px-0 pt-0">
-        <!--<div class="row no-gutters">-->
-            <!--@*@Html.Partial("_AgencySelection")*@
-            @*@{
-                Html.RenderAction("AgencySelection", "AgencyService");
-            }*@-->
-            <!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
-
-            </div>
-        </div>-->
-    <!--</div>
+    </div>
+</div>-->
+<!--</div>
 </div>-->
 <div class="row">
     <div class="col-md-8 pr-md-0">
@@ -63,15 +65,15 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="row align-items-center">
-                            <div class="d-flex align-items-center ml-3">
+                            <div class="d-flex align-items-center ml-3" id="tabNotinBooks" onclick="Tabclick(event,0);">
                                 <span class="fas fa-book"></span>
-                                <h6 class="mb-0 ml-2"><a href="">Not in Books</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3">36</span>
                             </div>
 
-                            <div class="d-flex align-items-center ml-5">
+                            <div class="d-flex align-items-center ml-5" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
-                                <h6 class="mb-0 ml-2"><a href="">Not in Banks</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3">36</span>
                             </div>
                         </div>
@@ -130,13 +132,16 @@
                                 <th class="sort pr-1 align-middle">Description</th>
                                 <th class="sort pr-1 align-middle">Amount</th>
                                 <th class="sort pr-1 align-middle">GL Account</th>
-                                <th ><span class="far fa-question-circle"></span></th>
+                                <th><span class="far fa-question-circle"></span></th>
                                 <th class="sort pr-10 align-center ">Rule</th>
                                 <th></th>
-                                
+
                             </tr>
                         </thead>
                         <tbody id="purchases">
+                            @foreach (var item in Model)
+                            {
+
                             <tr class="btn-reveal-trigger">
                                 <td class="align-middle">
                                     <div class="custom-control custom-checkbox">
@@ -144,11 +149,18 @@
                                         <label class="custom-control-label" for="checkbox-0"></label>
                                     </div>
                                 </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
+                                <td class="sort pr-1 align-middle"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.date)</td>
+                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.description)</td>
+                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.reference)</td>
+                                @if (item.amount < 0)
+                                {
+                                    <td class="sort pr-1 align-middle text-danger">(@Html.DisplayFor(modelItem => item.amount))</td>
+                                }
+                                else
+                                {
+                                    <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.amount)</td>
+                                }
                                 <td class="sort pr-1 align-middle">
                                     <div class="row justify-content-between">
                                         <div class="col-auto">
@@ -170,282 +182,8 @@
                                 </td>
                                 <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
                             </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span> </td>
-
-
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
-
-                            <tr class="btn-reveal-trigger">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                        <label class="custom-control-label" for="checkbox-0"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle">PayPal</td>
-                                <td class="sort pr-1 align-middle">6/25/2021</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                                <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                                <td class="sort pr-1 align-middle">$99</td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment"></span></td>
-                            </tr>
+                            }
+                           
                         </tbody>
                     </table>
                 </div>
@@ -485,7 +223,7 @@
 
             </div>
 
-       
+
             <div class="card panel-primary">
 
                 <div class="card-body">
@@ -568,12 +306,12 @@
                                 <div class="hover-actions-trigger d-flex align-items-center">
                                     <div class="">
                                         <div class="text-40 fs-xl--3">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="">
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -587,47 +325,96 @@
                         <button class="btn btn-sm btn-send outline-none ml-2" type="submit">Send</button>
                     </form>
                 </div>
-            </div>           
+            </div>
 
         </div>
-       
+
     </div>
 </div>
 
 
-            @section Scripts {
-                @Scripts.Render("~/bundles/js/table");
-                <script>
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table");
+    <script>
 
-                    $(document).ready(function () {
-                        AgencyDropdownPartialViewChange();
-
-                    });
-
-                    function AgencyDropdownPartialViewChange() {
-                        var ClientID = $("#ddlclient option:selected").val();
-
-                        $.ajax({
-                            url: '/AgencyService/GetClientDetails?id=' + ClientID,
-                            type: "GET",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function (data) {
-                                if (data != null) {
-                                    // Write here what should happend once client selected
-                                    SetUserPreferencesForAgency();
-                                }
-                                else {
-                                    // Write here what should happend once selected client is null
-                                }
-                            },
-                            error: function () {
-                                // Write here what should happend when action result is errored.
-                            }
-                        });
-                    }
-
-                </script>
-
+        $(document).ready(function () {
+            //AgencyDropdownPartialViewChange();
+            var type = sessionStorage.getItem('Type');
+            if (type != null) {
+                
+                if (type == "0") {
+                    $('#tabNotinBooks').addClass('tabselect');
+                    $('#tabNotinBanks').removeClass('tabselect');
+                }
+                else {
+                    $('#tabNotinBooks').removeClass('tabselect');
+                    $('#tabNotinBanks').addClass('tabselect');
+                }
             }
+            else {
+                $('#tabNotinBooks').addClass('tabselect');
+                $('#tabNotinBanks').removeClass('tabselect');
+            }
+
+        });
+        function Tabclick(e, type) {
+            sessionStorage.setItem('Type', type);
+            if (type == 0) {                
+                $('#tabNotinBooks').addClass('tabselect');
+                $('#tabNotinBanks').removeClass('tabselect');
+            }
+            else {
+                $('#tabNotinBooks').removeClass('tabselect');
+                $('#tabNotinBanks').addClass('tabselect');
+            }            
+        }
+        function loadReconcilation() {
+            var type = sessionStorage.getItem('Type');
+            var recType = 'Not in Books';
+            if (type != null && type == '1') {
+                recType = 'Not in Banks';
+            }
+
+            postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
+
+                if (data === false) {
+                    
+
+                }
+                else {
+                   
+                }
+
+            });
+
+        }
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+
+            $.ajax({
+                url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        // Write here what should happend once client selected
+                        SetUserPreferencesForAgency();
+                        //loadReconcilation();
+                        window.location.reload();
+                    }
+                    else {
+                        // Write here what should happend once selected client is null
+                    }
+                },
+                error: function () {
+                    // Write here what should happend when action result is errored.
+                }
+            });
+        }
+
+    </script>
+
+}
 

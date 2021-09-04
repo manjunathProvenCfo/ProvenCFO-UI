@@ -15,13 +15,14 @@ namespace Proven.Service
         private StringContent content;
 
 
-        public ReconciliationMainModel GetReconciliation()
+        public ReconciliationMainModel GetReconciliation(int ClientId, string type, int Isreconciled)
         {
-            return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation").Result;
+            return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled).Result;
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

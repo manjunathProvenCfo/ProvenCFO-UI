@@ -25,6 +25,8 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     int AgencyID = 0;
+                    ViewBag.IsEditMode = false;
+                    var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
                     {
@@ -33,6 +35,10 @@ namespace ProvenCfoUI.Controllers
                     }
                     var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
                     TempData["CategoriesAndNotes"] = Categories;
+                    if (userType != "" && userType == "1")
+                    {
+                        ViewBag.IsEditMode = true;
+                    }
                 }
                 return View();
             }

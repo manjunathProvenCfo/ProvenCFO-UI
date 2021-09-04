@@ -61,53 +61,53 @@ namespace Proven.Service
             //}
         }
 
-        public ReconciliationMainModel CreateReconciliation(string id, string account_name, string amount, string company, string date, string description, string gl_account, string reconciled, string reference, string rule, string type)
-        {
-            reconciliationVM rv = new reconciliationVM();
-            rv.id = id;
-            rv.account_name = account_name;
-            rv.amount = amount;
-            rv.company = company;
-            rv.date = date;
-            rv.description = description;
-            rv.gl_account = gl_account;
-            rv.reconciled = reconciled;
-            rv.reference = reference;
-            rv.rule = rule;
-            rv.type = type;
-            var form = new Dictionary<string, string>
-           {
-               {"plenadata__id", "0"},
-               {"id", id},
-               {"account_name", account_name},
-               {"amount",  amount},
-               {"company", company},
-               {"date", date},
-               {"description", description},
-               {"gl_account", gl_account},
-               {"reconciled", reconciled},
-               {"reference", reference},
-               {"rule", rule},
-               {"type", type}
-           };
-            content = new StringContent(JsonConvert.SerializeObject(rv), Encoding.UTF8, "application/json");
-            client.DefaultRequestHeaders.Authorization
-                         = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWNvbmNpbGlhdGlvblNlcnZpY2VBY2Nlc3NUb2tlbiIsImp0aSI6ImM5MDdlM2RmLWY2YzgtNDg5MC05Y2RlLThiZmM5Zjg2ZjQyZCIsIklkIjoiNDBjZTQxYmItNTkzNi00MGMxLTk3ZjktYjk4YTJmZmY2MDM3IiwiRmlyc3ROYW1lIjoicGxhbmEiLCJMYXN0TmFtZSI6ImRhdGEiLCJVc2VyTmFtZSI6ImluZm9AcGxlbmFkYXRhLmNvbSIsIkVtYWlsIjoiaW5mb0BwbGVuYWRhdGEuY29tIiwiZXhwIjoxNjI3NjQzNTk0LCJpc3MiOiJQcm92ZW5DRk9BdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IlRoaXJkUGFydHlTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.Zurze_b-v8hSmWrSUDLd4R7vF7agchYMLfEZJTzPC7Q");
-            response = client.PostAsync("Reconciliation/CreateReconciliation", content).Result;
+        //public ReconciliationMainModel CreateReconciliation(string id, string account_name, string amount, string company, string date, string description, string gl_account, string reconciled, string reference, string rule, string type)
+        //{
+        //    reconciliationVM rv = new reconciliationVM();
+        //    rv.id = id;
+        //    rv.account_name = account_name;
+        //    rv.amount = amount;
+        //    rv.company = company;
+        //    rv.date = date;
+        //    rv.description = description;
+        //    rv.gl_account = gl_account;
+        //    rv.reconciled = reconciled;
+        //    rv.reference = reference;
+        //    rv.rule = rule;
+        //   // rv.type = type;
+        //    var form = new Dictionary<string, string>
+        //   {
+        //       {"plenadata__id", "0"},
+        //       {"id", id},
+        //       {"account_name", account_name},
+        //       {"amount",  amount},
+        //       {"company", company},
+        //       {"date", date},
+        //       {"description", description},
+        //       {"gl_account", gl_account},
+        //       {"reconciled", reconciled},
+        //       {"reference", reference},
+        //       {"rule", rule},
+        //       {"type", type}
+        //   };
+        //    content = new StringContent(JsonConvert.SerializeObject(rv), Encoding.UTF8, "application/json");
+        //    client.DefaultRequestHeaders.Authorization
+        //                 = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWNvbmNpbGlhdGlvblNlcnZpY2VBY2Nlc3NUb2tlbiIsImp0aSI6ImM5MDdlM2RmLWY2YzgtNDg5MC05Y2RlLThiZmM5Zjg2ZjQyZCIsIklkIjoiNDBjZTQxYmItNTkzNi00MGMxLTk3ZjktYjk4YTJmZmY2MDM3IiwiRmlyc3ROYW1lIjoicGxhbmEiLCJMYXN0TmFtZSI6ImRhdGEiLCJVc2VyTmFtZSI6ImluZm9AcGxlbmFkYXRhLmNvbSIsIkVtYWlsIjoiaW5mb0BwbGVuYWRhdGEuY29tIiwiZXhwIjoxNjI3NjQzNTk0LCJpc3MiOiJQcm92ZW5DRk9BdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IlRoaXJkUGFydHlTZXJ2aWNlUG9zdG1hbkNsaWVudCJ9.Zurze_b-v8hSmWrSUDLd4R7vF7agchYMLfEZJTzPC7Q");
+        //    response = client.PostAsync("Reconciliation/CreateReconciliation", content).Result;
 
 
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<ReconciliationMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var _content = response.Content.ReadAsStringAsync().Result;
+        //        return JsonConvert.DeserializeObject<ReconciliationMainModel>(_content);
+        //    }
+        //    else
+        //    {
+        //        string msg = response.ReasonPhrase;
+        //        throw new Exception(msg);
 
-            }
-        }
+        //    }
+        //}
 
         public LoginModel ForgotPassword(string email)
         {
