@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="row scrollspy-listing">
 
         <div class="col-3 order-2">
@@ -173,7 +173,7 @@
                     isPublished = "Published";
                 }
                 var position = $('#Position').val();
-              
+
                 var description = tinyMCE.get("txtDescription").getContent();
                 var status = $('#NotesStatus').val();
 
@@ -202,7 +202,7 @@
             });
 
             $("[id^=chkIsPublished]").change(function () {
-               
+
                 let el = $(this);
                 let isChecked = el[0].checked;
                 if (isChecked == true)
@@ -212,12 +212,10 @@
                 //TODO//Update status in database
                 /*let pdata = { Id: el.data().id, IsPublished: isChecked };*/
                 postAjax('/Notes/PublishingNotes?Id=' + el.data().id, function (response) {
-                    
+
                     if (response.Message == 'Success') {
                     }
-                      /*  window.location.reload();*/
-                        //$('.close-circle').click();
-                        //$('.modal-backdrop').remove();
+
                 });
 
             });
