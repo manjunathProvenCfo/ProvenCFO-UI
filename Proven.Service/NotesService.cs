@@ -60,6 +60,13 @@ namespace Proven.Service
 
             return PostAsync<ReturnModel, NotesDescriptionModel>("Notes/UpdateNotesDescription", ndm).Result;
         }
+
+        public NotesDescriptionModel PublishingNotes(int Id)
+        {
+            string result = string.Format("Notes/PublishingNotes?Id={0}", Id);
+            return PostAsync<NotesDescriptionModel>(result).Result;
+        }
+
         public void Dispose()
         {
             Dispose(true);

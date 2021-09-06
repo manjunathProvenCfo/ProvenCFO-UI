@@ -26,6 +26,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     int AgencyID = 0;
                     ViewBag.IsEditMode = false;
+                   
                     var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
@@ -39,6 +40,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.IsEditMode = true;
                     }
+                    
                 }
                 return View();
             }
@@ -115,16 +117,9 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //int AgencyID = User.AgencyID;//LoggedInUserPreferenced Agency Id
-                    //string CreatedBy = string.Empty;
+                    
                     var LoginUserid = Session["UserId"].ToString();
-                    //NotesDescriptionModel NewNotesDescription = new NotesDescriptionModel();
-                    //List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    //if (UserPref != null && UserPref.Count() > 0)
-                    //{
-                    //    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    //    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    //}
+                   
                     if (Notes.Id != null)
                     {
                         Notes.ModifiedBy = LoginUserid;
@@ -135,15 +130,6 @@ namespace ProvenCfoUI.Controllers
                         Notes.CreatedBy = LoginUserid;
                         Notes.IsDeleted = false;
                     }
-                    //Notes.IsPublished = "Published";
-                    //NewNotesDescription.Title = Notes.Title;
-                    //NewNotesDescription.Description = Notes.Description;
-                    //NewNotesDescription.NoteCatId = Notes.NoteCatId;
-                    //NewNotesDescription.IsPublished = Notes.IsPublished;
-                    ////NewNotesDescription.Position = Notes.Position;
-                    //NewNotesDescription.Status = Notes.Status;
-                    //NewNotesDescription.CreatedBy = LoginUserid;
-                    //NewNotesDescription.IsDeleted = false;
                     using (NotesService objNotes = new NotesService())
                     {
                         var result = objNotes.CreateNewNotes(Notes);
@@ -197,6 +183,28 @@ namespace ProvenCfoUI.Controllers
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
+            }
+        }
+
+        
+        [CheckSession]
+        public ActionResult PublishingNotes(int Id)
+        {
+            try
+            {
+                using (NotesService obj = new NotesService())
+                {
+                    var result = obj.PublishingNotes(Id);
+                    if (result == null)
+                        ViewBag.ErrorMessage = "Can not be  published";
+                    return RedirectToAction("GetNotesPage");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                ViewBag.ErrorMessage = "";
+                return View();
             }
         }
 
