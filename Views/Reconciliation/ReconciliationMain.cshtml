@@ -5,7 +5,7 @@
 }
 <style>
     .tabselect {
-        text-decoration:underline;
+        text-decoration: underline;
     }
 </style>
 
@@ -59,7 +59,7 @@
 <!--</div>
 </div>-->
 <div class="row">
-    <div class="col-md-8 pr-md-0">
+    <div class="col-md-8 pr-md-0" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
                 <div class="row align-items-center justify-content-between">
@@ -98,7 +98,7 @@
 
                                 <button class="btn btn-falcon-default btn-sm mx-1" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1 " id="iconComments" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
                             <div class="form-group position-relative mb-0">
@@ -116,8 +116,8 @@
                 </div>
             </div>
             <div class="card-body px-0 pt-0">
-                <div class="dashboard-data-table">
-                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" data-options='{"responsive":false,"pagingType":"simple","lengthChange":false,"searching":false,"pageLength":8,"columnDefs":[{"targets":[0,6],"orderable":false}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                <div class="dashboard-data-table table-responsive">
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,6],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
@@ -131,10 +131,18 @@
                                 <th class="sort pr-1 align-middle">Who</th>
                                 <th class="sort pr-1 align-middle">Description</th>
                                 <th class="sort pr-1 align-middle">Amount</th>
-                                <th class="sort pr-1 align-middle">GL Account</th>
-                                <th><span class="far fa-question-circle"></span></th>
-                                <th class="sort pr-10 align-center ">Rule</th>
                                 <th></th>
+                                @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                {
+                                    <th class="sort pr-1 align-middle">GL Account</th>
+                                }
+                                @*<th><span class="far fa-question-circle"></span></th>*@
+                                <th class="sort pr-10 align-center ">Rule</th>
+                                @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
+                                {
+                                    <th class="sort pr-10 align-center ">Tracking Category</th>
+                                }
+
 
                             </tr>
                         </thead>
@@ -142,55 +150,82 @@
                             @foreach (var item in Model)
                             {
 
-                            <tr class="btn-reveal-trigger">
+                            <tr class="btn-reveal-trigger cursor-pointer">
                                 <td class="align-middle">
                                     <div class="custom-control custom-checkbox">
                                         <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
                                         <label class="custom-control-label" for="checkbox-0"></label>
                                     </div>
                                 </td>
-                                <td class="sort pr-1 align-middle"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.date)</td>
-                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.description)</td>
-                                <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.reference)</td>
+                                <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.description)</td>
+                                <td class="sort pr-1 align-middle col-xs-2">@Html.DisplayFor(modelItem => item.reference)</td>
                                 @if (item.amount < 0)
                                 {
-                                    <td class="sort pr-1 align-middle text-danger">(@Html.DisplayFor(modelItem => item.amount))</td>
+                                    <td class="sort pr-1 align-middle text-danger col-xs-1">(@Html.DisplayFor(modelItem => item.amount))</td>
                                 }
                                 else
                                 {
-                                    <td class="sort pr-1 align-middle">@Html.DisplayFor(modelItem => item.amount)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.amount)</td>
                                 }
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Pick Account</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                <td class="sort pr-1 align-middle">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            <select class="custom-select custom-select-sm">
-                                                <option>Set Rule</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
+                                @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+
+                                                @*@Html.DropDownList(modelItem => modelItem. , new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam1" })*@
+                                                @Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })
+                                                @*<select class="custom-select custom-select-sm">
+                            <option>Pick Account</option>
+                        </select>*@
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                                @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                <td class="sort pr-1 align-middle col-xs-1">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto">
+                                            @Html.DropDownList("Mobiledropdown3", new List<SelectListItem>
+                                             { new SelectListItem { Text = "BANK", Value = "BANK"},
+                                               new SelectListItem { Text = "BANK<$300", Value = "BANK<$300"},
+                                               new SelectListItem { Text = "BANK=$", Value = "BANK=$"},
+                                               new SelectListItem { Text = "BANK=SPECIAL ACCOUNT", Value = "BANK=SPECIALACCOUNT"},
+                                               new SelectListItem { Text = "CHECK", Value = "CHECK"}
+                                               }, "Set Rule", new { @class = "form-control" })
+                                            @*<select class="custom-select custom-select-sm">
+                        <option>Set Rule</option>
+                    </select>*@
+                                        </div>
+                                    </div>
+                                </td>
+                                @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+                                                @Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control" })
+                                                @*<select class="custom-select custom-select-sm">
+                            <option>Set Rule</option>
+                        </select>*@
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+
                             </tr>
                             }
-                           
+
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 p-l-2">
+    <div class="col-md-4 p-l-2" id="divChat">
         <div class="card mb-3 pr-md-0 table table-striped">
             <div class="card-header">
                 <div class="row align-items-center justify-content-between">
@@ -341,7 +376,7 @@
             //AgencyDropdownPartialViewChange();
             var type = sessionStorage.getItem('Type');
             if (type != null) {
-                
+
                 if (type == "0") {
                     $('#tabNotinBooks').addClass('tabselect');
                     $('#tabNotinBanks').removeClass('tabselect');
@@ -356,17 +391,32 @@
                 $('#tabNotinBanks').removeClass('tabselect');
             }
 
+            $('#tblreconcilation tbody tr').click(function () {
+                $(this).addClass('bg-300').siblings().removeClass('bg-300');
+
+            });
+            $('#iconComments').click(function () {
+                if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                    $('#divChat').hide();
+                }
+                else {
+                    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                    $('#divChat').show();
+                }
+            });
+
         });
         function Tabclick(e, type) {
             sessionStorage.setItem('Type', type);
-            if (type == 0) {                
+            if (type == 0) {
                 $('#tabNotinBooks').addClass('tabselect');
                 $('#tabNotinBanks').removeClass('tabselect');
             }
             else {
                 $('#tabNotinBooks').removeClass('tabselect');
                 $('#tabNotinBanks').addClass('tabselect');
-            }            
+            }
         }
         function loadReconcilation() {
             var type = sessionStorage.getItem('Type');
@@ -378,11 +428,11 @@
             postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
 
                 if (data === false) {
-                    
+
 
                 }
                 else {
-                   
+
                 }
 
             });

@@ -19,7 +19,7 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-        
+
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
@@ -28,7 +28,7 @@ namespace ProvenCfoUI.Controllers
                 if (Type == "Not in Banks")
                 {
                     RecordsType = NotInBank;
-                }               
+                }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     int AgencyID = 0;
@@ -38,8 +38,15 @@ namespace ProvenCfoUI.Controllers
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    using (IntigrationService objIntegration = new IntigrationService())
+                    {
+                        ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID);
+                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID);
+                        
+                    }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
-                    return View("ReconciliationMain",objResult.ResultData);
+                    return View("ReconciliationMain", objResult.ResultData);
+                    
                 }
             }
             catch (Exception ex)
@@ -88,6 +95,12 @@ namespace ProvenCfoUI.Controllers
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    using (IntigrationService objIntegration = new IntigrationService())
+                    {
+                        ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
+
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
                     return View(objResult.ResultData);
