@@ -23,25 +23,28 @@ namespace Proven.Model
 
         public UserContext(IPrincipal user)
         {
-            if (user.Identity.IsAuthenticated)
+            if (user != null)
             {
-                var session = HttpContext.Current.Session;
-                HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
-                FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
-                string[] userData = ticket.Name.Split(',');
-                session["UserId"] = UserId = userData[0];
-                session["UserName"] = UserName = userData[1];
-                session["LoginName"] = LoginName = userData[2];
-                session["UserFullName"] = UserFullName = userData[3];
-                session["UserType"] = UserType = userData[4];
-
-                if (session["LoggedInUserPreferences"] != null)
+                if (user.Identity.IsAuthenticated)
                 {
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)session["LoggedInUserPreferences"];
-                    if (UserPref != null && UserPref.Count() > 0)
+                    var session = HttpContext.Current.Session;
+                    HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                    string[] userData = ticket.Name.Split(',');
+                    session["UserId"] = UserId = userData[0];
+                    session["UserName"] = UserName = userData[1];
+                    session["LoginName"] = LoginName = userData[2];
+                    session["UserFullName"] = UserFullName = userData[3];
+                    session["UserType"] = UserType = userData[4];
+
+                    if (session["LoggedInUserPreferences"] != null)
                     {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)session["LoggedInUserPreferences"];
+                        if (UserPref != null && UserPref.Count() > 0)
+                        {
+                            var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                            AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        }
                     }
                 }
             }
