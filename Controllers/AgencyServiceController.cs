@@ -88,7 +88,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         
                         var objResult = new List<ClientModel>();
-                        var LoginUserid = Convert.ToString( Session["UserId"]);
+                        var LoginUserid = Convert.ToString(User.UserId);
                         if (LoginUserid != "")
                         {
                             if (Session["UserType"] != null && Convert.ToString( Session["UserType"]).Trim() == "2")
