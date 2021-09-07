@@ -40,13 +40,14 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
-                        ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID);
-                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID);
-                        
+                        ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        ViewBag.BankRule = getBankRule();
+
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
                     return View("ReconciliationMain", objResult.ResultData);
-                    
+
                 }
             }
             catch (Exception ex)
@@ -81,6 +82,31 @@ namespace ProvenCfoUI.Controllers
         //        throw ex;
         //    }
         //}
+        public static List<SelectListItem> getBankRule()
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Text = "BANK";
+            item.Value = "BANK";
+            listItem.Add(item);
+            SelectListItem item1 = new SelectListItem();
+            item1.Text = "BANK<$300";
+            item1.Value = "BANK<$300";
+            listItem.Add(item1);
+            SelectListItem item2 = new SelectListItem();
+            item2.Text = "BANK=$";
+            item2.Value = "BANK=$";
+            listItem.Add(item2);
+            SelectListItem item3 = new SelectListItem();
+            item3.Text = "BANK = SPECIAL ACCOUNT";
+            item3.Value = "BANK = SPECIAL ACCOUNT";
+            listItem.Add(item3);
+            SelectListItem item4 = new SelectListItem();
+            item4.Text = "CHECK";
+            item4.Value = "CHECK";
+            listItem.Add(item4);
+            return listItem;
+        }
         public ActionResult ReconciliationMain()
         {
             try
@@ -100,6 +126,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        ViewBag.BankRule = getBankRule();
 
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
@@ -114,6 +141,18 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
 
+        }
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory)
+        {
+            BankRule = BankRule.Replace("0", "");
+            using (ReconcilationService objReConcilation = new ReconcilationService())
+            {
+                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory);
+                return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
+            }
+           
         }
     }
 }

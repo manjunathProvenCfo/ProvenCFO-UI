@@ -176,11 +176,8 @@
                                         <div class="row justify-content-between">
                                             <div class="col-auto">
 
-                                                @*@Html.DropDownList(modelItem => modelItem. , new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam1" })*@
-                                                @Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })
-                                                @*<select class="custom-select custom-select-sm">
-                            <option>Pick Account</option>
-                        </select>*@
+                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
                                             </div>
                                         </div>
                                     </td>
@@ -189,16 +186,7 @@
                                 <td class="sort pr-1 align-middle col-xs-1">
                                     <div class="row justify-content-between">
                                         <div class="col-auto">
-                                            @Html.DropDownList("Mobiledropdown3", new List<SelectListItem>
-                                             { new SelectListItem { Text = "BANK", Value = "BANK"},
-                                               new SelectListItem { Text = "BANK<$300", Value = "BANK<$300"},
-                                               new SelectListItem { Text = "BANK=$", Value = "BANK=$"},
-                                               new SelectListItem { Text = "BANK=SPECIAL ACCOUNT", Value = "BANK=SPECIALACCOUNT"},
-                                               new SelectListItem { Text = "CHECK", Value = "CHECK"}
-                                               }, "Set Rule", new { @class = "form-control" })
-                                            @*<select class="custom-select custom-select-sm">
-                        <option>Set Rule</option>
-                    </select>*@
+                                            @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })                                          
                                         </div>
                                     </div>
                                 </td>
@@ -207,10 +195,8 @@
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
                                             <div class="col-auto">
-                                                @Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control" })
-                                                @*<select class="custom-select custom-select-sm">
-                            <option>Set Rule</option>
-                        </select>*@
+                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount("+ item.id + "," + + ")" })*@                                              
+                                                @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(ViewBag.TrackingCategories, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
                                             </div>
                                         </div>
                                     </td>
@@ -417,6 +403,46 @@
                 $('#tabNotinBooks').removeClass('tabselect');
                 $('#tabNotinBanks').addClass('tabselect');
             }
+        }
+        function onChangeglAccount(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + Selectedvalue + '&BankRule=' + 0  + '&TrackingCategory=' + 0 , null, function (response) {
+                if (response.Message == 'Success') {
+                    
+                }
+                else {
+                   
+                }
+
+            })
+
+        }
+        function onChangeBankRule(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeTc(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + Selectedvalue, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
         }
         function loadReconcilation() {
             var type = sessionStorage.getItem('Type');

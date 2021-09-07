@@ -26,6 +26,8 @@ namespace Proven.Model
         public DateTime? UpdatedDateUTC { get; set; }
         public string AddToWatchlist { get; set; }
         public int? AgencyId { get; set; }
+        public int? gl_account_ref { get; set; }
+        public int? tracking_category_ref { get; set; }
     }
 
     public class XeromainGlAccountVM
