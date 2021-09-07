@@ -26,7 +26,6 @@ namespace ProvenCfoUI.Controllers
                 {
                     int AgencyID = 0;
                     ViewBag.IsEditMode = false;
-                   
                     var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
@@ -40,7 +39,6 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.IsEditMode = true;
                     }
-                    
                 }
                 return View();
             }

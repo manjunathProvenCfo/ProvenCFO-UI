@@ -69,62 +69,70 @@
                             }
 
                         </div>
+
                         @if (Categories.NotesCategoriesList != null)
                         {
                             foreach (var Category in Categories.NotesCategoriesList)
                             {
                                 counter++;
-                                <div class="card-body" data-id="@Category.Id">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h6 style="color: #00BE82; "> @Category.Title</h6>
-                                        @if (ViewBag.IsEditMode == true)
-                                        {
-                                            <div class="d-flex align-items-center">
-                                                <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
-                                                <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                    @if (@Category.IsPublished.ToLower() == "published")
-                                                    {
-                                                        <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
-                                                    }
-                                                    else
-                                                    {
-                                                        <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
-                                                    }
-                                                    <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
-                                                </div>
-                                                <div class="ml-2" style=" font-size : 24px">
-                                                    <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                                            <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                                        </a>
+                                if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
+                                {
+                                    <div class="card-body" data-id="@Category.Id">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            @if (ViewBag.IsEditMode == true)
+                                            {
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                        @if (@Category.IsPublished.ToLower() == "published")
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                                        }
+                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+                                                    <div class="ml-2" style=" font-size : 24px">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                            </a>
 
-                                                        <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
-                                                            <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
-                                                            <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="ml-2" style="font-size:24px;">
-                                                    <i class="fas fa-check" data-fa-transform="shrink-6"></i>
-                                                </div>
+                                                    <div class="ml-2" style="font-size:24px;">
+                                                        <i class="fas fa-check" data-fa-transform="shrink-6"></i>
+                                                    </div>
 
-                                            </div>
-                                        }
-                                    </div>
-                                    <p> @Html.Raw(Category.Description)</p>
+                                                </div>
+                                            }
+                                        </div>
+                                        <p> @Html.Raw(Category.Description)</p>
 
-                                    <div class="Words">
-                                        Created by: @Category.CreatedByUser , @Category.CreatedDate | Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate
-                                        <hr>
+                                        <div class="Words">
+                                            Created by: @Category.CreatedByUser, @Category.CreatedDate | Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate
+                                            <hr>
+                                        </div>
                                     </div>
-                                </div>
+
+                                }
+
+
 
                             }
 
                         }
+
                     </div>
                 </div>
             }
