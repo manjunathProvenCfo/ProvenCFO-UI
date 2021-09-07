@@ -298,5 +298,54 @@
             });
         }
 
+        function DeleteNotesDescription(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Do you really want to delete this Notes Description?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonColor: "#ec6c62"
+
+            },
+               
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Notes/DeleteNotesDescription/' + Id,
+                    })
+                        .done(function (data) {
+                            if (data == 'Active') {
+                                sweetAlert
+                                    ({
+                                        title: "Couldn't Delete!",
+                                        text: "This Notes Description is Unpublished",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "Notes Description is successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+
+                        })
+                        .error(function (data) {
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        });
+                });
+        }
+
     </script>
 }

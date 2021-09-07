@@ -21,6 +21,7 @@
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" for="txtNotesTitle">Title</span>
                                         <input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />
+                                        @*<span class="text-danger field-validation-error " data-valmsg-for="Title" data-valmsg-replace="true"><span id="NotesTitleExist" class=""></span></span>*@
                                         @Html.HiddenFor(x => x.Id)
                                         @Html.HiddenFor(x => x.NoteCatId)
                                         @Html.HiddenFor(x => x.AgencyId)

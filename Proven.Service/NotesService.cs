@@ -35,17 +35,6 @@ namespace Proven.Service
 
         public NotesDescriptionMainModel1 CreateNewNotes(NotesDescriptionModel notesDescription)
         {
-            //NotesDescriptionModel ndm = new NotesDescriptionModel();
-
-            //ndm.Title = notesDescription.Title;
-            //ndm.NoteCatId = notesDescription.NoteCatId;
-            //ndm.AgencyId = notesDescription.AgencyId;
-            //ndm.Description = notesDescription.Description;
-            //ndm.Status = notesDescription.Status;
-            //ndm.CreatedBy = LoginUserID;
-            //notesDescription.IsDeleted = false;
-            //notesDescription.IsPublished = "Published";
-
             return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", notesDescription).Result;
         }
 
@@ -66,6 +55,13 @@ namespace Proven.Service
             string result = string.Format("Notes/PublishingNotes?Id={0}", Id);
             return PostAsync<NotesDescriptionModel>(result).Result;
         }
+
+        public NotesDescriptionModel DeleteNotesDescription(int Id)
+        {
+            string result = string.Format("Notes/DeleteNotesDescription?Id={0}", Id);
+            return PostAsync<NotesDescriptionModel>(result).Result;
+        }
+
 
         public void Dispose()
         {

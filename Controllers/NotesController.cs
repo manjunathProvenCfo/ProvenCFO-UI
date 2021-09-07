@@ -206,6 +206,35 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        [CheckSession]
+        public string DeleteNotesDescription(int Id)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var results = objNotes.GetTeamClientById(Id);
+                    if (results != null)
+                    {
+                        return results.Status;
+                    }
+                    else
+                    {
+                        var result = objNotes.DeleteTeams(Id);
+                        return result.Status;
+                        //if (result == null)
+                        //    ViewBag.ErrorMessage = "Can't Delete"; 
+                    }
+                    return results.Status;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
     }
 }
 
