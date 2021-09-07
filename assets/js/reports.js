@@ -7,6 +7,7 @@ var $divReportPeriodQuarters;
 var $divReportPeriodMonths;
 
 var $btnUpload;
+var $btnDownloadAll;
 var $uploaderModal;
 var $reportUploader;
 var $uploader;
@@ -29,6 +30,7 @@ $(function () {
     $divReportPeriodMonths = $("div[data-report-period-is-month='True']");
 
     $btnUpload = $("a[id*='btnUpload']");
+    $btnDownloadAll = $("a[id*='btnDownloadAll']");
     $uploaderModal = $("#report-uploader-modal");
     $reportUploader = $("#reportUploader");
     $previews = $("#previews");
@@ -69,6 +71,7 @@ $(function () {
                 }
             }
         }
+        bindReports("");
 
     });
 
@@ -76,7 +79,7 @@ $(function () {
         let elUpload = $(this);
         debugger
         let data = elUpload.parents('div.card-body').data()
-        let agentId = $("#ddlclient").val();
+        let agencyId = $("#ddlclient").val();
         let year = data.year;
         let period = data.reportPeriod;
 
@@ -89,7 +92,7 @@ $(function () {
         previewNode.parentNode.removeChild(previewNode);
 
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
-            url: `/Reports/UploadReportAndSave?agentId=${agentId}&year=${year}&periodType=${period}`, // Set the url
+            url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
             maxFilesize: 2,
             thumbnailWidth: 80,
@@ -101,6 +104,9 @@ $(function () {
             clickable: "#reportUploader", // Define the element that should be used as click trigger to select files.
             success: function (file, response) {
                 debugger
+                //Load Reports
+                bindReports(period);
+
                 if (response != null && response.Status == 'Success') {
                     addAttachmentOnviewLoad([response.File], false, true);
 
@@ -177,12 +183,21 @@ $(function () {
         });
 
     })
+    $btnDownloadAll.click(function () {
+        let elDownloadAll = $(this);
+        let data = elDownloadAll.parents('div.card-body').data()
+        let agencyId = $("#ddlclient").val();
+        let year = data.year;
+        let period = data.reportPeriod;
+        window.open(`/Reports/DownloadAll?agencyId=${agencyId}&year=${year}&periodType=${period}`);
+    })
 
     bindPage();
 });
 
 var bindPage = function () {
     bindYears();
+    bindReports("");
     $reportYears.trigger('change');
 }
 
@@ -190,4 +205,35 @@ var bindYears = function () {
     for (var i = moment().year(); i >= 2018; i--) {
         $reportYears.append(`<option>${i}</option>`)
     }
+}
+var bindReports = function (reportPeriod) {
+    let agencyId = $("#ddlclient").val();
+    let year = $reportYears.val();
+    let period = reportPeriod;
+    getReports(agencyId, year, period);
+}
+
+var getReports = function (agencyId, year, period) {
+    getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
+        if (response.Status == "Error")
+            ShowAlertBoxError("Error", "Error while fethcing reports!!");
+        debugger
+        let reports = response.Data;
+        if (isEmptyOrBlank(period)) {
+            $(".report-card-body .report").remove()
+        }
+        else {
+            $(`.report-card-body[data-report-period='${period}'] .report`).remove()
+        }
+        reports.forEach(function (obj) {
+
+            let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
+            if (isEmptyOrBlank(thumbnail))
+                thumbnail = obj.FilePath;
+            obj.FilePath = obj.FilePath.replace("~/", "../../");
+            thumbnail = thumbnail.replace("~/", "../../");
+            var reportHTML = `<div class="col-2 text-center report"> <figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <h2 class="book-title">${obj.FileName}</h2><a href="${obj.FilePath}" download="${obj.FileName}"><p class="publish-year mb-0">Download</p></a> </div>`;
+            $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
+        })
+    });
 }

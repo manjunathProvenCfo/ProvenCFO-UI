@@ -68,10 +68,10 @@ function ShowAlertBoxBase(title, text, type, callback) {
             title: title, //"Exist!",
             text: text,//"This User Role is Exist !",
             type: type //"warning"
-        },callback);
+        }, callback);
 }
 function ShowAlertBoxInfo(title, text, callback = null) {
-    ShowAlertBoxBase(title, text, 'info',callback);
+    ShowAlertBoxBase(title, text, 'info', callback);
 }
 function ShowAlertBoxSuccess(title, text, callback = null) {
     ShowAlertBoxBase(title, text, 'success', callback);
@@ -93,5 +93,27 @@ function addMultipleSelectValues(selector, valuesSpaceSeprated) {
     }
 }
 //select2 end
-
+var getSampleBGImageByFileExtension = function (fileExtension) {
+    fileExtension = fileExtension.replace(".", "").toUpperCase();
+    let bgimage = "";
+    if (fileExtension == 'PDF') {
+        bgimage = '../../assets/img/kanban/I_PDF.png';
+    }
+    else if (fileExtension == 'DOCX' || fileExtension == 'DOC') {
+        bgimage = '../../assets/img/kanban/I_Doc.png';
+    }
+    else if (fileExtension == 'RAR' || fileExtension == 'ZIP' || fileExtension == '7Z') {
+        bgimage = '../../assets/img/kanban/I_Zip.png';
+    }
+    else if (fileExtension == 'XLSX' || fileExtension == 'XLS') {
+        bgimage = '../../assets/img/kanban/I_XLS.png';
+    }
+    else if (fileExtension == 'TXT' || fileExtension == 'txt') {
+        bgimage = '../../assets/img/kanban/I_TXT.png';
+    }
+    else if (fileExtension == 'CSV' || fileExtension == 'csv') {
+        bgimage = '../../assets/img/kanban/I_CSV.png';
+    }
+    return bgimage;
+}
 
