@@ -14,6 +14,7 @@ namespace ProvenCfoUI.Helper
     public class Utltity
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public string ExportTOExcel(string fileName, DataTable dtt)
         {
 
@@ -105,10 +106,10 @@ namespace ProvenCfoUI.Helper
             var errorMessage = "Message= " + Exception.Message.ToString() + ". Method= " + Exception.TargetSite.Name.ToString();
             var errorDescription = " StackTrace : " + Exception.StackTrace.ToString() + " Source = " + Exception.Source.ToString();
             msg = errorMessage + " " + errorMessage;
-            return msg;           
+            return msg;
         }
         public static void Log4NetInfoLog(string Info)
-        {            
+        {
             log.Info(Info);
         }
 

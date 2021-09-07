@@ -49,6 +49,11 @@ namespace ProvenCfoUI.Comman
             }
             return false;
         }
+        public static void CreateDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+        }
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
 

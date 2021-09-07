@@ -49,10 +49,15 @@
         </div>
 
         <div class="col-9 order-1">
+            @{int containerCounter = 0;}
+
+            @{ int counter = 0; }
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
-                <div class="mb-3 v-pills-div" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
-                    <div class="card">
+                containerCounter++;
+
+                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
+                    <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
                             @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
@@ -67,63 +72,70 @@
                             }
 
                         </div>
+
                         @if (Categories.NotesCategoriesList != null)
                         {
-                            int counter = 0;
                             foreach (var Category in Categories.NotesCategoriesList)
                             {
                                 counter++;
-                                <div class="card-body" data-id="@Category.Id">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h6 style="color: #00BE82; "> @Category.Title</h6>
-                                        @if (ViewBag.IsEditMode == true)
-                                        {
-                                            <div class="d-flex align-items-center">
-                                                <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
-                                                <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                    @if (@Category.IsPublished.ToLower() == "published")
-                                                    {
-                                                        <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
-                                                    }
-                                                    else
-                                                    {
-                                                        <input class="custom-control-input" type="checkbox" id="@($"cc{counter}")" data-id="@Category.Id">
-                                                    }
-                                                    <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
-                                                </div>
-                                                <div class="ml-2" style=" font-size : 24px">
-                                                    <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                                            <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                                        </a>
+                                if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
+                                {
+                                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            @if (ViewBag.IsEditMode == true)
+                                            {
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                        @if (@Category.IsPublished.ToLower() == "published")
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                                        }
+                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+                                                    <div class="ml-2" style=" font-size : 24px">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                            </a>
 
-                                                        <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
-                                                            <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
-                                                            <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="ml-2" style="font-size:24px;">
-                                                    <i class="fas fa-check" data-fa-transform="shrink-6"></i>
-                                                </div>
+                                                    <div class="ml-2" style="font-size:24px;">
+                                                        <i class="fas fa-check" data-fa-transform="shrink-6"></i>
+                                                    </div>
 
-                                            </div>
-                                        }
-                                    </div>
-                                    <p> @Html.Raw(Category.Description)</p>
+                                                </div>
+                                            }
+                                        </div>
+                                        <p> @Html.Raw(Category.Description)</p>
 
-                                    <div class="Words">
-                                        Created by: @Category.CreatedByUser , @Category.CreatedDate | Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate
-                                        <hr>
+                                        <div class="Words">
+                                            Created by: @Category.CreatedByUser, @Category.CreatedDate | Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate
+                                            <hr>
+                                        </div>
                                     </div>
-                                </div>
+
+                                }
+
+
 
                             }
 
                         }
+
                     </div>
                 </div>
             }
@@ -137,11 +149,10 @@
 @section Scripts{
     @*@Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
+    <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            //var ClientID = $("#ddlclient option:selected").val();
-
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
         });
@@ -201,17 +212,21 @@
             });
 
             $("[id^=chkIsPublished]").change(function () {
+
                 let el = $(this);
                 let isChecked = el[0].checked;
                 if (isChecked == true)
-                    el.parent('div').siblings("[id=lblIsPublished]").text("Published");
+                    el.parent('div').siblings("span#lblIsPublished").text("Published");
                 else
-                    el.parent('div').siblings("[id=lblIsPublished]").text("Unpublished");
+                    el.parent('div').siblings("span#lblIsPublished").text("Unpublished");
                 //TODO//Update status in database
-                let pdata = { Id: el.data().id, IsPublished: isChecked };
-                //postAjax('', JSON.stringify({ pdata }), function (response) {
+                /*let pdata = { Id: el.data().id, IsPublished: isChecked };*/
+                postAjax('/Notes/PublishingNotes?Id=' + el.data().id, function (response) {
 
-                //});
+                    if (response.Message == 'Success') {
+                    }
+
+                });
 
             });
 
@@ -285,5 +300,91 @@
             });
         }
 
+        function DeleteNotesDescription(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Do you really want to delete this Notes Description?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonColor: "#ec6c62"
+
+            },
+               
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Notes/DeleteNotesDescription/' + Id,
+                    })
+                        .done(function (data) {
+                            if (data == 'Active') {
+                                sweetAlert
+                                    ({
+                                        title: "Couldn't Delete!",
+                                        text: "This Notes Description is Unpublished",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "Notes Description is successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+
+                        })
+                        .error(function (data) {
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        });
+                });
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var Selectors = {
+                BODY: 'body',
+                NOTES_CONTAINER: '.notes-container',
+                NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
+                NOTES_ITEM: '.notes-item',
+            };
+
+            let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+            for (var i = 0; i < arrItemsContainer.length; i++) {
+                let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+                    draggable: Selectors.NOTES_ITEM,
+                    delay: 200,
+                    mirror: {
+                        appendTo: Selectors.BODY,
+                        constrainDimensions: true
+                    }
+                });
+                sortable.on('drag:stop', function (e) {
+                    debugger
+                    var $this = $(e.data.source);
+                    var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+                    let $items = $itemContainer.find('.notes-item:visible');
+                    let ids = [];
+                    let positions = [];
+                    for (var i = 0; i < $items.length; i++) {
+                        ids.push(parseInt($items[i].getAttribute("data-id")));
+                        positions.push(i + 1);
+                        $items[i].setAttribute("data-position", i + 1);
+                    }
+                    let pdata = { Ids: ids, Positions: positions };
+                    //post Ajax
+                });
+            }
+        });
     </script>
 }

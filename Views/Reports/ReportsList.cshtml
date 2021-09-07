@@ -34,21 +34,33 @@
                 @Html.Partial("_ReportPeriodPartial", "YearEnd")
             </div>
 
-            <div class="card mb-1">
-                @Html.Partial("_ReportPeriodPartial", "Q4")
-            </div>
-            <div class="card mb-1">
-                @Html.Partial("_ReportPeriodPartial", "Q3")
-            </div>
-            <div class="card mb-1">
-                @Html.Partial("_ReportPeriodPartial", "Q2")
-            </div>
-            <div class="card mb-1">
-                @Html.Partial("_ReportPeriodPartial", "Q1")
-            </div>
-
             @for (int i = 12; i >= 1; i--)
             {
+                switch (i)
+                {
+                    case 12:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q4")
+                        </div>
+                        break;
+                    case 9:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q3")
+                        </div>
+                        break;
+                    case 6:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q2")
+                        </div>
+                        break;
+                    case 3:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q1")
+                        </div>
+                        break;
+                    default:
+                        break;
+                }
                 var month = (new DateTime(2020, i, 1)).ToString("MMM");
                 <div class="card mb-1">
                     @Html.Partial("_ReportPeriodPartial", month)
@@ -58,67 +70,67 @@
             @Html.Partial("_ReportUploaderPartial")
 
             @*<div class="card mb-1">
-                    <div class="card-body report-card-body position-relative">
-                        <div class="dropdown position-absolute">
-                            <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Download All</a>
-                                <a class="dropdown-item" href="#">Upload</a>
-                                <a class="dropdown-item" href="#">Edit</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center">
-                            <div class="col-2 text-center ">December 2020</div>
-                            <div class="col-2 text-center">
-                                <figure class="book-cover">
-                                    <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
-                                </figure>
-                                <h2 class="book-title">Monthly Financials</h2>
-                                <p class="publish-year mb-0">December 2020</p>
-                            </div>
-                            <div class="col-2 text-center">
-                                <figure class="book-cover">
-                                    <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
-                                </figure>
-                                <h2 class="book-title">Account Transactions</h2>
-                                <p class="publish-year mb-0">December 2020</p>
-                            </div>
-                        </div>
+            <div class="card-body report-card-body position-relative">
+                <div class="dropdown position-absolute">
+                    <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Download All</a>
+                        <a class="dropdown-item" href="#">Upload</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
                     </div>
                 </div>
 
-                <div class="card mb-1">
-                    <div class="card-body report-card-body position-relative">
-                        <div class="dropdown position-absolute">
-                            <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Download All</a>
-                                <a class="dropdown-item" href="#">Upload</a>
-                                <a class="dropdown-item" href="#">Edit</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center">
-                            <div class="col-2 text-center ">November 2020</div>
-                            <div class="col-2 text-center">
-                                <figure class="book-cover">
-                                    <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
-                                </figure>
-                                <h2 class="book-title">Monthly Financials</h2>
-                                <p class="publish-year mb-0">November 2020</p>
-                            </div>
-                        </div>
+                <div class="row align-items-center">
+                    <div class="col-2 text-center ">December 2020</div>
+                    <div class="col-2 text-center">
+                        <figure class="book-cover">
+                            <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                        </figure>
+                        <h2 class="book-title">Monthly Financials</h2>
+                        <p class="publish-year mb-0">December 2020</p>
                     </div>
-                </div>*@
+                    <div class="col-2 text-center">
+                        <figure class="book-cover">
+                            <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                        </figure>
+                        <h2 class="book-title">Account Transactions</h2>
+                        <p class="publish-year mb-0">December 2020</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-1">
+            <div class="card-body report-card-body position-relative">
+                <div class="dropdown position-absolute">
+                    <a href="javascript:void(0);" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Download All</a>
+                        <a class="dropdown-item" href="#">Upload</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" style="color:#E63756;">Delete</a>
+                    </div>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="col-2 text-center ">November 2020</div>
+                    <div class="col-2 text-center">
+                        <figure class="book-cover">
+                            <img class="img-fluid" src="~/assets/img/Reports/Avatar Image3.png" alt="" />
+                        </figure>
+                        <h2 class="book-title">Monthly Financials</h2>
+                        <p class="publish-year mb-0">November 2020</p>
+                    </div>
+                </div>
+            </div>
+        </div>*@
         </div>
     </div>
 
