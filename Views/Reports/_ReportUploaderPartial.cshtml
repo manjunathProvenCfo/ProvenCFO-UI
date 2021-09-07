@@ -36,7 +36,7 @@
                                 </div>
                             </div>*@
                             <div id="reportUploader" class="dropzone dropzone-multiple">
-                                <div class="dz-message" data-dz-message="data-dz-message"> <img class="me-2" src="../../../assets/img/icons/cloud-upload.svg" width="25" alt="">Drop your files here</div>
+                                <div class="dz-message text-center" data-dz-message="data-dz-message"> <img class="me-2" src="../../../assets/img/icons/cloud-upload.svg" width="25" alt="">Drop your files here</div>
                             </div>
                             <div id="attachmentContainer">
                             </div>
@@ -60,7 +60,7 @@
                                             </div>
                                         </div>
                                         <div id="actions">
-                                            <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;">
+                                            <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;" id="btnDropzoneUpload">
                                                 <i class="glyphicon glyphicon-upload"></i>
                                                 <span>Upload</span>
                                             </button>
@@ -71,7 +71,7 @@
                                                     <span>Cancel</span>
                                                 </button>*@
                                             <span class="mx-1"></span>
-                                            <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                            <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);"  id="btnDropzoneRemove">
                                                 <i class="glyphicon glyphicon-trash"></i>
                                                 <input type="hidden" name="" value="" class="name" data-dz-name />
                                                 <span>Remove</span>

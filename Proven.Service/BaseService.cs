@@ -17,8 +17,8 @@ namespace Proven.Service
         public BaseService()
         {
             //TODO:Make it dynamic from AppSettings
-            //client.BaseAddress = new Uri("http://localhost:27754/Api/");
-            client.BaseAddress = new Uri("https://provencfoapi.codewarriorsllc.com/api/");
+            client.BaseAddress = new Uri("http://localhost:27754/Api/");
+            //client.BaseAddress = new Uri("https://provencfoapi.codewarriorsllc.com/api/");
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

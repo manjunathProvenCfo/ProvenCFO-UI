@@ -17,6 +17,7 @@ var myDropzone_view;
 //var $formFileUploader;
 //var $formUploader;
 Dropzone.autoDiscover = false;
+var AllowdedMimeTypes = "image/*,application/pdf,text/plain,application/json,application/csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint";
 
 $(function () {
     $reportYears = $("#reportYears");
@@ -72,8 +73,12 @@ $(function () {
     });
 
     $btnUpload.click(function () {
-        debugger
         let elUpload = $(this);
+        debugger
+        let data = elUpload.parents('div.card-body').data()
+        let agentId = $("#ddlclient").val();
+        let year = data.year;
+        let period = data.reportPeriod;
 
         $uploaderModal.modal('show');
 
@@ -84,7 +89,9 @@ $(function () {
         previewNode.parentNode.removeChild(previewNode);
 
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
-            url: "/Needs/UploadFileAndSaves", // Set the url
+            url: `/Reports/UploadReportAndSave?agentId=${agentId}&year=${year}&periodType=${period}`, // Set the url
+            acceptedFiles: AllowdedMimeTypes,
+            maxFilesize: 2,
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 2,
@@ -109,8 +116,26 @@ $(function () {
 
         //view Page
         myDropzone_view.on("addedfile", function (file) {
-            file.previewElement.querySelector(".start").onclick = function () {
+            debugger
+            //Remove Preview Div
+            $(".file-row .preview img").each(function (i, obj) {
+                let attr = $(obj).attr("src");
+                if (isEmptyOrBlank(attr)) {
+                    $(obj).parent('.preview').remove();
+                }
 
+            });
+
+            //Remove Upload Button for errored files
+            setTimeout(function () { $(".file-row.dz-error #btnDropzoneUpload").remove(); }, 10)
+
+
+            file.previewElement.querySelector(".start").onclick = function () {
+                debugger
+                if (file.status === "error") {
+                    ShowAlertBoxError("Error", `You can't upload ${file.name} file.`);
+                    return;
+                }
                 var IsCanAddfiles = true;
                 var filesList = $('#attachmentContainer h6');
 
@@ -121,17 +146,15 @@ $(function () {
                 });
                 if (IsCanAddfiles == true) {
                     myDropzone_view.enqueueFile(file);
-                    var attachmentSpan = $('#attCount_' + gCurrentViewTaskId + ' span');
-                    if (attachmentSpan.length > 0) {
-                        $('#attCount_' + gCurrentViewTaskId).removeClass('d-none');
-                        var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
-                        var IsattachmentsysmbolAvil = $('#attCount_' + gCurrentViewTaskId + ' .fa-paperclip');
-                        if (AttachmentCount != undefined && AttachmentCount != '') {
-                            $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
-                        }
-
-                    }
-
+                    //var attachmentSpan = $('#attCount_' + gCurrentViewTaskId + ' span');
+                    //if (attachmentSpan.length > 0) {
+                    //    $('#attCount_' + gCurrentViewTaskId).removeClass('d-none');
+                    //    var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
+                    //    var IsattachmentsysmbolAvil = $('#attCount_' + gCurrentViewTaskId + ' .fa-paperclip');
+                    //    if (AttachmentCount != undefined && AttachmentCount != '') {
+                    //        $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
+                    //    }
+                    //}
                 }
                 else {
                     ShowAlertBox('Exist!', 'Selected file is already attached.', 'warning');
@@ -142,8 +165,14 @@ $(function () {
             };
         });
 
+        myDropzone_view.on("maxfilesexceeded", function (file) {
+            debugger
+            let a = "";
+        });
+
         //view Page
         myDropzone_view.on("sending", function (file) {
+            debugger
             file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
         });
 
