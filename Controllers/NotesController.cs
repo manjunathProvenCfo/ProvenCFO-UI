@@ -216,16 +216,16 @@ namespace ProvenCfoUI.Controllers
                     var results = objNotes.GetNotesDescriptionById(Id);
                     if (results != null)
                     {
-                        return results.Status;
+                        return results.IsPublished;
                     }
                     else
                     {
                         var result = objNotes.DeleteNotesDescription(Id);
-                        return result.Status;
+                        return result.IsPublished;
                         //if (result == null)
                         //    ViewBag.ErrorMessage = "Can't Delete"; 
                     }
-                    return results.Status;
+                    return results.IsPublished;
                 }
             }
             catch (Exception ex)
