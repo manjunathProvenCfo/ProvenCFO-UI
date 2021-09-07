@@ -20,5 +20,14 @@ namespace ProvenCfoUI.Controllers
         {
             var userId = User.UserId;
         }
+
+        [CheckSession]
+        public ActionResult Download(string fileName)
+        {
+            string fullPath = System.IO.Path.Combine(Server.MapPath("~/ExportFile/"), fileName);
+            byte[] fileByteArray = System.IO.File.ReadAllBytes(fullPath);
+            System.IO.File.Delete(fullPath);
+            return File(fileByteArray, "application/vnd.ms-excel", fileName);
+        }
     }
 }
