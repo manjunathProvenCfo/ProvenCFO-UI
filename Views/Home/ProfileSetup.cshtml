@@ -266,23 +266,24 @@
             model.Id = $("#Id").val();
             model.LinkedInProfile = $("#LinkedInProfile").val();
 
-            if (model.LinkedInProfile != '') {
-                if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == -1) {
-                    // there is a mismatch, hence show the error message                   
-                    $('#valLinkedInProfile').show();
-                    $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
-                    return false;
-                }
-                else {
-                    // else, do not display message                  
-                    $('#valLinkedInProfile').hide();
-                    $('#valLinkedInProfile').text('');
-                }
-            }
-            else {
-                $('#valLinkedInProfile').hide();
-                $('#valLinkedInProfile').text('');
-            }
+            //if (model.LinkedInProfile != '') {
+            //    debugger;
+            //    if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == null) {
+            //        // there is a mismatch, hence show the error message                   
+            //        $('#valLinkedInProfile').show();
+            //        $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+            //        return false;
+            //    }
+            //    else {
+            //        // else, do not display message                  
+            //        $('#valLinkedInProfile').hide();
+            //        $('#valLinkedInProfile').text('');
+            //    }
+            //}
+            //else {
+            //    $('#valLinkedInProfile').hide();
+            //    $('#valLinkedInProfile').text('');
+            //}
 
 
 
