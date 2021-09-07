@@ -213,14 +213,14 @@ namespace ProvenCfoUI.Controllers
             {
                 using (NotesService objNotes = new NotesService())
                 {
-                    var results = objNotes.GetTeamClientById(Id);
+                    var results = objNotes.GetNotesDescriptionById(Id);
                     if (results != null)
                     {
                         return results.Status;
                     }
                     else
                     {
-                        var result = objNotes.DeleteTeams(Id);
+                        var result = objNotes.DeleteNotesDescription(Id);
                         return result.Status;
                         //if (result == null)
                         //    ViewBag.ErrorMessage = "Can't Delete"; 
