@@ -38,7 +38,7 @@ namespace Proven.Service
             return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", notesDescription).Result;
         }
 
-        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished,string LoginUserID)
+        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID)
         {
             NotesDescriptionModel ndm = new NotesDescriptionModel();
             ndm.Id = DescriptionId;
@@ -60,6 +60,11 @@ namespace Proven.Service
         {
             string result = string.Format("Notes/DeleteNotesDescription?Id={0}", Id);
             return PostAsync<NotesDescriptionModel>(result).Result;
+        }
+        public NotesDescriptionModel SwapNote(string[] Ids, int[] Positions)
+        {
+            var obj = new { Ids, Positions };
+            return PostAsync<NotesDescriptionModel, object>("Notes/SwapNote", obj).Result;
         }
 
 

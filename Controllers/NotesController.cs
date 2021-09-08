@@ -57,7 +57,7 @@ namespace ProvenCfoUI.Controllers
                 NotesDescriptionModel note = new NotesDescriptionModel();
                 note.ModifiedBy = Session["UserFullName"].ToString();
                 //note.TaskType = "Task";
-               
+
                 return PartialView("OpenDescription", note);
             }
             catch (Exception ex)
@@ -115,9 +115,9 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
+
                     var LoginUserid = Session["UserId"].ToString();
-                   
+
                     if (Notes.Id != null)
                     {
                         Notes.ModifiedBy = LoginUserid;
@@ -141,7 +141,7 @@ namespace ProvenCfoUI.Controllers
                             ViewBag.ErrorMessage = "Exist";
                             return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
-                    
+
                     }
                 }
                 else
@@ -165,7 +165,7 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var LoginUserid = Session["UserId"].ToString();
-                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished,  LoginUserid).resultData;
+                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished, LoginUserid).resultData;
                     if (result == true)
                     {
                         return Json(new { Notes = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
@@ -174,7 +174,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         return Json(new { Notes = result, Message = "Error" }, JsonRequestBehavior.AllowGet);
                     }
-                   
+
                 }
             }
             catch (Exception ex)
@@ -184,7 +184,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        
+
         [CheckSession]
         public ActionResult PublishingNotes(int Id)
         {
@@ -233,6 +233,42 @@ namespace ProvenCfoUI.Controllers
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
+        }
+
+       
+        [CheckSession]
+        [HttpPost]
+        public JsonResult SwapNote(string[] Ids, int[] Positions)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    //NotesDescriptionModel notesDescriptionModel = new NotesDescriptionModel()
+                    //{
+                    //Ids = Ids,
+                    //Positions=Positions
+                    //};
+
+
+                    var result = objNotes.SwapNote(Ids, Positions);
+                    if (result != null)
+                    {
+                        return Json(new { notes = result, message = "success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { notes = result, message = "error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+            //return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
         }
 
     }

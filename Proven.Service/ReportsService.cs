@@ -15,7 +15,10 @@ namespace Proven.Service
         {
             return PostAsync<ReportsVM, ReportsVM>("Reports/SaveReport", report, readResultDataProp: true).Result;
         }
-
+        public List<ReportsVM> GetReports(int agencyId, int year, string periodType)
+        {
+            return GetAsync<List<ReportsVM>>($"Reports/GetReports?agencyId={agencyId}&year={year}&periodType={periodType}", readResultDataProp: true).Result;
+        }
         public void Dispose()
         {
             //base.Dispose(true);
