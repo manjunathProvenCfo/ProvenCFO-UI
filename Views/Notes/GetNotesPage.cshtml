@@ -395,6 +395,16 @@
                     }
                     let pdata = { Ids: ids, Positions: positions };
                     //post Ajax
+                    let json = JSON.stringify(pdata);
+
+                    postAjax('/Notes/SwapNote', JSON.stringify(pdata), function (response) {
+                        debugger;
+                        if (response.Message == 'Success') {
+
+                        }
+
+                    })
+
                 });
             }
         });
