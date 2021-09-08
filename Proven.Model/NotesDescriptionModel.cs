@@ -27,6 +27,10 @@ namespace Proven.Model
         public DateTime? ModifiedDate { get; set; }
         public bool? IsDeleted { get; set; }
         public int UserType { get; set; }
+
+        public string[] Ids { get; set; }
+        public int[] Positions { get; set; }
+
     }
     public class NotesDescriptionMainModel
     {
