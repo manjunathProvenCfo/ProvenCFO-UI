@@ -146,7 +146,7 @@ namespace ProvenCfoUI.Controllers
         [HttpPost]
         public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory)
         {
-            BankRule = BankRule.Replace("0", "");
+            //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
                 var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory);

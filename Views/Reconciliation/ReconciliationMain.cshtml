@@ -153,8 +153,9 @@
                                 <tr class="btn-reveal-trigger cursor-pointer">
                                     <td class="align-middle">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                            <label class="custom-control-label" for="checkbox-0"></label>
+                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
+                                           
+                                            <label class="custom-control-label" for="@item.id"></label>
                                         </div>
                                     </td>
                                     <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
