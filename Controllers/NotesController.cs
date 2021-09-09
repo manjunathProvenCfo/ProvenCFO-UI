@@ -214,16 +214,14 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var results = objNotes.GetNotesDescriptionById(Id);
-                    if (results != null)
+                    if (results.IsPublished == "Unpublished")
                     {
                         return results.IsPublished;
                     }
                     else
                     {
                         var result = objNotes.DeleteNotesDescription(Id);
-                        return result.IsPublished;
-                        //if (result == null)
-                        //    ViewBag.ErrorMessage = "Can't Delete"; 
+                        return result.IsPublished; 
                     }
                     return results.IsPublished;
                 }
@@ -238,20 +236,13 @@ namespace ProvenCfoUI.Controllers
        
         [CheckSession]
         [HttpPost]
-        public JsonResult SwapNote(string[] Ids, int[] Positions)
+        public JsonResult DragAndDropNotesDescription(string[] Ids, int[] Positions)
         {
             try
             {
                 using (NotesService objNotes = new NotesService())
                 {
-                    //NotesDescriptionModel notesDescriptionModel = new NotesDescriptionModel()
-                    //{
-                    //Ids = Ids,
-                    //Positions=Positions
-                    //};
-
-
-                    var result = objNotes.SwapNote(Ids, Positions);
+                    var result = objNotes.DragAndDropNotesDescription(Ids, Positions);
                     if (result != null)
                     {
                         return Json(new { notes = result, message = "success" }, JsonRequestBehavior.AllowGet);
