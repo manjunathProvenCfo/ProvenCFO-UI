@@ -236,7 +236,7 @@ namespace ProvenCfoUI.Controllers
        
         [CheckSession]
         [HttpPost]
-        public JsonResult DragAndDropNotesDescription(string[] Ids, int[] Positions)
+        public JsonResult DragAndDropNotesDescription(int[] Ids, int[] Positions)
         {
             try
             {
