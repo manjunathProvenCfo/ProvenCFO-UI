@@ -43,7 +43,7 @@ namespace ProvenCfoUI.Controllers
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         ViewBag.BankRule = getBankRule();
-
+                        ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
                     return View("ReconciliationMain", objResult.ResultData);
@@ -107,6 +107,22 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
+        public static List<SelectListItem> getDistincAccount(int AgencyID)
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            using (ReconcilationService objReConcilation = new ReconcilationService())
+            {
+                var objaccount = objReConcilation.GetDistinctAccount(AgencyID).resultData;
+                foreach (var account in objaccount)
+                {
+                    SelectListItem item = new SelectListItem();
+                    item.Text = account;
+                    item.Value = account;
+                    listItem.Add(item);
+                }
+            }
+            return listItem;
+        }
         public ActionResult ReconciliationMain()
         {
             try
@@ -127,9 +143,9 @@ namespace ProvenCfoUI.Controllers
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         ViewBag.BankRule = getBankRule();
-
+                        ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
-                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);                    
                     return View(objResult.ResultData);
                 }
 
@@ -152,7 +168,7 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
-           
+
         }
     }
 }

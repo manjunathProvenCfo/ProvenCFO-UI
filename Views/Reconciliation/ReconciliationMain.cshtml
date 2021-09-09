@@ -154,7 +154,7 @@
                                     <td class="align-middle">
                                         <div class="custom-control custom-checkbox">
                                             <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
-                                           
+
                                             <label class="custom-control-label" for="@item.id"></label>
                                         </div>
                                     </td>
@@ -164,11 +164,11 @@
                                     <td class="sort pr-1 align-middle col-xs-2">@Html.DisplayFor(modelItem => item.reference)</td>
                                     @if (item.amount < 0)
                                     {
-                                        <td class="sort pr-1 align-middle text-danger col-xs-1">(@Html.DisplayFor(modelItem => item.amount))</td>
+                                        <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
                                     }
                                     else
                                     {
-                                        <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.amount)</td>
+                                        <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
                                     }
                                     <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
                                     @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
@@ -355,8 +355,8 @@
         </div>
 
     </div>
-    <div class="col-md-4 p-l-2 d-none" id="divTable1">
-        <div class="card mb-3 pr-md-0 table table-striped " id="divChat1">
+    <div class="col-md-4 p-l-2 " id="divFilter">
+        <div class="card mb-3 pr-md-0 table table-striped ">
             <div class="card-header">
                 <div class="align-items-center justify-content-between p-l-6 ">
                     <button class="close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="Cancel1" data-dismiss="modal" aria-label="Close"><svg class="svg-inline--fa fa-times fa-w-11" data-fa-transform="shrink-6 right-0.3 down-0.3" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg="" style="transform-origin: 0.3625em 0.51875em;"><g transform="translate(176 256)"><g transform="translate(9.6, 9.6)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" transform="translate(-176 -256)"></path></g></g></svg><!-- <span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span> Font Awesome fontawesome.com --></button>
@@ -367,63 +367,317 @@
 
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        <h6 class="mb-0 ml-2">Filter Accounts</h6>
-
+                                        <h5 class="mb-0 ml-2">Filter</h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
+                  
                 </div>
             </div>
 
-            <div>
-                <span class="select2 select2-container select2-container--bootstrap4 select2-container--below select2-container--focus" dir="ltr" data-select2-id="3" style="width: 420px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered"><li class="select2-selection__choice" title="SVB-BDR Operating Account" data-select2-id="53"><span class="select2-selection__choice__remove" role="presentation">×</span>accounting.transactions</li><li class="select2-selection__choice" title="BDR INTERSTING BEARING Account" data-select2-id="54"><span class="select2-selection__choice__remove" role="presentation">×</span>BDR REVENUE Account</li><li class="select2-selection__choice" title="Divvy" data-select2-id="55"><span class="select2-selection__choice__remove" role="presentation">×</span>SVB ESCROW ACCOUNT</li><li class="select2-selection__choice" title="ACCOUNT DETAIL " data-select2-id="56"><span class="select2-selection__choice__remove" role="presentation">×</span>accounting.reports.tenninetynine.read</li><li class="select2-selection__choice" title="accounting.budgets.read" data-select2-id="57"><span class="select2-selection__choice__remove" role="presentation">×</span>accounting.budgets.read</li><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" placeholder="" style="width: 0.75em;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-            </div>
+            <div class="card panel-primary">
 
-            <div class="d-flex align-items-center">
-                <div class="col-12">
+                <div class="card-body">
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-6">
+                            <div class="row align-items-center">
 
-                    <h6 class="mb-0 ml-6" style=" margin: 1rem; padding-left: 20rem;">select All</h6>
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Account</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-10">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select Gender",
+                                       new { @class = " selectpicker form-control", @multiple = "multiple" , style = "width: 250px;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-6">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Select Date Range</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-10">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <input class="form-control datetimepicker w-100" id="timepicker2" type="text" placeholder="m/d/y to m/d/y" data-options='{"mode":"range","dateFormat":"m/d/y","disableMobile":true}' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-6">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Amount Min</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Amount Max</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-5">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input class="form-control" id="filterMinAmount" type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input class="form-control" id="filterMaxAmount" type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-6">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Bank Rule</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-10">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        @Html.DropDownList("bankrule", new SelectList(ViewBag.BankRule, "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                    </div>
 
-                    @*<div class="mb-0 ml-2 text-400 fs--2">5/25/2021</div>*@
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-6">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-lg-start ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        <h6 class="mb-0 ml-2">Tracking Categories </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center justify-content-between  pt-2">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-10">
+                            <div class="row align-items-center">
+                                <div class="d-flex align-items-center ml-2">
+                                    <div class="mb-0 ml-2 text-400 fs--2">
+                                        @Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="" style=" margin: 1rem;">
+                            <input type="radio" id="html" name="fav_language" value="Show All" checked="true">
+                            <label for="html">Show All</label><br>
+                            <input type="radio" id="css" name="fav_language" value="Not Ready to Reconcile">
+                            <label for="css">Not Ready to Reconcile</label><br>
+                            <input type="radio" id="javascript" name="fav_language" value="Show Reconciled only">
+                            <label for="javascript">Show Reconciled only</label> <br />
+                            <input type="radio" id="javascript" name="fav_language" value="Read to Reconciled only">
+                            <label for="javascript">Read to Reconciled only</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+
+                        </div>                       
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Apply  </button>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                        </div>
+                    </div> <br /> <br />
+
                 </div>
-
             </div>
-
-            <div class="d-flex align-items-center">
-                <div class="" style=" margin: 1rem;">
-                    <input type="radio" id="html" name="fav_language" value="Show All">
-                    <label for="html">Show All</label><br>
-                    <input type="radio" id="css" name="fav_language" value="Not Ready to Reconcile">
-                    <label for="css">Not Ready to Reconcile</label><br>
-                    <input type="radio" id="javascript" name="fav_language" value="Show Reconciled only">
-                    <label for="javascript">Show Reconciled only</label> <br />
-                    <input type="radio" id="javascript" name="fav_language" value="Read to Reconciled only">
-                    <label for="javascript">Read to Reconciled only</label>
-                </div>
-            </div>
-            <div class="text-center" style="color:black">
-                <button type="submit">cancel</button>
-            </div> <br/> <br/> 
-            
-
         </div>
     </div>
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/js/table");
-    <script>
+    @section Scripts {
+        @Scripts.Render("~/bundles/js/table");
+        <script>
 
-        $(document).ready(function () {
-            //AgencyDropdownPartialViewChange();
-            var type = sessionStorage.getItem('Type');
-            if (type != null) {
+            $(document).ready(function () {
+                //AgencyDropdownPartialViewChange();
+                var type = sessionStorage.getItem('Type');
+                $('#divFilter').hide();
+                if (type != null) {
 
-                if (type == "0") {
+                    if (type == "0") {
+                        $('#tabNotinBooks').addClass('tabselect');
+                        $('#tabNotinBanks').removeClass('tabselect');
+                    }
+                    else {
+                        $('#tabNotinBooks').removeClass('tabselect');
+                        $('#tabNotinBanks').addClass('tabselect');
+                    }
+                }
+                else {
+                    $('#tabNotinBooks').addClass('tabselect');
+                    $('#tabNotinBanks').removeClass('tabselect');
+                }
+
+                $('#tblreconcilation tbody tr').click(function () {
+                    $(this).addClass('bg-300').siblings().removeClass('bg-300');
+
+                });
+                $('#iconComments').click(function () {
+                    if ($("#divFilter").is(":visible")) {
+                        $('#divFilter').hide();
+                        $('#divChat').show();
+
+                    }
+                    else if ($("#divChat").is(":visible")) {
+                        $('#divFilter').hide();
+                        $('#divChat').hide();
+                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                    }
+                    else {
+                        $('#divChat').show();
+                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                    }
+                    //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                    //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                    //    $('#divChat').hide();
+                    //}
+                    //else {
+                    //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                    //    $('#divChat').show();
+                    //}
+                });
+
+                $('#Cancel').click(function () {
+                    if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                        $('#divChat').hide();
+                    }
+                    else {
+                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                        $('#divChat').show();
+                    }
+                });
+                $('#Filter').click(function () {
+                    if ($("#divChat").is(":visible")) {
+                        $('#divChat').hide();
+                        $('#divFilter').show();
+
+                    }
+                    else if ($("#divFilter").is(":visible")) {
+                        $('#divChat').hide();
+                        $('#divFilter').hide();
+                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                    }
+                    else {
+                        $('#divFilter').show();
+                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                    }
+                    //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                    //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                    //    $('#divTable1').addClass('d-none');
+                    //    $('#divFilter').hide();
+                    //}
+                    //else {
+                    //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                    //    $('#divChat').hide();
+                    //    $('#divTable1').removeClass('d-none');
+                    //    $('#divFilter').show();
+                    //}
+                });
+
+                $('#Cancel1').click(function () {
+                    if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                        $('#divTable1').addClass('d-none');
+                        $('#divChat').hide();
+                    }
+                    else {
+                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                        $('#divTable1').removeClass('d-none');
+                        $('#divChat').show();
+                    }
+                });
+
+            });
+            function Tabclick(e, type) {
+                sessionStorage.setItem('Type', type);
+                if (type == 0) {
                     $('#tabNotinBooks').addClass('tabselect');
                     $('#tabNotinBanks').removeClass('tabselect');
                 }
@@ -432,161 +686,93 @@
                     $('#tabNotinBanks').addClass('tabselect');
                 }
             }
-            else {
-                $('#tabNotinBooks').addClass('tabselect');
-                $('#tabNotinBanks').removeClass('tabselect');
-            }
+            function onChangeglAccount(id, event) {
+                var Selectedvalue = event.currentTarget.value;
+                var ClientID = $("#ddlclient option:selected").val();
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + Selectedvalue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+                    if (response.Message == 'Success') {
 
-            $('#tblreconcilation tbody tr').click(function () {
-                $(this).addClass('bg-300').siblings().removeClass('bg-300');
-
-            });
-            $('#iconComments').click(function () {
-                if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    $('#divChat').hide();
-                }
-                else {
-                    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    $('#divChat').show();
-                }
-            });
-           
-            $('#Cancel').click(function () {
-                if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    $('#divChat').hide();
-                }
-                else {
-                    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    $('#divChat').show();
-                }
-            });           
-            $('#Filter').click(function () {
-                if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    $('#divTable1').addClass('d-none');
-                    $('#divChat1').hide();
-                }
-                else {
-                    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    $('#divTable1').removeClass('d-none');
-                    $('#divChat1').show();
-                }
-            });
-          
-            $('#Cancel1').click(function () {
-                if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    $('#divTable1').addClass('d-none');
-                    $('#divChat').hide();
-                }
-                else {
-                    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    $('#divTable1').removeClass('d-none');
-                    $('#divChat').show();
-                }
-            });
-
-        });
-        function Tabclick(e, type) {
-            sessionStorage.setItem('Type', type);
-            if (type == 0) {
-                $('#tabNotinBooks').addClass('tabselect');
-                $('#tabNotinBanks').removeClass('tabselect');
-            }
-            else {
-                $('#tabNotinBooks').removeClass('tabselect');
-                $('#tabNotinBanks').addClass('tabselect');
-            }
-        }
-        function onChangeglAccount(id, event) {
-            var Selectedvalue = event.currentTarget.value;
-            var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + Selectedvalue + '&BankRule=' + 0  + '&TrackingCategory=' + 0 , null, function (response) {
-                if (response.Message == 'Success') {
-                    
-                }
-                else {
-                   
-                }
-
-            })
-
-        }
-        function onChangeBankRule(id, event) {
-            var Selectedvalue = event.currentTarget.value;
-            var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
-                if (response.Message == 'Success') {
-
-                }
-                else {
-
-                }
-
-            })
-        }
-        function onChangeTc(id, event) {
-            var Selectedvalue = event.currentTarget.value;
-            var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + Selectedvalue, null, function (response) {
-                if (response.Message == 'Success') {
-
-                }
-                else {
-
-                }
-
-            })
-        }
-        function loadReconcilation() {
-            var type = sessionStorage.getItem('Type');
-            var recType = 'Not in Books';
-            if (type != null && type == '1') {
-                recType = 'Not in Banks';
-            }
-
-            postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
-
-                if (data === false) {
-
-
-                }
-                else {
-
-                }
-
-            });
-
-        }
-
-        function AgencyDropdownPartialViewChange() {
-            var ClientID = $("#ddlclient option:selected").val();
-
-            $.ajax({
-                url: '/AgencyService/GetClientDetails?id=' + ClientID,
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    if (data != null) {
-                        // Write here what should happend once client selected
-                        SetUserPreferencesForAgency();
-                        //loadReconcilation();
-                        window.location.reload();
                     }
                     else {
-                        // Write here what should happend once selected client is null
+
                     }
-                },
-                error: function () {
-                    // Write here what should happend when action result is errored.
+
+                })
+
+            }
+            function onChangeBankRule(id, event) {
+                var Selectedvalue = event.currentTarget.value;
+                var ClientID = $("#ddlclient option:selected").val();
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                    if (response.Message == 'Success') {
+
+                    }
+                    else {
+
+                    }
+
+                })
+            }
+            function onChangeTc(id, event) {
+                var Selectedvalue = event.currentTarget.value;
+                var ClientID = $("#ddlclient option:selected").val();
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + Selectedvalue, null, function (response) {
+                    if (response.Message == 'Success') {
+
+                    }
+                    else {
+
+                    }
+
+                })
+            }
+            function loadReconcilation() {
+                var type = sessionStorage.getItem('Type');
+                var recType = 'Not in Books';
+                if (type != null && type == '1') {
+                    recType = 'Not in Banks';
                 }
-            });
-        }
 
-    </script>
+                postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
 
-}
+                    if (data === false) {
+
+
+                    }
+                    else {
+
+                    }
+
+                });
+
+            }
+
+            function AgencyDropdownPartialViewChange() {
+                var ClientID = $("#ddlclient option:selected").val();
+
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            // Write here what should happend once client selected
+                            SetUserPreferencesForAgency();
+                            //loadReconcilation();
+                            window.location.reload();
+                        }
+                        else {
+                            // Write here what should happend once selected client is null
+                        }
+                    },
+                    error: function () {
+                        // Write here what should happend when action result is errored.
+                    }
+                });
+            }
+
+        </script>
+
+    }
 
