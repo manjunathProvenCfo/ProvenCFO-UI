@@ -163,6 +163,40 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            var ClientID = $("#ddlclient option:selected").val();
+            getAgencyMembersList(ClientID);
+        });
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+            if (ClientID != null && ClientID != undefined && ClientID != '') {
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $('#Notes-create-new-btn').show();//TODO
+                            SetUserPreferencesForAgency();
+                            window.location.reload();
+                        }
+                        else {
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            else {
+                window.location.reload();
+            }
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
         });
@@ -230,7 +264,7 @@
                 else
                     el.parent('div').siblings("span#lblIsPublished").text("Unpublished");
                 //TODO//Update status in database
-                /*let pdata = { Id: el.data().id, IsPublished: isChecked };*/
+                /*let pdata = {Id: el.data().id, IsPublished: isChecked };*/
                 postAjax('/Notes/PublishingNotes?Id=' + el.data().id, function (response) {
 
                     if (response.Message == 'Success') {
@@ -246,7 +280,7 @@
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").prev().data().id;
                 let pdata = { Id: id, SwapId: swapId };
-                //postAjax('', JSON.stringify({ pdata }), function (response) {
+                //postAjax('', JSON.stringify({pdata}), function (response) {
 
                 //});
             })
@@ -257,7 +291,7 @@
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").next().data().id;
                 let pdata = { Id: id, SwapId: swapId };
-                //postAjax('', JSON.stringify({ pdata }), function (response) {
+                //postAjax('', JSON.stringify({pdata}), function (response) {
 
                 //});
             })
@@ -390,9 +424,9 @@
                     let positions = [];
                     for (var i = $items.length; i > 0; i--) {
                         debugger
-                        ids.push(parseInt($items[i-1].getAttribute("data-id")));
+                        ids.push(parseInt($items[i - 1].getAttribute("data-id")));
                         positions.push(i);
-                        $items[i-1].setAttribute("data-position", i);
+                        $items[i - 1].setAttribute("data-position", i);
                     }
                     let pdata = { Ids: ids, Positions: positions.reverse() };
                     //post Ajax
