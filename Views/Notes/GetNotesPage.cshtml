@@ -327,10 +327,10 @@
                     debugger;
                     $.ajax({
                         type: "POST",
-                        url: '/Notes/DeleteNotesDescription/'+ Id,  
+                        url: '/Notes/DeleteNotesDescription/' + Id,
                     })
                         .done(function (data) {
-                            
+
                             if (data == 'Unpublished') {
                                 sweetAlert
                                     ({
@@ -388,12 +388,13 @@
                     let $items = $itemContainer.find('.notes-item:visible');
                     let ids = [];
                     let positions = [];
-                    for (var i = 0; i < $items.length; i++) {
-                        ids.push(parseInt($items[i].getAttribute("data-id")));
-                        positions.push(i + 1);
-                        $items[i].setAttribute("data-position", i + 1);
+                    for (var i = $items.length; i > 0; i--) {
+                        debugger
+                        ids.push(parseInt($items[i-1].getAttribute("data-id")));
+                        positions.push(i);
+                        $items[i-1].setAttribute("data-position", i);
                     }
-                    let pdata = { Ids: ids, Positions: positions };
+                    let pdata = { Ids: ids, Positions: positions.reverse() };
                     //post Ajax
                     let json = JSON.stringify(pdata);
 
