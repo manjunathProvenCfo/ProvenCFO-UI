@@ -240,6 +240,30 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        [CheckSession]
+        public string ResolveNote(int Id)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var results = objNotes.GetNotesDescriptionById(Id);
+                    if (results.IsResolved == false)
+                    {
+                        var resolve = objNotes.ResolveNote(Id);
+                        return resolve.IsPublished;
+                    }
+
+                    return results.IsPublished;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
 
         [CheckSession]
         [HttpPost]
