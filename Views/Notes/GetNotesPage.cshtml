@@ -121,8 +121,9 @@
                                             }
                                         </div>
                                         <p> @Html.Raw(Category.Description)</p>
-
+                                       
                                         <div class="Words">
+                                            @*<hr>*@
                                             Created by: @Category.CreatedByUser, @Category.CreatedDate
                                             @if ((Category.ModifiedByUser == ""))
                                             {
@@ -134,7 +135,6 @@
 
                                             }
 
-                                            <hr>
                                         </div>
                                     </div>
 
@@ -365,18 +365,7 @@
                     })
                         .done(function (data) {
 
-                            if (data == 'Unpublished') {
-                                sweetAlert
-                                    ({
-                                        title: "Couldn't Delete!",
-                                        text: "Note is Unpublished!",
-                                        type: "warning"
-                                    },
-                                        function () {
-                                            window.location.reload();
-                                        });
-                            }
-                            else {
+                            if ((data = 'UnPublished') || (data = 'Published')) {
                                 sweetAlert
                                     ({
                                         title: "Deleted!",
@@ -387,7 +376,7 @@
                                             window.location.reload();
                                         });
                             }
-
+                            
                         })
                         .error(function (data) {
                             swal("Oops", "We couldn't connect to the server!", "error");

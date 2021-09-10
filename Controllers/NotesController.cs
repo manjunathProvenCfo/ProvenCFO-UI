@@ -214,15 +214,12 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var results = objNotes.GetNotesDescriptionById(Id);
-                    if (results.IsPublished == "Unpublished")
-                    {
-                        return results.IsPublished;
-                    }
-                    else
+                    if(results.IsPublished == "Published"|| results.IsPublished == "Unpublished")
                     {
                         var result = objNotes.DeleteNotesDescription(Id);
-                        return result.IsPublished; 
+                        return result.IsPublished;
                     }
+                    
                     return results.IsPublished;
                 }
             }
@@ -233,7 +230,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-       
+
         [CheckSession]
         [HttpPost]
         public JsonResult DragAndDropNotesDescription(int[] Ids, int[] Positions)
