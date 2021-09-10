@@ -68,13 +68,13 @@
                             <div class="d-flex align-items-center ml-3" id="tabNotinBooks" onclick="Tabclick(event,0);">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
-                                <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount"></span>
                             </div>
 
                             <div class="d-flex align-items-center ml-5" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
-                                <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount"></span>
                             </div>
                         </div>
                     </div>
@@ -373,7 +373,7 @@
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
 
@@ -400,7 +400,7 @@
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
                                         @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select Gender",
-                                       new { @class = " selectpicker form-control", @multiple = "multiple" , style = "width: 250px;" })
+                                       new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                     </div>
                                 </div>
                             </div>
@@ -552,7 +552,7 @@
                     <div class="row">
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
 
-                        </div>                       
+                        </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Apply  </button>
                         </div>
@@ -575,11 +575,12 @@
         <script>
 
             $(document).ready(function () {
+                bindNotInBooksAndBanksCount();
                 //AgencyDropdownPartialViewChange();
                 var type = sessionStorage.getItem('Type');
                 $('#divFilter').hide();
                 if (type != null) {
-
+                    debugger;
                     if (type == "0") {
                         $('#tabNotinBooks').addClass('tabselect');
                         $('#tabNotinBanks').removeClass('tabselect');
@@ -727,9 +728,11 @@
                 })
             }
             function loadReconcilation() {
+
                 var type = sessionStorage.getItem('Type');
                 var recType = 'Not in Books';
                 if (type != null && type == '1') {
+                    debugger;
                     recType = 'Not in Banks';
                 }
 
@@ -770,6 +773,27 @@
                         // Write here what should happend when action result is errored.
                     }
                 });
+            }
+
+            function bindNotInBooksAndBanksCount() {
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+                    debugger
+                    if (response.Message == "Success") {
+                        let data = response.ResultData;
+                        let totalSum = 0;
+                        for (var i = 0; i < data.length; i++) {
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                $("#lblNotInBooksCount").text(data[i].totalCount);
+                            }
+                            else {
+                                $("#lblNotInBanksCount").text(data[i].totalCount);
+                            }
+                        }
+                        $("#lblNotInCount").text(totalSum);
+                    }
+                })
             }
 
         </script>

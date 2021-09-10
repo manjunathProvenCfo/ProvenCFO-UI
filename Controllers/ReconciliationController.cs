@@ -31,6 +31,8 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
+                    //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
+                    //return View(objResult.ResultData);
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
@@ -40,15 +42,37 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
+
+
+
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         ViewBag.BankRule = getBankRule();
                         ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+
                     return View("ReconciliationMain", objResult.ResultData);
 
                 }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        public JsonResult GetReconciliationDataCountAgencyId(string AgencyId)
+        {
+            try
+            {
+
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
             }
             catch (Exception ex)
             {
@@ -145,7 +169,7 @@ namespace ProvenCfoUI.Controllers
                         ViewBag.BankRule = getBankRule();
                         ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
-                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);                    
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
                     return View(objResult.ResultData);
                 }
 
