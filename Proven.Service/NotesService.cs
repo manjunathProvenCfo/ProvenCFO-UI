@@ -61,6 +61,12 @@ namespace Proven.Service
             string result = string.Format("Notes/DeleteNotesDescription?Id={0}", Id);
             return PostAsync<NotesDescriptionModel>(result).Result;
         }
+
+        public NotesDescriptionModel ResolveNote(int Id)
+        {
+            string resolve = string.Format("Notes/ResolveNote?Id={0}", Id);
+            return PostAsync<NotesDescriptionModel>(resolve).Result;
+        }
         public NotesDescriptionModel DragAndDropNotesDescription(int[] Ids, int[] Positions)
         {
             var objNotes = new { Ids, Positions };

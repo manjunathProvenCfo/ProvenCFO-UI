@@ -27,6 +27,7 @@ namespace Proven.Model
         public String IsDeleted { get; set; }
         public int? gl_account_ref { get; set; }
         public int? tracking_category_ref { get; set; }
+       
     }
     public class ReconciliationMainModel
     {

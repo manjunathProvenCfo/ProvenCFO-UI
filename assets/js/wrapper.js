@@ -23,7 +23,7 @@ function baseAjaxCall(type, url, data, response, async) {
             response(data);
         },
         error: function (err) {
-            debugger
+            
             console.log(err);
             if (err.status == 5000) {
                 ShowAlertBoxError("Internal server error");

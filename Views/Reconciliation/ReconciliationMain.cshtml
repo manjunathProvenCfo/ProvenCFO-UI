@@ -68,13 +68,13 @@
                             <div class="d-flex align-items-center ml-3" id="tabNotinBooks" onclick="Tabclick(event,0);">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
-                                <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount"></span>
                             </div>
 
                             <div class="d-flex align-items-center ml-5" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
-                                <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount"></span>
                             </div>
                         </div>
                     </div>
@@ -134,13 +134,13 @@
                                 <th></th>
                                 @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
                                 {
-                                    <th class="sort pr-1 align-middle">GL Account</th>
+                                <th class="sort pr-1 align-middle">GL Account</th>
                                 }
                                 @*<th><span class="far fa-question-circle"></span></th>*@
                                 <th class="sort pr-10 align-center ">Rule</th>
                                 @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
                                 {
-                                    <th class="sort pr-10 align-center ">Tracking Category</th>
+                                <th class="sort pr-10 align-center ">Tracking Category</th>
                                 }
 
 
@@ -150,60 +150,60 @@
                             @foreach (var item in Model)
                             {
 
-                                <tr class="btn-reveal-trigger cursor-pointer">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
+                            <tr class="btn-reveal-trigger cursor-pointer">
+                                <td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
 
-                                            <label class="custom-control-label" for="@item.id"></label>
-                                        </div>
-                                    </td>
-                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.description)</td>
-                                    <td class="sort pr-1 align-middle col-xs-2">@Html.DisplayFor(modelItem => item.reference)</td>
-                                    @if (item.amount < 0)
+                                        <label class="custom-control-label" for="@item.id"></label>
+                                    </div>
+                                </td>
+                                <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.description)</td>
+                                <td class="sort pr-1 align-middle col-xs-2">@Html.DisplayFor(modelItem => item.reference)</td>
+                                @if (item.amount < 0)
                                     {
-                                        <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
+                                <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
                                     }
                                     else
                                     {
-                                        <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
                                     }
-                                    <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
-                                    @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
+                                @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
                                     {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
+                                <td class="sort pr-1 align-middle col-xs-1">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto">
 
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                    }
-                                    @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
-                                    <td class="sort pr-1 align-middle col-xs-1">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
-                                            </div>
+                                            @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                            @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
                                         </div>
-                                    </td>
-                                    @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
+                                    </div>
+                                </td>
+                                    }
+                                @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                <td class="sort pr-1 align-middle col-xs-1">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto">
+                                            @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+                                        </div>
+                                    </div>
+                                </td>
+                                @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
                                     {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount("+ item.id + "," + + ")" })*@
-                                                    @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(ViewBag.TrackingCategories, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
-                                                </div>
-                                            </div>
-                                        </td>
+                                <td class="sort pr-1 align-middle col-xs-1">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto">
+                                            @*@Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount("+ item.id + "," + + ")" })*@
+                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(ViewBag.TrackingCategories, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
+                                        </div>
+                                    </div>
+                                </td>
                                     }
 
-                                </tr>
+                            </tr>
                             }
 
                         </tbody>
@@ -373,7 +373,7 @@
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
 
@@ -400,7 +400,7 @@
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
                                         @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select Gender",
-                                       new { @class = " selectpicker form-control", @multiple = "multiple" , style = "width: 250px;" })
+                                       new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                     </div>
                                 </div>
                             </div>
@@ -552,7 +552,7 @@
                     <div class="row">
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
 
-                        </div>                       
+                        </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Apply  </button>
                         </div>
@@ -575,6 +575,7 @@
         <script>
 
             $(document).ready(function () {
+                bindNotInBooksAndBanksCount();
                 //AgencyDropdownPartialViewChange();
                 var type = sessionStorage.getItem('Type');
                 $('#divFilter').hide();
@@ -727,9 +728,11 @@
                 })
             }
             function loadReconcilation() {
+
                 var type = sessionStorage.getItem('Type');
                 var recType = 'Not in Books';
                 if (type != null && type == '1') {
+
                     recType = 'Not in Banks';
                 }
 
@@ -772,7 +775,28 @@
                 });
             }
 
+            function bindNotInBooksAndBanksCount() {
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+                    if (response.Message == "Success") {
+                        let data = response.ResultData;
+                        let totalSum = 0;
+                        for (var i = 0; i < data.length; i++) {
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                $("#lblNotInBanksCount").text(data[i].totalCount);
+                            }
+                            else {
+                                $("#lblNotInBooksCount").text(data[i].totalCount);                              
+                            }
+                        }
+                        $("#lblNotInCount").text(totalSum);
+                    }
+                })
+            }
+
         </script>
 
     }
-
+   

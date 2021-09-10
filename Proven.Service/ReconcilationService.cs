@@ -19,13 +19,18 @@ namespace Proven.Service
         {
             return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled).Result;
         }
+
+        public ReconciliationCountModel GetReconciliationDataCountAgencyId(string AgencyId)
+        {
+            return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=" + AgencyId).Result;
+        }
         public ReturnStringModel GetDistinctAccount(int ClientId)
         {
-            return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId ).Result;
+            return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId).Result;
         }
         public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory)
         {
-            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}", AgencyID,id,GLAccount, BankRule, TrackingCategory);
+            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}", AgencyID, id, GLAccount, BankRule, TrackingCategory);
             return PostAsync<ReturnModel>(result).Result;
         }
         public void Dispose()

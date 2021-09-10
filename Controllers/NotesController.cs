@@ -26,7 +26,9 @@ namespace ProvenCfoUI.Controllers
                 {
                     int AgencyID = 0;
                     ViewBag.IsEditMode = false;
+                    ViewBag.IsDraggable = false;
                     var userType = Convert.ToString(Session["UserType"]);
+                    var user = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
                     {
@@ -39,6 +41,14 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.IsEditMode = true;
                     }
+                    if (user == "1")
+                    {
+                        ViewBag.IsDraggable = true;
+                    }
+                    //else
+                    //{
+                    //    ViewBag.IsDraggable = false;
+                    //}
                 }
                 return View();
             }
@@ -214,15 +224,12 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var results = objNotes.GetNotesDescriptionById(Id);
-                    if (results.IsPublished == "Unpublished")
-                    {
-                        return results.IsPublished;
-                    }
-                    else
+                    if (results.IsPublished == "Published" || results.IsPublished == "Unpublished")
                     {
                         var result = objNotes.DeleteNotesDescription(Id);
-                        return result.IsPublished; 
+                        return result.IsPublished;
                     }
+
                     return results.IsPublished;
                 }
             }
@@ -233,7 +240,31 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-       
+        [CheckSession]
+        public string ResolveNote(int Id)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var results = objNotes.GetNotesDescriptionById(Id);
+                    if (results.IsResolved == false)
+                    {
+                        var resolve = objNotes.ResolveNote(Id);
+                        return resolve.IsPublished;
+                    }
+
+                    return results.IsPublished;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
         [CheckSession]
         [HttpPost]
         public JsonResult DragAndDropNotesDescription(int[] Ids, int[] Positions)
