@@ -420,3 +420,19 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
 .emojionearea-editor{
     margin:1rem;
 }
+span#lblNotInBooksCount {
+    color: white;
+    background-color: red;
+}
+span#lblNotInBanksCount {
+    color: white;
+    background-color: red;
+}
+span#lblNotInBooksCount1 {
+    color: white;
+    background-color: #00d27a;
+}
+span#lblNotInBanksCount1 {
+    color: white;
+    background-color: #00d27a;
+}
