@@ -62,6 +62,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [CheckSession]
         public JsonResult GetReconciliationDataCountAgencyId(string AgencyId)
         {
             try

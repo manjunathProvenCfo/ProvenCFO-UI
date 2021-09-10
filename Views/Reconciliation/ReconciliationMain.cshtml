@@ -580,7 +580,7 @@
                 var type = sessionStorage.getItem('Type');
                 $('#divFilter').hide();
                 if (type != null) {
-                    debugger;
+                   
                     if (type == "0") {
                         $('#tabNotinBooks').addClass('tabselect');
                         $('#tabNotinBanks').removeClass('tabselect');
@@ -732,7 +732,7 @@
                 var type = sessionStorage.getItem('Type');
                 var recType = 'Not in Books';
                 if (type != null && type == '1') {
-                    debugger;
+                   
                     recType = 'Not in Banks';
                 }
 
@@ -778,7 +778,7 @@
             function bindNotInBooksAndBanksCount() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                    debugger
+
                     if (response.Message == "Success") {
                         let data = response.ResultData;
                         let totalSum = 0;
