@@ -121,9 +121,8 @@
                                             }
                                         </div>
                                         <p> @Html.Raw(Category.Description)</p>
-                                       
+
                                         <div class="Words">
-                                            @*<hr>*@
                                             Created by: @Category.CreatedByUser, @Category.CreatedDate
                                             @if ((Category.ModifiedByUser == ""))
                                             {
@@ -135,6 +134,7 @@
 
                                             }
 
+                                            @*<hr>*@
                                         </div>
                                     </div>
 
@@ -365,7 +365,7 @@
                     })
                         .done(function (data) {
 
-                            if ((data = 'UnPublished') || (data = 'Published')) {
+                            if ((data == 'Unpublished') || (data == 'Published')) {
                                 sweetAlert
                                     ({
                                         title: "Deleted!",
@@ -376,7 +376,8 @@
                                             window.location.reload();
                                         });
                             }
-                            
+
+
                         })
                         .error(function (data) {
                             swal("Oops", "We couldn't connect to the server!", "error");
@@ -385,52 +386,55 @@
         }
 
     </script>
-    <script type="text/javascript">
-        $(function () {
-            var Selectors = {
-                BODY: 'body',
-                NOTES_CONTAINER: '.notes-container',
-                NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
-                NOTES_ITEM: '.notes-item',
-            };
+    @if(ViewBag.IsDraggable == true)
+    {
+        <script type="text/javascript">
+            $(function () {
+                var Selectors = {
+                    BODY: 'body',
+                    NOTES_CONTAINER: '.notes-container',
+                    NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
+                    NOTES_ITEM: '.notes-item',
+                };
 
-            let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
-            for (var i = 0; i < arrItemsContainer.length; i++) {
-                let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
-                    draggable: Selectors.NOTES_ITEM,
-                    delay: 200,
-                    mirror: {
-                        appendTo: Selectors.BODY,
-                        constrainDimensions: true
-                    }
-                });
-                sortable.on('drag:stop', function (e) {
-                    debugger
-                    var $this = $(e.data.source);
-                    var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
-                    let $items = $itemContainer.find('.notes-item:visible');
-                    let ids = [];
-                    let positions = [];
-                    for (var i = $items.length; i > 0; i--) {
-                        debugger
-                        ids.push(parseInt($items[i - 1].getAttribute("data-id")));
-                        positions.push(i);
-                        $items[i - 1].setAttribute("data-position", i);
-                    }
-                    let pdata = { Ids: ids, Positions: positions.reverse() };
-                    //post Ajax
-                    let json = JSON.stringify(pdata);
-
-                    postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
-                        debugger;
-                        if (response.Message == 'Success') {
-
+                let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+                for (var i = 0; i < arrItemsContainer.length; i++) {
+                    let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+                        draggable: Selectors.NOTES_ITEM,
+                        delay: 200,
+                        mirror: {
+                            appendTo: Selectors.BODY,
+                            constrainDimensions: true
                         }
+                    });
+                    sortable.on('drag:stop', function (e) {
+                        debugger
+                        var $this = $(e.data.source);
+                        var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+                        let $items = $itemContainer.find('.notes-item:visible');
+                        let ids = [];
+                        let positions = [];
+                        for (var i = $items.length; i > 0; i--) {
+                            debugger
+                            ids.push(parseInt($items[i - 1].getAttribute("data-id")));
+                            positions.push(i);
+                            $items[i - 1].setAttribute("data-position", i);
+                        }
+                        let pdata = { Ids: ids, Positions: positions.reverse() };
+                        //post Ajax
+                        let json = JSON.stringify(pdata);
 
-                    })
+                        postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
+                            debugger;
+                            if (response.Message == 'Success') {
 
-                });
-            }
-        });
-    </script>
+                            }
+
+                        })
+
+                    });
+                }
+            });
+        </script>
+    }
 }
