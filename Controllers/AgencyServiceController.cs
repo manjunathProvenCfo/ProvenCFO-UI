@@ -25,6 +25,12 @@ namespace ProvenCfoUI.Controllers
 
             return View();
         }
+        [CheckSession]
+        public ActionResult AgencyXeroHome(string code, string scope,string state)
+        {
+
+            return View();
+        }
 
         [CheckSession]
         [HttpGet]
