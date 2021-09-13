@@ -1046,6 +1046,7 @@
     <Content Include="Views\Reports\_ReportPeriodPartial.cshtml" />
     <Content Include="Views\Reports\_ReportUploaderPartial.cshtml" />
     <Content Include="Views\Notes\OpenDescription.cshtml" />
+    <Content Include="Views\Notes\UpdateNoteSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

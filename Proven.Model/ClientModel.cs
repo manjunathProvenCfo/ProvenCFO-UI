@@ -60,10 +60,15 @@ namespace Proven.Model
         public string ProfileImage1 { get; set; }
         public string ProfileImage2 { get; set; }
         public string ProfileImage3 { get; set; }
-
-
         public int? TeamId { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
+
+        //For Summary Page
+        public string Summary { get; set; }
+        public string SummaryCreatedBy { get; set; }
+        public DateTime? SummaryCreatedDate { get; set; }
+        public string SummaryModifiedBy { get; set; }
+        public DateTime? SummaryModifiedDate { get; set; }
 
     }
 

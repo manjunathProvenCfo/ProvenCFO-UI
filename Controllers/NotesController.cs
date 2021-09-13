@@ -24,33 +24,35 @@ namespace ProvenCfoUI.Controllers
             {
                 using (NotesService objNotes = new NotesService())
                 {
-                    int AgencyID = 0;
-                    ViewBag.IsEditMode = false;
-                    ViewBag.IsDraggable = false;
-                    var userType = Convert.ToString(Session["UserType"]);
-                    var user = Convert.ToString(Session["UserType"]);
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    if (UserPref != null && UserPref.Count() > 0)
+                    using (ClientService objClient = new ClientService())
                     {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        int AgencyID = 0;
+                        ViewBag.IsEditMode = false;
+                        ViewBag.IsDraggable = false;
+                        var userType = Convert.ToString(Session["UserType"]);
+                        var user = Convert.ToString(Session["UserType"]);
+                        List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                        if (UserPref != null && UserPref.Count() > 0)
+                        {
+                            var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                            AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        }
+                        var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
+                        TempData["CategoriesAndNotes"] = Categories;
+                        var Summary = objClient.GetClientById(AgencyID);
+                        TempData["NotesSummary"] = Summary;
+                        if (userType != "" && userType == "1")
+                        {
+                            ViewBag.IsEditMode = true;
+                        }
+                        if (user == "1")
+                        {
+                            ViewBag.IsDraggable = true;
+                        }
                     }
-                    var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
-                    TempData["CategoriesAndNotes"] = Categories;
-                    if (userType != "" && userType == "1")
-                    {
-                        ViewBag.IsEditMode = true;
-                    }
-                    if (user == "1")
-                    {
-                        ViewBag.IsDraggable = true;
-                    }
-                    //else
-                    //{
-                    //    ViewBag.IsDraggable = false;
-                    //}
+                    return View();
                 }
-                return View();
+
             }
             catch (Exception ex)
             {
@@ -97,6 +99,25 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+        [CheckSession]
+        [HttpGet]
+        public ActionResult UpdateNoteSummary()
+        {
+            try
+            {
+                ClientModel result = new ClientModel();
+                result.SummaryCreatedBy = Session["UserFullName"].ToString();
+                return PartialView("UpdateNoteSummary", result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
 
 
         [CheckSession]
@@ -193,6 +214,8 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+
 
 
         [CheckSession]
