@@ -37,6 +37,10 @@ namespace Proven.Service
         {
             return PostAsync<NotesDescriptionMainModel1, NotesDescriptionModel>("Notes/CreateNotes", notesDescription).Result;
         }
+        public ClientMainModel UpdateNoteSummary(ClientModel client)
+        {
+            return PostAsync<ClientMainModel, ClientModel>("Notes/UpdateNoteSummary", client).Result;
+        }
 
         public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID)
         {

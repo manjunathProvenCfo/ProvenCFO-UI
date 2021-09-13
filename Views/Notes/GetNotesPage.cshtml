@@ -8,30 +8,32 @@
         <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
         </div>
         <!--/.bg-holder-->
+       
 
-        <div class="card-body" id="v-pills-Summary">
-            <div class="row">
-                <div class="col-lg-9">
+                <div class="card-body" id="v-pills-Summary">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="mb-0">Summary</h5>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="mb-0">Summary</h5>
+                                </div>
+                                <div class="col-md-6">
 
+                                </div>
+                            </div>
+                            <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
+                        </div>
+                        <div class="col-3">
+                            @if (ViewBag.IsEditMode == true)
+                            {
+                                <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                            }
+                            <div class="Words mt-8">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21 </div>
                         </div>
                     </div>
-                    <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
                 </div>
-                <div class="col-3">
-                    @if (ViewBag.IsEditMode == true)
-                    {
-                        <h5 class="mb-0 text-right"><span class="fas fa-edit"></span></h5>
-                    }
-                    <div class="Words mt-8">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21 </div>
-                </div>
+       
             </div>
-        </div>
-    </div>
 
     <div class="row scrollspy-listing">
 
@@ -151,6 +153,7 @@
             }
             @{ Html.RenderAction("CreateNewNotes", "Notes");}
             @{ Html.RenderAction("OpenDescription", "Notes"); }
+            @{ Html.RenderAction("UpdateNoteSummary", "Notes"); }
         </div>
 
     </div>
@@ -161,6 +164,7 @@
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
     <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
 
+    @*For AgencySelectionDropdown*@
     <script type="text/javascript">
         $(document).ready(function () {
             var ClientID = $("#ddlclient option:selected").val();
@@ -343,6 +347,50 @@
 
             });
         }
+
+        $(function () {
+            $("[id='notes-updatesummary-new-btn']").click(function (e) {
+
+                let btnAdd = $(this);
+                tinymce.get("txtSummary").getContent()
+                tinymce.get("txtSummary").setContent("");
+                tinyMCE.activeEditor.setContent("");
+                $("#notesummary-modal-new").modal("show");
+
+                $("#btnUpdateNoteSummary").text("Update");
+
+            });
+            $("#btnUpdateNoteSummary").click(function () {
+                var id = $('#Id').val();
+                var ClientID = $("#ddlclient option:selected").val();
+                var agencyId = $('#ClientID').val();
+                var summary = tinyMCE.get("txtSummary").getContent();
+               
+
+                $("#btnUpdateNoteSummary").prop('update', 'Save');
+
+                var pdata = { Id: id, Summary: summary, AgencyId: ClientID};
+                let json = JSON.stringify({ Notes: pdata });
+
+                postAjax('/Notes/UpdateNoteSummary', JSON.stringify({ Notes: pdata }), function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+
+                        }
+                    }
+
+                })
+            });
+        });
 
         function DeleteNotesDescription(Id) {
 
