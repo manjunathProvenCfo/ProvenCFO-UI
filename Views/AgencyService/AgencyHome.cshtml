@@ -78,18 +78,16 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
-                                <h6 class="mt-1">Not in Bank <i class="fal fa-question-circle"></i></h6>
+                                <h6 class="mt-1">Not in Bank </h6>
                                 @*<div class="fs--2 mt-3">
-                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex flex-between-center mb-1">
 
 
-                                        <div class="d-xxl-none">93%</div>
-                                    </div>
-                                </div>*@
-                                <div>
-                                    <h1 style=" margin-left: 15px;">32 </h1>
-                                                                     
-                                </div>
+                                            <div class="d-xxl-none">93%</div>
+                                        </div>
+                                    </div>*@
+                                <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
+
                                 <div> <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount1" style=" color: white; background-color: #00d27a;">$12.6k</span><br /></div>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount" style="color: white; background-color: red; ">$18.6k</span>
                             </div>
@@ -100,30 +98,28 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-6 col-lg-3 pl-md-3 mb-3">
                 <div class="card h-md-100">
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
-                                <h6 class="mt-1">Not in Book </h6>                               
-                                <div class="fs--2 mt-3">
-                                    <div class="d-flex flex-between-center mb-1">
-                                        <h1 style=" margin-left: 15px;"> 0 </h1>
-                                        
-                                        <div class="d-xxl-none">100%</div>
-                                    </div>
-                                </div>
-                                <div> <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount" style=" color: white; background-color: #00d27a;">0</span><br /></div>
-                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount1" style=" color: white; background-color: red;">0</span>
+                                <h6 class="mt-1">Not in Book </h6>
+
+                                <h1 id="lblNotInBooksCount2" style=" margin-left: 15px;">
+                                    0
+                                </h1>
+                                <div> <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount1" style=" color: white; background-color: #00d27a;">0</span><br /></div>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount" style="color: white; background-color: red; ">0</span>
                             </div>
                             <div class="col-5 col-sm-4">
-                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":100,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
             <div class="col-md-6 col-lg-3 pl-md-3 mb-3">
                 <div class="card h-md-100">
@@ -383,10 +379,10 @@
                                     <option value="5">Jun</option>
                                     <option value="6">July</option>
                                     @*<option value="7">August</option>
-                                    <option value="8">September</option>
-                                    <option value="9">October</option>
-                                    <option value="10">November</option>
-                                    <option value="11">December</option>*@
+                                        <option value="8">September</option>
+                                        <option value="9">October</option>
+                                        <option value="10">November</option>
+                                        <option value="11">December</option>*@
                                 </select>
                             </div>
                         </div>
@@ -535,9 +531,11 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
+                GetReconcilationData();
                 Chart1();
                 Chart2();
-               // totalSalesInit();
+
+                // totalSalesInit();
                 //totalSalesInitTwo();
             });
 
@@ -624,7 +622,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        
+
                         if (data != null) {
                             var count = 1;
                             $.each(data.TeamMembers, function (key, object) {
@@ -642,7 +640,7 @@
                                 }
                                 else {
                                     $('#spStaffName' + count).html(String(''));
-                                }                              
+                                }
                                 if (object.Jobtitle != null && object.Jobtitle != '') {
                                     $('#spJobTitle' + count).html(String(object.Jobtitle));
                                 }
@@ -668,11 +666,10 @@
                 });
             }
 
-           function getBankSummary()
-            {
+            function getBankSummary() {
 
                 $.ajax({
-                    url: '/AgencyService/GetBankSummary' ,
+                    url: '/AgencyService/GetBankSummary',
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -681,7 +678,7 @@
                             $('#spOutSanding').html(data.Total);
                         }
                         else {
-                            $('#spOutSanding').html(0);                           
+                            $('#spOutSanding').html(0);
                         }
                     },
                     error: function (e) {
@@ -695,7 +692,7 @@
             function AgencyDropdownPartialViewChange() {
 
 
-                
+
 
 
 
@@ -708,27 +705,27 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
-                           
+
                             getTeamMembersList();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
-                            $('.spEntityName').html(String(data.EntityName));                            
-                            $('#spTeamName').html(String(data.TeamName));                          
-                            
+                            $('.spEntityName').html(String(data.EntityName));
+                            $('#spTeamName').html(String(data.TeamName));
+
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             getBankSummary();
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
-                            
-                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));                                                                             
+
+                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                             $('.badge-soft-success').removeClass('d-none');
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
-                          
 
-                           
+
+
                         }
                         else {
 
@@ -772,88 +769,128 @@
                 });
 
             }
-            const camelize = (str) => {
-                const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
-                    c ? c.toUpperCase() : ""
-                );
-                return `${text.substr(0, 1).toLowerCase()}${text.substr(1)}`;
-            };
 
-            const getData = (el, data) => {
-                try {
-                    return JSON.parse(el.dataset[camelize(data)]);
-                } catch (e) {
-                    return el.dataset[camelize(data)];
-                }
-            };
-            const getGrays = (dom) => ({
-                white: getColor("white", dom),
-                100: getColor("100", dom),
-                200: getColor("200", dom),
-                300: getColor("300", dom),
-                400: getColor("400", dom),
-                500: getColor("500", dom),
-                600: getColor("600", dom),
-                700: getColor("700", dom),
-                800: getColor("800", dom),
-                900: getColor("900", dom),
-                1000: getColor("1000", dom),
-                1100: getColor("1100", dom),
-                black: getColor("black", dom),
-            });
-            const getColors = (dom) => ({
-                primary: getColor("primary", dom),
-                secondary: getColor("secondary", dom),
-                success: getColor("success", dom),
-                info: getColor("info", dom),
-                warning: getColor("warning", dom),
-                danger: getColor("danger", dom),
-                light: getColor("light", dom),
-                dark: getColor("dark", dom),
-            });
-            const getColor = (name, dom = document.documentElement) =>
-                getComputedStyle(dom).getPropertyValue(`--falcon-${name}`).trim();
-            const rgbaColor = (color = "#fff", alpha = 0.5) =>
-                `rgba(${hexToRgb(color)}, ${alpha})`;
-            const hexToRgb = (hexValue) => {
-                let hex;
-                hexValue.indexOf("#") === 0
-                    ? (hex = hexValue.substring(1))
-                    : (hex = hexValue);
-                // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-                const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
-                    hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b)
-                );
-                return result
-                    ? [
-                        parseInt(result[1], 16),
-                        parseInt(result[2], 16),
-                        parseInt(result[3], 16),
-                    ]
-                    : null;
-            };
-            var totalSalesInit = function totalSalesInit() {
-                var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales';
-                var SELECT_MONTH = '.select-month';
-                var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
-                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            function GetReconcilationData() {
 
-                function getFormatter(params) {
-                    var _params$ = params[0],
-                        name = _params$.name,
-                        value = _params$.value;
-                    var date = new Date(name);
-                    return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
-                }
 
-                if ($echartsLineTotalSales) {
-                    // Get options from data attribute
-                    var userOptions = getData($echartsLineTotalSales, 'options');
-                    var chart = window.echarts.init($echartsLineTotalSales);
-                    var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-                    var getDefaultOptions =  {
+                    if (response.Message == "Success") {
+
+                        let data = response.ResultData;
+                        let totalSum = 0;
+
+                        for (var i = 0; i < data.length; i++) {
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                               
+                                $("#lblNotInBanksCount2").text(data[i].totalCount);
+
+                            }
+                           
+
+                            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+                                $("#lblNotInBooksCount2").text(data[i].totalCount);
+
+                            }
+                            
+                        }
+                        $("#lblNotInCount").text(totalSum);
+                    }
+                    error: (function (data) {
+
+                       window.location.reload();
+
+                       swal("Oops", "We couldn't connect to the server!", "error");
+                   });
+                    
+                });
+            }
+               
+
+                    const camelize = (str) => {
+                    const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
+                        c ? c.toUpperCase() : ""
+                    );
+                    return `${text.substr(0, 1).toLowerCase()}${text.substr(1)}`;
+                };
+
+                const getData = (el, data) => {
+                    try {
+                        return JSON.parse(el.dataset[camelize(data)]);
+                    } catch (e) {
+                        return el.dataset[camelize(data)];
+                    }
+                };
+                const getGrays = (dom) => ({
+                    white: getColor("white", dom),
+                    100: getColor("100", dom),
+                    200: getColor("200", dom),
+                    300: getColor("300", dom),
+                    400: getColor("400", dom),
+                    500: getColor("500", dom),
+                    600: getColor("600", dom),
+                    700: getColor("700", dom),
+                    800: getColor("800", dom),
+                    900: getColor("900", dom),
+                    1000: getColor("1000", dom),
+                    1100: getColor("1100", dom),
+                    black: getColor("black", dom),
+                });
+                const getColors = (dom) => ({
+                    primary: getColor("primary", dom),
+                    secondary: getColor("secondary", dom),
+                    success: getColor("success", dom),
+                    info: getColor("info", dom),
+                    warning: getColor("warning", dom),
+                    danger: getColor("danger", dom),
+                    light: getColor("light", dom),
+                    dark: getColor("dark", dom),
+                });
+                const getColor = (name, dom = document.documentElement) =>
+                    getComputedStyle(dom).getPropertyValue(`--falcon-${name}`).trim();
+                const rgbaColor = (color = "#fff", alpha = 0.5) =>
+                    `rgba(${hexToRgb(color)}, ${alpha})`;
+                const hexToRgb = (hexValue) => {
+                    let hex;
+                    hexValue.indexOf("#") === 0
+                        ? (hex = hexValue.substring(1))
+                        : (hex = hexValue);
+                    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+                    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
+                        hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b)
+                    );
+                    return result
+                        ? [
+                            parseInt(result[1], 16),
+                            parseInt(result[2], 16),
+                            parseInt(result[3], 16),
+                        ]
+                        : null;
+                };
+                var totalSalesInit = function totalSalesInit() {
+                    var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales';
+                    var SELECT_MONTH = '.select-month';
+                    var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
+                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                    function getFormatter(params) {
+                        var _params$ = params[0],
+                            name = _params$.name,
+                            value = _params$.value;
+                        var date = new Date(name);
+                        return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
+                    }
+
+                    if ($echartsLineTotalSales) {
+                        // Get options from data attribute
+                        var userOptions = getData($echartsLineTotalSales, 'options');
+                        var chart = window.echarts.init($echartsLineTotalSales);
+                        var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
+
+                        var getDefaultOptions = {
                             color: getGrays()['100'],
                             tooltip: {
                                 trigger: 'axis',
@@ -965,68 +1002,68 @@
                                 bottom: '15%',
                                 top: '5%'
                             }
-                        };                   
+                        };
 
-                    if (getDefaultOptions) { // && typeof getDefaultOptions === 'object'
-                        chart.setOption(getDefaultOptions);
-                    }
+                        if (getDefaultOptions) { // && typeof getDefaultOptions === 'object'
+                            chart.setOption(getDefaultOptions);
+                        }
 
-                    $echartsLineTotalSales.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+                        $echartsLineTotalSales.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
 
-                    var monthSelect = document.querySelector(SELECT_MONTH);
+                        var monthSelect = document.querySelector(SELECT_MONTH);
 
-                    if (monthSelect) {
-                        monthSelect.addEventListener('change', function (e) {
-                            var month = e.currentTarget.value;
-                            var data = monthsnumber[month];
-                            chart.setOption({
-                                tooltip: {
-                                    formatter: function formatter(params) {
-                                        var _params$2 = params[0],
-                                            name = _params$2.name,
-                                            value = _params$2.value;
-                                        var date = new Date(name);
-                                        return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
-                                    }
-                                },
-                                xAxis: {
-                                    axisLabel: {
-                                        formatter: function formatter(value) {
-                                            var date = new Date(value);
-                                            return "".concat(months[month], " ").concat(date.getDate());
-                                        },
-                                        margin: 15
-                                    }
-                                },
-                                series: [{
-                                    data: data
-                                }]
+                        if (monthSelect) {
+                            monthSelect.addEventListener('change', function (e) {
+                                var month = e.currentTarget.value;
+                                var data = monthsnumber[month];
+                                chart.setOption({
+                                    tooltip: {
+                                        formatter: function formatter(params) {
+                                            var _params$2 = params[0],
+                                                name = _params$2.name,
+                                                value = _params$2.value;
+                                            var date = new Date(name);
+                                            return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
+                                        }
+                                    },
+                                    xAxis: {
+                                        axisLabel: {
+                                            formatter: function formatter(value) {
+                                                var date = new Date(value);
+                                                return "".concat(months[month], " ").concat(date.getDate());
+                                            },
+                                            margin: 15
+                                        }
+                                    },
+                                    series: [{
+                                        data: data
+                                    }]
+                                });
                             });
-                        });
+                        }
                     }
-                }
-            };
-            var totalSalesInitTwo = function totalSalesInitTwo() {
-                var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales-2';
-                var SELECT_MONTH = '.select-month';
-                var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
-                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                };
+                var totalSalesInitTwo = function totalSalesInitTwo() {
+                    var ECHART_LINE_TOTAL_SALES = '.echart-line-total-sales-2';
+                    var SELECT_MONTH = '.select-month';
+                    var $echartsLineTotalSales = document.querySelector(ECHART_LINE_TOTAL_SALES);
+                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-                function getFormatter(params) {
-                    var _params$ = params[0],
-                        name = _params$.name,
-                        value = _params$.value;
-                    var date = new Date(name);
-                    return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
-                }
+                    function getFormatter(params) {
+                        var _params$ = params[0],
+                            name = _params$.name,
+                            value = _params$.value;
+                        var date = new Date(name);
+                        return "".concat(months[0], " ").concat(date.getDate(), ", ").concat(value);
+                    }
 
-                if ($echartsLineTotalSales) {
-                    // Get options from data attribute
-                    var userOptions = getData($echartsLineTotalSales, 'options');
-                    var chart = window.echarts.init($echartsLineTotalSales);
-                    var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
+                    if ($echartsLineTotalSales) {
+                        // Get options from data attribute
+                        var userOptions = getData($echartsLineTotalSales, 'options');
+                        var chart = window.echarts.init($echartsLineTotalSales);
+                        var monthsnumber = [[60, 80, 60, 80, 65, 130, 120, 100, 30, 40, 30, 70], [100, 70, 80, 50, 120, 100, 130, 140, 90, 100, 40, 50], [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60], [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80], [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50], [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70], [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50], [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110], [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70], [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110], [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70], [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70]];
 
-                    var getDefaultOptions =  {
+                        var getDefaultOptions = {
                             color: getGrays()['100'],
                             tooltip: {
                                 trigger: 'axis',
@@ -1060,7 +1097,7 @@
                                 },
                                 axisLine: {
                                     lineStyle: {
-                                       color: getGrays()['300'],
+                                        color: getGrays()['300'],
                                         //color: utils.rgbaColor('#000', 0.01),
                                         type: 'dashed'
                                     }
@@ -1139,46 +1176,49 @@
                                 top: '5%'
                             }
                         };
-                    
 
-                    //chart.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
-                    if (getDefaultOptions && typeof getDefaultOptions === 'object') {
-                        chart.setOption(getDefaultOptions);
-                    }
 
-                    var monthSelect = document.querySelector(SELECT_MONTH);
+                        //chart.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
+                        if (getDefaultOptions && typeof getDefaultOptions === 'object') {
+                            chart.setOption(getDefaultOptions);
+                        }
 
-                    if (monthSelect) {
-                        monthSelect.addEventListener('change', function (e) {
-                            var month = e.currentTarget.value;
-                            var data = monthsnumber[month];
-                            chart.setOption({
-                                tooltip: {
-                                    formatter: function formatter(params) {
-                                        var _params$2 = params[0],
-                                            name = _params$2.name,
-                                            value = _params$2.value;
-                                        var date = new Date(name);
-                                        return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
-                                    }
-                                },
-                                xAxis: {
-                                    axisLabel: {
-                                        formatter: function formatter(value) {
-                                            var date = new Date(value);
-                                            return "".concat(months[month], " ").concat(date.getDate());
-                                        },
-                                        margin: 15
-                                    }
-                                },
-                                series: [{
-                                    data: data
-                                }]
+                        var monthSelect = document.querySelector(SELECT_MONTH);
+
+                        if (monthSelect) {
+                            monthSelect.addEventListener('change', function (e) {
+                                var month = e.currentTarget.value;
+                                var data = monthsnumber[month];
+                                chart.setOption({
+                                    tooltip: {
+                                        formatter: function formatter(params) {
+                                            var _params$2 = params[0],
+                                                name = _params$2.name,
+                                                value = _params$2.value;
+                                            var date = new Date(name);
+                                            return "".concat(months[month], " ").concat(date.getDate(), ", ").concat(value);
+                                        }
+                                    },
+                                    xAxis: {
+                                        axisLabel: {
+                                            formatter: function formatter(value) {
+                                                var date = new Date(value);
+                                                return "".concat(months[month], " ").concat(date.getDate());
+                                            },
+                                            margin: 15
+                                        }
+                                    },
+                                    series: [{
+                                        data: data
+                                    }]
+                                });
                             });
-                        });
+                        }
                     }
-                }
-            };
+                };
+
+
+
 
         </script>
-        }
+    }
