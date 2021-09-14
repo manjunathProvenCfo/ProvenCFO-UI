@@ -57,7 +57,7 @@ namespace ProvenCfoUI.Controllers
                         var report = reportsService.SaveReport(reportsVM);
                         Common.CreateDirectory(Server.MapPath(folderPath));
                         file.SaveAs(Server.MapPath(report.FilePath));
-                        return Json(new { File = report.FilePath, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }

@@ -13,7 +13,9 @@ var $reportUploader;
 var $uploader;
 var $previews_view;
 var $template_view;
+var $attachmentContainer;
 var myDropzone_view;
+var previewTemplate;
 
 //var $formFileUploader;
 //var $formUploader;
@@ -35,6 +37,7 @@ $(function () {
     $reportUploader = $("#reportUploader");
     $previews = $("#previews");
     $template = $("#template");
+    $attachmentContainer = $("#attachmentContainer");
     //$formFileUploader = $("#formFileUploader");
 
     //$formUploader = $formFileUploader.fileupload({
@@ -77,7 +80,7 @@ $(function () {
 
     $btnUpload.click(function () {
         let elUpload = $(this);
-        debugger
+
         let data = elUpload.parents('div.card-body').data()
         let agencyId = $("#ddlclient").val();
         let year = data.year;
@@ -85,19 +88,30 @@ $(function () {
 
         $uploaderModal.modal('show');
 
+        if (!isEmpty(myDropzone_view)) {
+            myDropzone_view.removeAllFiles();
+            myDropzone_view.destroy();
+        }
+
+        $attachmentContainer.html("");
+        //Bind uploaer popup
+        bindUploaderAttachments(agencyId, year, period);
+
         //templateHTML
         var previewNode = document.querySelector("#template");
-        previewNode.id = "";
-        var previewTemplate = previewNode.parentNode.innerHTML;
-        previewNode.parentNode.removeChild(previewNode);
-
+        if (!isEmpty(previewNode)) {
+            previewNode.id = "";
+            previewTemplate = previewNode.parentNode.innerHTML;
+            previewNode.parentNode.removeChild(previewNode);
+        }
+        debugger
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
             url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
-            maxFilesize: 2,
+            maxFilesize: 40,
             thumbnailWidth: 80,
             thumbnailHeight: 80,
-            parallelUploads: 2,
+            parallelUploads: 20,
             previewTemplate: previewTemplate,
             autoQueue: false, // Make sure the files aren't queued until manually added
             previewsContainer: "#previews", // Define the container to display the previews
@@ -108,14 +122,7 @@ $(function () {
                 bindReports(period);
 
                 if (response != null && response.Status == 'Success') {
-                    addAttachmentOnviewLoad([response.File], false, true);
-
-                    $.each($('#previews_view .file-row '), function (key, value) {
-                        if (value != null && value.children[2] != undefined && value.children[2].innerText == file.name) {
-                            value.remove();
-                        }
-                    });
-                    // $('#previews_view').empty();                      
+                    prepareAndPrependUploaderAttachment(response.File);
                 }
             }
         });
@@ -152,37 +159,27 @@ $(function () {
                 });
                 if (IsCanAddfiles == true) {
                     myDropzone_view.enqueueFile(file);
-                    //var attachmentSpan = $('#attCount_' + gCurrentViewTaskId + ' span');
-                    //if (attachmentSpan.length > 0) {
-                    //    $('#attCount_' + gCurrentViewTaskId).removeClass('d-none');
-                    //    var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
-                    //    var IsattachmentsysmbolAvil = $('#attCount_' + gCurrentViewTaskId + ' .fa-paperclip');
-                    //    if (AttachmentCount != undefined && AttachmentCount != '') {
-                    //        $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText = parseInt(AttachmentCount) + 1;
-                    //    }
-                    //}
                 }
                 else {
-                    ShowAlertBox('Exist!', 'Selected file is already attached.', 'warning');
+                    ShowAlertBoxError('Exist!', 'Selected file is already uploaded.');
                 }
 
-                //var att = '<div class="media align-items-center mb-3" id="att_' + 0 + '"><a class="text-decoration-none mr-3" href="' + item.FilePath + '" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(' + item.FilePath + ');"></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" data-fancybox="attachment-title">' + item.AttachedFileName + '</a></h6><span class="mx-1"></span><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="Removeattachment_view(' + item.Id + ',' + singlCode + item.AttachedFileName + singlCode + ',' + true + ')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ' + item.CreatedDateForDisplay + '</p></div></div>';
-                //$('#attachmentContainer').prepend(att);
             };
-        });
-
-        myDropzone_view.on("maxfilesexceeded", function (file) {
-            debugger
-            let a = "";
         });
 
         //view Page
         myDropzone_view.on("sending", function (file) {
-            debugger
             file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
         });
 
+        myDropzone_view.on("complete", function (file) {
+            if (file.status != "error")
+                myDropzone_view.removeFile(file);
+        });
+
+
     })
+
     $btnDownloadAll.click(function () {
         let elDownloadAll = $(this);
         let data = elDownloadAll.parents('div.card-body').data()
@@ -213,11 +210,40 @@ var bindReports = function (reportPeriod) {
     getReports(agencyId, year, period);
 }
 
+var bindUploaderAttachments = function (agencyId, year, period) {
+    getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
+        if (response.Status == "Error")
+            ShowAlertBoxError("Error", "Error while fethcing reports!!");
+        let reports = response.Data;
+        $attachmentContainer.html("");
+        reports.forEach(function (obj) {
+            prepareAndPrependUploaderAttachment(obj);
+            //let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
+            //if (isEmptyOrBlank(thumbnail))
+            //    thumbnail = obj.FilePath;
+            //obj.FilePath = obj.FilePath.replace("~/", "../../");
+            //thumbnail = thumbnail.replace("~/", "../../");
+            //debugger
+            //var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick=""><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+            //$attachmentContainer.prepend(reportAttachment);
+        })
+    });
+}
+var prepareAndPrependUploaderAttachment = function (obj) {
+    let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
+    if (isEmptyOrBlank(thumbnail))
+        thumbnail = obj.FilePath;
+    obj.FilePath = obj.FilePath.replace("~/", "../../");
+    thumbnail = thumbnail.replace("~/", "../../");
+    debugger
+    var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick=""><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+    $attachmentContainer.prepend(reportAttachment);
+}
+
 var getReports = function (agencyId, year, period) {
     getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
         if (response.Status == "Error")
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
-        debugger
         let reports = response.Data;
         if (isEmptyOrBlank(period)) {
             $(".report-card-body .report").remove()
