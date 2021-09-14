@@ -66,10 +66,11 @@ namespace Proven.Model
         //For Summary Page
         public string Summary { get; set; }
         public string SummaryCreatedBy { get; set; }
+        public string SummaryCreatedByFullName { get; set; }
         public DateTime? SummaryCreatedDate { get; set; }
         public string SummaryModifiedBy { get; set; }
+        public string SummaryModifiedByFullName { get; set; }
         public DateTime? SummaryModifiedDate { get; set; }
-
     }
 
     public class ClientMainModel

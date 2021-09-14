@@ -8,32 +8,36 @@
         <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
         </div>
         <!--/.bg-holder-->
-       
 
-                <div class="card-body" id="v-pills-Summary">
+        @{var summary = (ClientModel)TempData["NotesSummary"];}
+        <div class="card-body" id="v-pills-Summary">
+            <div class="row">
+                <div class="col-lg-9">
                     <div class="row">
-                        <div class="col-lg-9">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5 class="mb-0">Summary</h5>
-                                </div>
-                                <div class="col-md-6">
-
-                                </div>
-                            </div>
-                            <p class="mt-2">The MailBluster service (the “Service”) is a marketing service offered through the URL MailBluster.com (including any subdomains), our campaign sites and our email websites (together referred to as the “Website”) that allows you to create, send and manage bulk email messages to individual recipients or subscribers. Each such email message in respect of which you use the Service, including the image, text, and code comprised in it, is referred to in these Terms as “Content”). MailBluster is owned and operated by. <br />$6.25 / seat month after a trial</p>
+                        <div class="col-md-6">
+                            <h5 class="mb-0">Summary</h5>
                         </div>
-                        <div class="col-3">
-                            @if (ViewBag.IsEditMode == true)
-                            {
-                                <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
-                            }
-                            <div class="Words mt-8">Created by: Dave Willson , 06/21/20 | Last Edited by: Conryd Salvesen, 7/22/21 </div>
+                        <div class="col-md-6">
+
                         </div>
                     </div>
+                    <p class="mt-2">@Html.Raw(summary?.Summary)</p>
+                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
                 </div>
-       
+                <div class="col-3">
+                    @if (ViewBag.IsEditMode == true)
+                    {
+                        <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                    }
+                    <div class="Words mt-8">
+                        Created by:
+                        <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate?.ToString("MM/dd/yyyy"))</span> | Last Edited by: <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate?.ToString("MM/dd/yyyy"))</span>
+                    </div>
+                </div>
             </div>
+        </div>
+
+    </div>
 
     <div class="row scrollspy-listing">
 
@@ -168,7 +172,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var ClientID = $("#ddlclient option:selected").val();
-            getAgencyMembersList(ClientID);
+            //getAgencyMembersList(ClientID);
         });
 
         function AgencyDropdownPartialViewChange() {
@@ -350,31 +354,31 @@
 
         $(function () {
             $("[id='notes-updatesummary-new-btn']").click(function (e) {
-
-                let btnAdd = $(this);
-                tinymce.get("txtSummary").getContent()
-                tinymce.get("txtSummary").setContent("");
-                tinyMCE.activeEditor.setContent("");
+                debugger
+                let content = $("#hdnSummary").val();
+                tinymce.get("txtSummary").setContent(content);
+                tinyMCE.activeEditor.setContent(content);
                 $("#notesummary-modal-new").modal("show");
 
                 $("#btnUpdateNoteSummary").text("Update");
 
             });
             $("#btnUpdateNoteSummary").click(function () {
-                var id = $('#Id').val();
                 var ClientID = $("#ddlclient option:selected").val();
-                var agencyId = $('#ClientID').val();
+
                 var summary = tinyMCE.get("txtSummary").getContent();
-               
 
-                $("#btnUpdateNoteSummary").prop('update', 'Save');
-
-                var pdata = { Id: id, Summary: summary, AgencyId: ClientID};
-                let json = JSON.stringify({ Notes: pdata });
-
-                postAjax('/Notes/UpdateNoteSummary', JSON.stringify({ Notes: pdata }), function (response) {
+                var pdata = { Id: parseInt(ClientID), Summary: summary };
+                postAjax('/Notes/UpdateNoteSummary', JSON.stringify(pdata), function (response) {
+                    debugger
                     if (response.Message == 'Success') {
-                        window.location.reload();
+                        let data = response.Data;
+                        $("#lblSummaryCreatedBy").text(data.SummaryCreatedByFullName);
+                        $("#lblSummaryCreatedDate").text(moment(data.SummaryCreatedDate).format("MM/DD/YYYY"));
+                        if (!isEmptyOrBlank(data.SummaryModifiedByFullName)) {
+                            $("#lblSummaryModifiedBy").text(data.SummaryModifiedByFullName);
+                            $("#lblSummaryModifiedDate").text(moment(data.SummaryModifiedDate).format("MM/DD/YYYY"));
+                        }
                         $('.close-circle').click();
                         $('.modal-backdrop').remove();
                     }
@@ -475,7 +479,7 @@
         }
 
     </script>
-    @if(ViewBag.IsDraggable == true)
+    @if (ViewBag.IsDraggable == true)
     {
         <script type="text/javascript">
             $(function () {
@@ -497,14 +501,12 @@
                         }
                     });
                     sortable.on('drag:stop', function (e) {
-                        debugger
                         var $this = $(e.data.source);
                         var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
                         let $items = $itemContainer.find('.notes-item:visible');
                         let ids = [];
                         let positions = [];
                         for (var i = $items.length; i > 0; i--) {
-                            debugger
                             ids.push(parseInt($items[i - 1].getAttribute("data-id")));
                             positions.push(i);
                             $items[i - 1].setAttribute("data-position", i);
@@ -514,7 +516,6 @@
                         let json = JSON.stringify(pdata);
 
                         postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
-                            debugger;
                             if (response.Message == 'Success') {
 
                             }

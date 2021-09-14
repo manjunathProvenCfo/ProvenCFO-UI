@@ -107,7 +107,7 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 ClientModel result = new ClientModel();
-                result.SummaryCreatedBy = Session["UserFullName"].ToString();
+                result.SummaryCreatedBy = User.UserFullName;
                 return PartialView("UpdateNoteSummary", result);
             }
             catch (Exception ex)
@@ -204,6 +204,38 @@ namespace ProvenCfoUI.Controllers
                     else
                     {
                         return Json(new { Notes = result, Message = "Error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UpdateNoteSummary(int Id, string Summary)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    ClientModel client = new ClientModel();
+                    client.Id = Id;
+                    client.Summary = Summary;
+                    client.SummaryCreatedBy = User.UserId;
+                    client.SummaryCreatedDate = DateTime.Now;
+
+                    var clientResult = objNotes.UpdateNoteSummary(client);
+                    if (client != null)
+                    {
+                        return Json(new { Data = clientResult, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
                     }
 
                 }
