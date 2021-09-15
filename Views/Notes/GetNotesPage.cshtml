@@ -4,32 +4,33 @@
 }
 
 <div class="container-fluid p-0" data-layout="container">
-    <div class="card mb-3">
-        <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
-        </div>
-        <!--/.bg-holder-->
-
+    <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
-        <div class="card-body" id="v-pills-Summary">
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="mb-0">Summary</h5>
-                        </div>
-                        <div class="col-md-6">
-
-                        </div>
+        <div class="card notes-items-container">
+            <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
+            </div>
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Summary</h5>
+                <div class="dropdown">
+                    <div class="glyphicon-new-window">
+                        @if (ViewBag.IsEditMode == true)
+                    {
+                        <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                    }
                     </div>
-                    <p class="mt-2">@Html.Raw(summary?.Summary)</p>
+                </div>
+            </div>
+
+
+            <div class="card-body notes-item shadow-sm row align-items-end"">
+                <div class="col md-8">
+                    <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
                     <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
                 </div>
-                <div class="col-3">
-                    @if (ViewBag.IsEditMode == true)
-                    {
-                    <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
-                    }
-                    <div class="Words mt-8">
+
+
+                <div class="Words col-md-4 text-right">
+                    <div class="mb-3">
                         @if (summary?.SummaryCreatedByFullName == "")
                         {
                         <span>&nbsp;</span>
@@ -54,16 +55,12 @@
                             | Last Edited by: <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
                         </span>
                         }
-
-
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
+   
     <div class="row scrollspy-listing">
 
         <div class="col-3 order-2">
