@@ -115,5 +115,31 @@ namespace ProvenCfoUI.Controllers
             }
 
         }
+
+        [HttpPost]
+        public JsonResult SoftDeleteFile(int Id)
+        {
+            try
+            {
+                using (ReportsService reportsService = new ReportsService())
+                {
+                    var apiResult = reportsService.SoftDeleteFile(Id);
+                    if (apiResult.Status)
+                        return Json(new { Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    else
+                        return Json(new { Status = "Error" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

@@ -104,7 +104,7 @@ $(function () {
             previewTemplate = previewNode.parentNode.innerHTML;
             previewNode.parentNode.removeChild(previewNode);
         }
-        debugger
+
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
             url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
@@ -117,7 +117,6 @@ $(function () {
             previewsContainer: "#previews", // Define the container to display the previews
             clickable: "#reportUploader", // Define the element that should be used as click trigger to select files.
             success: function (file, response) {
-                debugger
                 //Load Reports
                 bindReports(period);
 
@@ -129,7 +128,6 @@ $(function () {
 
         //view Page
         myDropzone_view.on("addedfile", function (file) {
-            debugger
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
                 let attr = $(obj).attr("src");
@@ -144,7 +142,6 @@ $(function () {
 
 
             file.previewElement.querySelector(".start").onclick = function () {
-                debugger
                 if (file.status === "error") {
                     ShowAlertBoxError("Error", `You can't upload ${file.name} file.`);
                     return;
@@ -192,6 +189,12 @@ $(function () {
     bindPage();
 });
 
+var AgencyDropdownPartialViewChange = function () {
+    SetUserPreferencesForAgency();
+    bindReports("");
+    //window.location.reload();
+}
+
 var bindPage = function () {
     bindYears();
     bindReports("");
@@ -215,17 +218,10 @@ var bindUploaderAttachments = function (agencyId, year, period) {
         if (response.Status == "Error")
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
         let reports = response.Data;
+        reports = reports.reverse(); 
         $attachmentContainer.html("");
         reports.forEach(function (obj) {
             prepareAndPrependUploaderAttachment(obj);
-            //let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
-            //if (isEmptyOrBlank(thumbnail))
-            //    thumbnail = obj.FilePath;
-            //obj.FilePath = obj.FilePath.replace("~/", "../../");
-            //thumbnail = thumbnail.replace("~/", "../../");
-            //debugger
-            //var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick=""><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
-            //$attachmentContainer.prepend(reportAttachment);
         })
     });
 }
@@ -235,8 +231,7 @@ var prepareAndPrependUploaderAttachment = function (obj) {
         thumbnail = obj.FilePath;
     obj.FilePath = obj.FilePath.replace("~/", "../../");
     thumbnail = thumbnail.replace("~/", "../../");
-    debugger
-    var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick=""><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+    var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="RemoveFile(event,${obj.Id})"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
     $attachmentContainer.prepend(reportAttachment);
 }
 
@@ -262,4 +257,13 @@ var getReports = function (agencyId, year, period) {
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         })
     });
+}
+
+var RemoveFile = function (e, reportId) {
+    $(e.currentTarget).parents('.media').remove();
+    postAjax(`/Reports/SoftDeleteFile?Id=${reportId}`, null, function (response) {
+        if (response.Status == "Success") {
+            ShowAlertBoxSuccess("","File has been removed successfully!")
+        }
+    })
 }
