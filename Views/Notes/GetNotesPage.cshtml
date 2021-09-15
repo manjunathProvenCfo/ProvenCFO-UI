@@ -373,13 +373,14 @@
                     debugger
                     if (response.Message == 'Success') {
                         let data = response.Data;
+                        window.location.reload();
                         $("#lblSummaryCreatedBy").text(data.SummaryCreatedByFullName);
                         $("#lblSummaryCreatedDate").text(moment(data.SummaryCreatedDate).format("MM/DD/YYYY"));
                         if (!isEmptyOrBlank(data.SummaryModifiedByFullName)) {
                             $("#lblSummaryModifiedBy").text(data.SummaryModifiedByFullName);
                             $("#lblSummaryModifiedDate").text(moment(data.SummaryModifiedDate).format("MM/DD/YYYY"));
                         }
-                        window.onload.reload();
+                        //window.location.reload();
                         $('.close-circle').click();
                         $('.modal-backdrop').remove();
                     }
