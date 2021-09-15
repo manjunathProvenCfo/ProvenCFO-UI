@@ -9,7 +9,9 @@ namespace Proven.Model
     public class ReconcilationCountVM
     {
         public string type { get; set; }
-        public int totalCount { get; set; }
+        public int totalCount { get; set; }      
+        public decimal? amount { get; set; }
+        public int Count { get; set; }
 
     }
     public class ReconciliationCountModel

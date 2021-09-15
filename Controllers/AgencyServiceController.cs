@@ -19,10 +19,10 @@ namespace ProvenCfoUI.Controllers
         string errorDescription = string.Empty;
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: AgencyService
-        [CheckSession]
+        [CheckSession]       
         public ActionResult AgencyHome()
         {
-
+            
             return View();
         }
         [CheckSession]
@@ -53,16 +53,36 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
+        [HttpPost]
+        public JsonResult XeroSwitchOrganization(int ClientID)
+        {
+            try
+            {
+                using (ClientService objClient = new ClientService())
+                {
+                    Utltity obj = new Utltity();
+                    var objResultClient = objClient.GetClientById(ClientID);
+                    var url = Common.getXeroLoginUrl(objResultClient);
+                    return Json(new { URL = url}, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        [CheckSession]
         public async Task<JsonResult> GetBankSummary()
         {
             var returnData = new Dictionary<string, dynamic>();
             try
             {
-                if (XeroInstance.Instance.XeroConnectionStatus  == true)
+                if (XeroInstance.Instance.XeroConnectionStatus == true)
                 {
-                    var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken);
+                    var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
                     var Total = result._Invoices.Sum(x => x.Total);
-                    returnData.Add("data", result);
+                    returnData.Add("data", "");
                     returnData.Add("Total", Total);
                 }
                 else

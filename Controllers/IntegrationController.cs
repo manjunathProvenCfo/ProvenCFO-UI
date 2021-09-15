@@ -104,7 +104,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (XeroInstance.Instance.XeroConnectionStatus == true)
                 {
-                    var result = await XeroInstance.Instance.XeroService.GetTrackingCategories(XeroInstance.Instance.XeroToken);
+                    var result = await XeroInstance.Instance.XeroService.GetTrackingCategories(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
                     if (result._TrackingCategories != null)
                     {
                         List<XeroTrackingCategoriesVM> tcList = new List<XeroTrackingCategoriesVM>();
@@ -142,7 +142,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (XeroInstance.Instance.XeroConnectionStatus == true)
                 {
-                    var result = await XeroInstance.Instance.XeroService.GetGLAccounts(XeroInstance.Instance.XeroToken);
+                    var result = await XeroInstance.Instance.XeroService.GetGLAccounts(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
                     if (result._Accounts != null)
                     {
                         List<XeroGlAccountVM> gl = new List<XeroGlAccountVM>();
