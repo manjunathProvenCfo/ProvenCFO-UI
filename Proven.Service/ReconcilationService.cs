@@ -24,6 +24,15 @@ namespace Proven.Service
         {
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=" + AgencyId).Result;
         }
+        public ReconciliationCountModel GetReconciliationNegCountAgencyId(string AgencyId)
+        {
+            return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationNegCountAgencyId?AgencyId=" + AgencyId).Result;
+        }
+        public ReconciliationCountModel GetReconciliationCountAgencyId(string AgencyId)
+        {
+            return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationCountAgencyId?AgencyId=" + AgencyId).Result;
+        }
+
         public ReturnStringModel GetDistinctAccount(int ClientId)
         {
             return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId).Result;

@@ -81,6 +81,45 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [CheckSession]
+        public JsonResult GetReconciliationNegCountAgencyId(string AgencyId)
+        {
+            try
+            {
+
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetReconciliationNegCountAgencyId(AgencyId);
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        public JsonResult GetReconciliationCountAgencyId(string AgencyId)
+        {
+            try
+            {
+
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetReconciliationCountAgencyId(AgencyId);
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
 
         //public ActionResult ReconciliationMain()
         //{
