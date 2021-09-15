@@ -22,18 +22,7 @@ namespace Proven.Service
         public ClientMainModel GetClientList()
         {
             return GetAsync<ClientMainModel>("Client/GetClientList").Result;
-            //response = client.GetAsync("Client/GetClientList").Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<ClientMainModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-
-            //}
+            
         }
         public ClientMainModel GetClientListByStatus(bool IsActive, bool IsDeleted)
         {

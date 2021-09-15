@@ -695,6 +695,7 @@
 
                 });
             }
+           
 
             function AgencyDropdownPartialViewChange() {
 
@@ -704,7 +705,12 @@
 
 
                 var ClientID = $("#ddlclient option:selected").val();
-
+                //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
+                //    if (response && response.URL != '') {
+                //        window.location.href = response.URL;
+                //    }
+                //});
+               
                 $.ajax({
                     url: '/AgencyService/GetClientDetails?id=' + ClientID,
                     type: "GET",
@@ -712,21 +718,23 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
-
+                           
                             getTeamMembersList();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
-                            $('.spEntityName').html(String(data.EntityName));
-                            $('#spTeamName').html(String(data.TeamName));
-
+                            $('.spEntityName').html(String(data.EntityName));                            
+                            $('#spTeamName').html(String(data.TeamName));                          
+                            
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             getBankSummary();
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
-
-                            $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                            if (data.StartDate != null && data.StartDate != '') {
+                                let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
+                                $('#spCreatedDate').html(String(stDate)); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));                                                                             
+                            }                            
                             $('.badge-soft-success').removeClass('d-none');
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
