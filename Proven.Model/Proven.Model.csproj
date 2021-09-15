@@ -78,6 +78,7 @@
     <Compile Include="UserPreferencesVM.cs" />
     <Compile Include="UserSecurityVM.cs" />
     <Compile Include="XeroGlAccountVM.cs" />
+    <Compile Include="XeroTokenInfoVM.cs" />
     <Compile Include="XeroTrackingCategoriesVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
