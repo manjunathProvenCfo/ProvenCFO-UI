@@ -59,7 +59,7 @@
 <!--</div>
 </div>-->
 <div class="row">
-    <div class="col-md-8 pr-md-0" id="divTable">
+    <div class="col-md-12 pr-md-0" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
                 <div class="row align-items-center justify-content-between">
@@ -214,7 +214,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 p-l-2" id="divChat">
+    <div class="col-md-4 p-l-2 d-none" id="divChat">
         <div class="card mb-3 pr-md-0 table table-striped">
             <div class="card-header">
                 <div class="align-items-center justify-content-between p-l-6 ">
@@ -357,7 +357,7 @@
         </div>
 
     </div>
-    <div class="col-md-4 p-l-2 " id="divFilter">
+    <div class="col-md-4 p-l-2 d-none" id="divFilter">
         <div class="card mb-3 pr-md-0 table table-striped ">
             <div class="card-header">
                 <div class="align-items-center justify-content-between p-l-6 ">
@@ -401,7 +401,7 @@
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select Gender",
+                                        @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select account",
                                        new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                     </div>
                                 </div>
@@ -581,6 +581,8 @@
                 //AgencyDropdownPartialViewChange();
                 var type = sessionStorage.getItem('Type');
                 $('#divFilter').hide();
+                $('#divChat').hide();
+                
                 if (type != null) {
 
                     if (type == "0") {
@@ -604,16 +606,21 @@
                 $('#iconComments').click(function () {
                     if ($("#divFilter").is(":visible")) {
                         $('#divFilter').hide();
+                        $('#divFilter').addClass('d-none');
                         $('#divChat').show();
+                        $('#divChat').removeClass('d-none');
 
                     }
                     else if ($("#divChat").is(":visible")) {
                         $('#divFilter').hide();
+                        $('#divFilter').addClass('d-none');
                         $('#divChat').hide();
+                        $('#divChat').addClass('d-none');
                         $('#divTable').addClass('col-md-12').removeClass('col-md-8');
                     }
                     else {
                         $('#divChat').show();
+                        $('#divChat').removeClass('d-none');
                         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
                     }
                     //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
@@ -639,16 +646,21 @@
                 $('#Filter').click(function () {
                     if ($("#divChat").is(":visible")) {
                         $('#divChat').hide();
+                        $('#divChat').addClass('d-none');
                         $('#divFilter').show();
+                        $('#divFilter').removeClass('d-none');
 
                     }
                     else if ($("#divFilter").is(":visible")) {
                         $('#divChat').hide();
+                        $('#divChat').addClass('d-none');
                         $('#divFilter').hide();
+                        $('#divFilter').addClass('d-none');
                         $('#divTable').addClass('col-md-12').removeClass('col-md-8');
                     }
                     else {
                         $('#divFilter').show();
+                        $('#divFilter').removeClass('d-none');
                         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
                     }
                     //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
