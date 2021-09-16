@@ -14,53 +14,52 @@
                 <div class="dropdown">
                     <div class="glyphicon-new-window">
                         @if (ViewBag.IsEditMode == true)
-                    {
-                        <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
-                    }
+                        {
+                            <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                        }
                     </div>
                 </div>
             </div>
-
-
-            <div class="card-body notes-item shadow-sm row align-items-end"">
-                <div class="col md-8">
+            <div class="card-body notes-item shadow-sm">
+                <div class="d-flex col-md-9 justify-content-lg-between">
                     <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
                     <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
                 </div>
 
-
-                <div class="Words col-md-4 text-right">
-                    <div class="mb-3">
-                        @if (summary?.SummaryCreatedByFullName == "")
-                        {
+                <div class="Words">
+                    @if (summary?.SummaryCreatedByFullName == "")
+                    {
                         <span>&nbsp;</span>
 
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         <span>
                             Created by:
                             <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate))</span>
                         </span>
-                        }
+                    }
 
-                        @if (summary?.SummaryCreatedByFullName == "")
-                        {
+                    @if (summary?.SummaryCreatedByFullName == "")
+                    {
                         <span>&nbsp;</span>
 
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         <span>
                             | Last Edited by: <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
                         </span>
-                        }
-                    </div>
+                    }
+
+
                 </div>
             </div>
+
+
         </div>
     </div>
-   
+
     <div class="row scrollspy-listing">
 
         <div class="col-3 order-2">
@@ -70,7 +69,7 @@
                 <div class="nav flex-column nav-pills">
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
-                    <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
+                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
                     }
                 </div>
             </div>
@@ -84,98 +83,94 @@
             {
                 containerCounter++;
 
-            <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
-                <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h3>@Categories.NoteCategory</h3>
-                        @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
-                        @*Here I am writing new line for add button for testing*@
-                        @if (ViewBag.IsEditMode == true)
+                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
+                    <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h3>@Categories.NoteCategory</h3>
+                            @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
+                            @*Here I am writing new line for add button for testing*@
+                            @if (ViewBag.IsEditMode == true)
                             {
-                        <div class="dropdown">
-                            <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
-                                <span class="fas fa-plus"></span>
-                            </div>
-                        </div>
+                                <div class="dropdown">
+                                    <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
+                                        <span class="fas fa-plus"></span>
+                                    </div>
+                                </div>
                             }
 
-                    </div>
+                        </div>
 
-                    @if (Categories.NotesCategoriesList != null)
+                        @if (Categories.NotesCategoriesList != null)
                         {
                             foreach (var Category in Categories.NotesCategoriesList)
                             {
                                 counter++;
                                 if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
                                 {
-                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h6 style="color: #00BE82; "> @Category.Title</h6>
-                            @if (ViewBag.IsEditMode == true)
+                                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            @if (ViewBag.IsEditMode == true)
                                             {
-                            <div class="d-flex align-items-center">
-                                <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
-                                <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                    @if (@Category.IsPublished.ToLower() == "published")
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                        @if (@Category.IsPublished.ToLower() == "published")
                                                         {
-                                    <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
                                                         }
                                                         else
                                                         {
-                                    <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
                                                         }
-                                    <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
-                                </div>
-                                <div class="ml-2" style=" font-size : 24px">
-                                    <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                            <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                        </a>
+                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+                                                    <div class="ml-2" style=" font-size : 24px">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                            </a>
 
-                                        <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                            <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
-                                            <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
-                                            <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ml-2" style="font-size:24px;">
-                                    <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
-                                </div>
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-2" style="font-size:24px;">
+                                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
+                                                    </div>
 
-                            </div>
+                                                </div>
                                             }
-                        </div>
-                        <p> @Html.Raw(Category.Description)</p>
+                                        </div>
+                                        <p> @Html.Raw(Category.Description)</p>
 
-                        <div class="Words">
-                            Created by: @Category.CreatedByUser, @Category.CreatedDate
-                            @if ((Category.ModifiedByUser == ""))
+                                        <div class="Words">
+                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            @if ((Category.ModifiedByUser == ""))
                                             {
-                            <span>&nbsp;</span>
+                                                <span>&nbsp;</span>
                                             }
                                             else
                                             {
-                            <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
 
                                             }
 
-                            @*<hr>*@
-                        </div>
-                    </div>
+                                            @*<hr>*@
+                                        </div>
+                                    </div>
 
                                 }
-
-
-
                             }
-
                         }
 
+                    </div>
                 </div>
-            </div>
             }
             @{ Html.RenderAction("CreateNewNotes", "Notes");}
             @{ Html.RenderAction("OpenDescription", "Notes"); }
@@ -505,50 +500,50 @@
     </script>
     @if (ViewBag.IsDraggable == true)
     {
-    <script type="text/javascript">
-        $(function () {
-            var Selectors = {
-                BODY: 'body',
-                NOTES_CONTAINER: '.notes-container',
-                NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
-                NOTES_ITEM: '.notes-item',
-            };
+        <script type="text/javascript">
+            $(function () {
+                var Selectors = {
+                    BODY: 'body',
+                    NOTES_CONTAINER: '.notes-container',
+                    NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
+                    NOTES_ITEM: '.notes-item',
+                };
 
-            let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
-            for (var i = 0; i < arrItemsContainer.length; i++) {
-                let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
-                    draggable: Selectors.NOTES_ITEM,
-                    delay: 200,
-                    mirror: {
-                        appendTo: Selectors.BODY,
-                        constrainDimensions: true
-                    }
-                });
-                sortable.on('drag:stop', function (e) {
-                    var $this = $(e.data.source);
-                    var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
-                    let $items = $itemContainer.find('.notes-item:visible');
-                    let ids = [];
-                    let positions = [];
-                    for (var i = $items.length; i > 0; i--) {
-                        ids.push(parseInt($items[i - 1].getAttribute("data-id")));
-                        positions.push(i);
-                        $items[i - 1].setAttribute("data-position", i);
-                    }
-                    let pdata = { Ids: ids, Positions: positions.reverse() };
-                    //post Ajax
-                    let json = JSON.stringify(pdata);
-
-                    postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
-                        if (response.Message == 'Success') {
-
+                let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+                for (var i = 0; i < arrItemsContainer.length; i++) {
+                    let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+                        draggable: Selectors.NOTES_ITEM,
+                        delay: 200,
+                        mirror: {
+                            appendTo: Selectors.BODY,
+                            constrainDimensions: true
                         }
+                    });
+                    sortable.on('drag:stop', function (e) {
+                        var $this = $(e.data.source);
+                        var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+                        let $items = $itemContainer.find('.notes-item:visible');
+                        let ids = [];
+                        let positions = [];
+                        for (var i = $items.length; i > 0; i--) {
+                            ids.push(parseInt($items[i - 1].getAttribute("data-id")));
+                            positions.push(i);
+                            $items[i - 1].setAttribute("data-position", i);
+                        }
+                        let pdata = { Ids: ids, Positions: positions.reverse() };
+                        //post Ajax
+                        let json = JSON.stringify(pdata);
 
-                    })
+                        postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
+                            if (response.Message == 'Success') {
 
-                });
-            }
-        });
-    </script>
+                            }
+
+                        })
+
+                    });
+                }
+            });
+        </script>
     }
 }
