@@ -23,14 +23,13 @@
             <div class="card-body notes-item shadow-sm">
                 <div class="d-flex col-md-9">
                     <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
-                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)"/>
+                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
                 </div>
 
                 <div class="Words">
                     @if (summary?.SummaryCreatedByFullName == "")
                     {
                         <span>&nbsp;</span>
-
                     }
                     else
                     {
@@ -40,18 +39,17 @@
                         </span>
                     }
 
-                    @if (summary?.SummaryCreatedByFullName == "")
+                    @if (summary?.SummaryModifiedByFullName == "")
                     {
                         <span>&nbsp;</span>
-
                     }
                     else
                     {
                         <span>
-                            | Last Edited by: <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                           | Last Edited By:
+                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
                         </span>
                     }
-
 
                 </div>
             </div>
