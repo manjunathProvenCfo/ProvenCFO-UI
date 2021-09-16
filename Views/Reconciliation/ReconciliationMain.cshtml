@@ -162,8 +162,8 @@
                                 </td>
                                 <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
                                 <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.description)</td>
-                                <td class="sort pr-1 align-middle col-xs-2">@Html.DisplayFor(modelItem => item.reference)</td>
+                                <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                                <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
                                 @if (item.amount < 0)
                                     {
                                 <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
