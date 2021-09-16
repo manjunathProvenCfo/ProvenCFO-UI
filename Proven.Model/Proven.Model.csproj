@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIResult.cs" />
     <Compile Include="BillableEntitiesVM.cs" />
     <Compile Include="ChatParticipants.cs" />
     <Compile Include="City.cs" />

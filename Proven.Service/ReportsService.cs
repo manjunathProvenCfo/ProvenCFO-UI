@@ -19,6 +19,10 @@ namespace Proven.Service
         {
             return GetAsync<List<ReportsVM>>($"Reports/GetReports?agencyId={agencyId}&year={year}&periodType={periodType}", readResultDataProp: true).Result;
         }
+        public APIResult<bool> SoftDeleteFile(int id)
+        {
+            return PostAsync<APIResult<bool>>($"Reports/SoftDeleteFile?Id={id}", null).Result;
+        }
         public void Dispose()
         {
             //base.Dispose(true);
