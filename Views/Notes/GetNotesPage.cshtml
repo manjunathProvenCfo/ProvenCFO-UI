@@ -21,9 +21,9 @@
                 </div>
             </div>
             <div class="card-body notes-item shadow-sm">
-                <div class="d-flex col-md-9 justify-content-lg-between">
+                <div class="d-flex col-md-9">
                     <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
-                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
+                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)"/>
                 </div>
 
                 <div class="Words">
@@ -36,7 +36,7 @@
                     {
                         <span>
                             Created by:
-                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate))</span>
+                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
                         </span>
                     }
 
