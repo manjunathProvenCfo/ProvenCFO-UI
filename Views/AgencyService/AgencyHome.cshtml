@@ -536,12 +536,11 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
-                GetReconcilationData();
+               
                 Chart1();
                 Chart2();
-                GetReconcilationPostiveData();
-                GetReconcilationNegativeData()
-
+               
+               
                 // totalSalesInit();
                 //totalSalesInitTwo();
             });
@@ -727,6 +726,9 @@
                             
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             getBankSummary();
+                            GetReconcilationData();
+                            GetReconcilationPostiveData();
+                            GetReconcilationNegativeData();
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
@@ -789,16 +791,23 @@
 
 
                 var ClientID = $("#ddlclient option:selected").val();
-                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-                    if (response.Message == "Success") {
+
+                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+                  
+                    if (response.Message == "Success"  ) {
+                      
+                           
 
                         let data = response.ResultData;
+                       
+                        
                         let totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
                             totalSum = totalSum + data[i].totalCount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                               
 
                                 $("#lblNotInBanksCount2").text(data[i].totalCount);
 
@@ -809,7 +818,7 @@
                                 $("#lblNotInBooksCount2").text(data[i].totalCount);
 
                             }
-
+                          
                         }
 
                         $("#lblNotInCount").text(totalSum);
@@ -839,21 +848,14 @@
 
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-
                               
                                 $("#lblNegativeBanksCount").text(data[i].amount);
                             }
-
-
-                            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                               /* lblNegativeInBooksCount*/
+                            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {                             
                                 $("#lblNegativeInBooksCount").text(data[i].amount);
-                               
-                               /* lblNegativeBanksCount*/
+                                                             
                             }
-
-                        }
-                        /* $("#lblNotInCount").text(totalSum);*/
+                        }                       
                     }
 
 
@@ -881,23 +883,41 @@
                                
 
                             }
-
-
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                                $("#lblPostiveInBooksCount").text(data[i].amount);
-                              
-
+                                $("#lblPostiveInBooksCount").text(data[i].amount);                              
                             }
-
                         }
-                        /* $("#lblNotInCount").text(totalSum);*/
+                       
                     }
 
 
                 });
             }
 
+            //function AgencyDropdownPartialViewChange() {
+            //    var ClientID = $("#ddlclient option:selected").val();
 
+            //    $.ajax({
+            //        url: '/AgencyService/GetClientDetails?id=' + ClientID,
+            //        type: "GET",
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        success: function (data) {
+            //            if (data != null) {
+            //                // Write here what should happend once client selected
+            //                SetUserPreferencesForAgency();
+            //                //loadReconcilation();
+            //                window.location.reload();
+            //            }
+            //            else {
+            //                // Write here what should happend once selected client is null
+            //            }
+            //        },
+            //        error: function () {
+            //            // Write here what should happend when action result is errored.
+            //        }
+            //    });
+            //}
 
 
 

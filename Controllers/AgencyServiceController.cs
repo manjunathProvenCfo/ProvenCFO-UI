@@ -19,14 +19,14 @@ namespace ProvenCfoUI.Controllers
         string errorDescription = string.Empty;
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: AgencyService
-        [CheckSession]       
+        [CheckSession]
         public ActionResult AgencyHome()
         {
-            
+
             return View();
         }
         [CheckSession]
-        public ActionResult AgencyXeroHome(string code, string scope,string state)
+        public ActionResult AgencyXeroHome(string code, string scope, string state)
         {
 
             return View();
@@ -63,7 +63,7 @@ namespace ProvenCfoUI.Controllers
                     Utltity obj = new Utltity();
                     var objResultClient = objClient.GetClientById(ClientID);
                     var url = Common.getXeroLoginUrl(objResultClient);
-                    return Json(new { URL = url}, JsonRequestBehavior.AllowGet);
+                    return Json(new { URL = url }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -73,6 +73,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
+      
         public async Task<JsonResult> GetBankSummary()
         {
             var returnData = new Dictionary<string, dynamic>();

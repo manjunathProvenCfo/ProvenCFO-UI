@@ -382,6 +382,8 @@ namespace ProvenCfoUI.Controllers
             Session.Abandon();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
+            XeroInstance.Instance.XeroToken = null;
+            XeroInstance.Instance.XeroConnectionStatus = false;
         }
 
 
