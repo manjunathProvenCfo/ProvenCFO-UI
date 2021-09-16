@@ -128,13 +128,24 @@ namespace Proven.Service
         }
         public XeromainTokenInfo GetSavedXeroToken(int AgencyID)
         {
-            return GetAsync<XeromainTokenInfo>("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
-            
+            //return GetAsync<XeromainTokenInfo>("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+           var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<XeromainTokenInfo>(_content);
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+
+            }
         }
         public ReturnModel UpdateXeroToken(XeroTokenInfoVM tokenInfoVM)
         {
-            return PostAsync<ReturnModel, XeroTokenInfoVM>("Xero/UpdateXeroToken", tokenInfoVM).Result;
-
+            return ProdPostAsync<ReturnModel, XeroTokenInfoVM>("Xero/UpdateXeroToken", tokenInfoVM).Result;
+            
         }
         public async Task<List<Tenant>> ConnnectApp(IXeroToken xeroToken)
         {
