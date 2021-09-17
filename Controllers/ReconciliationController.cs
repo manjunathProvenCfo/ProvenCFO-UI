@@ -196,7 +196,12 @@ namespace ProvenCfoUI.Controllers
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     int AgencyID = 0;
+                    var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (userType == "1")
+                    {
+                        ViewBag.IsVisible = true;
+                    }
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
