@@ -18,11 +18,11 @@ namespace Proven.Model
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime date { get; set; }
         public String description { get; set; }
-        public String description_display { get { return description != null && description.Length > 20 ? description.Substring(0, 20) + "..." : description; } }
+        public String description_display { get { return description != null && description.Length > 30 ? description.Substring(0, 30) + "..." : description; } }
         public string gl_account { get; set; }
         public string reconciled { get; set; }
         public String reference { get; set; }
-        public string reference_display { get { return reference != null && reference.Length > 20 ? reference.Substring(0, 20) + "...": reference; } }
+        public string reference_display { get { return reference != null && reference.Length > 30 ? reference.Substring(0, 30) + "...": reference; } }
         public string rule { get; set; }
         //public string type { get; set; }
         public String AgencyID { get; set; }
