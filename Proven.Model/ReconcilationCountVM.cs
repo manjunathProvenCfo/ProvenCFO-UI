@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ namespace Proven.Model
     public class ReconcilationCountVM
     {
         public string type { get; set; }
-        public int totalCount { get; set; }      
+        public int totalCount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [DataType(DataType.Currency)]
         public decimal? amount { get; set; }
         public int Count { get; set; }
 

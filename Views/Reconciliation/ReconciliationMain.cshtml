@@ -173,11 +173,13 @@
                                     <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
                                     @if (item.amount < 0)
                                     {
-                                        <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
+                                        @*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                                        <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-","")</td>
                                     }
                                     else
                                     {
-                                        <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
+                                        @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                                        <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
                                     }
                                     <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
                                     @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)

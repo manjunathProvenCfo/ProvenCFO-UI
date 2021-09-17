@@ -12,7 +12,8 @@ namespace Proven.Model
         public string plenadata__id { get; set; }
         public string id { get; set; }
         public string account_name { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.##}")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [DataType(DataType.Currency)]
         public decimal amount { get; set; }
         public string company { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
