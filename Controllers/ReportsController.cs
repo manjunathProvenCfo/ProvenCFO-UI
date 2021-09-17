@@ -117,7 +117,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [HttpPost]
-        public JsonResult SoftDeleteFile(int Id)
+        public JsonResult SoftDeleteFile(int Id, string PeriodType)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     var apiResult = reportsService.SoftDeleteFile(Id);
                     if (apiResult.Status)
-                        return Json(new { Status = "Success" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { Status = "Success", PeriodType = PeriodType }, JsonRequestBehavior.AllowGet);
                     else
                         return Json(new { Status = "Error" }, JsonRequestBehavior.AllowGet);
                 }

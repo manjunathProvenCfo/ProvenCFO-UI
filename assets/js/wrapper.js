@@ -23,7 +23,7 @@ function baseAjaxCall(type, url, data, response, async) {
             response(data);
         },
         error: function (err) {
-            
+
             console.log(err);
             if (err.status == 5000) {
                 ShowAlertBoxError("Internal server error");
@@ -82,6 +82,20 @@ function ShowAlertBoxWarning(title, text, callback = null) {
 function ShowAlertBoxError(title, text, callback = null) {
     ShowAlertBoxBase(title, text, 'error', callback);
 }
+function ShowConfirmBoxBase(title, text, type, confirmButtonText, confirmButtonColor, callback = null) {
+    swal({
+        title: title,
+        text: text,
+        type: type,
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonText: confirmButtonText,
+        confirmButtonColor: confirmButtonColor
+    }, callback);
+}
+function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) {
+    ShowConfirmBoxBase(title, text, "warning",confirmButtonText, "#ec6c62", callback);
+}
 //Alerts End
 
 //select2 start
@@ -97,7 +111,7 @@ var getSampleBGImageByFileExtension = function (fileExtension) {
     fileExtension = fileExtension.replace(".", "").toUpperCase();
     let bgimage = "";
     if (fileExtension == 'PDF') {
-        bgimage = '../../assets/img/kanban/I_PDF.png';
+        bgimage = '../../assets/img/reports/pdf.png';
     }
     else if (fileExtension == 'DOCX' || fileExtension == 'DOC') {
         bgimage = '../../assets/img/kanban/I_Doc.png';
@@ -106,7 +120,7 @@ var getSampleBGImageByFileExtension = function (fileExtension) {
         bgimage = '../../assets/img/kanban/I_Zip.png';
     }
     else if (fileExtension == 'XLSX' || fileExtension == 'XLS') {
-        bgimage = '../../assets/img/kanban/I_XLS.png';
+        bgimage = '../../assets/img/reports/excel.png';
     }
     else if (fileExtension == 'TXT' || fileExtension == 'txt') {
         bgimage = '../../assets/img/kanban/I_TXT.png';
