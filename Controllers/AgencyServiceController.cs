@@ -88,17 +88,19 @@ namespace ProvenCfoUI.Controllers
                 }
                 else
                 {
-                    return Json("", JsonRequestBehavior.AllowGet);
+                    returnData.Add("data", "");
+                    returnData.Add("Total", 0);
+                   
                 }
 
-                return Json(returnData, JsonRequestBehavior.AllowGet);
+                
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-
+            return Json(returnData, JsonRequestBehavior.AllowGet);
         }
 
         [CheckSession]

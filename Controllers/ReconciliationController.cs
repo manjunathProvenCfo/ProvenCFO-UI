@@ -46,7 +46,16 @@ namespace ProvenCfoUI.Controllers
 
 
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
-                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            ViewBag.TrackingCategories = TCgroup;
+                           
+
+                        }
                         ViewBag.BankRule = getBankRule();
                         ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
@@ -200,7 +209,7 @@ namespace ProvenCfoUI.Controllers
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (userType == "1")
                     {
-                        ViewBag.IsVisible = true;
+                        ViewBag.IsBankRuleVisible = true;
                     }
                     if (UserPref != null && UserPref.Count() > 0)
                     {
@@ -210,8 +219,19 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         ViewBag.GLAccounts = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
-                        ViewBag.TrackingCategories = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                        ViewBag.BankRule = getBankRule();
+                        
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        
+                        if(objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                          select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            ViewBag.TrackingCategories = TCgroup;
+
+                        }
+                       
+                            ViewBag.BankRule = getBankRule();
                         ViewBag.DistinctAccount = getDistincAccount(AgencyID);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
@@ -229,12 +249,12 @@ namespace ProvenCfoUI.Controllers
         }
         [CheckSession]
         [HttpPost]
-        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory)
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional = 0)
         {
             //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
-                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory);
+                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
 

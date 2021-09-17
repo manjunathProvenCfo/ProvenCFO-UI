@@ -37,9 +37,9 @@ namespace Proven.Service
         {
             return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId).Result;
         }
-        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory)
+        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional)
         {
-            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}", AgencyID, id, GLAccount, BankRule, TrackingCategory);
+            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
             return PostAsync<ReturnModel>(result).Result;
         }
         public void Dispose()

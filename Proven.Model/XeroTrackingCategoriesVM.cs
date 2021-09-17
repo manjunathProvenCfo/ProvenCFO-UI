@@ -14,6 +14,12 @@ namespace Proven.Model
         public string Status { get; set; }
         public int AgencyId { get; set; }
     }
+    public class XeroTrackingOptionGroupVM
+    {
+        
+        public string Name { get; set; }
+        public List<XeroTrackingCategoriesVM> Options { get; set; }
+    }
 
     public class XeroTrackingMainCategoriesVM
     {

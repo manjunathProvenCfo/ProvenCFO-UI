@@ -137,14 +137,18 @@
                                 {
                                     <th class="sort pr-1 align-middle">GL Account</th>
                                 }
-                                <th></th>
-                                @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
-                                {
-                                    <th class="sort pr-10 align-center ">Tracking Category</th>
-                                }
-                                @if (ViewBag.IsVisible == true)
+                                @*<th></th>*@
+                                @if (ViewBag.IsBankRuleVisible == true)
                                 {
                                     <th class="sort pr-10 align-center ">Rule</th>
+                                }
+                                @if (ViewBag.TrackingCategories != null)
+                                {
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                    {
+                                        <th class="sort pr-10 align-center ">@tcgroup.Name</th>
+                                    }
+
                                 }
 
 
@@ -155,66 +159,77 @@
                             @foreach (var item in Model)
                             {
 
-                            <tr class="btn-reveal-trigger cursor-pointer">
-                                <td class="align-middle">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
+                                <tr class="btn-reveal-trigger cursor-pointer">
+                                    <td class="align-middle">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
 
-                                        <label class="custom-control-label" for="@item.id"></label>
-                                    </div>
-                                </td>
-                                <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
-                                <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
-                                @if (item.amount < 0)
-                                {
-                                    <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
-                                }
-                                else
-                                {
-                                    <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
-                                }
-                                <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
-                                @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
-                                {
-                                    <td class="sort pr-1 align-middle col-xs-1">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-
-                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
-                                            </div>
+                                            <label class="custom-control-label" for="@item.id"></label>
                                         </div>
                                     </td>
-                                }
-                                <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                                @if (ViewBag.TrackingCategories != null && ViewBag.TrackingCategories.Count > 0)
-                                {
-                                    <td class="sort pr-1 align-middle col-xs-1">
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount("+ item.id + "," + + ")" })*@
-                                                @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(ViewBag.TrackingCategories, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
+                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
+                                    @if (item.amount < 0)
+                                    {
+                                        <td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>
+                                    }
+                                    <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
+                                    @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+
+                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                }
-
-                                @if (ViewBag.IsVisible == true)
-                                {
-                                    <td class="sort pr-1 align-middle col-xs-1">
-
-                                        <div class="row justify-content-between">
-                                            <div class="col-auto">
-                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+                                        </td>
+                                    }
+                                    @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                    @if (ViewBag.IsBankRuleVisible == true)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+                                                </div>
                                             </div>
-                                        </div>
+                                        </td>
+                                    }
+                                    @if (ViewBag.TrackingCategories != null)
+                                    {
+                                        int count = 0;
+                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                        {
 
-                                    </td>
-                                }
+                                            <td class="sort pr-1 align-middle col-xs-1">
+                                                <div class="row justify-content-between">
+                                                    <div class="col-auto">
+                                                        @if (count == 0)
+                                                        {
+                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })
+                                                        }
 
-                            </tr>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            count++;
+                                        }
+
+                                    }
+
+                                </tr>
                             }
 
                         </tbody>
@@ -540,7 +555,25 @@
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        @Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                                        @if (ViewBag.TrackingCategories != null)
+                                        {
+                                            int count = 0;
+                                            foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                            {
+                                                <h6 class="mb-0 ml-2">@tcgroup.Name </h6>
+                                                if (count == 0)
+                                                {
+                                                    @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = "form-control" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = "form-control" })
+                                                }
+                                                count++;
+                                            }
+
+                                        }
+                                        @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
                                     </div>
                                 </div>
                             </div>
@@ -591,7 +624,7 @@
                 var type = sessionStorage.getItem('Type');
                 $('#divFilter').hide();
                 $('#divChat').hide();
-                
+
                 if (type != null) {
 
                     if (type == "0") {
@@ -741,6 +774,19 @@
                 var Selectedvalue = event.currentTarget.value;
                 var ClientID = $("#ddlclient option:selected").val();
                 postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + Selectedvalue, null, function (response) {
+                    if (response.Message == 'Success') {
+
+                    }
+                    else {
+
+                    }
+
+                })
+            }
+            function onChangeAditinalTc(id, event) {
+                var Selectedvalue = event.currentTarget.value;
+                var ClientID = $("#ddlclient option:selected").val();
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
                     if (response.Message == 'Success') {
 
                     }
