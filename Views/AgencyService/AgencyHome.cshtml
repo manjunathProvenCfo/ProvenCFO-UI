@@ -90,9 +90,9 @@
 
 
                                 <div>
-                                    <span class="badge badge-pill badge-soft-danger ml-3" id="lblNegativeBanksCount" style="color: white; background-color: #00d27a; ">0</span>
+                                    <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblNegativeBanksCount" style="color: white; background-color: #00d27a; ">0</span>
                                 </div>
-                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblpostiveBanksCount" style=" color: white; background-color: red;">0</span><br />
+                                <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblpostiveBanksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
                                 <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
@@ -112,9 +112,9 @@
                                     0
                                 </h1>
                                 <div>
-                                    <span class="badge badge-pill badge-soft-danger ml-3" id="lblNegativeInBooksCount" style="color: white; background-color: #00d27a; ">0</span>
+                                    <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblNegativeInBooksCount" style="color: white; background-color: #00d27a; ">0</span>
                                 </div>
-                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
+                                <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
                                 <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
@@ -540,7 +540,16 @@
                 Chart1();
                 Chart2();
 
-
+                setTimeout(function () {
+                    $('.currency-usd').each(function (key, value) {
+                        var monetary_value = $(value).text().replace('-', '');
+                        var i = new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                        }).format(monetary_value);
+                        $(value).text(i);
+                    });
+                }, 3000);
                 // totalSalesInit();
                 //totalSalesInitTwo();
             });
