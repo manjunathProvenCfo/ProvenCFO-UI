@@ -97,7 +97,7 @@ namespace Proven.Service
                 {
                     AccessToken = xeroTokenInfo.access_token,
                     RefreshToken = xeroTokenInfo.refresh_token,
-                    IdToken = xeroTokenInfo.id_token
+                   // IdToken = xeroTokenInfo.id_token
                     // This is required for refresh logic down in GetCurrentValidTokenAsync.
                     //ExpiresAtUtc =  DateTime.MaxValue
                 };
@@ -129,17 +129,25 @@ namespace Proven.Service
         public XeromainTokenInfo GetSavedXeroToken(int AgencyID)
         {
             //return GetAsync<XeromainTokenInfo>("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
-           var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
-            if (response.IsSuccessStatusCode)
+
+            if (Convert.ToString(Prodclient.BaseAddress).IndexOf("provencfoapi") != -1) // This is a temporary code, In order to avoid bug
             {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<XeromainTokenInfo>(_content);
+                var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var _content = response.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<XeromainTokenInfo>(_content);
+                }
+                else
+                {
+                    string msg = response.ReasonPhrase;
+                    throw new Exception(msg);
+
+                }
             }
             else
             {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
-
+                return null;
             }
         }
         public ReturnModel UpdateXeroToken(XeroTokenInfoVM tokenInfoVM)
