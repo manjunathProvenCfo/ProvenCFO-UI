@@ -21,6 +21,7 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult ReportsList()
         {
+            IsReadOnlyUser();
             return View();
         }
 

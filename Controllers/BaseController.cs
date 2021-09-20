@@ -18,7 +18,18 @@ namespace ProvenCfoUI.Controllers
         protected new UserContext User => new UserContext(HttpContext?.User);
         public BaseController()
         {
-            var userId = User.UserId;
+
+        }
+
+        public void IsReadOnlyUser()
+        {
+            if (!string.IsNullOrEmpty(User.UserType))
+            {
+                if (User.UserType == "2")
+                    ViewBag.IsReadonlyUser = true;
+                else
+                    ViewBag.IsReadonlyUser = false;
+            }
         }
 
         [CheckSession]
