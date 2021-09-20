@@ -251,8 +251,8 @@
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
-                tinymce.get("txtDescription").getContent()
-                tinymce.get("txtDescription").setContent("");
+                tinymce.get("Description").getContent()
+                tinymce.get("Description").setContent("");
                 tinyMCE.activeEditor.setContent("");
                 $("#notes-modal-new").modal("show");
 
@@ -260,8 +260,11 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
+                if ($("#Title").valid() === false)
+                    return;
+                debugger
                 var id = $('#Id').val();
-                var title = $('#txtNotesTitle').val();
+                var title = $('#Title').val();
                 var noteCatId = $('#NoteCatId').val();
                 var ClientID = $("#ddlclient option:selected").val();
                 var agencyId = $('#ClientID').val();
@@ -272,7 +275,7 @@
                 }
                 var position = $('#Position').val();
                 debugger
-                var description = tinyMCE.get("txtDescription").getContent();
+                var description = tinyMCE.get("Description").getContent();
                 var status = $('#NotesStatus').val();
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
@@ -357,17 +360,17 @@
                             let title = response.Description.Title;
 
                             $('#Id').val(response.Description.Id);
-                            $('#txtNotesTitle').val(title);
+                            $('#Title').val(title);
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
                             else
                                 $("#chkPublished").prop('checked', false);
 
-                            $('#txtDescription').html(response.Description.Description);
+                            $('#Description').html(response.Description.Description);
                             if (response.Description.Description != null) {
-                                $('#txtDescription').html(response.Description.Description);
-                                tinymce.get("txtDescription").setContent(response.Description.Description);
+                                $('#Description').html(response.Description.Description);
+                                tinymce.get("Description").setContent(response.Description.Description);
                             }
 
                             $("#NoteCatId").val(response.Description.NoteCatId);
