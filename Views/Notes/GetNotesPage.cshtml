@@ -185,10 +185,17 @@
 
     @*For AgencySelectionDropdown*@
     <script type="text/javascript">
+        var $formValidator;
         $(document).ready(function () {
             var ClientID = $("#ddlclient option:selected").val();
             //getAgencyMembersList(ClientID);
             GetTotalNotesCount();
+            $formValidator = $("#formCreateNotes").validate(
+                {
+                    ignore: ""
+                });
+            $formValidator.settings.ignore = "";
+
         });
 
         function AgencyDropdownPartialViewChange() {
@@ -260,9 +267,9 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-                if ($("#Title").valid() === false)
+                $("#Description").val(tinymce.get("Description").getContent());
+                if ($("#Title").valid() === false || $("#Description").valid() == false)
                     return;
-                debugger
                 var id = $('#Id').val();
                 var title = $('#Title').val();
                 var noteCatId = $('#NoteCatId').val();
