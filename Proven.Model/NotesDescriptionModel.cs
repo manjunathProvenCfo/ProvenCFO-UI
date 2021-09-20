@@ -30,6 +30,7 @@ namespace Proven.Model
         public int UserType { get; set; }
         public string[] Ids { get; set; }
         public int[] Positions { get; set; }
+        public int TotalNotes { get; set; }
 
     }
     public class NotesDescriptionMainModel

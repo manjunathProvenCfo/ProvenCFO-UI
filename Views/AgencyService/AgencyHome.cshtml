@@ -80,12 +80,12 @@
                             <div class="col-auto pr-2">
                                 <h6 class="mt-1">Not in Bank </h6>
                                 @*<div class="fs--2 mt-3">
-            <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex flex-between-center mb-1">
 
 
-                <div class="d-xxl-none">93%</div>
-            </div>
-        </div>*@
+                                            <div class="d-xxl-none">93%</div>
+                                        </div>
+                                    </div>*@
                                 <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
 
 
@@ -536,11 +536,11 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
-               
+
                 Chart1();
                 Chart2();
-               
-               
+
+
                 // totalSalesInit();
                 //totalSalesInitTwo();
             });
@@ -694,22 +694,16 @@
 
                 });
             }
-           
+
 
             function AgencyDropdownPartialViewChange() {
-
-
-
-
-
-
                 var ClientID = $("#ddlclient option:selected").val();
                 //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
                 //    if (response && response.URL != '') {
                 //        window.location.href = response.URL;
                 //    }
                 //});
-               
+
                 $.ajax({
                     url: '/AgencyService/GetClientDetails?id=' + ClientID,
                     type: "GET",
@@ -717,26 +711,27 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
-                           
+
                             getTeamMembersList();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
-                            $('.spEntityName').html(String(data.EntityName));                            
-                            $('#spTeamName').html(String(data.TeamName));                          
-                            
+                            $('.spEntityName').html(String(data.EntityName));
+                            $('#spTeamName').html(String(data.TeamName));
+
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                             getBankSummary();
                             GetReconcilationData();
                             GetReconcilationPostiveData();
                             GetReconcilationNegativeData();
+                            /*GetTotalNotesCount();*/
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                             $('#spMonths').html(month);
                             $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                             if (data.StartDate != null && data.StartDate != '') {
                                 let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
-                                $('#spCreatedDate').html(String(stDate)); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));                                                                             
-                            }                            
+                                $('#spCreatedDate').html(String(stDate)); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                            }
                             $('.badge-soft-success').removeClass('d-none');
                             $('.badge-success').removeClass('d-none');
                             $('.rounded-circle').removeClass('d-none');
@@ -787,6 +782,23 @@
 
             }
 
+            //function GetTotalNotesCount() {
+            //    var ClientID = $("#ddlclient option:selected").val();
+            //    getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+            //        if (response.Message == "Success") {
+
+            //            let data = response.ResultData;
+            //            let TotalNotes;
+
+            //            for (var i = 0; i < data.length; i++) {
+            //                TotalNotes = TotalNotes + data[i].TotalNotes;
+            //            }
+            //            $("#lblTotalNotes").text(TotalNotes);
+            //        }
+            //    });
+            //}
+
             function GetReconcilationData() {
 
 
@@ -794,20 +806,20 @@
 
 
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                  
-                    if (response.Message == "Success"  ) {
-                      
-                           
+
+                    if (response.Message == "Success") {
+
+
 
                         let data = response.ResultData;
-                       
-                        
+
+
                         let totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
                             totalSum = totalSum + data[i].totalCount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                               
+
 
                                 $("#lblNotInBanksCount2").text(data[i].totalCount);
 
@@ -818,7 +830,7 @@
                                 $("#lblNotInBooksCount2").text(data[i].totalCount);
 
                             }
-                          
+
                         }
 
                         $("#lblNotInCount").text(totalSum);
@@ -843,19 +855,19 @@
 
                         let data = response.ResultData;
                         let totalSum = 0;
-                       
+
                         for (var i = 0; i < data.length; i++) {
 
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                              
+
                                 $("#lblNegativeBanksCount").text(data[i].amount);
                             }
-                            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {                             
+                            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
                                 $("#lblNegativeInBooksCount").text(data[i].amount);
-                                                             
+
                             }
-                        }                       
+                        }
                     }
 
 
@@ -873,21 +885,21 @@
 
                         let data = response.ResultData;
                         let totalSum = 0;
-                        
+
                         for (var i = 0; i < data.length; i++) {
-                            
+
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
                                 $("#lblpostiveBanksCount").text(data[i].amount);
-                               
+
 
                             }
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                                $("#lblPostiveInBooksCount").text(data[i].amount);                              
+                                $("#lblPostiveInBooksCount").text(data[i].amount);
                             }
                         }
-                       
+
                     }
 
 
