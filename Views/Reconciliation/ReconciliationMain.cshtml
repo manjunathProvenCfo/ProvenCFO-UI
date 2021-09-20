@@ -216,11 +216,11 @@
                                                     <div class="col-auto">
                                                         @if (count == 0)
                                                         {
-                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
+                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Pick Tracking Categories ", new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })
+                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })
                                                         }
 
                                                     </div>
