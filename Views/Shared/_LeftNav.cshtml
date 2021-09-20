@@ -62,7 +62,9 @@
                                 </li>
 
                                 <li class="nav-item" id="submenu_notes">
-                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">Notes <span class="badge badge-pill badge-soft-danger ml-3">14</span> </a>
+                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">
+                                        <span class="nav-link-text">  Notes  <span class="badge badge-pill badge-soft-danger ml-3" id="lblTotalNotes"></span></span>
+                                    </a>
                                 </li>
                             }
                         </ul>

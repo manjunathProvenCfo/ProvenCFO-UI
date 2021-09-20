@@ -105,7 +105,7 @@
     function SetUserPreferencesForAgency() {
        
         var ClientID = $("#ddlclient option:selected").val();
-
+        GetTotalNotesCount();
         $.ajax({
             url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
             type: "POST",
@@ -127,6 +127,24 @@
         });
 
     }
+
+    function GetTotalNotesCount() {
+        var ClientID = $("#ddlclient option:selected").val();
+        getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+            debugger;
+            if (response.Message == "Success") {
+
+                let data = response.ResultData;
+                let TotalNotes = 0;
+
+                for (var i = 0; i < data.length; i++) {
+                    TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+                }
+                $("#lblTotalNotes").text(TotalNotes);
+            }
+        });
+    }
+
     function HighlightMenu() {
         var activeTabs = $('.nav-item.active');
         if (activeTabs != null && activeTabs.length > 0) {

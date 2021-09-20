@@ -77,6 +77,11 @@ namespace Proven.Service
             return PostAsync<NotesDescriptionModel, object>("Notes/DragAndDropNotesDescription", objNotes).Result;
         }
 
+        public NotesCountModel TotalNotesCountByAgencyId(string AgencyId)
+        {
+            return GetAsync <NotesCountModel>("Notes/TotalNotesCountByAgencyId?AgencyId=" + AgencyId).Result;
+        }
+
 
         public void Dispose()
         {

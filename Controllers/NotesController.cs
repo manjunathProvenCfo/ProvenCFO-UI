@@ -348,6 +348,26 @@ namespace ProvenCfoUI.Controllers
             //return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
         }
 
+        [CheckSession]
+        public JsonResult TotalNotesCountByAgencyId(string AgencyId)
+        {
+            try
+            {
+
+                using (NotesService objNotes = new NotesService())
+                {
+                    var objResult = objNotes.TotalNotesCountByAgencyId(Convert.ToString(AgencyId));
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
     }
 }
 
