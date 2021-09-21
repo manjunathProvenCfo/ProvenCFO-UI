@@ -131,7 +131,7 @@
     function GetTotalNotesCount() {
         var ClientID = $("#ddlclient option:selected").val();
         getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-            debugger;
+            
             if (response.Message == "Success") {
 
                 let data = response.ResultData;
