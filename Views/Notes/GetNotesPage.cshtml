@@ -228,7 +228,7 @@
         function GetTotalNotesCount() {
             var ClientID = $("#ddlclient option:selected").val();
             getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                debugger;
+                
 
                 if (response.Message == "Success") {
 
@@ -458,7 +458,7 @@
             },
 
                 function () {
-                    debugger;
+                 
                     $.ajax({
                         type: "POST",
                         url: '/Notes/DeleteNotesDescription/' + Id,
@@ -499,7 +499,7 @@
             },
 
                 function () {
-                    debugger;
+                   
                     $.ajax({
                         type: "POST",
                         url: '/Notes/ResolveNote/' + Id,

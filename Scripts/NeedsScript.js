@@ -405,8 +405,7 @@ function RemovveFileOnCreate(attachmentId) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    RemoveAttchment(attachmentId);
-                    debugger;
+                    RemoveAttchment(attachmentId);                   
                     if (response.Message == 'Success') {
                         ShowAlertBox('', 'Selected attachment is removed.', 'warning');
 
@@ -451,7 +450,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
                 dataType: "json",
 
                 success: function (response) {
-                    debugger;
+                   
                     $('#att_' + attachmentId)[0].remove();                  
                     if (response.Message == 'Success') {
                         ShowAlertBox('', 'Selected attachment is removed.', 'warning');
@@ -844,7 +843,7 @@ function addComment(data, UserFullName) {
     }
 }
 function addMembers(e) {
-    debugger;
+   
     var element = $('#' + e.currentTarget.id + ' h6');
     var IsExistelement = $('#ulAddedMembers #li_' + e.currentTarget.id);
     if (IsExistelement.length > 0) {

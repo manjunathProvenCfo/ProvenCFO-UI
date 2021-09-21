@@ -184,7 +184,7 @@ namespace ProvenCfoUI.Comman
         }
         public static void ConnectXeroClient(ClientModel client)
         {
-            return;
+           
             if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
             {
                 XeroInstance.Instance.XeroScope = client.XeroScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
