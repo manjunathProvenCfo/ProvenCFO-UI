@@ -130,4 +130,13 @@ var getSampleBGImageByFileExtension = function (fileExtension) {
     }
     return bgimage;
 }
+var ConvertToUDS = function (inputAmount) {
+
+    var usdAmount = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(inputAmount);
+    return usdAmount;
+
+}
 
