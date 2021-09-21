@@ -542,12 +542,14 @@
 
                 setTimeout(function () {
                     $('.currency-usd').each(function (key, value) {
-                        var monetary_value = $(value).text().replace('-', '');
-                        var i = new Intl.NumberFormat('en-US', {
-                            style: 'currency',
-                            currency: 'USD'
-                        }).format(monetary_value);
-                        $(value).text(i);
+                        var monetary_value = $(value).text();
+                        if (monetary_value == '0') {
+                            var i = new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD'
+                            }).format(monetary_value);
+                            $(value).text(i);
+                        }                       
                     });
                 }, 3000);
                 // totalSalesInit();
@@ -870,11 +872,12 @@
 
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                
 
-                                $("#lblNegativeBanksCount").text(data[i].amount);
+                                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amount).replace('-',''));
                             }
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                                $("#lblNegativeInBooksCount").text(data[i].amount);
+                                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amount).replace('-',''));
 
                             }
                         }
@@ -901,12 +904,12 @@
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
-                                $("#lblpostiveBanksCount").text(data[i].amount);
+                                $("#lblpostiveBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
 
 
                             }
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                                $("#lblPostiveInBooksCount").text(data[i].amount);
+                                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
                             }
                         }
 
