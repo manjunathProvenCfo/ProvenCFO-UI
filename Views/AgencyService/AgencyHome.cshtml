@@ -818,17 +818,20 @@
 
 
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
+                    
                     if (response.Message == "Success") {
 
 
 
-                        let data = response.ResultData;
+                        var data = response.ResultData;
 
 
                         let totalSum = 0;
 
+
+
                         for (var i = 0; i < data.length; i++) {
+
                             totalSum = totalSum + data[i].totalCount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
@@ -844,9 +847,18 @@
                             }
 
                         }
-
+                       
+                        if (data == 0) {
+                           
+                            //$("#lblNotInBanksCount2").text(data.totalCount);
+                            //$("#lblNotInBooksCount2").text(data.totalCount);
+                            $("#lblNotInBooksCount2").text(0);
+                            $("#lblNotInBanksCount2").text(0);
+                        }
                         $("#lblNotInCount").text(totalSum);
+
                     }
+                    
                     error: (function (data) {
 
                         window.location.reload();
@@ -881,6 +893,11 @@
 
                             }
                         }
+                        if (data == 0) {
+                                                  
+                            $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                            $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+                        }
                     }
 
 
@@ -896,8 +913,8 @@
 
                     if (response.Message == "Success") {
 
-                        let data = response.ResultData;
-                        let totalSum = 0;
+                        var data = response.ResultData;
+                        var totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
 
@@ -912,9 +929,16 @@
                                 $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
                             }
                         }
+                        if (data == 0) {
+
+                            $("#lblpostiveBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                            $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+                        }
 
                     }
-
+                    else {
+                        totalSum = totalSum + data[i].amount;
+                    }
 
                 });
             }
