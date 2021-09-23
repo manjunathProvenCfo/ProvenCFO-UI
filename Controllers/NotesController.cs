@@ -284,7 +284,6 @@ namespace ProvenCfoUI.Controllers
                         var result = objNotes.DeleteNotesDescription(Id);
                         return result.IsPublished;
                     }
-
                     return results.IsPublished;
                 }
             }
@@ -357,6 +356,26 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var objResult = objNotes.TotalNotesCountByAgencyId(Convert.ToString(AgencyId));
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
+        [CheckSession]
+        public JsonResult NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    var objResult = objNotes.NotesIndividualCountAndPercentageByAgencyId(Convert.ToString(AgencyId));
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
 

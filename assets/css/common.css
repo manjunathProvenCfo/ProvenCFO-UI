@@ -107,6 +107,11 @@ body, .navbar-glass,
         font-size: 1.15rem;
     }
 
+.dashboard-frame .echart {
+    width: 6.625rem;
+    height: 6.625rem;
+}
+
 .bg-red {
     background-color: #E63756 !important;
 }
