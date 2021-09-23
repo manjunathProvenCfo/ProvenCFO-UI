@@ -45,10 +45,10 @@
                     }
                     else
                     {
-                <span>
-                    | Last Edited by: 
-                    <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
-                </span>
+                        <span>
+                            | Last Edited by:
+                            <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                        </span>
                     }
 
                 </div>
@@ -228,7 +228,7 @@
         function GetTotalNotesCount() {
             var ClientID = $("#ddlclient option:selected").val();
             getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                
+
 
                 if (response.Message == "Success") {
 
@@ -458,14 +458,14 @@
             },
 
                 function () {
-                 
+
                     $.ajax({
                         type: "POST",
                         url: '/Notes/DeleteNotesDescription/' + Id,
                     })
                         .done(function (data) {
 
-                            if ((data == 'Unpublished') || (data == 'Published')) {
+                            /*if ((data == 'Unpublished') || (data == 'Published')) {*/
                                 sweetAlert
                                     ({
                                         title: "Deleted!",
@@ -475,7 +475,7 @@
                                         function () {
                                             window.location.reload();
                                         });
-                            }
+                            /*}*/
 
 
                         })
@@ -499,7 +499,7 @@
             },
 
                 function () {
-                   
+
                     $.ajax({
                         type: "POST",
                         url: '/Notes/ResolveNote/' + Id,

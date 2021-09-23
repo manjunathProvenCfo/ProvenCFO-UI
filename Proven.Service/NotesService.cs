@@ -81,6 +81,10 @@ namespace Proven.Service
         {
             return GetAsync <NotesCountModel>("Notes/TotalNotesCountByAgencyId?AgencyId=" + AgencyId).Result;
         }
+        public NotesCountModel NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
+        {
+            return GetAsync<NotesCountModel>("Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=" + AgencyId).Result;
+        }
 
 
         public void Dispose()
