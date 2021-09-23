@@ -90,6 +90,37 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+
+        [CheckSession]
+        public JsonResult GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
+        {
+            string RecordsType = NotInBooks;
+            //type = NotInBooks;
+            //type = NotInBooks;
+            //type = NotInBank;
+            try
+            {
+                if (RecordsType == "Not in Banks")
+                {
+                    RecordsType = NotInBank;
+                }
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                   
+                    var objResult = objReConcilation.GetReconciliationDashboardDataAgencyId(AgencyID , RecordsType);
+                   
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+                
+
+            }
+           catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
         [CheckSession]
         public JsonResult GetReconciliationNegCountAgencyId(string AgencyId)
         {

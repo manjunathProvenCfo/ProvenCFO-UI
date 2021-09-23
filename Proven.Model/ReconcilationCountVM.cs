@@ -15,6 +15,10 @@ namespace Proven.Model
         [DataType(DataType.Currency)]
         public decimal? amount { get; set; }
         public int Count { get; set; }
+        public decimal? amountPositive { get; set; }
+        public decimal? amountNegative { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public double percentage { get; set; }
 
     }
     public class ReconciliationCountModel

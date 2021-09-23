@@ -83,7 +83,7 @@
                                         <div class="d-flex flex-between-center mb-1">
 
 
-                                            <div class="d-xxl-none">93%</div>
+                                            <div class="d-xxl-none">993%</div>
                                         </div>
                                     </div>*@
                                 <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
@@ -95,7 +95,9 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblpostiveBanksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
-                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" data-echart-responsive="true" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                @*<h2 class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%);"><span class="value" id="lblPercentage">0</span><span>%</span> </h2>*@
+                                @*<div class="absolute-centered font-weight-medium text-dark fs-2" id="lblPercentage">0</div>*@
                             </div>
                         </div>
                     </div>
@@ -117,7 +119,8 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
-                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" id="lblPercentage" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                               
                             </div>
                         </div>
                     </div>
@@ -536,6 +539,7 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
+                bindNotInBooksAndBanksCountDashboard();
 
                 Chart1();
                 Chart2();
@@ -735,6 +739,7 @@
                             GetReconcilationData();
                             GetReconcilationPostiveData();
                             GetReconcilationNegativeData();
+                            bindNotInBooksAndBanksCountDashboard();
                             /*GetTotalNotesCount();*/
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
@@ -915,9 +920,9 @@
 
                         var data = response.ResultData;
                         var totalSum = 0;
-
+                       
                         for (var i = 0; i < data.length; i++) {
-
+                           
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
@@ -941,6 +946,39 @@
                     }
 
                 });
+            }
+
+
+            function bindNotInBooksAndBanksCountDashboard() {
+                debugger;
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+                    if (response.Message == "Success") {
+                        
+                        let data = response.ResultData;
+                      
+                        let totalSum = 0;
+                      
+                        for (var i = 0; i < data.length; i++) {
+                          
+                            percentage = data[i].percentage.toFixed(2);
+                           
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                $("#lblNotInBanksCount").text(data[i].totalCount);
+                            }
+                            else {
+                                $("#lblNotInBooksCount").text(data[i].totalCount);
+                            }
+                        }
+
+
+                        $("#lblNotInCount").text(totalSum);                       
+                        $("#lblPercentage").text(percentage);
+
+                    }
+                })
             }
 
             //function AgencyDropdownPartialViewChange() {

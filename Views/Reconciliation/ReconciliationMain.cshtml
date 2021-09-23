@@ -621,120 +621,121 @@
         <script>
 
             $(document).ready(function () {
-                bindNotInBooksAndBanksCount();
-                //AgencyDropdownPartialViewChange();
-                var type = sessionStorage.getItem('Type');
-                $('#divFilter').hide();
-                $('#divChat').hide();
-
-                if (type != null) {
-
-                    if (type == "0") {
-                        $('#tabNotinBooks').addClass('tabselect');
-                        $('#tabNotinBanks').removeClass('tabselect');
-                    }
-                    else {
-                        $('#tabNotinBooks').removeClass('tabselect');
-                        $('#tabNotinBanks').addClass('tabselect');
-                    }
-                }
-                else {
-                    $('#tabNotinBooks').addClass('tabselect');
-                    $('#tabNotinBanks').removeClass('tabselect');
-                }
-
-                $('#tblreconcilation tbody tr').click(function () {
-                    $(this).addClass('bg-300').siblings().removeClass('bg-300');
-
-                });
-                $('#iconComments').click(function () {
-                    if ($("#divFilter").is(":visible")) {
+                        bindNotInBooksAndBanksCount();
+                        bindNotInBooksAndBanksCountDashboard();
+                        //AgencyDropdownPartialViewChange();
+                        var type = sessionStorage.getItem('Type');
                         $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
-                        $('#divChat').show();
-                        $('#divChat').removeClass('d-none');
-
-                    }
-                    else if ($("#divChat").is(":visible")) {
-                        $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
                         $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    }
-                    else {
-                        $('#divChat').show();
-                        $('#divChat').removeClass('d-none');
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    }
-                    //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    //    $('#divChat').hide();
-                    //}
-                    //else {
-                    //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    //    $('#divChat').show();
-                    //}
-                });
 
-                $('#Cancel').click(function () {
-                    if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                        $('#divChat').hide();
-                    }
-                    else {
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                        $('#divChat').show();
-                    }
-                });
-                $('#Filter').click(function () {
-                    if ($("#divChat").is(":visible")) {
-                        $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divFilter').show();
-                        $('#divFilter').removeClass('d-none');
+                        if (type != null) {
 
-                    }
-                    else if ($("#divFilter").is(":visible")) {
-                        $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    }
-                    else {
-                        $('#divFilter').show();
-                        $('#divFilter').removeClass('d-none');
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    }
-                    //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                    //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    //    $('#divTable1').addClass('d-none');
-                    //    $('#divFilter').hide();
-                    //}
-                    //else {
-                    //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    //    $('#divChat').hide();
-                    //    $('#divTable1').removeClass('d-none');
-                    //    $('#divFilter').show();
-                    //}
-                });
+                            if (type == "0") {
+                                $('#tabNotinBooks').addClass('tabselect');
+                                $('#tabNotinBanks').removeClass('tabselect');
+                            }
+                            else {
+                                $('#tabNotinBooks').removeClass('tabselect');
+                                $('#tabNotinBanks').addClass('tabselect');
+                            }
+                        }
+                        else {
+                            $('#tabNotinBooks').addClass('tabselect');
+                            $('#tabNotinBanks').removeClass('tabselect');
+                        }
 
-                $('#Cancel1').click(function () {
-                    if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                        $('#divTable1').addClass('d-none');
-                        $('#divChat').hide();
-                        $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
-                    }
-                    else {
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                        $('#divTable1').removeClass('d-none');
-                        $('#divChat').show();
-                    }
-                });
+                        $('#tblreconcilation tbody tr').click(function () {
+                            $(this).addClass('bg-300').siblings().removeClass('bg-300');
 
+                        });
+                        $('#iconComments').click(function () {
+                            if ($("#divFilter").is(":visible")) {
+                                $('#divFilter').hide();
+                                $('#divFilter').addClass('d-none');
+                                $('#divChat').show();
+                                $('#divChat').removeClass('d-none');
+
+                            }
+                            else if ($("#divChat").is(":visible")) {
+                                $('#divFilter').hide();
+                                $('#divFilter').addClass('d-none');
+                                $('#divChat').hide();
+                                $('#divChat').addClass('d-none');
+                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                            }
+                            else {
+                                $('#divChat').show();
+                                $('#divChat').removeClass('d-none');
+                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                            }
+                            //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                            //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                            //    $('#divChat').hide();
+                            //}
+                            //else {
+                            //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                            //    $('#divChat').show();
+                            //}
+                        });
+
+                        $('#Cancel').click(function () {
+                            if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                                $('#divChat').hide();
+                            }
+                            else {
+                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                                $('#divChat').show();
+                            }
+                        });
+                        $('#Filter').click(function () {
+                            if ($("#divChat").is(":visible")) {
+                                $('#divChat').hide();
+                                $('#divChat').addClass('d-none');
+                                $('#divFilter').show();
+                                $('#divFilter').removeClass('d-none');
+
+                            }
+                            else if ($("#divFilter").is(":visible")) {
+                                $('#divChat').hide();
+                                $('#divChat').addClass('d-none');
+                                $('#divFilter').hide();
+                                $('#divFilter').addClass('d-none');
+                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                            }
+                            else {
+                                $('#divFilter').show();
+                                $('#divFilter').removeClass('d-none');
+                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                            }
+                            //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                            //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                            //    $('#divTable1').addClass('d-none');
+                            //    $('#divFilter').hide();
+                            //}
+                            //else {
+                            //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                            //    $('#divChat').hide();
+                            //    $('#divTable1').removeClass('d-none');
+                            //    $('#divFilter').show();
+                            //}
+                        });
+
+                        $('#Cancel1').click(function () {
+                            if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+                                $('#divTable1').addClass('d-none');
+                                $('#divChat').hide();
+                                $('#divFilter').hide();
+                                $('#divFilter').addClass('d-none');
+                            }
+                            else {
+                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                                $('#divTable1').removeClass('d-none');
+                                $('#divChat').show();
+                            }
+                        });
+                    
             });
             function Tabclick(e, type) {
                 sessionStorage.setItem('Type', type);
@@ -853,8 +854,34 @@
 
             function bindNotInBooksAndBanksCount() {
                 var ClientID = $("#ddlclient option:selected").val();
+              
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
+                    if (response.Message == "Success") {
+                        let data = response.ResultData;
+                        let totalSum = 0;
+                        for (var i = 0; i < data.length; i++) {
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                $("#lblNotInBanksCount").text(data[i].totalCount);
+                            }
+                            else {
+                                $("#lblNotInBooksCount").text(data[i].totalCount);
+                            }
+                        }
+
+                        $("#lblNotInCount").text(totalSum);
+
+                    }
+                })
+            }
+
+
+
+            function bindNotInBooksAndBanksCountDashboard() {
+                var ClientID = $("#ddlclient option:selected").val();               
+                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
+                   
                     if (response.Message == "Success") {
                         let data = response.ResultData;
                         let totalSum = 0;
