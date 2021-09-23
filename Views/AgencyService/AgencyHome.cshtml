@@ -95,7 +95,7 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblpostiveBanksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
-                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4">
-                                <div class="progress-circle" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
                             </div>
                         </div>
                     </div>
@@ -193,8 +193,8 @@
                             </div>
                             <div class="col-auto">
                                 <div class="position-relative">
-                                    <div class="echart-doughnut" data-echart-responsive="true"></div>
-                                    <div class="absolute-centered font-weight-medium text-dark fs-2">14</div>
+                                    <div id="echart-notes" class="echart"></div>
+                                    <div class="absolute-centered font-weight-medium text-dark fs-2"><span id="lblTotalNotesCount"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -536,7 +536,7 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
-
+                NotesIndividualCountAndPercentageByAgencyId();
                 Chart1();
                 Chart2();
 
@@ -549,7 +549,7 @@
                                 currency: 'USD'
                             }).format(monetary_value);
                             $(value).text(i);
-                        }                       
+                        }
                     });
                 }, 3000);
                 // totalSalesInit();
@@ -629,6 +629,93 @@
                 if (option && typeof option === 'object') {
                     myChart.setOption(option);
                 }
+            }
+            function NotesChart(dataArray) {
+                let dom = document.getElementById("echart-notes");
+                var myChart = echarts.init(dom);
+                var app = {};
+                
+                let options = {
+                    color: [utils.colors.danger, "#F68F57", "#00BE82","#235EE8", utils.colors.info, utils.grays[300]],
+                    tooltip: {
+                        trigger: 'item',
+                        padding: [7, 10],
+                        backgroundColor: utils.grays.white,
+                        textStyle: {
+                            color: utils.grays.black
+                        },
+                        transitionDuration: 0,
+                        borderColor: utils.grays['300'],
+                        borderWidth: 1,
+                        formatter: function formatter(params) {
+                            return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                        }
+                    },
+                    position: function position(pos, params, dom, rect, size) {
+                        return getPosition(pos, params, dom, rect, size);
+                    },
+                    legend: {
+                        show: false
+                    },
+                    series: [{
+                        type: 'pie',
+                        radius: ['100%', '87%'],
+                        avoidLabelOverlap: false,
+                        hoverAnimation: false,
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: utils.grays.white
+                        },
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center',
+                                textStyle: {
+                                    fontSize: '20',
+                                    fontWeight: '500',
+                                    color: utils.grays['700']
+                                }
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: dataArray
+                    }]
+                };
+                if (options && typeof options === 'object') {
+                    myChart.setOption(options);
+                }
+            }
+
+            function NotesIndividualCountAndPercentageByAgencyId() {
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+                   
+                    let data = response.ResultData;
+                    let result = [];
+                    for (var i = 0; i < data.length; i++) {
+                        let NoteCategoryName = data[i].NoteCategoryName;
+                        let NoteCategoryCount = data[i].NoteCategoryCount;
+                        var tempObj = { value: NoteCategoryCount, name: NoteCategoryName };
+                        result.push(tempObj);
+                    }
+                    NotesChart(result);
+                    if (response.Message == "Success") {
+
+                        let TotalNotes = 0;
+
+                        for (var i = 0; i < data.length; i++) {
+                            TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+                        }
+                        $("#lblTotalNotes").text(TotalNotes);
+                    }
+                });
             }
 
             function getTeamMembersList() {
@@ -818,7 +905,7 @@
 
 
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                    
+
                     if (response.Message == "Success") {
 
 
@@ -847,9 +934,9 @@
                             }
 
                         }
-                       
+
                         if (data == 0) {
-                           
+
                             //$("#lblNotInBanksCount2").text(data.totalCount);
                             //$("#lblNotInBooksCount2").text(data.totalCount);
                             $("#lblNotInBooksCount2").text(0);
@@ -858,7 +945,7 @@
                         $("#lblNotInCount").text(totalSum);
 
                     }
-                    
+
                     error: (function (data) {
 
                         window.location.reload();
@@ -884,17 +971,17 @@
 
                             totalSum = totalSum + data[i].amount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                                
 
-                                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amount).replace('-',''));
+
+                                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
                             }
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amount).replace('-',''));
+                                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
 
                             }
                         }
                         if (data == 0) {
-                                                  
+
                             $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
                             $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
                         }
