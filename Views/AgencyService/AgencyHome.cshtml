@@ -1077,15 +1077,10 @@
                             }
                         }
 
-                        
-                      /*  $("#lblNotInCount").text(totalSum);*/
+
+                        $("#lblNotInCount").text(totalSum);
                         $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                         utils.addProgressCircle("#lblNotInBankPercentage")
-                        //if (data == 0) {
-                        //    debugger;
-                        //    $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-                        //   /* $("#lblNotInBankPercentage").text(ConvertToUDS(0).replace('-', ''));*/
-                        //}
                         //$("#lblPercentage").text(percentage);
 
                     }
