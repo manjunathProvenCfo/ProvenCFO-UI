@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using CFO.Model.ViewModels;
+using Proven.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,10 @@ namespace Proven.Service
         {
             return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled).Result;
         }
-
+        public ReconciliationMainModel GetFilteredReconcilation(ReconciliationfilterModel Filter)
+        {
+            return PostAsync<ReconciliationMainModel, ReconciliationfilterModel>("Reconciliation/GetFilteredReconciliation", Filter).Result;
+        }
         public ReconciliationCountModel GetReconciliationDataCountAgencyId(string AgencyId)
         {
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=" + AgencyId).Result;
@@ -38,9 +42,9 @@ namespace Proven.Service
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationCountAgencyId?AgencyId=" + AgencyId).Result;
         }
 
-        public ReturnStringModel GetDistinctAccount(int ClientId)
+        public ReturnStringModel GetDistinctAccount(int ClientId, string Type)
         {
-            return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId).Result;
+            return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId + "&Type=" + Type).Result;
         }
         public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional)
         {

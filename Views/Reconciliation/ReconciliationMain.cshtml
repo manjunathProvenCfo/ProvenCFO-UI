@@ -102,9 +102,9 @@
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
                             @*<div class="form-group position-relative mb-0">
-                                <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
+                                    <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
-                            </div>*@
+                                </div>*@
 
                         </div>
 
@@ -117,7 +117,7 @@
             </div>
             <div class="card-body px-0 pt-0">
                 <div class="dashboard-data-table table-responsive">
-                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom"  id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,6],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,6],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
@@ -133,7 +133,7 @@
                                 <th class="sort pr-1 align-middle">Amount</th>
                                 <th></th>
 
-                                @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
                                 {
                                     <th class="sort pr-1 align-middle">GL Account</th>
                                 }
@@ -142,9 +142,9 @@
                                 {
                                     <th class="sort pr-10 align-center ">Rule</th>
                                 }
-                                @if (ViewBag.TrackingCategories != null && ViewBag.IsBankRuleVisible == true)
+                                @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
                                 {
-                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
                                         <th class="sort pr-10 align-center ">@tcgroup.Name</th>
                                     }
@@ -156,7 +156,7 @@
                             </tr>
                         </thead>
                         <tbody id="purchases">
-                            @foreach (var item in Model)
+                            @foreach (var item in (List<Proven.Model.reconciliationVM>)ViewBag.ReconcilationData)
                             {
 
                                 <tr class="btn-reveal-trigger cursor-pointer">
@@ -174,7 +174,7 @@
                                     @if (item.amount < 0)
                                     {
                                         @*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
-                                        <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-","")</td>
+                                        <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
                                     }
                                     else
                                     {
@@ -182,14 +182,14 @@
                                         <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
                                     }
                                     <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
-                                    @if (ViewBag.GLAccounts != null && ViewBag.GLAccounts.Count > 0)
+                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
                                     {
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
 
                                                     @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList(ViewBag.GLAccounts, "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
+                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
                                                 </div>
                                             </div>
                                         </td>
@@ -200,15 +200,15 @@
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
-                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList(ViewBag.BankRule, "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
                                                 </div>
                                             </div>
                                         </td>
                                     }
-                                    @if (ViewBag.TrackingCategories != null && ViewBag.IsBankRuleVisible == true)
+                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
                                     {
                                         int count = 0;
-                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                         {
 
                                             <td class="sort pr-1 align-middle col-xs-1">
@@ -427,7 +427,7 @@
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        @Html.DropDownList("StudentGender", new SelectList(ViewBag.DistinctAccount, "Value", "Text"), "Select account",
+                                        @Html.DropDownList("filteraccounts", new SelectList((List<SelectListItem>)TempData["DistinctAccount"], "Value", "Text"), "Select account",
                                        new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                     </div>
                                 </div>
@@ -529,9 +529,12 @@
                         <div class="col-10">
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
-                                    <div class="mb-0 ml-2 text-400 fs--2">
-                                        @Html.DropDownList("bankrule", new SelectList(ViewBag.BankRule, "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
-                                    </div>
+                                    @if (TempData["BankRule"] != null)
+                                    {
+                                        <div class="mb-0 ml-2 text-400 fs--2">
+                                            @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -557,19 +560,19 @@
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        @if (ViewBag.TrackingCategories != null)
+                                        @if (TempData["TrackingCategories"] != null)
                                         {
                                             int count = 0;
-                                            foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)ViewBag.TrackingCategories)
+                                            foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                             {
                                                 <h6 class="mb-0 ml-2">@tcgroup.Name </h6>
                                                 if (count == 0)
                                                 {
-                                                    @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = "form-control" })
+                                                    @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = "form-control" })
+                                                    @Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                                 }
                                                 count++;
                                             }
@@ -585,13 +588,13 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="" style=" margin: 1rem;">
-                            <input type="radio" id="html" name="fav_language" value="Show All" checked="true">
-                            <label for="html">Show All</label><br>
-                            <input type="radio" id="css" name="fav_language" value="Not Ready to Reconcile">
+                            <input type="radio" id="rb0" name="fav_language" value="Show All Unreconciled" checked="true">
+                            <label for="html">Show all unreconciled</label><br>
+                            <input type="radio" id="rb1" name="fav_language" value="Not Ready to Reconcile">
                             <label for="css">Not Ready to Reconcile</label><br>
-                            <input type="radio" id="javascript" name="fav_language" value="Show Reconciled only">
+                            <input type="radio" id="rb2" name="fav_language" value="Show Reconciled only">
                             <label for="javascript">Show Reconciled only</label> <br />
-                            <input type="radio" id="javascript" name="fav_language" value="Read to Reconciled only">
+                            <input type="radio" id="rb3" name="fav_language" value="Read to Reconciled only">
                             <label for="javascript">Read to Reconciled only</label>
                         </div>
                     </div>
@@ -600,13 +603,14 @@
 
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
-                            <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Apply  </button>
+                            <button class="btn btn-primary" id="btnfilter" onclick="FillterReconcilation();" type="button"> Apply  </button>
+
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
 
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
-                            <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                            <button class="btn btn-primary" data-dismiss="modal" onclick="FillterReset();" aria-label="Close" id="btnReset">Reset</button>
                         </div>
                     </div> <br /> <br />
 
@@ -614,15 +618,17 @@
             </div>
         </div>
     </div>
+</div>
 
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/js/table");
-        <script>
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table");
+    <script>
 
             $(document).ready(function () {
                         bindNotInBooksAndBanksCount();
                         bindNotInBooksAndBanksCountDashboard();
+			LoadFilterData();
                         //AgencyDropdownPartialViewChange();
                         var type = sessionStorage.getItem('Type');
                         $('#divFilter').hide();
@@ -735,9 +741,130 @@
                                 $('#divChat').show();
                             }
                         });
-                    
+
             });
-            function Tabclick(e, type) {
+        function FillterReset() {
+            sessionStorage.removeItem('Filter');
+            var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+            window.location.href = url;
+        }
+        function FillterReconcilation() {
+            var account = $('#filteraccounts').val().join(',');
+            var ClientID = $("#ddlclient option:selected").val();
+            var fromDate, toDate;
+            var filterReconcilationcategories = 0;
+            var IsNotinBooks = $('#tabNotinBooks').hasClass('tabselect');
+            var type = 'Outstanding Payments';
+            if (IsNotinBooks == true) {
+                type = 'Unreconciled';
+            }
+
+            if ($('#rb1').prop('checked') == true) {
+                filterReconcilationcategories = 1;
+            }
+            else if ($('#rb2').prop('checked') == true) {
+                filterReconcilationcategories = 2;
+            }
+            else if ($('#rb3').prop('checked') == true) {
+                filterReconcilationcategories = 3;
+            }
+
+            var datepicker = $("#timepicker2").val();
+            if (datepicker.includes("to")) {
+                this.fromDate = datepicker.substring(0, datepicker.indexOf("to")).trim();
+                this.toDate = datepicker.substring(datepicker.indexOf("to") + 2).trim();
+            } else {
+                this.fromDate = datepicker;
+                this.toDate = datepicker;
+            }
+            var MinAmount = $("#filterMinAmount").val();
+            var MaxAmount = $("#filterMaxAmount").val();
+            var bankrule = $("#bankrule").val().join(',');
+            var TrackingCategories = $("#TrackingCategories").val().join(',');
+            var TrackingCategories_1 = $("#TrackingCategories_1").val().join(',');
+            var pdata = {
+                accounts: account,
+                dateRangeFrom: this.fromDate,
+                dateRangeTo: this.toDate,
+                amountMin: MinAmount,
+                amountMax: MaxAmount,
+                Bankrule: bankrule,
+                TrackingCategory1: TrackingCategories,
+                TrackingCategory2: TrackingCategories_1,
+                FilterType: filterReconcilationcategories,
+                AgencyID: ClientID,
+                Type: type,
+                selectedDate: datepicker
+            }
+            sessionStorage.setItem('Filter', JSON.stringify(pdata));
+
+            var url = '@Url.Action("GetFilteredReconcilation", "Reconciliation", new { accounts = "_accounts",
+                              dateRangeFrom = "_dateRangeFrom",
+                              dateRangeTo = "_dateRangeTo",
+                              amountMin = "_amountMin",
+                              amountMax = "_amountMax",
+                              Bankrule = "_Bankrule",
+                              TrackingCategory1 = "_TrackingCategory1",
+                              TrackingCategory2 = "_TrackingCategory2",
+                              FilterType = "_FilterType",
+                              AgencyID = "_AgencyID",
+                              Type = "_Type"
+                          })';
+            url = url.replace('_accounts', account);
+            url = url.replace('_dateRangeFrom', this.fromDate);
+            url = url.replace('_dateRangeTo', this.toDate);
+            url = url.replace('_amountMin', MinAmount);
+            url = url.replace('_amountMax', MaxAmount);
+            url = url.replace('_Bankrule', bankrule);
+            url = url.replace('_TrackingCategory1', TrackingCategories);
+            url = url.replace('_TrackingCategory2', TrackingCategories_1);
+            url = url.replace('_FilterType', 0);
+            url = url.replace('_AgencyID', ClientID);
+            url = url.replace('_Type', type);
+
+
+            url = replaceAll(url, '\&amp;', '&');
+            window.location.href = url;
+        }
+
+        function LoadFilterData() {
+            var filterData = JSON.parse(sessionStorage.getItem('Filter'));
+            if (filterData) {
+                $('#Filter').css("background-color", "blue");
+                if (filterData.accounts != '' && filterData.accounts.split(',').length > 0) {
+                    $('#filteraccounts').val(filterData.accounts.split(',')).trigger('change');
+                }
+                $("#timepicker2").val(filterData.selectedDate);
+                $("#filterMinAmount").val(filterData.amountMin);
+                $("#filterMaxAmount").val(filterData.amountMax);
+                if (filterData.Bankrule != '' && filterData.Bankrule.split(',').length > 0) {
+                    $('#bankrule').val(filterData.Bankrule.split(',')).trigger('change');
+                }
+                //$("#bankrule").val(filterData.Bankrule.split(','));
+                if (filterData.TrackingCategory1 != null && filterData.TrackingCategory1 != '' && filterData.TrackingCategory1.length > 0) {
+                    $("#TrackingCategories").val(filterData.TrackingCategory1).trigger('change');
+                }
+                if (filterData.TrackingCategory2 != null && filterData.TrackingCategory2 != '' && filterData.TrackingCategory2.length > 0) {
+                    $("#TrackingCategories_1").val(filterData.TrackingCategory2).trigger('change');
+                }
+                if (filterData.FilterType == 0) {
+                    $('#rb0').prop('checked', true);
+                }
+                else if (filterData.FilterType == 1) {
+                    $('#rb1').prop('checked', true);
+                }
+                else if (filterData.FilterType == 2) {
+                    $('#rb2').prop('checked', true);
+                }
+                else if (filterData.FilterType == 3) {
+                    $('#rb3').prop('checked', true);
+                }
+
+            }
+
+            }
+
+        function Tabclick(e, type) {
                 sessionStorage.setItem('Type', type);
                 if (type == 0) {
                     $('#tabNotinBooks').addClass('tabselect');
@@ -747,7 +874,11 @@
                     $('#tabNotinBooks').removeClass('tabselect');
                     $('#tabNotinBanks').addClass('tabselect');
                 }
-            }
+}
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
+
             function onChangeglAccount(id, event) {
                 var Selectedvalue = event.currentTarget.value;
                 var ClientID = $("#ddlclient option:selected").val();
@@ -810,7 +941,7 @@
                     recType = 'Not in Banks';
                 }
                 var ClientID = $("#ddlclient option:selected").val();
-               
+
                 postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
                     if (response.Message == "Success") {
                         let data = response.ResultData;
@@ -854,7 +985,7 @@
 
             function bindNotInBooksAndBanksCount() {
                 var ClientID = $("#ddlclient option:selected").val();
-              
+
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
                     if (response.Message == "Success") {
@@ -879,9 +1010,9 @@
 
 
             function bindNotInBooksAndBanksCountDashboard() {
-                var ClientID = $("#ddlclient option:selected").val();               
+                var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                   
+
                     if (response.Message == "Success") {
                         let data = response.ResultData;
                         let totalSum = 0;
@@ -901,7 +1032,7 @@
                 })
             }
 
-        </script>
+    </script>
 
-    }
+}
 
