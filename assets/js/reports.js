@@ -46,10 +46,11 @@ $(function () {
     //$uploader = $reportUploader.dropzone({ url: "" });
 
     $reportYears.change(function (e) {
+      
         let year = parseInt($(this).val());
         $lblYears.text(year);
         $divReportPeriodCard.attr("data-year", year);
-
+       
         let currentYear = moment().year();
         let currentMonth = parseInt(moment().format("MM"));
         if (year < currentYear) {
