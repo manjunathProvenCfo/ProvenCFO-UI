@@ -281,7 +281,7 @@
                     isPublished = "Published";
                 }
                 var position = $('#Position').val();
-                debugger
+               
                 var description = tinyMCE.get("Description").getContent();
                 var status = $('#NotesStatus').val();
 
@@ -330,7 +330,7 @@
 
             $("[Id=moveUp]").click(function () {
                 let el = $(this);
-                debugger
+               
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").prev().data().id;
                 let pdata = { Id: id, SwapId: swapId };
@@ -341,7 +341,7 @@
 
             $("[Id=moveDown]").click(function () {
                 let el = $(this);
-                debugger
+               
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").next().data().id;
                 let pdata = { Id: id, SwapId: swapId };
@@ -400,7 +400,7 @@
 
         $(function () {
             $("[id='notes-updatesummary-new-btn']").click(function (e) {
-                debugger
+               
                 let content = $("#hdnSummary").val();
                 tinymce.get("txtSummary").setContent(content);
                 tinyMCE.activeEditor.setContent(content);
@@ -416,7 +416,7 @@
 
                 var pdata = { Id: parseInt(ClientID), Summary: summary };
                 postAjax('/Notes/UpdateNoteSummary', JSON.stringify(pdata), function (response) {
-                    debugger
+                  
                     if (response.Message == 'Success') {
                         let data = response.Data;
                         window.location.reload();
