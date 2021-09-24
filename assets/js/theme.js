@@ -4939,6 +4939,7 @@ utils.$document.ready(function () {
  global ProgressBar
 */
 utils.addProgressCircle = function (selectorProgressCircle) {
+    
     var merge = window._.merge; // progressbar.js@1.0.0 version is used
     // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
