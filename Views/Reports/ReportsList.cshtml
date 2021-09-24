@@ -69,7 +69,8 @@
                     default:
                         break;
                 }
-                var month = (new DateTime(2020, i, 1)).ToString("MMMM");
+
+                var month = (new DateTime(2020, i, 1)).ToString(" MMM ", new System.Globalization.CultureInfo("en-US"));
                 <div class="card mb-1">
                     @Html.Partial("_ReportPeriodPartial", month)
                 </div>
@@ -86,3 +87,4 @@
     @Scripts.Render("~/bundles/js/kanban")
     @Scripts.Render("~/bundles/js/reports")
 }
+@*string fullMonthName = new DateTime(2015, i, 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("es"));*@
