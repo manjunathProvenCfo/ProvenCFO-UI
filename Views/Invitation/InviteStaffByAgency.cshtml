@@ -110,7 +110,7 @@
                                         <label for="split-login-email" class="mb-0">Status</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "1" }, new SelectListItem { Text = "InActive", Value = "0" } }, new { @class = "form-control text-box single-line" })
+                                        @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "1" }, new SelectListItem { Text = "Inactive", Value = "0" } }, new { @class = "form-control text-box single-line" })
                                         @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
