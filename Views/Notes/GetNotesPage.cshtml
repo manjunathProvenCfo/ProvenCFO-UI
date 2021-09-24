@@ -130,7 +130,7 @@
                                                             </a>
 
                                                             <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                                <a class="dropdown-item" href="#" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
                                                                 <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
                                                                 <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
                                                                 <div class="dropdown-divider"></div>
@@ -353,6 +353,7 @@
         });
 
         function openEdit(e) {
+            e.stopPropagation();
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
             $("#notes-modal-new").modal("show");
