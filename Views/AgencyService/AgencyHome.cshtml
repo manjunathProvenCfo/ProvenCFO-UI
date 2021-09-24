@@ -179,7 +179,7 @@
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
                                 <h6 class="mt-1">Notes</h6>
-                                <div class="fs--2 mt-3">
+                                <div class="fs--2 mt-3" id="notesCategoryDiv">
                                     <div class="d-flex flex-between-center mb-1">
                                         <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Income</span></div>
                                         <div class="d-xxl-none">15%</div>
@@ -610,6 +610,7 @@
                     myChart.setOption(option);
                 }
             }
+            var colorsArray = [];
             function Chart2() {
                 var dom = document.getElementById("container2");
                 var myChart = echarts.init(dom);
@@ -654,9 +655,10 @@
                 let dom = document.getElementById("echart-notes");
                 var myChart = echarts.init(dom);
                 var app = {};
-                
+                debugger;
                 let options = {
-                    color: [utils.colors.danger, "#F68F57", "#00BE82","#235EE8", utils.colors.info, utils.grays[300]],
+                    
+                    color:colorsArray,
                     tooltip: {
                         trigger: 'item',
                         padding: [7, 10],
@@ -708,24 +710,65 @@
                         data: dataArray
                     }]
                 };
+                debugger;
                 if (options && typeof options === 'object') {
                     myChart.setOption(options);
                 }
             }
-
+            var colors = {
+                "Income": {
+                    "className": "bg-red",
+                    "chartColorCode": "#ff0000"
+                },
+                "Expenses":{
+                        "className": "bg-orange",
+                        "chartColorCode": "#F68F57"
+                },
+                "Assets":{
+                        "className": "bg-green",
+                        "chartColorCode": "#00BE82"
+                },
+                "Bank Balance":{
+                        "className": "bg-soft-primary",
+                        "chartColorCode": "#bfbfbf"
+                },
+                "Liabilities": {
+                        "className": "bg-blue",
+                    "chartColorCode": "#235EE8"
+                },
+                "Equity": {
+                        "className": "bg-light-blue",
+                        "chartColorCode": "#27BCFE"
+                }
+            };
             function NotesIndividualCountAndPercentageByAgencyId() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                   
                     let data = response.ResultData;
-                    let result = [];
+                    debugger;
+                    $("#notesCategoryDiv").children().remove();
+                    for (key in colors) {
+                        var htmltext = `<div class="d-flex align-items-center">
+                                            <span class="dot ${colors[key].className}"></span>
+                                            <span class="font-weight-semi-bold">${key}</span>
+                                        </div>`;
+
+                        $("#notesCategoryDiv").append(htmltext);
+                    }
+
+                    var result = {};
                     for (var i = 0; i < data.length; i++) {
                         let NoteCategoryName = data[i].NoteCategoryName;
                         let NoteCategoryCount = data[i].NoteCategoryCount;
-                        var tempObj = { value: NoteCategoryCount, name: NoteCategoryName };
-                        result.push(tempObj);
+                        var tempObj = { value: NoteCategoryCount, name: NoteCategoryName, };
+                        result[NoteCategoryName] = tempObj;
                     }
-                    NotesChart(result);
+
+                    for (key in result) {
+                        colorsArray.push(colors[key].chartColorCode)
+                    }
+                    //debugger;
+                    NotesChart(Object.values(result));
                     if (response.Message == "Success") {
 
                         let TotalNotes = 0;
@@ -1053,7 +1096,6 @@
 
 
             function bindNotInBooksAndBanksCountDashboard() {
-                debugger;
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
