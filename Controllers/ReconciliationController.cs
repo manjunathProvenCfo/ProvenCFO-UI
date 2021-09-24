@@ -36,6 +36,7 @@ namespace ProvenCfoUI.Controllers
                     //return View(objResult.ResultData);
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
@@ -44,20 +45,25 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
 
-
-
                         TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
-                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                        if (objTCList != null && objTCList.Count > 0)
+                        if (userType == "1")
                         {
-                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                       group p by p.Name into g
-                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                            TempData["TrackingCategories"] = TCgroup;
+                            ViewBag.IsBankRuleVisible = true;
+                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            if (objTCList != null && objTCList.Count > 0)
+                            {
+                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                           group p by p.Name into g
+                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                                TempData["TrackingCategories"] = TCgroup;
 
-
+                            }
+                            TempData["BankRule"] = getBankRule();
                         }
-                        TempData["BankRule"] = getBankRule();
+                        else
+                        {
+                            ViewBag.IsBankRuleVisible = false;
+                        }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
@@ -162,15 +168,15 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                   
-                    var objResult = objReConcilation.GetReconciliationDashboardDataAgencyId(AgencyID , RecordsType);
-                   
+
+                    var objResult = objReConcilation.GetReconciliationDashboardDataAgencyId(AgencyID, RecordsType);
+
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
-                
+
 
             }
-           catch (Exception ex)
+            catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
@@ -287,23 +293,23 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 string RecordsType = NotInBooks;
-                
 
-                    //  return View();
-                    using (ReconcilationService objReConcilation = new ReconcilationService())
+
+                //  return View();
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    int AgencyID = 0;
+                    var userType = Convert.ToString(Session["UserType"]);
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+
+                    if (UserPref != null && UserPref.Count() > 0)
                     {
-                        int AgencyID = 0;
-                        var userType = Convert.ToString(Session["UserType"]);
-                        List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                       
-                        if (UserPref != null && UserPref.Count() > 0)
-                        {
-                            var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                            AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                        }
-                        using (IntigrationService objIntegration = new IntigrationService())
-                        {
-                            TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    using (IntigrationService objIntegration = new IntigrationService())
+                    {
+                        TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
 
                         if (userType == "1")
                         {
@@ -323,12 +329,12 @@ namespace ProvenCfoUI.Controllers
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
-                        }
-                        var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
-                        ViewBag.ReconcilationData = objResult.ResultData;
-                        return View(objResult.ResultData);
                     }
-                
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    ViewBag.ReconcilationData = objResult.ResultData;
+                    return View(objResult.ResultData);
+                }
+
 
             }
             catch (Exception ex)

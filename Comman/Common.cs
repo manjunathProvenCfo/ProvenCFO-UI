@@ -16,6 +16,7 @@ namespace ProvenCfoUI.Comman
         protected static List<UserSecurityVM> _roleList;
         private bool isDisposed = false;
         public static string RegxPasswordMatch = @"(?=.*\d)(?=.*[A-Za-z]).{8,}";
+        private static Object XeroLock = new Object();
         public static bool IsFeatureAccessable(string FeatureCode)
         {
 
@@ -194,50 +195,53 @@ namespace ProvenCfoUI.Comman
                 XeroInstance.Instance.XeroTenentID = client.XeroID;
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
-
-                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
-
-                var XeroTokenInfoSaved = Xero.GetSavedXeroToken(client.Id).ResultData;
-                if (XeroTokenInfoSaved != null)
+                lock (XeroLock)
                 {
+                    XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
 
-                    var SavedToken = Xero.getTokenFormat(XeroTokenInfoSaved);
-                    XeroInstance.Instance.XeroService = Xero;
-                    Task.Run(async () =>
+                    var XeroTokenInfoSaved = Xero.GetSavedXeroToken(client.Id).ResultData;
+                    if (XeroTokenInfoSaved != null)
                     {
-                        try
-                        {
-                                //var newtoken = await Xero.LoginXeroAccess();
-                            var token = await Xero.RefreshToken(SavedToken);
-                            XeroTokenInfoSaved.access_token = token.AccessToken;
-                            XeroTokenInfoSaved.id_token = token.IdToken;
-                            XeroTokenInfoSaved.refresh_token = token.RefreshToken;
-                            XeroTokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
-                            XeroTokenInfoSaved.ModifiedDate = DateTime.Now;
-                            XeroTokenInfoSaved.AppName = XeroInstance.Instance.XeroAppName;
-                            Xero.UpdateXeroToken(XeroTokenInfoSaved);
-                                //var url = Xero.BuildLoginUri();
-                                //
-                                //if (DateTime.UtcNow > token.ExpiresAtUtc)
-                                //{
-                                //    await Xero.RefreshToken(token);
-                                //}
-                                XeroInstance.Instance.XeroToken = token;
-                            XeroInstance.Instance.XeroConnectionStatus = true;
-                            XeroInstance.Instance.XeroConnectionMessage = string.Empty;
-                        }
-                        catch (Exception ex)
-                        {
-                            XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                            XeroInstance.Instance.XeroClientID = string.Empty;
-                            XeroInstance.Instance.XeroClientSecret = string.Empty;
-                            XeroInstance.Instance.XeroToken = null;
-                            XeroInstance.Instance.XeroConnectionStatus = false;
-                            XeroInstance.Instance.XeroConnectionMessage = ex.Message;
-                            throw;
-                        }
 
-                    });
+                        var SavedToken = Xero.getTokenFormat(XeroTokenInfoSaved);
+                        XeroInstance.Instance.XeroService = Xero;
+                        Task.Run(async () =>
+                        {
+                            try
+                            {
+                            //var newtoken = await Xero.LoginXeroAccess();
+                            var token = await Xero.RefreshToken(SavedToken);
+                                XeroTokenInfoSaved.access_token = token.AccessToken;
+                                XeroTokenInfoSaved.id_token = token.IdToken;
+                                XeroTokenInfoSaved.refresh_token = token.RefreshToken;
+                                XeroTokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                XeroTokenInfoSaved.ModifiedDate = DateTime.Now;
+                                XeroTokenInfoSaved.AppName = XeroInstance.Instance.XeroAppName;
+                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
+                            //var url = Xero.BuildLoginUri();
+                            //
+                            //if (DateTime.UtcNow > token.ExpiresAtUtc)
+                            //{
+                            //    await Xero.RefreshToken(token);
+                            //}
+                            XeroInstance.Instance.XeroToken = token;
+                                XeroInstance.Instance.XeroConnectionStatus = true;
+                                XeroInstance.Instance.XeroConnectionMessage = string.Empty;
+                            }
+                            catch (Exception ex)
+                            {
+                                XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                            XeroInstance.Instance.XeroClientID = string.Empty;
+                                XeroInstance.Instance.XeroClientSecret = string.Empty;
+                                XeroInstance.Instance.XeroToken = null;
+                                XeroInstance.Instance.XeroConnectionStatus = false;
+                                XeroInstance.Instance.XeroConnectionMessage = ex.Message;
+                                throw;
+                            }
+
+                        });
+                    }
+
                 }
             }
             else
