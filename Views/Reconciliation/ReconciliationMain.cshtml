@@ -454,7 +454,7 @@
                             <div class="row align-items-center">
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
-                                        <input class="form-control datetimepicker w-100" id="timepicker2" type="text" placeholder="m/d/y to m/d/y" data-options='{"mode":"range","dateFormat":"m/d/y","disableMobile":true}' />
+                                        <input class="form-control datetimepicker w-100" id="timepicker2" type="text" placeholder="mm/dd/yyyy to mm/dd/yyyy" data-options='{"mode":"range","dateFormat":"m/d/Y","disableMobile":true}' />
                                     </div>
                                 </div>
                             </div>
@@ -589,7 +589,7 @@
                     <div class="d-flex align-items-center">
                         <div class="" style=" margin: 1rem;">
                             <input type="radio" id="rb0" name="fav_language" value="Show All Unreconciled" checked="true">
-                            <label for="html">Show all unreconciled</label><br>
+                            <label for="html">Show All Unreconciled</label><br>
                             <input type="radio" id="rb1" name="fav_language" value="Not Ready to Reconcile">
                             <label for="css">Not Ready to Reconcile</label><br>
                             <input type="radio" id="rb2" name="fav_language" value="Show Reconciled only">
@@ -818,7 +818,7 @@
             url = url.replace('_Bankrule', bankrule);
             url = url.replace('_TrackingCategory1', TrackingCategories);
             url = url.replace('_TrackingCategory2', TrackingCategories_1);
-            url = url.replace('_FilterType', 0);
+            url = url.replace('_FilterType', filterReconcilationcategories);
             url = url.replace('_AgencyID', ClientID);
             url = url.replace('_Type', type);
 
@@ -830,7 +830,7 @@
         function LoadFilterData() {
             var filterData = JSON.parse(sessionStorage.getItem('Filter'));
             if (filterData) {
-                $('#Filter').css("background-color", "blue");
+                $('#Filter').css("background-color", "#edf2f9");
                 if (filterData.accounts != '' && filterData.accounts.split(',').length > 0) {
                     $('#filteraccounts').val(filterData.accounts.split(',')).trigger('change');
                 }
