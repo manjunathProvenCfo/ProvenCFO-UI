@@ -780,8 +780,8 @@
             var MinAmount = $("#filterMinAmount").val();
             var MaxAmount = $("#filterMaxAmount").val();
             var bankrule = $("#bankrule").val().join(',');
-            var TrackingCategories = $("#TrackingCategories").val().join(',');
-            var TrackingCategories_1 = $("#TrackingCategories_1").val().join(',');
+            var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') :'';
+            var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined? $("#TrackingCategories_1").val().join(','):'';
             var pdata = {
                 accounts: account,
                 dateRangeFrom: this.fromDate,
