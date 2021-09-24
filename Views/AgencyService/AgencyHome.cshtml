@@ -181,23 +181,27 @@
                                 <h6 class="mt-1">Notes</h6>
                                 <div class="fs--2 mt-3">
                                     <div class="d-flex flex-between-center mb-1">
-                                        <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Income</span></div>
+                                        <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Income</span></div>
                                         <div class="d-xxl-none">15%</div>
                                     </div>
                                     <div class="d-flex flex-between-center mb-1">
-                                        <div class="d-flex align-items-center"><span class="dot bg-orange"></span><span class="font-weight-semi-bold">Expenses</span></div>
+                                        <div class="d-flex align-items-center"><span class="dot bg-blue"></span><span class="font-weight-semi-bold">Expenses</span></div>
                                         <div class="d-xxl-none"> 25%</div>
                                     </div>
                                     <div class="d-flex flex-between-center mb-1">
-                                        <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Assest</span></div>
+                                        <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Assest</span></div>
                                         <div class="d-xxl-none"> 30%</div>
                                     </div>
                                     <div class="d-flex flex-between-center mb-1">
-                                        <div class="d-flex align-items-center"><span class="dot bg-green"></span><span class="font-weight-semi-bold">Liabilities</span></div>
+                                        <div class="d-flex align-items-center"><span class="dot bg-orange"></span><span class="font-weight-semi-bold">Bank Balance</span></div>
                                         <div class="d-xxl-none"> 15%</div>
                                     </div>
                                     <div class="d-flex flex-between-center mb-1">
-                                        <div class="d-flex align-items-center"><span class="dot bg-blue"></span><span class="font-weight-semi-bold">Equity</span></div>
+                                        <div class="d-flex align-items-center"><span class="dot bg-soft-primary"></span><span class="font-weight-semi-bold">Liabilities</span></div>
+                                        <div class="d-xxl-none"> 15%</div>
+                                    </div>
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-green"></span><span class="font-weight-semi-bold">Equity</span></div>
                                         <div class="d-xxl-none"> 15%</div>
                                     </div>
                                 </div>
@@ -727,9 +731,9 @@
                         let TotalNotes = 0;
 
                         for (var i = 0; i < data.length; i++) {
-                            TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+                            TotalNotes = Number(data[i].TotalNotes);
                         }
-                        $("#lblTotalNotes").text(TotalNotes);
+                        $("#lblTotalNotesCount").text(TotalNotes);
                     }
                 });
             }
