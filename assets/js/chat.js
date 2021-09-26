@@ -199,7 +199,7 @@ var renderParticipants = function () {
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-0 chat-contact-title">`+ obj[i].ChannelName + `</h6><span class="message-time fs--2">Tue</span>
+                                <h6 class="mb-0 chat-contact-title">`+ obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
@@ -291,6 +291,10 @@ var getParticipantByEmail = function (email) {
         return participant[0];
     else
         null;
+}
+var getParticipantNameByEmail = function (email) {
+    let participant = getParticipantByEmail(email);
+    return participant?.FirstName;
 }
 //var getParticipantByChannelId = function (channelId) {
 //    return chat.channels(x => x.ChannelId == channelId);

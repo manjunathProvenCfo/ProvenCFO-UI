@@ -343,7 +343,7 @@ var addTimestampRow = function (time) {
     return row;
 }
 
-var prepareMessageRow = function (message, timeStampRowId) {
+var prepareMessageRow = function (message, timeStampRowId, participantName) {
     let msg = message.state;
     let timestamp = msg.timestamp;
     let time = moment(timestamp, "HH:mm:ss").format("hh:mm A");
@@ -386,6 +386,7 @@ var prepareMessageRow = function (message, timeStampRowId) {
                     </div>
                 </div>
                 <div class='text-400 fs--2'>
+                    <span class='font-weight-semi-bold mr-2'>${participantName}</span>
                     <span>${time}</span>
                 </div>
             </div>
@@ -462,8 +463,9 @@ var addMessage = function (message) {
     let msg = message.state;
     var timestampRow = addTimestampRow(msg.timestamp);
     let timeStampRowId = timestampRow.attr("id");
-
-    var messageRow = prepareMessageRow(message, timeStampRowId);
+    debugger
+    let participantName= getParticipantNameByEmail(msg.author.toLowerCase());
+    var messageRow = prepareMessageRow(message, timeStampRowId, participantName);
     let firstMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:first`);
     let lastMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:last`);
     if (lastMsgDiv.length > 0) {
