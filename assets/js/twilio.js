@@ -16,7 +16,8 @@ var getToken = function () {
 
 var createTwilioClient = function () {
     getToken();
-    Twilio.Conversations.Client.create(token, { logLevel: 'info' })
+    //logLevel: 'info'
+    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
         .then(function (createdClient) {
 
             twilioClient = createdClient;
@@ -36,7 +37,7 @@ var createTwilioClient = function () {
                 channel.on("messageAdded", updateChannels);
             });
             //click First Paticipant
-            setTimeout(function () { $participants.eq(0).click(); }, 3000);
+            //setTimeout(function () { $participants.eq(0).click(); }, 3000);
 
 
             setTimeout(registerUserUpdatedEventHandlers, 200);
@@ -62,7 +63,7 @@ var createTwilioClient = function () {
 
 
 var createAllChannels = function () {
-    let participantsToCreate = chat.participants.filter(x => isEmptyOrBlank(x.ChannelId));
+    let participantsToCreate = chat.channels.filter(x => isEmptyOrBlank(x.ChannelId));
     if (participantsToCreate.length == 0)
         return;
     participantsToCreate.forEach(function (participant) {
@@ -83,9 +84,11 @@ var getChannelBySidAndJoin = function (channelId) {
     let existingChannel = twilioClient.conversations.conversations.get(channelId);
     if (isEmptyOrBlank(existingChannel)) {
         twilioClient.getConversationBySid(channelId).then(function (conv) {
+
             setActiveChannel(conv);
         });
     } else {
+
         setActiveChannel(existingChannel);
     }
 }
@@ -136,15 +139,19 @@ var setActiveChannel = function (channel) {
 
     activeChannel = channel;
 
-    let participant = getParticipantByChannelIndex();
+    let participant = getChannelParticipnatByChannelIndex();//TODO Public Chat
 
     addParticipant(participant.Email);
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
+
         var body = $messageBodyInput.val();
         if (validateMessage()) {
             channel.sendMessage(body).then(function () {
+                getToken();
+                twilioClient.updateToken(token);
+
                 $messageBodyInput.val('').focus();
                 $messageBodyInput.trigger('change');
                 setScrollPosition();
@@ -215,8 +222,10 @@ var setActiveChannel = function (channel) {
 
     channel.on('typingStarted', function (member) {
         member.getUser().then(user => {
-            typingMembers.add(member.identity);
-            updateTypingIndicator();
+            if (member.identity.toLowerCase() != chat.userEmail.toLowerCase()) {
+                typingMembers.add(member.identity);
+                updateTypingIndicator();
+            }
         });
     });
 
@@ -261,16 +270,20 @@ var updateActiveChannel = function () {
 }
 
 var addJoinedChannel = function (channel) {
-    //var updateableParticipants = chat.participants.filter(obj => isEmptyOrBlank(obj.ChannelUniqueName))
-    var updateableParticipants = chat.participants;
-    for (var i = 0; i < updateableParticipants.length; i++) {
-        if (channel?.uniqueName?.toLowerCase() == getChannelUniqueName(chat.userEmail, updateableParticipants[i].Email)) {
-            updateableParticipants[i].ChannelId = channel.sid;
-            updateableParticipants[i].ChannelUniqueName = channel.uniqueName;
-            $participants.eq(i).attr("data-channelId", channel.sid);
+    //var updateableParticipants = chat.channels.filter(obj => isEmptyOrBlank(obj.ChannelUniqueName))
+    var updateableParticipants = chat.channels;
+    var privateUpdateableParticipants = updateableParticipants.filter(x => x.IsPrivate === true && isEmptyOrBlank(x.ChannelId));
+    var publicUpdateableParticipants = updateableParticipants.filter(x => x.IsPrivate === false);
+    if (channel?.channelState?.attributes?.type === "private") {
+        for (var i = 0; i < privateUpdateableParticipants.length; i++) {
+            if (channel?.uniqueName?.toLowerCase() == getChannelUniqueName(chat.userEmail, privateUpdateableParticipants[i].ChatParticipants[0].Email)) {
+                privateUpdateableParticipants[i].ChannelId = channel.sid;
+                privateUpdateableParticipants[i].ChannelUniqueName = channel.uniqueName;
+                $participants.eq(i).attr("data-channelId", channel.sid);
 
-            //var objTwilioConversations = { ConversationId: channel.sid, ConversationUniqueName: channel.uniqueName, IsPrivate: channel.channelState.attributes?.type == "private", Status: channel.channelState.state.current }
-            //insertUpdateTwilioConversation(objTwilioConversations);
+                //var objTwilioConversations = { ConversationId: channel.sid, ConversationUniqueName: channel.uniqueName, IsPrivate: channel.channelState.attributes?.type == "private", Status: channel.channelState.state.current }
+                //insertUpdateTwilioConversation(objTwilioConversations);
+            }
         }
     }
 }
@@ -518,7 +531,7 @@ var addChannelMessagesScrollEvent = function () {
     $channelMessages.on('scroll', function (e) {
         //if ($channelMessages.height() - 50 < $channelMessages.scrollTop() + $channelMessages.height()) {
         //    activeChannel.getMessages(Chat_Page_Size).then(messages => {
-        //        debugger
+        //        
         //        messages.items.map(x => activeChannelMessages.push(x));
         //        var newestMessageIndex = messages.length ? messages[0].index : 0;
         //        if (!isUpdatingConsumption && activeChannel.lastConsumedMessageIndex !== newestMessageIndex) {
@@ -583,7 +596,7 @@ var updateParticipants = function () {
         .then(function (members) {
             members.forEach(function (member) {
                 member.getUser().then(user => {
-                    onlineOfflineMembers[user.state.identity] = (isEmptyOrBlank(user.state.online) ? false : user.state.online);
+                    onlineOfflineMembers[user.state.identity.toLowerCase()] = (isEmptyOrBlank(user.state.online) ? false : user.state.online);
                 });
             });
         });
@@ -592,11 +605,12 @@ var updateParticipants = function () {
 
 var setOnlineOfflineStatus = function () {
     Object.keys(onlineOfflineMembers).forEach(key => {
+        key = key.toLowerCase()
         let participant = getParticipantByEmail(key);
         if (isEmptyOrBlank(participant) === false) {
             participant["Online"] = onlineOfflineMembers[key];
             var elParticipant = $participants.filter(function (index, obj) {
-                return obj.attributes['data-index'].value == participant.Index;
+                return obj.attributes['data-email'].value == participant.Email;
             });
             if (participant.Online) {
                 elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
@@ -662,7 +676,7 @@ var handleUserUpdate = function (user, updateReasons) {
             let participant = getParticipantByEmail(user.state.identity);
             if (!isEmptyOrBlank(participant)) {
                 participant["Online"] = isEmptyOrBlank(user?.state?.online) ? false : user?.state?.online;
-                let elParticipant = $participantsContainer.children(`[data-index=${participant.Index}]`)
+                let elParticipant = $participantsContainer.children(`[data-email='${participant.Email.toLowerCase()}']`)
                 if (participant["Online"])
                     elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
                 else

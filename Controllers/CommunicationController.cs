@@ -43,20 +43,36 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
-                var chatParticipants = new List<ChatParticipants>();
+                var ChatChannels = new List<ChatChannel>();
 
                 using (var communicationService = new CommunicationService())
                 {
-                    chatParticipants = await communicationService.GetChatParticipants(userId, userEmail);
+                    ChatChannels = await communicationService.GetChatParticipants(userId, userEmail);
                 }
-                return Json(chatParticipants, JsonRequestBehavior.AllowGet);
+                return Json(ChatChannels, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid)
+        {
+            try
+            {
+                List<ChatChannel> chatChannels = new List<ChatChannel>();
 
-                throw ex;
+                using (var communicationService = new CommunicationService())
+                {
+                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid);
+                }
+                return Json(chatChannels, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json("", JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -67,6 +67,9 @@ namespace ProvenCfoUI.Controllers
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+
+                    ViewBag.UserId = User.UserId;
+                    ViewBag.UserEmail = User.LoginName;
                     ViewBag.ReconcilationData = objResult.ResultData;
                     return View("ReconciliationMain", objResult.ResultData);
 
@@ -331,6 +334,9 @@ namespace ProvenCfoUI.Controllers
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+
+                    ViewBag.UserId = User.UserId;
+                    ViewBag.UserEmail = User.LoginName;
                     ViewBag.ReconcilationData = objResult.ResultData;
                     return View(objResult.ResultData);
                 }

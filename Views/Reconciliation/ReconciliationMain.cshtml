@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<Proven.Model.reconciliationVM>
-@{
-    ViewBag.Title = "ReconciliationMain";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewBag.Title = "ReconciliationMain";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 <style>
     .tabselect {
         text-decoration: underline;
@@ -59,7 +57,7 @@
 <!--</div>
 </div>-->
 <div class="row">
-    <div class="col-md-12 pr-md-0" id="divTable">
+    <div class="col-md-12" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
                 <div class="row align-items-center justify-content-between">
@@ -135,21 +133,20 @@
 
                                 @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
                                 {
-                                    <th class="sort pr-1 align-middle">GL Account</th>
-                                }
-                                @*<th></th>*@
+                    <th class="sort pr-1 align-middle">GL Account</th>
+ } @*<th></th>*@
                                 @if (ViewBag.IsBankRuleVisible == true)
                                 {
-                                    <th class="sort pr-10 align-center ">Rule</th>
-                                }
+                    <th class="sort pr-10 align-center ">Rule</th>
+}
                                 @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
                                 {
                                     foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
-                                        <th class="sort pr-10 align-center ">@tcgroup.Name</th>
-                                    }
+                    <th class="sort pr-10 align-center ">@tcgroup.Name</th>
+}
 
-                                }
+            }
 
 
 
@@ -159,80 +156,75 @@
                             @foreach (var item in (List<Proven.Model.reconciliationVM>)ViewBag.ReconcilationData)
                             {
 
-                                <tr class="btn-reveal-trigger cursor-pointer">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
+                <tr class="btn-reveal-trigger cursor-pointer">
+                    <td class="align-middle">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" />
 
-                                            <label class="custom-control-label" for="@item.id"></label>
-                                        </div>
-                                    </td>
-                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
-                                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
-                                    @if (item.amount < 0)
-                                    {
-                                        @*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                            <label class="custom-control-label" for="@item.id"></label>
+                        </div>
+                    </td>
+                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
+                    @if (item.amount < 0)
+                    {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
                                         <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
-                                    }
+ }
                                     else
-                                    {
-                                        @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
-                                        <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
-                                    }
-                                    <td class="sort pr-1 align-middle"><span class="fa fa-comment mr-1"></span></td>
-                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
-                                    {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
+                                    { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                                                        <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+}
+                    <td class="sort pr-1 align-middle"><span id="iconComments" data-id="@item.id"><i class="fa fa-comment mr-1"></i></span></td>
+                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                    {
+    <td class="sort pr-1 align-middle col-xs-1">
+        <div class="row justify-content-between">
+            <div class="col-auto">
 
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                    }
-                                    @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
-                                    @if (ViewBag.IsBankRuleVisible == true)
-                                    {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
-                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                    }
-                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
-                                    {
-                                        int count = 0;
-                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
-                                        {
+                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
+            </div>
+        </div>
+    </td>
+ } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                    @if (ViewBag.IsBankRuleVisible == true)
+                    {
+    <td class="sort pr-1 align-middle col-xs-1">
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+            </div>
+        </div>
+    </td>
+}
+                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                    {
+                        int count = 0;
+                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                        {
 
-                                            <td class="sort pr-1 align-middle col-xs-1">
-                                                <div class="row justify-content-between">
-                                                    <div class="col-auto">
-                                                        @if (count == 0)
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })
-                                                        }
+    <td class="sort pr-1 align-middle col-xs-1">
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                @if (count == 0)
+                {
+@Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" }) }
+else
+{
+@Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })}
 
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            count++;
-                                        }
+            </div>
+        </div>
+    </td>
+count++;
+}
 
-                                    }
+}
 
-                                </tr>
-                            }
+                </tr>
+}
 
                         </tbody>
                     </table>
@@ -241,147 +233,7 @@
         </div>
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divChat">
-        <div class="card mb-3 pr-md-0 table table-striped">
-            <div class="card-header">
-                <div class="align-items-center justify-content-between p-l-6 ">
-                    <button class="close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="Cancel" data-dismiss="modal" aria-label="Close"><svg class="svg-inline--fa fa-times fa-w-11" data-fa-transform="shrink-6 right-0.3 down-0.3" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg="" style="transform-origin: 0.3625em 0.51875em;"><g transform="translate(176 256)"><g transform="translate(9.6, 9.6)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" transform="translate(-176 -256)"></path></g></g></svg><!-- <span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span> Font Awesome fontawesome.com --></button>
-
-                    <div class="row align-items-center justify-content-between  pt-2">
-                        <div class="col-6">
-                            <div class="row align-items-center">
-                                <div class="d-flex align-items-center ml-2">
-                                    <span class=""></span>
-                                    <h6 class="mb-0 ml-2">Apple.Com/USCA</h6>
-                                    <span class="badge badge-pill badge-soft-danger ml-3"></span>
-                                </div>
-                                <div class="d-flex align-items-center ml-2">
-                                    <div class="mb-0 ml-2 text-400 fs--2">
-                                        @*<h6 class="mb-0 ml-2">APPLE.COM/US Balance Addjustment</h6>*@
-                                        APPLE.COM/US Balance Addjustment
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center">
-                            <div class="col-12">
-
-                                <h6 class="mb-0 ml-2"> $99.99</h6>
-
-                                <div class="mb-0 ml-2 text-400 fs--2">5/25/2021</div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card panel-primary">
-
-                <div class="card-body">
-                    <div class="media p-3" id="IM2d95f2200edb4c44a822bea0c6b5791d" data-index="7" data-sid="IM2d95f2200edb4c44a822bea0c6b5791d" data-timestamp="20210901">
-                        <div class="avatar avatar-l mr-2">
-                            @*<img class="rounded-circle" src="../Upload/Profile/Skype_Picture_2021_08_06T12_13_17_582Z.jpeg" alt="">*@
-                            <img class="rounded-circle" src="~/assets/img/gallery/1.jpg" />
-                        </div>
-                        <div class="media-body">
-                            <div class="w-xxl-75">
-                                <div class="hover-actions-trigger d-flex align-items-center">
-                                    <div class="chat-message bg-200 p-2 rounded-soft">
-                                        <div class="text-40 fs--3">
-                                            Hello Charu, need to discuss some task.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-400 fs--2">
-                                    <span>vikas kumar-May 2021 03:39 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="media-body d-flex justify-content-end">
-                        <div class="w-100 w-xxl-75">
-                            <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
-
-                                <div class="bg-primary text-white p-2 rounded-soft chat-message justify-content-end">
-                                    <div class="text-40 fs--3">
-                                        Hi Vikas, busy with some stuff ping you once i am done with it.
-                                    </div>
-                                </div>
-                                <div class="avatar avatar-l mr-2 justify-content-end m-2">
-                                    <img class="rounded-circle" src="~/assets/img/gallery/4.jpg" />
-
-                                    @*<img class="rounded-circle" src="~/assets/img/gallery/3.jpg" />*@
-
-                                </div>
-                                <div class="text-400 fs--2">
-                                    @*<span>vikas kumar-May 2021 03:39 PM</span>*@
-                                </div>
-                            </div>
-
-
-                            <div class="text-400 fs--2 text-right">
-                                Charu Pandey-today 2021 11:08 AM<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="media p-3" id="IM2d95f2200edb4c44a822bea0c6b5791d" data-index="7" data-sid="IM2d95f2200edb4c44a822bea0c6b5791d" data-timestamp="20210901">
-                        <div class="avatar avatar-l mr-2">
-                            @*<img class="rounded-circle" src="../Upload/Profile/Skype_Picture_2021_08_06T12_13_17_582Z.jpeg" alt="">*@
-                            <img class="rounded-circle" src="~/assets/img/gallery/1.jpg" />
-                        </div>
-                        <div class="media-body">
-                            <div class="w-xxl-75">
-                                <div class="hover-actions-trigger d-flex align-items-center">
-                                    <div class="chat-message bg-200 p-2 rounded-soft">
-                                        <div class="text-40 fs-xl--3">
-                                            Ok, waiting for you ping.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-400 fs--2">
-                                    <span>vikas kumar-today 2021 03:39 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="media p-3" id="IM2d95f2200edb4c44a822bea0c6b5791d" data-index="7" data-sid="IM2d95f2200edb4c44a822bea0c6b5791d" data-timestamp="20210901">
-                        <div class="avatar avatar-l mr-2">
-                            @*<img class="rounded-circle" src="../Upload/Profile/Skype_Picture_2021_08_06T12_13_17_582Z.jpeg" alt="">*@
-                            @*<img class="rounded-circle" src="~/assets/img/gallery/1.jpg" />*@
-                        </div>
-                        <div class="media-body">
-                            <div class="w-xxl-75">
-                                <div class="hover-actions-trigger d-flex align-items-center">
-                                    <div class="">
-                                        <div class="text-40 fs-xl--3">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <form class="card - chat-editor-area ">
-                        <input class="d-none" type="file" id="chat-file-upload" accept="image/*,application/pdf,.csv,.CSV, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain">
-                        <label class="mb-0 p-1 chat-file-upload cursor-pointer" for="chat-file-upload"><span class="fas fa-paperclip"></span></label>
-                        <textarea class="emojiarea border-0 outline-none shadow-none" data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false}'></textarea>
-                        <button class="btn btn-sm btn-send outline-none ml-2" type="submit">Send</button>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-
+        @Html.Partial("_communication", true)
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divFilter">
         <div class="card mb-3 pr-md-0 table table-striped ">
@@ -428,7 +280,7 @@
                                 <div class="d-flex align-items-center ml-2">
                                     <div class="mb-0 ml-2 text-400 fs--2">
                                         @Html.DropDownList("filteraccounts", new SelectList((List<SelectListItem>)TempData["DistinctAccount"], "Value", "Text"), "Select account",
-                                       new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                                                                     new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
                                     </div>
                                 </div>
                             </div>
@@ -531,10 +383,9 @@
                                 <div class="d-flex align-items-center ml-2">
                                     @if (TempData["BankRule"] != null)
                                     {
-                                        <div class="mb-0 ml-2 text-400 fs--2">
-                                            @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
-                                        </div>
-                                    }
+                        <div class="mb-0 ml-2 text-400 fs--2">
+                            @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
+                        </div>}
                                 </div>
                             </div>
                         </div>
@@ -565,20 +416,16 @@
                                             int count = 0;
                                             foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                             {
-                                                <h6 class="mb-0 ml-2">@tcgroup.Name </h6>
-                                                if (count == 0)
-                                                {
-                                                    @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })
-                                                }
-                                                count++;
-                                            }
+                            <h6 class="mb-0 ml-2">@tcgroup.Name </h6> if (count == 0)
+                            {
+        @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" }) }
+    else
+    {
+@Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" }) }
+count++;
+}
 
-                                        }
-                                        @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
+} @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
                                     </div>
                                 </div>
                             </div>
@@ -623,12 +470,19 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
-
+        $(document).ready(function () {
+            chat.userId = "@ViewBag.UserId";
+            chat.userEmail = "@ViewBag.UserEmail";
+            hideParticipantsSidebar();
+        });
+    </script>
+    <script>
             $(document).ready(function () {
                         bindNotInBooksAndBanksCount();
                         bindNotInBooksAndBanksCountDashboard();
-			LoadFilterData();
+			            LoadFilterData();
                         //AgencyDropdownPartialViewChange();
                         var type = sessionStorage.getItem('Type');
                         $('#divFilter').hide();
@@ -653,36 +507,18 @@
                         $('#tblreconcilation tbody tr').click(function () {
                             $(this).addClass('bg-300').siblings().removeClass('bg-300');
 
-                        });
-                        $('#iconComments').click(function () {
-                            if ($("#divFilter").is(":visible")) {
-                                $('#divFilter').hide();
-                                $('#divFilter').addClass('d-none');
-                                $('#divChat').show();
-                                $('#divChat').removeClass('d-none');
+                });
+                $('span[id=iconComments]').click(function () {
+                 $('#divFilter').hide();
+                 $('#divFilter').addClass('d-none');
+                 $('#divChat').show();
+                 $('#divChat').removeClass('d-none');
+                 $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-                            }
-                            else if ($("#divChat").is(":visible")) {
-                                $('#divFilter').hide();
-                                $('#divFilter').addClass('d-none');
-                                $('#divChat').hide();
-                                $('#divChat').addClass('d-none');
-                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                            }
-                            else {
-                                $('#divChat').show();
-                                $('#divChat').removeClass('d-none');
-                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                            }
-                            //if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                            //    $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                            //    $('#divChat').hide();
-                            //}
-                            //else {
-                            //    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                            //    $('#divChat').show();
-                            //}
-                        });
+                    let channelUniqueNameGuid = $(this).data().id;
+                    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+                    loadChatPage(true,1);
+                });
 
                         $('#Cancel').click(function () {
                             if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {

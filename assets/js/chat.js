@@ -18,11 +18,17 @@ var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
     twilioUserId: "",
+    channels: [],
     participants: [],
-    channelIndex: -1
+    channelIndex: -1,
+    publicChannelUniqueNameGuid: ""
 };
 
-var loadPage = function () {
+var loadChatPage = function (isPublicChatOnly, type) {
+    if (isEmptyOrBlank(isPublicChatOnly))
+        isPublicChatOnly = false;
+    if (isEmptyOrBlank(type))
+        type = 1;
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
@@ -35,11 +41,16 @@ var loadPage = function () {
 
     $channelMessages.empty();
     addChannelMessagesScrollEvent();
+    if (isPublicChatOnly === true) {
+        hideParticipantsSidebar();
+        getPublicChatParticipants(chat.publicChannelUniqueNameGuid);
+    }
+    else {
+        getChatParticipants();
+        createTwilioClient();
+    }
 
-    getChatParticipants();
-    createTwilioClient();
-
-    if (chat.participants.length > 0) {
+    if (chat.channels.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
@@ -95,17 +106,46 @@ var loadPage = function () {
     });
 
 }
+var resetChatPage = function () {
+    chat.twilioUserId = "";
+    chat.channels = [];
+    chat.participants = [];
+    chat.channelIndex = -1;
 
+    typingMembers = new Set();
+    onlineOfflineMembers = new Object();
+}
+var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+var getPublicChatParticipants = function (channelUniqueNameGuid) {
+    resetChatPage();
+    getAjaxSync(`/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=${channelUniqueNameGuid}`, null, function (response) {
+        debugger
+        setParticipants(response);
+        createTwilioClient();
+        /*$participants.eq(0).click();*/
+    });
+}
 var getChatParticipants = function () {
     getAjaxSync(`/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}`, null, function (response) {
         if (response.length > 0) {
-            chat.participants = response;
-            chat.participants.forEach(x => {
-                if (isEmpty(onlineOfflineMembers[x.Email])) {
-                    onlineOfflineMembers[x.Email] = x.Online;
+            chat.channels = response;
+            let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
+            chat.participants = [];
+            arrParticipants.forEach(x => {
+                if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
+                    chat.participants.push(x);
                 }
             });
+            for (var i = 0; i < chat.channels.length; i++) {
+                if (chat.channels[i].IsPrivate === true) {
+                    chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
+                }
+                else {
+                    chat.channels[i].ChannelImage = Default_Profile_Image;
+                }
+            }
 
+            setOnlineOfflineMembersArray();
             renderParticipants();
         }
         else {
@@ -113,19 +153,53 @@ var getChatParticipants = function () {
         }
     });
 }
+var setParticipants = function (response) {
+    if (response.length > 0) {
+        chat.channels = response;
+        let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
+        chat.participants = [];
+        arrParticipants.forEach(x => {
+            if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
+                chat.participants.push(x);
+            }
+        });
+        for (var i = 0; i < chat.channels.length; i++) {
+            if (chat.channels[i].IsPrivate === true) {
+                chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
+            }
+            else {
+                chat.channels[i].ChannelImage = Default_Profile_Image;
+            }
+        }
+
+        setOnlineOfflineMembersArray();
+        renderParticipants();
+    }
+    else {
+        ShowAlertBoxWarning("No participant exists for chat");
+    }
+}
+var setOnlineOfflineMembersArray = function () {
+
+    chat.participants.forEach(x => {
+        if (isEmpty(onlineOfflineMembers[x.Email.toLowerCase()])) {
+            onlineOfflineMembers[x.Email.toLowerCase()] = x.Online;
+        }
+    });
+}
 var renderParticipants = function () {
-    let obj = chat.participants;
+    let obj = chat.channels;
     var participants = '';
     for (var i = 0; i < obj.length; i++) {
-        chat.participants[i]["Index"] = i;
-        participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
+        chat.channels[i]["Index"] = i;
+        participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-email="` + (obj[i].IsPrivate === false ? '' : obj[i].ChatParticipants[0].Email.toLowerCase()) + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
                         <div class="avatar avatar-xl status-offline">
-                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ProfileImage) == true ? Default_Profile_Image : obj[i].ProfileImage) + `" alt="" />
+                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ChannelImage) == true ? Default_Profile_Image : obj[i].ChannelImage) + `" alt="" />
 
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-0 chat-contact-title">`+ obj[i].FirstName + ' ' + obj[i].LastName + `</h6><span class="message-time fs--2">Tue</span>
+                                <h6 class="mb-0 chat-contact-title">`+ obj[i].ChannelName + `</h6><span class="message-time fs--2">Tue</span>
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
@@ -154,29 +228,37 @@ var renderParticipants = function () {
 
 var handleParticipantClick = function (event) {
     let index = event.currentTarget.dataset.index;
-
     if (isEmpty(index)) {
-        throw 'Participant Index not found.'
+        throw 'Channel Index not found.'
         return;
     }
 
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
-        let participant = getParticipantByChannelIndex();
-        $channelName.text(participant.FirstName + " " + participant.LastName);
-        $channelParticipantEmail.text(participant.Email);
-
+        let channel = getChannelByChannelIndex();
+        let participant = getChannelParticipnatByChannelIndex();
+        $channelName.text(channel.ChannelName);
         $channelMessages.empty();
-
-        //Twilio
-        if (isEmptyOrBlank(participant.ChannelId)) {
-            let attributes = { "type": "private" }
-            let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
-            createOrJoinExistingChannel(channelName, channelName, true, attributes);
+        if (channel.IsPrivate === true) {
+            $channelParticipantEmail.text(participant.Email);
         }
         else {
-            getChannelBySidAndJoin(participant.ChannelId);
+            $channelParticipantEmail.html("&nbsp");
+        }
+        //Twilio
+        if (isEmptyOrBlank(channel.ChannelId)) {
+            if (channel.IsPrivate === true) {
+                var attributes = { "type": "private" }
+                var channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+            } else if (channel.Type == 1) {
+                var attributes = { "type": "public reconciliation" }
+                var channelName = channel.ChannelUniqueName;
+            }
+            createOrJoinExistingChannel(channelName, channelName, channel.IsPrivate, attributes);
+        }
+        else {
+            getChannelBySidAndJoin(channel.ChannelId);
         }
     }
 }
@@ -194,6 +276,15 @@ var insertUpdateTwilioConversation = function (objTwilioConversations) {
 }
 
 
+var getChannelByChannelIndex = function () {
+    return chat.channels[chat.channelIndex];
+}
+var getChannelByChannelId = function (channelId) {
+    return chat.channels(x => x.ChannelId == channelId);
+}
+var getChannelParticipnatByChannelIndex = function () {
+    return getChannelByChannelIndex().ChatParticipants[0];
+}
 var getParticipantByEmail = function (email) {
     let participant = chat.participants.filter(x => x.Email.toLowerCase() == email.toLowerCase());
     if (participant.length > 0)
@@ -201,13 +292,9 @@ var getParticipantByEmail = function (email) {
     else
         null;
 }
-
-var getParticipantByChannelIndex = function () {
-    return chat.participants[chat.channelIndex];
-}
-var getParticipantByChannelId = function (channelId) {
-    return chat.participants(x => x.ChannelId == channelId);
-}
+//var getParticipantByChannelId = function (channelId) {
+//    return chat.channels(x => x.ChannelId == channelId);
+//}
 
 var getChannelUniqueName = function (userEmail, participantEmail) {
     userEmail = userEmail.toLowerCase();

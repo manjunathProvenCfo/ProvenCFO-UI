@@ -75,6 +75,9 @@ namespace ProvenCfoUI
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
+                        "~/assets/lib/superagent/dist/superagent.min.js",
+                        "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
+                        "~/assets/lib/jquery.fancybox.min.js",
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));
 

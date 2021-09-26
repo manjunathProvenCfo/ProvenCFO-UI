@@ -13,25 +13,16 @@ namespace Proven.Service
     public class CommunicationService : BaseService, IDisposable
     {
         private bool isDisposed = false;
-        private HttpResponseMessage response;
-        private StringContent content;
 
-        public async Task<List<ChatParticipants>> GetChatParticipants(string UserID, string userEmail)
+        public async Task<List<ChatChannel>> GetChatParticipants(string UserID, string userEmail)
         {
-            return await GetAsync<List<ChatParticipants>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}");
-            //response = await client.GetAsync($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}").ConfigureAwait(false);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            //    return JsonConvert.DeserializeObject<List<ChatParticipants>>(content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
+            return await GetAsync<List<ChatChannel>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}");
         }
+        public async Task<List<ChatChannel>> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid)
+        {
+            return await GetAsync<List<ChatChannel>>($"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}");
+        }
+
 
         public void Dispose()
         {
@@ -45,13 +36,6 @@ namespace Proven.Service
 
             if (disposing)
             {
-                if (response != null)
-                    response.Dispose();
-                if (content != null)
-                {
-                    content.Dispose();
-                }
-
                 // free managed resources               
             }
             isDisposed = true;
