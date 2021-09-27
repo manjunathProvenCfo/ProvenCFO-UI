@@ -552,10 +552,7 @@
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
-
                 bindNotInBooksAndBanksCountDashboard();
-
-
                 NotesIndividualCountAndPercentageByAgencyId();
 
                 Chart1();
@@ -652,11 +649,12 @@
                     myChart.setOption(option);
                 }
             }
+
             function NotesChart(dataArray) {
                 let dom = document.getElementById("echart-notes");
                 var myChart = echarts.init(dom);
                 var app = {};
-                debugger;
+                
                 let options = {
 
                     color: colorsArray,
@@ -711,7 +709,7 @@
                         data: dataArray
                     }]
                 };
-                debugger;
+               
                 if (options && typeof options === 'object') {
                     myChart.setOption(options);
                 }
@@ -746,7 +744,6 @@
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
                     let data = response.ResultData;
-                    debugger;
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">
@@ -768,7 +765,7 @@
                     for (key in result) {
                         colorsArray.push(colors[key].chartColorCode)
                     }
-                    //debugger;
+                   
                     NotesChart(Object.values(result));
                     if (response.Message == "Success") {
 
@@ -987,15 +984,12 @@
                             totalSum = totalSum + data[i].totalCount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
-
                                 $("#lblNotInBanksCount2").text(data[i].totalCount);
-
                             }
 
 
                             else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
                                 $("#lblNotInBooksCount2").text(data[i].totalCount);
-
                             }
 
                         }
