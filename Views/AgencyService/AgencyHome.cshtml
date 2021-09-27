@@ -655,8 +655,7 @@
             function NotesChart(dataArray) {
                 let dom = document.getElementById("echart-notes");
                 var myChart = echarts.init(dom);
-                var app = {};
-                debugger;
+                var app = {};                
                 let options = {
 
                     color: colorsArray,
@@ -710,8 +709,7 @@
                         },
                         data: dataArray
                     }]
-                };
-                debugger;
+                };                
                 if (options && typeof options === 'object') {
                     myChart.setOption(options);
                 }
@@ -745,8 +743,7 @@
             function NotesIndividualCountAndPercentageByAgencyId() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                    let data = response.ResultData;
-                    debugger;
+                    let data = response.ResultData;                  
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">

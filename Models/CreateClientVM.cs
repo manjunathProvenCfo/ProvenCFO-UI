@@ -42,6 +42,7 @@ namespace ProvenCfoUI.Models
         public string StartDateText { get; set; }
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
+        public bool EnableAutomation { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }

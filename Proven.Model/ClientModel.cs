@@ -63,6 +63,8 @@ namespace Proven.Model
         public int? TeamId { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
 
+        public bool? EnableAutomation { get; set; }
+
         //For Summary Page
         public string Summary { get; set; }
         public string SummaryCreatedBy { get; set; }
