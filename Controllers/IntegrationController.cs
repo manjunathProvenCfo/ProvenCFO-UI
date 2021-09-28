@@ -65,12 +65,13 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
+        [CheckSession]
         public ActionResult GetXeroTracking()
         {
             try
             {
                 int AgencyID = 0;
+                List<XeroTrackingCategoriesVM> objXeroTC = new List<XeroTrackingCategoriesVM>();
                 ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                 ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
                 List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
@@ -84,11 +85,11 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var objResult = objIntegration.GetXeroTracking(AgencyID);
-                        return View(objResult.ResultData);
+                        return View(objResult.ResultData);                        
                     }
                 }
 
-                return View();
+                return View(objXeroTC);
             }
             catch (Exception ex)
             {
@@ -98,6 +99,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [HttpPost]
+        [CheckSession]
         public async Task<JsonResult> GetXeroTrackingCategorySync(int ClientID)
         {
             try
@@ -136,6 +138,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [CheckSession]
         public async Task<JsonResult> GetXeroGLAccountSync(int ClientID)
         {
             try
@@ -192,6 +195,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [HttpPost]
+        [CheckSession]
         public async Task<JsonResult> UpdateXeroConnectionStatus()
         {
             ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;

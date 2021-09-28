@@ -47,16 +47,19 @@
                     </tr>
                 </thead>
                 <tbody id="purchases">
-                    @foreach (var item in Model)
+                    @if (Model != null)
                     {
-                        <tr class="btn-reveal-trigger">
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Option)
-                            </td>
-                        </tr>
+                        foreach (var item in Model)
+                        {
+                            <tr class="btn-reveal-trigger">
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Option)
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
 
