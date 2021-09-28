@@ -22,7 +22,7 @@
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" for="Title">Title</span>
                                             @*<input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />*@
-                                            @Html.TextBoxFor(x => x.Title, new { @style = "max-width:85%" }) 
+                                            @Html.TextBoxFor(x => x.Title, new { @style = "width:89%" }) 
                                             @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger w-100" })
                                             @Html.HiddenFor(x => x.Id)
                                             @Html.HiddenFor(x => x.NoteCatId)
