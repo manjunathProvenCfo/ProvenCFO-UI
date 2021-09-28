@@ -845,23 +845,22 @@ count++;
 
 
 
-            function bindNotInBooksAndBanksCountDashboard() {
+        function bindNotInBooksAndBanksCountDashboard() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-                    if (response.Message == "Success") {
+                   
+                    if (response.Message == "Success") {                       
                         let data = response.ResultData;
                         let totalSum = 0;
-                        for (var i = 0; i < data.length; i++) {
-                            totalSum = totalSum + data[i].totalCount;
+                        for (var i = 0; i < data.length; i++) {                         
+                            totalSum = totalSum + data[i].Count;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                                $("#lblNotInBanksCount").text(data[i].totalCount);
+                                $("#lblNotInBanksCount").text(data[i].Count);
                             }
                             else {
-                                $("#lblNotInBooksCount").text(data[i].totalCount);
+                                $("#lblNotInBooksCount").text(data[i].Count);
                             }
                         }
-
                         $("#lblNotInCount").text(totalSum);
 
                     }
