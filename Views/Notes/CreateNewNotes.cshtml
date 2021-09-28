@@ -14,15 +14,15 @@
             <div class="modal-body p-0">
                 <div class="p-4">
                     <div class="row">
-                        <div class="col-lg-9">
+                        <div class="col-lg-11">
                             <div class="media">
                                 <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
                                 <div class="media-body">
                                     <form action="" method="post" onsubmit="return false;" id="formCreateNotes">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" for="Title">Title</span>
-                                            <input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />
-                                            @*@Html.TextBoxFor(x => x.Title, new { @style = "max-width:85%" })*@
+                                            @*<input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />*@
+                                            @Html.TextBoxFor(x => x.Title, new { @style = "max-width:85%" }) 
                                             @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger w-100" })
                                             @Html.HiddenFor(x => x.Id)
                                             @Html.HiddenFor(x => x.NoteCatId)
