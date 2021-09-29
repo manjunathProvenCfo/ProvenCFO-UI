@@ -144,7 +144,7 @@
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
                                 <h6 class="mt-1">Need List</h6>
-                                <div class="fs--2 mt-3">
+                                <div class="fs--2 mt-3" id="needsCategoryDiv">
                                     <div class="d-flex flex-between-center mb-1">
                                         <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Urgent</span></div>
                                         <div class="d-xxl-none">20%</div>
@@ -165,8 +165,8 @@
                             </div>
                             <div class="col-auto">
                                 <div class="position-relative">
-                                    <div class="echart-doughnut" data-echart-responsive="true"></div>
-                                    <div class="absolute-centered font-weight-medium text-dark fs-2">26</div>
+                                    <div id="echart-needs" class="echart"></div>
+                                    <div class="absolute-centered font-weight-medium text-dark fs-2"><span id="lblTotalTasksCount"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -549,12 +549,13 @@
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
         <script>
+           
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
                 bindNotInBooksAndBanksCountDashboard();
                 NotesIndividualCountAndPercentageByAgencyId();
-
+                KanbanCountWithIndividualPriority();
                 Chart1();
                 Chart2();
 
@@ -649,6 +650,141 @@
                     myChart.setOption(option);
                 }
             }
+
+            var colorsArrays = [];
+            function NeedsChart(dataArray) {
+                
+                let dom = document.getElementById("echart-needs");
+                var myChart = echarts.init(dom);
+
+                var app = {};
+
+
+                let options = {
+                    
+                    color: colorsArrays,
+                    tooltip: {
+                        trigger: 'item',
+                        padding: [7, 10],
+                        backgroundColor: utils.grays.white,
+                        textStyle: {
+                            color: utils.grays.black
+                        },
+                        transitionDuration: 0,
+                        borderColor: utils.grays['300'],
+                        borderWidth: 1,
+                        formatter: function formatter(params) {
+                            return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                        }
+                    },
+                    position: function position(pos, params, dom, rect, size) {
+                        return getPosition(pos, params, dom, rect, size);
+                    },
+                    legend: {
+                        show: false
+                    },
+                    series: [{
+                        type: 'pie',
+                        radius: ['100%', '87%'],
+                        avoidLabelOverlap: false,
+                        hoverAnimation: false,
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: utils.grays.white
+                        },
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center',
+                                textStyle: {
+                                    fontSize: '20',
+                                    fontWeight: '500',
+                                    color: utils.grays['700']
+                                }
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: dataArray
+                    }]
+
+                };
+
+
+                if (options && typeof options === 'object') {
+                    myChart.setOption(options);
+                }
+            }
+            
+            var color = {
+                "Urgent": {
+                    "className": "bg-red",
+                    "echartColorCode": "#ff0000"
+                },
+                "High": {
+                    "className": "bg-orange",
+                    "echartColorCode": "#F68F57"
+                },
+                "Medium": {
+                    "className": "bg-green",
+                    "echartColorCode": "#00BE82"
+                },
+                "Low": {
+                    "className": "bg-soft-primary",
+                    "echartColorCode": "#bfbfbf"
+                }
+            };
+
+
+           
+            function KanbanCountWithIndividualPriority() {
+              
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
+                    let data = response.ResultData;
+                   
+                    $("#needsCategoryDiv").children().remove();
+                    for (key in color) {
+                        var htmltext = `<div class="d-flex align-items-center">
+                                                    <span class="dot ${color[key].className}"></span>
+                                                    <span class="font-weight-semi-bold">${key}</span>
+                                                </div>`;
+
+                        $("#needsCategoryDiv").append(htmltext);
+                    }
+
+                    var results = {};
+                    for (var i = 0; i < data.length; i++) {
+                        let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName;
+                        let PriorityNameCount = data[i].PriorityNameCount;
+                        var tempObj1 = { value: PriorityNameCount, name: KanbanTaskPriorityName, };
+                        results[KanbanTaskPriorityName] = tempObj1;
+                    }
+                 
+                    for (key in results) {
+                        colorsArrays.push(color[key].echartColorCode);
+                        //colorsArrays.push(color[key] != undefined ? color[key].echartColorCode : '');
+                    }
+                   
+                    NeedsChart(Object.values(results));
+                    if (response.Message == "Success") {
+
+                        let TotalTasks = 0;
+
+                        for (var i = 0; i < data.length; i++) {
+                            TotalTasks = Number(data[i].TotalTasks);
+                        }
+                        $("#lblTotalTasksCount").text(TotalTasks);
+                    }
+                });
+            }
+
 
 
             var colorsArray = [];
@@ -746,6 +882,7 @@
                     "chartColorCode": "#27BCFE"
                 }
             };
+            console.log(colors);
             function NotesIndividualCountAndPercentageByAgencyId() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {

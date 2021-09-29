@@ -616,5 +616,28 @@ namespace ProvenCfoUI.Controllers
                 return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        [CheckSession]
+        [HttpGet]
+        public JsonResult KanbanCountWithIndividualPriority(string AgencyId)
+        {
+            try
+            {
+                using (NeedsService objNeeds = new NeedsService())
+                {
+                    var objResult = objNeeds.KanbanCountWithIndividualPriority(Convert.ToString(AgencyId));
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
     }
 }

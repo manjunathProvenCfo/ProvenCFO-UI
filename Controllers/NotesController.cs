@@ -328,6 +328,7 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var result = objNotes.DragAndDropNotesDescription(Ids, Positions);
+
                     if (result != null)
                     {
                         return Json(new { notes = result, message = "success" }, JsonRequestBehavior.AllowGet);
@@ -369,6 +370,7 @@ namespace ProvenCfoUI.Controllers
 
 
         [CheckSession]
+        [HttpGet]
         public JsonResult NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
         {
             try
