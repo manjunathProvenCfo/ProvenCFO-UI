@@ -24,7 +24,7 @@ namespace ProvenCfoUI.Models
         public string ContactPersonName { get; set; }
         public string Status { get; set; }
         public int CityId { get; set; }
-        [Required(ErrorMessage = "City is required field.")]
+        [Required(ErrorMessage = "City is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum 50 characters exceeded.")]
         public string CityName { get; set; }
         [Required(ErrorMessage = "State is a required field.")]
@@ -39,7 +39,7 @@ namespace ProvenCfoUI.Models
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
         public string XeroScope { get; set; }
-        [Required(ErrorMessage = "startDate is a required field.")]
+        [Required(ErrorMessage = "Start Date is a required field.")]
         public string StartDateText { get; set; }
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
