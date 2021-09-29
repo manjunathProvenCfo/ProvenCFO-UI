@@ -94,7 +94,7 @@ function ShowConfirmBoxBase(title, text, type, confirmButtonText, confirmButtonC
     }, callback);
 }
 function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) {
-    ShowConfirmBoxBase(title, text, "warning",confirmButtonText, "#ec6c62", callback);
+    ShowConfirmBoxBase(title, text, "warning", confirmButtonText, "#ec6c62", callback);
 }
 //Alerts End
 
@@ -138,5 +138,30 @@ var ConvertToUDS = function (inputAmount) {
     }).format(inputAmount);
     return usdAmount;
 
+}
+var formatAmount = function (amount, wrapSpan) {
+    if (isEmptyOrBlank(wrapSpan))
+        wrapSpan = false;
+    if (isEmptyOrBlank(amount))
+        amount = 0;
+    let usdAmount = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        currencySign: 'accounting'
+    }).format(amount);
+    if (wrapSpan === false)
+        return usdAmount;
+    if (amount < 0) {
+        return `<span class='text-danger'>${usdAmount}</span>`;
+    }
+    else {
+        return `<span>${usdAmount}</span>`;
+    }
+}
+
+var formatDateMMDDYYYY = function (date) {
+    if (isEmptyOrBlank(date))
+        return '';
+    return moment(date).format('MM/DD/YYYY');
 }
 

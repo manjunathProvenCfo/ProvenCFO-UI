@@ -463,7 +463,7 @@ var addMessage = function (message) {
     let msg = message.state;
     var timestampRow = addTimestampRow(msg.timestamp);
     let timeStampRowId = timestampRow.attr("id");
-    debugger
+
     let participantName= getParticipantNameByEmail(msg.author.toLowerCase());
     var messageRow = prepareMessageRow(message, timeStampRowId, participantName);
     let firstMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:first`);

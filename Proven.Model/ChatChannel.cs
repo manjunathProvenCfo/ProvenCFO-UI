@@ -14,5 +14,12 @@ namespace Proven.Model
         public string ChannelImage { get; set; }
         public bool IsPrivate { get; set; }
         public List<ChatParticipants> ChatParticipants { get; set; }
+        #region reconciliation
+        public string AccountName { get; set; }
+        public string Company { get; set; }
+        public string ReconciliationDescription { get; set; }
+        public DateTime ReconciliationDate { get; set; }
+        public decimal? ReconciliationAmount { get; set; }
+        #endregion
     }
 }

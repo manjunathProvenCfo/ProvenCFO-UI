@@ -3,6 +3,10 @@ var $participantFirst;
 var $participants;
 var $channelName;
 var $channelParticipantEmail;
+var $channelReconciliationDescription;
+var $channelReconciliationCompany;
+var $channelReconciliationDate;
+var $channelReconciliationAmount;
 var $messageBodyInput;
 var $messageBodyFileUploader;
 var $messageBodyFilePreviewerModal;
@@ -28,11 +32,15 @@ var loadChatPage = function (isPublicChatOnly, type) {
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
-        type = 1;
+        chat.type = 1;
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
     $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
     $messageBodyInput = $("#message-body-input");
     $messageBodyFileUploader = $("#chat-file-upload");
     $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
@@ -41,6 +49,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
 
     $channelMessages.empty();
     addChannelMessagesScrollEvent();
+    $('.chat-content-header .col-auto').remove();
     if (isPublicChatOnly === true) {
         hideParticipantsSidebar();
         getPublicChatParticipants(chat.publicChannelUniqueNameGuid);
@@ -119,7 +128,6 @@ var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 var getPublicChatParticipants = function (channelUniqueNameGuid) {
     resetChatPage();
     getAjaxSync(`/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=${channelUniqueNameGuid}`, null, function (response) {
-        debugger
         setParticipants(response);
         createTwilioClient();
         /*$participants.eq(0).click();*/
@@ -153,7 +161,7 @@ var getChatParticipants = function () {
         }
     });
 }
-var setParticipants = function (response) {
+var setParticipants = function (response, type) {
     if (response.length > 0) {
         chat.channels = response;
         let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
@@ -199,7 +207,7 @@ var renderParticipants = function () {
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-0 chat-contact-title">`+ obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
+                                <h6 class="mb-0 chat-contact-title" title="${obj[i].ChannelName}">`+ obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
@@ -242,9 +250,16 @@ var handleParticipantClick = function (event) {
         $channelMessages.empty();
         if (channel.IsPrivate === true) {
             $channelParticipantEmail.text(participant.Email);
+            $channelReconciliationDescription.html("");
+            $channelReconciliationCompany.html("");
+            $channelReconciliationDate.html("");
+            $channelReconciliationAmount.html("");
         }
         else {
-            $channelParticipantEmail.html("&nbsp");
+            $channelParticipantEmail.html("");
+            $channelReconciliationDescription.html(`${channel.Company}/${channel.ReconciliationDescription}`);
+            $channelReconciliationDate.html(`${formatDateMMDDYYYY(channel.ReconciliationDate)}`);
+            $channelReconciliationAmount.html(formatAmount(channel.ReconciliationAmount, true));
         }
         //Twilio
         if (isEmptyOrBlank(channel.ChannelId)) {
