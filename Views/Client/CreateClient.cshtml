@@ -194,6 +194,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.StartDateText, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker" } })
+                                        @Html.ValidationMessageFor(model => model.StartDateText, "", new { @class = "text-danger" })
                                         @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@
 
 
