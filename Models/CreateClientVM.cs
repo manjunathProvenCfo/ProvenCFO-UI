@@ -31,7 +31,9 @@ namespace ProvenCfoUI.Models
         public int StateId { get; set; }
         [Required(ErrorMessage = "Team is a required field")]
         public int TeamId { get; set; }
-        public int BillableEntityId { get; set; }       
+        [Required(ErrorMessage = "Billable Entity  is a required field")]
+        public int BillableEntityId { get; set; }
+        [Required(ErrorMessage = "Start Date is a required field.")]
         public DateTime? StartDate { get; set; }
         public string XeroID { get; set; }
         public string XeroClientID { get; set; }
