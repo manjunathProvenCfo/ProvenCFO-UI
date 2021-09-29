@@ -39,6 +39,7 @@ namespace ProvenCfoUI.Models
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
         public string XeroScope { get; set; }
+        [Required(ErrorMessage = "startDate is a required field.")]
         public string StartDateText { get; set; }
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
