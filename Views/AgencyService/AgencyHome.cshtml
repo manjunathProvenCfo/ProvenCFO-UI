@@ -123,12 +123,12 @@
                                 </div>
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
-                            <div class="col-5 col-sm-4">
+                            <div class="col-5 col-sm-4" id="divNotInBookPercentage">
 
-                                @*<div class="progress-circle" id="lblPercentage" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
+                                @*<div class="progress-circle" id="lblPercentage" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
 
 
-                                <div class="progress-circle" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
+                                <div class="progress-circle" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
 
                             </div>
                         </div>
@@ -892,6 +892,7 @@
                             GetReconcilationPostiveData();
                             GetReconcilationNegativeData();
                             bindNotInBooksAndBanksCountDashboard();
+                            bindNotInBooksAndBanksCountDashboard1();
                             /*GetTotalNotesCount();*/
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
@@ -1099,65 +1100,66 @@
 
 
             function bindNotInBooksAndBanksCountDashboard() {
+               
                 var ClientID = $("#ddlclient option:selected").val();
-                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
+                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+                    
                     if (response.Message == "Success") {
-
+                        
                         let data = response.ResultData;
-
+                        
                         let totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
-
+                          
                             percentage = data[i].percentage.toFixed(0);
 
                             totalSum = totalSum + data[i].totalCount;
-                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                            if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
                                 $("#lblNotInBanksCount").text(data[i].totalCount);
                             }
                             else {
                                 $("#lblNotInBooksCount").text(data[i].totalCount);
                             }
                         }
-
-
-                        /* $("#lblNotInCount").text(totalSum);*/
                         $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                         utils.addProgressCircle("#lblNotInBankPercentage")
-                        //$("#lblPercentage").text(percentage);
-
+                       
                     }
+                  
                 })
             }
+            function bindNotInBooksAndBanksCountDashboard1() {
+               
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+                    
+                    if (response.Message == "Success") {
+                    
+                        let data = response.ResultData;
 
-            //function AgencyDropdownPartialViewChange() {
-            //    var ClientID = $("#ddlclient option:selected").val();
+                        let totalSum = 0;
 
-            //    $.ajax({
-            //        url: '/AgencyService/GetClientDetails?id=' + ClientID,
-            //        type: "GET",
-            //        contentType: "application/json; charset=utf-8",
-            //        dataType: "json",
-            //        success: function (data) {
-            //            if (data != null) {
-            //                // Write here what should happend once client selected
-            //                SetUserPreferencesForAgency();
-            //                //loadReconcilation();
-            //                window.location.reload();
-            //            }
-            //            else {
-            //                // Write here what should happend once selected client is null
-            //            }
-            //        },
-            //        error: function () {
-            //            // Write here what should happend when action result is errored.
-            //        }
-            //    });
-            //}
+                        for (var i = 0; i < data.length; i++) {
+                          
+                            percentage = data[i].percentage.toFixed(0);
 
-
-
+                            totalSum = totalSum + data[i].totalCount;
+                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                                $("#lblNotInBooksCount").text(data[i].Count);
+                            }
+                            else {
+                                $("#divNotInBookPercentage").text(data[i].percentage);
+                            }
+                        }
+                      
+                        $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                        utils.addProgressCircle("#divNotInBookPercentage1")
+                       
+                    }
+                   
+                })
+            }
             const camelize = (str) => {
                 const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
                     c ? c.toUpperCase() : ""
