@@ -56,6 +56,7 @@
     <Compile Include="InviteUserVMId.cs" />
     <Compile Include="JobTitleModel.cs" />
     <Compile Include="KanbanAttachmentsVM.cs" />
+    <Compile Include="KanbanCountWithIndividualPriority.cs" />
     <Compile Include="kanbanSegmentTypesModel.cs" />
     <Compile Include="KanbanTaskAssigneeAsssociationModel.cs" />
     <Compile Include="KanbanTaskCommentsListModel.cs" />
