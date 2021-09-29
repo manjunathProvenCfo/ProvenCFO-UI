@@ -159,20 +159,20 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
         {
-            string RecordsType = NotInBooks;
+            //string RecordsType = NotInBooks;
             //type = NotInBooks;
             //type = NotInBooks;
             //type = NotInBank;
             try
             {
-                if (RecordsType == "Not in Banks")
-                {
-                    RecordsType = NotInBank;
-                }
+                //if (RecordsType == "Not in Banks")
+                //{
+                //    RecordsType = NotInBank;
+                //}
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
 
-                    var objResult = objReConcilation.GetReconciliationDashboardDataAgencyId(AgencyID, RecordsType);
+                    var objResult = objReConcilation.GetReconciliationDashboardDataAgencyId(AgencyID, type);
 
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }

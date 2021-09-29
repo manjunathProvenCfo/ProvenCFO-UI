@@ -846,9 +846,16 @@ count++;
 
 
         function bindNotInBooksAndBanksCountDashboard() {
-                var ClientID = $("#ddlclient option:selected").val();
-                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                   
+            //var type = sessionStorage.getItem('type');
+            //var recType = 'Not in Books';
+            //if (type != null && type == '1')
+            //{
+
+            //    recType = 'Not in Banks';
+            //}
+            var ClientID = $("#ddlclient option:selected").val();
+            getAjax('/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=' + ClientID + '&type=' + recType, null, function (response) {
+              
                     if (response.Message == "Success") {                       
                         let data = response.ResultData;
                         let totalSum = 0;
