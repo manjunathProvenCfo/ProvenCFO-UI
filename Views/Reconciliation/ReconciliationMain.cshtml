@@ -574,6 +574,12 @@
             var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
+            if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
+                ShowAlertBoxWarning("No records are selected to perform bulk action.");
+            }
+            if (GLaccount == '' && bankrule == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+                ShowAlertBoxWarning("No Option are selected to perform bulk action.");
+            }
 
             let pdata = {
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
