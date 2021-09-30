@@ -128,7 +128,7 @@
                                 @*<div class="progress-circle" id="lblPercentage" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
 
 
-                                <div class="progress-circle" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
+                                    <div class="progress-circle" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
 
                             </div>
                         </div>
@@ -549,7 +549,7 @@
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
         <script>
-           
+
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
                 AgencyDropdownPartialViewChange();
@@ -609,7 +609,7 @@
                     myChart.setOption(option);
                 }
             }
-            
+
             function Chart2() {
                 var dom = document.getElementById("container2");
                 var myChart = echarts.init(dom);
@@ -653,7 +653,7 @@
 
             var colorsArrays = [];
             function NeedsChart(dataArray) {
-                
+
                 let dom = document.getElementById("echart-needs");
                 var myChart = echarts.init(dom);
 
@@ -661,7 +661,7 @@
 
 
                 let options = {
-                    
+
                     color: colorsArrays,
                     tooltip: {
                         trigger: 'item',
@@ -721,7 +721,7 @@
                     myChart.setOption(options);
                 }
             }
-            
+
             var color = {
                 "urgent": {
                     "className": "bg-red",
@@ -742,37 +742,46 @@
             };
 
 
-           
+
             function KanbanCountWithIndividualPriority() {
-              
+
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
                     let data = response.ResultData;
-                   
+
                     $("#needsCategoryDiv").children().remove();
                     for (key in color) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                                    <span class="dot ${color[key].className}"></span>
-                                                    <span class="font-weight-semi-bold">${key}</span>
-                                                </div>`;
+                        <span class="dot ${color[key].className}"></span>
+                        <span class="font-weight-semi-bold">${key}</span>
+                    </div>`;
 
                         $("#needsCategoryDiv").append(htmltext);
                     }
 
                     var results = {};
-                    for (var i = 0; i < data.length; i++) {
-                        let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName.toLowerCase();
-                        let PriorityNameCount = data[i].PriorityNameCount;
-                        var tempObj1 = { value: PriorityNameCount, name: KanbanTaskPriorityName, };
-                        results[KanbanTaskPriorityName] = tempObj1;
+                    if (data != undefined && data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName.toLowerCase();
+                            let PriorityNameCount = data[i].PriorityNameCount;
+                            var tempObj1 = { value: PriorityNameCount, name: KanbanTaskPriorityName };
+
+                            results[KanbanTaskPriorityName] = tempObj1;
+                        }
                     }
-                 
+                    else {
+                        var tempObj = { value: 1, name: "no data" };
+                        results["no data"] = tempObj;
+
+                    }
+
+
                     for (key in results) {
-                        debugger;
-                        colorsArrays.push(color[key].echartColorCode);
-                        //colorsArrays.push(color[key] != undefined ? color[key].echartColorCode : '');
+                        if (colors != undefined && colors.length > 0) {
+                            colorsArrays.push(color[key].echartColorCode);
+                        }
                     }
-                   
+
                     NeedsChart(Object.values(results));
                     if (response.Message == "Success") {
 
@@ -782,19 +791,22 @@
                             TotalTasks = Number(data[i].TotalTasks);
                         }
                         $("#lblTotalTasksCount").text(TotalTasks);
+                        if (TotalTasks == 0) {
+                            colorsArrays.push(defaultChartColor);
+                        }
                     }
                 });
             }
 
 
-
+            var defaultChartColor = "#edf2f9";
             var colorsArray = [];
             function NotesChart(dataArray) {
                 let dom = document.getElementById("echart-notes");
                 var myChart = echarts.init(dom);
 
                 var app = {};
-                
+
 
                 let options = {
 
@@ -851,7 +863,7 @@
                     }]
 
                 };
-               
+
 
                 if (options && typeof options === 'object') {
                     myChart.setOption(options);
@@ -883,7 +895,7 @@
                     "chartColorCode": "#27BCFE"
                 }
             };
-            console.log(colors);
+
             function NotesIndividualCountAndPercentageByAgencyId() {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
@@ -892,25 +904,36 @@
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                                    <span class="dot ${colors[key].className}"></span>
-                                                    <span class="font-weight-semi-bold">${key}</span>
-                                                </div>`;
+                            <span class="dot ${colors[key].className}"></span>
+                            <span class="font-weight-semi-bold">${key}</span>
+                        </div>`;
 
                         $("#notesCategoryDiv").append(htmltext);
                     }
 
                     var result = {};
-                    for (var i = 0; i < data.length; i++) {
-                        let NoteCategoryName = data[i].NoteCategoryName;
-                        let NoteCategoryCount = data[i].NoteCategoryCount;
-                        var tempObj = { value: NoteCategoryCount, name: NoteCategoryName, };
-                        result[NoteCategoryName] = tempObj;
+                    if (data != undefined && data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            let NoteCategoryName = data[i].NoteCategoryName;
+                            let NoteCategoryCount = data[i].NoteCategoryCount;
+                            var tempObj = { value: NoteCategoryCount, name: NoteCategoryName };
+                            result[NoteCategoryName] = tempObj;
+                        }
+                    }
+                    else {
+                        var tempObj = { value: 1, name: "no data" };
+                        result["no data"] = tempObj;
+
                     }
 
                     for (key in result) {
-                        colorsArray.push(colors[key].chartColorCode)
+                        if (colors != undefined && colors.length > 0) {
+                            colorsArray.push(colors[key].chartColorCode)
+                        }
+
                     }
-                   
+
                     NotesChart(Object.values(result));
                     if (response.Message == "Success") {
 
@@ -920,6 +943,10 @@
                             TotalNotes = Number(data[i].TotalNotes);
                         }
                         $("#lblTotalNotesCount").text(TotalNotes);
+
+                        if (TotalNotes == 0) {
+                            colorsArray.push(defaultChartColor);
+                        }
                     }
                 });
             }
@@ -1019,6 +1046,7 @@
 
                             getTeamMembersList();
                             NotesIndividualCountAndPercentageByAgencyId();
+                            KanbanCountWithIndividualPriority();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
                             $('.spEntityName').html(String(data.EntityName));
@@ -1238,18 +1266,18 @@
 
 
             function bindNotInBooksAndBanksCountDashboard() {
-               
+
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-                    
+
                     if (response.Message == "Success") {
-                        
+
                         let data = response.ResultData;
-                        
+
                         let totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
-                          
+
                             percentage = data[i].percentage.toFixed(0);
 
                             totalSum = totalSum + data[i].totalCount;
@@ -1262,24 +1290,24 @@
                         }
                         $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                         utils.addProgressCircle("#lblNotInBankPercentage")
-                       
+
                     }
-                  
+
                 })
             }
             function bindNotInBooksAndBanksCountDashboard1() {
-               
+
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-                    
+
                     if (response.Message == "Success") {
-                    
+
                         let data = response.ResultData;
 
                         let totalSum = 0;
 
                         for (var i = 0; i < data.length; i++) {
-                          
+
                             percentage = data[i].percentage.toFixed(0);
 
                             totalSum = totalSum + data[i].totalCount;
@@ -1290,12 +1318,12 @@
                                 $("#divNotInBookPercentage").text(data[i].percentage);
                             }
                         }
-                      
+
                         $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                         utils.addProgressCircle("#divNotInBookPercentage1")
-                       
+
                     }
-                   
+
                 })
             }
             const camelize = (str) => {
