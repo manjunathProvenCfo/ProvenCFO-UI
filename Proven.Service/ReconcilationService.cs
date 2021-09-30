@@ -51,6 +51,10 @@ namespace Proven.Service
             string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
             return PostAsync<ReturnModel>(result).Result;
         }
+        public ReturnModel BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
+        {          
+            return PostAsync<ReturnModel, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
+        }
         public void Dispose()
         {
             Dispose(true);

@@ -70,7 +70,8 @@ namespace ProvenCfoUI.Controllers
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
-                    ViewBag.ReconcilationData = objResult.ResultData;
+                    TempData["ReconcilationData"] = objResult.ResultData;
+                    Session["ReconcilationData"] = objResult.ResultData;
                     return View("ReconciliationMain", objResult.ResultData);
 
                 }
@@ -129,11 +130,55 @@ namespace ProvenCfoUI.Controllers
                 }
                 //TempData["BankRule"] = getBankRule();
                 //TempData["DistinctAccount"] = getDistincAccount(Filter.AgencyID.Value, Filter.Type);
-                ViewBag.ReconcilationData = objResult;
+                TempData["ReconcilationData"] = objResult;
+                Session["ReconcilationData"] = objResult;
 
                 return View("ReconciliationMain", objResult);
                 // return View("ReconciliationMain", objResult.ResultData);
             }
+        }
+        [CheckSession]
+        public JsonResult ReconcilationBuilAction(BulkActionParametersVM BPParameter)
+        {
+            try
+            {
+                List<string> Ids;
+                if (BPParameter.IsAllSelected == true)
+                {
+                    var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
+                    var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
+                    if(result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    Ids = result.Select(x => x.id).ToList();
+                    foreach (var item in UnselectedIds)
+                    {
+                        Ids.Remove(item);
+                    }
+                }
+                else
+                {
+                    var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords)? BPParameter.UnSelectedRecords.Split(','): new string[0];
+                    Ids = BPParameter.SelectedItems.Split(',').ToList();
+                    foreach (var item in UnselectedIds)
+                    {
+                        Ids.Remove(item);
+                    }
+                }
+                BPParameter.Ids = Ids.ToArray();
+                using (ReconcilationService service = new ReconcilationService())
+                {
+                    var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
+                    if (returnVale == true)
+                        return Json(new { Message = "Success", UpdatedCount  = Ids.Count() }, JsonRequestBehavior.AllowGet);
+                    else
+                        return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+
         }
         [CheckSession]
         public JsonResult GetReconciliationDataCountAgencyId(string AgencyId)
@@ -159,7 +204,7 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
         {
-            string RecordsType = NotInBooks;            
+            string RecordsType = NotInBooks;
             try
             {
                 if (RecordsType == "Not in Banks")
@@ -334,7 +379,8 @@ namespace ProvenCfoUI.Controllers
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
-                    ViewBag.ReconcilationData = objResult.ResultData;
+                    TempData["ReconcilationData"] = objResult.ResultData;
+                    Session["ReconcilationData"] = objResult.ResultData;
                     return View(objResult.ResultData);
                 }
 

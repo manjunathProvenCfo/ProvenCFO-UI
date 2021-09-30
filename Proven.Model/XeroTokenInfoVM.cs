@@ -21,6 +21,7 @@ namespace Proven.Model
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public int? IsDeleted { get; set; }
+        public int AgencyID { get; set; }
     }
     public class XeromainTokenInfo
     {

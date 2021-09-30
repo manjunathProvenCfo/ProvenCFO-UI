@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="APIResult.cs" />
     <Compile Include="BillableEntitiesVM.cs" />
+    <Compile Include="BulkActionParametersVM.cs" />
     <Compile Include="ChatChannel.cs" />
     <Compile Include="ChatParticipants.cs" />
     <Compile Include="City.cs" />

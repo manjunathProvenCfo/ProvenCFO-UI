@@ -31,6 +31,7 @@ namespace Proven.Model
         public int? gl_account_ref { get; set; }
         public int? tracking_category_ref { get; set; }
         public int? additional_tracking_category_ref { get; set; }
+        public bool Selected { get; set; }
 
     }
     public class ReconciliationMainModel

@@ -1,0 +1,160 @@
+﻿
+@model bool
+<div class="card mb-3 pr-md-0 table table-striped ">
+    <div class="card-header">
+        <div class="align-items-center justify-content-between p-l-6 ">
+            <button class="close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="CancelBulkupdate" data-dismiss="modal" aria-label="Close"><svg class="svg-inline--fa fa-times fa-w-11" data-fa-transform="shrink-6 right-0.3 down-0.3" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg="" style="transform-origin: 0.3625em 0.51875em;"><g transform="translate(176 256)"><g transform="translate(9.6, 9.6)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" transform="translate(-176 -256)"></path></g></g></svg><!-- <span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span> Font Awesome fontawesome.com --></button>
+
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-6">
+                    <div class="row align-items-center">
+
+                        <div class="d-flex align-items-center ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                <h5 class="mb-0 ml-2">Bulk Update</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card panel-primary">
+
+        <div class="card-body">
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-6">
+                    <div class="row align-items-center">
+
+                        <div class="d-flex align-items-lg-start ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                <h6 class="mb-0 ml-2">GL Account</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-1">
+                </div>
+                <div class="col-10">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-center ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Select GL Account",
+                                                             new { @class = " selectpicker form-control", style = "width: 250px;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+
+
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-6">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-lg-start ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                <h6 class="mb-0 ml-2">Bank Rule</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-1">
+                </div>
+                <div class="col-10">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-center ml-2">
+                            @if (TempData["BankRule"] != null)
+                            {
+                                <div class="mb-0 ml-2 text-400 fs--2">
+                                    @Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control", style = "width: 250px;" })
+                                </div>}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-6">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-lg-start ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                <h6 class="mb-0 ml-2">Tracking Categories </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-1">
+                </div>
+                <div class="col-10">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-center ml-2">
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                                @if (TempData["TrackingCategories"] != null)
+                                {
+                                    int count = 0;
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                                    {
+                                        <h6 class="mb-0 ml-2">@tcgroup.Name </h6> <br /> if (count == 0)
+                                        {
+                                            @Html.DropDownList("BA_TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"),"Select Option", new { @class = " selectpicker form-control", style = "width: 250px;" }) }
+                                        else
+                                        {
+                                            @Html.DropDownList("BA_TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select Option", new { @class = " selectpicker form-control", style = "width: 250px;" }) }
+                                        count++;
+                                    }
+
+                                } @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between  pt-2">
+                <div class="col-1">
+                </div>
+                <div class="col-10">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-center ml-2">
+
+                            <div class="mb-0 ml-2 text-400 fs--2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+            <br /> <br />
+            <div class="row">
+                <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+
+                </div>
+                <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                    <button class="btn btn-primary" id="btnfilter" onclick="BulkActionReconcilation();" type="button"> Apply  </button>
+
+                </div>
+                <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+
+                </div>
+                <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                    <button class="btn btn-primary" data-dismiss="modal" onclick="BulkActionCancel();" aria-label="Close" id="btnBulkActionCancel">Cancel</button>
+                </div>
+            </div> <br /> <br />
+
+        </div>
+    </div>
+</div>
