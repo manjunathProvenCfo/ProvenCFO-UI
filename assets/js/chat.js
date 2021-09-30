@@ -4,6 +4,7 @@ var $participants;
 var $channelName;
 var $channelParticipantEmail;
 var $channelReconciliationDescription;
+var $channelReconciliationDescriptionSidebar;
 var $channelReconciliationCompany;
 var $channelReconciliationDate;
 var $channelReconciliationAmount;
@@ -38,6 +39,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
     $channelName = $(".channelName");
     $channelParticipantEmail = $(".channelParticipantEmail");
     $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
     $channelReconciliationCompany = $(".channelReconciliationCompany");
     $channelReconciliationDate = $(".channelReconciliationDate");
     $channelReconciliationAmount = $(".channelReconciliationAmount");
@@ -211,9 +213,7 @@ var renderParticipants = function () {
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
-                                    <!--Antony
-                                    sent
-                                    6 photos-->
+                                    <span class='channelReconciliationDescriptionSidebar'>${(obj[i].IsPrivate === true ? '' : obj[i].Company + '/' + obj[i].ReconciliationDescription)}</span>
                                 </div>
                                 <div class="dropdown dropdown-active-trigger position-absolute b-0 r-0 hover-actions">
                                     <button class="btn btn-link btn-sm text-400 dropdown-toggle dropdown-caret-none p-0 fs-0" type="button" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-cog" data-fa-transform="shrink-3 down-4"></span></button>
