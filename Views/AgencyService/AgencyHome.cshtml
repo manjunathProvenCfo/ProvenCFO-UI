@@ -780,6 +780,9 @@
                         if (colors != undefined && colors.length > 0) {
                             colorsArrays.push(color[key].echartColorCode);
                         }
+                        else {
+                            colorsArrays.push(defaultChartColor);
+                        }
                     }
 
                     NeedsChart(Object.values(results));
@@ -791,9 +794,9 @@
                             TotalTasks = Number(data[i].TotalTasks);
                         }
                         $("#lblTotalTasksCount").text(TotalTasks);
-                        if (TotalTasks == 0) {
-                            colorsArrays.push(defaultChartColor);
-                        }
+                        //if (TotalTasks == 0) {
+                            
+                        //}
                     }
                 });
             }
@@ -931,6 +934,9 @@
                         if (colors != undefined && colors.length > 0) {
                             colorsArray.push(colors[key].chartColorCode)
                         }
+                        else {
+                            colorsArray.push(defaultChartColor);
+                        }
 
                     }
 
@@ -944,9 +950,9 @@
                         }
                         $("#lblTotalNotesCount").text(TotalNotes);
 
-                        if (TotalNotes == 0) {
-                            colorsArray.push(defaultChartColor);
-                        }
+                        //if (TotalNotes == 0) {
+                        //    colorsArray.push(defaultChartColor);
+                        //}
                     }
                 });
             }
