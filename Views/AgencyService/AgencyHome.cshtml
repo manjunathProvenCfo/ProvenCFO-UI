@@ -723,19 +723,19 @@
             }
             
             var color = {
-                "Urgent": {
+                "urgent": {
                     "className": "bg-red",
                     "echartColorCode": "#ff0000"
                 },
-                "High": {
+                "high": {
                     "className": "bg-orange",
                     "echartColorCode": "#F68F57"
                 },
-                "Medium": {
+                "medium": {
                     "className": "bg-green",
                     "echartColorCode": "#00BE82"
                 },
-                "Low": {
+                "low": {
                     "className": "bg-soft-primary",
                     "echartColorCode": "#bfbfbf"
                 }
@@ -761,13 +761,14 @@
 
                     var results = {};
                     for (var i = 0; i < data.length; i++) {
-                        let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName;
+                        let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName.toLowerCase();
                         let PriorityNameCount = data[i].PriorityNameCount;
                         var tempObj1 = { value: PriorityNameCount, name: KanbanTaskPriorityName, };
                         results[KanbanTaskPriorityName] = tempObj1;
                     }
                  
                     for (key in results) {
+                        debugger;
                         colorsArrays.push(color[key].echartColorCode);
                         //colorsArrays.push(color[key] != undefined ? color[key].echartColorCode : '');
                     }
