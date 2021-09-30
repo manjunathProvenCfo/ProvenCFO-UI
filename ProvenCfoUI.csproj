@@ -508,6 +508,7 @@
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\chat.js" />
+    <Content Include="assets\js\common.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
     <Content Include="assets\js\jquery.min.js" />
@@ -1079,6 +1080,7 @@
     <Content Include="Views\Notes\UpdateNoteSummary.cshtml" />
     <Content Include="Views\Shared\_reconcilationFilter.cshtml" />
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
+    <Content Include="Views\Shared\_doughnut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

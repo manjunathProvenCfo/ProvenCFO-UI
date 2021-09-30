@@ -11,7 +11,7 @@ namespace ProvenCfoUI
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/customjquery").Include(
+            bundles.Add(new ScriptBundle("~/bundles/layoutJS").Include(
              "~/Scripts/jquery-{version}.js",
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
@@ -31,7 +31,10 @@ namespace ProvenCfoUI
              "~/assets/js/theme.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
-              "~/assets/js/wrapper.js"
+             "~/assets/lib/superagent/dist/superagent.min.js",
+             "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
+             "~/assets/js/common.js",
+             "~/assets/js/wrapper.js"
     ));
 
             bundles.Add(new ScriptBundle("~/bundles/js/select").Include(
@@ -75,8 +78,6 @@ namespace ProvenCfoUI
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
-                        "~/assets/lib/superagent/dist/superagent.min.js",
-                        "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
                         "~/assets/lib/jquery.fancybox.min.js",
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));

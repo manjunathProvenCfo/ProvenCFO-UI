@@ -8,14 +8,8 @@ var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
 const Chat_Page_Size = 30;
 
-var getToken = function () {
-    postAjaxSync("/twilio/token?identity=" + chat.userEmail, null, function (response) {
-        token = response;
-    })
-}
-
 var createTwilioClient = function () {
-    getToken();
+    getTwilioToken(chat.userEmail);
     //logLevel: 'info'
     Twilio.Conversations.Client.create(token, { logLevel: 'error' })
         .then(function (createdClient) {
@@ -24,7 +18,7 @@ var createTwilioClient = function () {
             //twilioClient.getUser(chat.userEmail).then(function (user) { console.log(user) });
 
             twilioClient.getSubscribedConversations().then(updateChannels);
-
+                
             twilioClient.on("connectionStateChanged", function (state) {
                 //connectionInfo
                 //    .removeClass("online offline connecting denied")
@@ -43,7 +37,7 @@ var createTwilioClient = function () {
             setTimeout(registerUserUpdatedEventHandlers, 200);
 
             twilioClient.on('tokenAboutToExpire', () => {
-                getToken();
+                getTwilioToken(chat.userEmail);
                 twilioClient.updateToken(token);
             });
 
@@ -149,7 +143,7 @@ var setActiveChannel = function (channel) {
         var body = $messageBodyInput.val();
         if (validateMessage()) {
             channel.sendMessage(body).then(function () {
-                getToken();
+                getTwilioToken();
                 twilioClient.updateToken(token);
 
                 $messageBodyInput.val('').focus();
