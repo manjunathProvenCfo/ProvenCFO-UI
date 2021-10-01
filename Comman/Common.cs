@@ -219,6 +219,7 @@ namespace ProvenCfoUI.Comman
                                 XeroTokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
                                 XeroTokenInfoSaved.ModifiedDate = DateTime.Now;
                                 XeroTokenInfoSaved.AppName = XeroInstance.Instance.XeroAppName;
+                                XeroTokenInfoSaved.ConnectionStatus = "SUCCESS";
                                 Xero.UpdateXeroToken(XeroTokenInfoSaved);
                                 XeroInstance.Instance.XeroToken = token;
                                 XeroInstance.Instance.XeroConnectionStatus = true;
@@ -227,7 +228,9 @@ namespace ProvenCfoUI.Comman
                             catch (Exception ex)
                             {
                                 log.Error(Utltity.Log4NetExceptionLog(ex));
-                                CleanToken();
+                                XeroTokenInfoSaved.ConnectionStatus = "ERROR";
+                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
+                                CleanToken();                                
                                 XeroInstance.Instance.XeroConnectionMessage = ex.Message;
                                 throw;
                             }

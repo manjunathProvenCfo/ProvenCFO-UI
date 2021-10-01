@@ -22,6 +22,7 @@ namespace Proven.Model
         public string ModifiedBy { get; set; }
         public int? IsDeleted { get; set; }
         public int AgencyID { get; set; }
+        public string ConnectionStatus { get; set; }
     }
     public class XeromainTokenInfo
     {
