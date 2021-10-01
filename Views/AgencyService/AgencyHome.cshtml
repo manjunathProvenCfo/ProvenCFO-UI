@@ -752,9 +752,9 @@
                     $("#needsCategoryDiv").children().remove();
                     for (key in color) {
                         var htmltext = `<div class="d-flex align-items-center">
-                        <span class="dot ${color[key].className}"></span>
-                        <span class="font-weight-semi-bold">${key}</span>
-                    </div>`;
+                                <span class="dot ${color[key].className}"></span>
+                                <span class="font-weight-semi-bold">${key}</span>
+                            </div>`;
 
                         $("#needsCategoryDiv").append(htmltext);
                     }
@@ -777,12 +777,8 @@
 
 
                     for (key in results) {
-                        if (colors != undefined && colors.length > 0) {
-                            colorsArrays.push(color[key].echartColorCode);
-                        }
-                        else {
-                            colorsArrays.push(defaultChartColor);
-                        }
+                        
+                        colorsArrays.push(color[key] ? color[key].chartColorCode : defaultChartColor)
                     }
 
                     NeedsChart(Object.values(results));
@@ -793,10 +789,8 @@
                         for (var i = 0; i < data.length; i++) {
                             TotalTasks = Number(data[i].TotalTasks);
                         }
+                        
                         $("#lblTotalTasksCount").text(TotalTasks);
-                        //if (TotalTasks == 0) {
-                            
-                        //}
                     }
                 });
             }
@@ -809,7 +803,6 @@
                 var myChart = echarts.init(dom);
 
                 var app = {};
-
 
                 let options = {
 
@@ -907,9 +900,9 @@
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">
-                            <span class="dot ${colors[key].className}"></span>
-                            <span class="font-weight-semi-bold">${key}</span>
-                        </div>`;
+                                    <span class="dot ${colors[key].className}"></span>
+                                    <span class="font-weight-semi-bold">${key}</span>
+                                </div>`;
 
                         $("#notesCategoryDiv").append(htmltext);
                     }
@@ -931,13 +924,8 @@
                     }
 
                     for (key in result) {
-                        if (colors != undefined && colors.length > 0) {
-                            colorsArray.push(colors[key].chartColorCode)
-                        }
-                        else {
-                            colorsArray.push(defaultChartColor);
-                        }
 
+                        colorsArray.push(colors[key] ? colors[key].chartColorCode : defaultChartColor)
                     }
 
                     NotesChart(Object.values(result));
