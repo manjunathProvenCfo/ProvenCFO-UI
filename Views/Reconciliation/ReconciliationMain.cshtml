@@ -80,7 +80,7 @@
 
 
                     <div class="col-6 col-sm-auto ml-auto text-right pl-0">
-                        <div class="d-none" id="purchases-actions">
+                        @*<div class="d-none" id="purchases-actions">
                             <div class="input-group input-group-sm">
                                 <select class="custom-select cus" aria-label="Bulk actions">
                                     <option selected="">Bulk actions</option>
@@ -90,7 +90,7 @@
                                 </select>
                                 <button class="btn btn-falcon-default btn-sm ml-2" type="button">Apply</button>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
 
@@ -428,7 +428,7 @@
         }
         function BulkActionCancel() {
 
-            ShowConfirmBoxWarning("Are you sure?", "Do you really want to cancel the bulk action?", "Yes, remove it!", function (isConfirmed) {
+            ShowConfirmBoxWarning("Are you sure?", "Do you really want to cancel the bulk action?", "Yes, cancel it!", function (isConfirmed) {
                 if (isConfirmed == false)
                     return;
                 sessionStorage.removeItem('SelectedRecords');
@@ -576,9 +576,11 @@
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
             if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
+                return;
             }
             if (GLaccount == '' && bankrule == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
+                return;
             }
 
             let pdata = {
@@ -593,8 +595,14 @@
                     sessionStorage.removeItem('UnSelectedRecords');
                     ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () { window.location.reload(); });
                 }
+                else if (response.Message == 'NoRecords')
+                {
+                    ShowAlertBoxWarning("No records are selected to perform bulk action.");
+                    return;
+                }
                 else {
-                    ShowAlertBoxSuccess("Error", "Error while updateing records.", function () {  });
+                    ShowAlertBoxError("Error", "Error while updateing records.");
+                    return;
                 }
             })
 

@@ -163,15 +163,23 @@ namespace ProvenCfoUI.Controllers
                         Ids.Remove(item);
                     }
                 }
-                BPParameter.Ids = Ids.ToArray();
-                using (ReconcilationService service = new ReconcilationService())
+                if (Ids != null && Ids.Count > 0)
                 {
-                    var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
-                    if (returnVale == true)
-                        return Json(new { Message = "Success", UpdatedCount  = Ids.Count() }, JsonRequestBehavior.AllowGet);
-                    else
-                        return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    BPParameter.Ids = Ids.ToArray();
+                    using (ReconcilationService service = new ReconcilationService())
+                    {
+                        var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
+                        if (returnVale == true)
+                            return Json(new { Message = "Success", UpdatedCount = Ids.Count() }, JsonRequestBehavior.AllowGet);
+                        else
+                            return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    }
                 }
+                else
+                {
+                    return Json(new { Message = "NoRecords", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                }
+                
             }
             catch (Exception ex)
             {
