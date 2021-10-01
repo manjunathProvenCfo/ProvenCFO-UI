@@ -740,9 +740,7 @@
                     "echartColorCode": "#bfbfbf"
                 }
             };
-
-
-
+            
             function KanbanCountWithIndividualPriority() {
 
                 var ClientID = $("#ddlclient option:selected").val();
@@ -777,8 +775,7 @@
 
 
                     for (key in results) {
-                        
-                        colorsArrays.push(color[key] ? color[key].chartColorCode : defaultChartColor)
+                        colorsArrays.push(color[key] ? color[key].echartColorCode : defaultChartColor);
                     }
 
                     NeedsChart(Object.values(results));
@@ -937,10 +934,6 @@
                             TotalNotes = Number(data[i].TotalNotes);
                         }
                         $("#lblTotalNotesCount").text(TotalNotes);
-
-                        //if (TotalNotes == 0) {
-                        //    colorsArray.push(defaultChartColor);
-                        //}
                     }
                 });
             }
