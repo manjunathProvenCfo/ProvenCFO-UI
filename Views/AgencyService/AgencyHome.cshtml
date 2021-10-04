@@ -143,7 +143,7 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
-                                <h6 class="mt-1">Need List</h6>
+                                <h6 class="mt-1">Needs List</h6>
                                 <div class="fs--2 mt-3" id="needsCategoryDiv">
                                     <div class="d-flex flex-between-center mb-1">
                                         <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Urgent</span></div>
@@ -674,7 +674,12 @@
                         borderColor: utils.grays['300'],
                         borderWidth: 1,
                         formatter: function formatter(params) {
-                            return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                            if (params.data.name == "no data") {
+                                return "";
+                            }
+                            else {
+                                return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                            }
                         }
                     },
                     position: function position(pos, params, dom, rect, size) {
@@ -723,19 +728,19 @@
             }
 
             var color = {
-                "urgent": {
+                "Urgent": {
                     "className": "bg-red",
                     "echartColorCode": "#ff0000"
                 },
-                "high": {
+                "High": {
                     "className": "bg-orange",
                     "echartColorCode": "#F68F57"
                 },
-                "medium": {
+                "Medium": {
                     "className": "bg-green",
                     "echartColorCode": "#00BE82"
                 },
-                "low": {
+                "Low": {
                     "className": "bg-soft-primary",
                     "echartColorCode": "#bfbfbf"
                 }
@@ -815,7 +820,12 @@
                         borderColor: utils.grays['300'],
                         borderWidth: 1,
                         formatter: function formatter(params) {
+                            if (params.data.name == "no data") {
+                                return "";
+                            }
+                            else {
                             return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                            }
                         }
                     },
                     position: function position(pos, params, dom, rect, size) {
