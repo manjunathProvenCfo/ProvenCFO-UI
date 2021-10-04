@@ -298,7 +298,7 @@
                                 </div>
                                 <div class="action-icons">
                                     <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope'></span>
+                                        <span class='far fa-envelope copyEmail' id="email1"></span>
                                     </a>
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
@@ -327,7 +327,7 @@
                                 </div>
                                 <div class="action-icons">
                                     <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope'></span>
+                                        <span class='far fa-envelope copyEmail'id="email2"></span>
                                     </a>
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
@@ -357,7 +357,7 @@
                                 </div>
                                 <div class="action-icons">
                                     <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope'></span>
+                                        <span class='far fa-envelope copyEmail'id="email3"></span>
                                     </a>
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
@@ -548,10 +548,20 @@
 
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js" integrity="sha512-iJh0F10blr9SC3d0Ow1ZKHi9kt12NYa+ISlmCdlCdNZzFwjH1JppRTeAnypvUez01HroZhAmP4ro4AvZ/rG0UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
 
             $('divClientDetials').addClass('d-none');
             $(document).ready(function () {
+
+                new Clipboard(".copyEmail", {
+                    text: function (trigger) {
+                        let email = $(trigger).data('clipboard-text');
+                        alert("copied to clipboard " + email);
+                        return email;
+                    }
+                });
+
                 AgencyDropdownPartialViewChange();
                 bindNotInBooksAndBanksCountDashboard();
                 NotesIndividualCountAndPercentageByAgencyId();
@@ -740,7 +750,7 @@
                     "echartColorCode": "#bfbfbf"
                 }
             };
-            
+
             function KanbanCountWithIndividualPriority() {
 
                 var ClientID = $("#ddlclient option:selected").val();
@@ -750,9 +760,9 @@
                     $("#needsCategoryDiv").children().remove();
                     for (key in color) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                <span class="dot ${color[key].className}"></span>
-                                <span class="font-weight-semi-bold">${key}</span>
-                            </div>`;
+                                        <span class="dot ${color[key].className}"></span>
+                                        <span class="font-weight-semi-bold">${key}</span>
+                                    </div>`;
 
                         $("#needsCategoryDiv").append(htmltext);
                     }
@@ -786,7 +796,7 @@
                         for (var i = 0; i < data.length; i++) {
                             TotalTasks = Number(data[i].TotalTasks);
                         }
-                        
+
                         $("#lblTotalTasksCount").text(TotalTasks);
                     }
                 });
@@ -897,9 +907,9 @@
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                    <span class="dot ${colors[key].className}"></span>
-                                    <span class="font-weight-semi-bold">${key}</span>
-                                </div>`;
+                                            <span class="dot ${colors[key].className}"></span>
+                                            <span class="font-weight-semi-bold">${key}</span>
+                                        </div>`;
 
                         $("#notesCategoryDiv").append(htmltext);
                     }
@@ -946,7 +956,6 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-
                         if (data != null) {
                             var count = 1;
                             $.each(data.TeamMembers, function (key, object) {
@@ -954,6 +963,9 @@
                                     $('#aLinkedInProfile' + count).attr("href", object.LinkedInProfile);
                                     $('#aLinkedInProfile' + count).prop('disabled', false);
                                     $('#aLinkedInProfile' + count).removeClass('disabled-action-icons');
+                                }
+                                if (object.Username != null && object.Username != '') {
+                                    $('#email' + count).data("clipboard-text", String(object.Email));
                                 }
                                 else {
                                     $('#aLinkedInProfile' + count)[0].className = $('#aLinkedInProfile' + count)[0].className + ' disabled-action-icons';
