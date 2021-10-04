@@ -183,6 +183,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
