@@ -40,6 +40,7 @@ $(document).ready(function () {
     });
     //view Page
     myDropzone_view.on("addedfile", function (file) {
+      
         file.previewElement.querySelector(".start").onclick = function () {
 
             var IsCanAddfiles = true;
@@ -111,6 +112,7 @@ $(document).ready(function () {
 
     //Create Page
     myDropzone.on("addedfile", function (file) {
+       
         file.previewElement.querySelector(".start").onclick = function () {
             var IsCanAddfiles = true;
             var filesList = $('#attachmentContainer_Add h6');
@@ -222,6 +224,7 @@ $(document).ready(function () {
         $('#divEditDescription').hide();
     });
     $('#kanband-create-new-btn').click(function (e) {
+        
         tinymce.get("txtDescription").getContent()
         tinymce.get("txtDescription").setContent("");
         tinyMCE.activeEditor.setContent("");
@@ -843,7 +846,7 @@ function addComment(data, UserFullName) {
     }
 }
 function addMembers(e) {
-   
+    
     var element = $('#' + e.currentTarget.id + ' h6');
     var IsExistelement = $('#ulAddedMembers #li_' + e.currentTarget.id);
     if (IsExistelement.length > 0) {
