@@ -303,7 +303,7 @@
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
                                     </a>
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                    <a href="#"  class="d-inline-block mx-2 fs-1"  id="phoneNumber1">
                                         <span class='far fas fa-phone'></span>
                                     </a>
                                     <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile1">
@@ -332,7 +332,7 @@
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
                                     </a>
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                    <a href="#"  target="_blank" class="d-inline-block mx-2 fs-1" id="phoneNumber2">
                                         <span class='far fas fa-phone'></span>
                                     </a>
                                     <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile2">
@@ -362,7 +362,7 @@
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
                                     </a>
-                                    <a href="#" class="d-inline-block mx-2 fs-1">
+                                    <a href="tel:" class="d-inline-block mx-2 fs-1" id="phoneNumber3">
                                         <span class='far fas fa-phone'></span>
                                     </a>
                                     <a href="#" target="_blank" class="d-inline-block mx-2 fs-1" id="aLinkedInProfile3">
@@ -968,11 +968,17 @@
                     success: function (data) {
                         if (data != null) {
                             var count = 1;
+                            var number;
                             $.each(data.TeamMembers, function (key, object) {
                                 if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
+                                    debugger;
                                     $('#aLinkedInProfile' + count).attr("href", object.LinkedInProfile);
                                     $('#aLinkedInProfile' + count).prop('disabled', false);
                                     $('#aLinkedInProfile' + count).removeClass('disabled-action-icons');
+                                }
+                                if (object.Username != null && object.Username != '') {
+                                    number = "tel:" + object.PhoneNumber;
+                                    $('#phoneNumber'+ count ).attr("href", number );
                                 }
                                 if (object.Username != null && object.Username != '') {
                                     $('#email' + count).data("clipboard-text", String(object.Email));

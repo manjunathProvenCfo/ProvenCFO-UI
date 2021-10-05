@@ -25,6 +25,7 @@ namespace Proven.Model
         public string Jobtitle { get; set; }
         public string Profileimage { get; set; }
         public string Email { get; set; }
+        public string PhoneNumber { get; set; }
 
     }
 
