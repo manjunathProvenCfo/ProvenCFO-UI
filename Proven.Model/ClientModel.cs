@@ -30,7 +30,8 @@ namespace Proven.Model
         public string XeroID { get; set; }
         public string XeroClientID { get; set; }
         public string XeroClientSecret { get; set; }
-       // public string[] XeroScope { get; set; }
+        public string XeroContactIDforProvenCfo { get; set; }
+        // public string[] XeroScope { get; set; }
         public string[] XeroScopeArray { get; set; }
         public string XeroScopeString { get; set; }
          public string XeroScope { get; set; }

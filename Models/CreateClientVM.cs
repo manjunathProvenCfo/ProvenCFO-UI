@@ -47,6 +47,7 @@ namespace ProvenCfoUI.Models
         public List<State> StateList { get; set; }
         public bool EnableAutomation { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
+        public string XeroContactIDforProvenCfo { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
     }

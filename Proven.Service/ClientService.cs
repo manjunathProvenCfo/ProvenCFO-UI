@@ -125,7 +125,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo)
         {
             var form = new Dictionary<string, object>
             {
@@ -147,7 +147,8 @@ namespace Proven.Service
                 {"XeroClientID",XeroClientID },
                 {"XeroClientSecret",XeroClientSecret },
                 {"ReceiveQuarterlyReports",ReceiveQuarterlyReports },
-                { "EnableAutomation",EnableAutomation}
+                { "EnableAutomation",EnableAutomation},
+                {"XeroContactIDforProvenCfo",XeroContactIDforProvenCfo }
             };
 
             //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
@@ -169,7 +170,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string BillableEntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string BillableEntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo)
         {
             var form = new Dictionary<string, object>
             {
@@ -187,7 +188,9 @@ namespace Proven.Service
                  {"XeroClientID",XeroClientID },
                 {"XeroClientSecret",XeroClientSecret },
                 {"ReceiveQuarterlyReports",ReceiveQuarterlyReports },
-                {"EnableAutomation",EnableAutomation }
+                {"EnableAutomation",EnableAutomation },
+                {"XeroContactIDforProvenCfo",XeroContactIDforProvenCfo }
+
                
                 //{"PhoneNumber",PhoneNumber },
                 //{"Address",Address },
