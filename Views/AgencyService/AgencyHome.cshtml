@@ -327,7 +327,7 @@
                                 </div>
                                 <div class="action-icons">
                                     <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope copyEmail'id="email2"></span>
+                                        <span class='far fa-envelope copyEmail' id="email2"></span>
                                     </a>
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
@@ -357,7 +357,7 @@
                                 </div>
                                 <div class="action-icons">
                                     <a href="#" class="d-inline-block mx-2 fs-1">
-                                        <span class='far fa-envelope copyEmail'id="email3"></span>
+                                        <span class='far fa-envelope copyEmail' id="email3"></span>
                                     </a>
                                     <a href="#" class="d-inline-block mx-2 fs-1">
                                         <span class='far fab fa-rocketchat'></span>
@@ -548,7 +548,13 @@
 
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
+        @Scripts.Render("~/bundles/js/toastr");
+        @Scripts.Render("~/bundles/js/clipboard");
+   
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js" integrity="sha512-iJh0F10blr9SC3d0Ow1ZKHi9kt12NYa+ISlmCdlCdNZzFwjH1JppRTeAnypvUez01HroZhAmP4ro4AvZ/rG0UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+       
         <script>
 
             $('divClientDetials').addClass('d-none');
@@ -556,8 +562,12 @@
 
                 new Clipboard(".copyEmail", {
                     text: function (trigger) {
+
                         let email = $(trigger).data('clipboard-text');
-                        alert("copied to clipboard " + email);
+                        toastr.success("copied to clipboard " + email);
+                        /* Toast("Toast title", "Toast message here");*/
+
+                        /*alert("copied to clipboard " + email);*/
                         return email;
                     }
                 });
@@ -765,9 +775,9 @@
                     $("#needsCategoryDiv").children().remove();
                     for (key in color) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                        <span class="dot ${color[key].className}"></span>
-                                        <span class="font-weight-semi-bold">${key}</span>
-                                    </div>`;
+                                                                <span class="dot ${color[key].className}"></span>
+                                                                <span class="font-weight-semi-bold">${key}</span>
+                                                            </div>`;
 
                         $("#needsCategoryDiv").append(htmltext);
                     }
@@ -834,7 +844,7 @@
                                 return "";
                             }
                             else {
-                            return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
+                                return "<strong>" + params.data.name + ":</strong> " + params.percent + "%";
                             }
                         }
                     },
@@ -917,9 +927,9 @@
                     $("#notesCategoryDiv").children().remove();
                     for (key in colors) {
                         var htmltext = `<div class="d-flex align-items-center">
-                                            <span class="dot ${colors[key].className}"></span>
-                                            <span class="font-weight-semi-bold">${key}</span>
-                                        </div>`;
+                                                                    <span class="dot ${colors[key].className}"></span>
+                                                                    <span class="font-weight-semi-bold">${key}</span>
+                                                                </div>`;
 
                         $("#notesCategoryDiv").append(htmltext);
                     }
