@@ -196,6 +196,10 @@ namespace ProvenCfoUI.Comman
                 XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
                 XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
                 XeroInstance.Instance.XeroTenentID = client.XeroID;
+                if(!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo))
+                {
+                    XeroInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
+                }                
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
 

@@ -74,26 +74,32 @@ namespace ProvenCfoUI.Controllers
         }
         [CheckSession]
       
-        public async Task<JsonResult> GetBankSummary()
+        public async Task<JsonResult> GetAccountOutStanding()
         {
             var returnData = new Dictionary<string, dynamic>();
             try
             {
-                if (XeroInstance.Instance.XeroConnectionStatus == true)
-                {
-                    var result = await XeroInstance.Instance.XeroService.GetInvoices(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
-                    var Total = result._Invoices.Sum(x => x.Total);
-                    returnData.Add("data", "");
-                    returnData.Add("Total", Total);
+                if (XeroInstance.Instance.XeroConnectionStatus == true && !string.IsNullOrEmpty(Convert.ToString(XeroInstance.Instance.XeroContactIDofProvenCfo)))
+                {                   
+                    var result = await XeroInstance.Instance.XeroService.GetContact(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID, XeroInstance.Instance.XeroContactIDofProvenCfo);
+                                        
+                    if (result != null && result._Contacts.FirstOrDefault().Balances != null && result._Contacts.FirstOrDefault().Balances.AccountsPayable != null)
+                    {
+                        var Outstanding = result._Contacts.FirstOrDefault().Balances.AccountsPayable.Outstanding;
+                        returnData.Add("data", "");
+                        returnData.Add("Total", Outstanding);
+                    }
+                    else
+                    {
+                        returnData.Add("data", "");
+                        returnData.Add("Total", 0);
+                    }                                       
                 }
                 else
                 {
                     returnData.Add("data", "");
-                    returnData.Add("Total", 0);
-                   
-                }
-
-                
+                    returnData.Add("Total", 0);                   
+                }                
             }
             catch (Exception ex)
             {

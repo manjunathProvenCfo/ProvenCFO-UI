@@ -46,5 +46,6 @@ namespace ProvenCfoUI.Comman
         public bool XeroConnectionStatus { get; set; }
         public string XeroConnectionMessage { get; set; }
         public XeroService XeroService { get; set; }
+        public Guid XeroContactIDofProvenCfo { get; set; }
     }
 }

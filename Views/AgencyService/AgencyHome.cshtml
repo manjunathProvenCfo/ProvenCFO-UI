@@ -1028,10 +1028,10 @@
                 });
             }
 
-            function getBankSummary() {
+            function GetAccountOutStanding() {
 
                 $.ajax({
-                    url: '/AgencyService/GetBankSummary',
+                    url: '/AgencyService/GetAccountOutStanding',
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1068,7 +1068,7 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null) {
-
+                            GetAccountOutStanding();
                             getTeamMembersList();
                             NotesIndividualCountAndPercentageByAgencyId();
                             KanbanCountWithIndividualPriority();
@@ -1078,7 +1078,7 @@
                             $('#spTeamName').html(String(data.TeamName));
 
                             $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
-                            getBankSummary();
+                           
                             GetReconcilationData();
                             GetReconcilationPostiveData();
                             GetReconcilationNegativeData();
