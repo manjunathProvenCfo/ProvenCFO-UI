@@ -121,7 +121,7 @@
                                 }
                                 else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
+                                    <a data-toggle="tooltip" data-placement="top" title="Delete User" href="javascript:void(0)" onclick="deleteInvite('@item.Id')">
                                         <i class="far fa-trash-alt"> </i>
                                     </a>
                                 }
@@ -231,7 +231,6 @@
                 function () {
                     $.ajax({
                         url: "/Invitation/DeactivateInvite/" + Id,
-
                         type: "Post"
                     })
                         .done(function (data) {
@@ -268,7 +267,6 @@
                 function () {
                     $.ajax({
                         url: "/Invitation/DeleteInvite/" + Id,
-
                         type: "Post"
                     })
                         .done(function (data) {
