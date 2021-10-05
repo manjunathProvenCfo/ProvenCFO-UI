@@ -552,7 +552,7 @@
         @Scripts.Render("~/bundles/js/clipboard");
    
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js" integrity="sha512-iJh0F10blr9SC3d0Ow1ZKHi9kt12NYa+ISlmCdlCdNZzFwjH1JppRTeAnypvUez01HroZhAmP4ro4AvZ/rG0UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js" ></script>
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
        
         <script>
@@ -564,7 +564,7 @@
                     text: function (trigger) {
 
                         let email = $(trigger).data('clipboard-text');
-                        toastr.success("copied to clipboard " + email);
+                        toastr.success("Email address successfully copied to your clipboard " + email);
                         /* Toast("Toast title", "Toast message here");*/
 
                         /*alert("copied to clipboard " + email);*/
@@ -1313,8 +1313,8 @@
                                 $("#lblNotInBooksCount").text(data[i].totalCount);
                             }
                         }
-                        $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-                        utils.addProgressCircle("#lblNotInBankPercentage")
+                        $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                        utils.addProgressCircle("#divNotInBookPercentage1")
 
                     }
 
@@ -1344,8 +1344,10 @@
                             }
                         }
 
-                        $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-                        utils.addProgressCircle("#divNotInBookPercentage1")
+                        $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                        utils.addProgressCircle("#lblNotInBankPercentage")
+
+                       
 
                     }
 
