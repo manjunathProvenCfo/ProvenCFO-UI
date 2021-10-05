@@ -757,12 +757,12 @@
                     "echartColorCode": "#F68F57"
                 },
                 "Medium": {
-                    "className": "bg-green",
-                    "echartColorCode": "#00BE82"
+                    "className": "bg-light-blue",
+                    "chartColorCode": "#27BCFE"
                 },
                 "Low": {
-                    "className": "bg-soft-primary",
-                    "echartColorCode": "#bfbfbf"
+                    "className": "bg-green",
+                    "chartColorCode": "#00BE82"
                 }
             };
 
@@ -801,7 +801,9 @@
 
                     for (key in results) {
                         colorsArrays.push(color[key] ? color[key].echartColorCode : defaultChartColor);
+                        
                     }
+
 
                     NeedsChart(Object.values(results));
                     if (response.Message == "Success") {
