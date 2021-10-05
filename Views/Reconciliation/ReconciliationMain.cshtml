@@ -129,7 +129,7 @@
                                 <th class="sort pr-1 align-middle">Who</th>
                                 <th class="sort pr-1 align-middle">Description</th>
                                 <th class="sort pr-1 align-middle">Amount</th>
-                                <th></th>
+
 
                                 @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
                                 {
@@ -139,6 +139,7 @@
                                 {
                                     <th class="sort pr-10 align-center ">Rule</th>
                                 }
+
                                 @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
                                 {
                                     foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
@@ -148,7 +149,7 @@
 
                                 }
 
-
+                                <th class="vikas"></th>
 
                             </tr>
                         </thead>
@@ -156,74 +157,75 @@
                             @foreach (var item in (List<Proven.Model.reconciliationVM>)TempData["ReconcilationData"])
                             {
 
-                                <tr class="btn-reveal-trigger cursor-pointer">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" value="@item.Selected" />
+                            <tr class="btn-reveal-trigger cursor-pointer">
+                                <td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" value="@item.Selected" />
 
-                                            <label class="custom-control-label" for="@item.id"></label>
+                                        <label class="custom-control-label" for="@item.id"></label>
+                                    </div>
+                                </td>
+                                <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                                <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
+                                @if (item.amount < 0)
+                                {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                                <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+                            }
+                            else
+                            { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                            <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+                        }
+
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+
+                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
-                                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
-                                    @if (item.amount < 0)
-                                    {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
-                                    <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+                                } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                @if (ViewBag.IsBankRuleVisible == true)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
+                                            </div>
+                                        </div>
+                                    </td>
                                 }
-                                else
-                                { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
-                                <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
-                            }
-                                    <td class="sort pr-1 align-middle"><span id="iconComments" data-id="@item.id"><i class="fa fa-comment mr-1"></i></span></td>
-                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                {
+                                    int count = 0;
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
+
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
+                                                    @if (count == 0)
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" }) }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })}
 
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)" })
                                                 </div>
                                             </div>
                                         </td>
-                                    } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
-                                    @if (ViewBag.IsBankRuleVisible == true)
-                                    {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
-                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                    }
-                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
-                                    {
-                                        int count = 0;
-                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
-                                        {
-
-                                            <td class="sort pr-1 align-middle col-xs-1">
-                                                <div class="row justify-content-between">
-                                                    <div class="col-auto">
-                                                        @if (count == 0)
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)" }) }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)" })}
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            count++;
-                                        }
-
+                                        count++;
                                     }
 
-                                </tr>
+                                }
+                                <td class="sort pr-1 align-middle"><span id="iconComments" data-id="@item.id"><i class="fa fa-comment mr-1"></i></span></td>
+                            </tr>
                             }
 
                         </tbody>
