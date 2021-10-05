@@ -156,6 +156,7 @@ namespace Proven.Service
             return ProdPostAsync<ReturnModel, XeroTokenInfoVM>("Xero/UpdateXeroToken", tokenInfoVM).Result;
             
         }
+
         public async Task<List<Tenant>> ConnnectApp(IXeroToken xeroToken)
         {
             //return await RequestClientCredentialsTokenAsync();            
@@ -203,9 +204,14 @@ namespace Proven.Service
         /// <returns>List of Tenants attached to accesstoken</returns>
 
         public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Contacts> GetContacts(IXeroToken xeroToken, string XeroTenentID)
-        {
+        {            
             return await _accountinstance.GetContactsAsync(xeroToken.AccessToken, XeroTenentID);
         }
+        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Contacts> GetContact(IXeroToken xeroToken, string XeroTenentID, Guid ContactID)
+        {            
+            return await _accountinstance.GetContactAsync(xeroToken.AccessToken, XeroTenentID, ContactID);
+        }
+
         public async Task<Xero.NetStandard.OAuth2.Model.Accounting.ReportWithRows> GetBankSummary(IXeroToken xeroToken, string XeroTenentID)
         {
             var obj = await _accountinstance.GetReportBankSummaryAsync(xeroToken.AccessToken, XeroTenentID);

@@ -73,6 +73,7 @@ namespace Proven.Model
         public string SummaryModifiedBy { get; set; }
         public string SummaryModifiedByFullName { get; set; }
         public DateTime? SummaryModifiedDate { get; set; }
+        public string XeroContactIDforProvenCfo { get; set; }
     }
 
     public class ClientMainModel
