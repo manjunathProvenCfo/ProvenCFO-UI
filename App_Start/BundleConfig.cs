@@ -40,6 +40,13 @@ namespace ProvenCfoUI
             bundles.Add(new ScriptBundle("~/bundles/js/select").Include(
                "~/assets/lib/select2/select2.min.js"
                ));
+            bundles.Add(new ScriptBundle("~/bundles/js/toastr").Include(
+              "~/assets/lib/toastr/toastr.min.js"
+              ));
+            bundles.Add(new ScriptBundle("~/bundles/js/clipboard").Include(
+            "~/assets/lib/toastr/clipboard.min.js"
+            ));
+
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
                "~/assets/lib/echarts/echarts.min.js",
                "~/assets/lib/flatpickr/flatpickr.min.js"
@@ -127,6 +134,7 @@ namespace ProvenCfoUI
             #endregion
             //Css Start
 
+          
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
