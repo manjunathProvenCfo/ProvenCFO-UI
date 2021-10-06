@@ -454,9 +454,8 @@
                     </div>
                     <div class="card-body py-2">
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-online">
-                                <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
-
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
                             </div>
                             <div class="media-body ml-3">
                                 <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">June 2021</a></h6>
@@ -464,8 +463,8 @@
                             </div>
                         </div>
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-online">
-                                <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
                             </div>
                             <div class="media-body ml-3">
                                 <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">May 2021</a></h6>
@@ -473,8 +472,8 @@
                             </div>
                         </div>
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-away">
-                                <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
 
                             </div>
                             <div class="media-body ml-3">
@@ -484,7 +483,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-light p-0">
-                        <a class="btn btn-sm btn-link btn-block py-2" href=@Url.Action("About", "Home")>
+                        <a class="btn btn-sm btn-link btn-block py-2" href=@Url.Action("ReportsList", "Reports""About", "Home")>
                             Show All<span clas111s="fas fa-chevron-right ml-1 fs--2"></span>
                         </a>
                     </div>
@@ -498,8 +497,8 @@
                     </div>
                     <div class="card-body py-2">
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-online">
-                                <img class="rounded-circle" src="../assets/img/team/1-thumb.png" alt="" />
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
 
                             </div>
                             <div class="media-body ml-3">
@@ -508,8 +507,8 @@
                             </div>
                         </div>
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-online">
-                                <img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
 
                             </div>
                             <div class="media-body ml-3">
@@ -518,8 +517,8 @@
                             </div>
                         </div>
                         <div class="media align-items-center mb-3">
-                            <div class="avatar avatar-2xl status-away">
-                                <img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />
+                            <div class="avatar avatar-2xl">
+                                <img class="rounded" src="../assets/img/reports/finance.png" alt="" style="height:46px;width:36px">
 
                             </div>
                             <div class="media-body ml-3">
@@ -785,7 +784,7 @@
 
                     var results = {};
                     if (data != undefined && data.length > 0) {
-                        debugger;
+                        
                         for (var i = 0; i < data.length; i++) {
                             let KanbanTaskLabelName = data[i].KanbanTaskLabelName;
                             let LabelNameCount = data[i].LabelNameCount;
@@ -802,7 +801,7 @@
 
 
                     for (key in results) {
-                        debugger;
+                       
                         colorArrays.push(color[key] ? color[key].echartColorCode : defaultChartColor);
                         
                     }
