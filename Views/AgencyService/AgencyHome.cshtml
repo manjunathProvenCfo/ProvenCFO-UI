@@ -671,18 +671,19 @@
                 }
             }
 
-            var colorsArrays = [];
-            function NeedsChart(dataArray) {
+            var colorArrays = [];
 
+            var defaultChartColor = "#edf2f9";
+
+            function NeedsChart(dataArray) {
                 let dom = document.getElementById("echart-needs");
                 var myChart = echarts.init(dom);
-
+                var defaultChartColor = "#edf2f9";
                 var app = {};
 
 
                 let options = {
-
-                    color: colorsArrays,
+                    color: colorArrays,
                     tooltip: {
                         trigger: 'item',
                         padding: [7, 10],
@@ -758,11 +759,11 @@
                 },
                 "Medium": {
                     "className": "bg-light-blue",
-                    "chartColorCode": "#27BCFE"
+                    "echartColorCode": "#27BCFE"
                 },
                 "Low": {
                     "className": "bg-green",
-                    "chartColorCode": "#00BE82"
+                    "echartColorCode": "#00BE82"
                 }
             };
 
@@ -784,12 +785,13 @@
 
                     var results = {};
                     if (data != undefined && data.length > 0) {
+                        debugger;
                         for (var i = 0; i < data.length; i++) {
-                            let KanbanTaskPriorityName = data[i].KanbanTaskPriorityName.toLowerCase();
-                            let PriorityNameCount = data[i].PriorityNameCount;
-                            var tempObj1 = { value: PriorityNameCount, name: KanbanTaskPriorityName };
+                            let KanbanTaskLabelName = data[i].KanbanTaskLabelName;
+                            let LabelNameCount = data[i].LabelNameCount;
+                            var tempObj1 = { value: LabelNameCount, name: KanbanTaskLabelName };
 
-                            results[KanbanTaskPriorityName] = tempObj1;
+                            results[KanbanTaskLabelName] = tempObj1;
                         }
                     }
                     else {
@@ -800,7 +802,8 @@
 
 
                     for (key in results) {
-                        colorsArrays.push(color[key] ? color[key].echartColorCode : defaultChartColor);
+                        debugger;
+                        colorArrays.push(color[key] ? color[key].echartColorCode : defaultChartColor);
                         
                     }
 
@@ -820,7 +823,7 @@
             }
 
 
-            var defaultChartColor = "#edf2f9";
+            
             var colorsArray = [];
             function NotesChart(dataArray) {
                 let dom = document.getElementById("echart-notes");
@@ -1073,7 +1076,6 @@
                             GetAccountOutStanding();
                             getTeamMembersList();
                             NotesIndividualCountAndPercentageByAgencyId();
-                            KanbanCountWithIndividualPriority();
                             $('#roleexist').show();
                             $('.spClientName').html(String(data.Name));
                             $('.spEntityName').html(String(data.EntityName));
@@ -1086,6 +1088,7 @@
                             GetReconcilationNegativeData();
                             bindNotInBooksAndBanksCountDashboard();
                             bindNotInBooksAndBanksCountDashboard1();
+                            KanbanCountWithIndividualPriority();
                             /*GetTotalNotesCount();*/
                             SetUserPreferencesForAgency();
                             let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;

@@ -8,8 +8,8 @@ namespace Proven.Model
 {
     public class KanbanCountWithIndividualPriority
     {
-        public string KanbanTaskPriorityName { get; set; }
-        public int PriorityNameCount { get; set; }
+        public string KanbanTaskLabelName { get; set; }
+        public int LabelNameCount { get; set; }
         public int TotalTasks { get; set; }
         public string AgencyId { get; set; }
     }
