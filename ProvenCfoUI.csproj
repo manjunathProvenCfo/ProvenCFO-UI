@@ -517,7 +517,6 @@
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\reports.js" />
-    <Content Include="assets\js\SessionTimeOut.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
     <Content Include="assets\js\twilio.js" />
