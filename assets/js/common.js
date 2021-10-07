@@ -53,7 +53,7 @@ function SetUserPreferencesForAgency() {
 
     var ClientID = $("#ddlclient option:selected").val();
     GetTotalNotesCount();
-    KanbanCountWithIndividualPriority();
+ 
     $.ajax({
         url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
         type: "POST",
