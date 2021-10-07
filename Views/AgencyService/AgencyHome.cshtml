@@ -263,7 +263,7 @@
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Outstanding Balance</p>
                             <p class="col-md-7 col-xl-8 mb-2 color-gray-shades">
-                                <span id="spOutSanding"></span> <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
+                                <span id="spOutSanding" class="currency-usd"></span> <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
                             </p>
                         </div>
                     </div>
@@ -1042,14 +1042,14 @@
                     dataType: "json",
                     success: function (data) {
                         if (data != null && data != '') {
-                            $('#spOutSanding').html(data.Total);
+                            $('#spOutSanding').html(ConvertToUDS(data.Total));
                         }
                         else {
-                            $('#spOutSanding').html(0);
+                            $('#spOutSanding').html(ConvertToUDS(0));
                         }
                     },
                     error: function (e) {
-                        $('#spOutSanding').html(0);
+                        $('#spOutSanding').html(ConvertToUDS(0));
                         console.log(e);
                     }
 
