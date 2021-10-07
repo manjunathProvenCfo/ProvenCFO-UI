@@ -186,7 +186,49 @@ $(function () {
         let year = data.year;
         let period = data.reportPeriod;
         window.open(`/Reports/DownloadAll?agencyId=${agencyId}&year=${year}&periodType=${period}`);
-    })
+    });
+    //Draggable Start
+    const Selectors = {
+        BODY: 'body',
+        NOTES_CONTAINER: '.notes-container',
+        NOTES_ITEMS_CONTAINER: 'div.notes-items-container',
+        NOTES_ITEM: '.notes-item',
+    };
+
+    let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+    for (var i = 0; i < arrItemsContainer.length; i++) {
+        let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+            draggable: Selectors.NOTES_ITEM,
+            delay: 200,
+            mirror: {
+                appendTo: Selectors.BODY,
+                constrainDimensions: true
+            }
+        });
+        sortable.on('drag:stop', function (e) {
+            var $this = $(e.data.source);
+            var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+            let $items = $itemContainer.find('.notes-item:visible');
+            let ids = [];
+            let positions = [];
+            let counter = $items.length;
+            for (var i = 0; i < $items.length; i++) {
+                ids.push(parseInt($items[i].getAttribute("data-id")));
+                positions.push(counter);
+                counter = counter - 1;
+            }
+            let pdata = { Ids: ids, Positions: positions };
+
+            postAjax('/reports/UpdatePositions', JSON.stringify(pdata), function (response) {
+                if (response.Message == 'Success') {
+
+                }
+
+            })
+
+        });
+    }
+    //Draggable End
 
     bindPage();
 });
@@ -255,13 +297,13 @@ var getReports = function (agencyId, year, period) {
                 thumbnail = obj.FilePath;
             obj.FilePath = obj.FilePath.replace("~/", "../../");
             thumbnail = thumbnail.replace("~/", "../../");
-            var reportHTML = `<div class="col-2 text-center report"> <figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <h2 class="book-title">${obj.FileName}</h2><a href="${obj.FilePath}" download="${obj.FileName}"><p class="publish-year mb-0">Download</p></a> </div>`;
+            var reportHTML = `<div class="col-2 text-center report notes-item" data-id="${obj.Id}" data-position="${obj.Position}"> <figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <h2 class="book-title">${obj.FileName}</h2><a href="${obj.FilePath}" download="${obj.FileName}"><p class="publish-year mb-0">Download</p></a> </div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         })
     });
 }
 
-var RemoveSavedFile = function (e, reportId, period) {
+var RemoveSavedFile = function (e, reportId, period) {  
     let report = $(e.currentTarget).parents('.media');
     ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this report?", "Yes, remove it!", function (isConfirmed) {
         if (isConfirmed == false)

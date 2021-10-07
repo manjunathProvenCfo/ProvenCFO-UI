@@ -23,6 +23,11 @@ namespace Proven.Service
         {
             return PostAsync<APIResult<bool>>($"Reports/SoftDeleteFile?Id={id}", null).Result;
         }
+        public APIResult<bool> UpdatePositions(int[] Ids, int[] Positions)
+        {
+            var positions = new { Ids, Positions };
+            return PostAsync<APIResult<bool>, object>("Reports/UpdatePositions", positions  ).Result;
+        }
         public void Dispose()
         {
             //base.Dispose(true);

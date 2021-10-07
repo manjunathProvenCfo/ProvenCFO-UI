@@ -25,11 +25,15 @@ namespace ProvenCfoUI.Controllers
             return View();
         }
 
+        [CheckSession]
         [HttpPost]
         public JsonResult UploadReportAndSave(HttpPostedFileBase file, int agencyId, int year, string periodType)
         {
             try
             {
+                periodType = periodType.Trim();
+                periodType = char.ToUpper(periodType[0]) + periodType.Substring(1);
+
                 if (file.ContentLength > 0)
                 {
                     var LoginUserid = User.UserId;
@@ -75,6 +79,7 @@ namespace ProvenCfoUI.Controllers
             }
             return Json(new { File = "", Status = ViewBag.ErrorMessage, Message = "Report upload failed!!" }, JsonRequestBehavior.AllowGet);
         }
+        [CheckSession]
         public JsonResult GetReports(int agencyId, int year, string periodType)
         {
             try
@@ -96,6 +101,7 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+        [CheckSession]
         public FileContentResult DownloadAll(int agencyId, int year, string periodType)
         {
             using (var memoryStream = new MemoryStream())
@@ -117,6 +123,7 @@ namespace ProvenCfoUI.Controllers
 
         }
 
+        [CheckSession]
         [HttpPost]
         public JsonResult SoftDeleteFile(int Id, string PeriodType)
         {
@@ -141,6 +148,35 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UpdatePositions(int[] Ids, int[] Positions)
+        {
+            try
+            {
+                using (ReportsService reportsService = new ReportsService())
+                {
+                    var result = reportsService.UpdatePositions(Ids, Positions);
+
+                    if (result != null)
+                    {
+                        return Json(new { notes = result, message = "success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { notes = result, message = "error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+            //return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
