@@ -80,7 +80,9 @@ $(function () {
 
     });
 
-    $btnUpload.click(function () {
+    $btnUpload.click(function (e) {
+        debugger
+        e.stopPropagation();
         let elUpload = $(this);
 
         let data = elUpload.parents('div.card-body').data()
@@ -297,7 +299,7 @@ var getReports = function (agencyId, year, period) {
                 thumbnail = obj.FilePath;
             obj.FilePath = obj.FilePath.replace("~/", "../../");
             thumbnail = thumbnail.replace("~/", "../../");
-            var reportHTML = `<div class="col-2 text-center report notes-item" data-id="${obj.Id}" data-position="${obj.Position}"> <figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <h2 class="book-title">${obj.FileName}</h2><a href="${obj.FilePath}" download="${obj.FileName}"><p class="publish-year mb-0">Download</p></a> </div>`;
+            var reportHTML = `<div class="col-2 text-center report notes-item" data-id="${obj.Id}" data-position="${obj.Position}"> <h2 class="book-title">${obj.FileName}</h2><figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <p class="publish-options mb-0"><a href="${obj.FilePath}" target="_blank"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a><a href="${obj.FilePath}" download="${obj.FileName}"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a></p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         })
     });
