@@ -984,18 +984,19 @@
                             var count = 1;
                             var number;
                             $.each(data.TeamMembers, function (key, object) {
-                                if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
-                                    
-                                    $('#aLinkedInProfile' + count).attr("href", object.LinkedInProfile);
-                                    $('#aLinkedInProfile' + count).prop('disabled', false);
-                                    $('#aLinkedInProfile' + count).removeClass('disabled-action-icons');
-                                }
+                                
                                 if (object.Username != null && object.Username != '') {
                                     number = "tel:" + object.PhoneNumber;
                                     $('#phoneNumber'+ count ).attr("href", number );
                                 }
                                 if (object.Username != null && object.Username != '') {
                                     $('#email' + count).data("clipboard-text", String(object.Email));
+                                }
+                                if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
+                                    
+                                    $('#aLinkedInProfile' + count).attr("href", object.LinkedInProfile);
+                                    $('#aLinkedInProfile' + count).prop('disabled', false);
+                                    $('#aLinkedInProfile' + count).removeClass('disabled-action-icons');
                                 }
                                 else {
                                     $('#aLinkedInProfile' + count)[0].className = $('#aLinkedInProfile' + count)[0].className + ' disabled-action-icons';
