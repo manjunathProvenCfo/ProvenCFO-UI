@@ -504,6 +504,9 @@
     <Content Include="assets\img\products\7.jpg" />
     <Content Include="assets\img\products\8.jpg" />
     <Content Include="assets\img\products\9.jpg" />
+    <Content Include="assets\img\Reports\excel.png" />
+    <Content Include="assets\img\Reports\finance.png" />
+    <Content Include="assets\img\Reports\pdf.png" />
     <Content Include="assets\img\team\default-logo.png" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
@@ -514,6 +517,7 @@
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\reports.js" />
+    <Content Include="assets\js\SessionTimeOut.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
     <Content Include="assets\js\twilio.js" />
@@ -1000,6 +1004,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\NeedsScript.js" />
+    <Content Include="Scripts\SessionTimeOut.js" />
     <Content Include="Style\NeedStyle.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1081,6 +1086,8 @@
     <Content Include="Views\Shared\_reconcilationFilter.cshtml" />
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
     <Content Include="Views\Shared\_doughnut.cshtml" />
+    <Content Include="Views\Home\_SessionExpireWarning.cshtml" />
+    <Content Include="Views\Home\_ShowSessionExpire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
