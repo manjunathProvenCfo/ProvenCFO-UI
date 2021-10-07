@@ -1004,7 +1004,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\NeedsScript.js" />
-    <Content Include="Scripts\SessionTimeOut.js" />
     <Content Include="Style\NeedStyle.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1086,8 +1085,6 @@
     <Content Include="Views\Shared\_reconcilationFilter.cshtml" />
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
     <Content Include="Views\Shared\_doughnut.cshtml" />
-    <Content Include="Views\Home\_SessionExpireWarning.cshtml" />
-    <Content Include="Views\Home\_ShowSessionExpire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
