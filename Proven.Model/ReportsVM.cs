@@ -23,5 +23,6 @@ namespace Proven.Model
 		public DateTime? ModifiedDate { get; set; }
 		public bool IsDeleted { get; set; }
         public int Position { get; set; }
+        public bool IsMonthlySummary { get; set; }
     }
 }

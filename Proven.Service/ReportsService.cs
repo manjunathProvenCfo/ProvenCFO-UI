@@ -26,7 +26,11 @@ namespace Proven.Service
         public APIResult<bool> UpdatePositions(int[] Ids, int[] Positions)
         {
             var positions = new { Ids, Positions };
-            return PostAsync<APIResult<bool>, object>("Reports/UpdatePositions", positions  ).Result;
+            return PostAsync<APIResult<bool>, object>("Reports/UpdatePositions", positions).Result;
+        }
+        public APIResult<bool> Delete(int[] Ids)
+        {
+            return PostAsync<APIResult<bool>, int[]>("Reports/Delete", Ids).Result;
         }
         public void Dispose()
         {

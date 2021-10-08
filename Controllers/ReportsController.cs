@@ -162,11 +162,11 @@ namespace ProvenCfoUI.Controllers
 
                     if (result != null)
                     {
-                        return Json(new { notes = result, message = "success" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json(new { notes = result, message = "error" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
                     }
 
                 }
@@ -174,9 +174,36 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
-                throw ex;
+                return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
             }
-            //return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult Delete(int[] Ids)
+        {
+            try
+            {
+                using (ReportsService reportsService = new ReportsService())
+                {
+                    var result = reportsService.Delete(Ids);
+
+                    if (result != null)
+                    {
+                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
