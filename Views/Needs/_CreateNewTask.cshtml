@@ -6,11 +6,11 @@
 @*@using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
     {
         @Html.AntiForgeryToken()*@
-<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1" aria-hidden="true" id="kanban-modal-new">
+<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1" aria-hidden="true" id="kanban-modal-new" >
     <div class="modal-dialog modal-lg mt-6" role="document">
         <div class="modal-content border-0">
             <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
-                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id ="verifyAttachment" onclick="checkAttachment()"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
             </div>
             <div class="modal-body p-0">
                 <div class="bg-light rounded-soft-top px-4 py-3">
@@ -188,7 +188,7 @@
                             <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Create </button>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
-                            <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                            <button class="btn btn-primary"  id="cancel" onclick="checkAttachment()">Cancel</button>
                         </div>
                     </div>
                 </div>
