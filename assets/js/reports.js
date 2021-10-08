@@ -186,13 +186,15 @@ $(function () {
         let elDelete = $(this);
         let data = elDelete.data();
     });
-    $btnDownloadAll.click(function () {
+    $btnDownloadAll.click(function (e) {
+        e.stopPropagation();
         let elDownloadAll = $(this);
         let data = elDownloadAll.parents('div.card-body').data()
         let agencyId = $("#ddlclient").val();
         let year = data.year;
         let period = data.reportPeriod;
         window.open(`/Reports/DownloadAll?agencyId=${agencyId}&year=${year}&periodType=${period}`);
+        return false;
     });
     //Draggable Start
     const Selectors = {
@@ -238,7 +240,18 @@ $(function () {
     //Draggable End
     $btnDeleteAll.click(function (e) {
         e.stopPropagation();
-    })
+        let el = $(this);
+        debugger
+        let parentDiv = el.parents("#divReportPeriodCard");
+        let data = parentDiv.data();
+        let agencyId = $("#ddlclient").val();
+        let year = data.year;
+        let period = data.reportPeriod;
+
+        let deleteReportsIds = parentDiv.find("[id*=reportItem_]").map(function (i, obj) { return parseInt(obj.dataset.id); })
+        deleteReportsIds = deleteReportsIds.toArray();
+        deleteReports(deleteReportsIds, period);
+    });
     bindPage();
 });
 
@@ -336,13 +349,12 @@ var deleteReportOnCliCk = function (e, id) {
     });
     return false;
 }
-var deleteReports = function (deleteIds) {
-    let pdata = { Ids: deleteIds};
+var deleteReports = function (deleteIds, period) {
+    let pdata = { Ids: deleteIds };
     postAjax(`/Reports/Delete`, JSON.stringify(pdata), function (response) {
-        if (response.Message == 'Success') {
-
-        }
-
+        debugger
+        if (!isEmptyOrBlank(period))
+            bindReports(period);
     });
 }
 
