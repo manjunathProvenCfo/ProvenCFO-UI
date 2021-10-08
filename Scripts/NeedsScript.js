@@ -1028,8 +1028,30 @@ function openModal(filepath, IsShow) {
 }
 
 function closeModal() {
+ 
     $("#myModal").css("display", "none");
     $(".mySlides").css("display", "none");
     $("#imgPreview").attr("src", "");
     //document.getElementById("myModal").style.display = "none";
+}
+
+function checkAttachment() {
+    
+    let attachment = $("#previews").children().length;
+    
+    if (attachment > 0) {
+        ShowAlertBox('', ` You have ${attachment} attachment left. Please upload or remove it before close.`, 'warning');
+    }
+    else
+        $("#kanban-modal-new").modal('hide');
+
+}
+function checkAttachment1() {
+    let attachment1 = $("#previews_view").children().length;
+    if (attachment1 > 0) {
+        ShowAlertBox('', ` You have ${attachment1} attachment left. Please upload or remove it before close.`, 'warning');
+    }
+    else
+        $("#kanban-modal-open").modal('hide');
+
 }
