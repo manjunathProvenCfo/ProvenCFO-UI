@@ -174,7 +174,7 @@ namespace ProvenCfoUI
                    ));
             #endregion
 
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
 
         }
     }

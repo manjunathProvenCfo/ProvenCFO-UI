@@ -32,6 +32,10 @@ namespace Proven.Service
         {
             return PostAsync<APIResult<bool>, int[]>("Reports/Delete", Ids).Result;
         }
+        public APIResult<bool> MakeItMonthlySummary(int Id, int Year,string PeriodType)
+        {
+            return PostAsync<APIResult<bool>>($"Reports/MakeItMonthlySummary?Id={Id}&year={Year}&PeriodType={PeriodType}").Result;
+        }
         public void Dispose()
         {
             //base.Dispose(true);

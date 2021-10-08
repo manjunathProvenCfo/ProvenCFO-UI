@@ -182,7 +182,6 @@ $(function () {
 
     });
     $("a[id='btnDelete']").on("click", function () {
-        debugger
         let elDelete = $(this);
         let data = elDelete.data();
     });
@@ -241,16 +240,20 @@ $(function () {
     $btnDeleteAll.click(function (e) {
         e.stopPropagation();
         let el = $(this);
-        debugger
         let parentDiv = el.parents("#divReportPeriodCard");
         let data = parentDiv.data();
         let agencyId = $("#ddlclient").val();
         let year = data.year;
         let period = data.reportPeriod;
-
         let deleteReportsIds = parentDiv.find("[id*=reportItem_]").map(function (i, obj) { return parseInt(obj.dataset.id); })
         deleteReportsIds = deleteReportsIds.toArray();
-        deleteReports(deleteReportsIds, period);
+
+        ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this report?", "Yes, remove it!", function (isConfirmed) {
+            if (isConfirmed == false)
+                return;
+            deleteReports(deleteReportsIds, period);
+            ShowAlertBoxSuccess("", "Files has been removed successfully!")
+        });
     });
     bindPage();
 });
@@ -319,7 +322,14 @@ var getReports = function (agencyId, year, period) {
                 thumbnail = obj.FilePath;
             obj.FilePath = obj.FilePath.replace("~/", "../../");
             thumbnail = thumbnail.replace("~/", "../../");
-            var reportHTML = `<div class="col-2 text-center report notes-item" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> <h2 class="book-title d-flex justify-content-center"><i class="fa fa-star mr-2"></i>${obj.FileName}</h2><figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <p class="publish-options mb-0"><a href="${obj.FilePath}" target="_blank"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a><a href="${obj.FilePath}" download="${obj.FileName}"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a><a id="btnDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a></p></div>`;
+            let staredReportHTML = "";
+            if (!isEmptyOrBlank(obj.IsMonthlySummary) && obj.IsMonthlySummary === true)
+                staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
+            var reportHTML = `<div class="col-2 text-center report notes-item" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2><figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <p class="publish-options mb-0">
+                                <a href="${obj.FilePath}" target="_blank"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a>
+                                <a href="${obj.FilePath}" download="${obj.FileName}"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a>
+                                <a id="btnDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a>
+                                <a href="#" onclick="monthlySummaryOnClick(event,${obj.Id})"><span title="Make it Monthly Summary report"><i class="fa fa-star" aria-hidden="true"></i></span></a></p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         })
     });
@@ -340,6 +350,7 @@ var RemoveSavedFile = function (e, reportId, period) {
     });
 }
 var deleteReportOnCliCk = function (e, id) {
+    e.preventDefault();
     ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this report?", "Yes, remove it!", function (isConfirmed) {
         if (isConfirmed == false)
             return;
@@ -352,9 +363,25 @@ var deleteReportOnCliCk = function (e, id) {
 var deleteReports = function (deleteIds, period) {
     let pdata = { Ids: deleteIds };
     postAjax(`/Reports/Delete`, JSON.stringify(pdata), function (response) {
-        debugger
         if (!isEmptyOrBlank(period))
             bindReports(period);
     });
 }
 
+var monthlySummaryOnClick = function (e, id) {
+    e.preventDefault();
+    let el = $(e.currentTarget);
+    let parentDiv = el.parents("#divReportPeriodCard");
+    let data = parentDiv.data();
+    let agencyId = $("#ddlclient").val();
+    let year = data.year;
+    let period = data.reportPeriod;
+
+    postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}`, null, function (response) {
+        if (response.message == "success") {
+            ShowAlertBoxSuccess("", "Report has been marked as Monthly Summary report!")
+            bindReports(period);
+        }
+    });
+    return false;
+}

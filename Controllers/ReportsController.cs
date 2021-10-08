@@ -205,5 +205,33 @@ namespace ProvenCfoUI.Controllers
                 return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult MakeItMonthlySummary(int Id, int Year, string PeriodType)
+        {
+            try
+            {
+                using (ReportsService reportsService = new ReportsService())
+                {
+                    var result = reportsService.MakeItMonthlySummary(Id, Year, PeriodType);
+
+                    if (result != null)
+                    {
+                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
