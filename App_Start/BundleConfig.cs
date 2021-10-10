@@ -85,7 +85,7 @@ namespace ProvenCfoUI
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
-                        "~/assets/lib/jquery.fancybox.min.js",
+                        "~/assets/lib/fancybox/jquery.fancybox.min.js",
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));
 
@@ -134,7 +134,7 @@ namespace ProvenCfoUI
             #endregion
             //Css Start
 
-          
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
@@ -154,6 +154,7 @@ namespace ProvenCfoUI
                     "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
+                     "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
                      "~/assets/css/theme.css"
                     ));
@@ -163,6 +164,10 @@ namespace ProvenCfoUI
                     "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/Style/NeedStyle.css"
                    ));
+
+            bundles.Add(new StyleBundle("~/bundles/css/twilio-chat").Include(
+                    "~/assets/lib/fancybox/jquery.fancybox.min.css"
+                ));
 
             #region FileUploader
             bundles.Add(new StyleBundle("~/Content/jQuery-File-Upload").Include(

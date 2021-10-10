@@ -323,13 +323,27 @@ var getReports = function (agencyId, year, period) {
             obj.FilePath = obj.FilePath.replace("~/", "../../");
             thumbnail = thumbnail.replace("~/", "../../");
             let staredReportHTML = "";
+            let deleteReportHTML = `<a id="btnDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a>`;
+            let monthlySummaryReportHTML = `<a href="#" onclick="monthlySummaryOnClick(event,${obj.Id})"><span title="Make it Monthly Summary report"><i class="fa fa-star" aria-hidden="true"></i></span></a>`;
+            if (isReadonlyUser) {
+                deleteReportHTML = '';
+                monthlySummaryReportHTML = '';
+            }
             if (!isEmptyOrBlank(obj.IsMonthlySummary) && obj.IsMonthlySummary === true)
                 staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
-            var reportHTML = `<div class="col-2 text-center report notes-item" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2><figure class="book-cover"> <img class="img-fluid" src="${thumbnail}" alt="" /> </figure> <p class="publish-options mb-0">
+            var reportHTML = `<div class="col-2 text-center report notes-item py-2" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> 
+                                <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
+                                <a class="data-fancybox" href="${obj.FilePath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}">
+                                <figure class="book-cover"> 
+                                <img class="img-fluid" src="${thumbnail}" alt="" /> 
+                                </figure> 
+                                </a>
+                                <p class="publish-options mb-0">
                                 <a href="${obj.FilePath}" target="_blank"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a>
                                 <a href="${obj.FilePath}" download="${obj.FileName}"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a>
-                                <a id="btnDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a>
-                                <a href="#" onclick="monthlySummaryOnClick(event,${obj.Id})"><span title="Make it Monthly Summary report"><i class="fa fa-star" aria-hidden="true"></i></span></a></p></div>`;
+                                ${deleteReportHTML}
+                                ${monthlySummaryReportHTML}
+                                </p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         })
     });

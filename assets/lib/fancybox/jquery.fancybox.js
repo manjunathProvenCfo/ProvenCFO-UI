@@ -75,7 +75,7 @@
       //"share",
       "slideShow",
       //"fullScreen",
-      //"download",
+      "download",
       "thumbs",
       "close"
     ],

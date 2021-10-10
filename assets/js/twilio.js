@@ -436,7 +436,7 @@ var prepareMessageRow = function (message, timeStampRowId, participantName) {
 }
 
 var prepareImageMessageBody = function (url) {
-    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" target="_blank" data-fancybox="twilio-gallery"><img src="${url}" alt="" class="img-fluid rounded mb-2"></a></div>`;
+    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" data-fancybox="twilio-gallery data-fancybox"><img src="${url}" alt="" class="img-fluid rounded mb-2"></a></div>`;
     return messageBody;
 }
 
