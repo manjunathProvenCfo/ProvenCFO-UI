@@ -158,13 +158,14 @@
     document.getElementById("EmailIdExist").style.display = "none";
     $(document).ready(function () {
 
-        //
+       
         var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
 
-        //if (msg != undefined && msg != '' && msg == "Created") {
-        //    AddAlertRole();
-        //    $('#InviteCreate').val('');
-        //}
+        if (msg != undefined && msg != '' && msg == "Created") {
+           
+            AddAlertRole();
+            $('#InviteCreate').val('');
+        }
         //else if (msg != undefined && msg != '' && msg == "Updated") {
         //    UpdateAlertRole();
         //    $('#InviteCreate').val('');
@@ -204,7 +205,18 @@
     };
 
 
- 
+    function AddAlertRole() {
+     
+        sweetAlert
+            ({
+                title: "Sent!",
+                text: "staff user invitation has been sent.",
+                type: "success"
+            },
+                function () {
+                    window.location.href = '/Invitation/InviteStaffList'
+                });
+    }
 
     function ExistAlertRole() {
         sweetAlert
