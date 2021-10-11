@@ -30,15 +30,10 @@ namespace ProvenCfoUI
              "~/assets/lib/jquery.fancybox.min.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
+             "~/assets/lib/sweetalert/sweetalert.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js"
     ));
-
-
-            bundles.Add(new ScriptBundle("~/bundles/js/theme").Include(
-               "~/assets/js/theme.min.js"
-               ));
-
             bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
              "~/assets/js/wrapper.js"
@@ -168,6 +163,7 @@ namespace ProvenCfoUI
                      "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
+                     "~/assets/lib/sweetalert/sweetalert.min.js",
                      "~/assets/css/theme.css"
                     ));
 

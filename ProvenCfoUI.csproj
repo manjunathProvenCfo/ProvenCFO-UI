@@ -621,6 +621,8 @@
     <Content Include="assets\lib\stickyfilljs\stickyfill.min.js" />
     <Content Include="assets\lib\superagent\dist\superagent.js" />
     <Content Include="assets\lib\superagent\dist\superagent.min.js" />
+    <Content Include="assets\lib\sweetalert\sweetalert.min.css" />
+    <Content Include="assets\lib\sweetalert\sweetalert.min.js" />
     <Content Include="assets\lib\tinymce\changelog.txt" />
     <Content Include="assets\lib\tinymce\icons\default\icons.js" />
     <Content Include="assets\lib\tinymce\icons\default\icons.min.js" />
