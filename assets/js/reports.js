@@ -17,6 +17,8 @@ var $template_view;
 var $attachmentContainer;
 var myDropzone_view;
 var previewTemplate;
+var $renameModal;
+var $btnRename;
 
 //var $formFileUploader;
 //var $formUploader;
@@ -40,12 +42,8 @@ $(function () {
     $previews = $("#previews");
     $template = $("#template");
     $attachmentContainer = $("#attachmentContainer");
-    //$formFileUploader = $("#formFileUploader");
-
-    //$formUploader = $formFileUploader.fileupload({
-    //    dataType: 'json'
-    //});
-    //$uploader = $reportUploader.dropzone({ url: "" });
+    $renameModal = $("#report-rename-modal");
+    $btnRename = $("#btnRename");
 
     if (isReadonlyUser == false) {
         addContextMenu();
@@ -87,6 +85,7 @@ $(function () {
 
     $btnUpload.click(function (e) {
         e.stopPropagation();
+        e.preventDefault();
         let elUpload = $(this);
 
         let data = elUpload.parents('div.card-body').data()
@@ -254,6 +253,21 @@ $(function () {
             ShowAlertBoxSuccess("", "Files has been removed successfully!")
         });
     });
+
+    $btnRename.click(function (e) {
+        if (isEmptyOrBlank($("#txtNewFileName").val())) {
+            ShowAlertBoxError("", "Please enter New File Name");
+            return;
+        }
+        let period = $("#hdnPeriod").val();
+        let pdata = { Id: $("#hdnId").val(), FileName: $("#txtNewFileName").val()  };
+        postAjax(`/Reports/Rename`, JSON.stringify(pdata), function (response) {
+            if (!isEmptyOrBlank(period))
+                bindReports(period);
+            $renameModal.modal('hide');
+        });
+    });
+
     bindPage();
 });
 
@@ -324,6 +338,7 @@ var getReports = function (agencyId, year, period) {
             let staredReportHTML = "";
             let deleteReportHTML = `<a class="d-none" id="aDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a>`;
             let monthlySummaryReportHTML = `<a class="d-none" href="#" onclick="monthlySummaryOnClick(event,${obj.Id})" id="aMonthlySummary"><span title="Make it Monthly Summary report"><i class="fa fa-star" aria-hidden="true"></i></span></a>`;
+            let renameReportHTML = `<a class="d-none" id="aRename" href="#" onclick="renameReportOnClick(event,${obj.Id},'${obj.FileName}')"></a>`;
             if (isReadonlyUser) {
                 deleteReportHTML = '';
                 monthlySummaryReportHTML = '';
@@ -332,7 +347,7 @@ var getReports = function (agencyId, year, period) {
                 staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
             var reportHTML = `<div class="col-2 text-center report notes-item context-menu py-2" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> 
                                 <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
-                                <a class="data-fancybox" href="${obj.FilePath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}">
+                                <a class="data-fancybox" href="${obj.FilePath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtension}">
                                 <figure class="book-cover"> 
                                 <img class="img-fluid" src="${thumbnail}" alt="" /> 
                                 </figure> 
@@ -341,11 +356,10 @@ var getReports = function (agencyId, year, period) {
                                 <a class="d-none" href="${obj.FilePath}" target="_blank" id="aView"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a>
                                 <a class="d-none" href="${obj.FilePath}" download="${obj.FileName}" id="aDownload"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a>
                                 ${deleteReportHTML}
+                                ${renameReportHTML}
                                 ${monthlySummaryReportHTML}
                                 </p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
-
-
         });
     });
 }
@@ -367,6 +381,12 @@ var addContextMenu = function () {
             name: "Delete",
             callback: function (itemKey, opt, e) {
                 opt.$trigger.find("#aDelete")[0].click();
+            }
+        },
+        "rename": {
+            name: "Rename",
+            callback: function (itemKey, opt, e) {
+                opt.$trigger.find("#aRename")[0].click();
             }
         },
         "defaultReport": {
@@ -431,4 +451,17 @@ var monthlySummaryOnClick = function (e, id) {
         }
     });
     return false;
+}
+
+var renameReportOnClick = function (e, id, fileName) {
+    e.preventDefault();
+    $renameModal.modal('show');
+    let el = $(e.currentTarget);
+    let parentDiv = el.parents("#divReportPeriodCard");
+    let data = parentDiv.data();
+
+    $("#lblFileName").text(fileName);
+    $("#hdnId").val(id);
+    $("#hdnPeriod").val(data.reportPeriod);
+    $("#txtNewFileName").val('');
 }

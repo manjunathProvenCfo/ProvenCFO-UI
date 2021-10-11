@@ -1088,6 +1088,7 @@
     <Content Include="Views\Shared\_reconcilationFilter.cshtml" />
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
     <Content Include="Views\Shared\_doughnut.cshtml" />
+    <Content Include="Views\Reports\_ReportRenamePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

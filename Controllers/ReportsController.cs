@@ -39,17 +39,18 @@ namespace ProvenCfoUI.Controllers
                     var LoginUserid = User.UserId;
                     var guid = Guid.NewGuid().ToString();
 
-                    string fileName = Path.GetFileName(file.FileName);
+                    string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    string fileExtension = Path.GetExtension(file.FileName);
                     string folderPath = $"~/UploadedFiles/Reports/{year}/{periodType}/";
 
-                    string filePath = folderPath + $"{guid}_{fileName}";
+                    string filePath = folderPath + $"{guid}_{fileName}{fileExtension}";
 
                     ReportsVM reportsVM = new ReportsVM();
                     reportsVM.AgencyId_Ref = agencyId;
                     reportsVM.FileName = fileName;
                     reportsVM.FileGuid = guid;
                     reportsVM.FilePath = filePath;
-                    reportsVM.FileExtention = Path.GetExtension(fileName);
+                    reportsVM.FileExtention = fileExtension;
                     reportsVM.Year = year;
                     reportsVM.PeriodType = periodType;
                     reportsVM.Status = "Active";
@@ -227,6 +228,34 @@ namespace ProvenCfoUI.Controllers
 
                 }
             }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult Rename(int Id, string FileName)
+        {
+            try
+            {
+                using (ReportsService reportsService = new ReportsService())
+                {
+                    var result = reportsService.Rename(Id,FileName);
+
+                    if (result != null)
+                    {
+                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }    
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
