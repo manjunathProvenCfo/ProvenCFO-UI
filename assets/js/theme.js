@@ -101,6 +101,7 @@ var utils = function ($) {
     $html: $('html'),
     $body: $('body'),
     $main: $('main'),
+    $abc: $('abc'),
     isRTL: function isRTL() {
       return this.$html.attr('dir') === 'rtl';
     },
@@ -223,7 +224,81 @@ var utils = function ($) {
       }
 
       return breakpoint;
-    }
+      },
+      addProgressCircle = function (selectorProgressCircle) {
+
+          var merge = window._.merge; // progressbar.js@1.0.0 version is used
+          // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+
+          /*-----------------------------------------------
+          | Progress Circle 
+          -----------------------------------------------*/
+          if (isEmptyOrBlank(selectorProgressCircle))
+              selectorProgressCircle = '.progress-circle'
+          var progresCircle = $(selectorProgressCircle);
+          if (progresCircle.length) {
+              progresCircle.each(function (index, value) {
+                  var $this = $(value);
+                  var userOptions = $this.data('options');
+                  var defaultOptions = {
+                      strokeWidth: 2,
+                      trailWidth: 2,
+                      trailColor: utils.grays['200'],
+                      easing: 'easeInOut',
+                      duration: 3000,
+                      svgStyle: {
+                          'stroke-linecap': 'round',
+                          display: 'block',
+                          width: '100%'
+                      },
+                      text: {
+                          autoStyleContainer: false
+                      },
+                      // Set default step function for all animate calls
+                      step: function step(state, circle) {
+                          // Change stroke color during progress
+                          // circle.path.setAttribute('stroke', state.color);
+                          // Change stroke width during progress
+                          // circle.path.setAttribute('stroke-width', state.width);
+                          var percentage = Math.round(circle.value() * 100);
+                          circle.setText("<span class='value'>" + percentage + "<b>%</b></span> <span>" + (userOptions.text || '') + "</span>");
+                      }
+                  }; // Assign default color for IE
+
+                  var color = userOptions.color && userOptions.color.includes('url');
+
+                  if (window.is.ie() && color) {
+                      userOptions.color = utils.colors.primary;
+                  }
+
+                  var options = merge(defaultOptions, userOptions);
+                  var bar = new ProgressBar.Circle(value, options);
+                  var linearGradient = "<defs>\n          <linearGradient id=\"gradient\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\" gradientUnits=\"userSpaceOnUse\">\n            <stop offset=\"0%\" stop-color='#1970e2' />\n            <stop offset=\"100%\" stop-color='#4695ff' />\n          </linearGradient>\n        </defs>"; // Disable gradient color in IE
+
+                  !window.is.ie() && bar.svg.insertAdjacentHTML('beforeEnd', linearGradient);
+                  var playProgressTriggered = false;
+
+                  var progressCircleAnimation = function progressCircleAnimation() {
+                      if (!playProgressTriggered) {
+                          if (utils.isScrolledIntoView(value) || utils.nua.match(/puppeteer/i)) {
+                              bar.animate(options.progress / 100);
+                              playProgressTriggered = true;
+                          }
+                      }
+
+                      return playProgressTriggered;
+                  };
+
+                  progressCircleAnimation();
+                  utils.$window.scroll(function () {
+                      progressCircleAnimation();
+                  });
+              });
+          }
+          /*-----------------------------------------------
+            |   Progress Line
+            -----------------------------------------------*/
+      }
   };
   return Utils;
 }(jQuery);
@@ -4935,83 +5010,86 @@ utils.$document.ready(function () {
 
   return false;
 });
-/*
- global ProgressBar
-*/
-utils.addProgressCircle = function (selectorProgressCircle) {
-    
-    var merge = window._.merge; // progressbar.js@1.0.0 version is used
-    // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
+utils.$document.ready(function () {
+    /*
+     global ProgressBar
+    */
+    utils.addProgressCircle = function (selectorProgressCircle) {
 
-    /*-----------------------------------------------
-    | Progress Circle 
-    -----------------------------------------------*/
-    if (isEmptyOrBlank(selectorProgressCircle))
-        selectorProgressCircle = '.progress-circle'
-    var progresCircle = $(selectorProgressCircle);
-    if (progresCircle.length) {
-        progresCircle.each(function (index, value) {
-            var $this = $(value);
-            var userOptions = $this.data('options');
-            var defaultOptions = {
-                strokeWidth: 2,
-                trailWidth: 2,
-                trailColor: utils.grays['200'],
-                easing: 'easeInOut',
-                duration: 3000,
-                svgStyle: {
-                    'stroke-linecap': 'round',
-                    display: 'block',
-                    width: '100%'
-                },
-                text: {
-                    autoStyleContainer: false
-                },
-                // Set default step function for all animate calls
-                step: function step(state, circle) {
-                    // Change stroke color during progress
-                    // circle.path.setAttribute('stroke', state.color);
-                    // Change stroke width during progress
-                    // circle.path.setAttribute('stroke-width', state.width);
-                    var percentage = Math.round(circle.value() * 100);
-                    circle.setText("<span class='value'>" + percentage + "<b>%</b></span> <span>" + (userOptions.text || '') + "</span>");
-                }
-            }; // Assign default color for IE
+        var merge = window._.merge; // progressbar.js@1.0.0 version is used
+        // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
-            var color = userOptions.color && userOptions.color.includes('url');
-
-            if (window.is.ie() && color) {
-                userOptions.color = utils.colors.primary;
-            }
-
-            var options = merge(defaultOptions, userOptions);
-            var bar = new ProgressBar.Circle(value, options);
-            var linearGradient = "<defs>\n          <linearGradient id=\"gradient\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\" gradientUnits=\"userSpaceOnUse\">\n            <stop offset=\"0%\" stop-color='#1970e2' />\n            <stop offset=\"100%\" stop-color='#4695ff' />\n          </linearGradient>\n        </defs>"; // Disable gradient color in IE
-
-            !window.is.ie() && bar.svg.insertAdjacentHTML('beforeEnd', linearGradient);
-            var playProgressTriggered = false;
-
-            var progressCircleAnimation = function progressCircleAnimation() {
-                if (!playProgressTriggered) {
-                    if (utils.isScrolledIntoView(value) || utils.nua.match(/puppeteer/i)) {
-                        bar.animate(options.progress / 100);
-                        playProgressTriggered = true;
+        /*-----------------------------------------------
+        | Progress Circle 
+        -----------------------------------------------*/
+        if (isEmptyOrBlank(selectorProgressCircle))
+            selectorProgressCircle = '.progress-circle'
+        var progresCircle = $(selectorProgressCircle);
+        if (progresCircle.length) {
+            progresCircle.each(function (index, value) {
+                var $this = $(value);
+                var userOptions = $this.data('options');
+                var defaultOptions = {
+                    strokeWidth: 2,
+                    trailWidth: 2,
+                    trailColor: utils.grays['200'],
+                    easing: 'easeInOut',
+                    duration: 3000,
+                    svgStyle: {
+                        'stroke-linecap': 'round',
+                        display: 'block',
+                        width: '100%'
+                    },
+                    text: {
+                        autoStyleContainer: false
+                    },
+                    // Set default step function for all animate calls
+                    step: function step(state, circle) {
+                        // Change stroke color during progress
+                        // circle.path.setAttribute('stroke', state.color);
+                        // Change stroke width during progress
+                        // circle.path.setAttribute('stroke-width', state.width);
+                        var percentage = Math.round(circle.value() * 100);
+                        circle.setText("<span class='value'>" + percentage + "<b>%</b></span> <span>" + (userOptions.text || '') + "</span>");
                     }
+                }; // Assign default color for IE
+
+                var color = userOptions.color && userOptions.color.includes('url');
+
+                if (window.is.ie() && color) {
+                    userOptions.color = utils.colors.primary;
                 }
 
-                return playProgressTriggered;
-            };
+                var options = merge(defaultOptions, userOptions);
+                var bar = new ProgressBar.Circle(value, options);
+                var linearGradient = "<defs>\n          <linearGradient id=\"gradient\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\" gradientUnits=\"userSpaceOnUse\">\n            <stop offset=\"0%\" stop-color='#1970e2' />\n            <stop offset=\"100%\" stop-color='#4695ff' />\n          </linearGradient>\n        </defs>"; // Disable gradient color in IE
 
-            progressCircleAnimation();
-            utils.$window.scroll(function () {
+                !window.is.ie() && bar.svg.insertAdjacentHTML('beforeEnd', linearGradient);
+                var playProgressTriggered = false;
+
+                var progressCircleAnimation = function progressCircleAnimation() {
+                    if (!playProgressTriggered) {
+                        if (utils.isScrolledIntoView(value) || utils.nua.match(/puppeteer/i)) {
+                            bar.animate(options.progress / 100);
+                            playProgressTriggered = true;
+                        }
+                    }
+
+                    return playProgressTriggered;
+                };
+
                 progressCircleAnimation();
+                utils.$window.scroll(function () {
+                    progressCircleAnimation();
+                });
             });
-        });
+        }
+        /*-----------------------------------------------
+          |   Progress Line
+          -----------------------------------------------*/
     }
-  /*-----------------------------------------------
-    |   Progress Line
-    -----------------------------------------------*/
-}
+
+});
 utils.$document.ready(function () {
   var merge = window._.merge; // progressbar.js@1.0.0 version is used
   // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/

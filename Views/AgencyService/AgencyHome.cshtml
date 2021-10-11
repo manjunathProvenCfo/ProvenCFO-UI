@@ -547,6 +547,7 @@
 
         @Scripts.Render("~//bundles/js/chart");
         @Scripts.Render("~/bundles/js/select");
+
         @Scripts.Render("~/bundles/js/toastr");
         @Scripts.Render("~/bundles/js/clipboard");
    
@@ -1326,7 +1327,7 @@
                 })
             }
             function bindNotInBooksAndBanksCountDashboard1() {
-                debugger;
+              
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
 
@@ -1336,7 +1337,7 @@
                         for (var i = 0; i < data.length; i++) {
 
                             percentage = data[i].percentage.toFixed(0);
-                            debugger;
+                           
                             totalSum = totalSum + data[i].totalCount;
                             if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
                                 $("#lblNotInBooksCount").text(data[i].Count);

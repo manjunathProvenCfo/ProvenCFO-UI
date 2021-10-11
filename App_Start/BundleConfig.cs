@@ -28,14 +28,23 @@ namespace ProvenCfoUI
              "~/assets/lib/flatpickr/flatpickr.min.js",
              "~/assets/lib/emojionearea/emojionearea.min.js",
              "~/assets/lib/jquery.fancybox.min.js",
-             "~/assets/js/theme.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
-             "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
+             "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js"
+    ));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/js/theme").Include(
+               "~/assets/js/theme.min.js"
+               ));
+
+            bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
              "~/assets/js/wrapper.js"
-    ));
+               ));
+            
+
 
             bundles.Add(new ScriptBundle("~/bundles/js/select").Include(
                "~/assets/lib/select2/select2.min.js"
