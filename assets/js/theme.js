@@ -4944,7 +4944,7 @@ utils.addProgressCircle = function (selectorProgressCircle) {
     // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
 
     /*-----------------------------------------------
-    |   Progress Circle
+    | Progress Circle 
     -----------------------------------------------*/
     if (isEmptyOrBlank(selectorProgressCircle))
         selectorProgressCircle = '.progress-circle'
