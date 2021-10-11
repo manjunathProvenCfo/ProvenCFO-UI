@@ -62,14 +62,14 @@ $(function () {
         }
         else {
             if (year == currentYear) {
-                $divReportPeriodYearEnd.show();
+                $divReportPeriodYearEnd.hide();
 
                 for (var i = 0; i < (12 - currentMonth + 1); i++) {
 
                     if (i == 0)
-                        $divReportPeriodQuarters.filter("[data-report-period='Q4']").show();
+                        $divReportPeriodQuarters.filter("[data-report-period='Q4']").hide();
                     else if (i == 3)
-                        $divReportPeriodQuarters.filter("[data-report-period='Q3']").show();
+                        $divReportPeriodQuarters.filter("[data-report-period='Q3']").hide();
                     else if (i == 6)
                         $divReportPeriodQuarters.filter("[data-report-period='Q2']").hide();
                     else if (i == 9)
