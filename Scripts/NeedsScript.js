@@ -150,56 +150,62 @@ $(document).ready(function () {
     var ClientID = $("#ddlclient option:selected").val();
     getAgencyMembersList(ClientID);
 
-    $("#btnCreateNewTicket").click(function () {
+    $("#btnCreateNewTicket").click(function (e) {
+        if (checkAttachment() == false) {
+            return false;
+        }
+        else {
 
-        var TaskType = '';//$('#ddlTaskType').val();
-        var TaskTitle = $('#txtTaskTitle').val();
-        var Description = tinyMCE.activeEditor.getContent();
-        //var Assignee = '';//$('#ddlAssignee').val();
-        var Priority = 'medium';//$('#ddlPriority').val();
-        var dpStartDate = '';//$('#dpStartDate').val();
-        var dpEndDate = '';//$('#dpEndDate').val();
-        var dpDueDate = '';//$('#dpDueDate').val();
-        var EstimatedHours = '';//$('#txtEstimatedHours').val();
-        var Labels = $('#divTag span').map(function (i, opt) {
-            return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
-        }).toArray().join(', ');
-        var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
-            return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
-        }).toArray().join(', ');
 
-        var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
 
-        $.ajax({
-            type: "POST",
-            url: "/Needs/CreatNewTask",
-            data: JSON.stringify({ Task: pdata }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                if (response.Message == 'Success') {
-                    window.location.reload();
-                    $('.close-circle').click();
-                    $('.modal-backdrop').remove();
-                }
-                else {
-                    if (response.Message == 'Exist') {
-                        ShowAlertBox('Required!', response.Message, 'warning');
+            var TaskType = '';//$('#ddlTaskType').val();
+            var TaskTitle = $('#txtTaskTitle').val();
+            var Description = tinyMCE.activeEditor.getContent();
+            //var Assignee = '';//$('#ddlAssignee').val();
+            var Priority = 'medium';//$('#ddlPriority').val();
+            var dpStartDate = '';//$('#dpStartDate').val();
+            var dpEndDate = '';//$('#dpEndDate').val();
+            var dpDueDate = '';//$('#dpDueDate').val();
+            var EstimatedHours = '';//$('#txtEstimatedHours').val();
+            var Labels = $('#divTag span').map(function (i, opt) {
+                return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
+            }).toArray().join(', ');
+            var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
+                return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
+            }).toArray().join(', ');
+
+            var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
+
+            $.ajax({
+                type: "POST",
+                url: "/Needs/CreatNewTask",
+                data: JSON.stringify({ Task: pdata }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
                     }
                     else {
-                        ShowAlertBox('Exist!', response.Message, 'warning');
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
 
+                        }
                     }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
                 }
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
-
+            });
+        }
     });
     $('#btnCancelComments').click(function (e) {
         $('#txtComments').val('');
@@ -1041,10 +1047,11 @@ function checkAttachment() {
     
     if (attachment > 0) {
         ShowAlertBox('', ` You have ${attachment} attachment left. Please upload or remove it before close.`, 'warning');
+        return false;
     }
     else
         $("#kanban-modal-new").modal('hide');
-
+    return true;
 }
 function checkAttachment1() {
     let attachment1 = $("#previews_view").children().length;
