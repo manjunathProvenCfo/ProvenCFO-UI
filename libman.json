@@ -28,15 +28,16 @@
         "moment.min.js.map"
       ]
     },
-    //{
-    //  "provider": "cdnjs",
-    //  "library": "blueimp-file-upload@10.31.0",
-    //  "destination": "assets/lib/blueimp-file-upload/"
-    //},
-    //{
-    //  "provider": "cdnjs",
-    //  "library": "blueimp-gallery@3.3.0",
-    //  "destination": "assets/lib/blueimp-gallery/"
-    //}
+    {
+      "provider": "cdnjs",
+      "library": "jquery-contextmenu@2.9.2",
+      "destination": "assets/lib/jquery-contextmenu/",
+      "files": [
+        "jquery.contextMenu.min.js",
+        "jquery.contextMenu.min.css",
+        "jquery.contextMenu.min.js.map",
+        "jquery.ui.position.min.js"
+      ]
+    }
   ]
 }

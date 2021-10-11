@@ -559,6 +559,9 @@
     <Content Include="assets\lib\glightbox\glightbox.min.css" />
     <Content Include="assets\lib\glightbox\glightbox.min.js" />
     <Content Include="assets\lib\is_js\is.min.js" />
+    <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.css" />
+    <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js" />
+    <Content Include="assets\lib\jquery-contextmenu\jquery.ui.position.min.js" />
     <Content Include="assets\lib\jquery-countdown\jquery.countdown.min.js" />
     <Content Include="assets\lib\jquery-validation\jquery.validate.min.js" />
     <Content Include="assets\lib\jquery.mb.ytplayer\jquery.mb.YTPlayer.min.css" />
@@ -991,6 +994,7 @@
     <Content Include="assets\AvertaWebFont\woff\Averta Thin.woff" />
     <Content Include="libman.json" />
     <Content Include="assets\lib\moment.js\moment.min.js.map" />
+    <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

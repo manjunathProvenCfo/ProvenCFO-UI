@@ -98,7 +98,10 @@ namespace ProvenCfoUI
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));
 
-            bundles.Add(new Bundle("~/bundles/js/reports").Include("~/assets/js/reports.js"));
+            bundles.Add(new Bundle("~/bundles/js/reports").Include(
+                "~/assets/lib/jquery-contextmenu/jquery.contextmenu.min.js",
+                "~/assets/lib/jquery-contextmenu/jquery.ui.position.min.js",
+                "~/assets/js/reports.js"));
             #region FileUploader
 
             bundles.Add(new ScriptBundle("~/bundles/jQuery-File-Upload").Include(
