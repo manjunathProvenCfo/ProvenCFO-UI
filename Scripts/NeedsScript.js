@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
     //view Page
     myDropzone_view.on("addedfile", function (file) {
-      
+
         file.previewElement.querySelector(".start").onclick = function () {
 
             var IsCanAddfiles = true;
@@ -112,7 +112,7 @@ $(document).ready(function () {
 
     //Create Page
     myDropzone.on("addedfile", function (file) {
-       
+
         file.previewElement.querySelector(".start").onclick = function () {
             var IsCanAddfiles = true;
             var filesList = $('#attachmentContainer_Add h6');
@@ -151,13 +151,7 @@ $(document).ready(function () {
     getAgencyMembersList(ClientID);
 
     $("#btnCreateNewTicket").click(function (e) {
-        if (checkAttachment() == false) {
-            return false;
-        }
-        else {
-
-
-
+       
             var TaskType = '';//$('#ddlTaskType').val();
             var TaskTitle = $('#txtTaskTitle').val();
             var Description = tinyMCE.activeEditor.getContent();
@@ -175,8 +169,8 @@ $(document).ready(function () {
             }).toArray().join(', ');
 
             var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
-
             $.ajax({
+
                 type: "POST",
                 url: "/Needs/CreatNewTask",
                 data: JSON.stringify({ Task: pdata }),
@@ -205,7 +199,6 @@ $(document).ready(function () {
                     alert(response.responseText);
                 }
             });
-        }
     });
     $('#btnCancelComments').click(function (e) {
         $('#txtComments').val('');
@@ -230,7 +223,7 @@ $(document).ready(function () {
         $('#divEditDescription').hide();
     });
     $('#kanband-create-new-btn').click(function (e) {
-        
+
         tinymce.get("txtDescription").getContent()
         tinymce.get("txtDescription").setContent("");
         tinyMCE.activeEditor.setContent("");
@@ -403,7 +396,7 @@ function RemovveFileOnCreate(attachmentId) {
         confirmButtonText: "Yes, delete it!",
         confirmButtonColor: "#ec6c62"
     },
-      
+
         /* RemoveAttchment(attachmentId);*/
         function () {
 
@@ -414,7 +407,7 @@ function RemovveFileOnCreate(attachmentId) {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    RemoveAttchment(attachmentId);                   
+                    RemoveAttchment(attachmentId);
                     if (response.Message == 'Success') {
                         ShowAlertBox('', 'Selected attachment is removed.', 'warning');
 
@@ -438,7 +431,7 @@ function RemoveMember(UserID) {
 
 }
 function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
-   /* $('#att_' + attachmentId)[0].remove();*/
+    /* $('#att_' + attachmentId)[0].remove();*/
     var TaskId = gCurrentViewTaskId;
     swal({
         title: "Are you sure?",
@@ -449,7 +442,7 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
         confirmButtonText: "Yes, delete it!",
         confirmButtonColor: "#ec6c62"
     },
-       
+
         function () {
             $.ajax({
                 type: "POST",
@@ -459,8 +452,8 @@ function Removeattachment_view(attachmentId, FileName, IsTaskAttachment) {
                 dataType: "json",
 
                 success: function (response) {
-                   
-                    $('#att_' + attachmentId)[0].remove();                  
+
+                    $('#att_' + attachmentId)[0].remove();
                     if (response.Message == 'Success') {
                         ShowAlertBox('', 'Selected attachment is removed.', 'warning');
                         var AttachmentCount = $('#attCount_' + gCurrentViewTaskId + ' span')[0].innerText.trim();
@@ -852,7 +845,7 @@ function addComment(data, UserFullName) {
     }
 }
 function addMembers(e) {
-    
+
     var element = $('#' + e.currentTarget.id + ' h6');
     var IsExistelement = $('#ulAddedMembers #li_' + e.currentTarget.id);
     if (IsExistelement.length > 0) {
@@ -868,7 +861,7 @@ function addMembers(e) {
     }
     $('#ulAddedMembers').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
 }
-function addMember_view(e) {    
+function addMember_view(e) {
     var element = $('#' + e.currentTarget.id + ' h6');
     var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
     var singlCode = "'";
@@ -891,7 +884,7 @@ function addMember_view(e) {
 }
 
 function addMembers_view(e) {
-    
+
     var element = $('#' + e.currentTarget.id + ' h6');
     var MainPageelement = $('#' + gCurrentViewTaskId + ' ul')
     var singlCode = "'";
@@ -1034,7 +1027,7 @@ function openModal(filepath, IsShow) {
 }
 
 function closeModal() {
- 
+
     $("#myModal").css("display", "none");
     $(".mySlides").css("display", "none");
     $("#imgPreview").attr("src", "");
@@ -1042,9 +1035,9 @@ function closeModal() {
 }
 
 function checkAttachment() {
-    
+
     let attachment = $("#previews").children().length;
-    
+
     if (attachment > 0) {
         ShowAlertBox('', ` You have ${attachment} attachment left. Please upload or remove it before close.`, 'warning');
         return false;
@@ -1053,6 +1046,7 @@ function checkAttachment() {
         $("#kanban-modal-new").modal('hide');
     return true;
 }
+
 function checkAttachment1() {
     let attachment1 = $("#previews_view").children().length;
     if (attachment1 > 0) {
@@ -1060,5 +1054,7 @@ function checkAttachment1() {
     }
     else
         $("#kanban-modal-open").modal('hide');
-
+}
+function CancelForCreate() {
+    $("#kanban-modal-new").modal('hide');
 }
