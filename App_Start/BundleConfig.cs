@@ -163,7 +163,7 @@ namespace ProvenCfoUI
                      "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
-                     "~/assets/lib/sweetalert/sweetalert.min.js",
+                     "~/assets/lib/sweetalert/sweetalert.min.css",
                      "~/assets/css/theme.css"
                     ));
 

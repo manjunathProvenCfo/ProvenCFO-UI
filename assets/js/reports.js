@@ -47,7 +47,9 @@ $(function () {
 
     if (isReadonlyUser == false) {
         addContextMenu();
+        addDraggable();
     }
+
     $reportYears.change(function (e) {
 
         let year = parseInt($(this).val());
@@ -82,7 +84,6 @@ $(function () {
         bindReports("");
 
     });
-
     $btnUpload.click(function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -193,48 +194,7 @@ $(function () {
         window.open(`/Reports/DownloadAll?agencyId=${agencyId}&year=${year}&periodType=${period}`);
         return false;
     });
-    //Draggable Start
-    const Selectors = {
-        BODY: 'body',
-        NOTES_CONTAINER: '.notes-container',
-        NOTES_ITEMS_CONTAINER: 'div.notes-items-container',
-        NOTES_ITEM: '.notes-item',
-    };
-
-    let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
-    for (var i = 0; i < arrItemsContainer.length; i++) {
-        let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
-            draggable: Selectors.NOTES_ITEM,
-            delay: 200,
-            mirror: {
-                appendTo: Selectors.BODY,
-                constrainDimensions: true
-            }
-        });
-        sortable.on('drag:stop', function (e) {
-            var $this = $(e.data.source);
-            var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
-            let $items = $itemContainer.find('.notes-item:visible');
-            let ids = [];
-            let positions = [];
-            let counter = $items.length;
-            for (var i = 0; i < $items.length; i++) {
-                ids.push(parseInt($items[i].getAttribute("data-id")));
-                positions.push(counter);
-                counter = counter - 1;
-            }
-            let pdata = { Ids: ids, Positions: positions };
-
-            postAjax('/reports/UpdatePositions', JSON.stringify(pdata), function (response) {
-                if (response.Message == 'Success') {
-
-                }
-
-            })
-
-        });
-    }
-    //Draggable End
+    
     $btnDeleteAll.click(function (e) {
         e.stopPropagation();
         let el = $(this);
@@ -401,7 +361,50 @@ var addContextMenu = function () {
         items: menus
     });
 }
+var addDraggable = function () {
+    //Draggable Start
+    const Selectors = {
+        BODY: 'body',
+        NOTES_CONTAINER: '.notes-container',
+        NOTES_ITEMS_CONTAINER: 'div.notes-items-container',
+        NOTES_ITEM: '.notes-item',
+    };
 
+    let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+    for (var i = 0; i < arrItemsContainer.length; i++) {
+        let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+            draggable: Selectors.NOTES_ITEM,
+            delay: 200,
+            mirror: {
+                appendTo: Selectors.BODY,
+                constrainDimensions: true
+            }
+        });
+        sortable.on('drag:stop', function (e) {
+            var $this = $(e.data.source);
+            var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+            let $items = $itemContainer.find('.notes-item:visible');
+            let ids = [];
+            let positions = [];
+            let counter = $items.length;
+            for (var i = 0; i < $items.length; i++) {
+                ids.push(parseInt($items[i].getAttribute("data-id")));
+                positions.push(counter);
+                counter = counter - 1;
+            }
+            let pdata = { Ids: ids, Positions: positions };
+
+            postAjax('/reports/UpdatePositions', JSON.stringify(pdata), function (response) {
+                if (response.Message == 'Success') {
+
+                }
+
+            })
+
+        });
+    }
+    //Draggable End
+}
 var RemoveSavedFile = function (e, reportId, period) {
     let report = $(e.currentTarget).parents('.media');
     ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this report?", "Yes, remove it!", function (isConfirmed) {
@@ -445,6 +448,7 @@ var monthlySummaryOnClick = function (e, id) {
     let period = data.reportPeriod;
 
     postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}`, null, function (response) {
+        debugger
         if (response.message == "success") {
             ShowAlertBoxSuccess("", "Report has been marked as Monthly Summary report!")
             bindReports(period);
