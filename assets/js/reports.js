@@ -94,6 +94,7 @@ $(function () {
         let year = data.year;
         let period = data.reportPeriod;
 
+        $("#lblReportPeriod").text(`${period} ${year}`);
         $uploaderModal.modal('show');
 
         if (!isEmpty(myDropzone_view)) {
