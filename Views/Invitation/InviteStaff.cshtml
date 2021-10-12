@@ -160,16 +160,13 @@
 
        
         var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
-
-        if (msg != undefined && msg != '' && msg == "Invitation Send Successfully") {
-            debugger;
+       
+        if (msg != undefined && msg != '' && msg == "Sent") {
+           
             AddAlertRole();
             $('#InviteCreate').val('');
         }
-        //else if (msg != undefined && msg != '' && msg == "Updated") {
-        //    UpdateAlertRole();
-        //    $('#InviteCreate').val('');
-        //}
+       
         if (msg != undefined && msg != '' && msg == "Exist") {
 
             $('#EmailIdExist').show();
