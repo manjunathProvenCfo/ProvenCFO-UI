@@ -55,6 +55,18 @@ namespace Proven.Service
         {          
             return PostAsync<ReturnModel, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
         }
+
+        public XeroReconcilationDataOnDemandRequestMainModel AddNewXeroOnDemandDataRequest(XeroReconcilationDataOnDemandRequestVM model)
+        {
+            return PostAsync<XeroReconcilationDataOnDemandRequestMainModel, XeroReconcilationDataOnDemandRequestVM>("Xero/AddNewXeroOnDemandDataRequest", model).Result;
+        }
+
+        public XeroReconcilationDataOnDemandRequestMainModel GetXeroOnDemandRequestStatus(string CurrentStatus)
+        {
+            return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/GetXeroOnDemandRequestStatus?CurrentStatus=" + CurrentStatus).Result;
+        }
+
+
         public void Dispose()
         {
             Dispose(true);

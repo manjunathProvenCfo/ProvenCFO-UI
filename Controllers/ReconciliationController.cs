@@ -414,5 +414,74 @@ namespace ProvenCfoUI.Controllers
             }
 
         }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult AddNewXeroOnDemandDataRequest(XeroReconcilationDataOnDemandRequestVM model)
+        {
+            try
+            {
+                var AgencyID = 0;
+                var LoginUserid = Session["UserId"].ToString();
+                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                if (UserPref != null && UserPref.Count() > 0)
+                {
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                }
+                XeroReconcilationDataOnDemandRequestVM xero = new XeroReconcilationDataOnDemandRequestVM();
+                model.RequestType = "On Demand";
+                model.RequestedAtUTC = xero.RequestedAtUTC;
+                model.CurrentStatus = "New";
+                model.RequestCompletedAtUTC = xero.RequestCompletedAtUTC;
+                model.Remark = xero.Remark;
+                model.AgencyId = AgencyID;
+                model.AgencyName = xero.AgencyName;
+                model.CreatedBy = LoginUserid;
+                model.CreatedDate = xero.CreatedDate;
+                using (ReconcilationService objReconcilliation = new ReconcilationService())
+                {
+                    var result = objReconcilliation.AddNewXeroOnDemandDataRequest(model).ResultData;
+                    if (result != null)
+                    {
+                        ViewBag.ErrorMessage = "Created";
+                        return Json(new { data = result, Status = ViewBag.ErrorMessage, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Error";
+                        return Json(new { data = "", Status = ViewBag.ErrorMessage, Message = "Error" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
+        {
+            try
+            {
+
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
+                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
+
     }
 }
