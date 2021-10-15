@@ -93,7 +93,7 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p" onclick="OnDemandData()"></span>RequestOnDemandData</button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p" ></span>RequestOnDemandData</button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
@@ -431,44 +431,50 @@
                 });
 
                 $("#OnDemandData").click(function () {
-                   $("#Loader").removeAttr("style");
+                   /*  $("#Loader").removeAttr("style");*/
+                    var ClientID = $("#ddlclient option:selected").val();
+                  
+                  
                     var RequestType = "On Demand";
                     var RequestedAtUTC = '';
                     var CurrentStatus = "New";
                     var RequestCompletedAtUTC = '';
                     var Remark = '';
-                    var AgencyId = ;
+                   
                     var AgencyName = '';
                     var CreatedBy = '';
                     var CreatedDate = '';
-                    var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: AgencyId, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
-                    $.ajax({
-
-                        type: "POST",
-                        url: "/Reconcilliation/AddNewXeroOnDemandDataRequest",
-                        data: JSON.stringify({ Task: pdata }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
+                    var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+                    postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+                        //if (response.Message == 'Success') {
+                                       
+                       // type: "POST",
+                       ///* url: '/Reconcilliation/AddNewXeroOnDemandDataRequest?id=' + ClientID,*/
+                       // url: "/Reconcilliation/AddNewXeroOnDemandDataRequest",
+                       // data: JSON.stringify({ Task: pdata }),
+                       // contentType: "application/json; charset=utf-8",
+                       // dataType: "json",
+                       // success: function (response) {
+                           
                             if (response.Message == 'Success') {
                                 window.location.reload();
                             }
-                            else {
-                                if (response.Message == 'Exist') {
-                                    ShowAlertBox('Required!', response.Message, 'warning');
-                                }
-                                else {
-                                    ShowAlertBox('Exist!', response.Message, 'warning');
+                        //    else {
+                        //        if (response.Message == 'Exist') {
+                        //            ShowAlertBox('Required!', response.Message, 'warning');
+                        //        }
+                        //        else {
+                        //            ShowAlertBox('Exist!', response.Message, 'warning');
 
-                                }
-                            }
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
+                        //        }
+                        //    }
+                        //},
+                        //failure: function (response) {
+                        //    alert(response.responseText);
+                        //},
+                        //error: function (response) {
+                        //    alert(response.responseText);
+                        //}
                     });
 
                 });
