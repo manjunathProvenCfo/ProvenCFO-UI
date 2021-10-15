@@ -25,7 +25,7 @@ namespace Proven.Model
     {
         public bool Status { get; set; }
         public int statusCode { get; set; }
-        public List<XeroReconcilationDataOnDemandRequestVM> ResultData { get; set; }
+        public XeroReconcilationDataOnDemandRequestVM ResultData { get; set; }
         public string message { get; set; }
         public object resourceType { get; set; }
         public object metaData { get; set; }
