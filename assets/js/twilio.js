@@ -139,12 +139,12 @@ var setActiveChannel = function (channel) {
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
-
+        debugger
         var body = $messageBodyInput.val();
         if (validateMessage()) {
             channel.sendMessage(body).then(function () {
-                getTwilioToken();
-                twilioClient.updateToken(token);
+                //getTwilioToken();
+                //twilioClient.updateToken(token);
 
                 $messageBodyInput.val('').focus();
                 $messageBodyInput.trigger('change');

@@ -1,7 +1,10 @@
-﻿$(function () {
+﻿const chatPages = ["communication/chat", "reconciliation"]
+$(function () {
     //Twilio Chat 
     if (userEmailAddress != "") {
-        createTwilioClientGlobal();
+        var filteredPages = chatPages.filter(x => (window.location.href.toLowerCase().indexOf(x) > 0 ? false : true))
+        if (filteredPages.length == chatPages.length)
+            createTwilioClientGlobal();
     }
     //Twilio Chat
     bindNotInBooksAndBanksCount();
@@ -28,7 +31,7 @@
         HighlightMenu();
 
     });
-    
+
 })
 
 var getTwilioToken = function (email) {
@@ -53,7 +56,7 @@ function SetUserPreferencesForAgency() {
 
     var ClientID = $("#ddlclient option:selected").val();
     GetTotalNotesCount();
- 
+
     $.ajax({
         url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
         type: "POST",

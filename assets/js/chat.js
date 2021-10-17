@@ -71,7 +71,20 @@ var loadChatPage = function (isPublicChatOnly, type) {
         "placeholder": "Type your message", "emojiPlaceholder": ":smile_cat:", "search": true, "tones": false, "filtersPosition": "bottom", "recentEmojis": false, events: {
             keydown: function (editor, event) {
                 if (event.keyCode === 13) {
-                    $btnSendMessage.click();
+                    //event.preventDefault();
+                    debugger
+                    let text = this.editor.html();
+                    if (event.shiftKey) {
+                        let msg = text + ` </br>`;
+                        $messageBodyInput.val(msg);
+                        $(".emojionearea-editor").html(msg);
+                    }
+                    else {
+                        let msg = text;
+                        $messageBodyInput.val(msg);
+                        $(".emojionearea-editor").html(msg);
+                        $btnSendMessage[0].click();
+                    }
                 } else if (activeChannel) {
                     activeChannel.typing();
                 }
@@ -80,7 +93,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
                 let val = "";
                 if (editor && editor.length > 0)
                     val = editor[0].innerText;
-
+                
                 if (isEmptyOrBlank(val))
                     $btnSendMessage.removeClass('text-primary');
                 else
