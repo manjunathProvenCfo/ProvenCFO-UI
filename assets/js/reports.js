@@ -159,6 +159,7 @@ $(function () {
                 var filesList = $('#attachmentContainer h6');
 
                 $.each(filesList, function (key, item) {
+                    debugger
                     if (item != null && item.innerText == file.name) {
                         IsCanAddfiles = false;
                     }
@@ -274,7 +275,8 @@ var prepareAndPrependUploaderAttachment = function (obj) {
         thumbnail = obj.FilePath;
     obj.FilePath = obj.FilePath.replace("~/", "../../");
     thumbnail = thumbnail.replace("~/", "../../");
-    var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="RemoveSavedFile(event,${obj.Id},'${obj.PeriodType}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+    debugger
+    var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}${obj.FileExtention}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="RemoveSavedFile(event,${obj.Id},'${obj.PeriodType}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
     $attachmentContainer.prepend(reportAttachment);
 }
 
@@ -351,7 +353,7 @@ var addContextMenu = function () {
             }
         },
         "defaultReport": {
-            name: "Default Report",
+            name: "Set as Default",
             callback: function (itemKey, opt, e) {
                 opt.$trigger.find("#aMonthlySummary")[0].click();
             }
@@ -449,7 +451,6 @@ var monthlySummaryOnClick = function (e, id) {
     let period = data.reportPeriod;
 
     postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}`, null, function (response) {
-        debugger
         if (response.message == "success") {
             ShowAlertBoxSuccess("", "Report has been marked as Monthly Summary report!")
             bindReports(period);
