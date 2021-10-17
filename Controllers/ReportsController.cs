@@ -115,7 +115,7 @@ namespace ProvenCfoUI.Controllers
 
                         foreach (var report in reports)
                         {
-                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName);
+                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName+ report.FileExtention);
                         }
                     }
                 }
