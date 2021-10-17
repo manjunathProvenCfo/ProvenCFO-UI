@@ -452,7 +452,7 @@ var monthlySummaryOnClick = function (e, id) {
 
     postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}`, null, function (response) {
         if (response.message == "success") {
-            ShowAlertBoxSuccess("", "Report has been marked as Monthly Summary report!")
+            ShowAlertBoxSuccess("", "Report has been marked as Default report!")
             bindReports(period);
         }
     });
