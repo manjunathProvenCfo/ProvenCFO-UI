@@ -139,8 +139,7 @@ var setActiveChannel = function (channel) {
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
-        debugger
-        var body = $messageBodyInput.val();
+        var body = $chatEditorArea[0].emojioneArea.getText();
         if (validateMessage()) {
             channel.sendMessage(body).then(function () {
                 //getTwilioToken();
@@ -309,7 +308,8 @@ var updateUnreadMessages = function updateUnreadMessages(message) {
 
 var validateMessage = function () {
     let isValid = true;
-    let body = $messageBodyInput.val();
+    let body = $chatEditorArea[0].emojioneArea.getText();
+    body = body.replaceAll("\n", "");
     if (isEmptyOrBlank(body)) {
         isValid = false;
     }
@@ -346,7 +346,8 @@ var prepareMessageRow = function (message, timeStampRowId, participantName) {
 
     switch (msg.type) {
         case "text":
-            msgHTML = msg.body;
+            if (!isEmptyOrBlank(msg.body))
+                msgHTML = msg.body.replaceAll("\n","</br>");
             break;
         default:
     }
@@ -458,7 +459,7 @@ var addMessage = function (message) {
     var timestampRow = addTimestampRow(msg.timestamp);
     let timeStampRowId = timestampRow.attr("id");
 
-    let participantName= getParticipantNameByEmail(msg.author.toLowerCase());
+    let participantName = getParticipantNameByEmail(msg.author.toLowerCase());
     var messageRow = prepareMessageRow(message, timeStampRowId, participantName);
     let firstMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:first`);
     let lastMsgDiv = $channelMessages.find(`[data-timestamp='${timeStampRowId}']:last`);

@@ -9,6 +9,7 @@ var $channelReconciliationCompany;
 var $channelReconciliationDate;
 var $channelReconciliationAmount;
 var $messageBodyInput;
+var $chatEditorArea;
 var $messageBodyFileUploader;
 var $messageBodyFilePreviewerModal;
 var $btnSendMessage;
@@ -44,6 +45,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
     $channelReconciliationDate = $(".channelReconciliationDate");
     $channelReconciliationAmount = $(".channelReconciliationAmount");
     $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
     $messageBodyFileUploader = $("#chat-file-upload");
     $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
     $btnSendMessage = $("#send-message");
@@ -67,40 +69,47 @@ var loadChatPage = function (isPublicChatOnly, type) {
         $participantFirst = $("#chatParticipants .chat-contact:first");
     }
 
-    $messageBodyInput.emojioneArea({
-        "placeholder": "Type your message", "emojiPlaceholder": ":smile_cat:", "search": true, "tones": false, "filtersPosition": "bottom", "recentEmojis": false, events: {
-            keydown: function (editor, event) {
-                if (event.keyCode === 13) {
-                    //event.preventDefault();
-                    debugger
-                    let text = this.editor.html();
-                    if (event.shiftKey) {
-                        let msg = text + ` </br>`;
-                        $messageBodyInput.val(msg);
-                        $(".emojionearea-editor").html(msg);
-                    }
-                    else {
-                        let msg = text;
-                        $messageBodyInput.val(msg);
-                        $(".emojionearea-editor").html(msg);
-                        $btnSendMessage[0].click();
-                    }
-                } else if (activeChannel) {
-                    activeChannel.typing();
-                }
-            },
-            keyup: function (editor, event) {
-                let val = "";
-                if (editor && editor.length > 0)
-                    val = editor[0].innerText;
-                
-                if (isEmptyOrBlank(val))
-                    $btnSendMessage.removeClass('text-primary');
-                else
-                    $btnSendMessage.addClass('text-primary');
-            }
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type =="keydown")
+                $btnSendMessage[0].click();
         }
-    });
+    })
+    //$messageBodyInput.emojioneArea({
+    //    "placeholder": "Type your message", "emojiPlaceholder": ":smile_cat:", "search": true, "tones": false, "filtersPosition": "bottom", "recentEmojis": false, events: {
+    //        keydown: function (editor, event) {
+    //            if (event.keyCode === 13) {
+    //                //event.preventDefault();
+    //                debugger
+    //                let text = this.editor.html();
+    //                if (event.shiftKey) {
+    //                    let msg = text + ` </br>`;
+    //                    $messageBodyInput.val(msg);
+    //                    $(".emojionearea-editor").html(msg);
+    //                }
+    //                else {
+    //                    let msg = text;
+    //                    $messageBodyInput.val(msg);
+    //                    $(".emojionearea-editor").html(msg);
+    //                    $btnSendMessage[0].click();
+    //                }
+    //            } else if (activeChannel) {
+    //                activeChannel.typing();
+    //            }
+    //        },
+    //        keyup: function (editor, event) {
+    //            let val = "";
+    //            if (editor && editor.length > 0)
+    //                val = editor[0].innerText;
+                
+    //            if (isEmptyOrBlank(val))
+    //                $btnSendMessage.removeClass('text-primary');
+    //            else
+    //                $btnSendMessage.addClass('text-primary');
+    //        }
+    //    }
+    //});
 
     $messageBodyFileUploader.on("change", function (e) {
         var files = $(this)[0].files;
