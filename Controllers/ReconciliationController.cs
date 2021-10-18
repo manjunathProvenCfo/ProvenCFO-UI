@@ -461,15 +461,35 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        //[CheckSession]
+        //public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
+        //{
+        //    try
+        //    {
+
+        //        using (ReconcilationService objReConcilation = new ReconcilationService())
+        //        {
+        //            var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
+        //            return Json(objResult, JsonRequestBehavior.AllowGet);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
+
         [CheckSession]
-        public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
+        public JsonResult GetXeroOnDemandRequestStatus(int AgencyID, string CurrentStatus, string CreaterUserID)
         {
             try
             {
 
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyID, CurrentStatus, CreaterUserID);
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
 
@@ -480,8 +500,6 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
-
 
     }
 }
