@@ -113,6 +113,10 @@ namespace ProvenCfoUI.Controllers
                     NewTasks.KanbanAttachments = _AddedFiles;
                     using (NeedsService objNeeds = new NeedsService())
                     {
+                        if (NewTasks.Labels == null)
+                        {
+                            return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = "Tags is a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
+                        }
                         var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
                         if (result.Status == true)
                         {
