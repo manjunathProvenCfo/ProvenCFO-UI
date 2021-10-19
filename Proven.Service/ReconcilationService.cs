@@ -65,9 +65,13 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/GetXeroOnDemandRequestStatus?CurrentStatus=" + CurrentStatus).Result;
         }
-        public ReconciliationCountModel GetXeroOnDemandRequestStatus(int AgencyID, string CurrentStatus, string CreaterUserID)
+        public XeroReconcilationDataOnDemandRequestMainModel GetXeroOnDemandRequestStatus(int AgencyID, string CurrentStatus, string CreaterUserID)
         {
-            return GetAsync<ReconciliationCountModel>("Xero/GetXeroOnDemandRequestStatus?AgencyId=" + AgencyID + "&CurrentStatus=" + CurrentStatus + "&CreaterUserID=" + CreaterUserID).Result;
+            return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Xero/GetXeroOnDemandRequestStatus?AgencyId=" + AgencyID + "&CurrentStatus=" + CurrentStatus + "&CreaterUserID=" + CreaterUserID).Result;
+        }
+        public XeroReconcilationDataOnDemandRequestMainModel GetXeroOnDemandRequestStatusById(int RequestID)
+        {
+            return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Xero/GetXeroOnDemandRequestStatusById?RequestID=" + RequestID).Result;
         }
 
         public void Dispose()

@@ -482,15 +482,35 @@ namespace ProvenCfoUI.Controllers
         //}
 
         [CheckSession]
-        public JsonResult GetXeroOnDemandRequestStatus(int AgencyID, string CurrentStatus, string CreaterUserID)
+        [HttpGet]
+        public JsonResult GetXeroOnDemandRequestStatus(int AgencyId, string CurrentStatus)
         {
             try
             {
-
+                var LoginUserid = Session["UserId"].ToString();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyID, CurrentStatus, CreaterUserID);
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyId,CurrentStatus, LoginUserid).ResultData;
+                    return Json(new { data = "", Status = objResult.CurrentStatus, Message = objResult.CurrentStatus }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        [CheckSession]
+        [HttpGet]
+        public JsonResult GetXeroOnDemandRequestStatusById(int RequestID)
+        {
+            try
+            {                
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatusById(RequestID).ResultData;
+                    return Json(new { data = "", Status = objResult.CurrentStatus, Message = objResult.CurrentStatus }, JsonRequestBehavior.AllowGet);
                 }
 
             }

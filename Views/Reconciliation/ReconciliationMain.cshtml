@@ -270,7 +270,7 @@
                         bindNotInBooksAndBanksCount();
                         bindNotInBooksAndBanksCountDashboard();
                 LoadFilterData();
-                reconcilationonstatusDemand();
+                //reconcilationonstatusDemand();
 
                         //AgencyDropdownPartialViewChange();
                         var type = sessionStorage.getItem('Type');
@@ -452,9 +452,11 @@
 
 
                         if (response.Message == 'Success') {
-
-                            //reconcilationonstatusDemand(CurrentStatus, AgencyId, function () { window.location.reload(); });
-                            ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
+                            setTimeout(() => {
+                                reconcilationonstatusDemand(response.data.Id);
+                            }, 1000);  
+                          
+                            //ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
                         }
 
                     });
@@ -476,18 +478,18 @@
             loadChatPage(true, 1);
         }
 
-        function reconcilationonstatusDemand(AgencyId, CurrentStatus, CreaterUserID) {
+        function reconcilationonstatusDemand(RequestID) {
 
             var ClientID = $("#ddlclient option:selected").val();
-            getAjax('/Reconciliation/GetXeroOnDemandRequestStatus?AgencyId=' + ClientID + '&CurrentStatus=' + CurrentStatus + '&CreaterUserID=' + CreaterUserID, function (response) {
-                if (response.CurrentStatus == 'SUCCESS') {
 
-                    ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus , function () { window.location.reload(); });
-/*                    ShowAlertBox('Required!', response.Message);*/
+            getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
+                if (response.Message == "SUCCESS") {
+                    
+                    ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
                 }
                 else {
-                    reconcilationonstatusDemand(AgencyId, CurrentStatus, CreaterUserID);
+                    reconcilationonstatusDemand(RequestID);
                 }
 
             })
