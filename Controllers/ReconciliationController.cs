@@ -35,6 +35,8 @@ namespace ProvenCfoUI.Controllers
                     //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
                     //return View(objResult.ResultData);
                     int AgencyID = 0;
+                    ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
+                    ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
@@ -346,7 +348,8 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 string RecordsType = NotInBooks;
-
+                ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
+                ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
 
                 //  return View();
                 using (ReconcilationService objReConcilation = new ReconcilationService())

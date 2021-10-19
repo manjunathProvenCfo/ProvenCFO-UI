@@ -75,6 +75,8 @@
 <!--</div>
 </div>-->
 <div class="row">
+    @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+    @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
     <div class="col-md-12" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
@@ -111,7 +113,7 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>RequestOnDemandData</button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>Request On Demand Data</button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
@@ -242,7 +244,7 @@
                                         }
 
                                     }
-                                    <td class="sort pr-1 align-middle" onclick="onCommentsClick(event,'@item.id')"><a href="#" onclick="onCommentsClick(event,'@item.id')"><span  class="fa fa-comment mr-1"></span></a></td>
+                                    <td class="sort pr-1 align-middle" onclick="onCommentsClick(event,'@item.id')"><a href="#" onclick="onCommentsClick(event,'@item.id')"><span class="fa fa-comment mr-1"></span></a></td>
                                 </tr>
                             }
 
@@ -293,6 +295,10 @@
                 //reconcilationonstatusDemand();
 
                         //AgencyDropdownPartialViewChange();
+                
+              
+
+                XeroConnectionUpdate();  
                         var type = sessionStorage.getItem('Type');
                         $('#divFilter').hide();
                         $('#divChat').hide();
@@ -497,7 +503,16 @@
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
             loadChatPage(true, 1);
         }
-
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+           
+            if (XConstatus.val() == "True") {          
+                $("#OnDemandData").show();                
+            }
+            else {                                
+                $("#OnDemandData").hide()                
+            }
+        }
         function reconcilationonstatusDemand(RequestID) {
 
             var ClientID = $("#ddlclient option:selected").val();
@@ -507,7 +522,13 @@
                 if (response.Message == "SUCCESS") {
                     msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
-                    ShowAlertBoxSuccess("Success!", "Successfully extract data from xero.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully extract data from Xero.", function () { window.location.reload(); });
+                }
+                else if (response.Message == "FAILED")
+                {
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.';
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
                 }
                 else {
                     var msg = 'Loading..'
@@ -531,7 +552,7 @@
                             msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
                             break;
                         case 'FAILED':
-                            msg = 'error data extracted successfully. Please try after some time. '
+                            msg = 'error while data extratction from Xero. Please try after some time. '
                             break;
 
                         default:
