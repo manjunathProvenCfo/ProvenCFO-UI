@@ -957,16 +957,16 @@ function addTag(className, TagName, Isview = false) {
 
 
 }
-function taggaleRemoveOption() {
+//function taggaleRemoveOption() {
 
-    $('#divShowRemove').show();
-    var TaskId = gCurrentViewTaskId;
-    if (TaskId != null && TaskId !== "") {
-        UpdateLableForKanbanTask(TaskId, '');
-        $('#' + TaskId + ' .card-body .badge').empty();
-    }
+//    $('#divShowRemove').show();
+//    var TaskId = gCurrentViewTaskId;
+//    if (TaskId != null && TaskId !== "") {
+//        UpdateLableForKanbanTask(TaskId, '');
+//        $('#' + TaskId + ' .card-body .badge').empty();
+//    }
 
-}
+//}
 function RemoveTags() {
     $('#divTag ul').empty();
     $('#divTagView ul').empty();
