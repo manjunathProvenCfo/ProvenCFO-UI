@@ -422,7 +422,7 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 var AgencyID = 0;
-                var LoginUserid = Session["UserId"].ToString();
+                var LoginUserid = Convert.ToString(Session["UserId"].ToString());
                 List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                 if (UserPref != null && UserPref.Count() > 0)
                 {
