@@ -1175,7 +1175,7 @@
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
                     if (response.Message == "Success") {
-
+                       
 
 
                         var data = response.ResultData;
@@ -1228,7 +1228,7 @@
                 getAjax(`/Reconciliation/GetReconciliationCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
                     if (response.Message == "Success") {
-
+                      
                         let data = response.ResultData;
                         let totalSum = 0;
 
@@ -1264,6 +1264,7 @@
                 getAjax(`/Reconciliation/GetReconciliationNegCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
                     if (response.Message == "Success") {
+                       
 
                         var data = response.ResultData;
                         var totalSum = 0;
