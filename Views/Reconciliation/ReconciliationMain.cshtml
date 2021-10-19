@@ -251,6 +251,8 @@
         <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
+        <br />
+        <div id="loadertext" >Loading...</div>
     </div>
 </div>
 
@@ -485,10 +487,38 @@
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
                 if (response.Message == "SUCCESS") {
-                    
-                    ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.' ;
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxSuccess("Success!", "Successfully extract data from xero.", function () { window.location.reload(); });
                 }
                 else {
+                    var msg = 'Loading..'
+                    switch (response.Message) {
+                        case 'New':
+                            msg = 'Sent on-demand data extract request.'
+                            break;
+                        case 'INITIATED':
+                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            break;
+                        case 'WAITING FOR OTP':
+                            msg = 'Waiting for OTP to log-in to Xero.';
+                            break;
+                        case 'LOGGED-IN':
+                            msg = 'Log in successfully to Xero.'
+                            break;
+                        case 'GETTING DATA':
+                            msg = 'Reconcilation data extracting for a selected agency. ';
+                            break;
+                        case 'SUCCESS':
+                            msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
+                            break;
+                        case 'FAILED':
+                            msg = 'error data extracted successfully. Please try after some time. '
+                            break;
+
+                        default:
+                    }
+                    $('#loadertext').text(msg);
                     reconcilationonstatusDemand(RequestID);
                 }
 
