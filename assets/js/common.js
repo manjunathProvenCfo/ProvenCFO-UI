@@ -105,8 +105,7 @@ function bindNotInBooksAndBanksCount() {
 
     getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-        if (response.Message == "Success") {
-          
+        if (response.Message == "Success") {         
             let data = response.ResultData;
             let totalSum = 0;
             for (var i = 0; i < data.length; i++) {
