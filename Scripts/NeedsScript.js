@@ -1054,6 +1054,7 @@ function checkAttachment1() {
     }
     else
         $("#kanban-modal-open").modal('hide');
+    window.location.reload();
 }
 function CancelForCreate() {
     $("#kanban-modal-new").modal('hide');
