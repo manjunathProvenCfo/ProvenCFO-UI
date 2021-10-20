@@ -113,6 +113,10 @@ namespace ProvenCfoUI.Controllers
                     NewTasks.KanbanAttachments = _AddedFiles;
                     using (NeedsService objNeeds = new NeedsService())
                     {
+                        if (NewTasks.Labels == null)
+                        {
+                            return Json(new { id = Task.Id,  Message = "Tags is a required field." }, JsonRequestBehavior.AllowGet);
+                        }
                         var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
                         if (result.Status == true)
                         {
@@ -146,7 +150,7 @@ namespace ProvenCfoUI.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = "Exist";
-                    return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = "Task title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
+                    return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = "Title is a required field." }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)

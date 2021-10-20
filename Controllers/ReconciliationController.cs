@@ -35,6 +35,8 @@ namespace ProvenCfoUI.Controllers
                     //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
                     //return View(objResult.ResultData);
                     int AgencyID = 0;
+                    ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
+                    ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
@@ -346,7 +348,8 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 string RecordsType = NotInBooks;
-
+                ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
+                ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
 
                 //  return View();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
@@ -422,7 +425,7 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 var AgencyID = 0;
-                var LoginUserid = Session["UserId"].ToString();
+                var LoginUserid = Convert.ToString(Session["UserId"].ToString());
                 List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                 if (UserPref != null && UserPref.Count() > 0)
                 {
@@ -461,16 +464,37 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        //[CheckSession]
+        //public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
+        //{
+        //    try
+        //    {
+
+        //        using (ReconcilationService objReConcilation = new ReconcilationService())
+        //        {
+        //            var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
+        //            return Json(objResult, JsonRequestBehavior.AllowGet);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
+
         [CheckSession]
-        public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
+        [HttpGet]
+        public JsonResult GetXeroOnDemandRequestStatus(int AgencyId, string CurrentStatus)
         {
             try
             {
-
+                var LoginUserid = Session["UserId"].ToString();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyId,CurrentStatus, LoginUserid).ResultData;
+                    return Json(new { data = "", Status = objResult.CurrentStatus, Message = objResult.CurrentStatus }, JsonRequestBehavior.AllowGet);
                 }
 
             }
@@ -480,8 +504,25 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [CheckSession]
+        [HttpGet]
+        public JsonResult GetXeroOnDemandRequestStatusById(int RequestID)
+        {
+            try
+            {                
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatusById(RequestID).ResultData;
+                    return Json(new { data = "", Status = objResult.CurrentStatus, Message = objResult.CurrentStatus }, JsonRequestBehavior.AllowGet);
+                }
 
-
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
 
     }
 }

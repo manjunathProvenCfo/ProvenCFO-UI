@@ -5,6 +5,28 @@
     .tabselect {
         text-decoration: underline;
     }
+    .loader-circle {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 1110;
+        background-color: rgba(0,0,0,0.75);
+    }
+
+        .loader-circle .spinner-border {
+            width: 4rem;
+            height: 4rem;
+            border: 0.5em solid #00be62;
+            border-right-color: transparent;
+        }
+    .position-fixed {
+        position: fixed !important;
+    }
+
+    select#item_additional_tracking_category_ref {
+        width: 100px;
+    }
 </style>
 
 <!--<div class="card mb-4 ">
@@ -57,6 +79,8 @@
 <!--</div>
 </div>-->
 <div class="row">
+    @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+    @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
     <div class="col-md-12" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
@@ -93,7 +117,7 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>RequestOnDemandData</button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>Request On Demand Data</button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
@@ -160,7 +184,7 @@
                                 <tr class="btn-reveal-trigger cursor-pointer">
                                     <td class="align-middle">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" value="@item.Selected" />
+                                            <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="@item.id" value="@item.Selected" />
 
                                             <label class="custom-control-label" for="@item.id"></label>
                                         </div>
@@ -224,7 +248,7 @@
                                         }
 
                                     }
-                                    <td class="sort pr-1 align-middle" onclick="onCommentsClick(event,'@item.id')"><a href="#" onclick="onCommentsClick(event,'@item.id')"><span  class="fa fa-comment mr-1"></span></a></td>
+                                    <td class="sort pr-1 align-middle" onclick="onCommentsClick(event,'@item.id')"><a href="#" onclick="onCommentsClick(event,'@item.id')"><span class="fa fa-comment mr-1"></span></a></td>
                                 </tr>
                             }
 
@@ -251,6 +275,8 @@
         <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
+        <br />
+        <div id="loadertext" >Loading...</div>
     </div>
 </div>
 
@@ -268,11 +294,15 @@
     <script>
             $(document).ready(function () {
                         bindNotInBooksAndBanksCount();
-                        bindNotInBooksAndBanksCountDashboard();
+/*                        bindNotInBooksAndBanksCountDashboard();*/
                 LoadFilterData();
-                reconcilationonstatusDemand();
+                //reconcilationonstatusDemand();
 
                         //AgencyDropdownPartialViewChange();
+                
+              
+
+                XeroConnectionUpdate();  
                         var type = sessionStorage.getItem('Type');
                         $('#divFilter').hide();
                         $('#divChat').hide();
@@ -413,24 +443,17 @@
                         $('#divChat').hide();
                         $('#divFilter').hide();
                         $('#divFilter').addClass('d-none');
+                        $('#divBulkUpdate').hide();
+                        $('#divBulkUpdate').removeClass('d-none');
                     }
                     else {
                         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
                         $('#divBulkUpdate').removeClass('d-none');
                         $('#divBulkUpdate').show();
+                        
                     }
                 });
-                $('.checkbox-bulk-select-target').change(function (e) {
-                    if (this.checked) {
-                        var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('SelectedRecords', SelectedItems);
-                    }
-                    else {
-                        var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-                    }
-                });
-
+              
                 $("#OnDemandData").click(function () {
 
                      $("#Loader").removeAttr("style");
@@ -452,9 +475,11 @@
 
 
                         if (response.Message == 'Success') {
-
-                            //reconcilationonstatusDemand(CurrentStatus, AgencyId, function () { window.location.reload(); });
-                            ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
+                            setTimeout(() => {
+                                reconcilationonstatusDemand(response.data.Id);
+                            }, 1000);  
+                          
+                            //ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
                         }
 
                     });
@@ -475,19 +500,73 @@
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
             loadChatPage(true, 1);
         }
-
-        function reconcilationonstatusDemand(AgencyId, CurrentStatus, CreaterUserID) {
+        function SelectClick(e) {
+            if (e.checked) {
+                var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+            }
+            else {
+                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+            }
+        }
+        
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+           
+            if (XConstatus.val() == "True") {          
+                $("#OnDemandData").show();                
+            }
+            else {                                
+                $("#OnDemandData").hide()                
+            }
+        }
+        function reconcilationonstatusDemand(RequestID) {
 
             var ClientID = $("#ddlclient option:selected").val();
-            getAjax('/Reconciliation/GetXeroOnDemandRequestStatus?AgencyId=' + ClientID + '&CurrentStatus=' + CurrentStatus + '&CreaterUserID=' + CreaterUserID, function (response) {
-                if (response.CurrentStatus == 'SUCCESS') {
 
-                    ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus , function () { window.location.reload(); });
-/*                    ShowAlertBox('Required!', response.Message);*/
+            getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
+                if (response.Message == "SUCCESS") {
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.' ;
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxSuccess("Success!", "Successfully extract data from Xero.", function () { window.location.reload(); });
+                }
+                else if (response.Message == "FAILED")
+                {
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.';
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
                 }
                 else {
-                    reconcilationonstatusDemand(AgencyId, CurrentStatus, CreaterUserID);
+                    var msg = 'Loading..'
+                    switch (response.Message) {
+                        case 'New':
+                            msg = 'Sent on-demand data extract request.'
+                            break;
+                        case 'INITIATED':
+                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            break;
+                        case 'WAITING FOR OTP':
+                            msg = 'Waiting for OTP to log-in to Xero.';
+                            break;
+                        case 'LOGGED-IN':
+                            msg = 'Log in successfully to Xero.'
+                            break;
+                        case 'GETTING DATA':
+                            msg = 'Reconcilation data extracting for a selected agency. ';
+                            break;
+                        case 'SUCCESS':
+                            msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
+                            break;
+                        case 'FAILED':
+                            msg = 'Error while data extratction from Xero. Please try after some time. '
+                            break;
+
+                        default:
+                    }
+                    $('#loadertext').text(msg);
+                    reconcilationonstatusDemand(RequestID);
                 }
 
             })
@@ -687,9 +766,12 @@
         }
 
             function onChangeglAccount(id, event) {
-                var Selectedvalue = event.currentTarget.value;
+                var selectedValue = event.currentTarget.value;
+                if (isEmptyOrBlank(selectedValue)) {
+                    selectedValue = 0;
+                }
                 var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + Selectedvalue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
                     if (response.Message == 'Success') {
 
                     }
@@ -714,9 +796,12 @@
                 })
             }
             function onChangeTc(id, event) {
-                var Selectedvalue = event.currentTarget.value;
+                var selectedValue = event.currentTarget.value;
+                if (isEmptyOrBlank(selectedValue)) {
+                    selectedValue = 0;
+                }
                 var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + Selectedvalue, null, function (response) {
+                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
                     if (response.Message == 'Success') {
 
                     }
@@ -795,7 +880,7 @@
 
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-                    if (response.Message == "Success") {
+                    if (response.Message == "Success") {                     
                         let data = response.ResultData;
                         let totalSum = 0;
                         for (var i = 0; i < data.length; i++) {
@@ -816,27 +901,28 @@
 
 
 
-        function bindNotInBooksAndBanksCountDashboard() {
-                var ClientID = $("#ddlclient option:selected").val();
-                getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
+        //function bindNotInBooksAndBanksCountDashboard() {
+        //        var ClientID = $("#ddlclient option:selected").val();
+        //        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-                    if (response.Message == "Success") {
-                        let data = response.ResultData;
-                        let totalSum = 0;
-                        for (var i = 0; i < data.length; i++) {
-                            totalSum = totalSum + data[i].Count;
-                            if (isEmptyOrBlank(data[i].type) === false && data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                                $("#lblNotInBanksCount").text(data[i].Count);
-                            }
-                            else {
-                                $("#lblNotInBooksCount").text(data[i].Count);
-                            }
-                        }
-                        $("#lblNotInCount").text(totalSum);
+        //            if (response.Message == "Success") {
+        //                debugger;
+        //                let data = response.ResultData;
+        //                let totalSum = 0;
+        //                for (var i = 0; i < data.length; i++) {
+        //                    totalSum = totalSum + data[i].Count;
+        //                    if (isEmptyOrBlank(data[i].type) === false && data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+        //                        $("#lblNotInBanksCount").text(data[i].Count);
+        //                    }
+        //                    else {
+        //                        $("#lblNotInBooksCount").text(data[i].Count);
+        //                    }
+        //                }
+        //                $("#lblNotInCount").text(totalSum);
 
-                    }
-                })
-            }
+        //            }
+        //        })
+        //}
 
     </script>
 

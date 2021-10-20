@@ -108,18 +108,19 @@ namespace ProvenCfoUI.Controllers
                                     return View("InviteStaff", InviteVM);
                                 }
                                 result = obj.AddInvitation(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.roleid, inviteStaffVM.jobid, inviteStaffVM.SessionTimeout, LoginUserid);
-                                //if (result != null)
-                                //{
-                                //    ViewBag.ErrorMessage = "Sent";
-                                //    return View("InviteStaff", InviteVM);
-                                //}
+                                if (result != null)
+                                {
+                                    ViewBag.ErrorMessage = "Sent";
+                                    return View("InviteStaff", InviteVM);
+                                }
                             }
+                            //return View("InviteStaff", InviteVM);
+                            // if (result == null)
 
-                            if (result == null)
-
-                                ViewBag.ErrorMessage = "";
-                            ViewBag.Message = "Invitation Send Successfully";
-                            return RedirectToAction("InviteStaffList");
+                            //     ViewBag.ErrorMessage = "";
+                            // //ViewBag.ErrorMessage = "Sent";
+                            //ViewBag.Message = "Invitation Send Successfully";
+                             return RedirectToAction("InviteStaffList");
                         }
                     }
                 }
