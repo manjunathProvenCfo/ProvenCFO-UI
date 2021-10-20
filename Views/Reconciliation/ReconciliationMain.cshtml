@@ -184,7 +184,7 @@
                                 <tr class="btn-reveal-trigger cursor-pointer">
                                     <td class="align-middle">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.id" value="@item.Selected" />
+                                            <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="@item.id" value="@item.Selected" />
 
                                             <label class="custom-control-label" for="@item.id"></label>
                                         </div>
@@ -450,17 +450,7 @@
                         $('#divBulkUpdate').show();
                     }
                 });
-                $('.checkbox-bulk-select-target').change(function (e) {
-                    if (this.checked) {
-                        var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('SelectedRecords', SelectedItems);
-                    }
-                    else {
-                        var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-                    }
-                });
-
+              
                 $("#OnDemandData").click(function () {
 
                      $("#Loader").removeAttr("style");
@@ -507,6 +497,17 @@
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
             loadChatPage(true, 1);
         }
+        function SelectClick(e) {
+            if (e.checked) {
+                var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+            }
+            else {
+                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+            }
+        }
+        
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
            
@@ -556,7 +557,7 @@
                             msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
                             break;
                         case 'FAILED':
-                            msg = 'error while data extratction from Xero. Please try after some time. '
+                            msg = 'Error while data extratction from Xero. Please try after some time. '
                             break;
 
                         default:
