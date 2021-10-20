@@ -139,8 +139,11 @@ var setActiveChannel = function (channel) {
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
-        var body = $chatEditorArea[0].emojioneArea.getText();
-        if (validateMessage()) {
+        debugger
+        let body = $chatEditorArea[0].emojioneArea.getText();
+        $messageBodyInput.val('').focus();
+        $messageBodyInput.trigger('change');
+        if (validateMessage(body)) {
             channel.sendMessage(body).then(function () {
                 //getTwilioToken();
                 //twilioClient.updateToken(token);
@@ -306,9 +309,9 @@ var updateUnreadMessages = function updateUnreadMessages(message) {
     }
 }
 
-var validateMessage = function () {
+var validateMessage = function (body) {
     let isValid = true;
-    let body = $chatEditorArea[0].emojioneArea.getText();
+    
     body = body.replaceAll("\n", "");
     if (isEmptyOrBlank(body)) {
         isValid = false;

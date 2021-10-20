@@ -112,6 +112,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
     //});
 
     $messageBodyFileUploader.on("change", function (e) {
+        debugger
         var files = $(this)[0].files;
         if (files.length === 0) {
             ShowAlertBoxError("File uploader", "Select atleast one file.");
