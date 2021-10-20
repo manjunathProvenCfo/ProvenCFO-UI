@@ -248,7 +248,7 @@
                                         }
 
                                     }
-                                    <td class="sort pr-1 align-middle" onclick="onCommentsClick(event,'@item.id')"><a href="#" onclick="onCommentsClick(event,'@item.id')"><span class="fa fa-comment mr-1"></span></a></td>
+                                    <td id="tdComments" class="sort pr-1 align-middle" onclick="onCommentsClick('@item.id')"><a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a></td>
                                 </tr>
                             }
 
@@ -285,11 +285,28 @@
     @Scripts.Render("~/bundles/js/table");
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
+        var currentChannelUniqueNameGuid = "";
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
             hideParticipantsSidebar();
         });
+
+        function onCommentsClick(channelUniqueNameGuid) {
+            //e.preventDefault();
+            $('#divFilter').hide();
+            $('#divFilter').addClass('d-none');
+            $('#divChat').show();
+            $('#divChat').removeClass('d-none');
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+            //let channelUniqueNameGuid = $(this).data().id;
+            if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
+                currentChannelUniqueNameGuid = channelUniqueNameGuid;
+                chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+                loadChatPage(true, 1);
+            }
+        }
     </script>
     <script>
             $(document).ready(function () {
@@ -328,17 +345,17 @@
                             $(this).addClass('bg-300').siblings().removeClass('bg-300');
 
                 });
-                $('span[id=iconComments]').click(function (e) {
-                 $('#divFilter').hide();
-                 $('#divFilter').addClass('d-none');
-                 $('#divChat').show();
-                 $('#divChat').removeClass('d-none');
-                 $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+                //$('span[id=iconComments]').click(function (e) {
+                // $('#divFilter').hide();
+                // $('#divFilter').addClass('d-none');
+                // $('#divChat').show();
+                // $('#divChat').removeClass('d-none');
+                // $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-                    let channelUniqueNameGuid = $(this).data().id;
-                    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-                    loadChatPage(true,1);
-                });
+                //    let channelUniqueNameGuid = $(this).data().id;
+                //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+                //    loadChatPage(true,1);
+                //});
 
                         $('#Cancel').click(function () {
                             if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
@@ -488,18 +505,6 @@
 
             });
 
-        var onCommentsClick = function (e, channelUniqueNameGuid) {
-            e.preventDefault();
-            $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');
-            $('#divChat').show();
-            $('#divChat').removeClass('d-none');
-            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
-            //let channelUniqueNameGuid = $(this).data().id;
-            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1);
-        }
         function SelectClick(e) {
             if (e.checked) {
                 var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
