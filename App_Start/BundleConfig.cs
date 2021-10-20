@@ -76,6 +76,9 @@ namespace ProvenCfoUI
              "~/assets/lib/flatpickr/flatpickr.min.js",
              "~/assets/lib/dropzone/dropzone.min.js"
                 ));
+            bundles.Add(new ScriptBundle("~/bundles/js/fancybox").Include(
+             "~/assets/lib/fancybox/jquery.fancybox.min.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                          "~/Scripts/jquery.validate*"));
@@ -97,6 +100,10 @@ namespace ProvenCfoUI
                 "~/assets/lib/jquery-contextmenu/jquery.contextmenu.min.js",
                 "~/assets/lib/jquery-contextmenu/jquery.ui.position.min.js",
                 "~/assets/js/reports.js"));
+
+            bundles.Add(new Bundle("~/bundles/js/agencyHome").Include(
+                "~/assets/js/agencyHome.js"
+                ));
             #region FileUploader
 
             bundles.Add(new ScriptBundle("~/bundles/jQuery-File-Upload").Include(
@@ -171,6 +178,9 @@ namespace ProvenCfoUI
                     "~/assets/lib/dropzone/dropzone.min.css",
                     "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/Style/NeedStyle.css"
+                   ));
+            bundles.Add(new StyleBundle("~/bundles/css/fancybox").Include(
+                    "~/assets/lib/fancybox/jquery.fancybox.min.css"
                    ));
 
             bundles.Add(new StyleBundle("~/bundles/css/twilio-chat").Include(
