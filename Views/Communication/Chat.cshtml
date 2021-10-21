@@ -34,8 +34,8 @@
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
         $(document).ready(function () {
-            $("#ddlclient").next(".select2-container").remove();
-            $("#ddlclient").remove();
+            /*$("#ddlclient").next(".select2-container").remove();*/
+            /*$("#ddlclient").remove();*/
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
             loadChatPage();
