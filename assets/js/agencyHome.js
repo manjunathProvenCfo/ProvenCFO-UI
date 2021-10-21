@@ -1238,7 +1238,7 @@ function prepareReportMedia(report) {
                                         <a class="data-fancybox" href="${report.FilePath}" data-fancybox="group"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
-                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="#">${report.PeriodType} ${report.Year}</a></h6>
+                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${report.FilePath}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>
                                         <p class="text-500 fs--2 mb-0">Created <span class="ml-2 d-inline-block">${moment(report.CreatedDate).format("MMMM DD, YYYY")}</span></p>
                                     </div>
                                 </div>`;
