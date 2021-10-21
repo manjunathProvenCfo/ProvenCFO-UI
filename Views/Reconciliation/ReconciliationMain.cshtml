@@ -29,8 +29,11 @@
     }
 
     a.page-link {
-        background-color: white;
-        border-color: white;
+        background-color: !important;
+        border-color: !important;
+    }
+    .page-link:hover {
+        color: #fff !important;
     }
 </style>
 
@@ -337,7 +340,7 @@
                                 $('#tabNotinBanks').removeClass('tabselect');
                             }
                             else {
-                                $('#tabNotinBooks').addClass('tabselect');
+                                $('#tabNotinBooks').removeClass('tabselect');
                                 $('#tabNotinBanks').addClass('tabselect');
                             }
                         }
@@ -464,6 +467,7 @@
                         $('#divTable1').addClass('d-none');
                         $('#divChat').hide();
                         $('#divFilter').hide();
+                        $('#divBulkUpdate').hide();
                         $('#divFilter').addClass('d-none');
                     }
                     else {
