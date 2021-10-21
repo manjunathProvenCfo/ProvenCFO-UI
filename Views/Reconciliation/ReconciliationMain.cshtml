@@ -332,7 +332,7 @@
                                 $('#tabNotinBanks').removeClass('tabselect');
                             }
                             else {
-                                $('#tabNotinBooks').removeClass('tabselect');
+                                $('#tabNotinBooks').addClass('tabselect');
                                 $('#tabNotinBanks').addClass('tabselect');
                             }
                         }
@@ -460,17 +460,24 @@
                         $('#divChat').hide();
                         $('#divFilter').hide();
                         $('#divFilter').addClass('d-none');
-                        $('#divBulkUpdate').hide();
-                        $('#divBulkUpdate').removeClass('d-none');
                     }
                     else {
                         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
                         $('#divBulkUpdate').removeClass('d-none');
                         $('#divBulkUpdate').show();
-                        
                     }
                 });
-              
+                $('.checkbox-bulk-select-target').change(function (e) {
+                    if (this.checked) {
+                        var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.target.id : e.target.id;
+                        sessionStorage.setItem('SelectedRecords', SelectedItems);
+                    }
+                    else {
+                        var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.target.id : e.target.id;
+                        sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+                    }
+                });
+
                 $("#OnDemandData").click(function () {
 
                      $("#Loader").removeAttr("style");
@@ -516,6 +523,18 @@
             }
         }
         
+        var onCommentsClick = function (e, channelUniqueNameGuid) {
+            e.preventDefault();
+            $('#divFilter').hide();
+            $('#divFilter').addClass('d-none');
+            $('#divChat').show();
+            $('#divChat').removeClass('d-none');
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+            //let channelUniqueNameGuid = $(this).data().id;
+            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+            loadChatPage(true, 1);
+        }
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
            
