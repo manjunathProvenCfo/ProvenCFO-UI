@@ -47,6 +47,11 @@
         font-size: 13px !important;
         width: 160px;
     }
+
+    select#item_additional_tracking_category_ref {
+        font-size: 13px !important;
+        width: 160px;
+    }
   /*  .page-item.active .page-link {
         background-color: #fff !important;
         border-color: #fff !important;
@@ -931,8 +936,9 @@
                 var ClientID = $("#ddlclient option:selected").val();
 
                 getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-                    if (response.Message == "Success") {                     
+                    debugger;
+                    if (response.Message == "Success") {
+                        debugger;
                         let data = response.ResultData;
                         let totalSum = 0;
                         for (var i = 0; i < data.length; i++) {

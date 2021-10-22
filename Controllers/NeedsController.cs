@@ -115,7 +115,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         if (NewTasks.Labels == null)
                         {
-                            return Json(new { id = Task.Id,  Message = "Tags is a required field." }, JsonRequestBehavior.AllowGet);
+                            return Json(new { id = Task.Id,  Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
                         }
                         var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
                         if (result.Status == true)
