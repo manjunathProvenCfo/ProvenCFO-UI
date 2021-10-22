@@ -143,10 +143,13 @@
                             <div class="d-flex">
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>Request On Demand Data</button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
-                                <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                            </div>
+                                @if (ViewBag.IsEmailVisible == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                }
+                                    <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                </div>
                             @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
