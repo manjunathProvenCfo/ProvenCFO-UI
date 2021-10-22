@@ -32,8 +32,10 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
+
                     //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
                     //return View(objResult.ResultData);
+                    
                     int AgencyID = 0;
                     ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                     ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
@@ -44,6 +46,7 @@ namespace ProvenCfoUI.Controllers
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
 
@@ -355,6 +358,7 @@ namespace ProvenCfoUI.Controllers
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     int AgencyID = 0;
+                    ViewBag.IsEmailVisible = false;
                     var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
 
@@ -369,6 +373,7 @@ namespace ProvenCfoUI.Controllers
 
                         if (userType == "1")
                         {
+                            ViewBag.IsEmailVisible = true;
                             ViewBag.IsBankRuleVisible = true;
                             List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             if (objTCList != null && objTCList.Count > 0)
