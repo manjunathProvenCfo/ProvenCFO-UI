@@ -227,6 +227,7 @@ $(function () {
             if (!isEmptyOrBlank(period))
                 bindReports(period);
             $renameModal.modal('hide');
+            ShowAlertBoxSuccess("", "Report has been renamed successfully!")
         });
     });
 
@@ -417,7 +418,7 @@ var RemoveSavedFile = function (e, reportId, period) {
         postAjax(`/Reports/SoftDeleteFile?Id=${reportId}&PeriodType=${period}`, null, function (response) {
             if (response.Status == "Success") {
                 bindReports(response.PeriodType);
-                ShowAlertBoxSuccess("", "File has been removed successfully!")
+                ShowAlertBoxSuccess("", "Report has been removed successfully!")
             }
         });
     });
@@ -429,7 +430,7 @@ var deleteReportOnCliCk = function (e, id) {
             return;
         $(`#reportItem_${id}`).remove();
         deleteReports([id]);
-        ShowAlertBoxSuccess("", "File has been removed successfully!")
+        ShowAlertBoxSuccess("", "Report has been removed successfully!")
     });
     return false;
 }
