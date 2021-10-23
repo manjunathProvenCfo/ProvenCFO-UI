@@ -5,6 +5,7 @@
     .tabselect {
         text-decoration: underline;
     }
+
     .loader-circle {
         top: 0;
         bottom: 0;
@@ -20,6 +21,7 @@
             border: 0.5em solid #00be62;
             border-right-color: transparent;
         }
+
     .position-fixed {
         position: fixed !important;
     }
@@ -30,19 +32,22 @@
 
     a.page-link {
         background-color: #fff !important;
-        border-color:   #d8e2ef !important;
+        border-color: #d8e2ef !important;
     }
+
     .page-link:hover {
         color: #000 !important;
     }
+
     select#item_gl_account_ref {
         font-size: 13px !important;
-       
     }
+
     select#item_rule {
         font-size: 13px !important;
         width: 160px;
     }
+
     select#item_tracking_category_ref {
         font-size: 13px !important;
         width: 160px;
@@ -52,7 +57,7 @@
         font-size: 13px !important;
         width: 160px;
     }
-  /*  .page-item.active .page-link {
+    /*  .page-item.active .page-link {
         background-color: #fff !important;
         border-color: #fff !important;
     }*/
@@ -152,9 +157,9 @@
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 }
-                                    <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                </div>
+                                <button class="btn btn-falcon-default btn-sm mx-1 " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                            </div>
                             @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
@@ -205,14 +210,13 @@
 
                                 }
 
-                                <th class="vikas"></th>
+                                <th class="vikas no-sort align-middle data-table-row-action"></th>
 
                             </tr>
                         </thead>
                         <tbody id="purchases">
                             @foreach (var item in (List<Proven.Model.reconciliationVM>)TempData["ReconcilationData"])
                             {
-
                                 <tr class="btn-reveal-trigger cursor-pointer">
                                     <td class="align-middle">
                                         <div class="custom-control custom-checkbox">
@@ -280,7 +284,13 @@
                                         }
 
                                     }
-                                    <td id="tdComments" class="sort pr-1 align-middle" onclick="onCommentsClick('@item.id')"><a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a></td>
+                                    <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="fas fa-comment fs--1"></span>
+                                        </button>
+                                        @*onclick="onCommentsClick('@item.id')"*@
+                                        @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
+                                    </td>
                                 </tr>
                             }
 
@@ -308,7 +318,7 @@
             <span class="sr-only">Loading...</span>
         </div>
         <br />
-        <div id="loadertext" >Loading...</div>
+        <div id="loadertext">Loading...</div>
     </div>
 </div>
 
@@ -317,233 +327,13 @@
     @Scripts.Render("~/bundles/js/table");
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
-        var currentChannelUniqueNameGuid = "";
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
-            hideParticipantsSidebar();
         });
-
-        function onCommentsClick(channelUniqueNameGuid) {
-            //e.preventDefault();
-            $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');
-            $('#divChat').show();
-            $('#divChat').removeClass('d-none');
-            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
-            //let channelUniqueNameGuid = $(this).data().id;
-            if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-                currentChannelUniqueNameGuid = channelUniqueNameGuid;
-                chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-                loadChatPage(true, 1);
-            }
-        }
     </script>
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
-            $(document).ready(function () {
-                        bindNotInBooksAndBanksCount();
-/*                        bindNotInBooksAndBanksCountDashboard();*/
-                LoadFilterData();
-                //reconcilationonstatusDemand();
-
-                        //AgencyDropdownPartialViewChange();
-                
-              
-
-                XeroConnectionUpdate();  
-                        var type = sessionStorage.getItem('Type');
-                        $('#divFilter').hide();
-                        $('#divChat').hide();
-                sessionStorage.removeItem('SelectedRecords');
-                sessionStorage.removeItem('UnSelectedRecords');
-                        if (type != null) {
-
-                            if (type == "0") {
-                                $('#tabNotinBooks').addClass('tabselect');
-                                $('#tabNotinBanks').removeClass('tabselect');
-                            }
-                            else {
-                                $('#tabNotinBooks').removeClass('tabselect');
-                                $('#tabNotinBanks').addClass('tabselect');
-                            }
-                        }
-                        else {
-                            $('#tabNotinBooks').addClass('tabselect');
-                            $('#tabNotinBanks').removeClass('tabselect');
-                        }
-
-                        $('#tblreconcilation tbody tr').click(function () {
-                            $(this).addClass('bg-300').siblings().removeClass('bg-300');
-
-                });
-                //$('span[id=iconComments]').click(function (e) {
-                // $('#divFilter').hide();
-                // $('#divFilter').addClass('d-none');
-                // $('#divChat').show();
-                // $('#divChat').removeClass('d-none');
-                // $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
-                //    let channelUniqueNameGuid = $(this).data().id;
-                //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-                //    loadChatPage(true,1);
-                //});
-
-                        $('#Cancel').click(function () {
-                            if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                                $('#divChat').hide();
-                            }
-                            else {
-                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                                $('#divChat').show();
-                            }
-                        });
-                        $('#Filter').click(function () {
-                            if ($("#divChat").is(":visible")) {
-                                $('#divChat').hide();
-                                $('#divChat').addClass('d-none');
-                                $('#divBulkUpdate').hide();
-                                $('#divBulkUpdate').addClass('d-none');
-                                $('#divFilter').show();
-                                $('#divFilter').removeClass('d-none');
-
-                            }
-                            else if ($("#divFilter").is(":visible") || $("#divBulkUpdate").is(":visible")) {
-                                $('#divChat').hide();
-                                $('#divChat').addClass('d-none');
-                                $('#divFilter').hide();
-                                $('#divFilter').addClass('d-none');
-                                $('#divBulkUpdate').hide();
-                                $('#divBulkUpdate').addClass('d-none');
-                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                            }
-                            else {
-                                $('#divFilter').show();
-                                $('#divFilter').removeClass('d-none');
-                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                            }
-                        });
-                $('#ichat').click(function () {
-                    if ($("#divChat").is(":visible")) {
-                        $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divFilter').hide();
-                        $('#divBulkUpdate').hide();
-                        $('#divBulkUpdate').addClass('d-none');
-                        $('#divFilter').addClass('d-none');
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-
-                    }
-                    else if ($("#divFilter").is(":visible") || $("#divBulkUpdate").is(":visible") ) {
-                        $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
-                        $('#divBulkUpdate').hide();
-                        $('#divBulkUpdate').addClass('d-none');
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    }
-                    else {
-                        $('#divChat').show();
-                        $('#divChat').removeClass('d-none');
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    }
-                });
-                $('#ibulkupdate').click(function () {
-                    if ($("#divFilter").is(":visible") || $("#divChat").is(":visible")) {
-                        $('#divChat').hide();
-                        $('#divChat').addClass('d-none');
-                        $('#divBulkUpdate').show();
-                        $('#divBulkUpdate').removeClass('d-none');
-                        $('#divFilter').hide();
-                        $('#divFilter').addClass('d-none');
-                    }
-                    else if ($("#divBulkUpdate").is(":visible")) {
-                        $('#divBulkUpdate').hide();
-                        $('#divBulkUpdate').addClass('d-none');
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                    }
-                    else {
-                        $('#divBulkUpdate').show();
-                        $('#divBulkUpdate').removeClass('d-none');
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                    }
-                });
-
-                        $('#Cancel1').click(function () {
-                            if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                                $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                                $('#divTable1').addClass('d-none');
-                                $('#divChat').hide();
-                                $('#divFilter').hide();
-                                $('#divFilter').addClass('d-none');
-                            }
-                            else {
-                                $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                                $('#divTable1').removeClass('d-none');
-                                $('#divChat').show();
-                            }
-                        });
-                $('#CancelBulkupdate').click(function () {
-                    if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
-                        $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-                        $('#divTable1').addClass('d-none');
-                        $('#divChat').hide();
-                        $('#divFilter').hide();
-                        $('#divBulkUpdate').hide();
-                        $('#divFilter').addClass('d-none');
-                    }
-                    else {
-                        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-                        $('#divBulkUpdate').removeClass('d-none');
-                        $('#divBulkUpdate').show();
-                    }
-                });
-                $('.checkbox-bulk-select-target').change(function (e) {
-                    if (this.checked) {
-                        var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('SelectedRecords', SelectedItems);
-                    }
-                    else {
-                        var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.target.id : e.target.id;
-                        sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-                    }
-                });
-
-                $("#OnDemandData").click(function () {
-
-                     $("#Loader").removeAttr("style");
-                    var ClientID = $("#ddlclient option:selected").val();
-
-
-                    var RequestType = "On Demand";
-                    var RequestedAtUTC = '';
-                    var CurrentStatus = "New";
-                    var RequestCompletedAtUTC = '';
-                    var Remark = '';
-
-                    var AgencyName = '';
-                    var CreatedBy = '';
-                    var CreatedDate = '';
-                    var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
-                    postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
-
-
-
-                        if (response.Message == 'Success') {
-                            setTimeout(() => {
-                                reconcilationonstatusDemand(response.data.Id);
-                            }, 1000);  
-                          
-                            //ShowAlertBoxSuccess("Success!", "Successfully Request On Demand" + response.CurrentStatus, function () { window.location.reload(); });
-                        }
-
-                    });
-
-                });
-
-            });
 
         function SelectClick(e) {
             if (e.checked) {
@@ -555,8 +345,8 @@
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
             }
         }
-        
-        var onCommentsClick = function (e, channelUniqueNameGuid) {
+
+        function onCommentsClick(e, channelUniqueNameGuid) {
             e.preventDefault();
             $('#divFilter').hide();
             $('#divFilter').addClass('d-none');
@@ -570,12 +360,12 @@
         }
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
-           
-            if (XConstatus.val() == "True") {          
-                $("#OnDemandData").show();                
+
+            if (XConstatus.val() == "True") {
+                $("#OnDemandData").show();
             }
-            else {                                
-                $("#OnDemandData").hide()                
+            else {
+                $("#OnDemandData").hide()
             }
         }
         function reconcilationonstatusDemand(RequestID) {
@@ -629,8 +419,6 @@
             })
 
         }
-
-
 
         function FillterReset() {
             sessionStorage.removeItem('Filter');
@@ -822,165 +610,138 @@
             return string.split(search).join(replace);
         }
 
-            function onChangeglAccount(id, event) {
-                var selectedValue = event.currentTarget.value;
-                if (isEmptyOrBlank(selectedValue)) {
-                    selectedValue = 0;
+        function onChangeglAccount(id, event) {
+            var selectedValue = event.currentTarget.value;
+            if (isEmptyOrBlank(selectedValue)) {
+                selectedValue = 0;
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
                 }
-                var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
-                    if (response.Message == 'Success') {
+                else {
 
-                    }
-                    else {
-
-                    }
-
-                })
-
-            }
-            function onChangeBankRule(id, event) {
-                var Selectedvalue = event.currentTarget.value;
-                var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
-                    if (response.Message == 'Success') {
-
-                    }
-                    else {
-
-                    }
-
-                })
-            }
-            function onChangeTc(id, event) {
-                var selectedValue = event.currentTarget.value;
-                if (isEmptyOrBlank(selectedValue)) {
-                    selectedValue = 0;
                 }
-                var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
-                    if (response.Message == 'Success') {
 
-                    }
-                    else {
+            })
 
-                    }
+        }
+        function onChangeBankRule(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
 
-                })
-            }
-            function onChangeAditinalTc(id, event) {
-                var Selectedvalue = event.currentTarget.value;
-                var ClientID = $("#ddlclient option:selected").val();
-                postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
-                    if (response.Message == 'Success') {
-
-                    }
-                    else {
-
-                    }
-
-                })
-            }
-            function loadReconcilation() {
-
-                var type = sessionStorage.getItem('Type');
-                var recType = 'Not in Books';
-                if (type != null && type == '1') {
-
-                    recType = 'Not in Banks';
                 }
-                var ClientID = $("#ddlclient option:selected").val();
+                else {
 
-                postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
-                    if (response.Message == "Success") {
-                        let data = response.ResultData;
-                    }
-                    if (data === false) {
+                }
+
+            })
+        }
+        function onChangeTc(id, event) {
+            var selectedValue = event.currentTarget.value;
+            if (isEmptyOrBlank(selectedValue)) {
+                selectedValue = 0;
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeAditinalTc(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function loadReconcilation() {
+
+            var type = sessionStorage.getItem('Type');
+            var recType = 'Not in Books';
+            if (type != null && type == '1') {
+
+                recType = 'Not in Banks';
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+
+            postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
+                if (response.Message == "Success") {
+                    let data = response.ResultData;
+                }
+                if (data === false) {
 
 
+                }
+                else {
+
+                }
+
+            });
+
+        }
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+
+            $.ajax({
+                url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        // Write here what should happend once client selected
+                        SetUserPreferencesForAgency();
+                        //loadReconcilation();
+                        window.location.reload();
                     }
                     else {
-
+                        // Write here what should happend once selected client is null
                     }
+                },
+                error: function () {
+                    // Write here what should happend when action result is errored.
+                }
+            });
+        }
 
-                });
+        function bindNotInBooksAndBanksCount() {
+            var ClientID = $("#ddlclient option:selected").val();
 
-            }
-
-            function AgencyDropdownPartialViewChange() {
-                var ClientID = $("#ddlclient option:selected").val();
-
-                $.ajax({
-                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
-                    type: "GET",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        if (data != null) {
-                            // Write here what should happend once client selected
-                            SetUserPreferencesForAgency();
-                            //loadReconcilation();
-                            window.location.reload();
+            getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+                if (response.Message == "Success") {
+                    let data = response.ResultData;
+                    let totalSum = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        totalSum = totalSum + data[i].totalCount;
+                        if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                            $("#lblNotInBanksCount").text(data[i].totalCount);
                         }
                         else {
-                            // Write here what should happend once selected client is null
+                            $("#lblNotInBooksCount").text(data[i].totalCount);
                         }
-                    },
-                    error: function () {
-                        // Write here what should happend when action result is errored.
                     }
-                });
-            }
 
-            function bindNotInBooksAndBanksCount() {
-                var ClientID = $("#ddlclient option:selected").val();
+                    $("#lblNotInCount").text(totalSum);
 
-                getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-                    debugger;
-                    if (response.Message == "Success") {
-                        debugger;
-                        let data = response.ResultData;
-                        let totalSum = 0;
-                        for (var i = 0; i < data.length; i++) {
-                            totalSum = totalSum + data[i].totalCount;
-                            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                                $("#lblNotInBanksCount").text(data[i].totalCount);
-                            }
-                            else {
-                                $("#lblNotInBooksCount").text(data[i].totalCount);
-                            }
-                        }
-
-                        $("#lblNotInCount").text(totalSum);
-
-                    }
-                })
-            }
-
-
-
-        //function bindNotInBooksAndBanksCountDashboard() {
-        //        var ClientID = $("#ddlclient option:selected").val();
-        //        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-        //            if (response.Message == "Success") {
-        //                debugger;
-        //                let data = response.ResultData;
-        //                let totalSum = 0;
-        //                for (var i = 0; i < data.length; i++) {
-        //                    totalSum = totalSum + data[i].Count;
-        //                    if (isEmptyOrBlank(data[i].type) === false && data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-        //                        $("#lblNotInBanksCount").text(data[i].Count);
-        //                    }
-        //                    else {
-        //                        $("#lblNotInBooksCount").text(data[i].Count);
-        //                    }
-        //                }
-        //                $("#lblNotInCount").text(totalSum);
-
-        //            }
-        //        })
-        //}
+                }
+            })
+        }
 
     </script>
 

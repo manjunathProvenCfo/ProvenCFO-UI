@@ -104,6 +104,9 @@ namespace ProvenCfoUI
             bundles.Add(new Bundle("~/bundles/js/agencyHome").Include(
                 "~/assets/js/agencyHome.js"
                 ));
+            bundles.Add(new Bundle("~/bundles/js/reconciliationMain").Include(
+                "~/assets/js/reconciliationMain.js"
+                ));
             #region FileUploader
 
             bundles.Add(new ScriptBundle("~/bundles/jQuery-File-Upload").Include(
