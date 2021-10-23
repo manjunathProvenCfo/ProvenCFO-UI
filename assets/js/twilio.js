@@ -139,7 +139,6 @@ var setActiveChannel = function (channel) {
 
     $btnSendMessage.off('click');
     $btnSendMessage.on('click', function () {
-        debugger
         let body = $chatEditorArea[0].emojioneArea.getText();
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');

@@ -81,7 +81,6 @@ var loadChatPage = function (isPublicChatOnly, type) {
     //        keydown: function (editor, event) {
     //            if (event.keyCode === 13) {
     //                //event.preventDefault();
-    //                debugger
     //                let text = this.editor.html();
     //                if (event.shiftKey) {
     //                    let msg = text + ` </br>`;
@@ -112,7 +111,6 @@ var loadChatPage = function (isPublicChatOnly, type) {
     //});
 
     $messageBodyFileUploader.on("change", function (e) {
-        debugger
         var files = $(this)[0].files;
         if (files.length === 0) {
             ShowAlertBoxError("File uploader", "Select atleast one file.");
