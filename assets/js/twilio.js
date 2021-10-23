@@ -11,7 +11,7 @@ const Chat_Page_Size = 30;
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
+    Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
         .then(function (createdClient) {
 
             twilioClient = createdClient;
@@ -159,6 +159,9 @@ var setActiveChannel = function (channel) {
         }
     });
     $channelMessages.empty();
+
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.trigger('change');
 
     //TODO
     //if (channel.status !== 'joined') {

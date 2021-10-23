@@ -52,6 +52,9 @@ var loadChatPage = function (isPublicChatOnly, type) {
     $channelMessages = $("#channel-messages");
 
     $channelMessages.empty();
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.trigger('change');
+
     addChannelMessagesScrollEvent();
     $('.chat-content-header .col-auto').remove();
     if (isPublicChatOnly === true) {
@@ -269,6 +272,10 @@ var handleParticipantClick = function (event) {
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
         $channelMessages.empty();
+
+        $messageBodyInput.val('').focus();
+        $messageBodyInput.trigger('change');
+
         if (channel.IsPrivate === true) {
             $channelParticipantEmail.text(participant.Email);
             $channelReconciliationDescription.html("");
