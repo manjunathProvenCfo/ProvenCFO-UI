@@ -14,7 +14,10 @@ namespace Proven.Model
         [RegularExpression(@"^[a-zA-Z0-9_ ]*$", ErrorMessage = "Please Enter a valid Entity Name")]
         [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
         public string EntityName { get; set; }
+        public string XeroId { get; set; }
         public string  ProvenCFOXeroContactID { get; set; }
+        public string CrmId { get; set; }
+        public string XeroShortCode { get; set; }
 
         [Required(ErrorMessage = "Clients is a required field.")]
         [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]

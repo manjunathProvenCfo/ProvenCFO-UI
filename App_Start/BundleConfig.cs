@@ -53,7 +53,8 @@ namespace ProvenCfoUI
 
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
                "~/assets/lib/echarts/echarts.min.js",
-               "~/assets/lib/flatpickr/flatpickr.min.js"
+               "~/assets/lib/flatpickr/flatpickr.min.js",
+                "~/assets/js/Chartcommon.js"
                //"~/assets/lib/chart.js/Chart.bundle.min.js",
                //"~/Content/js/theme/Utils.js"
                //"~/assets/js/utils.js"
@@ -99,7 +100,10 @@ namespace ProvenCfoUI
             bundles.Add(new Bundle("~/bundles/js/reports").Include(
                 "~/assets/lib/jquery-contextmenu/jquery.contextmenu.min.js",
                 "~/assets/lib/jquery-contextmenu/jquery.ui.position.min.js",
-                "~/assets/js/reports.js"));
+                "~/assets/js/reports.js"
+               
+                ));
+
 
             bundles.Add(new Bundle("~/bundles/js/agencyHome").Include(
                 "~/assets/js/agencyHome.js"

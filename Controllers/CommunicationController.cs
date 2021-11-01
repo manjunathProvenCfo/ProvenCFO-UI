@@ -24,6 +24,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        [HttpGet]
         public ActionResult Chat()
         {
             try
@@ -38,8 +39,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
-        public async Task<JsonResult> ChatParticipants(string userId, string userEmail)
+        public async Task<JsonResult> ChatParticipants(string userId, string userEmail,int clientId)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    ChatChannels = await communicationService.GetChatParticipants(userId, userEmail);
+                    ChatChannels = await communicationService.GetChatParticipants(userId, userEmail, clientId);
                 }
                 return Json(ChatChannels, JsonRequestBehavior.AllowGet);
             }
@@ -57,7 +57,7 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
-        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid)
+        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid,int clientId)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid);
+                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid, clientId);
                 }
                 return Json(chatChannels, JsonRequestBehavior.AllowGet);
             }

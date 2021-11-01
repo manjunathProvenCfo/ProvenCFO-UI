@@ -66,8 +66,10 @@ namespace ProvenCfoUI.Controllers
                     var result = obj.GetBillableEntitiesById(Id);
                     objvm.Id = result.Id;
                     objvm.EntityName = result.EntityName;
+                    objvm.XeroId = result.XeroId;
                     objvm.ProvenCFOXeroContactID = result.ProvenCFOXeroContactID;
-
+                    objvm.CrmId = result.CrmId;
+                    objvm.XeroShortCode = result.XeroShortCode;
                     objvm.Status = result.Status;
                     objvm.CreatedBy = result.CreatedBy;
                     objvm.CreatedDate = result.CreatedDate;
@@ -106,7 +108,7 @@ namespace ProvenCfoUI.Controllers
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddBillableEntity", billsVM);
                             }
-                            result = obj.AddBillableEntity(bill.EntityName, bill.ProvenCFOXeroContactID, bill.Clients, bill.Status.ToString().Trim(), LoginUserid);
+                            result = obj.AddBillableEntity(bill.EntityName, bill.XeroId, bill.ProvenCFOXeroContactID, bill.CrmId, bill.XeroShortCode, bill.Clients, bill.Status.ToString().Trim(), LoginUserid); ;
                             //result.Id = 0;
                             ViewBag.ErrorMessage = "Created";
                         }
@@ -115,7 +117,10 @@ namespace ProvenCfoUI.Controllers
                             var Existresult = obj.GetBillableEntitiesByName(bill.EntityName);
                             billsVM.Id = bill.Id;
                             billsVM.EntityName = bill.EntityName;
+                            billsVM.XeroId = bill.XeroId;
                             billsVM.ProvenCFOXeroContactID = bill.ProvenCFOXeroContactID;
+                            billsVM.CrmId = bill.CrmId;
+                            billsVM.XeroShortCode = bill.XeroShortCode;
                             billsVM.Clients = bill.Clients;
                             billsVM.Status = bill.Status;
                             billsVM.CreatedBy = bill.CreatedBy;
@@ -127,7 +132,7 @@ namespace ProvenCfoUI.Controllers
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddBillableEntity", billsVM);
                             }
-                            result = obj.UpdateBillableEntity(Convert.ToString(bill.Id), bill.EntityName, bill.ProvenCFOXeroContactID, bill.Clients, bill.Status.ToString().Trim(), Convert.ToString(bill.IsDeleted), LoginUserid);
+                            result = obj.UpdateBillableEntity(Convert.ToString(bill.Id), bill.EntityName,bill.XeroId, bill.ProvenCFOXeroContactID, bill.CrmId, bill.XeroShortCode, bill.Clients, bill.Status.ToString().Trim(), Convert.ToString(bill.IsDeleted), LoginUserid);
                             //result.Id = 0;
                             ViewBag.ErrorMessage = "Updated";
                             return View("AddBillableEntity", billsVM);
@@ -159,7 +164,7 @@ namespace ProvenCfoUI.Controllers
                     var LoginUserid = Session["UserId"].ToString();
                     using (BillableEntitiesService obj = new BillableEntitiesService())
                     {
-                        var result = obj.UpdateBillableEntity(Convert.ToString(bill.Id), bill.EntityName, bill.ProvenCFOXeroContactID, bill.Clients, bill.Status, Convert.ToString(bill.IsDeleted), LoginUserid);
+                        var result = obj.UpdateBillableEntity(Convert.ToString(bill.Id), bill.EntityName, bill.XeroId, bill.ProvenCFOXeroContactID, bill.CrmId, bill.XeroShortCode, bill.Clients, bill.Status, Convert.ToString(bill.IsDeleted), LoginUserid);
                         if (result == null)
                             ViewBag.ErrorMessage = "";
                         return RedirectToAction("GetAllBillableEntitiesList");
@@ -238,7 +243,10 @@ namespace ProvenCfoUI.Controllers
                     {
                         Billable_Entity_Id = b.Id,
                         Entity_Name = b.EntityName,
-                        Xero_ID = b.ProvenCFOXeroContactID,
+                        Xero_ID = b.XeroId,
+                        ProvenCFO_Xero_Contact_ID = b.ProvenCFOXeroContactID,
+                        CRM_ID = b.CrmId,
+                        Xero_Short_Code = b.XeroShortCode,
                         Status = b.Status == "Active" ? "Active" : "Inactive",
                         Created_By = b.CreatedByUser,
                         Created_Date = b.CreatedDate.ToString() == "Inactive" || (((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01-01-0001" || ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy") == "01/01/0001") ? "" : ((DateTime)b.CreatedDate).ToString("MM/dd/yyyy").Replace("-", "/"),

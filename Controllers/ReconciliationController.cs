@@ -369,7 +369,9 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
-                        TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                       var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
+                        TempData["GLAccounts"] = glAccountList;
 
                         if (userType == "1")
                         {

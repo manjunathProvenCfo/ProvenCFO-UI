@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static ProvenCfoUI.Comman.Common;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -17,6 +18,7 @@ namespace ProvenCfoUI.Controllers
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
+       
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: AgencyService
         [CheckSession]
@@ -216,6 +218,68 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
 
+        }
+        [HttpGet]
+        [CheckSession]
+        public async Task<JsonResult> GetGrossRevenueData(ChartOptions Option, ChartType cType)
+        {
+            try
+            {
+                if (XeroInstance.Instance.XeroConnectionStatus == true)
+                {
+                    var pval = Common.getChartOptionValues(Option);
+                    var result = await XeroInstance.Instance.XeroService.GetReportProfitAndLossAsync(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
+                    dynamic obj = null;
+                    dynamic Header = null;
+                    dynamic Xdata = null;
+                    dynamic Ydata = null;
+                    Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value).ToArray();
+                    if (cType == ChartType.Revenue && result!= null && result.Reports.Count > 0)
+                    {
+                        obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
+                        Ydata = obj;
+                    }
+                    else if (cType == ChartType.NetIncome && result != null && result.Reports.Count > 0)
+                    {
+                        foreach (var item in result.Reports[0].Rows)
+                        {
+                            if (item.Rows != null && item.Rows.Count > 0 && item.Rows[0].Cells.Count > 0 && item.Rows[0].Cells[0].Value == "Net Income")
+                            {
+                                Ydata = item.Rows[0].Cells.Select(x => x.Value).ToArray();
+                                
+                            }
+                        }
+                        ///obj = result.Reports[0].Rows.Where(x => x.Rows[0].Cells.Select(y => y.Value).Contains("Net Income")).ToList()[0].Rows.LastOrDefault().Cells;
+                        
+                    }
+                    
+                    //if (result._TrackingCategories != null)
+                    //{
+                    //    List<XeroTrackingCategoriesVM> tcList = new List<XeroTrackingCategoriesVM>();
+                    //    foreach (var item in result._TrackingCategories)
+                    //    {
+                    //        foreach (var Option in item.Options)
+                    //        {
+                    //            XeroTrackingCategoriesVM tc = new XeroTrackingCategoriesVM();
+                    //            tc.Name = item.Name;
+                    //            tc.Option = Option.Name;
+                    //            tc.AgencyId = ClientID;
+                    //            tc.Status = Convert.ToString(item.Status);
+                    //            tcList.Add(tc);
+                    //        }
+                    //    }
+                       
+                    //}
+                    return Json(new { Xdata = Header, Ydata = Ydata }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
     }
 }

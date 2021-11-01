@@ -233,6 +233,11 @@ namespace Proven.Service
             var obj = await _accountinstance.GetTrackingCategoriesAsync(xeroToken.AccessToken, XeroTenentID);
             return obj;
         }
+        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.ReportWithRows> GetReportProfitAndLossAsync(IXeroToken xeroToken, string XeroTenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods =null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null,bool? standardLayout = null ,bool? paymentsOnly = null)
+        {
+            var obj = await _accountinstance.GetReportProfitAndLossAsync(xeroToken.AccessToken, XeroTenentID,fromDate,toDate,periods,timeframe,trackingCategoryID,trackingCategoryID2,trackingOptionID,trackingOptionID2,standardLayout,paymentsOnly);
+            return obj;
+        }
 
     }
 }

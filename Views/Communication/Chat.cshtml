@@ -24,18 +24,29 @@
         .separator:not(:empty)::after {
             margin-left: .25em;
         }
+
+    .chat-sidebar .chat-content-header {
+        border-right: 1px solid #d8e2ef !important;
+    }
+
+    .chat-content-header {
+        min-height: 70px;
+    }
+
+    .contacts-list {
+        height: calc(100% - 2.063rem - 70px);
+    }
 </style>
 
-<div class="card-body px-0 pt-0">
-    @Html.Partial("_communication", false)
-</div>
+@*<div class="card-body py-0 px-0 pt-0">
+
+</div>*@
+@Html.Partial("_communication", false)
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
         $(document).ready(function () {
-            /*$("#ddlclient").next(".select2-container").remove();*/
-            /*$("#ddlclient").remove();*/
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
             loadChatPage();

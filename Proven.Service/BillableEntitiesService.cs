@@ -66,12 +66,15 @@ namespace Proven.Service
             //}
         }
 
-        public BillableEntitiesVM AddBillableEntity(string EntityName, string ProvenCFOXeroContactID, string Clients, string status, string userid)
+        public BillableEntitiesVM AddBillableEntity(string EntityName, string XeroId, string ProvenCFOXeroContactID, string CrmId, string XeroShortCode, string Clients, string status, string userid)
         {
             var form = new Dictionary<string, string>
             {
                 {"EntityName", EntityName},
+                {"XeroId", XeroId},
                 {"ProvenCFOXeroContactID", ProvenCFOXeroContactID },
+                {"CrmId", CrmId },
+                {"XeroShortCode", XeroShortCode },
                 {"Clients", Clients },
                 {"Status", status },
                 {"CreatedBy", userid}
@@ -92,15 +95,18 @@ namespace Proven.Service
             //}
         }
 
-        public BillableEntitiesVM UpdateBillableEntity(string Id, string EntityName, string ProvenCFOXeroContactID, string Clients, string status, string IsDeleted, string userid)
+        public BillableEntitiesVM UpdateBillableEntity(string Id, string EntityName, string XeroId, string ProvenCFOXeroContactID, string CrmId, string XeroShortCode, string Clients, string status, string IsDeleted, string userid)
         {
             var form = new Dictionary<string, object>
            {
                {"Id", Id},
-               {"EntityName", EntityName},
+               {"EntityName", EntityName },
+               {"XeroId", XeroId },
                {"ProvenCFOXeroContactID",ProvenCFOXeroContactID },
-                {"Clients", Clients },
-                {"Status", status },
+               {"CrmId", CrmId },
+               {"XeroShortCode", XeroShortCode },
+               {"Clients", Clients },
+               {"Status", status },
                {"ModifiedBy", userid},
                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true)}
            };

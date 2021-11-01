@@ -38,7 +38,7 @@
 
                     @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
                     <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>*@
 
                 </div>
             </div>
@@ -58,15 +58,15 @@
                                 <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                             </div>
                         </th>
-                        <td class="sort pr-1 align-middle">First Name</td>
-                        <td class="sort pr-2 align-middle">Last Name</td>
-                        <td class="sort pr-3 align-middle">Email Address</td>
-                        <td class="sort pr-4 align-middle">Job Title</td>
-                        <td class="sort pr-5 align-middle">Role</td>
+                        <th class="sort pr-1 align-middle">First Name</th>
+                        <th class="sort pr-2 align-middle">Last Name</th>
+                        <th class="sort pr-3 align-middle">Email Address</th>
+                        <th class="sort pr-4 align-middle">Job Title</th>
+                        <th class="sort pr-5 align-middle">Role</th>
                         @*<td class="sort pr-6 align-middle" style="max-width:5% !important">LinkedIn Profile </td>*@
-                        <td class="sort pr-7 align-middle">Status </td>
-                        <td class="sort pr-1 align-middle">Last Login (UTC)</td>
-                        <td class="no-sort align-middle text-center pr-3">Actions</td>
+                        <th class="sort pr-7 align-middle">Status </th>
+                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        <th class="no-sort align-middle text-center pr-3">Actions</th>
 
 
 
