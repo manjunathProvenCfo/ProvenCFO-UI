@@ -6,7 +6,7 @@ var activeChannelPage;
 var activeChannelMessages;
 var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
-const Chat_Page_Size = 30;
+const Chat_Page_Size = 10;
 
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
@@ -23,7 +23,19 @@ var createTwilioClient = function () {
                 //connectionInfo
                 //    .removeClass("online offline connecting denied")
                 //    .addClass(client.connectionState);
-                $participants.eq(0).click();
+
+                if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
+                    $participants.eq(0).click();
+                else {
+                    let qsEmail = getParameterByName('WithTeamMember');
+                    let qsParticipant = $participants.filter(function (i, obj) {
+                        return obj.dataset.email === qsEmail.toLowerCase();
+                    });
+                    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+                        qsParticipant[0].click();
+                    else
+                        $participants.eq(0).click();
+                }
             });
 
             twilioClient.on("channelJoined", function (channel) {
@@ -118,7 +130,9 @@ var addMediaMessage = function (file) {
             $newMessagesDiv.remove();
         let lastMessage = $channelMessages.children('.media:last')
         if (lastMessage && lastMessage.length > 0)
-            activeChannel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index')));
+            activeChannel.updateLastReadMessageIndex(parseInt(lastMessage.attr('data-index'))).then(function () {
+
+            });
     });
 }
 
@@ -132,7 +146,7 @@ var setActiveChannel = function (channel) {
     }
 
     activeChannel = channel;
-
+    
     let participant = getChannelParticipnatByChannelIndex();//TODO Public Chat
 
     addParticipant(participant.Email);
@@ -179,7 +193,7 @@ var setActiveChannel = function (channel) {
         channel.on('messageAdded', addMessage);
         channel.on('messageUpdated', updateMessage);
         channel.on('messageRemoved', removeMessage);
-
+        
         var newestMessageIndex = page.items.length ? page.items[page.items.length - 1].index : 0;
         var lastIndex = channel.lastReadMessageIndex;
         if (!isEmpty(lastIndex) && lastIndex !== newestMessageIndex) {
@@ -217,7 +231,6 @@ var setActiveChannel = function (channel) {
         //    });
         //});
     });
-
     channel.on('typingStarted', function (member) {
         member.getUser().then(user => {
             if (member.identity.toLowerCase() != chat.userEmail.toLowerCase()) {
@@ -442,7 +455,7 @@ var prepareMessageRow = function (message, timeStampRowId, participantName) {
 }
 
 var prepareImageMessageBody = function (url) {
-    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" data-fancybox="twilio-gallery data-fancybox"><img src="${url}" alt="" class="img-fluid rounded mb-2"></a></div>`;
+    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" data-fancybox="twilio-gallery data-fancybox"><img src="${url}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div>`;
     return messageBody;
 }
 
@@ -571,7 +584,9 @@ var addChannelMessagesScrollEvent = function () {
             });
 
             if (lastIndex != maxReadMessageIndex) {
-                activeChannel.updateLastReadMessageIndex(parseInt(maxReadMessageIndex));
+                activeChannel.updateLastReadMessageIndex(parseInt(maxReadMessageIndex)).then(function () {
+
+                });
             }
         }
 

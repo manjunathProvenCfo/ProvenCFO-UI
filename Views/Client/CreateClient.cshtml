@@ -118,7 +118,12 @@
                 {*@
 
                                         @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
-                                        new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
+                                        new SelectListItem { Text = "openid", Value = "openid" },
+                                        new SelectListItem { Text = "profile", Value = "profile" },
+                                        new SelectListItem { Text = "email", Value = "email" },
+                                        new SelectListItem { Text = "offline_access", Value = "offline_access" },
+                                        new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
+                                       new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
                                         new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
                                         new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
                                         new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
@@ -191,11 +196,51 @@
                                 </div>
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0"> Xero Contact ID For ProvenCfo</label>
+                                        <label for="split-login-email" class="mb-0"> Xero Contact ID For ProvenCFO</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.XeroContactIDforProvenCfo, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.XeroContactIDforProvenCfo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Asana ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.AsanaId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.AsanaId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Everhour ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.EverhourId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EverhourId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> CRM ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.CrmId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CrmId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Short Code</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroShortCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroShortCode, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 

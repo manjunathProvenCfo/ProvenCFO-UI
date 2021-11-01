@@ -14,13 +14,13 @@ namespace Proven.Service
     {
         private bool isDisposed = false;
 
-        public async Task<List<ChatChannel>> GetChatParticipants(string UserID, string userEmail)
+        public async Task<List<ChatChannel>> GetChatParticipants(string UserID, string userEmail,int clientId)
         {
-            return await GetAsync<List<ChatChannel>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}");
+            return await GetAsync<List<ChatChannel>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}&clientId={clientId}");
         }
-        public async Task<List<ChatChannel>> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid)
+        public async Task<List<ChatChannel>> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid,int clientId)
         {
-            return await GetAsync<List<ChatChannel>>($"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}");
+            return await GetAsync<List<ChatChannel>>($"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}&clientId={clientId}");
         }
 
 

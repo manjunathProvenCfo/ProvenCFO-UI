@@ -7,9 +7,9 @@ $(function () {
             createTwilioClientGlobal();
     }
     //Twilio Chat
-    bindNotInBooksAndBanksCount();
+   
+    bindNotInBooksAndBanksCount();  
     GetTotalNotesCount();
-
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
         $("#home").addClass("show");
@@ -49,6 +49,10 @@ var createTwilioClientGlobal = function () {
                 createdClient.updateToken(token);
             });
         });
+}
+
+var getClientId = function () {
+    return $("#ddlclient option:selected").val();
 }
 
 //Layout page

@@ -8,6 +8,7 @@ var $channelReconciliationDescriptionSidebar;
 var $channelReconciliationCompany;
 var $channelReconciliationDate;
 var $channelReconciliationAmount;
+var $chatSiderbarFilterButtons;
 var $messageBodyInput;
 var $chatEditorArea;
 var $messageBodyFileUploader;
@@ -27,14 +28,16 @@ var chat = {
     channels: [],
     participants: [],
     channelIndex: -1,
-    publicChannelUniqueNameGuid: ""
+    publicChannelUniqueNameGuid: "",
+    clientId: 0,
+    type: 0
 };
 
-var loadChatPage = function (isPublicChatOnly, type) {
+var loadChatPage = async function (isPublicChatOnly, type) {
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
-        chat.type = 1;
+        chat.type = 0;
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
@@ -50,13 +53,16 @@ var loadChatPage = function (isPublicChatOnly, type) {
     $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
 
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
     $messageBodyInput.trigger('change');
 
     addChannelMessagesScrollEvent();
-    $('.chat-content-header .col-auto').remove();
+    $('.tab-pane .chat-content-header .col-auto').remove();
+
+    chat.clientId = getClientId();
     if (isPublicChatOnly === true) {
         hideParticipantsSidebar();
         getPublicChatParticipants(chat.publicChannelUniqueNameGuid);
@@ -68,51 +74,24 @@ var loadChatPage = function (isPublicChatOnly, type) {
 
     if (chat.channels.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
+        $participants.off('click');
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
     }
-
+    $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
         if (event.keyCode === 13 && !event.shiftKey) {
             event.preventDefault();
-            if (event.type =="keydown")
+            if (event.type == "keydown")
                 $btnSendMessage[0].click();
+            else
+                activeChannel.typing();
         }
+        else
+          activeChannel.typing();
     })
-    //$messageBodyInput.emojioneArea({
-    //    "placeholder": "Type your message", "emojiPlaceholder": ":smile_cat:", "search": true, "tones": false, "filtersPosition": "bottom", "recentEmojis": false, events: {
-    //        keydown: function (editor, event) {
-    //            if (event.keyCode === 13) {
-    //                //event.preventDefault();
-    //                let text = this.editor.html();
-    //                if (event.shiftKey) {
-    //                    let msg = text + ` </br>`;
-    //                    $messageBodyInput.val(msg);
-    //                    $(".emojionearea-editor").html(msg);
-    //                }
-    //                else {
-    //                    let msg = text;
-    //                    $messageBodyInput.val(msg);
-    //                    $(".emojionearea-editor").html(msg);
-    //                    $btnSendMessage[0].click();
-    //                }
-    //            } else if (activeChannel) {
-    //                activeChannel.typing();
-    //            }
-    //        },
-    //        keyup: function (editor, event) {
-    //            let val = "";
-    //            if (editor && editor.length > 0)
-    //                val = editor[0].innerText;
-                
-    //            if (isEmptyOrBlank(val))
-    //                $btnSendMessage.removeClass('text-primary');
-    //            else
-    //                $btnSendMessage.addClass('text-primary');
-    //        }
-    //    }
-    //});
 
+    $messageBodyFileUploader.off("change");
     $messageBodyFileUploader.on("change", function (e) {
         var files = $(this)[0].files;
         if (files.length === 0) {
@@ -142,6 +121,7 @@ var loadChatPage = function (isPublicChatOnly, type) {
 
 }
 var resetChatPage = function () {
+    $participantsContainer.empty();
     chat.twilioUserId = "";
     chat.channels = [];
     chat.participants = [];
@@ -153,14 +133,18 @@ var resetChatPage = function () {
 var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 var getPublicChatParticipants = function (channelUniqueNameGuid) {
     resetChatPage();
-    getAjaxSync(`/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=${channelUniqueNameGuid}`, null, function (response) {
+    getAjaxSync(`/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=${channelUniqueNameGuid}&clientId=${chat.clientId}`, null, function (response) {
         setParticipants(response);
         createTwilioClient();
         /*$participants.eq(0).click();*/
     });
 }
 var getChatParticipants = function () {
-    getAjaxSync(`/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}`, null, function (response) {
+    let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
+    if (chat.type === 1) {
+        participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}`;
+    }
+    getAjaxSync(participantsURL, null, function (response) {
         if (response.length > 0) {
             chat.channels = response;
             let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
@@ -183,7 +167,10 @@ var getChatParticipants = function () {
             renderParticipants();
         }
         else {
-            ShowAlertBoxWarning("No participant exists for chat");
+            if (chat.type === 0)
+                ShowAlertBoxWarning("No person exists for chat");
+            else if (chat.type === 1)
+                ShowAlertBoxWarning("No reconciliation exists for chat");
         }
     });
 }
@@ -233,7 +220,7 @@ var renderParticipants = function () {
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-0 chat-contact-title" title="${obj[i].ChannelName}">`+ obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
+                                <h6 class="mb-0 chat-contact-title" title="${obj[i].ChannelName}">` + obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
@@ -360,7 +347,11 @@ var addTypingIndicatorDiv = function () {
 }
 
 var setScrollPosition = function () {
-    $channelMessages.scrollTop($channelMessages[0].scrollHeight);
+    let elSeparator = $('div.separator');
+    if (!isEmptyOrBlank(elSeparator) && elSeparator.length>0)
+        elSeparator[0].scrollIntoView(true);
+    else
+        $channelMessages.scrollTop($channelMessages[0].scrollHeight);
 }
 
 var Uploader = function (file) {
@@ -376,3 +367,36 @@ Uploader.prototype.getSizeInMB = function () {
 Uploader.prototype.getName = function () {
     return this.file.name;
 };
+
+$("#divChatSiderbarFilters > button").click(function () {
+    var el = $(this);
+    $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
+    el.addClass("btn-falcon-primary");
+    let type = el.data().type;
+    if (chat.type !== type) {
+        resetChatPage();
+        if (type === 0) {
+            chat.type = 0;
+            setTimeout(function () {
+                loadChatPage(false, chat.type);
+            }, 0)
+        }
+        else if (type === 1) {
+            chat.type = 1;
+
+            setTimeout(function () {
+                loadChatPage(false, chat.type);
+            }, 0)
+        }
+    }
+});
+
+function AgencyDropdownPartialViewChange() {
+    setTimeout(function () {
+        resetChatPage();
+        loadChatPage();
+        $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
+        $chatSiderbarFilterButtons.eq(0).addClass("btn-falcon-primary");
+    }, 1)
+    SetUserPreferencesForAgency();
+}

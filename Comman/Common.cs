@@ -20,6 +20,22 @@ namespace ProvenCfoUI.Comman
         public static string RegxPasswordMatch = @"(?=.*\d)(?=.*[A-Za-z]).{8,}";
         private static Object XeroLock = new Object();
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public enum ChartOptions
+        {
+            CurrentQuarter = 0,
+            PreviousQuarter = 1,
+            CurrentYearQuarters = 2,
+            CurrentYearByMonth = 3,
+            PreviousYearByQuarters = 4,
+            PreviousYearByMonth = 5,
+            PreviousThreeYearsByMonth = 6,
+            PreviousThreeYearsByQuarters = 7
+        }
+        public enum ChartType
+        {
+            Revenue = 0,
+            NetIncome = 1
+        }
         public static bool IsFeatureAccessable(string FeatureCode)
         {
 
@@ -293,7 +309,67 @@ namespace ProvenCfoUI.Comman
             }
             return string.Empty;
         }
-
+        public static ChartOptionsResultModel getChartOptionValues(ChartOptions Option)
+        {
+            ChartOptionsResultModel result = new ChartOptionsResultModel();
+            DateTime datetime = DateTime.Now;
+            switch (Option)
+            {
+                case ChartOptions.CurrentQuarter:                   
+                    int currQuarter = (datetime.Month - 1) / 3 + 1;
+                    result.StartDate = new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
+                    result.EndDate= datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "MONTH";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.PreviousQuarter:
+                    int PreviousQuarter = (datetime.Month - 1) / 3 ;
+                    result.StartDate = new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
+                    result.EndDate = datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "MONTH";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.CurrentYearQuarters:
+                    result.StartDate = new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.CurrentYearByMonth:
+                    result.StartDate = new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.PreviousYearByQuarters:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.PreviousYearByMonth:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.PreviousThreeYearsByMonth:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.PreviousThreeYearsByQuarters:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 12;
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
         public static void ConnectXeroOrganization(string code)
         {
             if (string.IsNullOrEmpty(code))
@@ -335,6 +411,7 @@ namespace ProvenCfoUI.Comman
                 XeroInstance.Instance.XeroConnectionStatus = false;
             }
         }
+       
 
     }
 

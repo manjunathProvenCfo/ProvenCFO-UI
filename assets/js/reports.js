@@ -51,11 +51,10 @@ $(function () {
     }
 
     $reportYears.change(function (e) {
-
         let year = parseInt($(this).val());
         $lblYears.text(year);
-        $divReportPeriodCard.attr("data-year", year);
 
+        //#region HideShowDivs
         let currentYear = moment().year();
         let currentMonth = parseInt(moment().format("MM"));
         if (year < currentYear) {
@@ -81,6 +80,14 @@ $(function () {
                 }
             }
         }
+        //#endregion
+
+        $divReportPeriodCard.each(function (i, obj) {
+            obj.setAttribute("data-year", year.toString());
+            obj.dataset.year = year.toString();
+            $(obj).data("year", year.toString());
+        })
+
         bindReports("");
 
     });
@@ -311,7 +318,7 @@ var getReports = function (agencyId, year, period) {
                 staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
             var reportHTML = `<div class="col-2 text-center report notes-item context-menu py-2" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> 
                                 <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
-                                <a class="data-fancybox" href="${obj.FilePath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtension}">
+                                <a class="data-fancybox" href="${obj.FilePath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtention}">
                                 <figure class="book-cover"> 
                                 <img class="img-fluid" src="${thumbnail}" alt="" /> 
                                 </figure> 

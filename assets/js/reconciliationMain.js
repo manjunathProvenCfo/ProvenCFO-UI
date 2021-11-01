@@ -2,8 +2,32 @@
 var currentChannelUniqueNameGuid = "";
 $(document).ready(function () {
     hideParticipantsSidebar();
+    $("#ichat").click(function () {
+        let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
+        if (elCheckbox.length === 0) {
+            ShowAlertBoxWarning("Please select reconciliation!");
+        }
+        else {
+            let reconciliaitonId = elCheckbox.attr("id");
+            showReconciliationChat(reconciliaitonId);
+        }
+    })
     $(document).on("click", "button[id=btnComment]", function (e) {
-        let channelUniqueNameGuid = e.currentTarget.dataset.id;
+        //let channelUniqueNameGuid = e.currentTarget.dataset.id;
+        showReconciliationChat(e.currentTarget.dataset.id);
+        //$('#divFilter').hide();
+        //$('#divFilter').addClass('d-none');
+        //$('#divChat').show();
+        //$('#divChat').removeClass('d-none');
+        //$('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
+        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    loadChatPage(true, 1);
+        //}
+    });
+    var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
         $('#divChat').show();
@@ -15,12 +39,16 @@ $(document).ready(function () {
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
             loadChatPage(true, 1);
         }
-    });
+    }
 });
 //Chat Code end
 
 $(document).ready(function () {
+
     bindNotInBooksAndBanksCount();
+
+    bindNotInBooksAndBanksCount1(); 
+    
     LoadFilterData();
 
 
@@ -41,10 +69,12 @@ $(document).ready(function () {
             $('#tabNotinBanks').addClass('tabselect');
         }
     }
+   
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
     }
+    sessionStorage.clear();
 
     $('#tblreconcilation tbody tr').click(function () {
         $(this).addClass('bg-300').siblings().removeClass('bg-300');
@@ -81,32 +111,6 @@ $(document).ready(function () {
         else {
             $('#divFilter').show();
             $('#divFilter').removeClass('d-none');
-            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-        }
-    });
-    $('#ichat').click(function () {
-        if ($("#divChat").is(":visible")) {
-            $('#divChat').hide();
-            $('#divChat').addClass('d-none');
-            $('#divFilter').hide();
-            $('#divBulkUpdate').hide();
-            $('#divBulkUpdate').addClass('d-none');
-            $('#divFilter').addClass('d-none');
-            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-
-        }
-        else if ($("#divFilter").is(":visible") || $("#divBulkUpdate").is(":visible")) {
-            $('#divChat').hide();
-            $('#divChat').addClass('d-none');
-            $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');
-            $('#divBulkUpdate').hide();
-            $('#divBulkUpdate').addClass('d-none');
-            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
-        }
-        else {
-            $('#divChat').show();
-            $('#divChat').removeClass('d-none');
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
         }
     });

@@ -44,12 +44,12 @@
                         <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
                         <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
                     </button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
                         <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
                         <span class="d-none d-sm-inline-block ml-1">
                             <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
                         </span>
-                    </button>
+                    </button>*@
                 </div>
             </div>
         </div>
@@ -105,17 +105,17 @@
                             <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            <th class="align-middle">
+                            <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.EntityName)
-                            </th>
-                            <th class="align-middle">
+                            </td>
+                            <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.CityName)
-                            </th>
-                            <th class="align-middle">
+                            </td>
+                            <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.StateName)
-                            </th>
+                            </td>
 
-                            <th class="align-middle">
+                            <td class="align-middle">
                                 @if (item.Status == true)
                                 {
                                     <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
@@ -125,13 +125,13 @@
                                     <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
                                 }
 
-                            </th>
-                            <th class="align-middle">
+                            </td>
+                            <td class="align-middle">
                                 @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
                                 {
                                     @item.StartDate.Value.ToString("MM/dd/yyyy")
                                 }
-                            </th>
+                            </td>
                             <td class="align-middle text-center pr-3">
                                 <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>

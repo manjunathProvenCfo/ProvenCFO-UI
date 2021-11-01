@@ -1,0 +1,13 @@
+Reconciliation Chat:-
+- Add Twilio user on user Create 
+- Create New Table TwilioPublicConversations 
+- Add New column in Reconciliation table Fk of TwilioPublicConversations 
+- Implement twilio participant Hookup - Later
+- getChatParticipant select both Private and public chat. Update response model
+- 
+
+Reconciliation Chat New:-
+- Improve performance
+- Fancybox
+- Resolve Scroll Issues
+- Public chat name

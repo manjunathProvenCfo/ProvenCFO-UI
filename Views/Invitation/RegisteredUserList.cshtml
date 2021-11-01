@@ -38,7 +38,7 @@
                     <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("NavigateToInviteStaffByAgency","Invitation")>Invite</a></span></button>
                     @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
                     <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button><Back to dashboard</a></span></button>
+                    @*<button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button><Back to dashboard</a></span></button>*@
 
                 </div>
             </div>
@@ -64,15 +64,15 @@
                                 <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                             </div>
                         </th>
-                        <td class="sort pr-1 align-middle">First Name</td>
-                        <td class="sort pr-1 align-middle">Last Name</td>
-                        <td class="sort pr-1 align-middle">Email Address</td>
+                        <th class="sort pr-1 align-middle">First Name</th>
+                        <th class="sort pr-1 align-middle">Last Name</th>
+                        <th class="sort pr-1 align-middle">Email Address</th>
                         @*<td class="sort pr-1 align-middle">Job Title</td>
                             <td class="sort pr-1 align-middle">Role</td>*@
-                        <td class="sort pr-1 align-middle">Status </td>
+                        <th class="sort pr-1 align-middle">Status </th>
 
-                        <td class="sort pr-1 align-middle">Last Login (UTC)</td>
-                        <td class="no-sort align-middle text-center pr-3">Actions</td>
+                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        <th class="no-sort align-middle text-center pr-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="agencyuserlist">

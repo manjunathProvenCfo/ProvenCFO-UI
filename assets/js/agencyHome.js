@@ -19,8 +19,8 @@ $(document).ready(function () {
     NotesIndividualCountAndPercentageByAgencyId();
     KanbanCountWithIndividualPriority();
     defaultReportsWidget();
-    Chart1();
-    Chart2();
+    RenderGrossRevenueChart(3);
+    RenderNetIncomeChart(3);
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -34,8 +34,18 @@ $(document).ready(function () {
             }
         });
     }, 3000);
-    // totalSalesInit();
-    //totalSalesInitTwo();
+
+    $('#ddlGrossRevenue').change(function () {
+        var item = $(this);
+       
+        RenderGrossRevenueChart(item.val());
+    });
+    $('#dllNetIncome').change(function () {
+        var item = $(this);
+       
+        RenderNetIncomeChart(item.val());
+    });
+    
 });
 
 //function GetMonthDifference(data.StartDate, Enddate) {
@@ -45,73 +55,176 @@ $(document).ready(function () {
 //    return months;
 //}
 
-function Chart1() {
-    var dom = document.getElementById("container1");
-    var myChart = echarts.init(dom);
-    var app = {};
-
-    var option;
+function RenderGrossRevenueChart(Option) {
 
 
+    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${0}`, null, function (response) {
+        response.Xdata.shift();
+        response.Ydata.shift()
+        var xdata = response.Xdata.reverse(); ///['Oct', 'Nov', 'Dec'];
+        var ydata = response.Ydata.reverse();//[100, 150, 200];
+        //var ydata = [
+        //    [10000, 15000, 26000],
+        //    [100, 70, 80],
+        //    [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60],
+        //    [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80],
+        //    [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50],
+        //    [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70],
+        //    [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50],
+        //    [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110],
+        //    [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70],
+        //    [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110],
+        //    [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70],
+        //    [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70],
+        //];
+        //if (Option == 0) {
+        //    xdata = ['Oct', 'Nov'];
+        //    ydata = [110000, 195000];
+        //}
+        //else if (Option ==1) {
+        //    xdata = ['Sep', 'Oct'];
+        //    ydata = [8000, 11000];
+        //}
+        //else if (Option == 2) {
+        //    xdata = ['Oct', 'Nov', 'Dec'];
+        //    ydata = [8000, 11000,12000];
+        //}
+        //else if (Option == 3) {
+        //    xdata = ['Jul', 'Aug', 'Sep'];
+        //    ydata = [5000, 6000, 3000];
+        //}
+        //else if (Option == 4) {
+        //    xdata = ['Q1-2021', 'Q2-2021', 'Q3-2021','Q4-2021'];
+        //    ydata = [118000, 110000, 117000,218000];
+        //}
+        //else if (Option == 5) {
+        //    xdata = ['Jan-21', 'Feb-21', 'Mar-21', 'Apr-21', 'May-21', 'Jun-21', 'Jul-21', 'Aug-21', 'Sep-21', 'Oct-21', 'Nov-21', 'Dec-21'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];            
+        //}
+        //else if (Option == 6) {
+        //    xdata = ['Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020'];
+        //    ydata = [12000, 8000, 3000, 21000];
+        //}
+        //else if (Option == 7) {
+        //    xdata = ['Jan-20', 'Feb-20', 'Mar-20', 'Apr-20', 'May-20', 'Jun-20', 'Jul-20', 'Aug-20', 'Sep-20', 'Oct-20', 'Nov-20', 'Dec-20'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];
+        //}
+        //else if (Option == 8) {
+        //    xdata = ['Jan-19', 'Feb-19', 'Mar-19', 'Apr-19', 'May-19', 'Jun-19', 'Jul-19', 'Aug-19', 'Sep-19', 'Oct-19', 'Nov-19', 'Dec-19','Jan-20', 'Feb-20', 'Mar-20', 'Apr-2020', 'May-20', 'Jun*20', 'Jul-20', 'Aug-20', 'Sep-20', 'Oct-20', 'Nov-20', 'Dec-20', 'Jan-21', 'Feb-21', 'Mar-21', 'Apr-2021', 'May-21', 'Jun*21', 'Jul-21', 'Aug-21', 'Sep-21', 'Oct-21', 'Nov-21', 'Dec-21'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000, 3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000, 3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];
+        //}
+        //else if (Option == 9) {
+        //    xdata = ['Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020', 'Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020'];
+        //    ydata = [12000, 8000, 3000, 21000, 12000, 8000, 3000, 21000, 12000, 8000, 3000, 21000];
+        //}
 
-    option = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: 'line'
-        }]
-    };
+        LineChart(xdata, ydata, '#container1');
+    });
 
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
 }
 
-function Chart2() {
-    var dom = document.getElementById("container2");
-    var myChart = echarts.init(dom);
-    var app = {};
+function RenderNetIncomeChart(Option) {
+    
+    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
+        response.Xdata.shift();
+        response.Ydata.shift();
+        var xdata = response.Xdata.reverse(); ///['Oct', 'Nov', 'Dec'];
+        var ydata = response.Ydata.reverse();//[100, 150, 200];
+        //var ydata = [
+        //    [75000, 125000, 190000],
+        //    [100, 70, 80],
+        //    [80, 50, 60, 40, 60, 120, 100, 130, 60, 80, 50, 60],
+        //    [70, 80, 100, 70, 90, 60, 80, 130, 40, 60, 50, 80],
+        //    [90, 40, 80, 80, 100, 140, 100, 130, 90, 60, 70, 50],
+        //    [80, 60, 80, 60, 40, 100, 120, 100, 30, 40, 30, 70],
+        //    [20, 40, 20, 50, 70, 60, 110, 80, 90, 30, 50, 50],
+        //    [60, 70, 30, 40, 80, 140, 80, 140, 120, 130, 100, 110],
+        //    [90, 90, 40, 60, 40, 110, 90, 110, 60, 80, 60, 70],
+        //    [50, 80, 50, 80, 50, 80, 120, 80, 50, 120, 110, 110],
+        //    [60, 90, 60, 70, 40, 70, 100, 140, 30, 40, 30, 70],
+        //    [20, 40, 20, 50, 30, 80, 120, 100, 30, 40, 30, 70],
+        //];
 
-    var option;
+        //if (Option == 0) {
+        //    xdata = ['Oct', 'Nov'];
+        //    ydata = [90000, 155000];
+        //}
+        //else if (Option == 1) {
+        //    xdata = ['Sep', 'Oct'];
+        //    ydata = [6000, 95000];
+        //}
+        //else if (Option == 2) {
+        //    xdata = ['Oct', 'Nov', 'Dec'];
+        //    ydata = [8000, 11000, 12000];
+        //}
+        //else if (Option == 3) {
+        //    xdata = ['Jul', 'Aug', 'Sep'];
+        //    ydata = [5000, 6000, 3000];
+        //}
+        //else if (Option == 4) {
+        //    xdata = ['Q1-2021', 'Q2-2021', 'Q3-2021', 'Q4-2021'];
+        //    ydata = [118000, 110000, 117000, 218000];
+        //}
+        //else if (Option == 5) {
+        //    xdata = ['Jan-21', 'Feb-21', 'Mar-21', 'Apr-21', 'May-21', 'Jun-21', 'Jul-21', 'Aug-21', 'Sep-21', 'Oct-21', 'Nov-21', 'Dec-21'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];
+        //}
+        //else if (Option == 6) {
+        //    xdata = ['Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020'];
+        //    ydata = [12000, 8000, 3000, 21000];
+        //}
+        //else if (Option == 7) {
+        //    xdata = ['Jan-20', 'Feb-20', 'Mar-20', 'Apr-20', 'May-20', 'Jun-20', 'Jul-20', 'Aug-20', 'Sep-20', 'Oct-20', 'Nov-20', 'Dec-20'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];
+        //}
+        //else if (Option == 8) {
+        //    xdata = ['Jan-19', 'Feb-19', 'Mar-19', 'Apr-19', 'May-19', 'Jun-19', 'Jul-19', 'Aug-19', 'Sep-19', 'Oct-19', 'Nov-19', 'Dec-19', 'Jan-20', 'Feb-20', 'Mar-20', 'Apr-2020', 'May-20', 'Jun*20', 'Jul-20', 'Aug-20', 'Sep-20', 'Oct-20', 'Nov-20', 'Dec-20', 'Jan-21', 'Feb-21', 'Mar-21', 'Apr-2021', 'May-21', 'Jun*21', 'Jul-21', 'Aug-21', 'Sep-21', 'Oct-21', 'Nov-21', 'Dec-21'];
+        //    ydata = [3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000, 3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000, 3000, 4000, 5000, 6500, 8500, 3200, 9000, 12000, 8500, 15000, 8000, 21000];
+        //}
+        //else if (Option == 9) {
+        //    xdata = ['Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020', 'Q1-2020', 'Q2-2020', 'Q3-2020', 'Q4-2020'];
+        //    ydata = [12000, 8000, 3000, 21000, 12000, 8000, 3000, 21000, 12000, 8000, 3000, 21000];
+        //}
+        LineChart(xdata, ydata, '#container2');
+    });
+    //var dom = document.getElementById("container2");
+    //var myChart = echarts.init(dom);
+    //var app = {};
+
+    //var option;
 
 
 
-    option = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: 'line',
-            lineStyle: {
-                color: '#2c7be5'
-            },
-            symbol: 'circle',
-            symbolSize: 10,
-            smooth: false,
-            hoverAnimation: true,
-        }],
-        grid: {
-            right: '28px',
-            left: '40px',
-            bottom: '15%',
-            top: '5%'
-        }
-    };
+    //option = {
+    //    xAxis: {
+    //        type: 'category',
+    //        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    //    },
+    //    yAxis: {
+    //        type: 'value'
+    //    },
+    //    series: [{
+    //        data: [150, 230, 224, 218, 135, 147, 260],
+    //        type: 'line',
+    //        lineStyle: {
+    //            color: '#2c7be5'
+    //        },
+    //        symbol: 'circle',
+    //        symbolSize: 10,
+    //        smooth: false,
+    //        hoverAnimation: true,
+    //    }],
+    //    grid: {
+    //        right: '28px',
+    //        left: '40px',
+    //        bottom: '15%',
+    //        top: '5%'
+    //    }
+    //};
 
-    if (option && typeof option === 'object') {
-        myChart.setOption(option);
-    }
+    //if (option && typeof option === 'object') {
+    //    myChart.setOption(option);
+    //}
 }
 
 var colorArrays = [];
@@ -464,6 +577,12 @@ function getTeamMembersList() {
                     else {
                         $('#spProfileImage' + count).attr('src', '../assets/img/team/default-logo.png');
                     }
+                    if (object.Email != null && object.Email != '') {
+                        $('#spTeamChat' + count).attr('href', `/Communication/Chat?WithTeamMember=${object.Email}`);
+                    }
+                    else {
+                        $('#spTeamChat' + count).attr('href', '');
+                    }
                     count = count + 1;
                 });
             }
@@ -580,6 +699,9 @@ function AgencyDropdownPartialViewChange() {
             $('#spProfileImage1').removeAttr('src');
             $('#spProfileImage2').removeAttr('src');
             $('#spProfileImage3').removeAttr('src');
+            $('#spTeamChat1').removeAttr('href');
+            $('#spTeamChat2').removeAttr('href');
+            $('#spTeamChat3').removeAttr('href');
             $('#spStatus').html('');
             $('#spClientAddress').html('');
             $('.badge-soft-success').addClass('d-none');

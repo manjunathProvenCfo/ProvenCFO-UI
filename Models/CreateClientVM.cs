@@ -48,6 +48,10 @@ namespace ProvenCfoUI.Models
         public bool EnableAutomation { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
         public string XeroContactIDforProvenCfo { get; set; }
+        public string AsanaId { get; set; }
+        public string EverhourId { get; set; }
+        public string CrmId { get; set; }
+        public string XeroShortCode { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
     }
