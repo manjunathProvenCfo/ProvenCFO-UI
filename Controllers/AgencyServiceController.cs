@@ -223,17 +223,18 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public async Task<JsonResult> GetGrossRevenueData(ChartOptions Option, ChartType cType)
         {
+            dynamic obj = null;
+            dynamic Header = null;
+            dynamic Xdata = null;
+            dynamic Ydata = null;
             try
-            {
+            { 
                 if (XeroInstance.Instance.XeroConnectionStatus == true)
                 {
                     var pval = Common.getChartOptionValues(Option);
                     var result = await XeroInstance.Instance.XeroService.GetReportProfitAndLossAsync(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
-                    dynamic obj = null;
-                    dynamic Header = null;
-                    dynamic Xdata = null;
-                    dynamic Ydata = null;
-                    Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value).ToArray();
+                   
+                    Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ","").Replace("31 ","").Replace("28 ","").Replace("29 ","")).ToArray();
                     if (cType == ChartType.Revenue && result!= null && result.Reports.Count > 0)
                     {
                         obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
@@ -252,31 +253,14 @@ namespace ProvenCfoUI.Controllers
                         ///obj = result.Reports[0].Rows.Where(x => x.Rows[0].Cells.Select(y => y.Value).Contains("Net Income")).ToList()[0].Rows.LastOrDefault().Cells;
                         
                     }
-                    
-                    //if (result._TrackingCategories != null)
-                    //{
-                    //    List<XeroTrackingCategoriesVM> tcList = new List<XeroTrackingCategoriesVM>();
-                    //    foreach (var item in result._TrackingCategories)
-                    //    {
-                    //        foreach (var Option in item.Options)
-                    //        {
-                    //            XeroTrackingCategoriesVM tc = new XeroTrackingCategoriesVM();
-                    //            tc.Name = item.Name;
-                    //            tc.Option = Option.Name;
-                    //            tc.AgencyId = ClientID;
-                    //            tc.Status = Convert.ToString(item.Status);
-                    //            tcList.Add(tc);
-                    //        }
-                    //    }
-                       
-                    //}
-                    return Json(new { Xdata = Header, Ydata = Ydata }, JsonRequestBehavior.AllowGet);
+                                      
+                    return Json(new { Xdata = Header, Ydata = Ydata,Status ="Success" }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return Json(new { Xdata = Header, Ydata = Ydata, Status = "No Data" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return Json(new {Status = "Error" }, JsonRequestBehavior.AllowGet);
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }

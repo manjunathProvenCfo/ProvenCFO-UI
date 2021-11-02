@@ -8,8 +8,8 @@ namespace Proven.Model
 {
     public class ChartOptionsResultModel
     {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string timeframe { get; set; }
         public int periods { get; set; }
     }

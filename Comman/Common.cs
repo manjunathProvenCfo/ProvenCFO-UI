@@ -22,14 +22,14 @@ namespace ProvenCfoUI.Comman
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public enum ChartOptions
         {
-            CurrentQuarter = 0,
-            PreviousQuarter = 1,
-            CurrentYearQuarters = 2,
-            CurrentYearByMonth = 3,
-            PreviousYearByQuarters = 4,
-            PreviousYearByMonth = 5,
-            PreviousThreeYearsByMonth = 6,
-            PreviousThreeYearsByQuarters = 7
+            Option_0 = 0,
+            Option_1 = 1,
+            Option_2 = 2,
+            Option_3 = 3,
+            Option_4= 4,
+            Option_5 = 5,
+            Option_6 = 6,
+            Option_7 = 7
         }
         public enum ChartType
         {
@@ -315,51 +315,51 @@ namespace ProvenCfoUI.Comman
             DateTime datetime = DateTime.Now;
             switch (Option)
             {
-                case ChartOptions.CurrentQuarter:                   
+                case ChartOptions.Option_0:                   
                     int currQuarter = (datetime.Month - 1) / 3 + 1;
-                    result.StartDate = new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
-                    result.EndDate= datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
+                    result.StartDate = null; //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
+                    result.EndDate = null; //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
                     result.timeframe = "MONTH";
-                    result.periods = 3;
+                    result.periods = 11;
                     break;
-                case ChartOptions.PreviousQuarter:
-                    int PreviousQuarter = (datetime.Month - 1) / 3 ;
-                    result.StartDate = new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
-                    result.EndDate = datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
+                case ChartOptions.Option_1:
+                    //int PreviousQuarter = (datetime.Month - 1) / 3 ;
+                    result.StartDate = null;//new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
+                    result.EndDate = null;// datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
                     result.timeframe = "MONTH";
-                    result.periods = 3;
+                    result.periods = 5;
                     break;
-                case ChartOptions.CurrentYearQuarters:
-                    result.StartDate = new DateTime(datetime.Year, 1, 1);
-                    result.EndDate = new DateTime(datetime.Year, 12, 31);
-                    result.timeframe = "QUARTER";
-                    result.periods = 3;
+                case ChartOptions.Option_2:
+                    result.StartDate = null;// new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = null;// new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 2;
                     break;
-                case ChartOptions.CurrentYearByMonth:
+                case ChartOptions.Option_3:
                     result.StartDate = new DateTime(datetime.Year, 1, 1);
                     result.EndDate = new DateTime(datetime.Year, 12, 31);
                     result.timeframe = "MONTH";
                     result.periods = 11;
                     break;
-                case ChartOptions.PreviousYearByQuarters:
+                case ChartOptions.Option_4:
                     result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
                     result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
                     result.timeframe = "QUARTER";
                     result.periods = 3;
                     break;
-                case ChartOptions.PreviousYearByMonth:
+                case ChartOptions.Option_5:
                     result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
                     result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
                     result.timeframe = "MONTH";
                     result.periods = 11;
                     break;
-                case ChartOptions.PreviousThreeYearsByMonth:
+                case ChartOptions.Option_6:
                     result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
                     result.EndDate = new DateTime(datetime.Year, 12, 31);
                     result.timeframe = "MONTH";
                     result.periods = 11;
                     break;
-                case ChartOptions.PreviousThreeYearsByQuarters:
+                case ChartOptions.Option_7:
                     result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
                     result.EndDate = new DateTime(datetime.Year, 12, 31);
                     result.timeframe = "QUARTER";
