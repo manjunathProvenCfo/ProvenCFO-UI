@@ -548,7 +548,7 @@ function AgencyDropdownPartialViewChange() {
                 setTimeout(function () {
                     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                     RenderNetIncomeChart($('#dllNetIncome').val());
-                }, 700);
+                }, 1000);
               
                 GetAccountOutStanding();
                 getTeamMembersList();
