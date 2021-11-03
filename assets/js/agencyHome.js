@@ -92,7 +92,7 @@ function RenderNetIncomeChart(Option) {
             var xdata = ['No Data'];
             var ydata = [0];
 
-            LineChart(xdata, ydata, '#container1');
+            LineChart(xdata, ydata, '#container2');
         }
 
     });
@@ -545,8 +545,11 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-                RenderNetIncomeChart($('#dllNetIncome').val());
+                setTimeout(function () {
+                    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+                    RenderNetIncomeChart($('#dllNetIncome').val());
+                }, 700);
+              
                 GetAccountOutStanding();
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
