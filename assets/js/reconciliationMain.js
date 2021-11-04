@@ -163,17 +163,7 @@ $(document).ready(function () {
             $('#divBulkUpdate').removeClass('d-none');
             $('#divBulkUpdate').show();
         }
-    });
-    $('.checkbox-bulk-select-target').change(function (e) {
-        if (this.checked) {
-            var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.target.id : e.target.id;
-            sessionStorage.setItem('SelectedRecords', SelectedItems);
-        }
-        else {
-            var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.target.id : e.target.id;
-            sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-        }
-    });
+    });   
 
     $("#OnDemandData").click(function () {
 
