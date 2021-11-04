@@ -35,11 +35,15 @@ namespace ProvenCfoUI.Models
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]
         public DateTime? StartDate { get; set; }
+        [Required(ErrorMessage = "XeroID is a required field")]
         public string XeroID { get; set; }
+        [Required(ErrorMessage = "XeroClientID is a required field")]
         public string XeroClientID { get; set; }
-       public string XeroClientSecret { get; set; }
+        [Required(ErrorMessage = "XeroClientSecret is a required field")]
+        public string XeroClientSecret { get; set; }
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
+        [Required(ErrorMessage = "XeroScope is a required field")]
         public string XeroScope { get; set; }
         [Required(ErrorMessage = "Start Date is a required field.")]
         public string StartDateText { get; set; }
