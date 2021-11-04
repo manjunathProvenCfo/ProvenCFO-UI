@@ -342,7 +342,7 @@
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
-
+        
         function SelectClick(e) {
             if (e.checked) {
                 var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
@@ -368,13 +368,13 @@
         }
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
-
-            if (XConstatus.val() == "True") {
-                $("#OnDemandData").show();
-            }
-            else {
-                $("#OnDemandData").hide()
-            }
+            $("#OnDemandData").show();
+            //if (XConstatus.val() == "True") {
+            //    $("#OnDemandData").show();
+            //}
+            //else {
+            //    $("#OnDemandData").hide()
+            //}
         }
         function reconcilationonstatusDemand(RequestID) {
 
@@ -454,6 +454,10 @@
             var type = 'Outstanding Payments';
             if (IsNotinBooks == true) {
                 type = 'Unreconciled';
+                sessionStorage.setItem('Type', 0);
+            }
+            else {
+                sessionStorage.setItem('Type', 1);
             }
 
             if ($('#rb1').prop('checked') == true) {
@@ -576,6 +580,7 @@
           
         }
         function BulkActionReconcilation() {
+            
             var GLaccount = $('#BA_filterGLaccounts').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
@@ -584,6 +589,7 @@
             var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
+            
             if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
