@@ -25,18 +25,20 @@ var createTwilioClient = function () {
                 //    .removeClass("online offline connecting denied")
                 //    .addClass(client.connectionState);
 
-                //if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
-                //    $participants.eq(0).click();
-                //else {
-                //    let qsEmail = getParameterByName('WithTeamMember');
-                //    let qsParticipant = $participants.filter(function (i, obj) {
-                //        return obj.dataset.email === qsEmail.toLowerCase();
-                //    });
-                //    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-                //        qsParticipant[0].click();
-                //    else
-                //        $participants.eq(0).click();
-                //}
+                if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
+                {
+                    $participants.eq(0).click();
+                }
+                else {
+                    let qsEmail = getParameterByName('WithTeamMember');
+                    let qsParticipant = $participants.filter(function (i, obj) {
+                        return obj.dataset.email === qsEmail.toLowerCase();
+                    });
+                    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+                        qsParticipant[0].click();
+                    else
+                        //$participants.eq(0).click();
+                }
             });
 
             twilioClient.on("channelJoined", function (channel) {
@@ -329,18 +331,18 @@ var updateChannels = function updateChannels() {
             }
             //sort particiapnts end
             //click particular participant start
-            if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
-                $participants.eq(0).click();
-            else {
-                let qsEmail = getParameterByName('WithTeamMember');
-                let qsParticipant = $participants.filter(function (i, obj) {
-                    return obj.dataset.email === qsEmail.toLowerCase();
-                });
-                if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-                    qsParticipant[0].click();
-                else
-                    $participants.eq(0).click();
-            }
+            //if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
+            //    $participants.eq(0).click();
+            //else {
+            //    let qsEmail = getParameterByName('WithTeamMember');
+            //    let qsParticipant = $participants.filter(function (i, obj) {
+            //        return obj.dataset.email === qsEmail.toLowerCase();
+            //    });
+            //    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+            //        qsParticipant[0].click();
+            //    else
+            //        $participants.eq(0).click();
+            //}
             //click particular participant end
             //createAllChannels();
         });
