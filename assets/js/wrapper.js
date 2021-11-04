@@ -173,5 +173,11 @@ function getParameterByName(name, url = window.location.href) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+function removeItemByIndex(arr, index) {
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+}
 
 

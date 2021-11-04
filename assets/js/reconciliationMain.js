@@ -3,9 +3,10 @@ var currentChannelUniqueNameGuid = "";
 $(document).ready(function () {
     hideParticipantsSidebar();
     $("#ichat").click(function () {
-        let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
+        //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
+        let elCheckbox = $("table tr.bg-300 td:first .checkbox-bulk-select-target");
         if (elCheckbox.length === 0) {
-            ShowAlertBoxWarning("Please select reconciliation!");
+            ShowAlertBoxWarning("Please select reconciliation row!");
         }
         else {
             let reconciliaitonId = elCheckbox.attr("id");

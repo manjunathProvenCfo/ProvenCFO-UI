@@ -88,7 +88,7 @@ var loadChatPage = async function (isPublicChatOnly, type) {
                 activeChannel.typing();
         }
         else
-          activeChannel.typing();
+            activeChannel.typing();
     })
 
     $messageBodyFileUploader.off("change");
@@ -348,7 +348,7 @@ var addTypingIndicatorDiv = function () {
 
 var setScrollPosition = function () {
     let elSeparator = $('div.separator');
-    if (!isEmptyOrBlank(elSeparator) && elSeparator.length>0)
+    if (!isEmptyOrBlank(elSeparator) && elSeparator.length > 0)
         elSeparator[0].scrollIntoView(true);
     else
         $channelMessages.scrollTop($channelMessages[0].scrollHeight);
@@ -368,6 +368,13 @@ Uploader.prototype.getName = function () {
     return this.file.name;
 };
 
+
+
+var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
+    return arr.filter(function (rp) {
+        return (rp.dataset.channelid ?? "") !== channelId;
+    });
+}
 $("#divChatSiderbarFilters > button").click(function () {
     var el = $(this);
     $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
