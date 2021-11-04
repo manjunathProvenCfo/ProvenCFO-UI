@@ -27,7 +27,7 @@ var createTwilioClient = function () {
 
                 if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
                 {
-                    $participants.eq(0).click();
+                    //$participants.eq(0).click();
                 }
                 else {
                     let qsEmail = getParameterByName('WithTeamMember');
@@ -36,8 +36,9 @@ var createTwilioClient = function () {
                     });
                     if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
                         qsParticipant[0].click();
-                    else
+                    else {
                         //$participants.eq(0).click();
+                    }
                 }
             });
 
