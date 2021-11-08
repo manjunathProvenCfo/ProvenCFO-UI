@@ -9,6 +9,7 @@ namespace ProvenCfoUI.Models
 {
     public class CreateClientVM
     {
+
         public int Id { get; set; }
         [Required(ErrorMessage = "Client Agency name is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
@@ -43,7 +44,6 @@ namespace ProvenCfoUI.Models
         public string XeroClientSecret { get; set; }
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
-        [Required(ErrorMessage = "XeroScope is a required field")]
         public string XeroScope { get; set; }
         [Required(ErrorMessage = "Start Date is a required field.")]
         public string StartDateText { get; set; }
@@ -58,5 +58,6 @@ namespace ProvenCfoUI.Models
         public string XeroShortCode { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
+
     }
 }
