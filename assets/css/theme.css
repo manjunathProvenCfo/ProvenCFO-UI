@@ -20496,6 +20496,7 @@ label {
 .dataTables_wrapper .dataTables_info {
     padding-top: 0 !important;
     font-size: 0.83333rem;
+    margin-left: 19px;
 }
 
 .dataTables_wrapper .data-table.dataTable {
