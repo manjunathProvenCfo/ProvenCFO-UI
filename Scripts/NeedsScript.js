@@ -511,8 +511,14 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
+    var img = new Image();
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    
+    ev.dataTransfer.setDragImage(img, 0, 0);
+    
     var count = parseInt($('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
     selectedTask = ev.target.id;
+    
     //count = count - 1;
     selectedColumnsid = $('#' + ev.target.id).parent().parent()[0].id;
     // $('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText = '(' + count + ')';
