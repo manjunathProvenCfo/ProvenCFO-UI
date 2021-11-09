@@ -32,6 +32,7 @@ namespace Proven.Model
         public int? tracking_category_ref { get; set; }
         public int? additional_tracking_category_ref { get; set; }
         public bool Selected { get; set; }
+        public bool IsChatExist { get; set; }
 
     }
     public class ReconciliationMainModel
