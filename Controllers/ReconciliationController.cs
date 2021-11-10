@@ -93,7 +93,7 @@ namespace ProvenCfoUI.Controllers
         public ActionResult GetFilteredReconcilation(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type)
         {
 
-            ViewBag.IsEmailVisible = false;
+            ViewBag.IsStaffUser = false;
           
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
@@ -118,7 +118,7 @@ namespace ProvenCfoUI.Controllers
                     TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value).ResultData;
                     if (userType == "1")
                     {
-                        ViewBag.IsEmailVisible = true;
+                        ViewBag.IsStaffUser = true;
                         ViewBag.IsBankRuleVisible = true;
                         List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(Filter.AgencyID.Value).ResultData;
                         if (objTCList != null && objTCList.Count > 0)
@@ -375,7 +375,7 @@ namespace ProvenCfoUI.Controllers
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     int AgencyID = 0;
-                    ViewBag.IsEmailVisible = false;
+                    ViewBag.IsStaffUser = false;
                     var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
 
@@ -392,7 +392,7 @@ namespace ProvenCfoUI.Controllers
 
                         if (userType == "1")
                         {
-                            ViewBag.IsEmailVisible = true;
+                            ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
                             List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             if (objTCList != null && objTCList.Count > 0)

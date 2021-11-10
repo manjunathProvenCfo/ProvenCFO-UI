@@ -41,7 +41,7 @@
 
     select#item_gl_account_ref {
         font-size: 13px !important;
-        width:400px;
+        width: 400px;
     }
 
     select#item_rule {
@@ -128,10 +128,13 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
                             </div>
 
-                            <div class="d-flex align-items-center ml-5" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                            <div class="d-flex align-items-center ml-3" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
+                            </div>
+                            <div class="d-flex align-items-center ml-2">
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk action"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
                         </div>
                     </div>
@@ -152,14 +155,17 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span>Request On Demand Data</button>
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
-                                @if (ViewBag.IsEmailVisible == true)
+                                @if (ViewBag.IsStaffUser == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                }
+                                
+                                @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 }
                                 <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
                             @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
@@ -285,24 +291,24 @@
                                         }
 
                                     }
-                                <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-                                    
-                                    <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                        @if (item.IsChatExist == true)
-                                        {
-                                            <span class="fas fa-comment fs--1"></span>
-                                        }
-                                        else
-                                        {
-                                            <span class="far fa-comment fs--1"></span>
+                                    <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
 
-                                        }
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            @if (item.IsChatExist == true)
+                                            {
+                                                <span class="fas fa-comment fs--1"></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="far fa-comment fs--1"></span>
+
+                                            }
 
 
-                                    </button>
-                                    @*onclick="onCommentsClick('@item.id')"*@
-                                    @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
-                                </td>
+                                        </button>
+                                        @*onclick="onCommentsClick('@item.id')"*@
+                                        @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
+                                    </td>
                                 </tr>
                             }
 
@@ -354,12 +360,12 @@
             //    ]
             //});
         });
-       
+
         $("select").select2();
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
-        
+
         function SelectClick(e) {
             if (e.checked) {
                 var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
@@ -583,21 +589,21 @@
             }
 
         function Tabclick(e, type) {
-            sessionStorage.setItem('Type', type);           
+            sessionStorage.setItem('Type', type);
             if (type == 0) {
-             
+
                 $('#tabNotinBooks').addClass('tabselect');
                 $('#tabNotinBanks').removeClass('tabselect');
             }
             else {
-                
+
                 $('#tabNotinBooks').removeClass('tabselect');
                 $('#tabNotinBanks').addClass('tabselect');
             }
-          
+
         }
         function BulkActionReconcilation() {
-            
+
             var GLaccount = $('#BA_filterGLaccounts').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
@@ -607,7 +613,7 @@
             var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
-            
+
             if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
@@ -646,7 +652,7 @@
         }
 
         function onChangeglAccount(id, event) {
-           
+
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = 0;
@@ -760,56 +766,56 @@
         var totalSum1;
         var totalSum2;
         function bindNotInBooksAndBanksCount() {
-           
+
             var ClientID = $("#ddlclient option:selected").val();
-           
+
             getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
                 if (response.Message == "Success") {
-                 
+
                     let data = response.ResultData;
 
                     var totalSum = 0;
-                    
+
                     for (var i = 0; i < data.length; i++) {
-                        
+
                         totalSum1 = totalSum + data[i].Count;
                         if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
                             $("#lblNotInBanksCount").text(data[i].Count);
-                        }                        
+                        }
                     }
                 }
             })
         }
 
-       
+
         function bindNotInBooksAndBanksCount1() {
             var ClientID = $("#ddlclient option:selected").val();
-           
+
             getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
                 if (response.Message == "Success") {
-                   
+
                     let data = response.ResultData;
                     var totalSum = 0;
                     for (var i = 0; i < data.length; i++) {
-                       
+
                       totalSum2 = totalSum + data[i].Count;
-                        
+
                         if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
                             $("#lblNotInBooksCount").text(data[i].Count);
                         }
-                       
+
                     }
                     TotalSum(totalSum1, totalSum2);
-                   
+
 
                 }
             })
         }
-      
-      
+
+
         function TotalSum(totalSum1, totalSum2) {
-           
-            let totalsum3;            
+
+            let totalsum3;
             totalsum3 = totalSum1 + totalSum2;
             $("#lblNotInCount").text(totalsum3);
         }
