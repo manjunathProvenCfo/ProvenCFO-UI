@@ -15,5 +15,6 @@ namespace CFO.Model.ViewModels
         public bool IsAllSelected { get; set; }
         public string SelectedItems { get; set; }
         public string UnSelectedRecords { get; set; }
+        public int? reconcilationStatus { get; set; }
     }
 }

@@ -27,17 +27,18 @@
                 </div>
 
                 <div class="Words">
-                    @if (summary?.SummaryCreatedByFullName == "")
+                    @*@if (summary?.SummaryCreatedByFullName == "")
                     {
                         <span>&nbsp;</span>
                     }
                     else
                     {
-                        <span>
-                            Created by:
-                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-                        </span>
-                    }
+                <span>
+                    Created by:
+                   
+                    <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+                </span>
+                    }*@
 
                     @if (summary?.SummaryModifiedByFullName == "")
                     {
@@ -46,7 +47,7 @@
                     else
                     {
                         <span>
-                            | Last Edited by:
+                             Last Edited by:
                             <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
                         </span>
                     }

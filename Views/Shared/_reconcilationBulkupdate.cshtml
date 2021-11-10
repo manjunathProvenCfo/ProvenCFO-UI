@@ -57,7 +57,7 @@
                                                                new { @class = " selectpicker form-control" })
                 </div>
             </div>
-           
+
 
             <div class="row pb-1">
                 <div class="col-12">
@@ -67,13 +67,26 @@
             <div class="row pb-3">
                 <div class="col-12">
                     @if (TempData["BankRule"] != null)
-                     {
-                       
-                            @Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })
-                     }
+                    {
+
+                        @Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })
+                    }
                 </div>
             </div>
-          
+            <div class="row pb-1">
+                <div class="col-12">
+                    <h6 class="mb-0">Status</h6>
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-12">
+                    @if (TempData["ReconciledStatus"] != null)
+                    {
+
+                        @Html.DropDownList("BA_Status", new SelectList((List<SelectListItem>)TempData["ReconciledStatus"], "Value", "Text"), "Select Status", new { @class = " selectpicker form-control" })
+                    }
+                </div>
+            </div>
 
             <div class="row pb-1">
                 <div class="col-12">
@@ -81,9 +94,9 @@
                     {
                         <h6 class="mb-0">Tracking Categories</h6>
                     }
-                    </div>
-            </div> <br/>
-        
+                </div>
+            </div> <br />
+
 
             <div class="row">
                 <div class="col-12">
@@ -107,27 +120,25 @@
 
 
                     }
-
-
-                    @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
                 </div>
             </div>
-            @*<div class="row align-items-center justify-content-between  pt-2">
-                <div class="col-1">
-                </div>
-                <div class="col-10">
-                    <div class="row align-items-center">
-                        <div class="d-flex align-items-center ml-2">
 
-                            <div class="mb-0 ml-2 text-400 fs--2">
-                            </div>
+            @*<div class="row align-items-center justify-content-between  pt-2">
+            <div class="col-1">
+            </div>
+            <div class="col-10">
+                <div class="row align-items-center">
+                    <div class="d-flex align-items-center ml-2">
+
+                        <div class="mb-0 ml-2 text-400 fs--2">
                         </div>
                     </div>
                 </div>
-                <div class="col-1">
-                </div>
             </div>
-            <br /> <br />*@
+            <div class="col-1">
+            </div>
+        </div>
+        <br /> <br />*@
 
 
             @*<div class="row">

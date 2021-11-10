@@ -33,11 +33,18 @@ var chat = {
     type: 0
 };
 
-var loadChatPage = async function (isPublicChatOnly, type) {
+var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
         chat.type = 0;
+    else
+        chat.type = type;
+    if (isEmptyOrBlank(autoSelectParticipant))
+        chat.autoSelectParticipant = false;
+    else
+        chat.autoSelectParticipant = autoSelectParticipant;
+
     $participantsContainer = $("#chatParticipants");
     $participants = "";
     $channelName = $(".channelName");
