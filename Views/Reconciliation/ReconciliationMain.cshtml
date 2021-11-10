@@ -285,22 +285,24 @@
                                         }
 
                                     }
-                                    <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-                                        <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            @if (item.IsChatExist == true)
-                                            {
-                                                <span class="fas fa-comment fs--1"></span>
-                                            }
-                                            else
-                                            {
-                                                <span class="far fa-comment fs--1"></span>
-                                            }
+                                <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+                                    @Html.DisplayFor(modelItem => item.IsChatExist)
+                                    <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                        @if (item.IsChatExist == true)
+                                        {
+                                            <span class="far fa-comment fs--1"></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fas fa-comment fs--1"></span>
+
+                                        }
 
 
-                                        </button>
-                                        @*onclick="onCommentsClick('@item.id')"*@
-                                        @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
-                                    </td>
+                                    </button>
+                                    @*onclick="onCommentsClick('@item.id')"*@
+                                    @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
+                                </td>
                                 </tr>
                             }
 
