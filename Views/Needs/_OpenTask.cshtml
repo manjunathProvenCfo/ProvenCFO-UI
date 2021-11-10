@@ -3,11 +3,11 @@
     <div class="modal-dialog modal-lg mt-6" role="document">
         <div class="modal-content border-0">
             <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
-                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="verifyAttachment" onclick="checkAttachment1()"data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="verifyAttachment" onclick="checkAttachment1()" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
             </div>
             <div class="modal-body p-0">
                 <div class="bg-light rounded-soft-top px-4 py-3">
-                    <h4 class="mb-1" id="kanban-modal-label-title"  >Add a new illustration to the landing page</h4>
+                    <h4 class="mb-1" id="kanban-modal-label-title">Add a new illustration to the landing page</h4>
                     <p class="fs--2 mb-0">Added by <a class="text-600 font-weight-semi-bold" href="#!" id="Reporter">Antony</a></p>
                 </div>
                 <div class="p-4">
@@ -36,7 +36,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                  
+
                                     <hr class="my-4" />
                                 </div>
                             </div>
@@ -64,6 +64,26 @@
                                     <hr class="my-4" />
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="col-lg-3">
+                            <h6 class="mt-5 mt-lg-0">Add To Card</h6>
+                            <ul class="nav flex-lg-column fs--1">
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-user mr-2"></span>Members</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-tag mr-2"></span>Label</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-paperclip mr-2"></span>Attachments</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-check mr-2"></span>Checklists</a></li>
+                            </ul>
+                            <h6 class="mt-3 d-none">Actions</h6>
+                            <ul class="nav flex-lg-column fs--1 d-none">
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="far fa-copy mr-2"> </span>Copy</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-arrow-right mr-2"></span>Move</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-trash-alt mr-2"></span>Remove</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
                             <div class="media">
                                 <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
                                 <div class="media-body">
@@ -76,11 +96,11 @@
                                                 <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Attach Link</a>
                                             </div>
                                         </div>
-                                    </div> 
-                                    <div class="min-vh-50 mh-25 border border-dark" id="divViewDescription" >
+                                    </div>
+                                    <div class="min-vh-50 mh-25 border border-dark" id="divViewDescription">
                                         <p class="text-word-break fs--1" id="kanban-modal-label-description">The illustration must match to the contrast of the theme. The illustraion must described the concept of the design. To know more about the theme visit the page. <a href="https://prium.github.io/falcon/v2.8.1/default/home/dashboard-alt.html" target="_blank">https://prium.github.io/falcon/v2.8.1/default/home/dashboard-alt.html</a></p>
                                     </div>
-                                    <div id="divEditDescription" >
+                                    <div id="divEditDescription">
                                         <div class="min-vh-50 mh-25 border border-dark">
                                             <textarea class="tinymce d-none border" name="content" id="txtDescription"></textarea>
                                         </div>
@@ -108,9 +128,9 @@
                                     </div>
                                     <div class="media align-items-center mb-3">
                                         <div class="table table-striped" class="files" id="previews_view" style="margin-top:40px">
-                                            
+
                                             <div id="template_view" class="file-row">
-                                               <strong style="color: red;">Please upload the file to save.</strong>
+                                                <strong style="color: red;">Please upload the file to save.</strong>
                                                 <!-- This is used as the file preview template -->
                                                 <div>
                                                     <span class="preview"><img data-dz-thumbnail /></span>
@@ -132,10 +152,10 @@
                                                     </button>
                                                     <span class="mx-1"></span>
                                                     @*<button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
-                                                        <i class="glyphicon glyphicon-ban-circle"></i>
-                                                        <input type="hidden" name="" value="" class="name" data-dz-name />
-                                                        <span>Cancel</span>
-                                                    </button>*@
+                                    <i class="glyphicon glyphicon-ban-circle"></i>
+                                    <input type="hidden" name="" value="" class="name" data-dz-name />
+                                    <span>Cancel</span>
+                                </button>*@
                                                     <span class="mx-1"></span>
                                                     <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
                                                         <i class="glyphicon glyphicon-trash"></i>
@@ -204,7 +224,7 @@
                                     <hr class="my-4" />
                                 </div>
                             </div>
-                            <div class="media d-none" >
+                            <div class="media d-none">
                                 <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-list-ul" data-fa-transform="shrink-2"></i></span>
                                 <div class="media-body">
                                     <h5 class="mb-3 fs-0">Activity </h5>
@@ -234,21 +254,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <h6 class="mt-5 mt-lg-0">Add To Card</h6>
-                            <ul class="nav flex-lg-column fs--1">
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-user mr-2"></span>Members</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-tag mr-2"></span>Label</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-paperclip mr-2"></span>Attachments</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-check mr-2"></span>Checklists</a></li>
-                            </ul>
-                            <h6 class="mt-3">Actions</h6>
-                            <ul class="nav flex-lg-column fs--1">
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="far fa-copy mr-2"> </span>Copy</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-arrow-right mr-2"></span>Move</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-trash-alt mr-2"></span>Remove</a></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
