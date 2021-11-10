@@ -508,17 +508,20 @@ function RemoveMember_view(UserID) {
 
 function allowDrop(ev) {
     ev.preventDefault();
+    ev.stopPropagation();
 }
 
 function drag(ev) {
-    var img = new Image();
-    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    //var img = new Image();
+    //img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     
-    ev.dataTransfer.setDragImage(img, 0, 0);
-    
+    //ev.dataTransfer.setDragImage(img, 0, 0);
+    /*ev.dataTransfer.clearData();*/
+   /* ev.currentTarget.style.background = "lightyellow";*/
+
+        
     var count = parseInt($('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
-    selectedTask = ev.target.id;
-    
+    selectedTask = ev.target.id;    
     //count = count - 1;
     selectedColumnsid = $('#' + ev.target.id).parent().parent()[0].id;
     // $('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText = '(' + count + ')';
