@@ -599,6 +599,7 @@
             var GLaccount = $('#BA_filterGLaccounts').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
+            var reconcilationStatus = $('#BA_Status').val();
             var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
             var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
             var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
@@ -609,7 +610,7 @@
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-            if (GLaccount == '' && bankrule == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
             }
@@ -618,7 +619,7 @@
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
                 AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords
+                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus
             };
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {

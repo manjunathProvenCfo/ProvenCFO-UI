@@ -38,7 +38,7 @@ $(document).ready(function () {
         if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
             currentChannelUniqueNameGuid = channelUniqueNameGuid;
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1);
+            loadChatPage(true, 1,true);
         }
     }
 });

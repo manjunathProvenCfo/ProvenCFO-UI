@@ -64,6 +64,7 @@ namespace ProvenCfoUI.Controllers
 
                             }
                             TempData["BankRule"] = getBankRule();
+                            TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
@@ -92,7 +93,8 @@ namespace ProvenCfoUI.Controllers
         public ActionResult GetFilteredReconcilation(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type)
         {
 
-
+            ViewBag.IsEmailVisible = false;
+          
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
                 ReconciliationfilterModel Filter = new ReconciliationfilterModel();
@@ -116,6 +118,7 @@ namespace ProvenCfoUI.Controllers
                     TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value).ResultData;
                     if (userType == "1")
                     {
+                        ViewBag.IsEmailVisible = true;
                         ViewBag.IsBankRuleVisible = true;
                         List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(Filter.AgencyID.Value).ResultData;
                         if (objTCList != null && objTCList.Count > 0)
@@ -126,6 +129,7 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
                         }
                         TempData["BankRule"] = getBankRule();
+                        TempData["ReconciledStatus"] = getReconciledStatus();
                     }
                     else
                     {
@@ -330,6 +334,19 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
+        public static List<SelectListItem> getReconciledStatus()
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Text = "Reconciled";
+            item.Value = "1";
+            listItem.Add(item);
+            SelectListItem item1 = new SelectListItem();
+            item1.Text = "Not Reconciled";
+            item1.Value = "0";
+            listItem.Add(item1);           
+            return listItem;
+        }
         public static List<SelectListItem> getDistincAccount(int AgencyID, string Type)
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -385,7 +402,8 @@ namespace ProvenCfoUI.Controllers
                                                                            select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
                                 TempData["TrackingCategories"] = TCgroup;
                             }
-                            TempData["BankRule"] = getBankRule();
+                            TempData["BankRule"] = getBankRule(); 
+                            TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
