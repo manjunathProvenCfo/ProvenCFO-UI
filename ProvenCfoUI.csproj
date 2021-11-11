@@ -547,6 +547,7 @@
     <Content Include="assets\lib\dropzone\dropzone.min.css" />
     <Content Include="assets\lib\dropzone\dropzone.min.js" />
     <Content Include="assets\lib\echarts\echarts.min.js" />
+    <Content Include="assets\lib\emojionearea\emojionearea.js" />
     <Content Include="assets\lib\emojionearea\emojionearea.min.css" />
     <Content Include="assets\lib\emojionearea\emojionearea.min.js" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.css" />
@@ -567,8 +568,12 @@
     <Content Include="assets\lib\jquery-contextmenu\jquery.ui.position.min.js" />
     <Content Include="assets\lib\jquery-countdown\jquery.countdown.min.js" />
     <Content Include="assets\lib\jquery-validation\jquery.validate.min.js" />
+    <Content Include="assets\lib\jquery.elastic\jquery.elastic.js" />
+    <Content Include="assets\lib\jquery.events.input\jquery.events.input.js" />
     <Content Include="assets\lib\jquery.mb.ytplayer\jquery.mb.YTPlayer.min.css" />
     <Content Include="assets\lib\jquery.mb.ytplayer\jquery.mb.YTPlayer.min.js" />
+    <Content Include="assets\lib\jquery.mentionsInput\jquery.mentionsInput.css" />
+    <Content Include="assets\lib\jquery.mentionsInput\jquery.mentionsInput.js" />
     <Content Include="assets\lib\leaflet.markercluster\leaflet.markercluster.js" />
     <Content Include="assets\lib\leaflet.markercluster\MarkerCluster.css" />
     <Content Include="assets\lib\leaflet.markercluster\MarkerCluster.Default.css" />
@@ -593,6 +598,8 @@
     <Content Include="assets\lib\list.min.js" />
     <Content Include="assets\lib\lodash\lodash.min.js" />
     <Content Include="assets\lib\lottie\lottie.min.js" />
+    <Content Include="assets\lib\mentiony\jquery.mentiony.css" />
+    <Content Include="assets\lib\mentiony\jquery.mentiony.js" />
     <Content Include="assets\lib\moment.js\moment.js" />
     <Content Include="assets\lib\moment.js\moment.min.js" />
     <Content Include="assets\lib\owl.carousel\owl.carousel.css" />
@@ -816,6 +823,8 @@
     <Content Include="assets\lib\twilio\conversations\dist\twilio-conversations.min.js" />
     <Content Include="assets\lib\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\lib\typed.js\typed.js" />
+    <Content Include="assets\lib\underscore.js\underscore-min.js" />
+    <Content Include="assets\lib\underscore.js\underscore.min.js" />
     <Content Include="assets\video\beach.jpg" />
     <Content Include="assets\video\beach.mp4" />
     <Content Include="assets\video\beach.webm" />
