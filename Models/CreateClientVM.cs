@@ -60,6 +60,9 @@ namespace ProvenCfoUI.Models
         public string EverhourId { get; set; }
         public string CrmId { get; set; }
         public string XeroShortCode { get; set; }
+        public int DashboardId { get; set; }
+        public string DashboardURLId { get; set; }
+
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
 
