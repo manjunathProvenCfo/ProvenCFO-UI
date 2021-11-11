@@ -92,7 +92,6 @@ namespace ProvenCfoUI
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
-                        "~/assets/lib/emojionearea/emojionearea.js",
                         "~/assets/lib/jquery.events.input/jquery.events.input.js",
                         "~/assets/lib/jquery.elastic/jquery.elastic.js",
                         "~/assets/lib/underscore.js/underscore.min.js",

@@ -38,8 +38,9 @@
     .contacts-list {
         height: calc(100% - 2.063rem - 70px);
     }
+
     .mentions-autocomplete-list {
-        z-index:9999999;
+        z-index: 9999999;
     }
 </style>
 
@@ -49,12 +50,7 @@
 @Html.Partial("_communication", false)
 
 @section Scripts {
-    @*<script src="~/assets/lib/mentiony/jquery.mentiony.js"></script>*@
-    @*<script src='~/assets/lib/jquery.events.input/jquery.events.input.js' type='text/javascript'></script>
-    <script src='~/assets/lib/jquery.elastic/jquery.elastic.js' type='text/javascript'></script>
-    <script src='~/assets/lib/underscore.js/underscore.min.js' type='text/javascript'></script>
-    <script src='~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js' type='text/javascript'></script>*@
-    
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
         $(document).ready(function () {
