@@ -26,7 +26,6 @@ namespace ProvenCfoUI
              "~/assets/lib/anchor.min.js",
              "~/assets/lib/prismjs/prism.js",
              "~/assets/lib/flatpickr/flatpickr.min.js",
-             "~/assets/lib/emojionearea/emojionearea.js",
              "~/assets/lib/jquery.fancybox.min.js",
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
@@ -93,6 +92,7 @@ namespace ProvenCfoUI
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
+                        "~/assets/lib/emojionearea/emojionearea.js",
                         "~/assets/lib/jquery.events.input/jquery.events.input.js",
                         "~/assets/lib/jquery.elastic/jquery.elastic.js",
                         "~/assets/lib/underscore.js/underscore.min.js",
