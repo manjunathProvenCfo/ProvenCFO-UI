@@ -549,7 +549,6 @@
     <Content Include="assets\lib\echarts\echarts.min.js" />
     <Content Include="assets\lib\emojionearea\emojionearea.js" />
     <Content Include="assets\lib\emojionearea\emojionearea.min.css" />
-    <Content Include="assets\lib\emojionearea\emojionearea.min.js" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.css" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.js" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.min.css" />

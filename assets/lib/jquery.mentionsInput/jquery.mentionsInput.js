@@ -17,7 +17,7 @@
     var defaultSettings = {
         triggerChar: '@', //Char that respond to event
         onDataRequest: $.noop, //Function where we can search the data
-        minChars: 2, //Minimum chars to fire the event
+        minChars: 3, //Minimum chars to fire the event
         allowRepeat: false, //Allow repeat mentions
         showAvatars: true, //Show the avatars
         elastic: false, //Grow the textarea automatically
@@ -28,7 +28,7 @@
         },
         templates: {
             wrapper: _.template('<div class="mentions-input-box"></div>'),
-            autocompleteList: _.template('<div class="mentions-autocomplete-list"></div>'),
+            autocompleteList: _.template('<div class="mentions-autocomplete-list" style="max-height:20em"></div>'),
             autocompleteListItem: _.template('<li data-ref-id="<%= id %>" data-ref-type="<%= type %>" data-display="<%= display %>"><%= content %></li>'),
             autocompleteListItemAvatar: _.template('<img src="<%= avatar %>" />'),
             autocompleteListItemIcon: _.template('<div class="icon <%= icon %>"></div>'),

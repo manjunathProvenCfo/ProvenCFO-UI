@@ -1649,7 +1649,7 @@ document = window.document || {};
     EmojioneArea.prototype.setText = function (str) {
         var self = this;
         emojioneReady(function () {
-            //debugger
+            debugger
             //let htm = htmlFromText(str, self);
             //let htmll = textFromHtml(str, self);
             //self.editor.html(htmlFromText(str, self));
