@@ -426,3 +426,7 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
 /*.emojionearea-editor{
     margin:1rem;
 }*/
+.bd-highlight {
+    background-color: var(--warning);
+    border: 1 px solid var(--warning);
+}

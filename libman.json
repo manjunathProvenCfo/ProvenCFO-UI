@@ -38,6 +38,15 @@
         "jquery.contextMenu.min.js.map",
         "jquery.ui.position.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "underscore.js@1.13.1",
+      "destination": "assets/lib/underscore.js/",
+      "files": [
+        "underscore-min.js",
+        "underscore.min.js"
+      ]
     }
   ]
 }

@@ -92,11 +92,12 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
             if (event.type == "keydown")
                 $btnSendMessage[0].click();
             else
-                activeChannel.typing();
+                activeChannel?.typing();
         }
         else
-            activeChannel.typing();
-    })
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000)
 
     $messageBodyFileUploader.off("change");
     $messageBodyFileUploader.on("change", function (e) {
@@ -413,4 +414,20 @@ function AgencyDropdownPartialViewChange() {
         $chatSiderbarFilterButtons.eq(0).addClass("btn-falcon-primary");
     }, 1)
     SetUserPreferencesForAgency();
+}
+
+var addMentionPlugin = function () {
+    $('#message-body-input').mentionsInput({
+        onDataRequest: function (mode, query, callback) {
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}`, null, function (responseData) {
+                callback.call(this, responseData);
+            });
+        },
+        onCaret: true
+    });
+}
+var getMentions = function () {
+    $('#message-body-input').mentionsInput('getMentions', function (data) {
+        return (JSON.stringify(data));
+    });
 }
