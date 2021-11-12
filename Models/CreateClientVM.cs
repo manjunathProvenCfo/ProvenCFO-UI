@@ -36,16 +36,16 @@ namespace ProvenCfoUI.Models
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]
         public DateTime? StartDate { get; set; }
-        [Required(ErrorMessage = "XeroID is a required field")]
+        [Required(ErrorMessage = "Xero ID is a required field")]
         public string XeroID { get; set; }
-        [Required(ErrorMessage = "XeroClientID is a required field")]
+        [Required(ErrorMessage = "Xero ClientID is a required field")]
         public string XeroClientID { get; set; }
-        [Required(ErrorMessage = "XeroClientSecret is a required field")]
+        [Required(ErrorMessage = "Xero ClientSecret is a required field")]
         public string XeroClientSecret { get; set; }
         [Required(ErrorMessage = "XeroScope is a required field")]
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
-        //[Required(ErrorMessage = "XeroScope is a required field.")]
+        //[Required(ErrorMessage = "Xero Scope is a required field.")]
         
         public string XeroScope { get; set; }
 
@@ -59,9 +59,10 @@ namespace ProvenCfoUI.Models
         public string AsanaId { get; set; }
         public string EverhourId { get; set; }
         public string CrmId { get; set; }
-        public string XeroShortCode { get; set; }
-        public int DashboardId { get; set; }
+        public int? DashboardId { get; set; }
         public string DashboardURLId { get; set; }
+        public string XeroShortCode { get; set; }
+        
 
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
