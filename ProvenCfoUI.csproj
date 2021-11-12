@@ -1104,7 +1104,6 @@
     <Content Include="Views\Shared\_doughnut.cshtml" />
     <Content Include="Views\Reports\_ReportRenamePartial.cshtml" />
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
-    <Content Include="Views\Home\_DashboardErrorpage.cshtml" />
     <Content Include="Views\Dashboard\DashboardError.cshtml" />
   </ItemGroup>
   <ItemGroup>
