@@ -298,12 +298,14 @@ var updateChannels = function updateChannels() {
             });
 
             //sort particiapnts start
-            let sorted = subscribedChannelsLastMessage.sort(function (a, b) {
-                var c = new Date(a.lastMessage?.dateCreated ?? "1990/12/31");
-                var d = new Date(b.lastMessage?.dateCreated ?? "1990/12/31");
-                return c - d;
-            });
+            //let sorted = subscribedChannelsLastMessage.sort(function (a, b) {
+            //    var c = new Date(a.lastMessage?.dateCreated ?? "1990/12/31");
+            //    var d = new Date(b.lastMessage?.dateCreated ?? "1990/12/31");
+            //    return c - d;
+            //});
+            let sorted = _.sortBy(subscribedChannelsLastMessage, function (o) { return o.lastMessage?.dateCreated; })
 
+            debugger
             let sortedParticipants = [];
             if (isEmptyOrBlank($participants))
                 return; 

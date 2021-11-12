@@ -243,7 +243,7 @@
             //debuggers
             // Mentions and syntax message
             //utils.htmlEncode()
-            var updatedMessageText = start + `<a href="#!" class="text-dark bd-highlight">@${mention.value}</a>` + ' ' + end;
+            var updatedMessageText = start + `<a href="#!" class="text-primary font-italic font-weight-bold">@${mention.value}</a>` + '&nbsp;' + end;
             console.log(updatedMessageText);
             elmInputBox.val(updatedMessageText); //Set the value to the txt area
             //elmInputBoxEditor.html(updatedMessageText); //Set the value to the txt area
@@ -463,7 +463,7 @@
                     'id': utils.htmlEncode(item.id),
                     'display': utils.htmlEncode(item.name),
                     'type': utils.htmlEncode(item.type),
-                    'content': utils.highlightTerm(utils.htmlEncode((item.display ? item.display : item.name)), query)
+                    'content': utils.highlightTerm(utils.htmlEncode((item.display ? item.display : item.name) + ' - ' + item.email), query)
                 })).attr('data-uid', itemUid); //Inserts the new item to list
 
                 //If the index is 0
@@ -515,7 +515,7 @@
             if (elmAutocompleteListPosition == 'absolute') {
                 var position = textareaSelectionPosition(elmInputBox),
                     lineHeight = parseInt(elmInputBox.css('line-height'), 10) || 18;
-                elmAutocompleteList.css('width', '15em'); // Sort of a guess
+                elmAutocompleteList.css('width', 'auto'); // Sort of a guess
                 if (window.location.href.toLowerCase().indexOf("reconciliation")>0 === true)
                     elmAutocompleteList.css('left', '20px');
                 else
@@ -541,11 +541,11 @@
             }
             var position = textareaSelectionPosition(elmInputBox),
                 lineHeight = parseInt(elmInputBox.css('line-height'), 10) || 18;
-            elmAutocompleteList.css('width', '15em'); // Sort of a guess
+            elmAutocompleteList.css('width', 'auto'); // Sort of a guess
             //if (window.location.href.toLowerCase().indexOf("reconciliation") > 0 === true)
             //    elmAutocompleteList.css('left', '20px');
             //else
-                elmAutocompleteList.css('left', position.left);
+                elmAutocompleteList.css('left', '0px');
             elmAutocompleteList.css('top', $(elmAutocompleteList).height());
         }
 
