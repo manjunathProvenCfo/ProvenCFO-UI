@@ -288,7 +288,7 @@ var handleParticipantClick = function (event) {
         if (isEmptyOrBlank(channel.ChannelId)) {
             if (channel.IsPrivate === true) {
                 var attributes = { "type": "private" }
-                var channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+                var channelName = getChannelUniqueName(chat.userEmail, participant.Email,chat.clientId);
             } else if (channel.Type == 1) {
                 var attributes = { "type": "public reconciliation" }
                 var channelName = channel.ChannelUniqueName;
@@ -338,13 +338,14 @@ var getParticipantNameByEmail = function (email) {
 //    return chat.channels(x => x.ChannelId == channelId);
 //}
 
-var getChannelUniqueName = function (userEmail, participantEmail) {
+var getChannelUniqueName = function (userEmail, participantEmail, clientId) {
+    debugger
     userEmail = userEmail.toLowerCase();
     participantEmail = participantEmail.toLowerCase();
     if (userEmail < participantEmail)
-        return userEmail + "_" + participantEmail;
+        return userEmail + "_" + participantEmail + "_" + clientId;
     else
-        return participantEmail + "_" + userEmail;
+        return participantEmail + "_" + userEmail + "_" + clientId;
 }
 
 var addTypingIndicatorDiv = function () {
@@ -417,7 +418,6 @@ function AgencyDropdownPartialViewChange() {
 }
 
 var addMentionPlugin = function () {
-    $("#message-body-input").removeAttr("data-mentions-input");
     $('#message-body-input').mentionsInput({
         onDataRequest: function (mode, query, callback) {
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}`, null, function (responseData) {

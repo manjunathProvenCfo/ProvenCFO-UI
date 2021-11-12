@@ -80,7 +80,7 @@ var createAllChannels = function () {
         return;
     participantsToCreate.forEach(function (participant) {
         let attributes = { "type": "private" }
-        let channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+        let channelName = getChannelUniqueName(chat.userEmail, participant.Email, chat.clientId);
         setTimeout(function () {
             twilioClient.createConversation({
                 friendlyName: channelName,
@@ -305,6 +305,8 @@ var updateChannels = function updateChannels() {
             });
 
             let sortedParticipants = [];
+            if (isEmptyOrBlank($participants))
+                return; 
             let remainingParticipants = $participants.toArray();
             sorted.forEach(function (sortedChannel) {
                 var elParticipant = $participants.filter(function (i, obj) {
@@ -362,7 +364,7 @@ var addJoinedChannel = function (channel) {
     var publicUpdateableParticipants = updateableParticipants.filter(x => x.IsPrivate === false);
     if (channel?.channelState?.attributes?.type === "private") {
         for (var i = 0; i < privateUpdateableParticipants.length; i++) {
-            if (channel?.uniqueName?.toLowerCase() == getChannelUniqueName(chat.userEmail, privateUpdateableParticipants[i].ChatParticipants[0].Email)) {
+            if (channel?.uniqueName?.toLowerCase() == getChannelUniqueName(chat.userEmail, privateUpdateableParticipants[i].ChatParticipants[0].Email, chat.clientId)) {
                 privateUpdateableParticipants[i].ChannelId = channel.sid;
                 privateUpdateableParticipants[i].ChannelUniqueName = channel.uniqueName;
                 $participants.eq(i).attr("data-channelId", channel.sid);
