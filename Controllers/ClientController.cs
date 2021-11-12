@@ -219,7 +219,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.EverhourId = client.EverhourId;
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
-                            Clientvm.DashboardId = Convert.ToInt32( client.DashboardId);
+                            Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
                             Clientvm.DashboardURLId = client.DashboardURLId;
 
 
@@ -335,7 +335,7 @@ namespace ProvenCfoUI.Controllers
                     var client = objClientService.GetClientById(id);
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.XeroScope, client.XeroClientSecret, client.XeroClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                         client.DashboardId.ToString(),client.DashboardURLId);
+                         client.DashboardId.ToString(),client.DashboardURLId.ToString());
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

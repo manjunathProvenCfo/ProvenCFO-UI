@@ -153,8 +153,8 @@ namespace Proven.Service
                 {"EverhourId",EverhourId },
                 {"CrmId",CrmId },
                 {"XeroShortCode",XeroShortCode },
-                {"DashboardId ",DashboardId },
-                {"DashboardURLId ",DashboardURLId  }
+                {"DashboardId",DashboardId },
+                {"DashboardURLId",DashboardURLId  }
             };
 
             //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
@@ -200,8 +200,8 @@ namespace Proven.Service
                 {"EverhourId",EverhourId },
                 {"CrmId",CrmId },
                 {"XeroShortCode",XeroShortCode },
-                 {"DashboardId ",DashboardId },
-                {"DashboardURLId ",DashboardURLId  }
+                 {"DashboardId",DashboardId },
+                {"DashboardURLId",DashboardURLId  }
 
                
                 //{"PhoneNumber",PhoneNumber },
