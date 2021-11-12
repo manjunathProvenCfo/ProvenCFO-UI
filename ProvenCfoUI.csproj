@@ -237,6 +237,7 @@
     <Compile Include="Controllers\BillableEntitiesController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\CommunicationController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntegrationController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
@@ -1102,6 +1103,9 @@
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
     <Content Include="Views\Shared\_doughnut.cshtml" />
     <Content Include="Views\Reports\_ReportRenamePartial.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Home\_DashboardErrorpage.cshtml" />
+    <Content Include="Views\Dashboard\DashboardError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1110,6 +1114,7 @@
     <Folder Include="Authorization\" />
     <Folder Include="Scripts\Custom\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Dashboarrd\" />
     <Folder Include="Views\Twilio\" />
   </ItemGroup>
   <ItemGroup>
