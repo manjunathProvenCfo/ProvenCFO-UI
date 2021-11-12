@@ -516,7 +516,10 @@
                 var position = textareaSelectionPosition(elmInputBox),
                     lineHeight = parseInt(elmInputBox.css('line-height'), 10) || 18;
                 elmAutocompleteList.css('width', '15em'); // Sort of a guess
-                elmAutocompleteList.css('left', position.left);
+                if (window.location.href.toLowerCase().indexOf("reconciliation")>0 === true)
+                    elmAutocompleteList.css('left', '20px');
+                else
+                    elmAutocompleteList.css('left', position.left);
                 //elmAutocompleteList.css('top', lineHeight + position.top);
                 elmAutocompleteList.css('top', $(elmAutocompleteList).height());
                 elmAutocompleteList.css('overflow-y', "scroll");
@@ -536,6 +539,14 @@
                 elmAutocompleteList.css('left', offset.left + 10000);
                 elmAutocompleteList.css('top', lineHeight + offset.top);
             }
+            var position = textareaSelectionPosition(elmInputBox),
+                lineHeight = parseInt(elmInputBox.css('line-height'), 10) || 18;
+            elmAutocompleteList.css('width', '15em'); // Sort of a guess
+            //if (window.location.href.toLowerCase().indexOf("reconciliation") > 0 === true)
+            //    elmAutocompleteList.css('left', '20px');
+            //else
+                elmAutocompleteList.css('left', position.left);
+            elmAutocompleteList.css('top', $(elmAutocompleteList).height());
         }
 
         //Resets the text area

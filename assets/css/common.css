@@ -427,6 +427,6 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
     margin:1rem;
 }*/
 .bd-highlight {
-    background-color: var(--warning);
-    border: 1 px solid var(--warning);
+    /*background-color: rgba(86,61,124,0.15);
+    border: 1 px solid rgba(86,61,124,0.15);*/
 }

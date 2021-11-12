@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Proven.Model.reconciliationVM>
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
-@Styles.Render("~/bundles/css/twilio-chat")
 <style>
     .tabselect {
         text-decoration: underline;
@@ -65,6 +64,7 @@
     }*/
 </style>
 
+@Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -809,10 +809,10 @@
                         }
 
                     }
-                    
+
                     TotalSum(totalSum1, totalSum2);
 
-                    
+
                 }
             })
         }
@@ -821,9 +821,9 @@
         function TotalSum(totalSum1, totalSum2) {
 
             let totalsum3;
-          totalsum3 = totalSum1 + totalSum2;           
-            $("#lblNotInCount").text(totalsum3);            
-            
+          totalsum3 = totalSum1 + totalSum2;
+            $("#lblNotInCount").text(totalsum3);
+
         }
 
     </script>

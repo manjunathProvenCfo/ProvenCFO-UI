@@ -417,6 +417,7 @@ function AgencyDropdownPartialViewChange() {
 }
 
 var addMentionPlugin = function () {
+    $("#message-body-input").removeAttr("data-mentions-input");
     $('#message-body-input').mentionsInput({
         onDataRequest: function (mode, query, callback) {
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}`, null, function (responseData) {
