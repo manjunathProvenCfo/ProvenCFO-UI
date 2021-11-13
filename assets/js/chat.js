@@ -30,7 +30,8 @@ var chat = {
     channelIndex: -1,
     publicChannelUniqueNameGuid: "",
     clientId: 0,
-    type: 0
+    type: 0,
+    forReconciliationIconColor:false
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {

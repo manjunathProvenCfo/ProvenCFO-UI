@@ -13,13 +13,13 @@ const Chat_Page_Size = 10;
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
+    Twilio.Conversations.Client.create(token, { logLevel: 'error'})//logLevel: 'error'
         .then(function (createdClient) {
 
             twilioClient = createdClient;
             //twilioClient.getUser(chat.userEmail).then(function (user) { console.log(user) });
-
-            twilioClient.getSubscribedConversations().then(updateChannels);
+            updateChannels(chat.forReconciliationIconColor);
+            //twilioClient.getSubscribedConversations().then(updateChannels);
 
             twilioClient.on("connectionStateChanged", function (state) {
                 //connectionInfo
@@ -253,12 +253,15 @@ var setActiveChannel = function (channel) {
         });
     });
 }
-
-var updateChannels = function updateChannels() {
+var updateChannels = function (forReconciliationIconColor) {
     allSubscribedChannels = [];
     twilioClient.getSubscribedConversations({ limit: 100 }).then(page => {
         getAllSubscribedChannels(page).then(allSubscribedChannels => {
-            joinAndSortSubscribedChannels(allSubscribedChannels);
+            allSubscribedChannels = allSubscribedChannels.sort(function (a, b) {
+                return a.friendlyName > b.friendlyName;
+            });
+            joinAndSortSubscribedChannels(allSubscribedChannels, forReconciliationIconColor);
+
         });
     });
 }
@@ -278,10 +281,7 @@ var getAllSubscribedChannels = function (page) {
     });
 
 }
-var joinAndSortSubscribedChannels = function (subscribedChannels) {
-    subscribedChannels = subscribedChannels.sort(function (a, b) {
-        return a.friendlyName > b.friendlyName;
-    });
+var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliationIconColor) {
     subscribedChannelsLastMessage = [];
     var subscribedChannelsByType = subscribedChannels.filter(function (channel) {
         let typeOfChannel = "private";
@@ -324,6 +324,20 @@ var joinAndSortSubscribedChannels = function (subscribedChannels) {
     let subscribedChannelsWithLastMessage = _.filter(subscribedChannelsLastMessage, x => x.lastMessage != null);
     let sorted = _.sortBy(subscribedChannelsWithLastMessage, function (o) { return o.lastMessage?.dateCreated; })
     sorted = sorted.reverse();
+    //Change reconciliation icon color
+    if (forReconciliationIconColor) {
+        //change color to blue
+        debugger
+        sorted.forEach(function (sortedChannel) {
+            if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
+                $("#tblreconcilation").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    let rowData = this.data();
+                    debugger
+                });
+            }
+        });
+    }
+    //sort left side participants
     let sortedParticipants = [];
     if (isEmptyOrBlank($participants))
         return;
@@ -339,7 +353,7 @@ var joinAndSortSubscribedChannels = function (subscribedChannels) {
         if (elParticipant.length > 0) {
             //add unread msg count
             let spanUnreadCount = elParticipant.find("#spanUnreadMsgCount");
-            let lastMessageIndex= (sortedChannel.lastMessage?.index ?? -1) + 1;
+            let lastMessageIndex = (sortedChannel.lastMessage?.index ?? -1) + 1;
             let lastMessageReadIndex = (sortedChannel.lastReadMessageIndex ?? -1) + 1;
             let unreadMsgCount = lastMessageIndex - lastMessageReadIndex;
             if (unreadMsgCount > 0) {

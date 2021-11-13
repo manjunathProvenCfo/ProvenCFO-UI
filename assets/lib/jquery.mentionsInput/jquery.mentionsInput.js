@@ -99,7 +99,7 @@
         function initTextarea() {
             elmInputBox = $(domInput); //Get the text area target
             elmInputBoxEditor = $(".emojionearea-editor");
-            console.log(elmInputBoxEditor);
+            /*console.log(elmInputBoxEditor);*/
             //If the text area is already configured, return
             if (elmInputBox.attr('data-mentions-input') === 'true') {
                 return;
@@ -132,7 +132,6 @@
             } else {
                 elmInputBox.bind('input', onInputBoxInput); //Bind the input event to the text area
                 $(".emojionearea-editor").on("input", function (event) {
-                    console.log("input event fired Jquery");
                     onInputBoxInput(event);
                 });
                 //document.getElementsByClassName("emojionearea-editor").addEventListener("input", function (event) {
@@ -342,7 +341,6 @@
 
         //Takes the input event when users write or delete something
         function onInputBoxInput(e) {
-            console.log('onInputBoxInput');
             updateValues();
             updateMentionsCollection();
 
