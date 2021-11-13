@@ -99,16 +99,16 @@
                     </div>
                     <div class="chat-content-scroll-area scrollbar perfect-scrollbar" id="channel-messages">
                         @*<div class="media position-relative p-3 border-bottom mb-3 align-items-center">
-                                                <div class="avatar avatar-2xl status-online mr-3">
-                                                    <img class="rounded-circle" src="~/assets/img/team/2.jpg" alt="" />
-                                                </div>
-                                                <div class="media-body">
-                                    <h6 class="mb-0"><a class="text-decoration-none stretched-link text-700" href="return false;"><span class="channelName"></span></a></h6>
-                                    <p class="mb-0">
+                                                        <div class="avatar avatar-2xl status-online mr-3">
+                                                            <img class="rounded-circle" src="~/assets/img/team/2.jpg" alt="" />
+                                                        </div>
+                                                        <div class="media-body">
+                                            <h6 class="mb-0"><a class="text-decoration-none stretched                                    <p class="mb-0">
+        -link text-700" href="return false;"><span class="channelName"></span></a></h6>
 
-                                    </p>
-                                </div>
-                            </div>*@
+                                            </p>
+                                        </div>
+                                    </div>*@
                     </div>
                 </div>
             </div>
@@ -116,8 +116,8 @@
                 <div class="w-100"><div id="typing-indicator"><span></span></div></div>
                 <input class="d-none" type="file" multiple id="chat-file-upload" accept="image/*,application/pdf,.csv,.CSV, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain">
                 <label class="mb-0 p-1 chat-file-upload cursor-pointer" for="chat-file-upload"><span class="fas fa-paperclip"></span></label>
+                <div id="message-body-div"><textarea id="message-body-input" class="emojiarea border-0 outline-none shadow-none" data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false,"inline":true}'></textarea></div>
                 @*<textarea id="message-body-input" class="border-0 outline-none shadow-none"></textarea>*@
-                <textarea id="message-body-input" class="emojiarea border-0 outline-none shadow-none" data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false}'></textarea>
                 <button id="send-message" class="btn btn-sm btn-send outline-none ml-2" type="button">Send</button>
             </form>
         </div>

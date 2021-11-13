@@ -68,8 +68,11 @@ namespace Proven.Model
         public string ProfileImage3 { get; set; }
         public int? TeamId { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
-
+        public int?  DashboardId { get; set; }
+        public string DashboardURLId { get; set; }
         public bool? EnableAutomation { get; set; }
+
+
 
         //For Summary Page
         public string Summary { get; set; }

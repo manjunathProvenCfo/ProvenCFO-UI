@@ -3,6 +3,8 @@
 }
 
 @Styles.Render("~/bundles/css/twilio-chat")
+@*<link href="~/assets/lib/mentiony/jquery.mentiony.css" rel="stylesheet" />*@
+@*<link href="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.css" rel="stylesheet" />*@
 <style type="text/css">
     .separator {
         display: flex;
@@ -36,14 +38,19 @@
     .contacts-list {
         height: calc(100% - 2.063rem - 70px);
     }
+
+    .mentions-autocomplete-list {
+        z-index: 9999999;
+    }
 </style>
 
 @*<div class="card-body py-0 px-0 pt-0">
 
-</div>*@
+    </div>*@
 @Html.Partial("_communication", false)
 
 @section Scripts {
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
         $(document).ready(function () {

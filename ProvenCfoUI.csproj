@@ -237,6 +237,7 @@
     <Compile Include="Controllers\BillableEntitiesController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\CommunicationController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntegrationController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
@@ -547,8 +548,8 @@
     <Content Include="assets\lib\dropzone\dropzone.min.css" />
     <Content Include="assets\lib\dropzone\dropzone.min.js" />
     <Content Include="assets\lib\echarts\echarts.min.js" />
+    <Content Include="assets\lib\emojionearea\emojionearea.js" />
     <Content Include="assets\lib\emojionearea\emojionearea.min.css" />
-    <Content Include="assets\lib\emojionearea\emojionearea.min.js" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.css" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.js" />
     <Content Include="assets\lib\fancybox\jquery.fancybox.min.css" />
@@ -567,8 +568,12 @@
     <Content Include="assets\lib\jquery-contextmenu\jquery.ui.position.min.js" />
     <Content Include="assets\lib\jquery-countdown\jquery.countdown.min.js" />
     <Content Include="assets\lib\jquery-validation\jquery.validate.min.js" />
+    <Content Include="assets\lib\jquery.elastic\jquery.elastic.js" />
+    <Content Include="assets\lib\jquery.events.input\jquery.events.input.js" />
     <Content Include="assets\lib\jquery.mb.ytplayer\jquery.mb.YTPlayer.min.css" />
     <Content Include="assets\lib\jquery.mb.ytplayer\jquery.mb.YTPlayer.min.js" />
+    <Content Include="assets\lib\jquery.mentionsInput\jquery.mentionsInput.css" />
+    <Content Include="assets\lib\jquery.mentionsInput\jquery.mentionsInput.js" />
     <Content Include="assets\lib\leaflet.markercluster\leaflet.markercluster.js" />
     <Content Include="assets\lib\leaflet.markercluster\MarkerCluster.css" />
     <Content Include="assets\lib\leaflet.markercluster\MarkerCluster.Default.css" />
@@ -593,6 +598,8 @@
     <Content Include="assets\lib\list.min.js" />
     <Content Include="assets\lib\lodash\lodash.min.js" />
     <Content Include="assets\lib\lottie\lottie.min.js" />
+    <Content Include="assets\lib\mentiony\jquery.mentiony.css" />
+    <Content Include="assets\lib\mentiony\jquery.mentiony.js" />
     <Content Include="assets\lib\moment.js\moment.js" />
     <Content Include="assets\lib\moment.js\moment.min.js" />
     <Content Include="assets\lib\owl.carousel\owl.carousel.css" />
@@ -816,6 +823,8 @@
     <Content Include="assets\lib\twilio\conversations\dist\twilio-conversations.min.js" />
     <Content Include="assets\lib\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\lib\typed.js\typed.js" />
+    <Content Include="assets\lib\underscore.js\underscore-min.js" />
+    <Content Include="assets\lib\underscore.js\underscore.min.js" />
     <Content Include="assets\video\beach.jpg" />
     <Content Include="assets\video\beach.mp4" />
     <Content Include="assets\video\beach.webm" />
@@ -1094,6 +1103,8 @@
     <Content Include="Views\Shared\_reconcilationBulkupdate.cshtml" />
     <Content Include="Views\Shared\_doughnut.cshtml" />
     <Content Include="Views\Reports\_ReportRenamePartial.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Dashboard\DashboardError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1102,6 +1113,7 @@
     <Folder Include="Authorization\" />
     <Folder Include="Scripts\Custom\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Dashboarrd\" />
     <Folder Include="Views\Twilio\" />
   </ItemGroup>
   <ItemGroup>

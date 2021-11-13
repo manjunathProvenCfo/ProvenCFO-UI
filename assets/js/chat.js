@@ -92,11 +92,12 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
             if (event.type == "keydown")
                 $btnSendMessage[0].click();
             else
-                activeChannel.typing();
+                activeChannel?.typing();
         }
         else
-            activeChannel.typing();
-    })
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000)
 
     $messageBodyFileUploader.off("change");
     $messageBodyFileUploader.on("change", function (e) {
@@ -287,7 +288,7 @@ var handleParticipantClick = function (event) {
         if (isEmptyOrBlank(channel.ChannelId)) {
             if (channel.IsPrivate === true) {
                 var attributes = { "type": "private" }
-                var channelName = getChannelUniqueName(chat.userEmail, participant.Email);
+                var channelName = getChannelUniqueName(chat.userEmail, participant.Email,chat.clientId);
             } else if (channel.Type == 1) {
                 var attributes = { "type": "public reconciliation" }
                 var channelName = channel.ChannelUniqueName;
@@ -337,13 +338,14 @@ var getParticipantNameByEmail = function (email) {
 //    return chat.channels(x => x.ChannelId == channelId);
 //}
 
-var getChannelUniqueName = function (userEmail, participantEmail) {
+var getChannelUniqueName = function (userEmail, participantEmail, clientId) {
+    debugger
     userEmail = userEmail.toLowerCase();
     participantEmail = participantEmail.toLowerCase();
     if (userEmail < participantEmail)
-        return userEmail + "_" + participantEmail;
+        return userEmail + "_" + participantEmail + "_" + clientId;
     else
-        return participantEmail + "_" + userEmail;
+        return participantEmail + "_" + userEmail + "_" + clientId;
 }
 
 var addTypingIndicatorDiv = function () {
@@ -413,4 +415,20 @@ function AgencyDropdownPartialViewChange() {
         $chatSiderbarFilterButtons.eq(0).addClass("btn-falcon-primary");
     }, 1)
     SetUserPreferencesForAgency();
+}
+
+var addMentionPlugin = function () {
+    $('#message-body-input').mentionsInput({
+        onDataRequest: function (mode, query, callback) {
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}`, null, function (responseData) {
+                callback.call(this, responseData);
+            });
+        },
+        onCaret: true
+    });
+}
+var getMentions = function () {
+    $('#message-body-input').mentionsInput('getMentions', function (data) {
+        return (JSON.stringify(data));
+    });
 }
