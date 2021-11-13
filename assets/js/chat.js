@@ -228,20 +228,20 @@ var renderParticipants = function () {
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-0 chat-contact-title" title="${obj[i].ChannelName}">` + obj[i].ChannelName + `</h6><!--<span class="message-time fs--2">Tue</span>-->
+                                <h6 class="mb-0 chat-contact-title" title="${obj[i].ChannelName}">` + obj[i].ChannelName + `</h6><span class="badge badge-primary fs--2" style="display:none" id="spanUnreadMsgCount">0</span>
                             </div>
                             <div class="min-w-0">
                                 <div class="chat-contact-content pr-3">
                                     <span class='channelReconciliationDescriptionSidebar'>${(obj[i].IsPrivate === true ? '' : obj[i].Company + '/' + obj[i].ReconciliationDescription)}</span>
                                 </div>
-                                <div class="dropdown dropdown-active-trigger position-absolute b-0 r-0 hover-actions">
+                                <!--<div class="dropdown dropdown-active-trigger position-absolute b-0 r-0 hover-actions">
                                     <button class="btn btn-link btn-sm text-400 dropdown-toggle dropdown-caret-none p-0 fs-0" type="button" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-cog" data-fa-transform="shrink-3 down-4"></span></button>
                                     <div class="dropdown-menu dropdown-menu-right border py-2 rounded-soft">
                                         <a class="dropdown-item" href="#!">Mute</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Archive</a><a class="dropdown-item" href="#!">Delete</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Mark as Unread</a><a class="dropdown-item" href="#!">Something's Wrong</a><a class="dropdown-item" href="#!">Ignore Messsages</a><a class="dropdown-item" href="#!">Block Messages</a>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="position-absolute b-0 r-0 hover-hide">
                                 </div>
                             </div>
@@ -339,7 +339,6 @@ var getParticipantNameByEmail = function (email) {
 //}
 
 var getChannelUniqueName = function (userEmail, participantEmail, clientId) {
-    debugger
     userEmail = userEmail.toLowerCase();
     participantEmail = participantEmail.toLowerCase();
     if (userEmail < participantEmail)
