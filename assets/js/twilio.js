@@ -786,6 +786,8 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
         //register Event
         twilioClient.getUser(key).then(user => {
             user.on('updated', event => handleUserUpdate(event.user, event.updateReasons));
+        }).catch(function (err) {
+            //console.log(err);
         });
 
     });
