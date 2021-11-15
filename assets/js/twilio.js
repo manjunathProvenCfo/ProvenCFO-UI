@@ -27,8 +27,9 @@ var createTwilioClient = function () {
                 //    .addClass(client.connectionState);
 
                 if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
-                    if (chat.autoSelectParticipant === true)
+                    if (chat.autoSelectParticipant === true) {
                         $participants.eq(0).click();
+                    }
                 }
                 else {
                     let qsEmail = getParameterByName('WithTeamMember');
