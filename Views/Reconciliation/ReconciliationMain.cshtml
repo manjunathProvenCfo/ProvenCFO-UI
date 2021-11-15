@@ -808,10 +808,12 @@
         function TotalSum(totalSum1, totalSum2) {
 
             let totalsum3;
-          totalsum3 = totalSum1 + totalSum2;
-            $("#lblNotInCount").text(totalsum3);
-
+            /*totalsum3 = Number(totalSum1) + Number(totalSum2);*/
+            totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+            $("#lblNotInCount").text(totalsum3) ;
         }
+
+       
 
     </script>
 
