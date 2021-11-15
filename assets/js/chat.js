@@ -394,6 +394,8 @@ $("#divChatSiderbarFilters > button").click(function () {
         if (type === 0) {
             chat.type = 0;
             setTimeout(function () {
+                $(".chat-content-header span").text('');
+                activeChannel = null;
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -401,6 +403,8 @@ $("#divChatSiderbarFilters > button").click(function () {
             chat.type = 1;
 
             setTimeout(function () {
+                $(".chat-content-header span").text('');
+                activeChannel = null;
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -418,9 +422,13 @@ function AgencyDropdownPartialViewChange() {
 }
 
 var addMentionPlugin = function () {
-    $('#message-body-input').mentionsInput({
+    if (chat.type === 0) {
+        $(".mentions-autocomplete-list").remove();
+        return;
+    }
+    $messageBodyInput.mentionsInput({
         onDataRequest: function (mode, query, callback) {
-            getAjax(`/communication/FilterMentionUsers?searchUser=${query}`, null, function (responseData) {
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}`, null, function (responseData) {
                 callback.call(this, responseData);
             });
         },

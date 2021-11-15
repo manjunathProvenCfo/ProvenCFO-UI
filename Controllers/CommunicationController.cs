@@ -76,16 +76,18 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public async Task<JsonResult> FilterMentionUsers(string searchUser)
+        public async Task<JsonResult> FilterMentionUsers(string searchUser, string userEmail, int chatType)
         {
             try
             {
+                if (chatType == 0)
+                    return Json(null, JsonRequestBehavior.AllowGet);
+
                 using (var communicationService = new CommunicationService())
                 {
-                    var ret = await communicationService.FilterMentionUsers(searchUser);
-                    return Json(await communicationService.FilterMentionUsers(searchUser), JsonRequestBehavior.AllowGet);
+                    return Json((await communicationService.FilterMentionUsers(searchUser)).Where(x => !(string.Compare(x.email, userEmail, true) == 0)), JsonRequestBehavior.AllowGet);
                 }
-                
+
             }
             catch (Exception ex)
             {
