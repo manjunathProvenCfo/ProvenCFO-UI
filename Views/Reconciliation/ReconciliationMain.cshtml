@@ -188,7 +188,7 @@
             </div>
             <div class="card-body px-0 pt-0">
                 <div class="dashboard-data-table table-responsive">
-                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"drawCallback":"drawnCallbackTblReconciliation","pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
@@ -298,7 +298,7 @@
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
                                         <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            <span class="fas fa-comment fs--1 text-dark"></span>
+                                            <span class="fas fa-comment fs--1 text-600"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -342,7 +342,10 @@
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
-
+            //Comment Icons
+            chat.type = 1;
+            chat.forReconciliationIconColor = true;
+            createTwilioClient();
             $(document).on('click', ".paginate_button", function () {
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
                 $(".glAccountDD").each(function (index, element) {
@@ -360,7 +363,7 @@
 
             //$('#tblreconcilation').dataTable({
             //    "columnDefs": [
-            //        { "width": "80%", "targets": 0 }
+            //        { "width" : "80%", "targets": 0 }
             //    ]
             //});
         });
@@ -369,7 +372,9 @@
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
-
+        function drawnCallbackTblReconciliation(settings) {
+            alert('')
+        }
         function SelectClick(e) {
             if (e.checked) {
                 var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;

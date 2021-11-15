@@ -13,7 +13,7 @@ const Chat_Page_Size = 10;
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, { logLevel: 'error'})//logLevel: 'error'
+    Twilio.Conversations.Client.create(token, { logLevel: 'error' })//logLevel: 'error'
         .then(function (createdClient) {
 
             twilioClient = createdClient;
@@ -291,8 +291,13 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         else
             typeOfChannel = "public reconciliation";
         if (channel.channelState.attributes.hasOwnProperty("type") && channel.channelState.attributes.type === typeOfChannel) {
+
+            channel.messagesEntity.messagesListPromise.then(function (e) {
+                //console.log(e)
+            });
             subscribedChannelsLastMessage.push({
                 channelId: channel.sid,
+                channelUniqueName: channel.channelState.uniqueName,
                 lastMessage: (channel.channelState.hasOwnProperty("lastMessage") === false ? null : channel.channelState.lastMessage),
                 lastReadMessageIndex: channel.channelState.lastReadMessageIndex,
                 isUnread: (channel.channelState.hasOwnProperty("lastMessage") === true && channel.channelState.lastMessage.index >= 0 && channel.channelState.lastMessage.index !== channel.channelState.lastReadMessageIndex ? true : false)
@@ -301,6 +306,7 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         }
         return false;
     });
+    //debugger
     subscribedChannelsByType.forEach(function (channel) {
         switch (channel.status) {
             case 'joined':
@@ -326,17 +332,24 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
     let sorted = _.sortBy(subscribedChannelsWithLastMessage, function (o) { return o.lastMessage?.dateCreated; })
     sorted = sorted.reverse();
     //Change reconciliation icon color
-    if (forReconciliationIconColor) {
-        //change color to blue
-        debugger
+    if (location.href.toLowerCase().indexOf("reconciliation") > -1) {
+        let colorChannelsDict = {};
         sorted.forEach(function (sortedChannel) {
             if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
-                $("#tblreconcilation").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    let rowData = this.data();
-                    debugger
-                });
+                colorChannelsDict[sortedChannel.channelUniqueName] = 1;
             }
         });
+        let colorChannelsDictKeys = Object.keys(colorChannelsDict);
+        let dtReconciliation = $('#tblreconcilation').DataTable();
+        dtReconciliation.column(dtReconciliation.columns().header().length - 1).nodes().to$().each(function (index, obj) {
+            let elComment = $(obj).children("#btnComment");
+            if (colorChannelsDictKeys.indexOf(elComment.data().id) > -1) {
+                if (colorChannelsDict[elComment.data().id] === 1)
+                    elComment.children().removeClass("text-600");
+            }
+        });
+        dtReconciliation.rows().invalidate().draw();
+
     }
     //sort left side participants
     let sortedParticipants = [];

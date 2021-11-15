@@ -243,7 +243,7 @@
             // Mentions and syntax message
             //utils.htmlEncode()
             var updatedMessageText = start + `<a href="#!" class="text-primary font-italic font-weight-bold">@${mention.value}</a>` + '&nbsp;' + end;
-            console.log(updatedMessageText);
+            
             elmInputBox.val(updatedMessageText); //Set the value to the txt area
             //elmInputBoxEditor.html(updatedMessageText); //Set the value to the txt area
             //$chatEditorArea[0].emojioneArea.setText(updatedMessageText)
