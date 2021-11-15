@@ -345,7 +345,6 @@
             $(document).on('click', ".paginate_button", function () {
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
                 $(".glAccountDD").each(function (index, element) {
-                    debugger;
                     let itemIndex = pageIndex + "" + index;
                     $(this).attr('id', 'item_gl_account_ref' + itemIndex);
                     $(element).select2();
