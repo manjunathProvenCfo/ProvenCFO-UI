@@ -341,6 +341,17 @@
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
+
+            $(document).on('click', ".paginate_button", function () {
+                let pageIndex = Number($(this).children('a').data("dt-idx"));
+                $(".glAccountDD").each(function (index, element) {
+                    debugger;
+                    let itemIndex = pageIndex + "" + index;
+                    $(this).attr('id', 'item_gl_account_ref' + itemIndex);
+                    $(element).select2();
+                });
+            })
+
             $(".glAccountDD").each(function (index, element) {
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 console.log(element)
