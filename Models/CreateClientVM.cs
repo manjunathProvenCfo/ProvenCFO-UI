@@ -30,7 +30,7 @@ namespace ProvenCfoUI.Models
         public string CityName { get; set; }
         [Required(ErrorMessage = "State is a required field.")]
         public int StateId { get; set; }       
-        public int TeamId { get; set; }
+        public int? TeamId { get; set; }
         [Required(ErrorMessage = "Billable Entity  is a required field")]
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]

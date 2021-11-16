@@ -350,7 +350,10 @@
         $(function () {
             $("#ReceiveQuarterlyReports").prop('cheked', @Convert.ToString(Model.ReceiveQuarterlyReports).ToLower());
 
-            addMultipleSelectValues('[name=XeroScopeArray]','@Model.XeroScope')
+            addMultipleSelectValues('[name=XeroScopeArray]', '@Model.XeroScope');
+
+
+            $('#TeamId').rules('remove');
         })
 
         $("#clientExist").addClass('d-none');
