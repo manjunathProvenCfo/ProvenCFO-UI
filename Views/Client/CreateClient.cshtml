@@ -84,7 +84,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.TeamList, "Id", "TeamName"), "Select team", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.TeamId, "", new { @class = "text-danger" })
+                                        @*@Html.ValidationMessageFor(model => model.TeamId, "", new { @class = "text-danger" })*@
                                     </div>
                                 </div>
                                 <div class="row align-items-center form-group">
