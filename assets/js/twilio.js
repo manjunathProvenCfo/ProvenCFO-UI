@@ -4,6 +4,7 @@ var twilioClient;
 var activeChannel;
 var activeChannelPage;
 var activeChannelMessages;
+var allSubChannels = [];
 var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
 var subscribedChannelsLastMessage = [];
@@ -12,23 +13,23 @@ const Chat_Page_Size = 10;
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
+    Twilio.Conversations.Client.create(token, { logLevel: 'error' })//logLevel: 'error'
         .then(function (createdClient) {
 
             twilioClient = createdClient;
             //twilioClient.getUser(chat.userEmail).then(function (user) { console.log(user) });
-
-            twilioClient.getSubscribedConversations().then(updateChannels);
+            updateChannels(chat.forReconciliationIconColor);
+            //twilioClient.getSubscribedConversations().then(updateChannels);
 
             twilioClient.on("connectionStateChanged", function (state) {
                 //connectionInfo
                 //    .removeClass("online offline connecting denied")
                 //    .addClass(client.connectionState);
 
-                if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
-                {
-                    if (chat.autoSelectParticipant===true)
+                if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
+                    if (chat.autoSelectParticipant === true) {
                         $participants.eq(0).click();
+                    }
                 }
                 else {
                     let qsEmail = getParameterByName('WithTeamMember');
@@ -253,106 +254,145 @@ var setActiveChannel = function (channel) {
         });
     });
 }
-
-var updateChannels = function updateChannels() {
-    twilioClient.getSubscribedConversations()
-        .then(page => {
-            subscribedChannels = page.items.sort(function (a, b) {
+var updateChannels = function (forReconciliationIconColor) {
+    allSubscribedChannels = [];
+    twilioClient.getSubscribedConversations({ limit: 100 }).then(page => {
+        getAllSubscribedChannels(page).then(allSubscribedChannels => {
+            allSubscribedChannels = allSubscribedChannels.sort(function (a, b) {
                 return a.friendlyName > b.friendlyName;
             });
-            subscribedChannelsLastMessage = [];
-            var subscribedChannelsByType = subscribedChannels.filter(function (channel) {
-                let typeOfChannel = "private";
-                if (chat.type === 0)
-                    typeOfChannel = "private";
-                else
-                    typeOfChannel = "public reconciliation";
-                if (channel.channelState.attributes.hasOwnProperty("type") && channel.channelState.attributes.type === typeOfChannel) {
-                    subscribedChannelsLastMessage.push({
-                        channelId: channel.sid,
-                        lastMessage: (channel.channelState.hasOwnProperty("lastMessage") === false ? null : channel.channelState.lastMessage),
-                        lastReadMessageIndex: channel.channelState.lastReadMessageIndex,
-                        isUnread: (channel.channelState.hasOwnProperty("lastMessage") === true && channel.channelState.lastMessage.index >= 0 && channel.channelState.lastMessage.index !== channel.channelState.lastReadMessageIndex ? true : false)
-                    });
-                    return true;
-                }
-                return false;
-            });
-            subscribedChannelsByType.forEach(function (channel) {
-                switch (channel.status) {
-                    case 'joined':
-                        addJoinedChannel(channel);
-                        addJoinedChannel(channel);
-                        break;
-                    case 'notParticipating':
-                        joinChannel(channel);
-                        addJoinedChannel(channel);
-                        break;
-                    //case 'invited':
-                    //    addInvitedChannel(channel);
-                    //    break;
-                    //default:
-                    //    addKnownChannel(channel);
-                    //    break;
-                }
-            });
+            joinAndSortSubscribedChannels(allSubscribedChannels, forReconciliationIconColor);
 
-            //sort particiapnts start
-            //let sorted = subscribedChannelsLastMessage.sort(function (a, b) {
-            //    var c = new Date(a.lastMessage?.dateCreated ?? "1990/12/31");
-            //    var d = new Date(b.lastMessage?.dateCreated ?? "1990/12/31");
-            //    return c - d;
-            //});
-            let sorted = _.sortBy(subscribedChannelsLastMessage, function (o) { return o.lastMessage?.dateCreated; })
-
-            debugger
-            let sortedParticipants = [];
-            if (isEmptyOrBlank($participants))
-                return; 
-            let remainingParticipants = $participants.toArray();
-            sorted.forEach(function (sortedChannel) {
-                var elParticipant = $participants.filter(function (i, obj) {
-                    if ((obj.dataset?.channelid ?? "") === sortedChannel.channelId) {
-                        remainingParticipants = removeSortedParticipantFromRemaningByChannelId(remainingParticipants, sortedChannel.channelId)
-                        return true;
-                    }
-                });
-                
-                if (elParticipant.length > 0) {
-                    sortedParticipants.push(elParticipant);
-                }
-            });
-            $participantsContainer.empty();
-            $participantsContainer.html(sortedParticipants.reverse());
-            remainingParticipants.forEach(function (rp) {
-                if ($(`#chatParticipants div[id*='chat-link'][data-index='${rp.dataset.index}']`).length === 0) {
-                    $participantsContainer.append(rp);
-                }
-            });
-            
-            if (chat.channels.length > 0) {
-                $participants = $("#chatParticipants div[id*='chat-link']");
-                $participants.off('click');
-                $participants.on('click', handleParticipantClick);
-                $participantFirst = $("#chatParticipants .chat-contact:first");
-            }
-            //sort particiapnts end
-            //click particular participant start
-            //if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true)
-            //    $participants.eq(0).click();
-            //else {
-            //    let qsEmail = getParameterByName('WithTeamMember');
-            //    let qsParticipant = $participants.filter(function (i, obj) {
-            //        return obj.dataset.email === qsEmail.toLowerCase();
-            //    });
-            //    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-            //        qsParticipant[0].click();
-            //    else
-            //        $participants.eq(0).click();
-            //}
-            //click particular participant end
-            //createAllChannels();
         });
+    });
+}
+
+var getAllSubscribedChannels = function (page) {
+    if (page?.hasOwnProperty("items") === true) {
+        allSubChannels = _.union(allSubChannels, page.items);
+    }
+
+    return new Promise(function (resolve, reject) {
+        if (page.hasNextPage === true) {
+            page.nextPage().then(y => {
+                resolve(getAllSubscribedChannels(y));
+            });
+        }
+        else { resolve(allSubChannels) };
+    });
+
+}
+var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliationIconColor) {
+    subscribedChannelsLastMessage = [];
+    var subscribedChannelsByType = subscribedChannels.filter(function (channel) {
+        let typeOfChannel = "private";
+        if (chat.type === 0)
+            typeOfChannel = "private";
+        else
+            typeOfChannel = "public reconciliation";
+        if (channel.channelState.attributes.hasOwnProperty("type") && channel.channelState.attributes.type === typeOfChannel) {
+
+            channel.messagesEntity.messagesListPromise.then(function (e) {
+                //console.log(e)
+            });
+            subscribedChannelsLastMessage.push({
+                channelId: channel.sid,
+                channelUniqueName: channel.channelState.uniqueName,
+                lastMessage: (channel.channelState.hasOwnProperty("lastMessage") === false ? null : channel.channelState.lastMessage),
+                lastReadMessageIndex: channel.channelState.lastReadMessageIndex,
+                isUnread: (channel.channelState.hasOwnProperty("lastMessage") === true && channel.channelState.lastMessage.index >= 0 && channel.channelState.lastMessage.index !== channel.channelState.lastReadMessageIndex ? true : false)
+            });
+            return true;
+        }
+        return false;
+    });
+    //debugger
+    subscribedChannelsByType.forEach(function (channel) {
+        switch (channel.status) {
+            case 'joined':
+                addJoinedChannel(channel);
+                addJoinedChannel(channel);
+                break;
+            case 'notParticipating':
+                joinChannel(channel);
+                addJoinedChannel(channel);
+                break;
+            //case 'invited':
+            //    addInvitedChannel(channel);
+            //    break;
+            //default:
+            //    addKnownChannel(channel);
+            //    break;
+        }
+    });
+
+    //sort particiapnts start
+    //let subscribedChannelsWithoutLastMessage = _.where(sorted, { lastMessage: null });
+    let subscribedChannelsWithLastMessage = _.filter(subscribedChannelsLastMessage, x => x.lastMessage != null);
+    let sorted = _.sortBy(subscribedChannelsWithLastMessage, function (o) { return o.lastMessage?.dateCreated; })
+    sorted = sorted.reverse();
+    //Change reconciliation icon color
+    if (location.href.toLowerCase().indexOf("reconciliation") > -1) {
+        let colorChannelsDict = {};
+        sorted.forEach(function (sortedChannel) {
+            if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
+                colorChannelsDict[sortedChannel.channelUniqueName] = 1;
+            }
+        });
+        let colorChannelsDictKeys = Object.keys(colorChannelsDict);
+        let dtReconciliation = $('#tblreconcilation').DataTable();
+        dtReconciliation.column(dtReconciliation.columns().header().length - 1).nodes().to$().each(function (index, obj) {
+            let elComment = $(obj).children("#btnComment");
+            if (colorChannelsDictKeys.indexOf(elComment.data().id) > -1) {
+                if (colorChannelsDict[elComment.data().id] === 1)
+                    elComment.children().removeClass("text-600");
+            }
+        });
+        dtReconciliation.rows().invalidate().draw();
+
+    }
+    //sort left side participants
+    let sortedParticipants = [];
+    if (isEmptyOrBlank($participants))
+        return;
+    let remainingParticipants = $participants.toArray();
+    sorted.forEach(function (sortedChannel) {
+        var elParticipant = $participants.filter(function (i, obj) {
+            if ((obj.dataset?.channelid ?? "") === sortedChannel.channelId) {
+                remainingParticipants = removeSortedParticipantFromRemaningByChannelId(remainingParticipants, sortedChannel.channelId)
+                return true;
+            }
+        });
+
+        if (elParticipant.length > 0) {
+            //add unread msg count
+            let spanUnreadCount = elParticipant.find("#spanUnreadMsgCount");
+            let lastMessageIndex = (sortedChannel.lastMessage?.index ?? -1) + 1;
+            let lastMessageReadIndex = (sortedChannel.lastReadMessageIndex ?? -1) + 1;
+            let unreadMsgCount = lastMessageIndex - lastMessageReadIndex;
+            if (unreadMsgCount > 0) {
+                spanUnreadCount.text(unreadMsgCount);
+                spanUnreadCount.show();
+            }
+            else
+                spanUnreadCount.hide();
+            sortedParticipants.push(elParticipant);
+        }
+    });
+    $participantsContainer.empty();
+    $participantsContainer.html(sortedParticipants);
+    remainingParticipants.forEach(function (rp) {
+        if ($(`#chatParticipants div[id*='chat-link'][data-index='${rp.dataset.index}']`).length === 0) {
+            $participantsContainer.append(rp);
+        }
+    });
+
+    if (chat.channels.length > 0) {
+        $participants = $("#chatParticipants div[id*='chat-link']");
+        $participants.off('click');
+        $participants.on('click', handleParticipantClick);
+        $participantFirst = $("#chatParticipants .chat-contact:first");
+    }
 }
 
 var updateActiveChannel = function () {
@@ -760,6 +800,8 @@ var registerUserUpdatedEventHandlers = function registerEventHandlers() {
         //register Event
         twilioClient.getUser(key).then(user => {
             user.on('updated', event => handleUserUpdate(event.user, event.updateReasons));
+        }).catch(function (err) {
+            //console.log(err);
         });
 
     });

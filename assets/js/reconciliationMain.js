@@ -12,7 +12,14 @@ $(document).ready(function () {
             let reconciliaitonId = elCheckbox.attr("id");
             showReconciliationChat(reconciliaitonId);
         }
-    })
+    });
+    $(document).on("click", "#tblreconcilation tr", function (e) {
+        if ($('#divChat:visible').length > 0) {
+            let elComment = $(this).find("#btnComment");
+            showReconciliationChat(elComment.data().id);
+        }
+    });
+
     $(document).on("click", "button[id=btnComment]", function (e) {
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
         showReconciliationChat(e.currentTarget.dataset.id);
@@ -38,7 +45,7 @@ $(document).ready(function () {
         if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
             currentChannelUniqueNameGuid = channelUniqueNameGuid;
             chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1,true);
+            loadChatPage(true, 1, true);
         }
     }
 });
@@ -48,8 +55,8 @@ $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
-    bindNotInBooksAndBanksCount1(); 
-    
+    bindNotInBooksAndBanksCount1();
+
     LoadFilterData();
 
 
@@ -70,7 +77,7 @@ $(document).ready(function () {
             $('#tabNotinBanks').addClass('tabselect');
         }
     }
-   
+
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
@@ -164,7 +171,7 @@ $(document).ready(function () {
             $('#divBulkUpdate').removeClass('d-none');
             $('#divBulkUpdate').show();
         }
-    });   
+    });
 
     $("#OnDemandData").click(function () {
 

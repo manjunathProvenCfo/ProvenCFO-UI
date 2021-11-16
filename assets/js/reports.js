@@ -45,7 +45,7 @@ $(function () {
     $renameModal = $("#report-rename-modal");
     $btnRename = $("#btnRename");
 
-    if (isReadonlyUser == false) {
+    if (isReadonlyUser == false || isReadonlyUser == true) {
         addContextMenu();
         addDraggable();
     }
@@ -335,42 +335,60 @@ var getReports = function (agencyId, year, period) {
     });
 }
 var addContextMenu = function () {
-    let menus = {
-        "view": {
-            name: "View",
-            callback: function (itemKey, opt, e) {
-                opt.$trigger.find("#aView")[0].click();
-            }
-        },
-        "download": {
-            name: "Download",
-            callback: function (itemKey, opt, e) {
-                opt.$trigger.find("#aDownload")[0].click();
-            }
-        },
-        "delete": {
-            name: "Delete",
-            callback: function (itemKey, opt, e) {
-                opt.$trigger.find("#aDelete")[0].click();
-            }
-        },
-        "rename": {
-            name: "Rename",
-            callback: function (itemKey, opt, e) {
-                opt.$trigger.find("#aRename")[0].click();
-            }
-        },
-        "defaultReport": {
-            name: "Set as Default",
-            callback: function (itemKey, opt, e) {
-                opt.$trigger.find("#aMonthlySummary")[0].click();
+    if (isReadonlyUser == false) {
+        let menus = {
+            "view": {
+                name: "View",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aView")[0].click();
+                }
+            },
+            "download": {
+                name: "Download",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aDownload")[0].click();
+                }
+            },
+            "delete": {
+                name: "Delete",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aDelete")[0].click();
+                }
+            },
+            "rename": {
+                name: "Rename",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aRename")[0].click();
+                }
+            },
+            "defaultReport": {
+                name: "Set as Default",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aMonthlySummary")[0].click();
+                }
             }
         }
+        $.contextMenu({
+            selector: '.context-menu',
+            items: menus
+        });
     }
-    $.contextMenu({
-        selector: '.context-menu',
-        items: menus
-    });
+    else {
+        let menus = {
+
+            "download": {
+                name: "Download",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aDownload")[0].click();
+                }
+            }
+        }
+
+        $.contextMenu({
+            selector: '.context-menu',
+            items: menus
+        });
+    }
 }
 var addDraggable = function () {
     //Draggable Start

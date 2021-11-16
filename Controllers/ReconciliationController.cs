@@ -49,8 +49,10 @@ namespace ProvenCfoUI.Controllers
                     
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
+                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
+                        TempData["GLAccounts"] = glAccountList;
 
-                        TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         if (userType == "1")
                         {
                             ViewBag.IsBankRuleVisible = true;

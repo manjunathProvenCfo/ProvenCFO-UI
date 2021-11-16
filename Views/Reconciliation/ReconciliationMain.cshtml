@@ -134,9 +134,9 @@
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-                            <div class="d-flex align-items-center ml-2">
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
-                            </div>
+                            @*<div class="d-flex align-items-center ml-2">
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
+                                </div>*@
                         </div>
                     </div>
 
@@ -161,6 +161,10 @@
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                 }
 
+                                <div class="d-flex align-items-center ml-2">
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
+                                </div>
+
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
@@ -184,7 +188,7 @@
             </div>
             <div class="card-body px-0 pt-0">
                 <div class="dashboard-data-table table-responsive">
-                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"drawCallback":"drawnCallbackTblReconciliation","pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
@@ -293,22 +297,9 @@
 
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-
                                         <button id="btnComment" data-id="@item.id" class="btn btn-link text-600 btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            @if (item.IsChatExist == true)
-                                            {
-                                                <span class="fas fa-comment fs--1"></span>
-                                            }
-                                            else
-                                            {
-                                                <span class="far fa-comment fs--1"></span>
-
-                                            }
-
-
+                                            <span class="fas fa-comment fs--1 text-600"></span>
                                         </button>
-                                        @*onclick="onCommentsClick('@item.id')"*@
-                                        @*<a href="#" onclick="onCommentsClick('@item.id')"><span class="fa fa-comment mr-1"></span></a>*@
                                     </td>
                                 </tr>
                             }
@@ -345,11 +336,25 @@
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
+            //Comment Icons
+            chat.type = 1;
+            chat.forReconciliationIconColor = true;
+            createTwilioClient();
+            $(document).on('click', ".paginate_button", function () {
+                let pageIndex = Number($(this).children('a').data("dt-idx"));
+                $(".glAccountDD").each(function (index, element) {
+                    let itemIndex = pageIndex + "" + index;
+                    $(this).attr('id', 'item_gl_account_ref' + itemIndex);
+                    $(element).select2();
+                });
+            })
+
             $(".glAccountDD").each(function (index, element) {
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 console.log(element)
@@ -358,7 +363,7 @@
 
             //$('#tblreconcilation').dataTable({
             //    "columnDefs": [
-            //        { "width": "80%", "targets": 0 }
+            //        { "width" : "80%", "targets": 0 }
             //    ]
             //});
         });
@@ -367,7 +372,9 @@
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
-
+        function drawnCallbackTblReconciliation(settings) {
+            alert('')
+        }
         function SelectClick(e) {
             if (e.checked) {
                 var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
@@ -819,12 +826,19 @@
 
 
         function TotalSum(totalSum1, totalSum2) {
+            let totalsum3 = 0;
+            if (isNaN(totalSum1 + totalSum2)) {
+                $("#lblNotInCount").addClass('d-none');
+            }
+            else {
+                $("#lblNotInCount").removeClass('d-none');
+                totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+                $("#lblNotInCount").text(totalsum3) ;
 
-            let totalsum3;
-          totalsum3 = totalSum1 + totalSum2;
-            $("#lblNotInCount").text(totalsum3);
-
+            }
         }
+
+
 
     </script>
 

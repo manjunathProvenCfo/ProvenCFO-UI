@@ -91,12 +91,14 @@ namespace ProvenCfoUI
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
-            bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
+            bundles.Add(new Bundle("~/bundles/lib/twilio-chat-lib").Include(
                         "~/assets/lib/jquery.events.input/jquery.events.input.js",
                         "~/assets/lib/jquery.elastic/jquery.elastic.js",
                         "~/assets/lib/underscore.js/underscore.min.js",
                         "~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js",
-                        "~/assets/lib/fancybox/jquery.fancybox.min.js",
+                        "~/assets/lib/fancybox/jquery.fancybox.min.js"));
+
+            bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
                         "~/assets/js/chat.js",
                         "~/assets/js/twilio.js"));
 
