@@ -14,6 +14,13 @@
             color: #bbb;
             margin-bottom: 20px;
         }
+      /*  .kanban-container.scrollbar.perfect-scrollbar.mr-n3 {
+            overflow: scroll hidden !important;
+            max-height: 800px !important;
+        }*/
+        body.overflow-hidden {
+            overflow: auto scroll !important;
+        }
     </style>
 
     <!-- ===============================================-->
@@ -37,7 +44,9 @@
                     </div>
 
                 </div>
-                <div class="kanban-container scrollbar perfect-scrollbar mr-n3" data-options='{"suppressScrollY":true,"suppressScrollX":false}' style="max-height:670px; overflow: scroll;">
+                <div class="kanban-container scrollbar perfect-scrollbar mr-n3" data-options='{"suppressScrollY":false,"suppressScrollX":false}' 
+                     style="">
+               @*style="max-height:720px; overflow: scroll;">*@
                     @foreach (var Segments in (IEnumerable<kanbanSegmentTypesModel>)TempData["SegmentsAndTasks"])
                     {
                     <div class="kanban-column ml-0" style="width:32% !important;" id="@Segments.SegmentDisplayName.ToString().Replace(" ","_")">
