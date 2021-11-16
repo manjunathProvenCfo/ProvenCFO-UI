@@ -55,6 +55,7 @@ namespace ProvenCfoUI.Controllers
 
                         if (userType == "1")
                         {
+                            ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
                             List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             if (objTCList != null && objTCList.Count > 0)
