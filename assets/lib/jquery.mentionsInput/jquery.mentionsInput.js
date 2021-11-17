@@ -242,7 +242,7 @@
             //debuggers
             // Mentions and syntax message
             //utils.htmlEncode()
-            var updatedMessageText = start + `<a href="#!" class="text-primary font-italic font-weight-bold">@${mention.value}</a>` + '&nbsp;' + end;
+            var updatedMessageText = start + `<a href="#!" data-email="${mention.email}" class="text-primary font-italic font-weight-bold">@${mention.value}</a>` + '&nbsp;' + end;
             
             elmInputBox.val(updatedMessageText); //Set the value to the txt area
             //elmInputBoxEditor.html(updatedMessageText); //Set the value to the txt area
