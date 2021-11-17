@@ -103,16 +103,16 @@ $(document).ready(function () {
         }
     });
     $('#Filter').click(function () {
-        if ($("#divChat").is(":visible")) {
+      
+        if ($("#divChat").is(":visible") || $("#divBulkUpdate").is(":visible")) {
             $('#divChat').hide();
             $('#divChat').addClass('d-none');
             $('#divBulkUpdate').hide();
             $('#divBulkUpdate').addClass('d-none');
             $('#divFilter').show();
             $('#divFilter').removeClass('d-none');
-
         }
-        else if ($("#divFilter").is(":visible") || $("#divBulkUpdate").is(":visible")) {
+        else if ($("#divFilter").is(":visible")) {
             $('#divChat').hide();
             $('#divChat').addClass('d-none');
             $('#divFilter').hide();
