@@ -84,8 +84,13 @@ $(document).ready(function () {
     }
     sessionStorage.clear();
 
-    $('#tblreconcilation tbody tr').click(function () {
-        $(this).addClass('bg-300').siblings().removeClass('bg-300');
+    $('.checkbox-bulk-select-target').click(function () {
+        if ($(this).is(":checked")) {
+            $(this).closest('tr').addClass('bg-300');
+        }
+        else {
+            $(this).closest("tr").removeClass('bg-300');
+        }
     });
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
