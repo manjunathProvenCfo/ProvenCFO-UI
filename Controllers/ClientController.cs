@@ -71,7 +71,7 @@ namespace ProvenCfoUI.Controllers
                         State = s.StateName,
                         Status = s.Status == true ? "Active" : "Inactive",
                         Start_Date = s.StartDate,
-                        Team = Convert.ToInt32(s.TeamId),
+                        Team_Name = s.TeamName,
                         Xero_Contact_ID_For_ProvenCfo = s.XeroContactIDforProvenCfo,
                         XeroID = s.XeroID,
                         XeroClientID = s.XeroClientID,
