@@ -23,9 +23,9 @@ namespace Proven.Service
             return await GetAsync<List<ChatChannel>>($"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}&clientId={clientId}");
         }
 
-        public async Task<IEnumerable<MentionUserVM>> FilterMentionUsers(string searchUser)
+        public async Task<IEnumerable<MentionUserVM>> FilterMentionUsers(string searchUser, int clientId)
         {
-            string result = string.Format($"Communication/FilterMentionUsers?searchUser={searchUser}");
+            string result = string.Format($"Communication/FilterMentionUsers?searchUser={searchUser}&clientId={clientId}");
             return await GetAsync<IEnumerable<MentionUserVM>>(result, true);
         }
 

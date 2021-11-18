@@ -76,7 +76,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public async Task<JsonResult> FilterMentionUsers(string searchUser, string userEmail, int chatType)
+        public async Task<JsonResult> FilterMentionUsers(string searchUser, string userEmail, int chatType, int clientId)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    return Json((await communicationService.FilterMentionUsers(searchUser)).Where(x => !(string.Compare(x.email, userEmail, true) == 0)), JsonRequestBehavior.AllowGet);
+                    return Json((await communicationService.FilterMentionUsers(searchUser, clientId)).Where(x => !(string.Compare(x.email, userEmail, true) == 0)), JsonRequestBehavior.AllowGet);
                 }
 
             }
