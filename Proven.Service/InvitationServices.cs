@@ -198,7 +198,7 @@ namespace Proven.Service
         }
 
 
-        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile)
+        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, /*string rolename,*/ string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile)
 
         {
             var form = new Dictionary<string, string>
@@ -206,7 +206,7 @@ namespace Proven.Service
                  {"Id", id.ToString()},
                  {"FirstName", firstname},
                 {"LastName" ,lastname},
-                {"RoleName",rolename },
+                //{"RoleName",rolename },
                 {"JobTitle",jobtitle },
                 {"IsActive",status.ToString()},
                 {"UserId",UserID },
