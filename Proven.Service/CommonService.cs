@@ -28,7 +28,7 @@ namespace Proven.Service
                {"CreatedBy",LoggedInUser}
            };
             //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            return PostAsync<UserPreferencesVM, Dictionary<string, string>>("Common/SetUserPreferences", form).Result;
+            return PostAsync<UserPreferencesVM, Dictionary<string, string>>("Common/SetUserPreferences", form, true).Result;
             //response = client.PostAsync("Common/SetUserPreferences", content).Result;
 
             //if (response.IsSuccessStatusCode)
