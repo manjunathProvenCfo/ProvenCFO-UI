@@ -7,8 +7,8 @@ $(function () {
             createTwilioClientGlobal();
     }
     //Twilio Chat
-   
-    bindNotInBooksAndBanksCount();  
+
+    bindNotInBooksAndBanksCount();
     GetTotalNotesCount();
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
@@ -56,25 +56,24 @@ var getClientId = function () {
 }
 
 //Layout page
-function SetUserPreferencesForAgency() {
+var AgencyDropdownPartialViewChange = function () {
 
-    var ClientID = $("#ddlclient option:selected").val();
-    GetTotalNotesCount();
-
+}
+var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
+    SetUserPreferencesForAgency(callback);
+}
+function SetUserPreferencesForAgency(callback) {
     $.ajax({
-        url: '/AgencyService/SetUserPreferences?ClientId=' + ClientID,
+        url: '/AgencyService/SetUserPreferences?ClientId=' + getClientId(),
         type: "POST",
-        //data: '{model: ' + JSON.stringify(model) + '}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-
-            if (data != null) {
-
+            //Call Global function here
+            if (isEmptyOrBlank(callback) === false) {
+                callback();
             }
-            else {
-
-            }
+            GetTotalNotesCount();
         },
         error: function (d) {
 
@@ -109,7 +108,7 @@ function bindNotInBooksAndBanksCount() {
 
     getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-        if (response.Message == "Success") {         
+        if (response.Message == "Success") {
             let data = response.ResultData;
             let totalSum = 0;
             for (var i = 0; i < data.length; i++) {

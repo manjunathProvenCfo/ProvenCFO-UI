@@ -9,6 +9,7 @@ var typingMembers = new Set();
 var onlineOfflineMembers = new Object();
 var subscribedChannelsLastMessage = [];
 const Chat_Page_Size = 10;
+const Chat_Find_Mention_Page_Size = 10;
 
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
@@ -337,6 +338,31 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         sorted.forEach(function (sortedChannel) {
             if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
                 colorChannelsDict[sortedChannel.channelUniqueName] = 1;
+                if ($(`#btnComment[data-id='${sortedChannel.channelUniqueName}']`).length > 0) {
+                    let channelFindMention = _.findWhere(subscribedChannelsByType, { sid: sortedChannel.channelId });
+                    channelFindMention.messagesEntity.getMessages(Chat_Find_Mention_Page_Size).then(function (page, mentionChannelUniqueName = sortedChannel.channelUniqueName) {
+
+                        let msgs = page.items;
+                        let allMatches = [];
+                        for (var i = 0; i < msgs.length; i++) {
+                            let msg = msgs[i].state;
+                            if (msg.type === "text") {
+                                let matches = findMentionInMessageBody(msg.body);
+                                if (matches.length > 0) {
+                                    allMatches.push(matches);
+                                }
+                            }
+                        }
+                        allMatches = _.flatten(allMatches);
+                        if (allMatches.filter(x => { if (x.toLowerCase() === chat.userEmail.toLowerCase()) return true; return false; }).length > 0) {
+                            let elSpan = $(`#btnComment[data-id='${mentionChannelUniqueName}']`).find('svg');
+                            if (elSpan.length > 0) {
+                                elSpan.removeClass("text-600");
+                                elSpan.addClass("text-success");
+                            }
+                        }
+                    });
+                }
             }
         });
         let colorChannelsDictKeys = Object.keys(colorChannelsDict);
@@ -344,8 +370,10 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         dtReconciliation.column(dtReconciliation.columns().header().length - 1).nodes().to$().each(function (index, obj) {
             let elComment = $(obj).children("#btnComment");
             if (colorChannelsDictKeys.indexOf(elComment.data().id) > -1) {
-                if (colorChannelsDict[elComment.data().id] === 1)
-                    elComment.children().removeClass("text-600");
+                if (colorChannelsDict[elComment.data().id] === 1) {
+                    elComment.children().remove()
+                    elComment.append(`<span class="fas fa-comment fs--1"></span>`);
+                }
             }
         });
         dtReconciliation.rows().invalidate().draw();
@@ -823,4 +851,15 @@ var handleUserUpdate = function (user, updateReasons) {
         }
     });
 }
+
+var findMentionInMessageBody = function (msg) {
+    let matches = [];
+
+    msg.replace(/[^<]*(<a href="#!" data-email="([^"]+)" class="([^"]+)">([^<]+)<\/a>)/g, function () {
+        matches.push(Array.prototype.slice.call(arguments, 2, 3));
+    });
+    return matches;
+}
+
+
 
