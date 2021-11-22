@@ -73,8 +73,9 @@
             Action
         </th>*@
 
-                        <th class="sort pr-1 align-middle" width="45%">Role Name</th>
-                        <th class="sort pr-1 align-middle" width="45%">Status</th>
+                        <th class="sort pr-1 align-middle" width="30%">Role Name</th>
+                        <th class="sort pr-1 align-middle" width="30%">Role Display Name</th>
+                        <th class="sort pr-1 align-middle" width="30%">Status</th>
                         <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
                     </tr>
                 </thead>
@@ -85,6 +86,9 @@
 
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.DisplayRoleName)
                         </td>
 
                         <td class="align-middle">

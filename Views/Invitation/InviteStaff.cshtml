@@ -94,7 +94,7 @@
                                         <label for="split-login-email" class="mb-0">User Role</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.roleid, new SelectList(Model.Rolelist, "id", "name"), "Select a User Role", new { @class = "form-control" })
+                                        @Html.DropDownListFor(model => model.roleid, new SelectList(Model.Rolelist, "id", "DisplayRoleName"), "Select a User Role", new { @class = "form-control" })
                                         @Html.ValidationMessageFor(model => model.roleid, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

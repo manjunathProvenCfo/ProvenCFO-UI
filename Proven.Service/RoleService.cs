@@ -114,7 +114,7 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel AddRoles(string name, string status, string userid)
+        public RolesViewModel AddRoles(string name, string status, string userid,string DisplayRoleName)
         {
 
 
@@ -122,7 +122,8 @@ namespace Proven.Service
            {
                {"name", name},
                {"Status",status },
-               {"CreatedBy", userid}
+               {"CreatedBy", userid},
+                {"DisplayRoleName",DisplayRoleName }
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/CreateRole", form).Result;
@@ -141,14 +142,15 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel UpdateRoles(string id, string name, string status, string userid)
+        public RolesViewModel UpdateRoles(string id, string name, string status, string userid,string DisplayRoleName)
         {
             var form = new Dictionary<string, string>
            {
                {"Id", id},
                {"name", name},
                {"Status",status },
-               {"ModifiedBy", userid}
+               {"ModifiedBy", userid},
+                {"DisplayRoleName",DisplayRoleName }
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/UpdateRole", form).Result;

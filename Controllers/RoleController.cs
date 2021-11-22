@@ -26,7 +26,8 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     var objResult = objRole.GetRoles();
-                    return View(objResult.ResultData);
+                    var result = objResult.ResultData.Where(x => x.IsVisible == true).ToList();
+                    return View(result);
                 }
             }
             catch (Exception ex)
@@ -68,6 +69,9 @@ namespace ProvenCfoUI.Controllers
                     objvm.CreatedDate = result.CreatedDate;
                     objvm.ModifiedBy = result.ModifiedBy;
                     objvm.ModifiedDate = result.ModifiedDate;
+                    objvm.DisplayRoleName = result.DisplayRoleName;
+                    objvm.IsVisible = result.IsVisible;
+
                     return View("AddRole", objvm);
                 }
             }
@@ -88,7 +92,7 @@ namespace ProvenCfoUI.Controllers
                     ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
                     var LoginUserid = Session["UserId"].ToString();
                     var resultdata = objRole.GetRoleById(id);
-                    var result = objRole.UpdateRoles(resultdata.id, resultdata.name, Status, LoginUserid);
+                    var result = objRole.UpdateRoles(resultdata.id, resultdata.name, Status, LoginUserid, resultdata.DisplayRoleName);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("Role");
@@ -124,7 +128,7 @@ namespace ProvenCfoUI.Controllers
                                 return View("AddRole", RoleVM);
                             }
 
-                            result = objRole.AddRoles(Role.name, Role.Status.ToString().Trim(), LoginUserid);
+                            result = objRole.AddRoles(Role.name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName);
                             ViewBag.ErrorMessage = "Created";
                         }
                         else
@@ -135,12 +139,13 @@ namespace ProvenCfoUI.Controllers
                             RoleVM.Status = Role.Status;
                             RoleVM.CreatedBy = Role.CreatedBy;
                             RoleVM.CreatedDate = Role.CreatedDate;
+                            RoleVM.DisplayRoleName = Role.DisplayRoleName;
                             if (Existresult != null && Existresult.id != Role.id)
                             {
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddRole", RoleVM);
                             }
-                            result = objRole.UpdateRoles(Role.id, Role.name, Role.Status.ToString().Trim(), LoginUserid);
+                            result = objRole.UpdateRoles(Role.id, Role.name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName);
                             ViewBag.ErrorMessage = "Updated";
                             return View("AddRole", RoleVM);
                         }
@@ -171,7 +176,7 @@ namespace ProvenCfoUI.Controllers
                     using (RoleService objRole = new RoleService())
                     {
                         var LoginUserid = Session["UserId"].ToString();
-                        var result = objRole.UpdateRoles(Role.id, Role.name, Role.Status, LoginUserid);
+                        var result = objRole.UpdateRoles(Role.id, Role.name, Role.Status, LoginUserid, Role.DisplayRoleName);
                         if (result == null)
                             ViewBag.ErrorMessage = "";
                         return RedirectToAction("Role");
@@ -230,7 +235,8 @@ namespace ProvenCfoUI.Controllers
                         Created_By = s.CreatedByUser,
                         Created_Date = (s.CreatedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.CreatedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.CreatedDate.ToString("MM/dd/yyyy").Replace("-", "/"),
                         Modified_By = s.ModifiedByUser,
-                        Modified_Date = (s.ModifiedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.ModifiedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.ModifiedDate.ToString("MM/dd/yyyy").Replace("-", "/")
+                        Modified_Date = (s.ModifiedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.ModifiedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.ModifiedDate.ToString("MM/dd/yyyy").Replace("-", "/"),
+                        DisplayRoleName = s.DisplayRoleName
                     }).ToList();
                     string filename = obj.ExportTOExcel("RolesList", obj.ToDataTable(objResult));
                     return Json(filename, JsonRequestBehavior.AllowGet);

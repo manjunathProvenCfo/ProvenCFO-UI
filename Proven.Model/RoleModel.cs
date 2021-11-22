@@ -18,6 +18,8 @@ namespace Proven.Model
         public string ModifiedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int MyProperty { get; set; }
+        public string DisplayRoleName { get; set; }
+        public Boolean? IsVisible { get; set; }
     }
     public class RoleMainModel
     {
