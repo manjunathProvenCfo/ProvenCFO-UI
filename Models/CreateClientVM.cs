@@ -58,7 +58,7 @@ namespace ProvenCfoUI.Models
         public string AsanaId { get; set; }
         public string EverhourId { get; set; }
         public string CrmId { get; set; }
-        public int? DashboardId { get; set; }
+        public string DashboardId { get; set; }
         public string DashboardURLId { get; set; }
         public string XeroShortCode { get; set; }
         

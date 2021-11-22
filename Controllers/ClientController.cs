@@ -219,7 +219,8 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.EverhourId = client.EverhourId;
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
-                            Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
+                            //Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
+                            Clientvm.DashboardId = client.DashboardId.ToString();
                             Clientvm.DashboardURLId = client.DashboardURLId;
 
 
