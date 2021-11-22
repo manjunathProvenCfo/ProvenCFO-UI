@@ -3,6 +3,7 @@ using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -103,6 +104,31 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+        [CheckSession]
+        public JsonResult GetIsReceiveQuarterlyReportEnable(int agencyId)
+        {
+            try
+            {
+                var IsReceiveQuarterlyReports = false;
+                using (ClientService objClientService = new ClientService())
+                {
+                    CreateClientVM Clientvm = new CreateClientVM();
+                    var client = objClientService.GetClientById(agencyId);
+                    IsReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
+                }
+                return Json(new { Data = IsReceiveQuarterlyReports, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         [CheckSession]
         public async Task<JsonResult> GetDashboardReports(int agencyId)
@@ -113,7 +139,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     var reports = await reportsService.GetDashboardReports(agencyId);
 
-                    return Json(new { DataMonthly = reports.Where(x => x.PeriodType != "YearEnd"), DataYearly = reports.Where(x=>x.PeriodType== "YearEnd"), Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { DataMonthly = reports.Where(x => x.PeriodType != "YearEnd"), DataYearly = reports.Where(x => x.PeriodType == "YearEnd"), Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -127,7 +153,7 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         [CheckSession]
         public FileContentResult DownloadAll(int agencyId, int year, string periodType)
         {
@@ -141,7 +167,7 @@ namespace ProvenCfoUI.Controllers
 
                         foreach (var report in reports)
                         {
-                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName+ report.FileExtention);
+                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName + report.FileExtention);
                         }
                     }
                 }
@@ -269,7 +295,7 @@ namespace ProvenCfoUI.Controllers
             {
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var result = reportsService.Rename(Id,FileName);
+                    var result = reportsService.Rename(Id, FileName);
 
                     if (result != null)
                     {
@@ -281,7 +307,7 @@ namespace ProvenCfoUI.Controllers
                     }
 
                 }
-            }    
+            }
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
