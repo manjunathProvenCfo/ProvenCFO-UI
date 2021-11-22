@@ -39,6 +39,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             var objResult = obj.GetInvitation();
                             objResult.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            objResult.Rolelist = objResult.Rolelist.Where(x => x.IsVisible == true).ToList();
                             objResult.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                             return View(objResult.ResultData);
                         }
@@ -64,6 +65,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         InviteStaffViewModel emptyobj = new InviteStaffViewModel();
                         emptyobj.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                        emptyobj.Rolelist = emptyobj.Rolelist.Where(x => x.IsVisible == true).ToList();
                         emptyobj.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                         return View(emptyobj);
                     }
@@ -98,6 +100,7 @@ namespace ProvenCfoUI.Controllers
                             inviteStaffVM.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                             inviteStaffVM.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                             InviteVM.Rolelist = inviteStaffVM.Rolelist;
+                            InviteVM.Rolelist = InviteVM.Rolelist.Where(x => x.IsVisible == true).ToList();
                             InviteVM.JobTitlelist = inviteStaffVM.JobTitlelist;
                             if (inviteStaffVM.id == null || inviteStaffVM.id == 0)
                             {
@@ -438,6 +441,7 @@ namespace ProvenCfoUI.Controllers
                             InviteUserModel InvitationUsers = new InviteUserModel();
                             var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
                             InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            InvitationUsers.Rolelist = InvitationUsers.Rolelist.Where(x => x.IsVisible == true).ToList();
                             InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                             InvitationUsers.Id = Convert.ToInt32(result.Id);
                             InvitationUsers.FirstName = result.FirstName;

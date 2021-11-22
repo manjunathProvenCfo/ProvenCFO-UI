@@ -428,7 +428,7 @@ var addMentionPlugin = function () {
     }
     $messageBodyInput.mentionsInput({
         onDataRequest: function (mode, query, callback) {
-            getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}`, null, function (responseData) {
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
                 callback.call(this, responseData);
             });
         },

@@ -19,5 +19,10 @@ namespace ProvenCfoUI.Models
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public int MyProperty { get; set; }
+        [Required(ErrorMessage = "Role Name is a required field.")]
+        [RegularExpression(@"^[a-zA-Z0-9_ ]*$", ErrorMessage = "Please Enter a valid Name")]
+        [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
+        public string DisplayRoleName { get; set; }
+        public Boolean? IsVisible { get; set; }
     }
 }

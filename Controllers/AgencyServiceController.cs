@@ -207,8 +207,9 @@ namespace ProvenCfoUI.Controllers
                     UserPref.UserRole = "";
                     UserPref.CreatedBy = Convert.ToString(ClientId);
                     var objResult = commSrv.SetUserPreferences(UserPref, LoginUserid);
-                    var objUserPref = commSrv.GetUserPreferences(LoginUserid);
-                    Session["LoggedInUserPreferences"] = objUserPref;
+                    var userPreferencesVMs = new List<UserPreferencesVM>() { objResult };
+                    //var objUserPref = commSrv.GetUserPreferences(LoginUserid);
+                    Session["LoggedInUserPreferences"] = userPreferencesVMs;
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
             }

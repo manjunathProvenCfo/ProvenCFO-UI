@@ -35,9 +35,15 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("NavigateToInviteStaffByAgency","Invitation")>Invite</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button">
+                        <a href=@Url.Action("NavigateToInviteStaffByAgency","Invitation")>
+                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">
+                                Invite
+                            </span>
+                        </a>
+                    </button>
                     @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button" onclick="ExportToExcel()"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span></button>
                     @*<button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button><Back to dashboard</a></span></button>*@
 
                 </div>
@@ -263,7 +269,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                           
+
                             sweetAlert
                                 ({
                                     title: "Done",
@@ -275,7 +281,7 @@
                                     });
                         })
                         .error(function (data) {
-                           
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -300,7 +306,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                           
+
                             sweetAlert
                                 ({
                                     title: "Deleted!",
@@ -312,7 +318,7 @@
                                     });
                         })
                         .error(function (data) {
-                            
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -337,7 +343,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                            
+
                             sweetAlert
                                 ({
                                     title: "Cancel!",
@@ -349,7 +355,7 @@
                                     });
                         })
                         .error(function (data) {
-                            
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -393,4 +399,3 @@
 
     </script>
 }
-
