@@ -98,6 +98,29 @@ function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) 
 }
 //Alerts End
 
+//Loader Start
+function showWaitMeLoader(SELECTOR) {
+    $(SELECTOR).waitMe({
+        //none, rotateplane, stretch, orbit, roundBounce, win8,
+        //win8_linear, ios, facebook, rotation, timer, pulse,
+        //progressBar, bouncePulse or img
+        effect: 'win8_linear',
+        text: '',
+        bg: 'rgba(255,255,255,0.7)',
+        //color for background animation and text (string).
+        color: '#000',
+        //change width for elem animation (string).
+        sizeW: '',
+        //change height for elem animation (string).
+        sizeH: '',
+        source: ''
+    });
+}
+function hideWaitMeLoader(SELECTOR) {
+    $(SELECTOR).waitMe('hide');
+}
+//Loader End
+
 //select2 start
 function addMultipleSelectValues(selector, valuesSpaceSeprated) {
     if (!isEmptyOrBlank(valuesSpaceSeprated)) {

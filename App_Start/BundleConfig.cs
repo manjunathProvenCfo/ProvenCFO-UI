@@ -30,6 +30,7 @@ namespace ProvenCfoUI
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
              "~/assets/lib/sweetalert/sweetalert.min.js",
+             "~/assets/lib/waitMe/waitMe.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js"
     ));
@@ -183,6 +184,7 @@ namespace ProvenCfoUI
                      "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
                      "~/assets/lib/sweetalert/sweetalert.min.css",
+                    "~/assets/lib/waitMe/waitMe.min.css",
                      "~/assets/css/theme.css"
                     ));
 

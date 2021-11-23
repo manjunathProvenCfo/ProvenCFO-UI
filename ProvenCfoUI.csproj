@@ -825,6 +825,8 @@
     <Content Include="assets\lib\typed.js\typed.js" />
     <Content Include="assets\lib\underscore.js\underscore-min.js" />
     <Content Include="assets\lib\underscore.js\underscore.min.js" />
+    <Content Include="assets\lib\waitMe\waitMe.min.css" />
+    <Content Include="assets\lib\waitMe\waitMe.min.js" />
     <Content Include="assets\video\beach.jpg" />
     <Content Include="assets\video\beach.mp4" />
     <Content Include="assets\video\beach.webm" />
