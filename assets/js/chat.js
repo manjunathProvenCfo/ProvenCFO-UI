@@ -42,7 +42,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     else
         chat.type = type;
     if (isEmptyOrBlank(autoSelectParticipant))
-        chat.autoSelectParticipant = false;
+        chat.autoSelectParticipant = true;
     else
         chat.autoSelectParticipant = autoSelectParticipant;
 

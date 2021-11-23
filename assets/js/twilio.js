@@ -14,7 +14,7 @@ const Chat_Find_Mention_Page_Size = 10;
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, { logLevel: 'error' })//logLevel: 'error'
+    Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
         .then(function (createdClient) {
 
             twilioClient = createdClient;
@@ -414,6 +414,26 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
             $participantsContainer.append(rp);
         }
     });
+
+    //Sidebar Participant Selection Start
+    if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
+        if (chat.autoSelectParticipant === true) {
+            $participants.eq(0).click();
+        }
+    }
+    else {
+        let qsEmail = getParameterByName('WithTeamMember');
+        let qsParticipant = $participants.filter(function (i, obj) {
+            return obj.dataset.email === qsEmail.toLowerCase();
+        });
+        if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+            qsParticipant[0].click();
+        else {
+            if (chat.autoSelectParticipant === true)
+                $participants.eq(0).click();
+        }
+    }
+    //Sidebar Participant Selection End
 
     if (chat.channels.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
