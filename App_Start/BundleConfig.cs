@@ -30,9 +30,9 @@ namespace ProvenCfoUI
              "~/assets/lib/progressbar.js/progressbar.min.js",
              "~/assets/lib/select2/select2.min.js",
              "~/assets/lib/sweetalert/sweetalert.min.js",
-             "~/assets/lib/waitMe/waitMe.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
-             "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js"
+             "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
+             "~/assets/lib/waitMe/waitMe.min.js"
     ));
             bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
