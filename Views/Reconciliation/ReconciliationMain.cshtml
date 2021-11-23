@@ -123,20 +123,20 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="row align-items-center">
-                            <div class="d-flex align-items-center ml-3" id="tabNotinBooks" onclick="Tabclick(event,0);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0);">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
                             </div>
 
-                            <div class="d-flex align-items-center ml-3" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-                            @*<div class="d-flex align-items-center ml-2">
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
-                                </div>*@
+                            <div class="d-flex align-items-center ml-2">
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span></button>
+                                </div>
                         </div>
                     </div>
 
@@ -161,7 +161,7 @@
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                  }  
                                 
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>                               
+                                    @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@                               
 
                                 @*@if (ViewBag.IsStaffUser == true)
                                 {*@
