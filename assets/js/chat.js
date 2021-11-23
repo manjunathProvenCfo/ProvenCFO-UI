@@ -300,6 +300,7 @@ var handleParticipantClick = function (event) {
             getChannelBySidAndJoin(channel.ChannelId);
         }
     }
+    $chatEditorArea[0].emojioneArea.setFocus()
 }
 
 //Database Queries Start
