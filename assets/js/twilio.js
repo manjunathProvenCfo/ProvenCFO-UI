@@ -629,7 +629,7 @@ var prepareImageMessageBody = function (url) {
 var prepareDocMessageBody = function (url, filename) {
     if (isEmptyOrBlank(filename))
         filename = "Download Link";
-    let messageBody = `<a href="${url}" target="_blank" data-fancybox="twilio-gallery">${filename}</a>`;
+    let messageBody = `<a href="${url}" target="_blank">${filename}</a>`;
     return messageBody;
 }
 
