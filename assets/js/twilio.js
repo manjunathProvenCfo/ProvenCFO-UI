@@ -621,8 +621,8 @@ var prepareMessageRow = function (message, timeStampRowId, participantName) {
     //</ul>
 }
 
-var prepareImageMessageBody = function (url) {
-    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" data-fancybox="twilio-gallery data-fancybox"><img src="${url}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div>`;
+var prepareImageMessageBody = function (url, filename) {
+    let messageBody = `<div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="${url}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="${filename}"><img src="${url}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div>`;
     return messageBody;
 }
 
@@ -678,8 +678,8 @@ var addMessage = function (message) {
                         mediaMessage = mediaMessage[0]
                         if (mediaMessage) {
                             if (mediaMessage.media.state.contentType.indexOf("image") != -1) {
-
-                                elMsg.find(".row").append(prepareImageMessageBody(mediaURL));
+                                
+                                elMsg.find(".row").append(prepareImageMessageBody(mediaURL, mediaMessage.media.state.filename));
                             }
                             else {
                                 elMsg.find(".chat-message").addClass("bg-primary text-white p-2 rounded-soft");
