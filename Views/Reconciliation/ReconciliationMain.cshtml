@@ -369,7 +369,7 @@
         $("select").select2();
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
-    <script>
+<script>
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
@@ -529,7 +529,7 @@
             }
             sessionStorage.setItem('Filter', JSON.stringify(pdata));
 
-            var url = '@Url.Action("GetFilteredReconcilation", "Reconciliation", new { accounts = "_accounts",
+            var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
                               dateRangeFrom = "_dateRangeFrom",
                               dateRangeTo = "_dateRangeTo",
                               amountMin = "_amountMin",
@@ -756,8 +756,9 @@
                     if (data != null) {
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
-                        //loadReconcilation();
-                        window.location.reload();
+                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                        window.location.href = url;
+                       // window.location.reload();
                     }
                     else {
                         // Write here what should happend once selected client is null
@@ -838,7 +839,7 @@
 
 
 
-    </script>
+</script>
 
 }
 
