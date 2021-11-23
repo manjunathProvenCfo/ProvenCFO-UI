@@ -31,7 +31,8 @@ var chat = {
     publicChannelUniqueNameGuid: "",
     clientId: 0,
     type: 0,
-    forReconciliationIconColor:false
+    forReconciliationIconColor: false,
+    selectedRecentParticipantOnce: false
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
@@ -135,6 +136,7 @@ var resetChatPage = function () {
     chat.channels = [];
     chat.participants = [];
     chat.channelIndex = -1;
+    selectedRecentParticipantOnce = false;
 
     typingMembers = new Set();
     onlineOfflineMembers = new Object();

@@ -423,18 +423,21 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
     }
 
     //Sidebar Participant Selection Start
-    if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
-        $participants.eq(0).click();
-    }
-    else {
-        let qsEmail = getParameterByName('WithTeamMember');
-        let qsParticipant = $participants.filter(function (i, obj) {
-            return obj.dataset.email === qsEmail.toLowerCase();
-        });
-        if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-            qsParticipant[0].click();
+    if (chat.selectedRecentParticipantOnce === false) {
+        chat.selectedRecentParticipantOnce = true;
+        if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
+            $participants.eq(0).click();
+        }
         else {
+            let qsEmail = getParameterByName('WithTeamMember');
+            let qsParticipant = $participants.filter(function (i, obj) {
+                return obj.dataset.email === qsEmail.toLowerCase();
+            });
+            if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+                qsParticipant[0].click();
+            else {
                 $participants.eq(0).click();
+            }
         }
     }
     //Sidebar Participant Selection End
