@@ -415,11 +415,16 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         }
     });
 
+    if (chat.channels.length > 0) {
+        $participants = $("#chatParticipants div[id*='chat-link']");
+        $participants.off('click');
+        $participants.on('click', handleParticipantClick);
+        $participantFirst = $("#chatParticipants .chat-contact:first");
+    }
+
     //Sidebar Participant Selection Start
     if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
-        if (chat.autoSelectParticipant === true) {
-            $participants.eq(0).click();
-        }
+        $participants.eq(0).click();
     }
     else {
         let qsEmail = getParameterByName('WithTeamMember');
@@ -429,18 +434,10 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
         if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
             qsParticipant[0].click();
         else {
-            if (chat.autoSelectParticipant === true)
                 $participants.eq(0).click();
         }
     }
     //Sidebar Participant Selection End
-
-    if (chat.channels.length > 0) {
-        $participants = $("#chatParticipants div[id*='chat-link']");
-        $participants.off('click');
-        $participants.on('click', handleParticipantClick);
-        $participantFirst = $("#chatParticipants .chat-contact:first");
-    }
 }
 
 var updateActiveChannel = function () {
@@ -746,7 +743,7 @@ var addChannelMessagesScrollEvent = function () {
                         maxReadMessageIndex = index;
                     }
                 } catch (e) {
-
+                    //console.log(e);
                 }
             });
 
