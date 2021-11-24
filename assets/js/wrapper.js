@@ -105,15 +105,17 @@ function showWaitMeLoader(SELECTOR) {
         //win8_linear, ios, facebook, rotation, timer, pulse,
         //progressBar, bouncePulse or img
         effect: 'win8_linear',
-        text: '',
-        bg: 'rgba(255,255,255,0.7)',
+        text: 'Loading Dashboard Data',
+        bg: 'rgb(83,83,83)',
+        /*bg: 'rgba(255,255,255,0.7)',*/
         //color for background animation and text (string).
-        color: '#000',
+        color: '#000000',
         //change width for elem animation (string).
         sizeW: '',
         //change height for elem animation (string).
         sizeH: '',
-        source: ''
+        source: '',
+         
     });
 }
 function hideWaitMeLoader(SELECTOR) {
