@@ -137,9 +137,7 @@
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-                            <div class="d-flex align-items-center ml-2">
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span></button>
-                                </div>
+                           
                         </div>
                     </div>
 
@@ -159,21 +157,21 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
+
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
+                                </button>
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                 }  
-                                
-                                    @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@                               
+                                }
 
-                                @*@if (ViewBag.IsStaffUser == true)
-                                {*@
-                                    @*<button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>*@
-                                @*}*@
+                                @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
+
+                               
                                 <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
-                            @*<div class="form-group position-relative mb-0">
+                                 @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
                                 </div>*@
