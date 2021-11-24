@@ -26,7 +26,7 @@
                 @if (Model.DashboardId != null && Model.DashboardURLId != null && Model.DashboardId != 0 && Model.DashboardURLId != "")
                 {
                     <div id="dashboard-@Model.DashboardId" style="position:relative;overflow:hidden;height:1000px;">
-                        <iframe src="https://app.reachreporting.com/embed/@Model.DashboardURLId?theme=light" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" class="rr-embed" data-rr-id="@Model.DashboardId" onload="hideWaitMeLoader('.dashboard-frame');"></iframe>
+                        <iframe src="https://app.reachreporting.com/embed/@Model.DashboardURLId?theme=light&bg=rgba(255,255,255,1)" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" class="rr-embed" data-rr-id="@Model.DashboardId" onload="hideWaitMeLoader('.dashboard-frame');"></iframe>
                     </div>
                 }
             </div>
