@@ -11,6 +11,7 @@ var subscribedChannelsLastMessage = [];
 const Chat_Page_Size = 10;
 const Chat_Find_Mention_Page_Size = 10;
 
+
 var createTwilioClient = function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
@@ -22,10 +23,12 @@ var createTwilioClient = function () {
             updateChannels(chat.forReconciliationIconColor);
             //twilioClient.getSubscribedConversations().then(updateChannels);
 
+
             twilioClient.on("connectionStateChanged", function (state) {
                 //connectionInfo
                 //    .removeClass("online offline connecting denied")
                 //    .addClass(client.connectionState);
+
 
                 if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
                     if (chat.autoSelectParticipant === true) {
@@ -44,6 +47,9 @@ var createTwilioClient = function () {
                             $participants.eq(0).click();
                     }
                 }
+
+                //addMessgeAdded Event Listener 
+                setMessageAddedListenerOnAllChannels();
             });
 
             twilioClient.on("channelJoined", function (channel) {
@@ -402,8 +408,10 @@ var joinAndSortSubscribedChannels = function (subscribedChannels, forReconciliat
                 spanUnreadCount.text(unreadMsgCount);
                 spanUnreadCount.show();
             }
-            else
+            else {
+                spanUnreadCount.text("");
                 spanUnreadCount.hide();
+            }
             sortedParticipants.push(elParticipant);
         }
     });
@@ -678,7 +686,7 @@ var addMessage = function (message) {
                         mediaMessage = mediaMessage[0]
                         if (mediaMessage) {
                             if (mediaMessage.media.state.contentType.indexOf("image") != -1) {
-                                
+
                                 elMsg.find(".row").append(prepareImageMessageBody(mediaURL, mediaMessage.media.state.filename));
                             }
                             else {
@@ -794,7 +802,7 @@ var setOnlineOfflineStatus = function () {
         if (isEmptyOrBlank(participant) === false) {
             participant["Online"] = onlineOfflineMembers[key];
             var elParticipant = $participants.filter(function (index, obj) {
-                return obj.attributes['data-email'].value == participant.Email;
+                return obj.attributes['data-email'].value.toLowerCase() === participant.Email.toLowerCase();
             });
             if (participant.Online) {
                 elParticipant.children('.avatar').removeClass('status-offline').addClass('status-online');
@@ -871,6 +879,29 @@ var handleUserUpdate = function (user, updateReasons) {
         }
     });
 }
+
+var setMessageAddedListenerOnAllChannels = async function () {
+    while (twilioClient.conversations.syncListFetched === false) {
+        await timer(1000);
+    }
+    twilioClient.conversations.conversations.forEach(function (value) {
+        value.removeListener('messageAdded', addMessage);
+        value.on('messageAdded', messageAddedAllChannels);
+    });
+}
+var messageAddedAllChannels = function (msg) {
+    if (location.href.toLowerCase().indexOf("communication/chat") > -1) {
+        if (msg.conversation.sid !== activeChannel.sid) {
+            let elParticipant = $(`#chatParticipants div[data-channelId*='${msg.conversation.sid}']`);
+            let spanUnreadCount = elParticipant.find("#spanUnreadMsgCount");
+            let unreadCount = (isNaN(parseInt(spanUnreadCount.text())) ? 0 : parseInt(spanUnreadCount.text()));
+            spanUnreadCount.text(unreadCount + 1);
+            spanUnreadCount.show();
+            _audio.play();
+        }
+    }
+}
+//EventHandler
 
 var findMentionInMessageBody = function (msg) {
     let matches = [];

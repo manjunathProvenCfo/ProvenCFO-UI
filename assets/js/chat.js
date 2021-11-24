@@ -19,8 +19,9 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 
-var Default_Profile_Image = "/assets/img/team/default-logo.png";
+const _audio = new Audio("/assets/audio/notification.mp3");
 
+var Default_Profile_Image = "/assets/img/team/default-logo.png";
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
