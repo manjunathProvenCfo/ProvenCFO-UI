@@ -563,9 +563,8 @@ namespace ProvenCfoUI.Controllers
                             using (SetupService objJob = new SetupService())
                             {
                                 var LoginUserid = Session["UserId"].ToString();
-
-                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, /*Invite.RoleId,*/ Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile);
-                                //result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile);
+                                result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                                 result.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                                 if (result == null)
                                     ViewBag.ErrorMessage = "";
@@ -614,7 +613,7 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate,  CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate,  CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
                     string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
