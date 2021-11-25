@@ -401,6 +401,7 @@ $("#divChatSiderbarFilters > button").click(function () {
             setTimeout(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
+                chat.selectedRecentParticipantOnce = false; 
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -410,6 +411,7 @@ $("#divChatSiderbarFilters > button").click(function () {
             setTimeout(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
+                chat.selectedRecentParticipantOnce = false; 
                 loadChatPage(false, chat.type);
             }, 0)
         }

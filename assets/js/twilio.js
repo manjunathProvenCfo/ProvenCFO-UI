@@ -19,7 +19,6 @@ var createTwilioClient = function () {
         .then(function (createdClient) {
 
             twilioClient = createdClient;
-            //twilioClient.getUser(chat.userEmail).then(function (user) { console.log(user) });
             updateChannels(chat.forReconciliationIconColor);
             //twilioClient.getSubscribedConversations().then(updateChannels);
 
@@ -101,6 +100,7 @@ var createAllChannels = function () {
 }
 
 var getChannelBySidAndJoin = function (channelId) {
+    isConversationSyncListFetched();
     let existingChannel = twilioClient.conversations.conversations.get(channelId);
     if (isEmptyOrBlank(existingChannel)) {
         twilioClient.getConversationBySid(channelId).then(function (conv) {
@@ -364,32 +364,13 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
                 if (channelFindMention.length > 0) {
                     isConversationSyncListFetched();
 
-                    let channelFindMentionFirst = channelFindMention[0];
-                    //let channelFindMention = _.findWhere(subscribedChannelsByType, { channelState[0]uniqueName: commentChannelUniqueName });
-                    channelFindMentionFirst.getMessages(Chat_Find_Mention_Page_Size).then(function (page, mentionChannelUniqueName = commentChannelUniqueName) {
-                        let msgs = page.items;
-                        let allMatches = [];
-                        for (var i = 0; i < msgs.length; i++) {
-                            let msg = msgs[i].state;
-                            if (msg.type === "text") {
-                                let matches = findMentionInMessageBody(msg.body);
-                                if (matches.length > 0) {
-                                    allMatches.push(matches);
-                                }
-                            }
-                        }
-                        allMatches = _.flatten(allMatches);
-                        if (allMatches.filter(x => { if (x.toLowerCase() === chat.userEmail.toLowerCase()) return true; return false; }).length > 0) {
-                            let elComment = $(`#btnComment[data-id='${mentionChannelUniqueName}']`);
-                            elComment.children().remove();
-                            elComment.append(`<span class="fas fa-comment fs--1"></span>`);
-                            $dtReconciliation.rows().invalidate().draw();
-                        }
-                    });
+                    setTimeout(setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName), 1000);
                 }
             }
         });
+        var dtReconciliationPageNumber = $dtReconciliation.page();
         $dtReconciliation.rows().invalidate().draw();
+        $dtReconciliation.page(dtReconciliationPageNumber + 1).draw(false);
         chat.isReconciliationIconColorChanged = true;
 
     }
@@ -457,6 +438,31 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
         }
     }
     //Sidebar Participant Selection End
+}
+
+var setReconciliationIconColor = function (channelFindMentionFirst, commentChannelUniqueName) {
+    channelFindMentionFirst.getMessages(Chat_Find_Mention_Page_Size).then(function (page, mentionChannelUniqueName = commentChannelUniqueName) {
+        let msgs = page.items;
+        let allMatches = [];
+        for (var i = 0; i < msgs.length; i++) {
+            let msg = msgs[i].state;
+            if (msg.type === "text") {
+                let matches = findMentionInMessageBody(msg.body);
+                if (matches.length > 0) {
+                    allMatches.push(matches);
+                }
+            }
+        }
+        allMatches = _.flatten(allMatches);
+        if (allMatches.filter(x => { if (x.toLowerCase() === chat.userEmail.toLowerCase()) return true; return false; }).length > 0) {
+            let elComment = $(`#btnComment[data-id='${mentionChannelUniqueName}']`);
+            elComment.children().remove();
+            elComment.append(`<span class="fas fa-comment fs--1"></span>`);
+            var dtReconciliationPageNumber = $dtReconciliation.page();
+            $dtReconciliation.rows().invalidate().draw();
+            $dtReconciliation.page(dtReconciliationPageNumber + 1).draw(false);
+        }
+    });
 }
 
 var updateActiveChannel = function () {
@@ -895,7 +901,7 @@ async function isConversationSyncListFetched() {
 }
 var setMessageAddedListenerOnAllChannels = async function () {
     await isConversationSyncListFetched();
-    
+
     twilioClient.conversations.conversations.forEach(function (value) {
         value.removeListener('messageAdded', messageAddedAllChannels);
         value.on('messageAdded', messageAddedAllChannels);
