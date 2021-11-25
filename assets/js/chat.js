@@ -33,7 +33,8 @@ var chat = {
     clientId: 0,
     type: 0,
     forReconciliationIconColor: false,
-    selectedRecentParticipantOnce: false
+    selectedRecentParticipantOnce: false,
+    isReconciliationIconColorChanged: false
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
@@ -292,7 +293,7 @@ var handleParticipantClick = function (event) {
         if (isEmptyOrBlank(channel.ChannelId)) {
             if (channel.IsPrivate === true) {
                 var attributes = { "type": "private" }
-                var channelName = getChannelUniqueName(chat.userEmail, participant.Email,chat.clientId);
+                var channelName = getChannelUniqueName(chat.userEmail, participant.Email, chat.clientId);
             } else if (channel.Type == 1) {
                 var attributes = { "type": "public reconciliation" }
                 var channelName = channel.ChannelUniqueName;

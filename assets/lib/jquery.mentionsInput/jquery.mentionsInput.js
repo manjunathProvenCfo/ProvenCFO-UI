@@ -17,7 +17,7 @@
     var defaultSettings = {
         triggerChar: '@', //Char that respond to event
         onDataRequest: $.noop, //Function where we can search the data
-        minChars: 3, //Minimum chars to fire the event
+        minChars: 2, //Minimum chars to fire the event
         allowRepeat: false, //Allow repeat mentions
         showAvatars: true, //Show the avatars
         elastic: false, //Grow the textarea automatically
