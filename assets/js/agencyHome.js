@@ -474,9 +474,22 @@ function getTeamMembersList() {
                     else {
                         $('#spStaffName' + count).html(String(''));
                     }
+
                     if (object.Jobtitle != null && object.Jobtitle != '') {
-                        $('#spJobTitle' + count).html(String(object.Jobtitle));
+                        if (count == 1) {
+                            $('#spJobTitle' + count).html('CFO');
+                        }
+                        else if (count == 2) {
+                            $('#spJobTitle' + count).html('Controller');
+                        }
+                        else if (count == 3) {
+                            $('#spJobTitle' + count).html('Accountant');
+                        }
+                        //$('#spJobTitle' + count).html(String(object.Jobtitle));
                     }
+                    //if (object.Jobtitle != null && object.Jobtitle != '') {
+                    //    $('#spJobTitle' + count).html(String(object.Jobtitle));
+                    //}
                     else {
                         $('#spJobTitle' + count).html(String(''));
                     }
