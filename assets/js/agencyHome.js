@@ -469,7 +469,15 @@ function getTeamMembersList() {
                         $('#aLinkedInProfile' + count).prop('disabled', true);
                     }
                     if (object.Username != null && object.Username != '') {
-                        $('#spStaffName' + count).html(String(object.Username));
+                        if (count == 1) {
+                            $('#spStaffName' + count).html(String(object.Username));
+                        }
+                        else if (count == 2) {
+                            $('#spStaffName' + count).html(String(object.Username));
+                        }
+                        else if (count == 3) {
+                            $('#spStaffName' + count).html(String(object.Username));
+                        }
                     }
                     else {
                         $('#spStaffName' + count).html(String(''));
