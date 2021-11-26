@@ -16,6 +16,7 @@ namespace ProvenCfoUI
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
              "~/assets/js/bootstrap.min.js",
+             "~/assets/lib/underscore.js/underscore.min.js",
              "~/assets/lib/moment.js/moment.min.js",
              "~/assets/lib/fortawesome/all.min.js",
              "~/assets/lib/stickyfilljs/stickyfill.min.js",
@@ -32,15 +33,12 @@ namespace ProvenCfoUI
              "~/assets/lib/sweetalert/sweetalert.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
-             "~/assets/lib/underscore.js/underscore.min.js",
              "~/assets/lib/waitMe/waitMe.min.js"
     ));
-            bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
+            bundles.Add(new Bundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
              "~/assets/js/wrapper.js"
                ));
-            
-
 
             bundles.Add(new ScriptBundle("~/bundles/js/select").Include(
                "~/assets/lib/select2/select2.min.js"
