@@ -1,10 +1,13 @@
-﻿const chatPages = ["communication/chat", "reconciliation"]
+﻿var twilioClient;
+const chatPages = ["communication/chat", "reconciliation"]
+const timer = ms => new Promise(res => setTimeout(res, ms));
+
 $(function () {
     //Twilio Chat 
     if (userEmailAddress != "") {
         var filteredPages = chatPages.filter(x => (window.location.href.toLowerCase().indexOf(x) > 0 ? false : true))
         if (filteredPages.length == chatPages.length)
-            createTwilioClientGlobal();
+            setTimeout(async function () { await createTwilioClientGlobal();}, 100);
     }
     //Twilio Chat
 
@@ -34,22 +37,6 @@ $(function () {
 
 })
 
-var getTwilioToken = function (email) {
-    postAjaxSync("/twilio/token?identity=" + email, null, function (response) {
-        token = response;
-    });
-}
-
-var createTwilioClientGlobal = function () {
-    getTwilioToken(userEmailAddress);
-    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
-        .then(function (createdClient) {
-            createdClient.on('tokenAboutToExpire', () => {
-                getTwilioToken(userEmailAddress);
-                createdClient.updateToken(token);
-            });
-        });
-}
 
 var getClientId = function () {
     return $("#ddlclient option:selected").val();
@@ -163,3 +150,79 @@ function HighlightMenu() {
 
 }
 //Layout page
+
+//Global Chat with Notifications Start
+var getTwilioToken = function (email) {
+    postAjaxSync("/twilio/token?identity=" + email, null, function (response) {
+        token = response;
+    });
+}
+
+var createTwilioClientGlobal = async function () {
+    getTwilioToken(userEmailAddress);
+    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
+        .then(function (createdClient) {
+            twilioClient = createdClient;
+            twilioClient.on("connectionStateChanged", async function (state) {
+                await isTwilioClientConnected();
+
+                await setNotificationMessageAddedListenerOnAllChannels();
+                var isNotificationPage = isLocationUrlContains("communication/notifications")
+                let notificationMessages = await getNotificationMessages(isNotificationPage);
+            });
+
+            createdClient.on('tokenAboutToExpire', () => {
+                getTwilioToken(userEmailAddress);
+                createdClient.updateToken(token);
+            });
+        });
+}
+
+var setNotificationMessageAddedListenerOnAllChannels = async function () {
+    await isConversationSyncListFetched();
+    twilioClient.conversations.conversations.forEach(function (value) {
+        value.removeListener('messageAdded', notificationMessageAddedAllChannels);
+        value.on('messageAdded', notificationMessageAddedAllChannels);
+    });
+}
+
+var notificationMessageAddedAllChannels = function (msg) {
+
+}
+
+var getNotificationMessages = async function (isNotificationPage) {
+    await isConversationSyncListFetched();
+
+    getSortedChannels();
+}
+
+var getSortedChannels = function (typeOfChannel) {
+    if (isEmptyOrBlank(typeOfChannel))
+        typeOfChannel = "public reconciliation";
+    debugger
+    let channels = _.filter(twilioClient.conversations.conversations.toJson(), function (k,channel) {
+        return (channel.channelState?.attributes?.hasOwnProperty("type")
+            && channel.channelState.attributes.type === typeOfChannel
+            && channel.channelState.hasOwnProperty("lastMessage"))
+    });
+    channels = _.pluck(channels, "value");
+    let sortedChannels = _.sortBy(channels, function (o) { return o.channelState.lastMessage?.dateCreated; })
+    console.log(sortedChannels);
+}
+
+async function isConversationSyncListFetched() {
+    while (twilioClient.conversations.syncListFetched === false) {
+        await timer(1000);
+    }
+}
+
+async function isTwilioClientConnected() {
+    while (twilioClient.connectionState !== "connected") {
+        await timer(1000);
+    }
+}
+
+function isLocationUrlContains(url) {
+    return (location.href.toLowerCase().indexOf(url) > -1 ? true : false);
+}
+//Global Chat with Notifications End

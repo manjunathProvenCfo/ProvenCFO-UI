@@ -299,9 +299,9 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
             typeOfChannel = "public reconciliation";
         if (channel.channelState.attributes.hasOwnProperty("type") && channel.channelState.attributes.type === typeOfChannel) {
 
-            channel.messagesEntity.messagesListPromise.then(function (e) {
-                //console.log(e)
-            });
+            //channel.messagesEntity.messagesListPromise.then(function (e) {
+            //    //console.log(e)
+            //});
             subscribedChannelsLastMessage.push({
                 channelId: channel.sid,
                 channelUniqueName: channel.channelState.uniqueName,
@@ -348,7 +348,7 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
         });
         let colorChannelsDictKeys = Object.keys(colorChannelsDict);
         var $dtReconciliation = $('#tblreconcilation').DataTable();
-        $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(function (index, obj) {
+        $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
             let elComment = $(obj).children("#btnComment");
             let commentChannelUniqueName = elComment.data().id;
             if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
@@ -362,15 +362,15 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
                 });
 
                 if (channelFindMention.length > 0) {
-                    isConversationSyncListFetched();
+                    await isConversationSyncListFetched();
 
-                    setTimeout(setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName), 1000);
+                    await setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName);
                 }
             }
         });
         var dtReconciliationPageNumber = $dtReconciliation.page();
         $dtReconciliation.rows().invalidate().draw();
-        $dtReconciliation.page(dtReconciliationPageNumber + 1).draw(false);
+        $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
         chat.isReconciliationIconColorChanged = true;
 
     }
@@ -440,7 +440,7 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
     //Sidebar Participant Selection End
 }
 
-var setReconciliationIconColor = function (channelFindMentionFirst, commentChannelUniqueName) {
+var setReconciliationIconColor = async function (channelFindMentionFirst, commentChannelUniqueName) {
     channelFindMentionFirst.getMessages(Chat_Find_Mention_Page_Size).then(function (page, mentionChannelUniqueName = commentChannelUniqueName) {
         let msgs = page.items;
         let allMatches = [];
@@ -460,7 +460,7 @@ var setReconciliationIconColor = function (channelFindMentionFirst, commentChann
             elComment.append(`<span class="fas fa-comment fs--1"></span>`);
             var dtReconciliationPageNumber = $dtReconciliation.page();
             $dtReconciliation.rows().invalidate().draw();
-            $dtReconciliation.page(dtReconciliationPageNumber + 1).draw(false);
+            $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
         }
     });
 }
@@ -894,11 +894,6 @@ var handleUserUpdate = function (user, updateReasons) {
     });
 }
 
-async function isConversationSyncListFetched() {
-    while (twilioClient.conversations.syncListFetched === false) {
-        await timer(1000);
-    }
-}
 var setMessageAddedListenerOnAllChannels = async function () {
     await isConversationSyncListFetched();
 

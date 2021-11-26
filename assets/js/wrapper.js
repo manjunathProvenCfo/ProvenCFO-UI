@@ -115,7 +115,7 @@ function showWaitMeLoader(SELECTOR) {
         //change height for elem animation (string).
         sizeH: '',
         source: '',
-         
+
     });
 }
 function hideWaitMeLoader(SELECTOR) {
@@ -205,4 +205,12 @@ function removeItemByIndex(arr, index) {
     return arr;
 }
 
-const timer = ms => new Promise(res => setTimeout(res, ms));
+var filterMap = function filterMap(map, pred) { 
+    const result = new Map();
+    for (let [k, v] of map) {
+        if (pred(k, v)) {
+            result.set(k, v);
+        }
+    }
+    return result;
+} 

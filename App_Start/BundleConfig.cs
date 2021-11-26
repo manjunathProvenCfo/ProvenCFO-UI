@@ -32,6 +32,7 @@ namespace ProvenCfoUI
              "~/assets/lib/sweetalert/sweetalert.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
+             "~/assets/lib/underscore.js/underscore.min.js",
              "~/assets/lib/waitMe/waitMe.min.js"
     ));
             bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
@@ -95,7 +96,6 @@ namespace ProvenCfoUI
             bundles.Add(new Bundle("~/bundles/lib/twilio-chat-lib").Include(
                         "~/assets/lib/jquery.events.input/jquery.events.input.js",
                         "~/assets/lib/jquery.elastic/jquery.elastic.js",
-                        "~/assets/lib/underscore.js/underscore.min.js",
                         "~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js",
                         "~/assets/lib/fancybox/jquery.fancybox.min.js"));
 
