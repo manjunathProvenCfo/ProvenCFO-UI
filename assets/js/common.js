@@ -197,10 +197,10 @@ var getNotificationMessages = async function (isNotificationPage) {
 }
 
 var getSortedChannels = function (typeOfChannel) {
+    return;
     if (isEmptyOrBlank(typeOfChannel))
         typeOfChannel = "public reconciliation";
-    debugger
-    let channels = _.filter(twilioClient.conversations.conversations.toJson(), function (k,channel) {
+    let channels = _.filter(twilioClient.conversations.conversations, function (k,channel) {
         return (channel.channelState?.attributes?.hasOwnProperty("type")
             && channel.channelState.attributes.type === typeOfChannel
             && channel.channelState.hasOwnProperty("lastMessage"))
