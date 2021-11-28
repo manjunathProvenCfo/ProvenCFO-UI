@@ -9,14 +9,14 @@ namespace ProvenCfoUI
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/assets/lib/underscore.js/underscore-min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/layoutJS").Include(
              "~/Scripts/jquery-{version}.js",
              "~/assets/js/jquery.min.js",
              "~/assets/js/popper.min.js",
              "~/assets/js/bootstrap.min.js",
-             "~/assets/lib/underscore.js/underscore.min.js",
              "~/assets/lib/moment.js/moment.min.js",
              "~/assets/lib/fortawesome/all.min.js",
              "~/assets/lib/stickyfilljs/stickyfill.min.js",
@@ -94,6 +94,7 @@ namespace ProvenCfoUI
             bundles.Add(new Bundle("~/bundles/lib/twilio-chat-lib").Include(
                         "~/assets/lib/jquery.events.input/jquery.events.input.js",
                         "~/assets/lib/jquery.elastic/jquery.elastic.js",
+                        "~/assets/lib/underscore.js/underscore-min.js",
                         "~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js",
                         "~/assets/lib/fancybox/jquery.fancybox.min.js"));
 
@@ -105,7 +106,7 @@ namespace ProvenCfoUI
                 "~/assets/lib/jquery-contextmenu/jquery.contextmenu.min.js",
                 "~/assets/lib/jquery-contextmenu/jquery.ui.position.min.js",
                 "~/assets/js/reports.js"
-               
+
                 ));
 
 

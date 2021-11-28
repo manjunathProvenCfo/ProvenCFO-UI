@@ -39,6 +39,21 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+        [CheckSession]
+        [HttpGet]
+        public ActionResult Notifications()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
         public async Task<JsonResult> ChatParticipants(string userId, string userEmail, int clientId)
         {
             try
@@ -95,5 +110,45 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
+
+        public async Task<JsonResult> GetNotificationChannels(int clientId)
+        {
+            try
+            {
+                List<ChatChannel> chatChannels = new List<ChatChannel>();
+
+                using (var communicationService = new CommunicationService())
+                {
+                    chatChannels = await communicationService.GetNotificationChannels(clientId);
+                }
+                return Json(chatChannels, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+        [CheckSession]
+        [HttpGet]
+        public async Task<JsonResult> GetNotificationParticipantsByEmails(string emails)
+        {
+            try
+            {
+                List<ChatParticipants> chatChannels = new List<ChatParticipants>();
+
+                using (var communicationService = new CommunicationService())
+                {
+                    chatChannels = await communicationService.GetNotificationParticipantsByEmails(emails);
+                }
+                return Json(chatChannels, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+        
     }
 }

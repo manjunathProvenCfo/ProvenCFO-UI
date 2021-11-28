@@ -432,12 +432,17 @@
             elmActiveAutoCompleteItem = elmItem; //Sets the item to elmActiveAutoCompleteItem
         }
 
+        function pluck(array, key) {
+            return array.map(o => o[key]);
+        }
+
         //Populates dropdown
         function populateDropdown(query, results) {
             elmAutocompleteList.show(); //Shows the autocomplete list
 
             if (!settings.allowRepeat) {
                 // Filter items that has already been mentioned
+                debugger
                 var mentionValues = _.pluck(mentionsCollection, 'value');
                 results = _.reject(results, function (item) {
                     return _.include(mentionValues, item.name);

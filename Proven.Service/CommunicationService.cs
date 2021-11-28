@@ -28,7 +28,14 @@ namespace Proven.Service
             string result = string.Format($"Communication/FilterMentionUsers?searchUser={searchUser}&clientId={clientId}");
             return await GetAsync<IEnumerable<MentionUserVM>>(result, true);
         }
-
+        public async Task<List<ChatChannel>> GetNotificationChannels(int clientId)
+        {
+            return await GetAsync<List<ChatChannel>>($"Communication/GetNotificationChannels?clientId={clientId}");
+        }
+        public async Task<List<ChatParticipants>> GetNotificationParticipantsByEmails(string emails)
+        {
+            return await GetAsync<List<ChatParticipants>>($"Communication/GetNotificationParticipantsByEmails?emails={emails}");
+        }
 
         public void Dispose()
         {

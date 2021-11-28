@@ -12,40 +12,21 @@ const Chat_Page_Size = 10;
 const Chat_Find_Mention_Page_Size = 10;
 
 
-var createTwilioClient = function () {
+var createTwilioClient = async function () {
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
     Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
-        .then(function (createdClient) {
+        .then(async function (createdClient) {
 
             twilioClient = createdClient;
-            updateChannels(chat.forReconciliationIconColor);
             //twilioClient.getSubscribedConversations().then(updateChannels);
 
 
-            twilioClient.on("connectionStateChanged", function (state) {
-                //connectionInfo
-                //    .removeClass("online offline connecting denied")
-                //    .addClass(client.connectionState);
-
-
-                if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
-                    if (chat.autoSelectParticipant === true) {
-                        $participants.eq(0).click();
-                    }
-                }
-                else {
-                    let qsEmail = getParameterByName('WithTeamMember');
-                    let qsParticipant = $participants.filter(function (i, obj) {
-                        return obj.dataset.email === qsEmail.toLowerCase();
-                    });
-                    if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-                        qsParticipant[0].click();
-                    else {
-                        if (chat.autoSelectParticipant === true)
-                            $participants.eq(0).click();
-                    }
-                }
+            twilioClient.on("connectionStateChanged", async function (state) {
+                await isTwilioClientConnected();
+                //Sort Sidebar channels, set reconsiliation icon color
+                updateChannels(chat.forReconciliationIconColor);
+                selectSidebarParticipant();
 
                 //addMessgeAdded Event Listener 
                 setMessageAddedListenerOnAllChannels();
@@ -313,7 +294,6 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
         }
         return false;
     });
-    //debugger
     subscribedChannelsByType.forEach(function (channel) {
         switch (channel.status) {
             case 'joined':
@@ -422,20 +402,7 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
     //Sidebar Participant Selection Start
     if (chat.selectedRecentParticipantOnce === false) {
         chat.selectedRecentParticipantOnce = true;
-        if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true) {
-            $participants.eq(0).click();
-        }
-        else {
-            let qsEmail = getParameterByName('WithTeamMember');
-            let qsParticipant = $participants.filter(function (i, obj) {
-                return obj.dataset.email === qsEmail.toLowerCase();
-            });
-            if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
-                qsParticipant[0].click();
-            else {
-                $participants.eq(0).click();
-            }
-        }
+        selectSidebarParticipant();
     }
     //Sidebar Participant Selection End
 }
@@ -449,18 +416,22 @@ var setReconciliationIconColor = async function (channelFindMentionFirst, commen
             if (msg.type === "text") {
                 let matches = findMentionInMessageBody(msg.body);
                 if (matches.length > 0) {
-                    allMatches.push(matches);
+                    allMatches.concat(matches);
                 }
             }
         }
         allMatches = _.flatten(allMatches);
-        if (allMatches.filter(x => { if (x.toLowerCase() === chat.userEmail.toLowerCase()) return true; return false; }).length > 0) {
-            let elComment = $(`#btnComment[data-id='${mentionChannelUniqueName}']`);
-            elComment.children().remove();
-            elComment.append(`<span class="fas fa-comment fs--1"></span>`);
-            var dtReconciliationPageNumber = $dtReconciliation.page();
-            $dtReconciliation.rows().invalidate().draw();
-            $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
+        if (allMatches.length > 0) {
+            if (allMatches.filter(x => {
+                if (x.toLowerCase() === chat.userEmail.toLowerCase()) return true; return false;
+            }).length > 0) {
+                let elComment = $(`#btnComment[data-id='${mentionChannelUniqueName}']`);
+                elComment.children().remove();
+                elComment.append(`<span class="fas fa-comment fs--1"></span>`);
+                var dtReconciliationPageNumber = $dtReconciliation.page();
+                $dtReconciliation.rows().invalidate().draw();
+                $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
+            }
         }
     });
 }
@@ -716,9 +687,15 @@ var addMessage = function (message) {
             }
         });
     }
-
     if (lastMsgDiv && lastMsgDiv.length > 0 && isElementInView(lastMsgDiv))
         setScrollPosition();
+
+    if (isEmptyOrBlank(getParameterByName('msgId')) === false) {
+        let elMediaMessage = $(`#${getParameterByName('msgId')}`);
+        if (elMediaMessage.length > 0) {
+            location.href = `#${getParameterByName('msgId')}`;
+        }
+    }
 }
 
 var removeMessage = function (message) { }
@@ -916,14 +893,6 @@ var messageAddedAllChannels = function (msg) {
 }
 //EventHandler
 
-var findMentionInMessageBody = function (msg) {
-    let matches = [];
-
-    msg.replace(/[^<]*(<a href="#!" data-email="([^"]+)" class="([^"]+)">([^<]+)<\/a>)/g, function () {
-        matches.push(Array.prototype.slice.call(arguments, 2, 3));
-    });
-    return matches;
-}
 
 
 

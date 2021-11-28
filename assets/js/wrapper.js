@@ -99,13 +99,13 @@ function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) 
 //Alerts End
 
 //Loader Start
-function showWaitMeLoader(SELECTOR) {
+function showWaitMeLoader(SELECTOR,loadingMessage) {
     $(SELECTOR).waitMe({
         //none, rotateplane, stretch, orbit, roundBounce, win8,
         //win8_linear, ios, facebook, rotation, timer, pulse,
         //progressBar, bouncePulse or img
         effect: 'win8_linear',
-        text: 'Loading Dashboard Data',
+        text: loadingMessage,
         bg: 'rgb(83,83,83)',
         /*bg: 'rgba(255,255,255,0.7)',*/
         //color for background animation and text (string).

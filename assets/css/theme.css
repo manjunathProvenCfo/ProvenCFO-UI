@@ -18845,6 +18845,11 @@ label {
     background-color: #2c7be5;
 }
 
+
+.notification-indicator-success::before {
+    background-color: var(--success);
+}
+
 .notification-indicator-warning::before {
     background-color: #f5803e;
 }
