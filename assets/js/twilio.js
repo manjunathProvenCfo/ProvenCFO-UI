@@ -649,7 +649,6 @@ var addMessagePrepand = function (message) {
 var addMessage = function (message) {
     //if (isEmptyOrBlank(prepand))
     //    prepand = false;
-    debugger
     let msg = message.state;
     if (addMessageProcessed.indexOf(msg.sid) > -1)
         return;
