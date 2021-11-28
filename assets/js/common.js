@@ -7,7 +7,9 @@ var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
 var addMessageProcessed = [];
+var Default_Profile_Image = "/assets/img/team/default-logo.png";
 
+const _audio = new Audio("/assets/audio/notification.mp3");
 const chatPages = ["communication/chat", "reconciliation"]
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
@@ -211,6 +213,7 @@ var setNotificationMessageAddedListenerOnAllChannels = async function () {
     await isConversationSyncListFetched();
     twilioClient.conversations.conversations.forEach(function (value) {
         value.removeListener('messageAdded', notificationMessageAddedAllChannels);
+        value.off('messageAdded', notificationMessageAddedAllChannels);
         value.on('messageAdded', notificationMessageAddedAllChannels);
     });
 }
@@ -250,8 +253,7 @@ var notificationMessageAddedAllChannels = function (msg) {
             })
         }
         preapreAndBindNotifications(notifications, isNotificationPage,true);
-
-        //_audio.play();
+        _audio.play();
     }
 }
 
@@ -371,8 +373,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
         let counter = Notification_Bell_Size;
         for (var i = 0; i < notifications.length && i < counter; i++) {
             let userFullName = notifications[i].messageAuthor;
-            let avatar = "../assets/img/team/default-logo.png";
-            debugger
+            let avatar = Default_Profile_Image;
             let notificationChannelParticipant = notificationChannelParticipants.get(notifications[i].messageAuthor.toLowerCase())
             if (!isEmptyOrBlank(notificationChannelParticipant)) {
                 avatar = notificationChannelParticipant.ProfileImage;
@@ -403,7 +404,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
     else {
         for (var i = 0; i < notifications.length; i++) {
             let userFullName = notifications[i].messageAuthor;
-            let avatar = "../assets/img/team/default-logo.png";
+            let avatar = Default_Profile_Image;
             let notificationChannelParticipant = notificationChannelParticipants.get(notifications[i].messageAuthor.toLowerCase())
             if (!isEmptyOrBlank(notificationChannelParticipant)) {
                 avatar = notificationChannelParticipant.ProfileImage;

@@ -18,10 +18,7 @@ var $channelMessages;
 var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
-
-const _audio = new Audio("/assets/audio/notification.mp3");
-
-var Default_Profile_Image = "/assets/img/team/default-logo.png";
+var addMessageProcessed = [];
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -274,11 +271,13 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
+        
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
         $channelMessages.empty();
 
+        addMessageProcessed = [];
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
 
@@ -418,6 +417,7 @@ $("#divChatSiderbarFilters > button").click(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
+                addMessageProcessed = [];
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -428,6 +428,7 @@ $("#divChatSiderbarFilters > button").click(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
+                addMessageProcessed = [];
                 loadChatPage(false, chat.type);
             }, 0)
         }

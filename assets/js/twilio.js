@@ -13,6 +13,11 @@ const Chat_Find_Mention_Page_Size = 10;
 
 
 var createTwilioClient = async function () {
+    //debugger
+    if (!isEmptyOrBlank(twilioClient)) {
+        await connectionStateConnectedMethods();
+        return;
+    }
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
     Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
@@ -23,13 +28,14 @@ var createTwilioClient = async function () {
 
 
             twilioClient.on("connectionStateChanged", async function (state) {
-                await isTwilioClientConnected();
-                //Sort Sidebar channels, set reconsiliation icon color
-                updateChannels(chat.forReconciliationIconColor);
-                selectSidebarParticipant();
+                //await isTwilioClientConnected();
+                ////Sort Sidebar channels, set reconsiliation icon color
+                //updateChannels(chat.forReconciliationIconColor);
+                //selectSidebarParticipant();
 
-                //addMessgeAdded Event Listener 
-                setMessageAddedListenerOnAllChannels();
+                ////addMessgeAdded Event Listener 
+                //setMessageAddedListenerOnAllChannels();
+                await connectionStateConnectedMethods();
             });
 
             twilioClient.on("channelJoined", function (channel) {
@@ -60,7 +66,15 @@ var createTwilioClient = async function () {
             //twilioClient.on('channelRemoved', leaveChannel);
         });
 }
+var connectionStateConnectedMethods = async function () {
+    await isTwilioClientConnected();
+    //Sort Sidebar channels, set reconsiliation icon color
+    updateChannels(chat.forReconciliationIconColor);
+    selectSidebarParticipant();
 
+    //addMessgeAdded Event Listener 
+    //setMessageAddedListenerOnAllChannels();
+}
 
 var createAllChannels = function () {
     let participantsToCreate = chat.channels.filter(x => isEmptyOrBlank(x.ChannelId));
@@ -136,6 +150,9 @@ var setActiveChannel = function (channel) {
         activeChannel.removeListener('messageAdded', addMessage);
         activeChannel.removeListener('messageRemoved', removeMessage);
         activeChannel.removeListener('messageUpdated', updateMessage);
+        activeChannel.off('messageAdded', addMessage);
+        activeChannel.off('messageRemoved', removeMessage);
+        activeChannel.off('messageUpdated', updateMessage);
         //activeChannel.removeListener('updated', updateActiveChannel);
         //activeChannel.removeListener('memberUpdated', updateMember);
     }
@@ -632,8 +649,12 @@ var addMessagePrepand = function (message) {
 var addMessage = function (message) {
     //if (isEmptyOrBlank(prepand))
     //    prepand = false;
-
+    debugger
     let msg = message.state;
+    if (addMessageProcessed.indexOf(msg.sid) > -1)
+        return;
+    addMessageProcessed.push(msg.sid);
+
     var timestampRow = addTimestampRow(msg.timestamp);
     let timeStampRowId = timestampRow.attr("id");
 
@@ -709,6 +730,7 @@ var createMessage = function (message, $el) {
 //TODO//ReTest this message
 var addChannelMessagesScrollEvent = function () {
     var isUpdatingConsumption = false;
+    $channelMessages.off('scroll');
     $channelMessages.on('scroll', function (e) {
         //if ($channelMessages.height() - 50 < $channelMessages.scrollTop() + $channelMessages.height()) {
         //    activeChannel.getMessages(Chat_Page_Size).then(messages => {
@@ -723,6 +745,7 @@ var addChannelMessagesScrollEvent = function () {
         //        }
         //    });
         //}
+        if (activeChannel === null) return;
         let lastIndex = activeChannel.lastReadMessageIndex;
         lastIndex = 0;
         let newestMessageIndex = $channelMessages.children('.media:last').attr('data-index');
@@ -876,6 +899,7 @@ var setMessageAddedListenerOnAllChannels = async function () {
 
     twilioClient.conversations.conversations.forEach(function (value) {
         value.removeListener('messageAdded', messageAddedAllChannels);
+        value.off('messageAdded', messageAddedAllChannels);
         value.on('messageAdded', messageAddedAllChannels);
     });
 }
