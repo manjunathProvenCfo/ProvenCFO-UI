@@ -87,6 +87,7 @@
     <Compile Include="UserModel.cs" />
     <Compile Include="UserPreferencesVM.cs" />
     <Compile Include="UserSecurityVM.cs" />
+    <Compile Include="UserTypesVM.cs" />
     <Compile Include="XeroGlAccountVM.cs" />
     <Compile Include="XeroReconcilationDataOnDemandRequestVM.cs" />
     <Compile Include="XeroTokenInfoVM.cs" />
