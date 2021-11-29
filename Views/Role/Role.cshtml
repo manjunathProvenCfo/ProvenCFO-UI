@@ -85,7 +85,7 @@
                     <tr class="btn-reveal-trigger">
 
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.name)
+                            @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.DisplayRoleName)
@@ -104,12 +104,12 @@
 
                         <td class="align-middle text-center pr-3">
                             <span class="d-none d-sm-inline-block">
-                                <a href='@Url.Action("EditRole", "Role", new { id = item.id})'>
+                                <a href='@Url.Action("EditRole", "Role", new { id = item.Id})'>
                                     <i class="far fa-edit"> </i>
                                 </a>
                             </span>
                             <span class="d-none d-sm-inline-block ml-2">
-                                <a href="#" onclick="deleteUser('@item.id')">
+                                <a href="#" onclick="deleteUser('@item.Id')">
                                     <i class="far fa-trash-alt"> </i>
                                 </a>
                             </span>
@@ -117,13 +117,13 @@
 
                                 @if (item.Status == "Active")
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.id, Status = "Inactive"})'>
+                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Inactive"})'>
                                         <i class="far far fas fa-power-off"> </i>
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.id, Status = "Active"})'>
+                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Active"})'>
                                         <i class="far far fas fa-plug"> </i>
                                     </a>
                                 }
