@@ -18,9 +18,7 @@ var $channelMessages;
 var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
-
-var Default_Profile_Image = "/assets/img/team/default-logo.png";
-
+var addMessageProcessed = [];
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -31,7 +29,9 @@ var chat = {
     publicChannelUniqueNameGuid: "",
     clientId: 0,
     type: 0,
-    forReconciliationIconColor:false
+    forReconciliationIconColor: false,
+    selectedRecentParticipantOnce: false,
+    isReconciliationIconColorChanged: false
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
@@ -76,6 +76,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         getPublicChatParticipants(chat.publicChannelUniqueNameGuid);
     }
     else {
+        chat.autoSelectParticipant = true;
         getChatParticipants();
         createTwilioClient();
     }
@@ -128,6 +129,11 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         })
     });
 
+    //Notification Reconciliation chat selection
+    if (isEmptyOrBlank(getParameterByName("isRecon")) === false && getParameterByName("isRecon") === "true") {
+        $("#divChatSiderbarFilters > button[data-type=1]").click();
+    }
+
 }
 var resetChatPage = function () {
     $participantsContainer.empty();
@@ -135,6 +141,7 @@ var resetChatPage = function () {
     chat.channels = [];
     chat.participants = [];
     chat.channelIndex = -1;
+    selectedRecentParticipantOnce = false;
 
     typingMembers = new Set();
     onlineOfflineMembers = new Object();
@@ -264,11 +271,13 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
+        
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
         $channelMessages.empty();
 
+        addMessageProcessed = [];
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
 
@@ -289,7 +298,7 @@ var handleParticipantClick = function (event) {
         if (isEmptyOrBlank(channel.ChannelId)) {
             if (channel.IsPrivate === true) {
                 var attributes = { "type": "private" }
-                var channelName = getChannelUniqueName(chat.userEmail, participant.Email,chat.clientId);
+                var channelName = getChannelUniqueName(chat.userEmail, participant.Email, chat.clientId);
             } else if (channel.Type == 1) {
                 var attributes = { "type": "public reconciliation" }
                 var channelName = channel.ChannelUniqueName;
@@ -300,6 +309,7 @@ var handleParticipantClick = function (event) {
             getChannelBySidAndJoin(channel.ChannelId);
         }
     }
+    $chatEditorArea[0].emojioneArea.setFocus()
 }
 
 //Database Queries Start
@@ -356,11 +366,21 @@ var addTypingIndicatorDiv = function () {
 }
 
 var setScrollPosition = function () {
-    let elSeparator = $('div.separator');
-    if (!isEmptyOrBlank(elSeparator) && elSeparator.length > 0)
-        elSeparator[0].scrollIntoView(true);
-    else
-        $channelMessages.scrollTop($channelMessages[0].scrollHeight);
+    let scrollPositionSet = false;
+    if (isEmptyOrBlank(getParameterByName('msgId')) === false) {
+        let elMediaMessage = $(`#${getParameterByName('msgId')}`);
+        if (elMediaMessage.length > 0) {
+            scrollPositionSet = true;
+            location.href = `#${getParameterByName('msgId')}`;
+        }
+    }
+    if (scrollPositionSet === false) {
+        let elSeparator = $('div.separator');
+        if (!isEmptyOrBlank(elSeparator) && elSeparator.length > 0)
+            elSeparator[0].scrollIntoView(true);
+        else
+            $channelMessages.scrollTop($channelMessages[0].scrollHeight);
+    }
 }
 
 var Uploader = function (file) {
@@ -396,6 +416,8 @@ $("#divChatSiderbarFilters > button").click(function () {
             setTimeout(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
+                chat.selectedRecentParticipantOnce = false;
+                addMessageProcessed = [];
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -405,6 +427,8 @@ $("#divChatSiderbarFilters > button").click(function () {
             setTimeout(function () {
                 $(".chat-content-header span").text('');
                 activeChannel = null;
+                chat.selectedRecentParticipantOnce = false;
+                addMessageProcessed = [];
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -439,4 +463,39 @@ var getMentions = function () {
     $('#message-body-input').mentionsInput('getMentions', function (data) {
         return (JSON.stringify(data));
     });
+}
+var selectSidebarParticipant = function () {
+    if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true && isEmptyOrBlank(getParameterByName('reconChannelId')) === true) {
+        if (chat.autoSelectParticipant === true) {
+            $participants.eq(0).click();
+        }
+    }
+    else if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === false) {
+        let qsEmail = getParameterByName('WithTeamMember');
+        let qsParticipant = $participants.filter(function (i, obj) {
+            return obj.dataset.email === qsEmail.toLowerCase();
+        });
+        if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0)
+            qsParticipant[0].click();
+        else {
+            if (chat.autoSelectParticipant === true)
+                $participants.eq(0).click();
+        }
+    }
+    else if (isEmptyOrBlank(getParameterByName('reconChannelId')) === false) {
+        let reconChannelId = getParameterByName('reconChannelId');
+        let qsParticipant = $participants.filter(function (i, obj) {
+            if ((obj.dataset?.channelid ?? "") === reconChannelId) {
+                return true;
+            }
+            return false;
+        });
+        if (!isEmptyOrBlank(qsParticipant) && qsParticipant.length > 0) {
+            qsParticipant[0].click();
+        }
+        else {
+            if (chat.autoSelectParticipant === true)
+                $participants.eq(0).click();
+        }
+    }
 }

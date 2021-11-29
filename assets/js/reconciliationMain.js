@@ -1,5 +1,6 @@
 ﻿//Chat Code start
 var currentChannelUniqueNameGuid = "";
+
 $(document).ready(function () {
     hideParticipantsSidebar();
     $("#ichat").click(function () {
@@ -14,6 +15,9 @@ $(document).ready(function () {
         }
     });
     $(document).on("click", "#tblreconcilation tr", function (e) {
+        $("#tblreconcilation tr").removeClass("bg-200");
+        $(this).addClass("bg-200");
+
         if ($('#divChat:visible').length > 0) {
             let elComment = $(this).find("#btnComment");
             showReconciliationChat(elComment.data().id);
@@ -92,6 +96,7 @@ $(document).ready(function () {
             $(this).closest("tr").removeClass('bg-300');
         }
     });
+
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
@@ -103,7 +108,7 @@ $(document).ready(function () {
         }
     });
     $('#Filter').click(function () {
-      
+
         if ($("#divChat").is(":visible") || $("#divBulkUpdate").is(":visible")) {
             $('#divChat').hide();
             $('#divChat').addClass('d-none');

@@ -41,11 +41,12 @@
     },
     {
       "provider": "cdnjs",
-      "library": "underscore.js@1.13.1",
+      "library": "underscore.js@1.9.1",
       "destination": "assets/lib/underscore.js/",
       "files": [
         "underscore-min.js",
-        "underscore.min.js"
+        "underscore.js",
+        "underscore-min.js.map"
       ]
     }
   ]

@@ -30,7 +30,7 @@ namespace Proven.Model
         public int? IsRegistered { get; set; }
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
-        //[Required(ErrorMessage = "Role is a required field.")]
+        [Required(ErrorMessage = "Role is a required field.")]
         public string RoleId { get; set; }
         public virtual RolesViewModel roleModel { get; set; }
         public DateTime? ExpiryTime { get; set; }

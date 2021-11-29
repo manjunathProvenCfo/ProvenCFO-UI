@@ -19,6 +19,7 @@ var myDropzone_view;
 var previewTemplate;
 var $renameModal;
 var $btnRename;
+var isReceiveQuarterlyReportEnable = false;
 
 //var $formFileUploader;
 //var $formUploader;
@@ -45,7 +46,7 @@ $(function () {
     $renameModal = $("#report-rename-modal");
     $btnRename = $("#btnRename");
 
-    if (isReadonlyUser == false || isReadonlyUser == true) {
+    if (isReadonlyUser === false || isReadonlyUser === true) {
         addContextMenu();
         addDraggable();
     }
@@ -88,6 +89,7 @@ $(function () {
             $(obj).data("year", year.toString());
         })
 
+        showHideQuarterBasedOnFlag();
         bindReports("");
 
     });
@@ -166,7 +168,7 @@ $(function () {
                 var filesList = $('#attachmentContainer h6');
 
                 $.each(filesList, function (key, item) {
-                    
+
                     if (item != null && item.innerText == file.name) {
                         IsCanAddfiles = false;
                     }
@@ -203,7 +205,7 @@ $(function () {
         window.open(`/Reports/DownloadAll?agencyId=${agencyId}&year=${year}&periodType=${period}`);
         return false;
     });
-    
+
     $btnDeleteAll.click(function (e) {
         e.stopPropagation();
         let el = $(this);
@@ -229,7 +231,7 @@ $(function () {
             return;
         }
         let period = $("#hdnPeriod").val();
-        let pdata = { Id: $("#hdnId").val(), FileName: $("#txtNewFileName").val()  };
+        let pdata = { Id: $("#hdnId").val(), FileName: $("#txtNewFileName").val() };
         postAjax(`/Reports/Rename`, JSON.stringify(pdata), function (response) {
             if (!isEmptyOrBlank(period))
                 bindReports(period);
@@ -243,12 +245,14 @@ $(function () {
 
 var AgencyDropdownPartialViewChange = function () {
     SetUserPreferencesForAgency();
+    bindQuarter();
     bindReports("");
     //window.location.reload();
 }
 
 var bindPage = function () {
     bindYears();
+    bindQuarter();
     bindReports("");
     $reportYears.trigger('change');
 }
@@ -256,6 +260,40 @@ var bindPage = function () {
 var bindYears = function () {
     for (var i = moment().year(); i >= 2018; i--) {
         $reportYears.append(`<option>${i}</option>`)
+    }
+}
+var bindQuarter = function () {
+    getAjaxSync(`/Reports/GetIsReceiveQuarterlyReportEnable?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
+            isReceiveQuarterlyReportEnable = response.Data;
+            showHideQuarterBasedOnFlag();
+        }
+    });
+}
+
+var showHideQuarterBasedOnFlag = function () {
+    if (isReceiveQuarterlyReportEnable === true) {
+        let year = $reportYears.val();
+        let currentYear = moment().year();
+        let currentMonth = parseInt(moment().format("MM"));
+
+        if (year === currentYear) {
+            $divReportPeriodQuarters.show();
+
+            for (var i = 0; i < (12 - currentMonth + 1); i++) {
+                if (i === 0)
+                    $divReportPeriodQuarters.filter("[data-report-period='Q4']").hide();
+                else if (i === 3)
+                    $divReportPeriodQuarters.filter("[data-report-period='Q3']").hide();
+                else if (i === 6)
+                    $divReportPeriodQuarters.filter("[data-report-period='Q2']").hide();
+                else if (i === 9)
+                    $divReportPeriodQuarters.filter("[data-report-period='Q1']").hide();
+            }
+        }
+    }
+    else {
+        $divReportPeriodQuarters.hide();
     }
 }
 var bindReports = function (reportPeriod) {
@@ -283,7 +321,7 @@ var prepareAndPrependUploaderAttachment = function (obj) {
         thumbnail = obj.FilePath;
     obj.FilePath = obj.FilePath.replace("~/", "../../");
     thumbnail = thumbnail.replace("~/", "../../");
-    
+
     var reportAttachment = `<div class="media align-items-center mb-3" id="att_${obj.Id}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}${obj.FileExtention}</a></h6><button class="cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="javascript:window.open('${obj.FilePath}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Download</span></button><button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;padding-left: 0px;" onclick="RemoveSavedFile(event,${obj.Id},'${obj.PeriodType}')"><i class="glyphicon glyphicon-ban-circle"></i><span>Remove</span></button><p class="mb-0">Uploaded at ${moment(obj.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
     $attachmentContainer.prepend(reportAttachment);
 }
@@ -425,7 +463,7 @@ var addDraggable = function () {
 
             postAjax('/reports/UpdatePositions', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
-
+                    //
                 }
 
             })

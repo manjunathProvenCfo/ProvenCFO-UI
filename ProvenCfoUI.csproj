@@ -824,7 +824,11 @@
     <Content Include="assets\lib\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="assets\lib\typed.js\typed.js" />
     <Content Include="assets\lib\underscore.js\underscore-min.js" />
-    <Content Include="assets\lib\underscore.js\underscore.min.js" />
+    <Content Include="assets\lib\underscore.js\underscore.js" />
+    <Content Include="assets\lib\waitMe\waitMe.css" />
+    <Content Include="assets\lib\waitMe\waitMe.min.css" />
+    <Content Include="assets\lib\waitMe\waitMe.min.js" />
+    <Content Include="assets\audio\notification.mp3" />
     <Content Include="assets\video\beach.jpg" />
     <Content Include="assets\video\beach.mp4" />
     <Content Include="assets\video\beach.webm" />
@@ -1009,6 +1013,7 @@
     <Content Include="libman.json" />
     <Content Include="assets\lib\moment.js\moment.min.js.map" />
     <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js.map" />
+    <Content Include="assets\lib\underscore.js\underscore-min.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1105,6 +1110,7 @@
     <Content Include="Views\Reports\_ReportRenamePartial.cshtml" />
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
     <Content Include="Views\Dashboard\DashboardError.cshtml" />
+    <Content Include="Views\Communication\Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

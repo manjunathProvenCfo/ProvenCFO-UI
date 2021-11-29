@@ -62,6 +62,9 @@
         background-color: #fff !important;
         border-color: #fff !important;
     }*/
+    .chat-message {
+        max-width: calc(100% - 2rem);
+    }
 </style>
 
 @Styles.Render("~/bundles/css/twilio-chat")
@@ -123,20 +126,18 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="row align-items-center">
-                            <div class="d-flex align-items-center ml-3" id="tabNotinBooks" onclick="Tabclick(event,0);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0);">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
                             </div>
 
-                            <div class="d-flex align-items-center ml-3" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-                            @*<div class="d-flex align-items-center ml-2">
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>
-                                </div>*@
+                           
                         </div>
                     </div>
 
@@ -156,21 +157,21 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
+
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
+                                </button>
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                 }  
-                                
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>                               
+                                }
 
-                                @*@if (ViewBag.IsStaffUser == true)
-                                {*@
-                                    @*<button class="btn btn-falcon-default btn-sm mx-1 " type="button"><span class="fas fa-envelope" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>*@
-                                @*}*@
+                                @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
+
+                               
                                 <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
-                            @*<div class="form-group position-relative mb-0">
+                                 @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
                                 </div>*@
@@ -186,7 +187,7 @@
             </div>
             <div class="card-body px-0 pt-0">
                 <div class="dashboard-data-table table-responsive">
-                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"drawCallback":"drawnCallbackTblReconciliation","pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
@@ -296,7 +297,7 @@
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
                                         <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            <span class="far fa-comment fs--1"></span>
+                                            <span class="far fa-comment fs--1 text-dark"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -369,7 +370,7 @@
         $("select").select2();
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
-    <script>
+<script>
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
@@ -529,7 +530,7 @@
             }
             sessionStorage.setItem('Filter', JSON.stringify(pdata));
 
-            var url = '@Url.Action("GetFilteredReconcilation", "Reconciliation", new { accounts = "_accounts",
+            var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
                               dateRangeFrom = "_dateRangeFrom",
                               dateRangeTo = "_dateRangeTo",
                               amountMin = "_amountMin",
@@ -756,8 +757,9 @@
                     if (data != null) {
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
-                        //loadReconcilation();
-                        window.location.reload();
+                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                        window.location.href = url;
+                       // window.location.reload();
                     }
                     else {
                         // Write here what should happend once selected client is null
@@ -838,7 +840,7 @@
 
 
 
-    </script>
+</script>
 
 }
 

@@ -98,6 +98,31 @@ function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) 
 }
 //Alerts End
 
+//Loader Start
+function showWaitMeLoader(SELECTOR,loadingMessage) {
+    $(SELECTOR).waitMe({
+        //none, rotateplane, stretch, orbit, roundBounce, win8,
+        //win8_linear, ios, facebook, rotation, timer, pulse,
+        //progressBar, bouncePulse or img
+        effect: 'win8_linear',
+        text: loadingMessage,
+        bg: 'rgb(83,83,83)',
+        /*bg: 'rgba(255,255,255,0.7)',*/
+        //color for background animation and text (string).
+        color: '#000000',
+        //change width for elem animation (string).
+        sizeW: '',
+        //change height for elem animation (string).
+        sizeH: '',
+        source: '',
+
+    });
+}
+function hideWaitMeLoader(SELECTOR) {
+    $(SELECTOR).waitMe('hide');
+}
+//Loader End
+
 //select2 start
 function addMultipleSelectValues(selector, valuesSpaceSeprated) {
     if (!isEmptyOrBlank(valuesSpaceSeprated)) {
@@ -180,4 +205,12 @@ function removeItemByIndex(arr, index) {
     return arr;
 }
 
-
+var filterMap = function filterMap(map, pred) { 
+    const result = new Map();
+    for (let [k, v] of map) {
+        if (pred(k, v)) {
+            result.set(k, v);
+        }
+    }
+    return result;
+}
