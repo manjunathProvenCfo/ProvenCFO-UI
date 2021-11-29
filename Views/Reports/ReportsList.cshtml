@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Reports";
+}
+<link href="~/assets/lib/jquery-contextmenu/jquery.contextMenu.min.css" rel="stylesheet" />
+<style type="text/css">
+    .book-title {
+        margin-bottom: 10px;
+    }
+
+    .book-cover {
+        margin-bottom: 10px;
+    }
+
+        .book-cover .img-fluid {
+            height: 100px;
+            width: auto;
+        }
+
+    .publish-options {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .report-card-body .dropdown {
+        z-index: 99;
+    }
+</style>
+
+<div class="container-fluid p-0" data-layout="container">
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card mb-1">
+                <div class="card-header report-card-header d-flex justify-content-between align-items-center">
+                    <h5>Reports</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex">
+                            <button class="btn btn-light"><i class="far fa-envelope"></i></button>
+                        </div>
+                        <div class="form-group position-relative mb-0">
+                            <input type="text" class="form-control" id="inputGroup" placeholder="Search">
+                            <div class="search-icon position-absolute">
+                                <i class="fab fa-sistrix"></i>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <select class="form-control pl-2" id="reportYears">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Partial("_ReportPeriodPartial", "YearEnd")
+            </div>
+
+            @for (int i = 12; i >= 1; i--)
+            {
+                switch (i)
+                {
+                    case 12:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q4")
+                        </div>
+                        break;
+                    case 9:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q3")
+                        </div>
+                        break;
+                    case 6:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q2")
+                        </div>
+                        break;
+                    case 3:
+                        <div class="card mb-1">
+                            @Html.Partial("_ReportPeriodPartial", "Q1")
+                        </div>
+                        break;
+                    default:
+                        break;
+                }
+
+                var month = (new DateTime(2021, i, 1)).ToString("MMM", new System.Globalization.CultureInfo("en-US"));
+                <div class="card mb-1">
+                    @Html.Partial("_ReportPeriodPartial", month)
+                </div>
+            }
+
+            @Html.Partial("_ReportUploaderPartial")
+            @Html.Partial("_ReportRenamePartial")
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/js/kanban")
+    @Scripts.Render("~/bundles/js/reports")
+    <script type="text/javascript">
+        var isReadonlyUser = @(Convert.ToString((bool)ViewBag.IsReadonlyUser).ToLower());
+    </script>
+}

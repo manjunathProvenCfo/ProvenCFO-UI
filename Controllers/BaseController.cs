@@ -1,4 +1,7 @@
-﻿using ProvenCfoUI.Comman;
+﻿using log4net;
+using Proven.Model;
+using ProvenCfoUI.Comman;
+using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +12,24 @@ namespace ProvenCfoUI.Controllers
 {
     public class BaseController : Controller
     {
-        [CheckSession]
-        // GET: Base
-        public ActionResult Index()
+        //private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //[CheckSession]
+        // GET: Basess
+        protected new UserContext User => new UserContext(HttpContext?.User);
+        public BaseController()
         {
-            return View();
+
+        }
+
+        public void IsReadOnlyUser()
+        {
+            if (!string.IsNullOrEmpty(User.UserType))
+            {
+                if (User.UserType == "2")
+                    ViewBag.IsReadonlyUser = true;
+                else
+                    ViewBag.IsReadonlyUser = false;
+            }
         }
 
         [CheckSession]

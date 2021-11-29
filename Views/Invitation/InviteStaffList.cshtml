@@ -5,7 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
 
+    .page-link:hover {
+        color: #000 !important;
+    }
+</style>
 
 <div class="card mb-3">
     <div class="card-header">
@@ -25,11 +34,15 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("InviteStaff","Invitation")>Invite</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button">
+                        <a href=@Url.Action("InviteStaff","Invitation")><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Invite</span></a>
+                    </button>
 
                     @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button" onclick="ExportToExcel()">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span>
+                    </button>
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>*@
 
                 </div>
             </div>
@@ -49,15 +62,15 @@
                                 <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                             </div>
                         </th>
-                        <td class="sort pr-1 align-middle">First Name</td>
-                        <td class="sort pr-1 align-middle">Last Name</td>
-                        <td class="sort pr-1 align-middle">Email Address</td>
-                        <td class="sort pr-1 align-middle">Job Title</td>
-                        <td class="sort pr-1 align-middle">Role</td>
-                        <td class="sort pr-1 align-middle">Status </td>
-
-                        <td class="sort pr-1 align-middle">Last Login (UTC)</td>
-                        <td class="no-sort align-middle text-center pr-3">Actions</td>
+                        <th class="sort pr-1 align-middle">First Name</th>
+                        <th class="sort pr-2 align-middle">Last Name</th>
+                        <th class="sort pr-3 align-middle">Email Address</th>
+                        <th class="sort pr-4 align-middle">Job Title</th>
+                        @*<th class="sort pr-5 align-middle">Role</th>*@
+                        @*<td class="sort pr-6 align-middle" style="max-width:5% !important">LinkedIn Profile </td>*@
+                        <th class="sort pr-7 align-middle">Status </th>
+                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        <th class="no-sort align-middle text-center pr-3">Actions</th>
 
 
 
@@ -77,9 +90,8 @@
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
                             <td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
-                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>
-
-
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.LinkedInProfile)</td>*@
 
                             <td class="align-middle">
 
@@ -122,7 +134,7 @@
                                     }
                                     else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
                                     {
-                                        <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
+                                        <a data-toggle="tooltip" data-placement="top" title="Delete User" href="javascript:void(0)" onclick="deleteInvite('@item.Id')">
                                             <i class="far fa-trash-alt"> </i>
                                         </a>
                                     }
@@ -168,25 +180,8 @@
 </div>
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
-        //var ExportToExcel = function () {
-
-        //    ExportFileReq();
-        //}
-        //var ExportFileReq = function () {
-        //    $.ajax({
-        //        type: "POST",
-        //        url: '/Invitation/ExportToExcel',
-        //        success: function (FileName) {
-        //            //get the file name for download
-        //            if (FileName != "") {
-        //                //use window.location.href for redirect to download action for download the file
-        //                var dPath = '/Base/Download?fileName=' + FileName;
-        //                window.location.href = dPath;
-        //            }
-        //        }
-        //    });
-        //}
 
         var ExportToExcel = function () {
 
@@ -230,11 +225,10 @@
                 function () {
                     $.ajax({
                         url: "/Invitation/DeactivateInvite/" + Id,
-
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Done",
@@ -246,7 +240,7 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -267,11 +261,10 @@
                 function () {
                     $.ajax({
                         url: "/Invitation/DeleteInvite/" + Id,
-
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Deleted!",
@@ -283,7 +276,7 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -308,7 +301,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Invitation canceled!",
@@ -320,16 +313,11 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
         }
-
-
-
-
-
     </script>
 }
 

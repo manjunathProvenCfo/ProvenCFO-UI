@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Proven.Model.XeroTrackingCategoriesVM>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@Styles.Render("~/bundles/customcss")
+    @Scripts.Render("~/bundles/modernizr")*@
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
+
+    .page-link:hover {
+        color: #000 !important;
+    }
+</style>
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0"> Tracking categories  |  </h5>&nbsp;
+                @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+                @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+                <div class="error" id="XeroStatus"></div>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm">
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
+
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions">
+                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroTrackingCategoriesSync();" id="spanSync">Sync From Xero</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-0 pt-0">
+        <div class="dashboard-data-table">
+            <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                <thead class="bg-200 text-900">
+                    <tr>
+
+
+                        <th class="sort pr-1 align-middle" width="25%">Name</th>
+                        <th class="sort pr-1 align-middle" width="25%">Option</th>
+
+
+                    </tr>
+                </thead>
+                <tbody id="purchases">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr class="btn-reveal-trigger">
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Option)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table");
+    <script>
+
+        $(document).ready(function () {
+            setTimeout(function () {
+                XeroConnectionUpdate();
+
+            }, 2000);
+        });
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+            var XMessage = $('#XeroStatusMessage');
+            var XStatus = $('#XeroStatus');
+            if (XConstatus.val() == "True") {
+                XStatus.text("Xero connected");
+                XStatus.css('color', 'green');
+                $('#btnSync').show();//prop('disabled', false);
+                //$('#spanSync').prop('disabled', false);
+            }
+            else {
+                XStatus.text('Error Connecting to Xero :' + XMessage.val());
+                XStatus.css('color', 'red');
+                $('#btnSync').hide()//prop('disabled', true);
+                // $('#spanSync').prop('disabled', true);
+            }
+        }
+
+
+        function AgencyDropdownPartialViewChange() {
+            setTimeout(function () {
+                var ClientID = $("#ddlclient option:selected").val();
+                getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
+                    if (response != null) {
+                        SetUserPreferencesForAgency();
+                        setTimeout(function () {
+                            window.location.reload();
+                            UpdateXeroConnectionStatus();
+
+                        }, 2000);
+                    }
+                    else {
+                    }
+                });
+            }, 2000);
+        }
+        function XeroTrackingCategoriesSync() {
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Integration/GetXeroTrackingCategorySync?ClientID=' + ClientID, null, function (data) {
+                if (data === false) {
+                    ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
+                }
+                else {
+                    ShowAlertBoxSuccess("Success!", "GL Account sync with Xero successfully.", function () { window.location.reload(); });
+                }
+            });
+        }
+
+    </script>
+
+}
+

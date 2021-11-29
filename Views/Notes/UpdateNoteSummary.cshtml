@@ -1,0 +1,59 @@
+﻿@model Proven.Model.ClientModel
+@using Proven.Model
+@{
+    ViewBag.Title = "Update Note Summary";
+}
+
+
+<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="notes-modal-label-1" aria-hidden="true" id="notesummary-modal-new">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="media">
+                                <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
+                                <div class="media-body">
+                                    <div class="input-group mb-3">
+                                        @Html.HiddenFor(x => x.Id)
+                                       
+                                    </div>
+                                  
+                                    <div class="form-group mb-3">
+                                        <h5 class="mb-2 fs-0">Summary</h5>
+                                        <div class="min-vh-50 mh-25 border border-dark">
+                                            <textarea class="tinymce d-none border" name="content" id="txtSummary"></textarea>
+                                        </div>
+                                    </div>
+                                    <hr class="my-4" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" id="btnUpdateNoteSummary" type="button"> Update </button>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

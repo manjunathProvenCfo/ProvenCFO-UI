@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using log4net;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,7 @@ namespace ProvenCfoUI.Helper
 {
     public class Utltity
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public string ExportTOExcel(string fileName, DataTable dtt)
         {
@@ -22,7 +24,7 @@ namespace ProvenCfoUI.Helper
             fileName += DateTime.Now.ToString("_dd_MM_yyyy_hh_mm_ss_tt") + ".xls";
             string fullPath = Path.Combine(path, fileName);
             //string dtt = fileName;
-           // string WorksheetName = dtt.TableName ?? "sheet";
+            // string WorksheetName = dtt.TableName ?? "sheet";
 
             Stream stream = System.IO.File.Create(fullPath);
 
@@ -31,11 +33,11 @@ namespace ProvenCfoUI.Helper
 
                 DataTable dt = dtt;
 
-              
-                string WorksheetName = dt.TableName?? "sheet";
+
+                string WorksheetName = dt.TableName ?? "sheet";
                 WorksheetName = fileName;
-                 //string WorksheetName1 = "staffuser";
-                 ExcelWorksheet ws = pack.Workbook.Worksheets.Add(WorksheetName);
+                //string WorksheetName1 = "staffuser";
+                ExcelWorksheet ws = pack.Workbook.Worksheets.Add(WorksheetName);
                 ws.Cells["A1"].LoadFromDataTable(dt, true);
 
                 pack.SaveAs(stream);
@@ -51,7 +53,7 @@ namespace ProvenCfoUI.Helper
             foreach (PropertyInfo prop in Props)
             {
                 //Setting column names as Property names  
-                
+
                 dataTable.Columns.Add(prop.Name);
             }
             foreach (T item in items)
@@ -97,6 +99,46 @@ namespace ProvenCfoUI.Helper
                 writer.WriteLine(Environment.NewLine + "-----------------------------------------------------------------------------" + Environment.NewLine);
             }
         }
+
+        public static string Log4NetExceptionLog(Exception Exception)
+        {
+            var msg = string.Empty;
+            var errorMessage = "Message= " + Exception.Message.ToString() + ". Method= " + Exception.TargetSite.Name.ToString();
+            var errorDescription = " StackTrace : " + Exception.StackTrace.ToString() + " Source = " + Exception.Source.ToString();
+            msg = errorMessage + " " + errorMessage;
+            return msg;
+        }
+        public static void Log4NetInfoLog(string Info)
+        {
+            log.Info(Info);
+        }
+
+        public static void WriteExceptionLog(Exception Exception)
+        {
+
+            var msg = string.Empty;
+            var errorMessage = "Message= " + Exception.Message.ToString() + ". Method= " + Exception.TargetSite.Name.ToString();
+            var errorDescription = " StackTrace : " + Exception.StackTrace.ToString() + " Source = " + Exception.Source.ToString();
+            msg = errorMessage + " " + errorMessage;
+            int WeekNum = GetWeekNumber();
+            int Year = DateTime.Now.Year;
+            string AppendStr = WeekNum.ToString() + "_" + Year.ToString() + "_";
+
+            string appath = System.AppDomain.CurrentDomain.BaseDirectory + "Error\\";
+            if (!Directory.Exists(appath))
+            {
+                Directory.CreateDirectory(appath);
+            }
+
+            string filePath = appath + AppendStr + "Error.txt";
+            using (StreamWriter writer = new StreamWriter(filePath, true))
+            {
+                writer.WriteLine("Message :" + msg + "<br/>" + Environment.NewLine +
+                   "" + Environment.NewLine + "Date :" + DateTime.Now.ToString());
+                writer.WriteLine(Environment.NewLine + "-----------------------------------------------------------------------------" + Environment.NewLine);
+            }
+        }
+
 
         public static void WriteMsg(string msg)
         {

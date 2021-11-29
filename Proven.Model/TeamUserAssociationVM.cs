@@ -21,6 +21,12 @@ namespace Proven.Model
         public string ModifiedByUser { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public bool? IsDeleted { get; set; }
+        public string LinkedInProfile { get; set; }
+        public string Jobtitle { get; set; }
+        public string Profileimage { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+
     }
 
     public class TeamUserAssociationVMMainModel

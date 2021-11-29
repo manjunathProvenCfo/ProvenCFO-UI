@@ -53,7 +53,17 @@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
                                 </div>
-
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-create-name">Role Display Name</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.DisplayRoleName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
+                                        @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
+                                        <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="Displayroleexist" class=""></span></span>
+                                    </div>
+                                    @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                </div>
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
@@ -67,9 +77,9 @@
 
 
                                 @*<div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-                                    </div>*@
+            <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+            <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+        </div>*@
 
                                 <div class="row align-items-center form-group mb-0">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
@@ -84,7 +94,8 @@
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateRole", "Role")">Update</button>
                                         }
-                                        @Html.ActionLink("Cancel", "Role", "Role", new { }, new { @class = "btn btn-primary ml-2" })
+
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("Role", "Role")'" />
                                     </div>
                                     @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
                                     @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
@@ -116,6 +127,7 @@
     <script>
         
         document.getElementById("roleexist").style.display = "none";
+        document.getElementById("Displayroleexist").style.display = "none";
         function CheckExistValidation() {
             if ($("#name").val() === "" && $("#roleexist").html() !== "") {
                 $('#roleexist').hide();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.Security;
 
 namespace ProvenCfoUI.Comman
@@ -17,9 +18,7 @@ namespace ProvenCfoUI.Comman
             {
                 if (context.Session.IsNewSession)
                 {
-                    string sessionCookie = context.Request.Headers["Cookie"];
-
-                    if ((sessionCookie != null) && (sessionCookie.IndexOf("ASP.NET_SessionId") >= 0 ))
+                    if (HttpContext.Current.Request.IsAuthenticated)
                     {
                         FormsAuthentication.SignOut();
                         string redirectTo = "~/Home/LoginSessionExpaired";
@@ -32,10 +31,21 @@ namespace ProvenCfoUI.Comman
 
                     }
                 }
-                if (context.Session["UserId"] == null || Convert.ToString(context.Session["UserId"]) == string.Empty)
+                if (HttpContext.Current.Request.IsAuthenticated == false)
                 {
-                    filterContext.Result = new RedirectResult("~/Home/Login");
-                    return;
+                    FormsAuthentication.RedirectToLoginPage();
+                }
+                else
+                {
+                    var session = HttpContext.Current.Session;
+                    HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                    string[] userData = ticket.Name.Split(',');
+                    session["UserId"] = userData[0];
+                    session["UserName"] = userData[1];
+                    session["LoginName"] = userData[2];
+                    session["UserFullName"] = userData[3];
+                    session["UserType"] = userData[4];
                 }
             }
 

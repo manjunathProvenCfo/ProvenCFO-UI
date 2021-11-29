@@ -13,7 +13,7 @@
             Html.RenderAction("AgencySelection", "AgencyService");
         }
     </div>
-    
+
     <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
         @*<li class="nav-item d-none d-md-block">
                 <a class="nav-link px-3 py-0" href="https://prium.github.io/falcon/v3.0.0-beta5/" target="_blank"><img src="assets/img/logos/bootstrap-5.png" alt="" height="35" /></a>
@@ -22,6 +22,45 @@
         @*@{
                 Html.RenderAction("AgencySelection", "AgencyService");
             }*@
+
+        @*The Setting one*@
+
+        <li class="nav-item dropdown dropdown-on-hover ">
+            <a class="nav-link active" id="navbarDropdownSetting" href="#" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"><span class="fa fa-cog fs-4" data-fa-transform="shrink-6"></span></a>
+        </li>
+        @*The Setting Ends here*@
+
+        @*Here I am Attaching the line..*@
+        <li class="nav-item dropdown dropdown-on-hover">
+            <a class="nav-link notification-indicator notification-indicator-primary px-0 icon-indicator" id="navbarDropdownNotification" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell fs-4" data-fa-transform="shrink-6"></span></a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-card" aria-labelledby="navbarDropdownNotification">
+                <div class="card card-notification shadow-none" style="max-width: 20rem">
+                    <div class="card-header">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-auto">
+                                <h6 class="card-header-title mb-0">Notifications</h6>
+                            </div>
+                            @*<div class="col-auto"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>*@
+                        </div>
+                    </div>
+                    <div class="list-group list-group-flush font-weight-normal fs--1" id="navbarDropdownNotificationListGroup">
+                        @*<div class="list-group-title border-bottom">NEW</div>*@
+                    </div>
+                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="/communication/notifications">View all</a></div>
+                </div>
+            </div>
+        </li>
+
+        @*The notification One Ends here*@
+
+        @*For the mail One*@
+        @*<li class="nav-item dropdown dropdown-on-hover">
+                <a class="nav-link notification-indicator notification-indicator-primary px-0 icon-indicator" id="navbarDropdownMail" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fa fa-envelope-open fs-4" data-fa-transform="shrink-6"></span></a>
+            </li>*@
+
+        @*The mail one Ends here*@
+
+
         <li class="nav-item dropdown dropdown-on-hover">
 
             <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

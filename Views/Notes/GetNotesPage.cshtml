@@ -1,0 +1,578 @@
+﻿@using Proven.Model
+@{
+    ViewBag.Title = "GetNotesPage";
+}
+
+<div class="container-fluid p-0" data-layout="container">
+    <div class="mb-3 v-pills-div notes-container">
+        @{var summary = (ClientModel)TempData["NotesSummary"];}
+        <div class="card notes-items-container">
+            <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
+            </div>
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Summary</h5>
+                <div class="dropdown">
+                    <div class="glyphicon-new-window">
+                        @if (ViewBag.IsEditMode == true)
+                        {
+                            <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body notes-item shadow-sm">
+                <div class="d-flex col-md-9">
+                    <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
+                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
+                </div>
+
+                <div class="Words">
+                    @*@if (summary?.SummaryCreatedByFullName == "")
+                    {
+                        <span>&nbsp;</span>
+                    }
+                    else
+                    {
+                <span>
+                    Created by:
+                   
+                    <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+                </span>
+                    }*@
+
+                    @if (summary?.SummaryModifiedByFullName == "")
+                    {
+                        <span>&nbsp;</span>
+                    }
+                    else
+                    {
+                        <span>
+                             Last Edited by:
+                            <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                        </span>
+                    }
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row scrollspy-listing">
+
+        <div class="col-3 order-2">
+
+            <div class="sticky-top sticky-kit right-nav-pills bg-white">
+
+                <div class="nav flex-column nav-pills">
+                    @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
+                    {
+                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-9 order-1">
+            @{int containerCounter = 0;}
+
+            @{ int counter = 0; }
+            @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
+            {
+                containerCounter++;
+
+                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
+                    <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h3>@Categories.NoteCategory</h3>
+                            @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
+                            @*Here I am writing new line for add button for testing*@
+                            @if (ViewBag.IsEditMode == true)
+                            {
+                                <div class="dropdown">
+                                    <div class="btn btn-sm btn-falcon-default dropdown-toggle dropdown-caret-none" id="notes-create-new-btn">
+                                        <span class="fas fa-plus"></span>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                        @if (Categories.NotesCategoriesList != null)
+                        {
+                            foreach (var Category in Categories.NotesCategoriesList)
+                            {
+                                counter++;
+                                if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
+                                {
+                                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            @if (ViewBag.IsEditMode == true)
+                                            {
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                        @if (@Category.IsPublished.ToLower() == "published")
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                                        }
+                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+                                                    <div class="ml-2" style=" font-size : 24px">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-2" style="font-size:24px;">
+                                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                        </div>
+                                        <p> @Html.Raw(Category.Description)</p>
+
+                                        <div class="Words">
+                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            @if ((Category.ModifiedByUser == ""))
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                            else
+                                            {
+                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+
+                                            }
+
+                                            @*<hr>*@
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                        }
+
+                    </div>
+                </div>
+            }
+            @{ Html.RenderAction("CreateNewNotes", "Notes");}
+            @{ Html.RenderAction("OpenDescription", "Notes"); }
+            @{ Html.RenderAction("UpdateNoteSummary", "Notes"); }
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
+    <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
+
+    @*For AgencySelectionDropdown*@
+    <script type="text/javascript">
+        var $formValidator;
+        $(document).ready(function () {
+            var ClientID = $("#ddlclient option:selected").val();
+            //getAgencyMembersList(ClientID);
+            GetTotalNotesCount();
+            $formValidator = $("#formCreateNotes").validate(
+                {
+                    ignore: ""
+                });
+            $formValidator.settings.ignore = "";
+
+        });
+
+        function AgencyDropdownPartialViewChange() {
+            var ClientID = $("#ddlclient option:selected").val();
+            if (ClientID != null && ClientID != undefined && ClientID != '') {
+                $.ajax({
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            $('#Notes-create-new-btn').show();//TODO
+                            SetUserPreferencesForAgency();
+                            window.location.reload();
+                        }
+                        else {
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            else {
+                window.location.reload();
+            }
+        }
+
+
+        function GetTotalNotesCount() {
+            var ClientID = $("#ddlclient option:selected").val();
+            getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+
+                if (response.Message == "Success") {
+
+                    let data = response.ResultData;
+                    let TotalNotes = 0;
+
+                    for (var i = 0; i < data.length; i++) {
+                        TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+                    }
+                    $("#lblTotalNotes").text(TotalNotes);
+                }
+            });
+        }
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".v-pills-div").find(".card-body:first #moveUp").remove();
+            $(".v-pills-div").find(".card-body:last #moveDown").remove();
+        });
+
+        $(function () {
+            $("[id='notes-create-new-btn']").click(function (e) {
+
+                let btnAdd = $(this);
+                let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
+                $("#NoteCatId").val(categoryId);
+                tinymce.get("Description").getContent()
+                tinymce.get("Description").setContent("");
+                tinyMCE.activeEditor.setContent("");
+                $("#notes-modal-new").modal("show");
+
+                $("#btnCreateNewNotesDescription").text("Create");
+
+            });
+            $("#btnCreateNewNotesDescription").click(function () {
+                $("#Description").val(tinymce.get("Description").getContent());
+                if ($("#Title").valid() === false || $("#Description").valid() == false)
+                    return;
+                var id = $('#Id').val();
+                var title = $('#Title').val();
+                var noteCatId = $('#NoteCatId').val();
+                var ClientID = $("#ddlclient option:selected").val();
+                var agencyId = $('#ClientID').val();
+
+                var isPublished = "Unpublished";
+                if ($("#chkPublished").prop("checked") === true) {
+                    isPublished = "Published";
+                }
+                var position = $('#Position').val();
+               
+                var description = tinyMCE.get("Description").getContent();
+                var status = $('#NotesStatus').val();
+
+                $("#btnCreateNewNotesDescription").prop('create', 'Save');
+
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
+                let json = JSON.stringify({ Notes: pdata });
+
+                postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
+                    if (response.Message == 'Success') {
+                        window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBoxWarning('Required!', response.Message);
+                        }
+                        else {
+                            ShowAlertBoxWarning('Exist!', response.Message);
+
+                        }
+                    }
+
+                })
+            });
+
+            $("[id^=chkIsPublished]").change(function () {
+
+                let el = $(this);
+                let isChecked = el[0].checked;
+                if (isChecked == true)
+                    el.parent('div').siblings("span#lblIsPublished").text("Published");
+                else
+                    el.parent('div').siblings("span#lblIsPublished").text("Unpublished");
+                //TODO//Update status in database
+                /*let pdata = {Id: el.data().id, IsPublished: isChecked };*/
+                postAjax('/Notes/PublishingNotes?Id=' + el.data().id, function (response) {
+
+                    if (response.Message == 'Success') {
+                    }
+
+                });
+
+            });
+
+            $("[Id=moveUp]").click(function () {
+                let el = $(this);
+               
+                let id = el.parents(".card-body").data().id;
+                let swapId = el.parents(".card-body").prev().data().id;
+                let pdata = { Id: id, SwapId: swapId };
+                //postAjax('', JSON.stringify({pdata}), function (response) {
+
+                //});
+            })
+
+            $("[Id=moveDown]").click(function () {
+                let el = $(this);
+               
+                let id = el.parents(".card-body").data().id;
+                let swapId = el.parents(".card-body").next().data().id;
+                let pdata = { Id: id, SwapId: swapId };
+                //postAjax('', JSON.stringify({pdata}), function (response) {
+
+                //});
+            })
+
+        });
+
+        function openEdit(e) {
+            e.stopPropagation();
+            var catDesId = e.currentTarget.attributes["descriptionId"].value;
+            $("#NoteCatId").val(NoteCatId);
+            $("#notes-modal-new").modal("show");
+            $("#btnCreateNewNotesDescription").text("Update");
+            $.ajax({
+                url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
+                //cache: false,
+                success: function (response) {
+                    if (response.Message == 'Success') {
+                        if (response.Description != null) {
+                            let published = response.Description.IsPublished;
+                            let title = response.Description.Title;
+
+                            $('#Id').val(response.Description.Id);
+                            $('#Title').val(title);
+                            if (published.toLowerCase() == "published") {
+                                $("#chkPublished").prop('checked', true);
+                            }
+                            else
+                                $("#chkPublished").prop('checked', false);
+
+                            $('#Description').html(response.Description.Description);
+                            if (response.Description.Description != null) {
+                                $('#Description').html(response.Description.Description);
+                                tinymce.get("Description").setContent(response.Description.Description);
+                            }
+
+                            $("#NoteCatId").val(response.Description.NoteCatId);
+                            $("#AgencyId").val(response.Description.AgencyId);
+                            $("#Position").val(response.Description.Position);
+                        }
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+                        }
+                    }
+                }
+
+            });
+        }
+
+        $(function () {
+            $("[id='notes-updatesummary-new-btn']").click(function (e) {
+               
+                let content = $("#hdnSummary").val();
+                tinymce.get("txtSummary").setContent(content);
+                tinyMCE.activeEditor.setContent(content);
+                $("#notesummary-modal-new").modal("show");
+
+                $("#btnUpdateNoteSummary").text("Update");
+
+            });
+            $("#btnUpdateNoteSummary").click(function () {
+                var ClientID = $("#ddlclient option:selected").val();
+
+                var summary = tinyMCE.get("txtSummary").getContent();
+
+                var pdata = { Id: parseInt(ClientID), Summary: summary };
+                postAjax('/Notes/UpdateNoteSummary', JSON.stringify(pdata), function (response) {
+                  
+                    if (response.Message == 'Success') {
+                        let data = response.Data;
+                        window.location.reload();
+                        $("#lblSummaryCreatedBy").text(data.SummaryCreatedByFullName);
+                        $("#lblSummaryCreatedDate").text(moment(data.SummaryCreatedDate));
+                        if (!isEmptyOrBlank(data.SummaryModifiedByFullName)) {
+                            $("#lblSummaryModifiedBy").text(data.SummaryModifiedByFullName);
+                            $("#lblSummaryModifiedDate").text(moment(data.SummaryModifiedDate));
+                        }
+                        //window.location.reload();
+                        $('.close-circle').click();
+                        $('.modal-backdrop').remove();
+                    }
+                    else {
+                        if (response.Message == 'Exist') {
+                            ShowAlertBox('Required!', response.Message, 'warning');
+                        }
+                        else {
+                            ShowAlertBox('Exist!', response.Message, 'warning');
+
+                        }
+                    }
+
+                })
+            });
+        });
+
+        function DeleteNotesDescription(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Do you really want to delete this note?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonColor: "#ec6c62"
+
+            },
+
+                function () {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/Notes/DeleteNotesDescription/' + Id,
+                    })
+                        .done(function (data) {
+
+                            /*if ((data == 'Unpublished') || (data == 'Published')) {*/
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "Note successfully deleted!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                          
+                        })
+                        .error(function (data) {
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        });
+                });
+        }
+
+        function ResolveNote(Id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Do you really want to resolve this note?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes, resolve it!",
+                confirmButtonColor: "#ec6c62"
+
+            },
+
+                function () {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/Notes/ResolveNote/' + Id,
+                    })
+                        .done(function (data) {
+
+                            if ((data == '') || (data == false)) {
+                                sweetAlert
+                                    ({
+                                        title: "Resolved!",
+                                        text: "Note successfully resolved!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+
+
+                        })
+                        .error(function (data) {
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        });
+                });
+        }
+
+    </script>
+    @if (ViewBag.IsDraggable == true)
+    {
+        <script type="text/javascript">
+            $(function () {
+                var Selectors = {
+                    BODY: 'body',
+                    NOTES_CONTAINER: '.notes-container',
+                    NOTES_ITEMS_CONTAINER: 'div[id^=notes-items-container]',
+                    NOTES_ITEM: '.notes-item',
+                };
+
+                let arrItemsContainer = $(Selectors.NOTES_ITEMS_CONTAINER).toArray();
+                for (var i = 0; i < arrItemsContainer.length; i++) {
+                    let sortable = new window.Draggable.Sortable(arrItemsContainer[i], {
+                        draggable: Selectors.NOTES_ITEM,
+                        delay: 200,
+                        mirror: {
+                            appendTo: Selectors.BODY,
+                            constrainDimensions: true
+                        }
+                    });
+                    sortable.on('drag:stop', function (e) {
+                        var $this = $(e.data.source);
+                        var $itemContainer = $this.closest(Selectors.NOTES_ITEMS_CONTAINER);
+                        let $items = $itemContainer.find('.notes-item:visible');
+                        let ids = [];
+                        let positions = [];
+                        for (var i = $items.length; i > 0; i--) {
+                            ids.push(parseInt($items[i - 1].getAttribute("data-id")));
+                            positions.push(i);
+                            $items[i - 1].setAttribute("data-position", i);
+                        }
+                        let pdata = { Ids: ids, Positions: positions.reverse() };
+                        //post Ajax
+                        let json = JSON.stringify(pdata);
+
+                        postAjax('/Notes/DragAndDropNotesDescription', JSON.stringify(pdata), function (response) {
+                            if (response.Message == 'Success') {
+
+                            }
+
+                        })
+
+                    });
+                }
+            });
+        </script>
+    }
+}

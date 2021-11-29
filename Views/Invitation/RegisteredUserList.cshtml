@@ -5,8 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
 
-@*<div>@Html.Partial("_Header")</div>*@
+    .page-link:hover {
+        color: #000 !important;
+    }
+</style>
+
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -26,10 +35,16 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("NavigateToInviteStaffByAgency","Invitation")>Invite</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button">
+                        <a href=@Url.Action("NavigateToInviteStaffByAgency","Invitation")>
+                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">
+                                Invite
+                            </span>
+                        </a>
+                    </button>
                     @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button><Back to dashboard</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button" onclick="ExportToExcel()"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span></button>
+                    @*<button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button><Back to dashboard</a></span></button>*@
 
                 </div>
             </div>
@@ -37,8 +52,8 @@
     </div>
     @*@Html.Partial("_AgencySelection")*@
     @*@{
-        Html.RenderAction("AgencySelection", "AgencyService");
-    }*@
+            Html.RenderAction("AgencySelection", "AgencyService");
+        }*@
 
 
     <div class="card-body px-0 pt-0">
@@ -55,112 +70,112 @@
                                 <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                             </div>
                         </th>
-                        <td class="sort pr-1 align-middle">First Name</td>
-                        <td class="sort pr-1 align-middle">Last Name</td>
-                        <td class="sort pr-1 align-middle">Email Address</td>
+                        <th class="sort pr-1 align-middle">First Name</th>
+                        <th class="sort pr-1 align-middle">Last Name</th>
+                        <th class="sort pr-1 align-middle">Email Address</th>
                         @*<td class="sort pr-1 align-middle">Job Title</td>
-        <td class="sort pr-1 align-middle">Role</td>*@
-                        <td class="sort pr-1 align-middle">Status </td>
+                            <td class="sort pr-1 align-middle">Role</td>*@
+                        <th class="sort pr-1 align-middle">Status </th>
 
-                        <td class="sort pr-1 align-middle">Last Login (UTC)</td>
-                        <td class="no-sort align-middle text-center pr-3">Actions</td>
+                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        <th class="no-sort align-middle text-center pr-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="agencyuserlist">
                     @foreach (var item in Model)
                     {
-                    <tr id="trUseragency" class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id=@item.Id value="@item.Id" />
-                                <label class="custom-control-label" for=@item.Id></label>
-                            </div>
-                        </td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
-                        <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
-                        @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
-        <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
+                        <tr id="trUseragency" class="btn-reveal-trigger">
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id=@item.Id value="@item.Id" />
+                                    <label class="custom-control-label" for=@item.Id></label>
+                                </div>
+                            </td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
+                                <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
 
 
 
-                        <td class="align-middle">
+                            <td class="align-middle">
 
 
-                            @if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
-                            {
-                                <span class="badge badge-pill badge-primary">Invited</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
-                            {
-                                <span class="badge badge-pill badge-success">Active</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
-                            {
-                                <span class="badge badge-pill badge-secondary">Inactive</span>
-                            }
-                            else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
-                            {
-                                <span class="badge badge-pill badge-secondary">Inactive</span>
-                            }
-                        </td>
-                        <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
-
-
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-none d-sm-inline-block ml-1">
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                @if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Edit" href='@Url.Action("EditToInviteStaffByAgency", "Invitation", new { id = item.Id })'>
-                                        <i class="far fa-edit"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-primary">Invited</span>
                                 }
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-1">
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 0)
+                                else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Cancel Invitation" href="#" onclick=" cancelInvite('@item.Id')">
-                                        <i class="fas fa-dot-circle"></i>
-                                    </a>
-                                }
-                                else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
-                                {
-                                    <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
-                                        <i class="far fa-trash-alt"> </i>
-                                    </a>
-                                }
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-1">
-
-
-                                @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
-                                {
-                                    <a data-toggle="tooltip" data-placement="top" title="Deactivate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success">Active</span>
                                 }
                                 else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
-
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
                                 else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
                                 {
-                                    <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
+                            </td>
+                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+
+
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block ml-1">
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Edit" href='@Url.Action("EditToInviteStaffByAgency", "Invitation", new { id = item.Id })'>
+                                            <i class="far fa-edit"> </i>
+                                        </a>
+                                    }
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-1">
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 0)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Cancel Invitation" href="#" onclick=" cancelInvite('@item.Id')">
+                                            <i class="fas fa-dot-circle"></i>
+                                        </a>
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Delete User" href="#" onclick="deleteInvite('@item.Id')">
+                                            <i class="far fa-trash-alt"> </i>
+                                        </a>
+                                    }
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-1">
+
+
+                                    @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Deactivate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+
+                                    }
+                                    else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                    {
+                                        <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateAgencyUserInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
 
 
 
-                            </span>
+                                </span>
 
-                        </td>
+                            </td>
 
 
-                    </tr>
+                        </tr>
 
                     }
 
@@ -172,6 +187,7 @@
 
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
 
         var ExportToExcel = function () {
@@ -253,7 +269,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Done",
@@ -265,7 +281,7 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -290,7 +306,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Deleted!",
@@ -302,7 +318,7 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
@@ -327,7 +343,7 @@
                         type: "Post"
                     })
                         .done(function (data) {
-                            debugger
+
                             sweetAlert
                                 ({
                                     title: "Cancel!",
@@ -339,13 +355,13 @@
                                     });
                         })
                         .error(function (data) {
-                            debugger
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
         }
-        function refreshgrid(ClientID) {           
-           window.location = '/Invitation/RefreshRegisteredUserList?AgencyID=' + ClientID;           
+        function refreshgrid(ClientID) {
+            window.location = '/Invitation/RefreshRegisteredUserList?AgencyID=' + ClientID;
         }
 
         function AgencyDropdownPartialViewChange() {
@@ -378,9 +394,8 @@
                 });
             }
 
-               
+
         }
 
     </script>
 }
-

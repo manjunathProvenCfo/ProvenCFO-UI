@@ -1,10 +1,73 @@
-﻿
-@{
-    ViewBag.Title = "ReconciliationMain";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model IEnumerable<Proven.Model.reconciliationVM>
+@{ ViewBag.Title = "ReconciliationMain";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<style>
+    .tabselect {
+        text-decoration: underline;
+    }
 
+    .loader-circle {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 1110;
+        background-color: rgba(0,0,0,0.75);
+    }
 
+        .loader-circle .spinner-border {
+            width: 4rem;
+            height: 4rem;
+            border: 0.5em solid #00be62;
+            border-right-color: transparent;
+        }
+
+    .position-fixed {
+        position: fixed !important;
+    }
+
+    select#item_additional_tracking_category_ref {
+        width: 90px;
+    }
+
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
+
+    .page-link:hover {
+        color: #000 !important;
+    }
+
+    select#item_gl_account_ref {
+        font-size: 13px !important;
+        width: 400px;
+    }
+
+    select#item_rule {
+        font-size: 13px !important;
+        width: 193px;
+    }
+
+    select#item_tracking_category_ref {
+        font-size: 13px !important;
+        width: 160px;
+    }
+
+    select#item_additional_tracking_category_ref {
+        font-size: 13px !important;
+        width: 160px;
+    }
+    /*  .page-item.active .page-link {
+        background-color: #fff !important;
+        border-color: #fff !important;
+    }*/
+    .chat-message {
+        max-width: calc(100% - 2rem);
+    }
+</style>
+
+@Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -23,412 +86,664 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">-->
-                    @*<button class="btn btn-falcon-default btn-sm" type="button">
-                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                            <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-                        </button>*@
-                    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                            <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-                        </button>*@
-                    <!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1">
-                            <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
-                        </span>
-                    </button>
-                </div>
+@*<button class="btn btn-falcon-default btn-sm" type="button">
+        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+    </button>*@
+@*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">filter</span></button>*@
+@*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+    </button>*@
+<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+                    <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                    <span class="d-none d-sm-inline-block ml-1">
+                        <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
+                    </span>
+                </button>
             </div>
         </div>
-    </div>-->
-
-
-    <!--<div class="card-body px-0 pt-0">
-        <!--<div class="row no-gutters">-->
-            <!--@*@Html.Partial("_AgencySelection")*@
-            @*@{
-                Html.RenderAction("AgencySelection", "AgencyService");
-            }*@-->
-            <!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
-
-            </div>
-        </div>-->
-    <!--</div>
+    </div>
 </div>-->
-<div class="card mb-3">
-    <div class="card-header">
-        <div class="row align-items-center justify-content-between">
-            <div class="col-6">
-                <div class="row align-items-center">
-                    <div class="d-flex align-items-center ml-3">
-                        <span class="fas fa-book"></span>
-                        <h6 class="mb-0 ml-2"><a href="">Not in Books</a></h6>
-                        <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+<!--<div class="card-body px-0 pt-0">
+    <!--<div class="row no-gutters">-->
+<!--@*@Html.Partial("_AgencySelection")*@
+@*@{
+    Html.RenderAction("AgencySelection", "AgencyService");
+}*@-->
+<!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
+
+    </div>
+</div>-->
+<!--</div>
+</div>-->
+<div class="row">
+    @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+    @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+    <div class="col-md-12" id="divTable">
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="row align-items-center">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0);">
+                                <span class="fas fa-book"></span>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
+                            </div>
+
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                                <span class="far fa-credit-card"></span>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
+                            </div>
+                           
+                        </div>
                     </div>
 
-                    <div class="d-flex align-items-center ml-5">
-                        <span class="far fa-credit-card"></span>
-                        <h6 class="mb-0 ml-2"><a href="">Not in Banks</a></h6>
-                        <span class="badge badge-pill badge-soft-danger ml-3">36</span>
+
+
+                    <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                        @*<div class="d-none" id="purchases-actions">
+                                <div class="input-group input-group-sm">
+                                    <select class="custom-select cus" aria-label="Bulk actions">
+                                        <option selected="">Bulk actions</option>
+                                        <option value="Refund">Refund</option>
+                                        <option value="Delete">Delete</option>
+                                        <option value="Archive">Archive</option>
+                                    </select>
+                                    <button class="btn btn-falcon-default btn-sm ml-2" type="button">Apply</button>
+                                </div>
+                            </div>*@
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex">
+
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
+                                </button>
+                                @if (ViewBag.IsStaffUser == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                }
+
+                                @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
+
+                               
+                                <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                            </div>
+                                 @*<div class="form-group position-relative mb-0">
+                                    <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
+
+                                </div>*@
+
+                        </div>
+
+
+
+
+
                     </div>
                 </div>
             </div>
+            <div class="card-body px-0 pt-0">
+                <div class="dashboard-data-table table-responsive">
+                    <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                        <thead class="bg-200 text-900">
+                            <tr>
+                                <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                        <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                    </div>
+                                </th>
+                                <th class="sort pr-1 align-middle">Account</th>
+                                <th class="sort pr-1 align-middle">Date</th>
+                                <th class="sort pr-1 align-middle">Who</th>
+                                <th class="sort pr-1 align-middle">Description</th>
+                                <th class="sort pr-1 align-middle">Amount</th>
 
-            
-            
-            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
-                <div class="d-none" id="purchases-actions">
-                    <div class="input-group input-group-sm">
-                        <select class="custom-select cus" aria-label="Bulk actions">
-                            <option selected="">Bulk actions</option>
-                            <option value="Refund">Refund</option>
-                            <option value="Delete">Delete</option>
-                            <option value="Archive">Archive</option>
-                        </select>
-                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Apply</button>
-                    </div>
-                </div>
-                <div id="dashboard-actions">
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">New</span></button>
-                    <button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span></button>
+
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                                {
+                                    <th class="sort pr-1 align-middle">GL Account</th>
+                                } @*<th></th>*@
+                                @if (ViewBag.IsBankRuleVisible == true)
+                                {
+                                    <th class="sort pr-10 align-center ">Rule</th>
+                                }
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                {
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                                    {
+                                        <th class="sort pr-10 align-center ">@tcgroup.Name</th>
+                                    }
+
+                                }
+
+                                <th class="vikas no-sort align-middle data-table-row-action"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="purchases">
+                            @foreach (var item in (List<Proven.Model.reconciliationVM>)TempData["ReconcilationData"])
+                            {
+                                <tr class="btn-reveal-trigger cursor-pointer">
+                                    <td class="align-middle">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="@item.id" value="@item.Selected" />
+
+                                            <label class="custom-control-label" for="@item.id"></label>
+                                        </div>
+                                    </td>
+                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
+                                    @if (item.amount < 0)
+                                    {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                                    <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+                                }
+                                else
+                                { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                                <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+                            }
+
+                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+
+                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
+                                                </div>
+                                            </div>
+                                        </td>
+                                    } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                    @if (ViewBag.IsBankRuleVisible == true)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+
+                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                    {
+                                        int count = 0;
+                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                                        {
+
+                                            <td class="sort pr-1 align-middle col-xs-1">
+                                                <div class="row justify-content-between">
+                                                    <div class="col-auto">
+                                                        @if (count == 0)
+                                                        {
+                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)", style = "width: 180px;" }) }
+                                                        else
+                                                        {
+                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)", style = "width: 180px;" })}
+
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            count++;
+                                        }
+
+                                    }
+                                    <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="far fa-comment fs--1 text-dark"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card-body px-0 pt-0">
-        <div class="dashboard-data-table">
-            <table class="table table-sm table-dashboard fs--1 data-table border-bottom" data-options='{"responsive":false,"pagingType":"simple","lengthChange":false,"searching":false,"pageLength":8,"columnDefs":[{"targets":[0,6],"orderable":false}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> view all <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
-                <thead class="bg-200 text-900">
-                    <tr>
-                        <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
-                                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
-                            </div>
-                        </th>
-                        <th class="sort pr-1 align-middle">Account</th>
-                        <th class="sort pr-1 align-middle">Date</th>
-                        <th class="sort pr-1 align-middle">Who</th>
-                        <th class="sort pr-1 align-middle">Description</th>
-                        <th class="sort pr-1 align-middle">Amount</th>
-                        <th class="sort pr-1 align-middle">GL Account</th>
-                        <th class="sort pr-1 align-middle"><span class="fas fa-question-circle">?</span></th>
-                        <th class="sort pr-1 align-middle">Rule</th>
-                    </tr>
-                </thead>
-                <tbody id="purchases">
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+    <div class="col-md-4 p-l-2 d-none" id="divChat">
+        @Html.Partial("_communication", true)
+    </div>
+    <div class="col-md-4 p-l-2 d-none" id="divFilter">
+        @Html.Partial("_reconcilationFilter", true)
+    </div>
+    <div class="col-md-4 p-l-2 d-none" id="divBulkUpdate">
+        @Html.Partial("_reconcilationBulkupdate", true)
 
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="checkbox-0" />
-                                <label class="custom-control-label" for="checkbox-0"></label>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle">PayPal</td>
-                        <td class="sort pr-1 align-middle">6/25/2021</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US  CA 95014 US</td>
-                        <td class="sort pr-1 align-middle">APPLE.COM/US Balance Adjustment</td>
-                        <td class="sort pr-1 align-middle">$99</td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Pick Account</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>
-                        <td class="sort pr-1 align-middle">
-                            <div class="row justify-content-between">
-                                <div class="col-auto">
-                                    <select class="custom-select custom-select-sm">
-                                        <option>Set Rule</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>
 
+<div class="position-fixed loader-circle" id="Loader" style="display:none;">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <br />
+        <div id="loadertext">Loading...</div>
+    </div>
+</div>
+
+
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/js/table")
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    @Scripts.Render("~/bundles/lib/twilio-chat-lib")
+    @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
-
         $(document).ready(function () {
-            AgencyDropdownPartialViewChange();
+            chat.userId = "@ViewBag.UserId";
+            chat.userEmail = "@ViewBag.UserEmail";
+            //Comment Icons
+            chat.type = 1;
+            chat.forReconciliationIconColor = true;
+            createTwilioClient();
+            $(document).on('click', ".paginate_button", function () {
+                let pageIndex = Number($(this).children('a').data("dt-idx"));
+                $(".glAccountDD").each(function (index, element) {
+                    let itemIndex = pageIndex + "" + index;
+                    $(this).attr('id', 'item_gl_account_ref' + itemIndex);
+                    $(element).select2();
+                });
+            })
 
+            $(".glAccountDD").each(function (index, element) {
+                $(this).attr('id', 'item_gl_account_ref' + index);
+                console.log(element)
+                $(element).select2();
+            });
+
+            //$('#tblreconcilation').dataTable({
+            //    "columnDefs": [
+            //        { "width" : "80%", "targets": 0 }
+            //    ]
+            //});
         });
+
+        $("select").select2();
+    </script>
+    @Scripts.Render("~/bundles/js/reconciliationMain")
+<script>
+        function drawnCallbackTblReconciliation(settings) {
+            alert('')
+        }
+        function SelectClick(e) {
+            if (e.checked) {
+                var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+            }
+            else {
+                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+            }
+        }
+
+        function onCommentsClick(e, channelUniqueNameGuid) {
+            e.preventDefault();
+            $('#divFilter').hide();
+            $('#divFilter').addClass('d-none');
+            $('#divChat').show();
+            $('#divChat').removeClass('d-none');
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+            //let channelUniqueNameGuid = $(this).data().id;
+            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+            loadChatPage(true, 1);
+        }
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+            $("#OnDemandData").show();
+            //if (XConstatus.val() == "True") {
+            //    $("#OnDemandData").show();
+            //}
+            //else {
+            //    $("#OnDemandData").hide()
+            //}
+        }
+        function reconcilationonstatusDemand(RequestID) {
+
+            var ClientID = $("#ddlclient option:selected").val();
+
+            getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
+
+                if (response.Message == "SUCCESS") {
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.' ;
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxSuccess("Success!", "Successfully extract data from Xero.", function () { window.location.reload(); });
+                }
+                else if (response.Message == "FAILED")
+                {
+                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.';
+                    $('#loadertext').text(msg);
+                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
+                }
+                else {
+                    var msg = 'Loading..'
+                    switch (response.Message) {
+                        case 'New':
+                            msg = 'Sent on-demand data extract request.'
+                            break;
+                        case 'INITIATED':
+                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            break;
+                        case 'WAITING FOR OTP':
+                            msg = 'Waiting for OTP to log-in to Xero.';
+                            break;
+                        case 'LOGGED-IN':
+                            msg = 'Log in successfully to Xero.'
+                            break;
+                        case 'GETTING DATA':
+                            msg = 'Reconcilation data extracting for a selected agency. ';
+                            break;
+                        case 'SUCCESS':
+                            msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
+                            break;
+                        case 'FAILED':
+                            msg = 'Error while data extratction from Xero. Please try after some time. '
+                            break;
+
+                        default:
+                    }
+                    $('#loadertext').text(msg);
+                    reconcilationonstatusDemand(RequestID);
+                }
+
+            })
+
+        }
+
+        function FillterReset() {
+            sessionStorage.removeItem('Filter');
+            var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+            window.location.href = url;
+        }
+        function BulkActionCancel() {
+
+            ShowConfirmBoxWarning("Are you sure?", "Do you really want to cancel the bulk action?", "Yes, cancel it!", function (isConfirmed) {
+                if (isConfirmed == false)
+                    return;
+                sessionStorage.removeItem('SelectedRecords');
+                sessionStorage.removeItem('UnSelectedRecords');
+                var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                window.location.href = url;
+            });
+
+        }
+        function FillterReconcilation() {
+            var account = $('#filteraccounts').val().join(',');
+            var ClientID = $("#ddlclient option:selected").val();
+            var fromDate, toDate;
+            var filterReconcilationcategories = 0;
+            var IsNotinBooks = $('#tabNotinBooks').hasClass('tabselect');
+            var type = 'Outstanding Payments';
+            if (IsNotinBooks == true) {
+                type = 'Unreconciled';
+                sessionStorage.setItem('Type', 0);
+            }
+            else {
+                sessionStorage.setItem('Type', 1);
+            }
+
+            if ($('#rb1').prop('checked') == true) {
+                filterReconcilationcategories = 1;
+            }
+            else if ($('#rb2').prop('checked') == true) {
+                filterReconcilationcategories = 2;
+            }
+            else if ($('#rb3').prop('checked') == true) {
+                filterReconcilationcategories = 3;
+            }
+
+            var datepicker = $("#timepicker2").val();
+            if (datepicker.includes("to")) {
+                this.fromDate = datepicker.substring(0, datepicker.indexOf("to")).trim();
+                this.toDate = datepicker.substring(datepicker.indexOf("to") + 2).trim();
+            } else {
+                this.fromDate = datepicker;
+                this.toDate = datepicker;
+            }
+            var MinAmount = $("#filterMinAmount").val();
+            var MaxAmount = $("#filterMaxAmount").val();
+            var bankrule = $("#bankrule").val().join(',');
+            var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') :'';
+            var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined? $("#TrackingCategories_1").val().join(','):'';
+            var pdata = {
+                accounts: account,
+                dateRangeFrom: this.fromDate,
+                dateRangeTo: this.toDate,
+                amountMin: MinAmount,
+                amountMax: MaxAmount,
+                Bankrule: bankrule,
+                TrackingCategory1: TrackingCategories,
+                TrackingCategory2: TrackingCategories_1,
+                FilterType: filterReconcilationcategories,
+                AgencyID: ClientID,
+                Type: type,
+                selectedDate: datepicker
+            }
+            sessionStorage.setItem('Filter', JSON.stringify(pdata));
+
+            var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
+                              dateRangeFrom = "_dateRangeFrom",
+                              dateRangeTo = "_dateRangeTo",
+                              amountMin = "_amountMin",
+                              amountMax = "_amountMax",
+                              Bankrule = "_Bankrule",
+                              TrackingCategory1 = "_TrackingCategory1",
+                              TrackingCategory2 = "_TrackingCategory2",
+                              FilterType = "_FilterType",
+                              AgencyID = "_AgencyID",
+                              Type = "_Type"
+                          })';
+            url = url.replace('_accounts', account);
+            url = url.replace('_dateRangeFrom', this.fromDate);
+            url = url.replace('_dateRangeTo', this.toDate);
+            url = url.replace('_amountMin', MinAmount);
+            url = url.replace('_amountMax', MaxAmount);
+            url = url.replace('_Bankrule', bankrule);
+            url = url.replace('_TrackingCategory1', TrackingCategories);
+            url = url.replace('_TrackingCategory2', TrackingCategories_1);
+            url = url.replace('_FilterType', filterReconcilationcategories);
+            url = url.replace('_AgencyID', ClientID);
+            url = url.replace('_Type', type);
+
+
+            url = replaceAll(url, '\&amp;', '&');
+            window.location.href = url;
+        }
+
+        function LoadFilterData() {
+            var filterData = JSON.parse(sessionStorage.getItem('Filter'));
+            if (filterData) {
+                $('#Filter').css("background-color", "#edf2f9");
+                if (filterData.accounts != '' && filterData.accounts.split(',').length > 0) {
+                    $('#filteraccounts').val(filterData.accounts.split(',')).trigger('change');
+                }
+                $("#timepicker2").val(filterData.selectedDate);
+                $("#filterMinAmount").val(filterData.amountMin);
+                $("#filterMaxAmount").val(filterData.amountMax);
+                if (filterData.Bankrule != '' && filterData.Bankrule.split(',').length > 0) {
+                    $('#bankrule').val(filterData.Bankrule.split(',')).trigger('change');
+                }
+                //$("#bankrule").val(filterData.Bankrule.split(','));
+                if (filterData.TrackingCategory1 != null && filterData.TrackingCategory1 != '' && filterData.TrackingCategory1.length > 0) {
+                    $("#TrackingCategories").val(filterData.TrackingCategory1).trigger('change');
+                }
+                if (filterData.TrackingCategory2 != null && filterData.TrackingCategory2 != '' && filterData.TrackingCategory2.length > 0) {
+                    $("#TrackingCategories_1").val(filterData.TrackingCategory2).trigger('change');
+                }
+                if (filterData.FilterType == 0) {
+                    $('#rb0').prop('checked', true);
+                }
+                else if (filterData.FilterType == 1) {
+                    $('#rb1').prop('checked', true);
+                }
+                else if (filterData.FilterType == 2) {
+                    $('#rb2').prop('checked', true);
+                }
+                else if (filterData.FilterType == 3) {
+                    $('#rb3').prop('checked', true);
+                }
+
+            }
+
+            }
+
+        function Tabclick(e, type) {
+            sessionStorage.setItem('Type', type);
+            if (type == 0) {
+
+                $('#tabNotinBooks').addClass('tabselect');
+                $('#tabNotinBanks').removeClass('tabselect');
+            }
+            else {
+
+                $('#tabNotinBooks').removeClass('tabselect');
+                $('#tabNotinBanks').addClass('tabselect');
+            }
+
+        }
+        function BulkActionReconcilation() {
+
+            var GLaccount = $('#BA_filterGLaccounts').val();
+            var ClientID = $("#ddlclient option:selected").val();
+            var bankrule = $('#BA_bankrules').val();
+            var reconcilationStatus = $('#BA_Status').val();
+            var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
+            var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
+            var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+            var SelectedItems = sessionStorage.getItem('SelectedRecords');
+            var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
+
+            if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
+                ShowAlertBoxWarning("No records are selected to perform bulk action.");
+                return;
+            }
+            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+                ShowAlertBoxWarning("No Option are selected to perform bulk action.");
+                return;
+            }
+
+            let pdata = {
+                 GLaccount: GLaccount, TrackingCategory: TrackingCategories,
+                AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
+                AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
+                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus
+            };
+            postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
+                if (response.Message == 'Success') {
+                    sessionStorage.removeItem('SelectedRecords');
+                    sessionStorage.removeItem('UnSelectedRecords');
+                    ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () { window.location.reload(); });
+                }
+                else if (response.Message == 'NoRecords')
+                {
+                    ShowAlertBoxWarning("No records are selected to perform bulk action.");
+                    return;
+                }
+                else {
+                    ShowAlertBoxError("Error", "Error while updating records.");
+                    return;
+                }
+            })
+
+        }
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
+
+        function onChangeglAccount(id, event) {
+
+            var selectedValue = event.currentTarget.value;
+            if (isEmptyOrBlank(selectedValue)) {
+                selectedValue = 0;
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+
+        }
+        function onChangeBankRule(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeTc(id, event) {
+            var selectedValue = event.currentTarget.value;
+            if (isEmptyOrBlank(selectedValue)) {
+                selectedValue = 0;
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeAditinalTc(id, event) {
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function loadReconcilation() {
+
+            var type = sessionStorage.getItem('Type');
+            var recType = 'Not in Books';
+            if (type != null && type == '1') {
+
+                recType = 'Not in Banks';
+            }
+            var ClientID = $("#ddlclient option:selected").val();
+
+            postAjax('/Reconciliation/GetReconcilation?Type=' + recType, null, function (data) {
+                if (response.Message == "Success") {
+                    let data = response.ResultData;
+                }
+                if (data === false) {
+
+
+                }
+                else {
+
+                }
+
+            });
+
+        }
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
@@ -442,6 +757,9 @@
                     if (data != null) {
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
+                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                        window.location.href = url;
+                       // window.location.reload();
                     }
                     else {
                         // Write here what should happend once selected client is null
@@ -453,7 +771,76 @@
             });
         }
 
-    </script>
+
+        var totalSum1;
+        var totalSum2;
+        function bindNotInBooksAndBanksCount() {
+
+            var ClientID = $("#ddlclient option:selected").val();
+
+            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+                if (response.Message == "Success") {
+
+                    let data = response.ResultData;
+
+                    var totalSum = 0;
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        totalSum1 = totalSum + data[i].Count;
+                        if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                            $("#lblNotInBanksCount").text(data[i].Count);
+                        }
+                    }
+
+                    TotalSum(totalSum1, totalSum2);
+                }
+            })
+        }
+
+
+        function bindNotInBooksAndBanksCount1() {
+            var ClientID = $("#ddlclient option:selected").val();
+
+            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+                if (response.Message == "Success") {
+
+                    let data = response.ResultData;
+                    var totalSum = 0;
+                    for (var i = 0; i < data.length; i++) {
+
+                      totalSum2 = totalSum + data[i].Count;
+
+                        if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+                            $("#lblNotInBooksCount").text(data[i].Count);
+                        }
+
+                    }
+
+                    TotalSum(totalSum1, totalSum2);
+
+
+                }
+            })
+        }
+
+
+        function TotalSum(totalSum1, totalSum2) {
+            let totalsum3 = 0;
+            if (isNaN(totalSum1 + totalSum2)) {
+                $("#lblNotInCount").addClass('d-none');
+            }
+            else {
+                $("#lblNotInCount").removeClass('d-none');
+                totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+                $("#lblNotInCount").text(totalsum3) ;
+
+            }
+        }
+
+
+
+</script>
 
 }
 

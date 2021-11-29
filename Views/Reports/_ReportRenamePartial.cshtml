@@ -1,0 +1,42 @@
+﻿<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="report-modal-label-1" aria-hidden="true" id="report-rename-modal">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="bg-light rounded-soft-top px-4 py-3">
+                    <h4 class="mb-1">Rename Report</h4>
+                </div>
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="media">
+                                <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
+                                <div class="media-body">
+                                    <div class="input-group mb-3">
+                                        <label id="lblFileName"></label>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" for="txtNewFileName">New File Name</span>
+                                        <input class="form-control" id="txtNewFileName" type="text" />
+                                        <input type="hidden" id="hdnId" />
+                                        <input type="hidden" id="hdnPeriod" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <div class="pr-2">
+                                    <button class="btn btn-primary" id="btnRename" type="button">Rename</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

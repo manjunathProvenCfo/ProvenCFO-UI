@@ -1,0 +1,77 @@
+﻿@model Proven.Model.NotesDescriptionModel
+@*@using Proven.Model
+@{
+    ViewBag.Title = "Open Note Description";
+}*@
+<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="notes-modal-label-1" aria-hidden="true" id="notes-modal-update">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="bg-light rounded-soft-top px-4 py-3">
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                        <input class="form-control"  name ="content" id="txtNotesTitle1" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="max-width:85%" value="" />
+                        @Html.HiddenFor(x => x.NoteCatId)
+                        @Html.HiddenFor(x => x.AgencyId)
+                        @Html.HiddenFor(x => x.IsPublished)
+                        @Html.HiddenFor(x => x.Position)
+                    </div>
+
+                </div>
+
+                <div class="bg-light rounded-soft-top px-4 py-3">
+                    <div class="form-group mb-3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Publish</label>
+                            </div>
+                            <div class="col-md-4 custom-switch custom-control-inline  mr-0 ">
+                                <input class="custom-control-input" id="customSwitch3" type="checkbox" checked>
+                                <label class="custom-control-label" for="customSwitch3"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="media">
+                                <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
+                                <div class="media-body">
+                                    <h5 class="mb-2 fs-0">Description</h5>
+                                    <div class="min-vh-50 mh-25 border border-dark">
+                                        <textarea class="tinymce d-none border" name="content" id="txtDescription"></textarea>
+                                    </div>
+                                    <hr class="my-4" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" id="btnUpdateNewNotesDescription" type="button"> Update </button>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                            <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

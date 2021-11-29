@@ -45,94 +45,95 @@
                                 @Html.HiddenFor(model => model.IsDeleted, "IsDeleted")
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        
+
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         <span class="text-danger field-validation-error " data-valmsg-replace="true"><span id="uniqueteam" class=""></span></span>
                                     </div>
                                 </div>
-                                    
-                                   
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-create-name">Team Name</label>
-                                        </div>
 
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.TeamName, new { htmlAttributes = new { @class = "form-control" } })
-                                            @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
-                                            <span class="text-danger field-validation-error " data-valmsg-for="TeamName" data-valmsg-replace="true"><span id="teamexist" class=""></span></span>
-                                        </div>
-                                        @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
-                                    </div>
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0">Team Member 1</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.DropDownListFor(model => model.TeamMemberId1, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam1"})
-                                            @Html.ValidationMessageFor(model => model.TeamMemberId1, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0">Team Member 2</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.DropDownListFor(model => model.TeamMemberId2, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam2"})
-                                            @Html.ValidationMessageFor(model => model.TeamMemberId2, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0">Team Member 3</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.DropDownListFor(model => model.TeamMemberId3, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam3"})
-                                            @Html.ValidationMessageFor(model => model.TeamMemberId3, "", new { @class = "text-danger" })
-                                        </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-create-name">Team Name</label>
                                     </div>
 
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email">Status</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
-                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                                        </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.TeamName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
+                                        <span class="text-danger field-validation-error " data-valmsg-for="TeamName" data-valmsg-replace="true"><span id="teamexist" class=""></span></span>
                                     </div>
-
-
-
-
-
-                                    @*<div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-            <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-        </div>*@
-
-                                    <div class="row align-items-center form-group mb-0">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-
-                                            @if (Model.Id == 0)
-                                            {
-                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateTeams", "Teams")" onclick="return UniqueTeams()">Create</button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateTeam", "Teams")" onclick="return UniqueTeams()">Update</button>
-                                            }
-                                            @Html.ActionLink("Cancel", "TeamsList", "Teams", new { }, new { @class = "btn btn-primary ml-2" })
-                                        </div>
-                                        @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
-                                        @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
-                                        @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
-                                    </div>
-
+                                    @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
                                 </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">CFO</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.TeamMemberId1, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam1" })
+                                        @Html.ValidationMessageFor(model => model.TeamMemberId1, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">Controller</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.TeamMemberId2, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam2" })
+                                        @Html.ValidationMessageFor(model => model.TeamMemberId2, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">Accountant</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.TeamMemberId3, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam3" })
+                                        @Html.ValidationMessageFor(model => model.TeamMemberId3, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Status</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+
+
+                                @*<div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+                                    </div>*@
+
+                                <div class="row align-items-center form-group mb-0">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
+                                        @if (Model.Id == 0)
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateTeams", "Teams")" onclick="return UniqueTeams()">Create</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateTeam", "Teams")" onclick="return UniqueTeams()">Update</button>
+                                        }
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("TeamsList", "Teams")'" />
+
+                                    </div>
+                                    @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
+                                    @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
+                                    @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
+                                </div>
+
+                            </div>
 
                         </div>
                     </form>
@@ -199,15 +200,15 @@
         };
 
         function UniqueTeams() {
-           
+
             var valhere1 = $("#DropDownListTeam1").val();
             var valhere2 = $("#DropDownListTeam2").val();
             var valhere3 = $("#DropDownListTeam3").val();
-          
-            if (valhere1 == valhere2 && valhere1 != "" || valhere2 == valhere3 && valhere2 != "" || valhere1 == valhere3 && valhere1 != "" ) {
+
+            if (valhere1 == valhere2 && valhere1 != "" || valhere2 == valhere3 && valhere2 != "" || valhere1 == valhere3 && valhere1 != "") {
                 $('#uniqueteam').html('<div class="alert alert-danger text-center"><b>Team members on a team must be unique.</b></div>');
                 return false;
-            } 
+            }
         }
 
 

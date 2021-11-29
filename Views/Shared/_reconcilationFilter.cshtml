@@ -1,0 +1,141 @@
+﻿@model bool
+<div class="card mb-3 pr-md-0 table table-striped ">
+    <div class="card-header d-flex bg-light align-items-center justify-content-between">
+        <h5 class="mb-0 ml-2">Filter</h5>
+        <button class="close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="Cancel1" data-dismiss="modal" aria-label="Close">
+            <span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span>
+        </button>
+    </div>
+
+    <div class="card panel-primary">
+
+        <div class="card-body">
+            <div class="row pb-1">
+                <div class="col-12">
+                    <h6 class="mb-0">Account</h6>
+                </div>
+            </div>
+
+            <div class="row pb-3">
+                <div class="col-12">
+                    @Html.DropDownList("filteraccounts", new SelectList((List<SelectListItem>)TempData["DistinctAccount"], "Value", "Text"), null,
+                    new { @class = " selectpicker form-control", @multiple = "multiple" })
+                </div>
+            </div>
+
+            <div class="row pb-1">
+                <div class="col-12">
+                    <h6 class="mb-0">Select Date Range</h6>
+                </div>
+            </div>
+
+            <div class="row pb-3">
+                <div class="col-12">
+                    <input class="form-control datetimepicker w-100" id="timepicker2" type="text" placeholder="mm/dd/yyyy to mm/dd/yyyy" data-options='{"mode":"range","dateFormat":"m/d/Y","disableMobile":true}' />
+                </div>
+            </div>
+
+
+
+            <div class="row pb-3">
+                <div class="col-6">
+                    <h6 class="mb-0 pb-1">Amount Min</h6>
+
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input class="form-control" id="filterMinAmount" type="text" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <h6 class="mb-0 pb-1">Amount Max</h6>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input class="form-control" id="filterMaxAmount" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row pb-1">
+                <div class="col-12">
+                    <h6 class="mb-0">Bank Rule</h6>
+                </div>
+            </div>
+
+            <div class="row pb-3">
+                <div class="col-12">
+                    @if (TempData["BankRule"] != null)
+                    {
+                        @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple" })
+                    }
+                </div>
+            </div>
+
+            <div class="row pb-3">
+                <div class="col-12">
+                    @if (TempData["TrackingCategories"] != null)
+                     {
+                        <h6 class="mb-0">Tracking Categories</h6>
+                     }
+                    </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    @if (TempData["TrackingCategories"] != null)
+                    {
+                        int count = 0;
+                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                        {
+                            <h6 class="mb-0 pb-1">@tcgroup.Name </h6>
+                            if (count == 0)
+                            {
+                                @Html.DropDownList("TrackingCategories", new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control mb-3", @multiple = "multiple" }) }
+                            else
+                            {
+                                @Html.DropDownList("TrackingCategories_" + count, new SelectList(tcgroup.Options, "Id", "Option"), new { @class = " selectpicker form-control mb-3", @multiple = "multiple" })
+                            }
+                            <div class="mb-3"></div>
+                            count++;
+                        }
+    
+                     }
+                    @*@Html.DropDownList("TrackingCategories", new SelectList(ViewBag.TrackingCategories, "Id", "Option"), new { @class = " selectpicker form-control", @multiple = "multiple", style = "width: 250px;" })*@
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="pb-2">
+                        <input class="align-middle" type="radio" id="rb0" name="fav_language" value="Show All Unreconciled" checked="true">
+                        <label class="align-middle mb-0 ml-1" for="rb0">Show All Unreconciled</label>
+                    </div>
+
+                    <div class="pb-2">
+                        <input class="align-middle" type="radio" id="rb1" name="fav_language" value="Not Ready to Reconcile">
+                        <label class="align-middle mb-0 ml-1" for="rb1">Not Ready to Reconcile</label>
+                    </div>
+
+                    <div class="pb-2">
+                        <input class="align-middle" type="radio" id="rb2" name="fav_language" value="Show Reconciled only">
+                        <label class="align-middle mb-0 ml-1" for="rb2">Show Reconciled only</label>
+                    </div>
+
+                    <div>
+                        <input class="align-middle" type="radio" id="rb3" name="fav_language" value="Ready to Reconcile">
+                        <label class="align-middle mb-0 ml-1" for="rb3">Ready to Reconcile</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer bg-light">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button class="btn btn-primary mr-1" id="btnfilter" onclick="FillterReconcilation();" type="button"> Apply  </button>
+                    <button class="btn btn-primary ml-1" data-dismiss="modal" onclick="FillterReset();" aria-label="Close" id="btnReset">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

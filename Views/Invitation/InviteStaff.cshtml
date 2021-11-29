@@ -94,7 +94,7 @@
                                         <label for="split-login-email" class="mb-0">User Role</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.roleid, new SelectList(Model.Rolelist, "id", "name"), "Select a User Role", new { @class = "form-control" })
+                                        @Html.DropDownListFor(model => model.roleid, new SelectList(Model.Rolelist, "id", "DisplayRoleName"), "Select a User Role", new { @class = "form-control" })
                                         @Html.ValidationMessageFor(model => model.roleid, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -131,8 +131,9 @@
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        <button class="btn btn-primary" type="submit">Send Invitation</button>
-                                        @Html.ActionLink("Cancel", "InviteStaffList", "Invitation", new { }, new { @class = "btn btn-primary ml-2" })
+                                        <button class="btn btn-primary" type="submit">Send Invitation</button>                                        
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("InviteStaffList", "Invitation")'" />
+                                        @*@Html.ActionLink("Cancel", "InviteStaffList", "Invitation", new { }, new { @class = "btn btn-primary ml-2" })*@
 
                                     </div>
                                 </div>
@@ -157,17 +158,15 @@
     document.getElementById("EmailIdExist").style.display = "none";
     $(document).ready(function () {
 
-        //
+       
         var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
-
-        //if (msg != undefined && msg != '' && msg == "Created") {
-        //    AddAlertRole();
-        //    $('#InviteCreate').val('');
-        //}
-        //else if (msg != undefined && msg != '' && msg == "Updated") {
-        //    UpdateAlertRole();
-        //    $('#InviteCreate').val('');
-        //}
+       
+        if (msg != undefined && msg != '' && msg == "Sent") {
+           
+            AddAlertRole();
+            $('#InviteCreate').val('');
+        }
+       
         if (msg != undefined && msg != '' && msg == "Exist") {
 
             $('#EmailIdExist').show();
@@ -203,7 +202,18 @@
     };
 
 
- 
+    function AddAlertRole() {
+     
+        sweetAlert
+            ({
+                title: "Sent!",
+                text: "staff user invitation has been sent.",
+                type: "success"
+            },
+                function () {
+                    window.location.href = '/Invitation/InviteStaffList'
+                });
+    }
 
     function ExistAlertRole() {
         sweetAlert

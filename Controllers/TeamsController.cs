@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -11,20 +12,26 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class TeamsController : Controller
+    public class TeamsController : BaseController
     {
-        string errorMessage = string.Empty;
-        string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Teams
         [CheckSession]
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         public ActionResult TeamsList()
         {
-            using (TeamsService obj = new TeamsService())
+            try
             {
-                var objResult = obj.GetTeamsList();
-
-                return View(objResult.ResultData);
+                using (TeamsService obj = new TeamsService())
+                {
+                    var objResult = obj.GetTeamsList();
+                    return View(objResult.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
@@ -32,42 +39,55 @@ namespace ProvenCfoUI.Controllers
         [HttpGet]
         public ActionResult AddTeams()
         {
-            TeamsVM result = new TeamsVM();
-            using (AccountService obj = new AccountService())
+            try
             {
-                result.StaffList = obj.GetRegisteredStaffUserList().resultData;
+                TeamsVM result = new TeamsVM();
+                using (AccountService obj = new AccountService())
+                {
+                    result.StaffList = obj.GetRegisteredStaffUserList().resultData;
+                }
+                return View(result);
             }
-
-            return View(result);
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         public ActionResult EditTeam(int Id)
         {
-            using (TeamsService obj = new TeamsService())
+            try
             {
-                using (AccountService objAcc = new AccountService())
+                using (TeamsService obj = new TeamsService())
                 {
-                    TeamsVM objvm = new TeamsVM();
-                    objvm.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
-                    objvm.StaffList = objvm.StaffList;
-                    var result = obj.GetTeamsById(Id);
-                    objvm.Id = result.Id;
-                    objvm.TeamName = result.TeamName;
-                    objvm.TeamMemberId1 = result.TeamMemberId1;
-                    objvm.TeamMembersList = result.TeamMembersList;
-                    objvm.TeamMemberId2 = result.TeamMemberId2;
-                    objvm.TeamMemberId3 = result.TeamMemberId3;
-                    objvm.Status = result.Status/*.ToString().Trim()*/;
-                    objvm.CreatedBy = result.CreatedBy;
-                    objvm.CreatedDate = result.CreatedDate;
-                    objvm.ModifiedBy = result.ModifiedBy;
-                    objvm.ModifiedDate = result.ModifiedDate;
-                    return View("AddTeams", objvm);
+                    using (AccountService objAcc = new AccountService())
+                    {
+                        TeamsVM objvm = new TeamsVM();
+                        objvm.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
+                        objvm.StaffList = objvm.StaffList;
+                        var result = obj.GetTeamsById(Id);
+                        objvm.Id = result.Id;
+                        objvm.TeamName = result.TeamName;
+                        objvm.TeamMemberId1 = result.TeamMemberId1;
+                        objvm.TeamMembersList = result.TeamMembersList;
+                        objvm.TeamMemberId2 = result.TeamMemberId2;
+                        objvm.TeamMemberId3 = result.TeamMemberId3;
+                        objvm.Status = result.Status/*.ToString().Trim()*/;
+                        objvm.CreatedBy = result.CreatedBy;
+                        objvm.CreatedDate = result.CreatedDate;
+                        objvm.ModifiedBy = result.ModifiedBy;
+                        objvm.ModifiedDate = result.ModifiedDate;
+                        return View("AddTeams", objvm);
+                    }
                 }
-
             }
-
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
@@ -103,7 +123,7 @@ namespace ProvenCfoUI.Controllers
                             }
                             else
                             {
-                                var Existresult = obj.GetTeamsByName(teamsVM.TeamName);
+                                var Existresult = obj.GetTeamsByName(team.TeamName);
                                 teamsVM.Id = team.Id;
                                 teamsVM.TeamName = team.TeamName;
                                 teamsVM.Status = team.Status;
@@ -133,6 +153,7 @@ namespace ProvenCfoUI.Controllers
 
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
             }
@@ -142,52 +163,68 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult UpdateTeam(TeamsVM team)
         {
-            using (AccountService objAcc = new AccountService())
+            try
             {
-                TeamsVM results = new TeamsVM();
-                team.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
-                results.StaffList = team.StaffList;
-                if (ModelState.IsValid)
+                using (AccountService objAcc = new AccountService())
                 {
-                    try
+                    TeamsVM results = new TeamsVM();
+                    team.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
+                    results.StaffList = team.StaffList;
+                    if (ModelState.IsValid)
                     {
-                        var LoginUserid = Session["UserId"].ToString();
-                        using (TeamsService obj = new TeamsService())
+                        try
                         {
-                            var result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.Status, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, Convert.ToString(team.IsDeleted), LoginUserid);
-                            if (result == null)
-                                ViewBag.ErrorMessage = "";
-                            return RedirectToAction("TeamsList");
+                            var LoginUserid = Session["UserId"].ToString();
+                            using (TeamsService obj = new TeamsService())
+                            {
+                                var result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.Status, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, Convert.ToString(team.IsDeleted), LoginUserid);
+                                if (result == null)
+                                    ViewBag.ErrorMessage = "";
+                                return RedirectToAction("TeamsList");
+                            }
                         }
-
+                        catch (Exception ex)
+                        {
+                            log.Error(Utltity.Log4NetExceptionLog(ex));
+                            return View();
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        return View();
-                    }
+                    return JavaScript("AlertTeam");
                 }
-                return JavaScript("AlertTeam");
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
         [CheckSession]
         public string DeleteTeam(int Id)
         {
-            using (TeamsService objTeams = new TeamsService())
+            try
             {
-                var results = objTeams.GetTeamClientById(Id);
-                if (results != null)
+                using (TeamsService objTeams = new TeamsService())
                 {
+                    var results = objTeams.GetTeamClientById(Id);
+                    if (results != null)
+                    {
+                        return results.Status;
+                    }
+                    else
+                    {
+                        var result = objTeams.DeleteTeams(Id);
+                        return result.Status;
+                        //if (result == null)
+                        //    ViewBag.ErrorMessage = "Can't Delete"; 
+                    }
                     return results.Status;
                 }
-                else
-                {
-                    var result = objTeams.DeleteTeams(Id);
-                    return result.Status;
-                    //if (result == null)
-                    //    ViewBag.ErrorMessage = "Can't Delete"; 
-                }
-                return results.Status;
             }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }            
         }
 
         [CheckSession]
@@ -206,6 +243,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -226,6 +264,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -255,9 +294,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
 

@@ -4,7 +4,16 @@
     ViewBag.Title = "Teams";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
 
+    .page-link:hover {
+        color: #000 !important;
+    }
+</style>
 
 
 <div class="card mb-3">
@@ -25,10 +34,19 @@
                     </div>
                 </div>
                 <div id="dashboard-actions">
-
-                    <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddTeams", "Teams")>Create New Team</a></span></button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
+                    <button class="btn btn-falcon-default btn-sm" type="button">
+                        <a href=@Url.Action("AddTeams", "Teams")>
+                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ml-1">
+                                Create New Team
+                            </span>
+                        </a>
+                    </button>
+                    <button class="btn btn-falcon-default btn-sm" type="button" onclick="ExportToExcel()">
+                        <span class="d-none d-sm-inline-block ml-1">Export</span>
+                    </button>
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span></button>*@
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>*@
 
                 </div>
             </div>
@@ -106,6 +124,7 @@
 
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
         var ExportToExcel = function () {
 
@@ -150,6 +169,7 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
+
                             if (data == 'Active') {
                                 sweetAlert
                                     ({
@@ -175,7 +195,6 @@
 
                         })
                         .error(function (data) {
-                            debugger
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });

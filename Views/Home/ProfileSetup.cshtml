@@ -68,18 +68,29 @@
                                     @Html.TextBoxFor(w => w.PhoneNumber, new { @class = "form-control" })
                                 </div>
                             </div>
+                            @if (Model.UserType == "1")
+                            {
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="phone">LinkedIn Profile</label>
+                                    @Html.TextBoxFor(w => w.LinkedInProfile, new { @class = "form-control" })
+                                <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="valLinkedInProfile" class=""></span></span>
+                                    @*@Html.ValidationMessageFor(w => w.LinkedInProfile, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            }
 
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="intro">Notes</label>
-                                    @Html.TextAreaFor(w => w.AboutUs, new { @class = "form-control", cols = "30", rows = "13" , MaxLength = "1000" })
+                                    @Html.TextAreaFor(w => w.AboutUs, new { @class = "form-control", cols = "30", rows = "13", MaxLength = "1000" })
                                 </div>
                             </div>
                             <div class="col-12 d-flex justify-content-end">
 
                                 @*<button class="btn btn-primary btn-block mt-3" type="submit" id="btnUpdate" name="submit" href="@Url.Action("EditInvitation", "Invitation")">Update</button>*@
 
-
+                                @Html.ActionLink("Click here to load Reconcilation data into DB", "CallApi", "Home", new { area = "" }, new { @class = "navbar-brand d-none" })
                                 <button class="btn btn-primary" type="button" onclick="updateProfile()">Update </button>
                             </div>
                         </div>
@@ -90,7 +101,7 @@
         </div>
         <div class="col-lg-4 pl-lg-2">
             <div class="sticky-top sticky-sidebar">
-                <div class="card mb-3 overflow-hidden">
+                <div class="overflow-hidden">
                     <div class="card-header">
                         <h5 class="mb-0">Account Settings</h5>
                     </div>
@@ -115,18 +126,31 @@
 </div>
 
 
-
-
-
-
-
-
 @section Scripts {
     <script>
 
         $(document).ready(function () {
+            $('#valLinkedInProfile').hide();
+            var expression = '(?:https?:)?\/\/(?:[\w]+\.)?linkedin\.com\/(?P<company_type>(company)|(school))\/(?P<company_permalink>[A-z0-9-À-ÿ\.]+)\/?';
+            
+            $('#LinkedInProfile').on('keyup', function () { 
+                if ($(this).val() != '') {
 
-
+                    if ($(this).val().toLowerCase().indexOf('linkedin.') == -1) {
+                        // there is a mismatch, hence show the error message                   
+                        $('#valLinkedInProfile').show();
+                        $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+                    }
+                    else {
+                        // else, do not display message                  
+                        $('#valLinkedInProfile').hide();
+                        $('#valLinkedInProfile').text('');
+                    }
+                }
+                else {
+                    $('#valLinkedInProfile').hide();
+                    $('#valLinkedInProfile').text('');}
+            });
             $("#profile-image").change(function () {
                 var ext = $('#profile-image').val().split('.').pop().toLowerCase();
                 if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
@@ -169,7 +193,7 @@
 
             $("#upload-cover-image").change(function () {
                 var ext = $('#upload-cover-image').val().split('.').pop().toLowerCase();
-                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg','.jif']) == -1) {
 
                     ValidationErrorMessage("Invalid file extension");
                     return;
@@ -208,7 +232,7 @@
             $("#txtOldPassword").keyup(function () {
                 if (!this.value || this.value.length > 0 ) {
                     $('#oldpasswordexist').hide();
-                    $('#oldpasswordexist').html('');   
+                    $('#oldpasswordexist').html('');
                 }
             });
             $("#txtNewPassword").keyup(function () {
@@ -240,15 +264,36 @@
             model.CoverImage = $("#CoverImage").val();
             model.ProfileImage = $("#ProfileImage").val();
             model.Id = $("#Id").val();
+            model.LinkedInProfile = $("#LinkedInProfile").val();
+
+            //if (model.LinkedInProfile != '') {
+            
+            //    if (model.LinkedInProfile.toLowerCase().indexOf('linkedin.') == null) {
+            //        // there is a mismatch, hence show the error message                   
+            //        $('#valLinkedInProfile').show();
+            //        $('#valLinkedInProfile').text('Please enter valid Linkedin Profile url.');
+            //        return false;
+            //    }
+            //    else {
+            //        // else, do not display message                  
+            //        $('#valLinkedInProfile').hide();
+            //        $('#valLinkedInProfile').text('');
+            //    }
+            //}
+            //else {
+            //    $('#valLinkedInProfile').hide();
+            //    $('#valLinkedInProfile').text('');
+            //}
+
 
 
             if (model.FirstName == null || model.FirstName == "") {
-                ValidationWarningMessage("Firstname is required!")
+                ValidationWarningMessage("First name is required!")
                 return false;
             }
 
             if (model.LastName == null || model.LastName == "") {
-                ValidationWarningMessage("Lastname is required!")
+                ValidationWarningMessage("Last name is required!")
                 return false;
             }
 
@@ -265,8 +310,8 @@
                     ValidationSuccessMessage1("Record updated successfully!")
                     return false;
                 },
-                error: function () {
-                    alert("error");
+                error: function (e) {
+                    alert("error :" + e.message);
                 }
             });
 
@@ -291,7 +336,7 @@
             var validation = true;
             if (model.OldPassword != undefined && model.OldPassword == '') {
                 $('#oldpasswordexist').show();
-                $('#oldpasswordexist').html('Old password is a required field'); 
+                $('#oldpasswordexist').html('Old password is a required field');
                 validation = false;
             }
             if (model.NewPassword != undefined && model.NewPassword == '') {
@@ -320,24 +365,24 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    
+
                     if (response.sucess == true) {
                         ValidationSuccessMessage("Password changed successfully!")
                     }
-                    else {   
+                    else {
                         ChangePasswordClear();
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'OldPassword') {
-                           
+
                             $('#oldpasswordexist').show();
-                            $('#oldpasswordexist').html(response.ErrorMsg);                                                      
-                        }    
+                            $('#oldpasswordexist').html(response.ErrorMsg);
+                        }
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'BOTH') {
                             $('#valNewPassword').show();
                             $('#valNewPassword').html(response.ErrorMsg);
 
                             $('#valConfirmPassword').show();
                             $('#valConfirmPassword').html(response.ErrorMsg);
-                        }  
+                        }
                         if (response.ErrorMsg != undefined && response.ErrorMsg != '' && response.Target == 'ConfirmPassword') {
                             $('#valConfirmPassword').show();
                             $('#valConfirmPassword').html(response.ErrorMsg);
@@ -352,7 +397,7 @@
         }
         function ChangePasswordClear() {
             $('#oldpasswordexist').hide();
-            $('#oldpasswordexist').html('');   
+            $('#oldpasswordexist').html('');
             $('#valNewPassword').hide();
             $('#valNewPassword').html('');
             $('#valConfirmPassword').hide();

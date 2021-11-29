@@ -1,4 +1,5 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
@@ -12,70 +13,102 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
-
-        string errorMessage = string.Empty;
-        string errorDescription = string.Empty;
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Role
         [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
         [CheckSession]
         public ActionResult Role()
         {
-            using (RoleService objRole = new RoleService())
+            try
             {
-                var objResult = objRole.GetRoles();
-                return View(objResult.ResultData);
-            }                       
+                using (RoleService objRole = new RoleService())
+                {
+                    var objResult = objRole.GetRoles();
+                    var result = objResult.ResultData.Where(x => x.IsVisible == true).ToList();
+                    return View(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         [HttpGet]
         public ActionResult AddRole()
-        {            
-            Models.RolesViewModel result = new Models.RolesViewModel();
-            return View(result);
+        {
+            try
+            {
+                Models.RolesViewModel result = new Models.RolesViewModel();
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
         //[HttpGet]
         [CheckSession]
         public ActionResult EditRole(string id)
         {
-            using (RoleService objRole = new RoleService())
+            try
             {
-                ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();                
-                var result = objRole.GetRoleById(id);
-                objvm.id = result.id;
-                objvm.name = result.name;
-                objvm.Status = result.Status.ToString().Trim();
-                objvm.CreatedBy = result.CreatedBy;
-                objvm.CreatedDate = result.CreatedDate;
-                objvm.ModifiedBy = result.ModifiedBy;
-                objvm.ModifiedDate = result.ModifiedDate;
-                return View("AddRole", objvm);
+                using (RoleService objRole = new RoleService())
+                {
+                    ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
+                    var result = objRole.GetRoleById(id);
+                    objvm.id = result.id;
+                    objvm.name = result.name;
+                    objvm.Status = result.Status.ToString().Trim();
+                    objvm.CreatedBy = result.CreatedBy;
+                    objvm.CreatedDate = result.CreatedDate;
+                    objvm.ModifiedBy = result.ModifiedBy;
+                    objvm.ModifiedDate = result.ModifiedDate;
+                    objvm.DisplayRoleName = result.DisplayRoleName;
+                    objvm.IsVisible = result.IsVisible;
+
+                    return View("AddRole", objvm);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
             }
         }
 
         [CheckSession]
         public ActionResult DeactivateRole(string id, string Status)
         {
-            using (RoleService objRole = new RoleService())
+            try
             {
-                ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
-                var LoginUserid = Session["UserId"].ToString();                
-                var resultdata = objRole.GetRoleById(id);
-                var result = objRole.UpdateRoles(resultdata.id, resultdata.name, Status, LoginUserid);
-                if (result == null)
-                    ViewBag.ErrorMessage = "";
-                return RedirectToAction("Role");
+                using (RoleService objRole = new RoleService())
+                {
+                    ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
+                    var LoginUserid = Session["UserId"].ToString();
+                    var resultdata = objRole.GetRoleById(id);
+                    var result = objRole.UpdateRoles(resultdata.id, resultdata.name, Status, LoginUserid, resultdata.DisplayRoleName);
+                    if (result == null)
+                        ViewBag.ErrorMessage = "";
+                    return RedirectToAction("Role");
+                }
             }
-
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
         [HttpPost]
         public ActionResult CreateRole(Proven.Model.RolesViewModel Role)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -85,7 +118,7 @@ namespace ProvenCfoUI.Controllers
                         Models.RolesViewModel RoleVM = new Models.RolesViewModel();
                         var LoginUserid = Session["UserId"].ToString();
                         var result = new Proven.Model.RolesViewModel();
-                        
+
                         if (Role.id == null)
                         {
                             var Existresult = objRole.GetRoleByName(Role.name);
@@ -95,7 +128,7 @@ namespace ProvenCfoUI.Controllers
                                 return View("AddRole", RoleVM);
                             }
 
-                            result = objRole.AddRoles(Role.name, Role.Status.ToString().Trim(), LoginUserid);
+                            result = objRole.AddRoles(Role.name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName);
                             ViewBag.ErrorMessage = "Created";
                         }
                         else
@@ -106,12 +139,13 @@ namespace ProvenCfoUI.Controllers
                             RoleVM.Status = Role.Status;
                             RoleVM.CreatedBy = Role.CreatedBy;
                             RoleVM.CreatedDate = Role.CreatedDate;
+                            RoleVM.DisplayRoleName = Role.DisplayRoleName;
                             if (Existresult != null && Existresult.id != Role.id)
                             {
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddRole", RoleVM);
                             }
-                            result = objRole.UpdateRoles(Role.id, Role.name, Role.Status.ToString().Trim(), LoginUserid);
+                            result = objRole.UpdateRoles(Role.id, Role.name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName);
                             ViewBag.ErrorMessage = "Updated";
                             return View("AddRole", RoleVM);
                         }
@@ -123,6 +157,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     //return RedirectToAction("Role");
                 }
 
@@ -140,8 +175,8 @@ namespace ProvenCfoUI.Controllers
                 {
                     using (RoleService objRole = new RoleService())
                     {
-                        var LoginUserid = Session["UserId"].ToString();                       
-                        var result = objRole.UpdateRoles(Role.id, Role.name, Role.Status, LoginUserid);
+                        var LoginUserid = Session["UserId"].ToString();
+                        var result = objRole.UpdateRoles(Role.id, Role.name, Role.Status, LoginUserid, Role.DisplayRoleName);
                         if (result == null)
                             ViewBag.ErrorMessage = "";
                         return RedirectToAction("Role");
@@ -149,6 +184,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    log.Error(Utltity.Log4NetExceptionLog(ex));
                     return View();
                 }
 
@@ -158,27 +194,30 @@ namespace ProvenCfoUI.Controllers
         }
         //[HttpPut]
         [CheckSession]
-        public ActionResult DeleteRole(string id)
+        public string DeleteRole(string id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                using (RoleService objRole = new RoleService())
                 {
-                    using (RoleService objRole = new RoleService())
-                    {                        
-                        var result = objRole.DeleteRoles(id);
-                        if (result == null)
-                            ViewBag.ErrorMessage = "";
-                        return RedirectToAction("Role");
+                    var results = objRole.GetUserRoleById(id);
+                    if (results != null)
+                    {
+                        return results.Status;
                     }
+                    else
+                    {
+                        var result = objRole.DeleteRoles(id);
+                        return result.Status;
+                    }
+                    return results.Status;
                 }
-                catch (Exception ex)
-                {
-                    return View();
-                }
-
             }
-            return View();
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
         }
 
         [CheckSession]
@@ -196,7 +235,8 @@ namespace ProvenCfoUI.Controllers
                         Created_By = s.CreatedByUser,
                         Created_Date = (s.CreatedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.CreatedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.CreatedDate.ToString("MM/dd/yyyy").Replace("-", "/"),
                         Modified_By = s.ModifiedByUser,
-                        Modified_Date = (s.ModifiedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.ModifiedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.ModifiedDate.ToString("MM/dd/yyyy").Replace("-", "/")
+                        Modified_Date = (s.ModifiedDate.ToString("MM/dd/yyyy") == "01-01-0001" || s.ModifiedDate.ToString("MM/dd/yyyy") == "01/01/0001") ? "" : s.ModifiedDate.ToString("MM/dd/yyyy").Replace("-", "/"),
+                        DisplayRoleName = s.DisplayRoleName
                     }).ToList();
                     string filename = obj.ExportTOExcel("RolesList", obj.ToDataTable(objResult));
                     return Json(filename, JsonRequestBehavior.AllowGet);
@@ -204,9 +244,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                errorMessage = "Message= " + ex.Message.ToString() + ". Method= " + ex.TargetSite.Name.ToString();
-                errorDescription = " StackTrace : " + ex.StackTrace.ToString() + " Source = " + ex.Source.ToString();
-                Utltity.WriteMsg(errorMessage + " " + errorDescription);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
 
@@ -215,12 +253,20 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         protected bool CheckDate(String date)
         {
-            DateTime Temp;
+            try
+            {
+                DateTime Temp;
+                if (DateTime.TryParse(date, out Temp) == true)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
 
-            if (DateTime.TryParse(date, out Temp) == true)
-                return true;
-            else
-                return false;
         }
 
 
@@ -229,7 +275,7 @@ namespace ProvenCfoUI.Controllers
 
 
 
-    
+
 
 
 }

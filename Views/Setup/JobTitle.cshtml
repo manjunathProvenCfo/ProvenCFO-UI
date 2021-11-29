@@ -5,8 +5,17 @@
     ViewBag.Title = "JobTitleList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
+    }
 
-        @*<div>@Html.Partial("_Header")</div>*@
+    .page-link:hover {
+        color: #000 !important;
+    }
+</style>
+
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -28,7 +37,7 @@
                 <div id="dashboard-actions">
                     <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AddJobTitle","SetUp")> Create New Job Title </a></span></button>
                     <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span></button>
-                    <button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>*@
                 </div>
             </div>
         </div>
@@ -44,7 +53,7 @@
                                     <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                                 </div>
                             </th>*@
-                        <th class="sort pr-1 align-middle"  width="30%"> Job Title</th>
+                        <th class="sort pr-1 align-middle" width="30%"> Job Title</th>
 
                         <th class="sort pr-1 align-middle" width="30%"> Job Code</th>
 
@@ -129,13 +138,14 @@
         </div>
     </div>
 </div>
-    
+
 
 
 @section Scripts {
+    @Scripts.Render("~/bundles/js/table");
     <script>
         var ExportToExcel = function () {
-           
+
             ExportFileReq("Setup", "ExportToExcel");
         }
 
@@ -159,7 +169,7 @@
         };
 
         function deleteJobTitle(Id) {
-            
+
             swal({
                 title: "Are you sure?",
                 text: " Do you really want to delete this Job Title?",
@@ -177,7 +187,7 @@
                     })
                         .done(function (data) {
                             if (data == 1) {
-                                
+
                                 swal
                                     ({
                                         title: "Couldn't Delete!",
@@ -201,7 +211,7 @@
                             }
                         })
                         .error(function (data) {
-                            debugger
+                          
                             swal("Oops", "We couldn't connect to the server! Please try again", "error");
                         });
                 });

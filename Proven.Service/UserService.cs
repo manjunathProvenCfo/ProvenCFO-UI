@@ -16,18 +16,19 @@ namespace Proven.Service
         private StringContent content;
         public InviteUserMainModel InvitedList()
         {
-            response = client.GetAsync("Invitation/GetInvitationList").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var _content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
-            }
-            else
-            {
-                string msg = response.ReasonPhrase;
-                throw new Exception(msg);
+            return GetAsync<InviteUserMainModel>("Invitation/GetInvitationList").Result;
+            //response = client.GetAsync("Invitation/GetInvitationList").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
-            }
+            //}
         }
         public void Dispose()
         {

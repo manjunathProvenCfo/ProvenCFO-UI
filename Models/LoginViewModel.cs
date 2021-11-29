@@ -16,7 +16,7 @@ namespace ProvenCfoUI.Models
                            @"\.[0-9]{1,9}\.[0-9]{1,9}\.)|(([a-zA-Z0-9\-]+\" +
                            @".)+))([a-zA-Z]{1,9}|[0-9]{1,9})(\]?)$",
                            ErrorMessage = "Please Enter a valid Email Address")]
-        public string username { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Please Enter Correct Password.")]
         public string PasswordHash { get; set; }

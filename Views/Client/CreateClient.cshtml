@@ -1,6 +1,7 @@
 ﻿@model ProvenCfoUI.Models.CreateClientVM
 @{
     ViewBag.Title = "CreateClient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -20,7 +21,7 @@
 }
 
 <script>
-   // document.getElementById("clientExist").style.display = "none";
+    // document.getElementById("clientExist").style.display = "none";
 </script>
 
 
@@ -42,12 +43,13 @@
                 </div>
             }
             @if (Model.Id == null || Model.Id == 0)
+
             {
-                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client Agency</h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client </h3>
             }
             else
             {
-                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client Agency</h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Client </h3>
             }
 
             <div class="row mt-4">
@@ -57,8 +59,9 @@
                             <div class="col-12 col-lg-8 col-xl-5">
                                 <div class="row align-items-center form-group">
                                     @Html.HiddenFor(x => x.Id, "id")
+                                    @Html.HiddenFor(x => x.Email, "Email")
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-create-name" class="mb-0">Client Agency Name</label>
+                                        <label for="split-create-name" class="mb-0">Client Name</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.ClientName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
@@ -68,11 +71,20 @@
                                 </div>
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Entity Name</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.BillableEntityId, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select Entity", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.BillableEntityId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Team</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.TeamList, "Id", "TeamName"), "Select team", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.TeamId, "", new { @class = "text-danger" })
+                                        @*@Html.ValidationMessageFor(model => model.TeamId, "", new { @class = "text-danger" })*@
                                     </div>
                                 </div>
                                 <div class="row align-items-center form-group">
@@ -84,8 +96,6 @@
                                         @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-
-
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-create-phonenumber" class="mb-0">State</label>
@@ -97,13 +107,174 @@
                                 </div>
 
                                 <div class="row align-items-center form-group">
-                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Address </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-            </div>*@
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Scope</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
+
+
+                                        @*@if (Model.Id == null || Model.Id == 0)
+                {*@
+
+                                        @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                        new SelectListItem { Text = "openid", Value = "openid" },
+                                        new SelectListItem { Text = "profile", Value = "profile" },
+                                        new SelectListItem { Text = "email", Value = "email" },
+                                        new SelectListItem { Text = "offline_access", Value = "offline_access" },
+                                        new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
+                                       new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
+                                        new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+                                        new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
+                                        new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                                        new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                                        new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                                        new SelectListItem { Text = "accounting.settings", Value = "accounting.settings" },
+                                        new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                                        new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                                        new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                                        new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                                        new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                                        new SelectListItem { Text = "assets", Value = "assets" },
+                                        new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                                        new SelectListItem { Text = "files", Value = "files" },
+                                        new SelectListItem { Text = "files.read", Value = "files.read" },
+                                        new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                                        new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                                        new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                                        new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                                        new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                                        new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                                        new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                                        new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                                        new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                                        new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                                        }, new { @class = " selectpicker form-control", @multiple = "multiple" })
+
+                                        @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
+                                        @*}
+                else
+                {
+
+                    @Html.EditorFor(model => model.XeroScope,"readonly", new { htmlAttributes = new { @class = "form-control",  @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
+                    }*@
+
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Client ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroClientID, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroClientID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Client Secret</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroClientSecret, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroClientSecret, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Contact ID For ProvenCFO</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroContactIDforProvenCfo, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroContactIDforProvenCfo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Asana ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.AsanaId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.AsanaId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Everhour ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.EverhourId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EverhourId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> CRM ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.CrmId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CrmId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Xero Short Code</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.XeroShortCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.XeroShortCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Dashboard ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.DashboardId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DashboardId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> Dashboard URL ID </label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.DashboardURLId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DashboardURLId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="" class="mb-0">Start Date</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.StartDateText, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker" } })
+                                        @Html.ValidationMessageFor(model => model.StartDateText, "", new { @class = "text-danger" })
+
+                                        @*<span class="text-danger field-validation-error" data-valmsg-for="StartDateText" data-valmsg-replace="true"><span id="clientExist" class=""></span></span>*@
+                                        @*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datetimepicker", id = "datepicker", type = "date", placeholder = "m-d-Y" } })*@
+
+
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
                                     </div>
@@ -112,15 +283,34 @@
                                         @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Receives Quarterly Reports</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                            @Html.CheckBoxFor(x => x.ReceiveQuarterlyReports, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="ReceiveQuarterlyReports">Yes, receives quarterly reports</label>
+                                        </div>
+                                        @*@Html.DropDownListFor(m => m.Status, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "Active" }, new SelectListItem { Text = "Inactive", Value = "Inactive" } }, new { @class = "form-control text-box single-line" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })*@
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Enable data Sync</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                            @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
+                                        </div>
+
+                                    </div>
+                                </div>
 
                                 <div class="row align-items-center form-group">
-                                    @*<div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                <label for="split-create-phonenumber" class="mb-0">Contact Person Name </label>
-            </div>
-            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                @Html.EditorFor(model => model.ContactPersonName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ContactPersonName, "", new { @class = "text-danger" })
-            </div>*@
+
                                 </div>
 
 
@@ -136,7 +326,7 @@
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
                                         }
-                                        @Html.ActionLink("Cancel", "ClientList", "Client", new { }, new { @class = "btn btn-primary ml-2" })
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
                                     </div>
 
                                 </div>
@@ -152,11 +342,24 @@
 
 
 
-@section Scripts {
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
+
+        $(function () {
+            $("#ReceiveQuarterlyReports").prop('cheked', @Convert.ToString(Model.ReceiveQuarterlyReports).ToLower());
+
+            addMultipleSelectValues('[name=XeroScopeArray]', '@Model.XeroScope');
+
+
+            $('#TeamId').rules('remove');
+        })
+
         $("#clientExist").addClass('d-none');
         $("#clientExist").html('');
+        $('#datepicker').attr('data-options', '{"dateFormat":"m/d/Y"}');
+
 
         function CheckExistValidation() {
             if ($("#ClientName").val() === "" && $("#clientExist").html() !== "") {
@@ -165,7 +368,7 @@
                 $("#clientExist").html('');
             }
         }
-       // document.getElementById("clientExist").style.display = "none";
+        // document.getElementById("clientExist").style.display = "none";
         var msg = $('#CreateOrUpdate') != undefined ? $('#CreateOrUpdate').val() : '';
 
         if (msg != undefined && msg != '' && msg == "Created") {
@@ -177,7 +380,7 @@
             $('#CreateOrUpdate').val('');
         }
         else if (msg != undefined && msg != '' && msg == "Exist") {
-            $('#clientExist').show();           
+            $('#clientExist').show();
             $("#clientExist").removeClass('d-none');
             $("#clientExist").html('This Client Agency name has been already taken.');
             $('#CreateOrUpdate').val('');
@@ -186,7 +389,7 @@
             sweetAlert
                 ({
                     title: "Created!",
-                    text: "New Client Agency created successfully!",
+                    text: "New Client  created successfully!",
                     type: "success"
                 },
                     function () {
@@ -197,16 +400,17 @@
             sweetAlert
                 ({
                     title: "Updated!",
-                    text: "Client Agency updated successfully!",
+                    text: "Client  updated successfully!",
                     type: "success"
                 },
                     function () {
                         window.location.href = '/Client/ClientList'
                     });
         }
+
     </script>
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
 }
 
 

@@ -1,8 +1,14 @@
-﻿using Proven.Model;
+﻿using log4net;
+using Proven.Model;
+using Proven.Service;
+using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ProvenCfoUI.Comman
@@ -12,6 +18,24 @@ namespace ProvenCfoUI.Comman
         protected static List<UserSecurityVM> _roleList;
         private bool isDisposed = false;
         public static string RegxPasswordMatch = @"(?=.*\d)(?=.*[A-Za-z]).{8,}";
+        private static Object XeroLock = new Object();
+        private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public enum ChartOptions
+        {
+            Option_0 = 0,
+            Option_1 = 1,
+            Option_2 = 2,
+            Option_3 = 3,
+            Option_4= 4,
+            Option_5 = 5,
+            Option_6 = 6,
+            Option_7 = 7
+        }
+        public enum ChartType
+        {
+            Revenue = 0,
+            NetIncome = 1
+        }
         public static bool IsFeatureAccessable(string FeatureCode)
         {
 
@@ -44,6 +68,11 @@ namespace ProvenCfoUI.Comman
                 }
             }
             return false;
+        }
+        public static void CreateDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
         public static void SaveStreamAsFile(string filePath, Stream inputStream, string fileName)
         {
@@ -80,13 +109,13 @@ namespace ProvenCfoUI.Comman
 
                 foreach (FileInfo file in di.GetFiles())
                 {
-                    file.Delete();                   
+                    file.Delete();
                 }
                 if (Directory.Exists(Path.GetDirectoryName(fileFullPath)))
                 {
                     Directory.Delete(Path.GetDirectoryName(fileFullPath));
                 }
-              
+
                 return true;
             }
             else
@@ -94,6 +123,67 @@ namespace ProvenCfoUI.Comman
                 return false;
             }
 
+        }
+
+        public static DataTable ConvertXSLXtoDataTable(string strFilePath, string connString)
+        {
+            OleDbConnection oledbConn = new OleDbConnection(connString);
+            DataTable dt = new DataTable();
+            try
+            {
+
+                oledbConn.Open();
+                using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM [Sheet1$]", oledbConn))
+                {
+                    OleDbDataAdapter oleda = new OleDbDataAdapter();
+                    oleda.SelectCommand = cmd;
+                    DataSet ds = new DataSet();
+                    oleda.Fill(ds);
+
+                    dt = ds.Tables[0];
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+
+                oledbConn.Close();
+            }
+
+            return dt;
+
+        }
+        public static DataTable ConvertCSVtoDataTable(string strFilePath)
+        {
+            DataTable dt = new DataTable();
+            using (StreamReader sr = new StreamReader(strFilePath))
+            {
+                string[] headers = sr.ReadLine().Split(',');
+                foreach (string header in headers)
+                {
+                    dt.Columns.Add(header);
+                }
+
+                while (!sr.EndOfStream)
+                {
+                    string[] rows = sr.ReadLine().Split(',');
+                    if (rows.Length > 1)
+                    {
+                        DataRow dr = dt.NewRow();
+                        for (int i = 0; i < headers.Length; i++)
+                        {
+                            dr[i] = rows[i].Trim();
+                        }
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+            }
+
+
+            return dt;
         }
         public void Dispose()
         {
@@ -112,5 +202,217 @@ namespace ProvenCfoUI.Comman
             }
             isDisposed = true;
         }
+        public static void ConnectXeroClient(ClientModel client)
+        {
+
+            if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
+            {
+                XeroInstance.Instance.XeroScope = client.XeroScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                XeroInstance.Instance.XeroClientID = client.XeroClientID;
+                XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
+                XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
+                XeroInstance.Instance.XeroTenentID = client.XeroID;
+                if(!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
+                {
+                    XeroInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
+                }                
+                //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
+
+
+                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
+                lock (XeroLock)
+                {
+                    Task.Run(async () =>
+                    {
+                        var XeroTokenInfoSaved = Xero.GetSavedXeroToken(client.Id).ResultData;
+                        if (XeroTokenInfoSaved != null)
+                        {
+                            try
+                            {
+                                var SavedToken = Xero.getTokenFormat(XeroTokenInfoSaved);
+                                XeroInstance.Instance.XeroService = Xero;
+                                var token = await Xero.RefreshToken(SavedToken);
+                                CleanToken();
+                                XeroTokenInfoSaved.access_token = token.AccessToken;
+                                XeroTokenInfoSaved.id_token = token.IdToken;
+                                XeroTokenInfoSaved.refresh_token = token.RefreshToken;
+                                XeroTokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                XeroTokenInfoSaved.ModifiedDate = DateTime.Now;
+                                XeroTokenInfoSaved.AppName = XeroInstance.Instance.XeroAppName;
+                                XeroTokenInfoSaved.ConnectionStatus = "SUCCESS";
+                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
+                                XeroInstance.Instance.XeroToken = token;
+                                XeroInstance.Instance.XeroConnectionStatus = true;
+                                XeroInstance.Instance.XeroConnectionMessage = string.Empty;
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error(Utltity.Log4NetExceptionLog(ex));
+                                XeroTokenInfoSaved.ConnectionStatus = "ERROR";
+                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
+                                CleanToken();                                
+                                XeroInstance.Instance.XeroConnectionMessage = ex.Message;
+                                throw;
+                            }
+                        }
+                        else
+                        {
+                            Utltity.Log4NetInfoLog("Insufficient client information");
+                            CleanToken();
+                            XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
+                        }
+                    });
+                }
+            }
+            else
+            {
+                Utltity.Log4NetInfoLog("Insufficient client information");
+                CleanToken();
+                XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
+            }
+        }
+
+        private static void CleanToken()
+        {
+            XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+            XeroInstance.Instance.XeroClientID = string.Empty;
+            XeroInstance.Instance.XeroClientSecret = string.Empty;
+            XeroInstance.Instance.XeroToken = null;
+            XeroInstance.Instance.XeroConnectionMessage = "";
+            XeroInstance.Instance.XeroConnectionStatus = false;
+        }
+
+        public static string getXeroLoginUrl(ClientModel client)
+        {
+            if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
+            {
+                XeroInstance.Instance.XeroScope = client.XeroScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                XeroInstance.Instance.XeroClientID = client.XeroClientID;
+                XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
+                XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
+                XeroInstance.Instance.XeroTenentID = client.XeroID;
+                //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
+                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
+                XeroInstance.Instance.XeroService = Xero;
+
+                try
+                {
+                    var url = Xero.BuildLoginUri();
+                    return url;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+
+            }
+            return string.Empty;
+        }
+        public static ChartOptionsResultModel getChartOptionValues(ChartOptions Option)
+        {
+            ChartOptionsResultModel result = new ChartOptionsResultModel();
+            DateTime datetime = DateTime.Now;
+            switch (Option)
+            {
+                case ChartOptions.Option_0:                   
+                    int currQuarter = (datetime.Month - 1) / 3 + 1;
+                    result.StartDate = null; //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
+                    result.EndDate = null; //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_1:
+                    //int PreviousQuarter = (datetime.Month - 1) / 3 ;
+                    result.StartDate = null;//new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
+                    result.EndDate = null;// datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "MONTH";
+                    result.periods = 5;
+                    break;
+                case ChartOptions.Option_2:
+                    result.StartDate = null;// new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = null;// new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 2;
+                    break;
+                case ChartOptions.Option_3:
+                    result.StartDate = new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_4:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.Option_5:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_6:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "MONTH";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_7:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 12;
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+        public static void ConnectXeroOrganization(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
+                XeroInstance.Instance.XeroService = Xero;
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        var token = await Xero.LoginXeroAccesswithCode(code);
+                        if (DateTime.UtcNow > token.ExpiresAtUtc)
+                        {
+                            await Xero.RefreshToken(token);
+                        }
+                        XeroInstance.Instance.XeroToken = token;
+                        XeroInstance.Instance.XeroConnectionStatus = true;
+                        XeroInstance.Instance.XeroConnectionMessage = string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                        XeroInstance.Instance.XeroClientID = string.Empty;
+                        XeroInstance.Instance.XeroClientSecret = string.Empty;
+                        XeroInstance.Instance.XeroToken = null;
+                        XeroInstance.Instance.XeroConnectionStatus = false;
+                        XeroInstance.Instance.XeroConnectionMessage = ex.Message;
+                        throw;
+                    }
+                });
+            }
+            else
+            {
+                XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                XeroInstance.Instance.XeroClientID = string.Empty;
+                XeroInstance.Instance.XeroClientSecret = string.Empty;
+                XeroInstance.Instance.XeroToken = null;
+                XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
+                XeroInstance.Instance.XeroConnectionStatus = false;
+            }
+        }
+       
+
     }
+
 }
