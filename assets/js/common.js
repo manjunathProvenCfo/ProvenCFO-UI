@@ -20,7 +20,7 @@ $(function () {
     twilioChatGlobal();
     //Twilio Chat
 
-    bindNotInBooksAndBanksCount();
+/*    bindNotInBooksAndBanksCount();*/
     GetTotalNotesCount();
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
@@ -113,31 +113,31 @@ function GetTotalNotesCount() {
 
 
 
-function bindNotInBooksAndBanksCount() {
+//function bindNotInBooksAndBanksCount() {
 
-    var ClientID = $("#ddlclient option:selected").val();
+//    var ClientID = $("#ddlclient option:selected").val();
 
-    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-        if (response.Message == "Success") {
-            let data = response.ResultData;
-            let totalSum = 0;
-            for (var i = 0; i < data.length; i++) {
-                totalSum = totalSum + data[i].totalCount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                    $("#lblNotInBanksCount").text(data[i].totalCount);
-                }
-                else {
-                    $("#lblNotInBooksCount").text(data[i].totalCount);
-                }
-            }
+//        if (response.Message == "Success") {
+//            let data = response.ResultData;
+//            let totalSum = 0;
+//            for (var i = 0; i < data.length; i++) {
+//                totalSum = totalSum + data[i].totalCount;
+//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+//                    $("#lblNotInBanksCount").text(data[i].totalCount);
+//                }
+//                else {
+//                    $("#lblNotInBooksCount").text(data[i].totalCount);
+//                }
+//            }
 
 
-            $("#lblNotInCount").text(totalSum);
+//            $("#lblNotInCount").text(totalSum);
 
-        }
-    })
-}
+//        }
+//    })
+//}
 
 
 function HighlightMenu() {
