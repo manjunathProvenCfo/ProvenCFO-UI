@@ -482,7 +482,6 @@ function getTeamMembersList() {
                     else {
                         $('#spStaffName' + count).html(String(''));
                     }
-
                     if (object.Jobtitle != null && object.Jobtitle != '') {
                         if (count == 1) {
                             $('#spJobTitle' + count).html('CFO');
@@ -582,6 +581,8 @@ function AgencyDropdownPartialViewChange() {
                 $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
 
                 GetReconcilationData();
+                GetReconcilationData1();
+                TotalSum(totalSum1, totalSum2);
                 GetReconcilationPostiveData();
                 GetReconcilationNegativeData();
                 bindNotInBooksAndBanksCountDashboard();
@@ -650,77 +651,122 @@ function AgencyDropdownPartialViewChange() {
 
 }
 
-//function GetTotalNotesCount() {
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-//        if (response.Message == "Success") {
-
-//            let data = response.ResultData;
-//            let TotalNotes;
-
-//            for (var i = 0; i < data.length; i++) {
-//                TotalNotes = TotalNotes + data[i].TotalNotes;
-//            }
-//            $("#lblTotalNotes").text(TotalNotes);
-//        }
-//    });
-//}
 
 function GetReconcilationData() {
 
 
+    //var ClientID = $("#ddlclient option:selected").val();
+
+
+    //getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+    //    if (response.Message == "Success") {
+
+
+
+    //        var data = response.ResultData;
+
+
+    //        let totalSum = 0;
+
+
+
+    //        for (var i = 0; i < data.length; i++) {
+
+    //            totalSum = totalSum + data[i].totalCount;
+    //            if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+
+    //                $("#lblNotInBanksCount2").text(data[i].totalCount);
+    //            }
+
+
+    //            else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+    //                $("#lblNotInBooksCount2").text(data[i].totalCount);
+    //            }
+
+    //        }
+
+    //        if (data == 0) {
+
+    //            //$("#lblNotInBanksCount2").text(data.totalCount);
+    //            //$("#lblNotInBooksCount2").text(data.totalCount);
+    //            $("#lblNotInBooksCount2").text(0);
+    //            $("#lblNotInBanksCount2").text(0);
+    //        }
+    //        $("#lblNotInCount").text(totalSum);
+
+    //    }
+
+    //    error: (function (data) {
+
+    //        window.location.reload();
+
+    //        swal("Oops", "We couldn't connect to the server!", "error");
+    //    });
+
+    //});
+
     var ClientID = $("#ddlclient option:selected").val();
 
-
-    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
         if (response.Message == "Success") {
 
+            let data = response.ResultData;
 
-
-            var data = response.ResultData;
-
-
-            let totalSum = 0;
-
-
+            var totalSum = 0;
 
             for (var i = 0; i < data.length; i++) {
 
-                totalSum = totalSum + data[i].totalCount;
+                totalSum1 = totalSum + data[i].Count;
                 if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-
-                    $("#lblNotInBanksCount2").text(data[i].totalCount);
+                    $("#lblNotInBanksCount2").text(data[i].Count);
                 }
+            }
 
+            TotalSum(totalSum1, totalSum2);
+        }
+    })
+}
 
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNotInBooksCount2").text(data[i].totalCount);
+function GetReconcilationData1() {
+    var ClientID = $("#ddlclient option:selected").val();
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        if (response.Message == "Success") {
+
+            let data = response.ResultData;
+            var totalSum = 0;
+            for (var i = 0; i < data.length; i++) {
+
+                totalSum2 = totalSum + data[i].Count;
+
+                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+                    $("#lblNotInBooksCount2").text(data[i].Count);
                 }
 
             }
 
-            if (data == 0) {
+            TotalSum(totalSum1, totalSum2);
 
-                //$("#lblNotInBanksCount2").text(data.totalCount);
-                //$("#lblNotInBooksCount2").text(data.totalCount);
-                $("#lblNotInBooksCount2").text(0);
-                $("#lblNotInBanksCount2").text(0);
-            }
-            $("#lblNotInCount").text(totalSum);
 
         }
-
-        error: (function (data) {
-
-            window.location.reload();
-
-            swal("Oops", "We couldn't connect to the server!", "error");
-        });
-
-    });
+    })
 }
+
+function TotalSum(totalSum1, totalSum2) {
+    let totalsum3 = 0;
+    if (isNaN(totalSum1 + totalSum2)) {
+        $("#lblNotInCount").addClass('d-none');
+    }
+    else {
+        $("#lblNotInCount").removeClass('d-none');
+        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        $("#lblNotInCount").text(totalsum3);
+
+    }
+}
+
 
 function GetReconcilationPostiveData() {
 
