@@ -22,7 +22,9 @@ $(function () {
     twilioChatGlobal();
     //Twilio Chat
 
-/*    bindNotInBooksAndBanksCount();*/
+    bindNotInBooksAndBanksCount();
+    bindNotInBooksAndBanksCount1();
+    
     GetTotalNotesCount();
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
@@ -114,7 +116,71 @@ function GetTotalNotesCount() {
 }
 
 
+var totalSum1;
+var totalSum2;
+function bindNotInBooksAndBanksCount() {
 
+    var ClientID = $("#ddlclient option:selected").val();
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+        if (response.Message == "Success") {
+
+            let data = response.ResultData;
+
+            var totalSum = 0;
+
+            for (var i = 0; i < data.length; i++) {
+
+                totalSum1 = totalSum + data[i].Count;
+                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                    $("#lblNotInBanksCount").text(data[i].Count);
+                }
+            }
+
+            TotalSum(totalSum1, totalSum2);
+        }
+    })
+}
+
+
+function bindNotInBooksAndBanksCount1() {
+    var ClientID = $("#ddlclient option:selected").val();
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        if (response.Message == "Success") {
+
+            let data = response.ResultData;
+            var totalSum = 0;
+            for (var i = 0; i < data.length; i++) {
+
+                totalSum2 = totalSum + data[i].Count;
+
+                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+                    $("#lblNotInBooksCount").text(data[i].Count);
+                }
+
+            }
+
+            TotalSum(totalSum1, totalSum2);
+
+
+        }
+    })
+}
+
+
+function TotalSum(totalSum1, totalSum2) {
+    let totalsum3 = 0;
+    if (isNaN(totalSum1 + totalSum2)) {
+        $("#lblNotInCount").addClass('d-none');
+    }
+    else {
+        $("#lblNotInCount").removeClass('d-none');
+        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        $("#lblNotInCount").text(totalsum3);
+
+    }
+}
 //function bindNotInBooksAndBanksCount() {
 
 //    var ClientID = $("#ddlclient option:selected").val();
