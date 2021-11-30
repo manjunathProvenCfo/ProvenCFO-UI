@@ -789,25 +789,26 @@ function GetReconcilationPostiveData() {
 
 
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
 
         if (response.Message == "Success") {
-
+           
             let data = response.ResultData;
             let totalSum = 0;
 
             for (var i = 0; i < data.length; i++) {
 
                 totalSum = totalSum + data[i].amount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
+               
+                
 
-                    $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
-                }
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
+               
+               
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
 
-                }
+               
             }
             if (data == 0) {
 
@@ -825,26 +826,24 @@ function GetReconcilationNegativeData() {
 
 
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationNegCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
 
         if (response.Message == "Success") {
-
-
+           
             var data = response.ResultData;
             var totalSum = 0;
 
             for (var i = 0; i < data.length; i++) {
 
-                totalSum = totalSum + data[i].amount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+                
 
-                    $("#lblpostiveBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
+                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
 
 
-                }
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
-                }
+               
+                
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
+              
             }
             if (data == 0) {
 
