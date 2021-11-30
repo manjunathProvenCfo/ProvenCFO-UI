@@ -31,6 +31,10 @@ namespace Proven.Service
 
             //}
         }
+        public MasterFeaturesMainModel GetMasterFeatures()
+        {
+            return GetAsync<MasterFeaturesMainModel>("Role/GetMasterFeatures").Result;            
+        }
         public UserTypeModel GetUserTypes()
         {
             return GetAsync<UserTypeModel>("Role/GetUserTypes").Result;            

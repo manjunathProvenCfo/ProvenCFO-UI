@@ -45,8 +45,9 @@ namespace ProvenCfoUI.Controllers
             {
                 using (RoleService objRole = new RoleService())
                 {
-                    Models.RolesViewModel result = new Models.RolesViewModel();
+                    ProvenCfoUI.Models.RolesViewModel result = new ProvenCfoUI.Models.RolesViewModel();
                     result.UserType = 2;
+                    result.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.Id).ToList();
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     return View(result);
                 }
@@ -67,6 +68,7 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
+                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     var result = objRole.GetRoleById(id);
                     objvm.Id = result.Id;
@@ -97,6 +99,7 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
+                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                     var LoginUserid = Session["UserId"].ToString();
                     var resultdata = objRole.GetRoleById(id);
                     var result = objRole.UpdateRoles(resultdata.Id, resultdata.Name, Status, LoginUserid, resultdata.DisplayRoleName, resultdata.UserType.Value);
@@ -129,6 +132,7 @@ namespace ProvenCfoUI.Controllers
                         if (Role.Id == null)
                         {
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
+                            RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                             var Existresult = objRole.GetRoleByName(Role.Name);
                             if (Existresult != null)
                             {
@@ -143,6 +147,7 @@ namespace ProvenCfoUI.Controllers
                         else
                         {
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
+                            RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                             var Existresult = objRole.GetRoleByName(Role.Name);
                             RoleVM.Id = Role.Id;
                             RoleVM.Name = Role.Name;

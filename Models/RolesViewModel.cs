@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proven.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,5 +27,7 @@ namespace ProvenCfoUI.Models
         public Boolean? IsVisible { get; set; }
 
         public int? UserType { get; set; }
+
+        public List<MasterFeaturesVM> MasterFeaturesList { get; set; }
     }
 }
