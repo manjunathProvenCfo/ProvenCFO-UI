@@ -6,13 +6,15 @@ var $notifictionsDropDown = $("#navbarDropdownNotification");
 var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
-var addMessageProcessed = [];
-var Default_Profile_Image = "/assets/img/team/default-logo.png";
+var notifications = [];
+var addMessageProcessedGlobal = [];
 
 const _audio = new Audio("/assets/audio/notification.mp3");
-const chatPages = ["communication/chat", "reconciliation"]
+const chatPages = ["communication/chat"]//reconciliation
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
+
+var Default_Profile_Image = "/assets/img/team/default-logo.png";
 const Notification_Bell_Size = 2;
 
 $(function () {
@@ -21,6 +23,8 @@ $(function () {
     //Twilio Chat
 
     bindNotInBooksAndBanksCount();
+    bindNotInBooksAndBanksCount1();
+    
     GetTotalNotesCount();
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
@@ -112,32 +116,96 @@ function GetTotalNotesCount() {
 }
 
 
-
+var totalSum1;
+var totalSum2;
 function bindNotInBooksAndBanksCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
 
-    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
         if (response.Message == "Success") {
+
             let data = response.ResultData;
-            let totalSum = 0;
+
+            var totalSum = 0;
+
             for (var i = 0; i < data.length; i++) {
-                totalSum = totalSum + data[i].totalCount;
+
+                totalSum1 = totalSum + data[i].Count;
                 if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                    $("#lblNotInBanksCount").text(data[i].totalCount);
-                }
-                else {
-                    $("#lblNotInBooksCount").text(data[i].totalCount);
+                    $("#lblNotInBanksCount").text(data[i].Count);
                 }
             }
 
+            TotalSum(totalSum1, totalSum2);
+        }
+    })
+}
 
-            $("#lblNotInCount").text(totalSum);
+
+function bindNotInBooksAndBanksCount1() {
+    var ClientID = $("#ddlclient option:selected").val();
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        if (response.Message == "Success") {
+
+            let data = response.ResultData;
+            var totalSum = 0;
+            for (var i = 0; i < data.length; i++) {
+
+                totalSum2 = totalSum + data[i].Count;
+
+                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+                    $("#lblNotInBooksCount").text(data[i].Count);
+                }
+
+            }
+
+            TotalSum(totalSum1, totalSum2);
+
 
         }
     })
 }
+
+
+function TotalSum(totalSum1, totalSum2) {
+    let totalsum3 = 0;
+    if (isNaN(totalSum1 + totalSum2)) {
+        $("#lblNotInCount").addClass('d-none');
+    }
+    else {
+        $("#lblNotInCount").removeClass('d-none');
+        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        $("#lblNotInCount").text(totalsum3);
+
+    }
+}
+//function bindNotInBooksAndBanksCount() {
+
+//    var ClientID = $("#ddlclient option:selected").val();
+
+//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+//        if (response.Message == "Success") {
+//            let data = response.ResultData;
+//            let totalSum = 0;
+//            for (var i = 0; i < data.length; i++) {
+//                totalSum = totalSum + data[i].totalCount;
+//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+//                    $("#lblNotInBanksCount").text(data[i].totalCount);
+//                }
+//                else {
+//                    $("#lblNotInBooksCount").text(data[i].totalCount);
+//                }
+//            }
+
+
+//            $("#lblNotInCount").text(totalSum);
+
+//        }
+//    })
+//}
 
 
 function HighlightMenu() {
@@ -220,14 +288,13 @@ var setNotificationMessageAddedListenerOnAllChannels = async function () {
 
 var notificationMessageAddedAllChannels = function (msg) {
     let msgState = msg.state;
-    if (addMessageProcessed.indexOf(msgState.sid) > -1)
+    if (addMessageProcessedGlobal.indexOf(msgState.sid) > -1)
         return;
-    addMessageProcessed.push(msgState.sid);
+    addMessageProcessedGlobal.push(msgState.sid);
 
     var isNotificationPage = isLocationUrlContains("communication/notifications")
     if (userEmailAddress.toLowerCase() !== msgState.author.toLowerCase()) {
         let allMentionedMessages = [];
-        let notifications = [];
 
         if (msgState.type === "text") {
             let matches = _.flatten(findMentionInMessageBody(msgState.body));
@@ -244,7 +311,7 @@ var notificationMessageAddedAllChannels = function (msg) {
                 }
             }
         }
-        if (isEmptyOrBlank(notificationChannelParticipants.get(notifications[0].messageAuthor.toLowerCase()))) {
+        if (isEmptyOrBlank(notificationChannelParticipants.get(notifications[notifications.length - 1].messageAuthor.toLowerCase()))) {
             let emails = _.uniq(_.map(notifications, (x) => x.messageAuthor.toLowerCase())).join(",");
             getAjaxSync(`/Communication/GetNotificationParticipantsByEmails?emails=${emails}`, null, function (response) {
                 if (!isEmptyOrBlank(response)) {
@@ -252,7 +319,7 @@ var notificationMessageAddedAllChannels = function (msg) {
                 }
             })
         }
-        preapreAndBindNotifications(notifications, isNotificationPage,true);
+        preapreAndBindNotifications([notifications[notifications.length - 1]], isNotificationPage, true);
         _audio.play();
     }
 }
@@ -305,7 +372,7 @@ var getSortedChannels = function (typeOfChannel) {
 }
 
 var getNotifications = async function (sortedChannels, isNotificationPages) {
-    let notifications = [];
+
     let totalNotifications = 0;
     let counter = (isNotificationPages ? sortedChannels.length : Notification_Bell_Size);
 
@@ -393,12 +460,15 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                              </div>
                          </a>
                     </div>`;
-            if (prepand === false)
+            if (prepand === false) {
                 $notifictionsList.append(template);
+            }
             else {
-                $notifictionsList.find(".list-group-item:last").remove();
+                if ($notifictionsList.find(".list-group-item:last").length >= 2)
+                    $notifictionsList.find(".list-group-item:last").remove();
                 $notifictionsList.prepend(template);
             }
+            setReconciliationMentionIconColor(notifications);
         }
     }
     else {

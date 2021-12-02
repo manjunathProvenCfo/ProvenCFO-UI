@@ -456,3 +456,42 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
     .chat-content-body .media-body.justify-content-end .text-primary:hover {
         color: #d9d9d9 !important;
     }
+
+.permission-box {
+    border: 1px solid #EFF3F8;
+    margin-top: 20px;
+    background: #fff;
+}
+
+    .permission-box h6 {
+        font-weight: 600;
+        font-size: 16px;
+        color: #33334F;
+        margin: 0;
+        padding: 12px 15px;
+        background: #f3f6fd;
+    }
+
+    .permission-box label {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .permission-box input {
+        cursor: pointer;
+        margin-right: 5px;
+    }
+
+    .permission-box ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+        .permission-box ul li {
+            width: 100%;
+            padding: 10px 15px;
+            list-style: none;
+            text-transform: capitalize;
+        }

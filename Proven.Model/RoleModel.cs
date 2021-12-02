@@ -8,8 +8,8 @@ namespace Proven.Model
 {
     public class RolesViewModel
     {
-        public string id { get; set; }
-        public string name { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedByUser { get; set; }
@@ -20,6 +20,7 @@ namespace Proven.Model
         public int MyProperty { get; set; }
         public string DisplayRoleName { get; set; }
         public Boolean? IsVisible { get; set; }
+        public int? UserType { get; set; }
     }
     public class RoleMainModel
     {

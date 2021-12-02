@@ -23,7 +23,7 @@
 
             }
 
-            @if (Model.id == null)
+            @if (Model.Id == null)
             {
                 <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create New User Role</h3>
             }
@@ -41,13 +41,13 @@
                             <div class="col-12 col-lg-8 col-xl-5">
                                 @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
 
-                                @Html.HiddenFor(x => x.id, "id")
+                                @Html.HiddenFor(x => x.Id, "id")
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-create-name">Role Name</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
                                         @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
                                         <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="roleexist" class=""></span></span>
                                     </div>
@@ -74,19 +74,96 @@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
                                 </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">User Type</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @foreach (var usertype in (List<Proven.Model.UserTypesVM>)TempData["UserTypeList"])
+                                        {
+                                            <span>
+                                                @if (Model.UserType == usertype.UserTypeID)
+                                                {
+                                                    @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID, new { @checked = "checked" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID)
+                                                }
+                                                @usertype.UserTypeName
+                                            </span>
+                                            <br />
+
+                                        }
+                                    </div>
+                                    @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
+                                </div>
 
 
                                 @*<div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-            <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-        </div>*@
+                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+                                    </div>*@
+
+
+                                @*@for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
+                                    {
+                                        <div class="col-12 facility_service_permissions">
+                                            <div class="permission-box">
+                                                <h6>
+                                                    @Html.CheckBoxFor(model => model.MasterFeaturesList[i].IsChecked.Value, Model.MasterFeaturesList[i].IsChecked.Value)
+                                                    @Html.DisplayFor(model => model.MasterFeaturesList[i].DisplayName)
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    }*@
+
+                                @for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
+                                {
+                                    if (Model.MasterFeaturesList[i].ParentId == 0)
+                                    {
+
+
+                                        <div class="col-12 facility_service_permissions">
+                                            <div class="permission-box">
+                                                <h6>
+                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick= "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ","-") + "')" })
+                                                    <label>@Model.MasterFeaturesList[i].DisplayName</label>
+                                                    @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
+                                                    @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
+                                                </h6>
+
+
+                                                @for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
+                                                {
+                                                    if (Model.MasterFeaturesList[j].ParentId == Model.MasterFeaturesList[i].Id)
+                                                    {
+                                                        <ul>
+                                                            <li>
+                                                                @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ","-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+                                                                <label>@Model.MasterFeaturesList[j].DisplayName</label>
+                                                                @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
+                                                                @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
+                                                            </li>
+                                                        </ul>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+
+
+
+
 
                                 <div class="row align-items-center form-group mb-0">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
-                                        @if (Model.id == null)
+                                        @if (Model.Id == null)
                                         {
                                             <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateRole", "Role")">Create</button>
                                         }
@@ -125,7 +202,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        
+
         document.getElementById("roleexist").style.display = "none";
         document.getElementById("Displayroleexist").style.display = "none";
         function CheckExistValidation() {
@@ -135,7 +212,22 @@
             }
         }
 
+        function check_uncheck_topper(top_id_checked, top_id) {
+            $('.top_tucker_' + top_id).prop("checked", top_id_checked);
+        }
 
+        function check_uncheck_checkbox(isChecked, parent_id, top_id) {
+            $('.top_role_' + top_id).prop("checked", true);
+            if (isChecked) {
+                //$(".input_super_cat_" + parent_id).each(function () {
+                //    this.checked = true;
+                //});
+            } else {
+                //$(".input_super_cat_" + parent_id).each(function () {
+                //    this.checked = false;
+                //});
+            }
+        }
         $(document).ready(function () {
 
             //
@@ -219,5 +311,5 @@
 
 
     </script>
-    
+
 }

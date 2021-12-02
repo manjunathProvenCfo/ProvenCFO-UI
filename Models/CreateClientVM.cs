@@ -29,8 +29,9 @@ namespace ProvenCfoUI.Models
         [MaxLength(50, ErrorMessage = "Maximum 50 characters exceeded.")]
         public string CityName { get; set; }
         [Required(ErrorMessage = "State is a required field.")]
-        public int StateId { get; set; }       
-        public int? TeamId { get; set; }
+        public int StateId { get; set; }
+        [Required(ErrorMessage = "Team is a required field")]
+        public int TeamId { get; set; }
         [Required(ErrorMessage = "Billable Entity  is a required field")]
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]

@@ -163,24 +163,25 @@
                                     <a class="nav-link" href=@Url.Action("JobTitle", "Setup") name="submenu_jobtitles">Job Titles</a>
                                 </li>
                             }
-                            @if (Common.IsFeatureAccessable("URL"))
+                            @if (!Common.IsFeatureAccessable("URL"))
                             {
 
                                 <li class="nav-item" id="submenu_userroles">
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
+
                             @if (Common.IsFeatureAccessable("INT"))
                             {
                                 <li class="nav-item" id="submenu_glAccount">
-                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">GL Accounts</a>
+                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_GLaccounts">GL Accounts</a>
                                 </li>
                             }
 
                             @if (Common.IsFeatureAccessable("INT"))
                             {
                                 <li class="nav-item" id="submenu_trackingCategories">
-                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_integration">Tracking Categories</a>
+                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_trackingcategories">Tracking Categories</a>
                                 </li>
                             }
                             @if (Common.IsFeatureAccessable("SYS"))

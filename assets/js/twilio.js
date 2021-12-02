@@ -13,7 +13,6 @@ const Chat_Find_Mention_Page_Size = 10;
 
 
 var createTwilioClient = async function () {
-    //debugger
     if (!isEmptyOrBlank(twilioClient)) {
         await connectionStateConnectedMethods();
         return;
@@ -262,10 +261,11 @@ var setActiveChannel = function (channel) {
 var updateChannels = function (forReconciliationIconColor) {
     allSubscribedChannels = [];
     twilioClient.getSubscribedConversations({ limit: 100 }).then(page => {
-        getAllSubscribedChannels(page).then(allSubscribedChannels => {
+        getAllSubscribedChannels(page).then(async allSubscribedChannels => {
             allSubscribedChannels = allSubscribedChannels.sort(function (a, b) {
                 return a.friendlyName > b.friendlyName;
             });
+            await isConversationSyncListFetched();
             joinAndSortSubscribedChannels(allSubscribedChannels, forReconciliationIconColor);
 
         });
@@ -353,22 +353,22 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
                     elComment.children().removeClass("text-dark");
                 }
             }
-            if (chat.isReconciliationIconColorChanged === false) {
-                let channelFindMention = _.filter(subscribedChannelsByType, function (subscribedChannelByType) {
-                    return subscribedChannelByType.channelState.uniqueName === commentChannelUniqueName;
-                });
+            //if (chat.isReconciliationIconColorChanged === false) {
+            //    let channelFindMention = _.filter(subscribedChannelsByType, function (subscribedChannelByType) {
+            //        return subscribedChannelByType.channelState.uniqueName === commentChannelUniqueName;
+            //    });
 
-                if (channelFindMention.length > 0) {
-                    await isConversationSyncListFetched();
+            //    if (channelFindMention.length > 0) {
+            //        await isConversationSyncListFetched();
 
-                    await setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName);
-                }
-            }
+            //        await setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName);
+            //    }
+            //}
         });
         var dtReconciliationPageNumber = $dtReconciliation.page();
         $dtReconciliation.rows().invalidate().draw();
         $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
-        chat.isReconciliationIconColorChanged = true;
+        //chat.isReconciliationIconColorChanged = true;
 
     }
     //sort left side participants
@@ -451,6 +451,24 @@ var setReconciliationIconColor = async function (channelFindMentionFirst, commen
             }
         }
     });
+}
+
+var setReconciliationMentionIconColor = async function (notifications) {
+    if (!isLocationUrlContains("reconciliation"))
+        return;
+    let colorChannelsDictKeys = _.map(notifications, "channelUniqueName");
+    var $dtReconciliation = $('#tblreconcilation').DataTable();
+    $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
+        let elComment = $(obj).children("#btnComment");
+        let commentChannelUniqueName = elComment.data().id;
+        if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
+            elComment.children().remove();
+            elComment.append(`<span class="fas fa-comment fs--1"></span>`);
+        }
+    });
+    let dtReconciliationPageNumber = $dtReconciliation.page();
+    $dtReconciliation.rows().invalidate().draw();
+    $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
 }
 
 var updateActiveChannel = function () {

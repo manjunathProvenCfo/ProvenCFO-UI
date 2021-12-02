@@ -71,7 +71,8 @@ namespace ProvenCfoUI.Controllers
                         State = s.StateName,
                         Status = s.Status == true ? "Active" : "Inactive",
                         Start_Date = s.StartDate,
-                        Team = Convert.ToInt32(s.TeamId),
+                        //Team = Convert.ToInt32(s.TeamId),
+                        Team = s.TeamName.ToString(),
                         Xero_Contact_ID_For_ProvenCfo = s.XeroContactIDforProvenCfo,
                         XeroID = s.XeroID,
                         XeroClientID = s.XeroClientID,
@@ -188,7 +189,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.CityId = client.CityId;
                             Clientvm.Address = client.Address;
                             Clientvm.StateId = client.State;
-                            Clientvm.TeamId = Convert.ToInt32(client.TeamId);
+                            Clientvm.TeamId = Convert.ToInt32( client.TeamId);
                             Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
