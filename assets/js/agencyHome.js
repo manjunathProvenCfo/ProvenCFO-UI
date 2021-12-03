@@ -15,10 +15,10 @@ $(document).ready(function () {
     });
 
     AgencyDropdownPartialViewChange();
-    bindNotInBooksAndBanksCountDashboard();
+    //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
     KanbanCountWithIndividualPriority();
-    defaultReportsWidget();
+    //defaultReportsWidget();
     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
     RenderNetIncomeChart($('#dllNetIncome').val());
 
@@ -585,8 +585,8 @@ function AgencyDropdownPartialViewChange() {
                 GetReconcilationData1();
                 //GetReconcilationPostiveData();
                 //GetReconcilationNegativeData();
-                bindNotInBooksAndBanksCountDashboard();
-                bindNotInBooksAndBanksCountDashboard1();
+                //bindNotInBooksAndBanksCountDashboard();
+                //bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
                 /*GetTotalNotesCount();*/
                 SetUserPreferencesForAgency();
@@ -728,18 +728,23 @@ function GetReconcilationData() {
     var ClientID = $("#ddlclient option:selected").val();
 
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-        if (response.Message == "Success") {            
+        if (response.Message == "Success") {
+            var percentage = 0;
+            totalSum1 = 0;
             let data = response.ResultData;
             if (data != null && data.length > 0) {
                 $("#lblNotInBanksCount2").text(data[0].Count);
                 $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
                 $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
-                totalSum1 = data[i].Count;
+                percentage = data[0].percentage.toFixed(0);
+                totalSum1 = data[0].Count;
             }
             else {
                 $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
                 $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
             }
+            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+            utils.addProgressCircle("#lblNotInBankPercentage")
 
             //for (var i = 0; i < data.length; i++) {
 
@@ -760,18 +765,22 @@ function GetReconcilationData1() {
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
         if (response.Message == "Success") {
             var totalSum = 0;
+            var percentage = 0;
+            totalSum2 = 0;
             let data = response.ResultData;
             if (data != null && data.length > 0) {
                 $("#lblNotInBooksCount2").text(data[0].Count);
                 $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
                 $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                 totalSum2 = data[0].Count;
+                percentage = data[0].percentage.toFixed(0);
             }
             else {
                 $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
                 $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
             }
-            
+            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+            utils.addProgressCircle("#divNotInBookPercentage1")
             //for (var i = 0; i < data.length; i++) {
 
                 
