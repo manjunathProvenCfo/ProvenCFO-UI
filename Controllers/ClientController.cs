@@ -221,7 +221,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
                             //Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
-                            Clientvm.DashboardId = client.DashboardId.ToString();
+                            Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
 
 
