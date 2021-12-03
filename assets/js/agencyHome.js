@@ -583,8 +583,8 @@ function AgencyDropdownPartialViewChange() {
 
                 GetReconcilationData();
                 GetReconcilationData1();
-                GetReconcilationPostiveData();
-                GetReconcilationNegativeData();
+                //GetReconcilationPostiveData();
+                //GetReconcilationNegativeData();
                 bindNotInBooksAndBanksCountDashboard();
                 bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
@@ -728,21 +728,28 @@ function GetReconcilationData() {
     var ClientID = $("#ddlclient option:selected").val();
 
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-        if (response.Message == "Success") {
-
+        if (response.Message == "Success") {            
             let data = response.ResultData;
-
-            var totalSum = 0;
-
-            for (var i = 0; i < data.length; i++) {
-
-                totalSum1 = totalSum + data[i].Count;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                    $("#lblNotInBanksCount2").text(data[i].Count);
-                }
+            if (data != null && data.length > 0) {
+                $("#lblNotInBanksCount2").text(data[0].Count);
+                $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                totalSum1 = data[i].Count;
+            }
+            else {
+                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
             }
 
-            TotalSum(totalSum1, totalSum2);
+            //for (var i = 0; i < data.length; i++) {
+
+            //    totalSum1 = totalSum + data[i].Count;
+            //    if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+            //        $("#lblNotInBanksCount2").text(data[i].Count);
+            //    }
+            //}
+
+            //TotalSum(totalSum1, totalSum2);
         }
     })
 
@@ -752,18 +759,28 @@ function GetReconcilationData1() {
 
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
         if (response.Message == "Success") {
-
-            let data = response.ResultData;
             var totalSum = 0;
-            for (var i = 0; i < data.length; i++) {
-
-                totalSum2 = totalSum + data[i].Count;
-
-                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNotInBooksCount2").text(data[i].Count);
-                }
-
+            let data = response.ResultData;
+            if (data != null && data.length > 0) {
+                $("#lblNotInBooksCount2").text(data[0].Count);
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                totalSum2 = data[0].Count;
             }
+            else {
+                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+            }
+            
+            //for (var i = 0; i < data.length; i++) {
+
+                
+
+            //    if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+            //        $("#lblNotInBooksCount2").text(data[i].Count);
+            //    }
+
+            //}
 
             TotalSum(totalSum1, totalSum2);
 
@@ -1326,7 +1343,7 @@ var totalSalesInitTwo = function totalSalesInitTwo() {
     }
 };
 
-var defaultReportsWidget = function () {
+var lblNegativeInBooksCount = function () {
     var agencyId = $("#ddlclient option:selected").val();
     getAjax(`/Reports/GetDashboardReports?agencyId=${agencyId}`, null, function (response) {
         var divMonthlyReports = $("#divMonthlyReports")
