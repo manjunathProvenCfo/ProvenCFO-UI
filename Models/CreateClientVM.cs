@@ -12,7 +12,7 @@ namespace ProvenCfoUI.Models
 
         public int Id { get; set; }
         [Required(ErrorMessage = "Client Agency name is a required field.")]
-        [MaxLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
+        [MaxLength(100, ErrorMessage = "Maximum 100 characters exceeded")]
         public string ClientName { get; set; }
         //[Required(ErrorMessage = "Please enter Email Address.")]
         //[RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,9}" +
