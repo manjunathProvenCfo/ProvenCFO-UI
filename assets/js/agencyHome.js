@@ -754,7 +754,7 @@ function GetReconcilationData() {
             //    }
             //}
 
-            //TotalSum(totalSum1, totalSum2);
+            TotalSum(totalSum1, totalSum2);
         }
     })
 
