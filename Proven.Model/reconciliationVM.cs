@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class reconciliationVM
     {
         public string plenadata__id { get; set; }

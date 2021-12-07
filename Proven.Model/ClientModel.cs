@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Proven.Model
 {
 
-
+    [Serializable]
     public class ClientModel
     {
         public int Id { get; set; }
