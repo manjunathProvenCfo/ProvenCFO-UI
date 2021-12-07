@@ -18,7 +18,7 @@ $(document).ready(function () {
     //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
     KanbanCountWithIndividualPriority();
-    defaultReportsWidget();
+    //defaultReportsWidget();
     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
     RenderNetIncomeChart($('#dllNetIncome').val());
 
@@ -1355,8 +1355,10 @@ var totalSalesInitTwo = function totalSalesInitTwo() {
 var defaultReportsWidget = function () {
     var agencyId = $("#ddlclient option:selected").val();
     getAjax(`/Reports/GetDashboardReports?agencyId=${agencyId}`, null, function (response) {
-        var divMonthlyReports = $("#divMonthlyReports")
-        var divYearlyReports = $("#divYearlyReports")
+        var divMonthlyReports = $("#divMonthlyReports");
+        var divYearlyReports = $("#divYearlyReports");
+        divMonthlyReports.empty();
+        divYearlyReports.empty();
         if (response.DataMonthly.length > 0) {
             for (var i = 0; i < response.DataMonthly.length; i++) {
                 let reportHtml = prepareReportMedia(response.DataMonthly[i]);
