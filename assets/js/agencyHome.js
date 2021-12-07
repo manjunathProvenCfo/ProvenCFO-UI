@@ -590,7 +590,7 @@ function AgencyDropdownPartialViewChange() {
                 KanbanCountWithIndividualPriority();
                 /*GetTotalNotesCount();*/
                 SetUserPreferencesForAgency();
-                
+                defaultReportsWidget();
                 let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                 $('#spMonths').html(month);
                 $('#spClientAddress').html(data.CityName + ',' + data.StateName);
