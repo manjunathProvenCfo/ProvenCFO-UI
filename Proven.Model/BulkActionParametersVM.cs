@@ -4,7 +4,8 @@ using System.Text;
 
 namespace CFO.Model.ViewModels
 {
-   public class BulkActionParametersVM
+    [Serializable]
+    public class BulkActionParametersVM
     {
         public string[] Ids { get; set; }
         public int GLaccount { get; set; }

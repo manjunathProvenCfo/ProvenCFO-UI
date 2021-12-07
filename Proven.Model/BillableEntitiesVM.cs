@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class BillableEntitiesVM
     {
         public int Id { get; set; }

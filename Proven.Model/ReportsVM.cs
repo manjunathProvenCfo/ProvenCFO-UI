@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
-    public class ReportsVM
+	[Serializable]
+	public class ReportsVM
     {
 		public int Id { get; set; }
 		public int AgencyId_Ref { get; set; }

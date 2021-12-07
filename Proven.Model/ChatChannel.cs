@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class ChatChannel
     {
         public string ChannelId { get; set; }
