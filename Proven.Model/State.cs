@@ -5,6 +5,7 @@ using System.Web;
 
 namespace ProvenCfoUI.Models
 {
+    [Serializable]
     public class State
     {
         public string Id { get; set; }

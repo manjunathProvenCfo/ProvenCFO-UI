@@ -11,6 +11,7 @@ namespace CFO.Model.ViewModels
         ShowReconciledOnly,
         ReadytobeReconciledOnly
     }
+    [Serializable]
     public class ReconciliationfilterModel
     {
         public string accounts { get; set; }

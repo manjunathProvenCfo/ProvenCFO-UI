@@ -18,7 +18,7 @@ $(document).ready(function () {
     //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
     KanbanCountWithIndividualPriority();
-    //defaultReportsWidget();
+    defaultReportsWidget();
     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
     RenderNetIncomeChart($('#dllNetIncome').val());
 
@@ -754,7 +754,7 @@ function GetReconcilationData() {
             //    }
             //}
 
-            //TotalSum(totalSum1, totalSum2);
+            TotalSum(totalSum1, totalSum2);
         }
     })
 
@@ -1352,7 +1352,7 @@ var totalSalesInitTwo = function totalSalesInitTwo() {
     }
 };
 
-var lblNegativeInBooksCount = function () {
+var defaultReportsWidget = function () {
     var agencyId = $("#ddlclient option:selected").val();
     getAjax(`/Reports/GetDashboardReports?agencyId=${agencyId}`, null, function (response) {
         var divMonthlyReports = $("#divMonthlyReports")

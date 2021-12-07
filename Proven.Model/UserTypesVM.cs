@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class UserTypesVM
     {
         public int Id { get; set; }

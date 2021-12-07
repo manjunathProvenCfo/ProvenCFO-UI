@@ -115,6 +115,10 @@ namespace ProvenCfoUI.Controllers
         [ChildActionOnly]
         public ActionResult AgencySelection()
         {
+            if (Session["UserType"] == null)
+            {
+                return RedirectToAction("LoginSessionExpaired");
+            }
             AgencyClient objAgy = new AgencyClient();
             try
             {

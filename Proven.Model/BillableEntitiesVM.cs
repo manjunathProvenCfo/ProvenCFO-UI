@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class BillableEntitiesVM
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Entity Name is a required field.")]
-        [RegularExpression(@"^[a-zA-Z0-9_ ]*$", ErrorMessage = "Please Enter a valid Entity Name")]
+        //[RegularExpression(@"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Please Enter a valid Entity Name")]
         [StringLength(50, ErrorMessage = "Maximum 50 characters exceeded")]
         public string EntityName { get; set; }
         public string XeroId { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Proven.Model
 {
-
+    [Serializable]
     public class UserModel
     {
         public string Id { get; set; }

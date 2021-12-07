@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
-   public class KanbanTaskCommentsModel
+    [Serializable]
+    public class KanbanTaskCommentsModel
     {
         public int Id { get; set; }
         public String CommentText { get; set; }
