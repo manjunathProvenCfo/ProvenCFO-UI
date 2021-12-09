@@ -171,7 +171,7 @@
                     </div>
                 </div>
             }
-            if (Session["UserId"] != null)
+            @if (Session["UserId"] != null)
             {
             @{ Html.RenderAction("CreateNewNotes", "Notes");}
             @{ Html.RenderAction("OpenDescription", "Notes"); }
