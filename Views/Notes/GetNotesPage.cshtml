@@ -28,17 +28,17 @@
 
                 <div class="Words">
                     @*@if (summary?.SummaryCreatedByFullName == "")
-                    {
-                        <span>&nbsp;</span>
-                    }
-                    else
-                    {
-                <span>
-                    Created by:
-                   
-                    <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-                </span>
-                    }*@
+                            {
+                                <span>&nbsp;</span>
+                            }
+                            else
+                            {
+                        <span>
+                            Created by:
+
+                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+                        </span>
+                            }*@
 
                     @if (summary?.SummaryModifiedByFullName == "")
                     {
@@ -47,7 +47,7 @@
                     else
                     {
                         <span>
-                             Last Edited by:
+                            Last Edited by:
                             <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
                         </span>
                     }
@@ -171,9 +171,12 @@
                     </div>
                 </div>
             }
+            if (Session["UserId"] != null)
+            {
             @{ Html.RenderAction("CreateNewNotes", "Notes");}
             @{ Html.RenderAction("OpenDescription", "Notes"); }
             @{ Html.RenderAction("UpdateNoteSummary", "Notes"); }
+            }
         </div>
 
     </div>
@@ -282,7 +285,7 @@
                     isPublished = "Published";
                 }
                 var position = $('#Position').val();
-               
+
                 var description = tinyMCE.get("Description").getContent();
                 var status = $('#NotesStatus').val();
 
@@ -331,7 +334,7 @@
 
             $("[Id=moveUp]").click(function () {
                 let el = $(this);
-               
+
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").prev().data().id;
                 let pdata = { Id: id, SwapId: swapId };
@@ -342,7 +345,7 @@
 
             $("[Id=moveDown]").click(function () {
                 let el = $(this);
-               
+
                 let id = el.parents(".card-body").data().id;
                 let swapId = el.parents(".card-body").next().data().id;
                 let pdata = { Id: id, SwapId: swapId };
@@ -402,7 +405,7 @@
 
         $(function () {
             $("[id='notes-updatesummary-new-btn']").click(function (e) {
-               
+
                 let content = $("#hdnSummary").val();
                 tinymce.get("txtSummary").setContent(content);
                 tinyMCE.activeEditor.setContent(content);
@@ -418,7 +421,7 @@
 
                 var pdata = { Id: parseInt(ClientID), Summary: summary };
                 postAjax('/Notes/UpdateNoteSummary', JSON.stringify(pdata), function (response) {
-                  
+
                     if (response.Message == 'Success') {
                         let data = response.Data;
                         window.location.reload();
@@ -468,16 +471,16 @@
                         .done(function (data) {
 
                             /*if ((data == 'Unpublished') || (data == 'Published')) {*/
-                                sweetAlert
-                                    ({
-                                        title: "Deleted!",
-                                        text: "Note successfully deleted!",
-                                        type: "success"
-                                    },
-                                        function () {
-                                            window.location.reload();
-                                        });
-                          
+                            sweetAlert
+                                ({
+                                    title: "Deleted!",
+                                    text: "Note successfully deleted!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.reload();
+                                    });
+
                         })
                         .error(function (data) {
                             swal("Oops", "We couldn't connect to the server!", "error");

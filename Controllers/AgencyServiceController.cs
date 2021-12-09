@@ -24,7 +24,7 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult AgencyHome()
         {
-
+        {            
             return View();
         }
         [CheckSession]
@@ -74,8 +74,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        [CheckSession]
-      
+        [CheckSession]      
         public async Task<JsonResult> GetAccountOutStanding()
         {
             var returnData = new Dictionary<string, dynamic>();

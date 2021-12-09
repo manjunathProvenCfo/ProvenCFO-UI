@@ -21,7 +21,10 @@
         </div>
         @*@Html.Partial("_AgencySelection")*@
         @{
-            Html.RenderAction("AgencySelection", "AgencyService");
+            if (Session["UserId"] != null)
+            {
+                Html.RenderAction("AgencySelection", "AgencyService");
+            }
         }
     </div>
 
