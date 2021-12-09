@@ -660,13 +660,13 @@
         }
 
         function onChangeglAccount(id, event) {
-
+            
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
-                selectedValue = 0;
+                selectedValue = -1;
             }
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id  + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }
@@ -677,8 +677,10 @@
             })
 
         }
-        function onChangeBankRule(id, event) {
+    function onChangeBankRule(id, event) {
+        
             var Selectedvalue = event.currentTarget.value;
+            
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
                 if (response.Message == 'Success') {
@@ -690,10 +692,11 @@
 
             })
         }
-        function onChangeTc(id, event) {
+    function onChangeTc(id, event) {
+       
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
-                selectedValue = 0;
+                selectedValue = -1;
             }
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {

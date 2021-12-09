@@ -107,8 +107,10 @@
                     </div>
 
                     @{
-
-                        Html.RenderAction("ChangePasswordFromProfile", "Home");
+                        if (Session["UserId"] != null)
+                        {
+                            Html.RenderAction("ChangePasswordFromProfile", "Home");
+                        }
                     }
                 </div>
                 <div class="card">
