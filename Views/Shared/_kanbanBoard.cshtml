@@ -161,12 +161,15 @@
 
 
                 </div>
-                @if (Session["UserId"] != null)
-                {
 
-                @{ Html.RenderAction("OpenTask", "Needs"); }
-                @{ Html.RenderAction("CreateNewTask", "Needs"); }
+                @{
+                    if (Session["UserId"] != null)
+                    {
+                        Html.RenderAction("OpenTask", "Needs");
+                        Html.RenderAction("CreateNewTask", "Needs");
+                    }
                 }
+               
             </div>
 
         </div>

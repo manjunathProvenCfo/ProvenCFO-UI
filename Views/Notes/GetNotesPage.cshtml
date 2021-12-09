@@ -171,12 +171,16 @@
                     </div>
                 </div>
             }
-            @if (Session["UserId"] != null)
-            {
-            @{ Html.RenderAction("CreateNewNotes", "Notes");}
-            @{ Html.RenderAction("OpenDescription", "Notes"); }
-            @{ Html.RenderAction("UpdateNoteSummary", "Notes"); }
+
+            @{
+                if (Session["UserId"] != null)
+                {
+                    Html.RenderAction("CreateNewNotes", "Notes");
+                    Html.RenderAction("OpenDescription", "Notes");
+                    Html.RenderAction("UpdateNoteSummary", "Notes");
+                }
             }
+           
         </div>
 
     </div>
