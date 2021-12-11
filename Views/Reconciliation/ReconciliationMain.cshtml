@@ -137,7 +137,7 @@
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-                           
+
                         </div>
                     </div>
 
@@ -158,7 +158,8 @@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
 
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
+                                    <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
                                 @if (ViewBag.IsStaffUser == true)
                                 {
@@ -167,11 +168,11 @@
 
                                 @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
 
-                               
+
                                 <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
-                                 @*<div class="form-group position-relative mb-0">
+                            @*<div class="form-group position-relative mb-0">
                                     <input type="text" class="form-control mr-3" id="inputGroup" placeholder="Search...">
 
                                 </div>*@
@@ -297,7 +298,7 @@
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
                                         <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            <span class="far fa-comment fs--1 text-dark"></span>
+                                            <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -370,7 +371,7 @@
         $("select").select2();
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
-<script>
+    <script>
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
@@ -843,7 +844,7 @@
 
 
 
-</script>
+    </script>
 
 }
 

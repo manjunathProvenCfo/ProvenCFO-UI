@@ -332,6 +332,7 @@ var getChannelByChannelId = function (channelId) {
     return chat.channels(x => x.ChannelId == channelId);
 }
 var getChannelParticipnatByChannelIndex = function () {
+    debugger
     return getChannelByChannelIndex().ChatParticipants[0];
 }
 var getParticipantByEmail = function (email) {

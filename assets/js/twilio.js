@@ -336,41 +336,31 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
     let sorted = _.sortBy(subscribedChannelsWithLastMessage, function (o) { return o.lastMessage?.dateCreated; })
     sorted = sorted.reverse();
     //Change reconciliation icon color
-    if (location.href.toLowerCase().indexOf("reconciliation") > -1) {
-        let colorChannelsDict = {};
-        sorted.forEach(function (sortedChannel) {
-            if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
-                colorChannelsDict[sortedChannel.channelUniqueName] = 1;
-            }
-        });
-        let colorChannelsDictKeys = Object.keys(colorChannelsDict);
-        var $dtReconciliation = $('#tblreconcilation').DataTable();
-        $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
-            let elComment = $(obj).children("#btnComment");
-            let commentChannelUniqueName = elComment.data().id;
-            if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
-                if (colorChannelsDict[commentChannelUniqueName] === 1) {
-                    elComment.children().removeClass("text-dark");
-                }
-            }
-            //if (chat.isReconciliationIconColorChanged === false) {
-            //    let channelFindMention = _.filter(subscribedChannelsByType, function (subscribedChannelByType) {
-            //        return subscribedChannelByType.channelState.uniqueName === commentChannelUniqueName;
-            //    });
+    //if (location.href.toLowerCase().indexOf("reconciliation") > -1) {
+    //    let colorChannelsDict = {};
+    //    sorted.forEach(function (sortedChannel) {
+    //        if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
+    //            colorChannelsDict[sortedChannel.channelUniqueName] = 1;
+    //        }
+    //    });
+    //    let colorChannelsDictKeys = Object.keys(colorChannelsDict);
+    //    var $dtReconciliation = $('#tblreconcilation').DataTable();
+    //    $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
+    //        let elComment = $(obj).children("#btnComment");
+    //        let commentChannelUniqueName = elComment.data().id;
+    //        if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
+    //            if (colorChannelsDict[commentChannelUniqueName] === 1) {
+    //                elComment.children().removeClass("text-dark");
+    //            }
+    //        }
+    //    });
+    //    var dtReconciliationPageNumber = $dtReconciliation.page();
+    //    $dtReconciliation.rows().invalidate().draw();
+    //    $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
+    //    //chat.isReconciliationIconColorChanged = true;
 
-            //    if (channelFindMention.length > 0) {
-            //        await isConversationSyncListFetched();
-
-            //        await setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName);
-            //    }
-            //}
-        });
-        var dtReconciliationPageNumber = $dtReconciliation.page();
-        $dtReconciliation.rows().invalidate().draw();
-        $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
-        //chat.isReconciliationIconColorChanged = true;
-
-    }
+    //}
+    //Change reconciliation icon color
     //sort left side participants
     let sortedParticipants = [];
     if (isEmptyOrBlank($participants))
