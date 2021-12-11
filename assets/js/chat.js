@@ -271,7 +271,7 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
-        
+
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
@@ -332,7 +332,6 @@ var getChannelByChannelId = function (channelId) {
     return chat.channels(x => x.ChannelId == channelId);
 }
 var getChannelParticipnatByChannelIndex = function () {
-    debugger
     return getChannelByChannelIndex().ChatParticipants[0];
 }
 var getParticipantByEmail = function (email) {
@@ -499,4 +498,9 @@ var selectSidebarParticipant = function () {
                 $participants.eq(0).click();
         }
     }
+}
+
+var UpdateReconciliationHasStatus = function (id) {
+    postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
+    });
 }

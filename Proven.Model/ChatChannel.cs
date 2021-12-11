@@ -21,6 +21,7 @@ namespace Proven.Model
         public string ReconciliationDescription { get; set; }
         public DateTime ReconciliationDate { get; set; }
         public decimal? ReconciliationAmount { get; set; }
+        public bool HasTwilioConversation { get; set; }
         #endregion
     }
 }

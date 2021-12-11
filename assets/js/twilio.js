@@ -132,6 +132,9 @@ var joinChannel = function (channel) {
 var addMediaMessage = function (file) {
     const formData = new FormData();
     formData.append('file', file);
+    if (isEmptyOrBlank(channel.channelState.lastMessage) && channel.channelState.attributes.type === "public reconciliation") {
+        UpdateReconciliationHasStatus(channel.channelState.uniqueName);
+    }
     activeChannel.sendMessage(formData).then(function (msg) {
         setScrollPosition();
         if ($newMessagesDiv && $newMessagesDiv.length > 0)
@@ -168,6 +171,10 @@ var setActiveChannel = function (channel) {
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
         if (validateMessage(body)) {
+            debugger
+            if (isEmptyOrBlank(channel.channelState.lastMessage) && channel.channelState.attributes.type === "public reconciliation") {
+                UpdateReconciliationHasStatus(channel.channelState.uniqueName);
+            }
             channel.sendMessage(body).then(function () {
                 //getTwilioToken();
                 //twilioClient.updateToken(token);
