@@ -271,7 +271,7 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
-        
+
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
@@ -498,4 +498,9 @@ var selectSidebarParticipant = function () {
                 $participants.eq(0).click();
         }
     }
+}
+
+var UpdateReconciliationHasStatus = function (id) {
+    postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
+    });
 }

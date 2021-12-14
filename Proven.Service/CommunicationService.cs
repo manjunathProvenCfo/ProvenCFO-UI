@@ -36,6 +36,10 @@ namespace Proven.Service
         {
             return await GetAsync<List<ChatParticipants>>($"Communication/GetNotificationParticipantsByEmails?emails={emails}");
         }
+        public async Task<bool> UpdateReconciliationHasStatus(string id)
+        {
+            return await PostAsync<bool>($"Communication/UpdateReconciliationHasStatus?id={id}");
+        }
 
         public void Dispose()
         {

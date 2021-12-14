@@ -149,6 +149,26 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateReconciliationHasStatus(string id)
+        {
+            try
+            {
+                bool isUpdated = false;
+
+                using (var communicationService = new CommunicationService())
+                {
+                    isUpdated = await communicationService.UpdateReconciliationHasStatus(id);
+                }
+                return Json(isUpdated, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

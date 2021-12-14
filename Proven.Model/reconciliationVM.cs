@@ -34,6 +34,8 @@ namespace Proven.Model
         public int? additional_tracking_category_ref { get; set; }
         public bool Selected { get; set; }
         public bool IsChatExist { get; set; }
+        public string TwilioConversationId { get; set; }
+        public bool has_twilio_conversation { get; set; }
 
     }
     public class ReconciliationMainModel
