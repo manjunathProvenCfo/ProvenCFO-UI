@@ -76,7 +76,20 @@
 
                                         <div class="kanban-item" draggable="true" ondragstart="drag(event)" id="@Tasks.Id" style="margin-left:1rem; margin-right:1rem">
                                             <div class="card kanban-item-card hover-actions-trigger" data-toggle="modal" data-target="#kanban-modal-open">
+                                                
                                                 <div class="card-body position-relative">
+                                                    <div class="ml-2" style=" font-size: 24px; padding-left: 26rem;">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-h" data-fa-transform="shrink-6"></i>
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+
+                                                                <a class="dropdown-item" href="#" onclick="DeleteNeedsCard('@Tasks.Id')" style="color:#E63756;">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     @if (Tasks.Labels == "Urgent")
                                                     {
                                                         <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-success bg-red">@Tasks.Labels</span></div>

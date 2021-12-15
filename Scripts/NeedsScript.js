@@ -379,7 +379,58 @@ function RemoveFile(e) {
         }
     });
 }
+//function DeleteNeedsCard(TaskId) {
+   
+//    swal({
+//        title: "Are you sure?",
+//        text: "Do you really want to delete this Card?",
+//        type: "warning",
+//        showCancelButton: true,
+//        closeOnConfirm: false,
+//        confirmButtonText: "Yes, delete it!",
+//        confirmButtonColor: "#ec6c62"
 
+//    },
+
+//        function () {
+           
+//            $.ajax({
+//                type: "POST",
+//                url: "/Needs/DeleteNeedsCard?TaskId=${TaskId}",
+                
+//            })
+//                .done(function (data) { 
+//                    sweetAlert
+//                        ({
+//                            title: "Deleted!",
+//                            text: "Card successfully deleted!",
+//                            type: "success"
+//                        },
+//                            function () {
+//                                window.location.reload();
+//                            });
+
+//                })
+                
+//        });
+//}
+var DeleteNeedsCard = function ( TaskId) {
+ 
+    ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this Card?", "Yes, remove it!", function (isConfirmed) {
+        if (isConfirmed == false)
+            return;
+       
+        postAjax(`/Needs/DeleteNeedsCard?TaskId=${TaskId}`, null, function (response) {
+            if (response.Status == "true") {
+                ShowAlertBoxSuccess("", "card has been removed successfully!")
+               
+            }
+           
+        });
+        window.location.reload();
+    });
+    return false;
+}
 function RemoveAttchment(attachmentId) {
 
     $('#att_' + attachmentId)[0].remove();

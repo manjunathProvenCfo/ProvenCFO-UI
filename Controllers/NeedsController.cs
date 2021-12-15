@@ -642,6 +642,25 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        [CheckSession]
+        public JsonResult DeleteNeedsCard(int TaskId)
+        {
+            try
+            {
+                using (NeedsService objNeeds = new NeedsService())
+                {
+                        var results = objNeeds.DeleteNeedsCard(TaskId);
+                        return Json(results, JsonRequestBehavior.AllowGet); 
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
 
     }
 }
