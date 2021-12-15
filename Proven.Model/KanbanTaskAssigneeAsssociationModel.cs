@@ -20,6 +20,7 @@ namespace Proven.Model
 
         public bool SingleMember { get; set; }
     }
+    [Serializable]
     public class KanbanTaskAssigneeAsssociationShortVM
     {
         public string Id { get; set; }

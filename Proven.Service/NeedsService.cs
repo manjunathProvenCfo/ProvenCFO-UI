@@ -378,5 +378,10 @@ namespace Proven.Service
             }
             isDisposed = true;
         }
+        public KanbanTasksVM DeleteNeedsCard(int TaskId)
+        {
+            string result = string.Format("Needs/DeleteNeedsCard?TaskId={0}", TaskId);
+            return PostAsync<KanbanTasksVM>(result).Result;
+        }
     }
 }

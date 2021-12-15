@@ -38,7 +38,7 @@ namespace Proven.Model
         public List<KanbanTaskAssigneeAsssociationShortVM> KanbanAssigneesList { get; set; }
         public List<KanbanTaskCommentsListModel> KanbanComments { get; set; }
     }
-
+    [Serializable]
     public class KanbanTasksVM
     {
         public int Id { get; set; }
