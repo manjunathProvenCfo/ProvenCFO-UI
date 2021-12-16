@@ -24,7 +24,7 @@ $(function () {
 
     bindNotInBooksAndBanksCount();
     bindNotInBooksAndBanksCount1();
-    
+
     GetTotalNotesCount();
 
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
@@ -88,7 +88,7 @@ function SetUserPreferencesForAgency(callback) {
                 callback();
             }
             GetTotalNotesCount();
-
+            setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
         },
         error: function (d) {
 
@@ -537,5 +537,15 @@ function parseMessageHtmlAndResize(message, resizeLength) {
         return html_text;
     else
         return html_text.slice(0, resizeLength) + "...";
+}
+var genereateAllReconciliationTwilioConversationAndAddParticipants = function () {
+    if (isLocationUrlContains("reconciliation"))
+        return;
+    let keySesionStorage = `GenChannelsRecon`;
+    let arrClientIds = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? [] : sessionStorage[keySesionStorage].split(','));
+    if (arrClientIds.indexOf(getClientId()) < 0) {
+        sessionStorage[keySesionStorage] = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? "" : sessionStorage[keySesionStorage]) + getClientId() + ",";
+        postAjax(`/twilio/GenereateAllReconciliationTwilioConversationAndAddParticipants?clientId=${getClientId()}`, null, () => { });
+    }
 }
 //Global Chat with Notifications End

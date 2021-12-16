@@ -26,6 +26,8 @@ namespace ProvenCfoUI.Controllers
                 using (NeedsService objNeeds = new NeedsService())
                 {
                     int AgencyID = 0;
+                    ViewBag.IsEditMode = false;
+                    var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
                     {
@@ -34,6 +36,10 @@ namespace ProvenCfoUI.Controllers
                     }
                     var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData;
                     TempData["SegmentsAndTasks"] = SegmentTasks;
+                    if (userType != "" && userType == "1")
+                    {
+                        ViewBag.IsEditMode = true;
+                    }
                 }
                 return View();
             }
@@ -634,6 +640,25 @@ namespace ProvenCfoUI.Controllers
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
 
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        public JsonResult DeleteNeedsCard(int TaskId)
+        {
+            try
+            { 
+                    using (NeedsService objNeeds = new NeedsService())
+                    {
+
+                        var results = objNeeds.DeleteNeedsCard(TaskId);
+                        return Json(results, JsonRequestBehavior.AllowGet);
+                    }
             }
             catch (Exception ex)
             {
