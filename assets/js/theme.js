@@ -1480,7 +1480,8 @@ utils.$document.ready(function () {
             }
         }); // Hide form when drag start
 
-        sortable.on(Events.DRAG_START, function () {
+        sortable.on(Events.DRAG_START, function (e) {
+            kanbanDrag(e)
             $(Selectors.KANBAN_COLLAPSE).collapse('hide');
         }); // Place forms and other contents bottom of the sortable container
 
@@ -1494,6 +1495,7 @@ utils.$document.ready(function () {
                 var $rails = $itemContainer.find(Selectors.PS_RAILS);
                 $itemContainer.append($rails);
             }
+            kanbanDrop(e);
         });
     }
 });
