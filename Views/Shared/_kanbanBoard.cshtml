@@ -80,13 +80,13 @@
                                                 <div class="card-body position-relative">
                                                     @if (ViewBag.IsEditMode == true)
                                                     {
-                                                        <div class="ml-2" style=" font-size: 24px; padding-left: 26rem;">
-                                                            <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                                                <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                        <div class="" style=" font-size: 24px; ">
+                                                            <div class="nav-item dropdown  dots-dropdown" style="list-style: none;">
+                                                                <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px; padding-left: 26rem;">
                                                                     <i class="fas fa-ellipsis-h" data-fa-transform="shrink-6"></i>
                                                                 </a>
 
-                                                                <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <div class="dropdown-menu" aria-labelledby="dividerUSE" style=" ">
 
                                                                     <a class="dropdown-item" href="#" onclick="DeleteNeedsCard('@Tasks.Id')" style="color:#E63756;">Delete</a>
                                                                 </div>
@@ -137,7 +137,7 @@
                                                                     {
                                                                         foreach (var assignee in Tasks.KanbanAssigneesList)
                                                                         {
-                                                                            <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)">
+                                                                            <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)" >
                                                                                 <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
                                                                                     <div class="avatar avatar-xl">
                                                                                         <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
