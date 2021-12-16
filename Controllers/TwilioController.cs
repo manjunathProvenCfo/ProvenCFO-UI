@@ -48,5 +48,14 @@ namespace ProvenCfoUI.Controllers
             return Json("");
         }
 
+        [HttpPost]
+        public JsonResult GenereateAllReconciliationTwilioConversationAndAddParticipants(int clientId)
+        {
+            using (var twilioService = new TwilioService())
+            {
+                twilioService.GenereateAllReconciliationTwilioConversationAndAddParticipants(clientId, User.UserId, User.LoginName);
+            }
+            return Json(true);
+        }
     }
 }

@@ -805,8 +805,12 @@
             }
         };
         $(function () {
-            docReady(totalSalesInit);
-            docReady(totalSalesInitTwo);
+            try {
+                docReady(totalSalesInit);
+                docReady(totalSalesInitTwo);
+            } catch (e) {
+                console.log(e);
+            }
         });
     </script>
 }
