@@ -82,12 +82,12 @@
                                             @if (ViewBag.IsEditMode == true)
                                             {
                                                 <div class="" style=" font-size: 24px; ">
-                                                    <div class="nav-item dropdown  dots-dropdown" style="list-style: none;">
-                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px; padding-left: 23rem;">
+                                                    <div class="nav-item dropdown " style="list-style: none;">
+                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:absolute;right:0; z-index:1000">
                                                             <i class="fas fa-ellipsis-h" data-fa-transform="shrink-6"></i>
                                                         </a>
 
-                                                        <div class="dropdown-menu" aria-labelledby="dividerUSE" style=" ">
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dividerUSE" style=" ">
 
                                                             <a class="dropdown-item" href="#" onclick="DeleteNeedsCard('@Tasks.Id')" style="color:#E63756;">Delete</a>
                                                         </div>
