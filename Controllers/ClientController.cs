@@ -378,7 +378,23 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
+        [CheckSession]
+        public ActionResult GetClientXeroAcccountsList()
+        {
+            try
+            {
+                using (ClientService obj = new ClientService())
+                {
+                    var objResult = obj.GetClientXeroAcccounts();
+                    return View(objResult.ResultData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
 
     }
 }

@@ -53,6 +53,7 @@ namespace Proven.Model
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
         public List<BillableEntitiesVM> billableEntitiesList { get; set; }
+        public List<ClientXeroAccountsModel> clientXeroAccounts { get; set; }
         public List<TeamsVM> TeamList { get; set; }
         public string TeamName { get; set; }
         public string TeamMemberId1 { get; set; }

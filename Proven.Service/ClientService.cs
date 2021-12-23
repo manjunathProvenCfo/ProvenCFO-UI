@@ -309,5 +309,12 @@ namespace Proven.Service
             }
         }
 
+        public ClientMainModel GetClientXeroAcccounts()
+        {
+            return GetAsync<ClientMainModel>("Client/GetClientXeroAcccounts").Result;
+
+        }
+
+
     }
 }
