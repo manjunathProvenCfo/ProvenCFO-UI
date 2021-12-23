@@ -442,7 +442,6 @@
 
             if (!settings.allowRepeat) {
                 // Filter items that has already been mentioned
-                debugger
                 var mentionValues = _.pluck(mentionsCollection, 'value');
                 results = _.reject(results, function (item) {
                     return _.include(mentionValues, item.name);
