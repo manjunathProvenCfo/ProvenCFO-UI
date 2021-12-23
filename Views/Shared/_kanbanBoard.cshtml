@@ -64,107 +64,108 @@
                                     {
                                         <span class="text-500">(@Segments.KanbanTaskList.Count())</span>}
                                 </h5>
-                                <button class="btn btn-sm btn-falcon-default py-0 px-2" type="button" data-boundary="viewport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h" data-fa-transform="shrink-2"></span></button>
+                                @*<button class="btn btn-sm btn-falcon-default py-0 px-2" type="button" data-boundary="viewport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h" data-fa-transform="shrink-2"></span></button>*@
                             </div>
 
 
-                            <div class="kanban-items-container-new scrollbar perfect-scrollbar min-vh-100" ondrop="drop(event)" ondragover="allowDrop(event)" id="@string.Concat(@Segments.SegmentDisplayName.ToString().Replace(" ","--"),"__")" segmenttype="@Segments.SegmentDisplayName" style="background-color:#f9fafd">
+                            <div class="kanban-items-container scrollbar perfect-scrollbar min-vh-100" ondrop="drop(event)" ondragover="allowDrop(event)" id="@string.Concat(@Segments.SegmentDisplayName.ToString().Replace(" ","--"),"__")" segmenttype="@Segments.SegmentDisplayName" style="background-color:#f9fafd">
                                 @if (Segments.KanbanTaskList != null)
                                 {
                                     foreach (var Tasks in Segments.KanbanTaskList)
                                     {
 
-                                        <div class="kanban-item" draggable="true" ondragstart="drag(event)" id="@Tasks.Id" style="margin-left:1rem; margin-right:1rem">
-                                            <div class="card kanban-item-card hover-actions-trigger" data-toggle="modal" data-target="#kanban-modal-open">
-                                                
-                                                <div class="card-body position-relative">
-                                                    @if (ViewBag.IsEditMode == true)
-                                                    {
-                                                        <div class="" style=" font-size: 24px; ">
-                                                            <div class="nav-item dropdown  dots-dropdown" style="list-style: none;">
-                                                                <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px; padding-left: 26rem;">
-                                                                    <i class="fas fa-ellipsis-h" data-fa-transform="shrink-6"></i>
-                                                                </a>
+                                <div class="kanban-item" draggable="true" id="@Tasks.Id" style="margin-left:1rem; margin-right:1rem">
+                                    @*ondragstart="drag(event)"*@
+                                    <div class="card kanban-item-card hover-actions-trigger" data-toggle="modal" data-target="#kanban-modal-open">
 
-                                                                <div class="dropdown-menu" aria-labelledby="dividerUSE" style=" ">
+                                        <div class="card-body position-relative">
+                                            @if (ViewBag.IsEditMode == true)
+                                            {
+                                                <div class="" style=" font-size: 24px; ">
+                                                    <div class="nav-item dropdown " style="list-style: none;">
+                                                        <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:absolute;right:0; z-index:1000">
+                                                            <i class="fas fa-ellipsis-h" data-fa-transform="shrink-6"></i>
+                                                        </a>
 
-                                                                    <a class="dropdown-item" href="#" onclick="DeleteNeedsCard('@Tasks.Id')" style="color:#E63756;">Delete</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                        @if (Tasks.Labels == "Urgent")
-                                                        {
-                                                            <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-success bg-red">@Tasks.Labels</span></div>
-                                                        }
-                                                        else if (Tasks.Labels == "High")
-                                                        {
-                                                            <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-primary bg-orange">@Tasks.Labels</span></div>
-                                                        }
-                                                        else if (Tasks.Labels == "Medium")
-                                                        {
-                                                            <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-info bg-light-blue">@Tasks.Labels</span></div>
-                                                        }
-                                                        else if (Tasks.Labels == "Low")
-                                                        {
-                                                            <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-danger bg-green">@Tasks.Labels</span></div>
-                                                        }
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dividerUSE" style=" ">
 
-
-                                                        <p class="mb-0 font-weight-medium text-sans-serif">  @Tasks.TaskTitle</p>
-                                                        @Html.Hidden("TaskId_" + @Tasks.Id, (object)@ViewBag.ErrorMessage, new { @id = "TaskId_" + @Tasks.Id })
-                                                        <div class="dropdown position-absolute text-sans-serif t-0 r-0 mt-card mr-card hover-actions">
-
-                                                            <div class="dropdown-menu dropdown-menu-right py-0">
-                                                                <a class="dropdown-item" href="#!">Add Card</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Copy link</a>
-                                                                <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="kanban-item-footer cursor-default">
-                                                            <div class="text-500 z-index-2">
-                                                                @if (Tasks.NumberofAttachment > 0)
-                                                                {
-                                                                    <span class="me-2" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <span class="me-2 d-none" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
-                                                                }
-                                                            </div>
-                                                            <div class="z-index-2">
-                                                                <ul class="nav avatar-group mb-0">
-                                                                    @if (Tasks.KanbanAssigneesList != null)
-                                                                    {
-                                                                        foreach (var assignee in Tasks.KanbanAssigneesList)
-                                                                        {
-                                                                            <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)" >
-                                                                                <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
-                                                                                    <div class="avatar avatar-xl">
-                                                                                        <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
-
-                                                                                    </div>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-md px-0 py-3">
-                                                                                    <div class="d-flex align-items-center position-relative px-3">
-                                                                                        <div class="avatar avatar-2xl me-2">
-                                                                                            <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
-
-                                                                                        </div>
-                                                                                        <div class="flex-1">
-                                                                                            <h6 class="mb-0"><a class="stretched-link text-900" href="#">Anna Karinina</a></h6>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </li>
-                                                                        }
-                                                                    }
-
-                                                                </ul>
-                                                            </div>
+                                                            <a class="dropdown-item" href="#" onclick="DeleteNeedsCard('@Tasks.Id')" style="color:#E63756;">Delete</a>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            }
+                                            @if (Tasks.Labels == "Urgent")
+                                            {
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-success bg-red">@Tasks.Labels</span></div>
+                                            }
+                                            else if (Tasks.Labels == "High")
+                                            {
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-primary bg-orange">@Tasks.Labels</span></div>
+                                            }
+                                            else if (Tasks.Labels == "Medium")
+                                            {
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-info bg-light-blue">@Tasks.Labels</span></div>
+                                            }
+                                            else if (Tasks.Labels == "Low")
+                                            {
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-danger bg-green">@Tasks.Labels</span></div>
+                                            }
+
+
+                                            <p class="mb-0 font-weight-medium text-sans-serif">  @Tasks.TaskTitle</p>
+                                            @Html.Hidden("TaskId_" + @Tasks.Id, (object)@ViewBag.ErrorMessage, new { @id = "TaskId_" + @Tasks.Id })
+                                            <div class="dropdown position-absolute text-sans-serif t-0 r-0 mt-card mr-card hover-actions">
+
+                                                <div class="dropdown-menu dropdown-menu-right py-0">
+                                                    <a class="dropdown-item" href="#!">Add Card</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Copy link</a>
+                                                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                                                </div>
                                             </div>
-                                        </div>}
+                                            <div class="kanban-item-footer cursor-default">
+                                                <div class="text-500 z-index-2">
+                                                    @if (Tasks.NumberofAttachment > 0)
+                                                    {
+                                                        <span class="me-2" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="me-2 d-none" id="@string.Concat("attCount_", Tasks.Id)" data-bs-toggle="tooltip" title="Attachments"><span class="fas fa-paperclip me-1"></span><span> @Tasks.NumberofAttachment</span></span>
+                                                    }
+                                                </div>
+                                                <div class="z-index-2">
+                                                    <ul class="nav avatar-group mb-0">
+                                                        @if (Tasks.KanbanAssigneesList != null)
+                                                        {
+                                                            foreach (var assignee in Tasks.KanbanAssigneesList)
+                                                            {
+                                                                <li class="nav-item dropdown" id="@string.Concat("li_",assignee.UserId_Ref)">
+                                                                    <a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#" role="button" data-bs-toggle="dropdown">
+                                                                        <div class="avatar avatar-xl">
+                                                                            <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
+
+                                                                        </div>
+                                                                    </a>
+                                                                    <div class="dropdown-menu dropdown-md px-0 py-3">
+                                                                        <div class="d-flex align-items-center position-relative px-3">
+                                                                            <div class="avatar avatar-2xl me-2">
+                                                                                <img class="rounded-circle" src="@Url.Content(assignee.ProfileImage ?? "../assets/img/team/avatar.png")" alt="" />
+
+                                                                            </div>
+                                                                            <div class="flex-1">
+                                                                                <h6 class="mb-0"><a class="stretched-link text-900" href="#">Anna Karinina</a></h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>}
                                 }
                             </div>
                         </div>}

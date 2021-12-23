@@ -415,13 +415,13 @@
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
                 if (response.Message == "SUCCESS") {
-                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.' ;
+                    msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
                     ShowAlertBoxSuccess("Success!", "Successfully extract data from Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
-                    msg = 'Reconcilation data extracted successfully. Please wait for page to refresh.';
+                    msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
                     ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
                 }
@@ -441,10 +441,10 @@
                             msg = 'Log in successfully to Xero.'
                             break;
                         case 'GETTING DATA':
-                            msg = 'Reconcilation data extracting for a selected agency. ';
+                            msg = 'Reconciliation data extracting for a selected agency. ';
                             break;
                         case 'SUCCESS':
-                            msg = 'Reconcilation data extracted successfully. Please wait for page to refresh. '
+                            msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. '
                             break;
                         case 'FAILED':
                             msg = 'Error while data extratction from Xero. Please try after some time. '
