@@ -63,11 +63,14 @@ namespace ProvenCfoUI.Models
         public int? DashboardId { get; set; }
         public string DashboardURLId { get; set; }
         public string XeroShortCode { get; set; }
-        
+
+        public string ExcludedAccountNumbers { get; set; }
+        public string IncludedAccountNumbers { get; set; }
+
 
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
-        public List<Proven.Model.ClientXeroAccountsModel> clientXeroAccounts { get; set; }
+        public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }
 
     }
 }

@@ -176,7 +176,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string IncludedAccountNumbers,string ExcludedAccountNumbers)
         {
             var form = new Dictionary<string, object>
             {
@@ -201,7 +201,9 @@ namespace Proven.Service
                 {"CrmId",CrmId },
                 {"XeroShortCode",XeroShortCode },
                  {"DashboardId",DashboardId },
-                {"DashboardURLId",DashboardURLId  }
+                {"DashboardURLId",DashboardURLId  },
+                {"IncludedAccountNumbers",IncludedAccountNumbers  },
+                {"ExcludedAccountNumbers",ExcludedAccountNumbers  }
 
                
                 //{"PhoneNumber",PhoneNumber },
@@ -312,6 +314,11 @@ namespace Proven.Service
         public ClientMainModel GetClientXeroAcccounts()
         {
             return GetAsync<ClientMainModel>("Client/GetClientXeroAcccounts").Result;
+
+        }
+        public ClientXeroAccountsMainModel GetClientXeroAcccountsByAgencyId(int AgencyId)
+        {
+            return GetAsync<ClientXeroAccountsMainModel>("Client/GetClientXeroAcccountsByAgencyID?AgencyID=" + AgencyId).Result;
 
         }
 

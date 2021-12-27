@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using ProvenCfoUI.Comman;
 using System.Globalization;
 using log4net;
+using System.Threading.Tasks;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -202,6 +203,7 @@ namespace ProvenCfoUI.Controllers
                                 //   // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
                                 //    //Clientvm.StartDate = client.StartDate;
                             }
+                            Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
                             //else
                             //{
                             //    Clientvm.StartDate = client.StartDate;
@@ -258,6 +260,7 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
                                     CultureInfo provider = CultureInfo.InvariantCulture;
@@ -291,6 +294,7 @@ namespace ProvenCfoUI.Controllers
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
                                     createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                     createClientVM.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                    createClientVM.clientXeroAccounts = obj.GetClientXeroAcccountsByAgencyId(createClientVM.Id).ResultData;
                                     if (ClientExist != null && ClientExist.Id != createClientVM.Id)
                                     {
                                         ViewBag.ErrorMessage = "Exist";
@@ -301,7 +305,7 @@ namespace ProvenCfoUI.Controllers
                                         createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
 
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid,Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode,Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId);
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid,Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode,Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers);
 
 
 
@@ -337,7 +341,7 @@ namespace ProvenCfoUI.Controllers
                     var client = objClientService.GetClientById(id);
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.XeroScope, client.XeroClientSecret, client.XeroClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                         client.DashboardId.ToString(),client.DashboardURLId.ToString());
+                         client.DashboardId.ToString(),client.DashboardURLId.ToString(),string.Empty,string.Empty);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");
@@ -350,6 +354,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+       
         [CheckSession]
         public JsonResult DeleteClient(int id)
         {

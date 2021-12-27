@@ -435,6 +435,9 @@
                         case 'INITIATED':
                             msg = 'Initiated data extraction from Xero and logging into Xero.'
                             break;
+                        case 'INITIATED 1':
+                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            break;
                         case 'WAITING FOR OTP':
                             msg = 'Waiting for OTP to log-in to Xero.';
                             break;
@@ -452,6 +455,7 @@
                             break;
 
                         default:
+                            msg = response.Message;
                     }
                     $('#loadertext').text(msg);
                     reconcilationonstatusDemand(RequestID);
