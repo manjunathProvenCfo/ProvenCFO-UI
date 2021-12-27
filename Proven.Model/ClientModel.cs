@@ -71,7 +71,7 @@ namespace Proven.Model
         public bool ReceiveQuarterlyReports { get; set; }
         public int?  DashboardId { get; set; }
         public string DashboardURLId { get; set; }
-        public bool? EnableAutomation { get; set; }
+        public bool?   EnableAutomation { get; set; }
 
 
 
