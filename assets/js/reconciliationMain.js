@@ -1,8 +1,10 @@
 ﻿//Chat Code start
 var currentChannelUniqueNameGuid = "";
-
+var IsEnableAutomation = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
+    bindEnableAutomation();
+
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
         let elCheckbox = $("table tr.bg-300 td:first .checkbox-bulk-select-target");
@@ -53,6 +55,14 @@ $(document).ready(function () {
         }
     }
 });
+var bindEnableAutomation = function () {
+        getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
+            if (response.Status === "Success") {
+                IsEnableAutomation = response.Data;
+              
+            }
+        });
+    }
 //Chat Code end
 
 $(document).ready(function () {
@@ -60,7 +70,7 @@ $(document).ready(function () {
     bindNotInBooksAndBanksCount();
 
     bindNotInBooksAndBanksCount1();
-
+   
     LoadFilterData();
 
 
@@ -184,30 +194,33 @@ $(document).ready(function () {
     });
 
     $("#OnDemandData").click(function () {
+        if (IsEnableAutomation === false)
+            return;
 
-        $("#Loader").removeAttr("style");
-        var ClientID = $("#ddlclient option:selected").val();
+            $("#Loader").removeAttr("style");
+            var ClientID = $("#ddlclient option:selected").val();
+            var RequestType = "On Demand";
+            var RequestedAtUTC = '';
+            var CurrentStatus = "New";
+            var RequestCompletedAtUTC = '';
+            var Remark = '';
 
+            var AgencyName = '';
+            var CreatedBy = '';
+            var CreatedDate = '';
 
-        var RequestType = "On Demand";
-        var RequestedAtUTC = '';
-        var CurrentStatus = "New";
-        var RequestCompletedAtUTC = '';
-        var Remark = '';
+            var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+            postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+                if (response.Message == 'Success') {
+                    setTimeout(() => {
+                        reconcilationonstatusDemand(response.data.Id);
+                    }, 1000);
+                }
 
-        var AgencyName = '';
-        var CreatedBy = '';
-        var CreatedDate = '';
-        var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
-        postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
-            if (response.Message == 'Success') {
-                setTimeout(() => {
-                    reconcilationonstatusDemand(response.data.Id);
-                }, 1000);
-            }
-
-        });
-
+            });
+      
     });
+
+    
 
 });
