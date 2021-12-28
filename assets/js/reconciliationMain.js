@@ -4,6 +4,7 @@ var IsEnableAutomation = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
+    enableBtn();
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -58,12 +59,16 @@ $(document).ready(function () {
 var bindEnableAutomation = function () {
         getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
             if (response.Status === "Success") {
+
                 IsEnableAutomation = response.Data;
+                if (IsEnableAutomation === false) {
+                    $("#OnDemandData").attr('disabled', true);
+                }
               
             }
         });
     }
-//Chat Code end
+
 
 $(document).ready(function () {
 
@@ -72,8 +77,8 @@ $(document).ready(function () {
     bindNotInBooksAndBanksCount1();
    
     LoadFilterData();
-
-
+   
+   
     XeroConnectionUpdate();
     var type = sessionStorage.getItem('Type');
     $('#divFilter').hide();
@@ -194,9 +199,13 @@ $(document).ready(function () {
     });
 
     $("#OnDemandData").click(function () {
-        if (IsEnableAutomation === false)
-            return;
 
+        if (IsEnableAutomation === false) {
+            $("#OnDemandData").attr('disabled', true);
+            return;
+        }
+            
+        
             $("#Loader").removeAttr("style");
             var ClientID = $("#ddlclient option:selected").val();
             var RequestType = "On Demand";
@@ -221,6 +230,5 @@ $(document).ready(function () {
       
     });
 
-    
 
 });
