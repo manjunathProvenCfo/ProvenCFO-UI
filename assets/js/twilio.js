@@ -132,8 +132,8 @@ var joinChannel = function (channel) {
 var addMediaMessage = function (file) {
     const formData = new FormData();
     formData.append('file', file);
-    if (isEmptyOrBlank(activeChannel.channelState.lastMessage) && channel.channelState.attributes.type === "public reconciliation") {
-        UpdateReconciliationHasStatus(channel.channelState.uniqueName);
+    if (isEmptyOrBlank(activeChannel.channelState.lastMessage) && activeChannel.channelState.attributes.type === "public reconciliation") {
+        UpdateReconciliationHasStatus(activeChannel.channelState.uniqueName);
     }
     activeChannel.sendMessage(formData).then(function (msg) {
         setScrollPosition();
