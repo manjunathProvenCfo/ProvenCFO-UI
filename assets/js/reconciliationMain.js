@@ -4,7 +4,7 @@ var IsEnableAutomation = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
-    enableBtn();
+   
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -63,6 +63,8 @@ var bindEnableAutomation = function () {
                 IsEnableAutomation = response.Data;
                 if (IsEnableAutomation === false) {
                     $("#OnDemandData").attr('disabled', true);
+                    $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+
                 }
               
             }
