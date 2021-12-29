@@ -125,7 +125,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId)
         {
             var form = new Dictionary<string, object>
             {
@@ -154,7 +154,8 @@ namespace Proven.Service
                 {"CrmId",CrmId },
                 {"XeroShortCode",XeroShortCode },
                 {"DashboardId",DashboardId },
-                {"DashboardURLId",DashboardURLId  }
+                {"DashboardURLId",DashboardURLId  },
+                {"ReportId",ReportId  }
             };
 
             //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
@@ -176,7 +177,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string IncludedAccountNumbers,string ExcludedAccountNumbers)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId, string IncludedAccountNumbers,string ExcludedAccountNumbers)
         {
             var form = new Dictionary<string, object>
             {
@@ -202,6 +203,7 @@ namespace Proven.Service
                 {"XeroShortCode",XeroShortCode },
                  {"DashboardId",DashboardId },
                 {"DashboardURLId",DashboardURLId  },
+                 {"ReportId",ReportId  },
                 {"IncludedAccountNumbers",IncludedAccountNumbers  },
                 {"ExcludedAccountNumbers",ExcludedAccountNumbers  }
 
