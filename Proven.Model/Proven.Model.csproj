@@ -53,6 +53,8 @@
     <Compile Include="City.cs" />
     <Compile Include="ClientModel.cs" />
     <Compile Include="ClientUserAssociationModel.cs" />
+    <Compile Include="ClientXeroAccountsModel.cs" />
+    <Compile Include="ClientXeroAccountsVM.cs" />
     <Compile Include="CommonViewModel.cs" />
     <Compile Include="InviteUserModel.cs" />
     <Compile Include="InviteUserVMId.cs" />

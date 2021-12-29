@@ -161,10 +161,10 @@
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
-                                @if (ViewBag.IsStaffUser == true)
-                                {
+                                @if (ViewBag.IsStaffUser == true )
+                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                }
+                                 }
 
                                 @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
 
@@ -399,6 +399,7 @@
             loadChatPage(true, 1);
         }
         function XeroConnectionUpdate() {
+       
             var XConstatus = $('#XeroConnectionStatus');
             $("#OnDemandData").show();
             //if (XConstatus.val() == "True") {
@@ -434,6 +435,9 @@
                         case 'INITIATED':
                             msg = 'Initiated data extraction from Xero and logging into Xero.'
                             break;
+                        case 'INITIATED 1':
+                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            break;
                         case 'WAITING FOR OTP':
                             msg = 'Waiting for OTP to log-in to Xero.';
                             break;
@@ -451,6 +455,7 @@
                             break;
 
                         default:
+                            msg = response.Message;
                     }
                     $('#loadertext').text(msg);
                     reconcilationonstatusDemand(RequestID);

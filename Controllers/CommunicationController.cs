@@ -72,7 +72,7 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
-        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId)
+        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId, bool? onlyHasChatChannels)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid, clientId);
+                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid, clientId, onlyHasChatChannels);
                 }
                 return Json(chatChannels, JsonRequestBehavior.AllowGet);
             }

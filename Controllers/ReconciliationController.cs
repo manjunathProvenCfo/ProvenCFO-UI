@@ -4,6 +4,7 @@ using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -551,6 +552,30 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
+        [CheckSession]
+        public JsonResult GetIsEnableAutomation(int agencyId)
+        {
+            try
+            {
+                var IsEnableAutomation = false;
+                using (ClientService objClientService = new ClientService())
+                {
+                    CreateClientVM Clientvm = new CreateClientVM();
+                    var client = objClientService.GetClientById(agencyId);
+                    IsEnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
+                }
+                return Json(new { Data = IsEnableAutomation, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

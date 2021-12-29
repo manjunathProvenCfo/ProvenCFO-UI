@@ -62,11 +62,17 @@ namespace ProvenCfoUI.Models
         [Range(0, 99999999999, ErrorMessage = "Dashboard ID must be between 0 and 99999999999")]
         public int? DashboardId { get; set; }
         public string DashboardURLId { get; set; }
+        public string ReportId { get; set; }
+
         public string XeroShortCode { get; set; }
-        
+
+        public string ExcludedAccountNumbers { get; set; }
+        public string IncludedAccountNumbers { get; set; }
+
 
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
+        public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }
 
     }
 }
