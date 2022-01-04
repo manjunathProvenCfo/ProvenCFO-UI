@@ -161,10 +161,10 @@
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
-                                @if (ViewBag.IsStaffUser == true )
-                                 {
+                                @if (ViewBag.IsStaffUser == true)
+                                {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                 }
+                                }
 
                                 @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update"><span class="fas fa-edit " data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span></button>*@
 
@@ -324,18 +324,27 @@
 
 <div class="position-fixed loader-circle" id="Loader" style="display:none;">
     <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
+        @*<div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+
+            </div>*@
+        <div class="row">
+            <lottie-player src="../../assets/lib/lottie-player/lf20_fw9ijhki.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         </div>
         <br />
-        <div id="loadertext">Loading...</div>
+        
+        <span class="row m-3">
+            <span id="loadertext">Loading...</span>
+        </span>
     </div>
+    
+
 </div>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>    
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
