@@ -17,6 +17,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class InvitationController : BaseController
     {
         // GET: 

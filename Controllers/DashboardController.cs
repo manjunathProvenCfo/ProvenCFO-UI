@@ -1,5 +1,6 @@
 ﻿using Proven.Model;
 using Proven.Service;
+using ProvenCfoUI.Comman;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class DashboardController : Controller
     {
         // GET: Dashboard

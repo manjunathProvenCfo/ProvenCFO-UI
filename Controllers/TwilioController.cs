@@ -10,6 +10,7 @@ using Proven.Model;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class TwilioController : BaseController
     {
         [HttpPost]
