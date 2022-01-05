@@ -13,6 +13,7 @@ namespace ProvenCfoUI.Controllers
 {
     //abcd
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class SetupController : BaseController
     {
         // GET: Setup

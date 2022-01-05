@@ -10,10 +10,10 @@ using ProvenCfoUI.Comman;
 using System.Globalization;
 using log4net;
 using System.Threading.Tasks;
-
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class ClientController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

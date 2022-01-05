@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace SweetAlert.Controllers
 {
+    [Exception_Filters]
     public class SweetController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

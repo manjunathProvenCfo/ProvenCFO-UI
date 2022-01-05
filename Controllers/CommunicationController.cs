@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class CommunicationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

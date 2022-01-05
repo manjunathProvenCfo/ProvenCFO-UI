@@ -25,6 +25,7 @@ using System.Web.Security;
 namespace ProvenCfoUI.Controllers
 {
     //[Authorize]
+    [Exception_Filters]
     public class HomeController : BaseController
     {
         string errorMessage = string.Empty;
@@ -84,6 +85,7 @@ namespace ProvenCfoUI.Controllers
             {
                 try
                 {
+
                     using (AccountService obj = new AccountService())
                     {
                         CommonService commSrv;
@@ -120,8 +122,8 @@ namespace ProvenCfoUI.Controllers
                                     break;
                                 default:
                                     ViewBag.ErrorMessage = "Email or Password not correct";
-                                    break;  
-                            }                            
+                                    break;
+                            }
                             Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
                             return View("Login");
                         }

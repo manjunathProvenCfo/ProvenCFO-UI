@@ -231,6 +231,7 @@
     <Compile Include="Comman\CustomAuthenticationFilter.cs" />
     <Compile Include="Comman\CustomAuthorizeAttribute.cs" />
     <Compile Include="Comman\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Comman\Exception_Filters.cs" />
     <Compile Include="Comman\XeroInstance.cs" />
     <Compile Include="Controllers\AgencyServiceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -1113,6 +1114,7 @@
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
     <Content Include="Views\Dashboard\DashboardError.cshtml" />
     <Content Include="Views\Communication\Notifications.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
