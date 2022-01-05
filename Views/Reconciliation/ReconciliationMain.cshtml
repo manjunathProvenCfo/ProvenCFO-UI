@@ -645,7 +645,14 @@
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
             }
-
+            var type = 'Outstanding Payments';
+            if (IsNotinBooks == true) {
+                type = 'Unreconciled';
+                sessionStorage.setItem('Type', 0);
+            }
+            else {
+                sessionStorage.setItem('Type', 1);
+            }
             let pdata = {
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
