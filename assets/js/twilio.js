@@ -203,6 +203,7 @@ var setActiveChannel = function (channel) {
     //}
 
     channel.getMessages(Chat_Page_Size).then(function (page) {
+        hideChatContentLoader();
         activeChannelPage = page;
         activeChannelMessages = page.items;
         page.items.forEach(addMessage);

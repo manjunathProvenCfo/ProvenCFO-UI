@@ -35,6 +35,7 @@ var chat = {
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+    showChatContentLoader();
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
@@ -267,6 +268,7 @@ var renderParticipants = function () {
 }
 
 var handleParticipantClick = function (event) {
+    showChatContentLoader();
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
         throw 'Channel Index not found.'
