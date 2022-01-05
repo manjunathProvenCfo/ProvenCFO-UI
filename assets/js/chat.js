@@ -268,7 +268,7 @@ var renderParticipants = function () {
 }
 
 var handleParticipantClick = function (event) {
-    showChatContentLoader();
+    
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
         throw 'Channel Index not found.'
@@ -278,6 +278,7 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
+        showChatContentLoader();
 
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
