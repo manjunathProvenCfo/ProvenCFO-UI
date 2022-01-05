@@ -154,6 +154,10 @@ body, .navbar-glass,
 .btn-link {
     color: #00BE82 !important;
 }
+.info {
+    background-color: #e7f3fe;
+    border-left: 6px solid #2196F3;
+}
 
 @media screen and (min-width: 1200px) and (max-width: 1680px) {
     .custom-form-width .col-xl-5 {
