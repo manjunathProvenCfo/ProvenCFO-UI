@@ -106,7 +106,7 @@ function showWaitMeLoader(SELECTOR,loadingMessage) {
         //progressBar, bouncePulse or img
         effect: 'win8_linear',
         text: loadingMessage,
-        bg: 'rgb(83,83,83)',
+        bg: 'rgba(0,0,0,0.75)',
         /*bg: 'rgba(255,255,255,0.7)',*/
         //color for background animation and text (string).
         color: '#000000',
@@ -120,6 +120,12 @@ function showWaitMeLoader(SELECTOR,loadingMessage) {
 }
 function hideWaitMeLoader(SELECTOR) {
     $(SELECTOR).waitMe('hide');
+}
+function showChatContentLoader() {
+    showWaitMeLoader(".card-chat-content", "Loading...");
+}
+function hideChatContentLoader() {
+    hideWaitMeLoader(".card-chat-content", "Loading...");
 }
 //Loader End
 
