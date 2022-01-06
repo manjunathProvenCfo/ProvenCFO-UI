@@ -10,14 +10,14 @@ namespace ProvenCfoUI.Comman
     {
         public void OnException(ExceptionContext filterContext)
         {
-            if (filterContext.Exception is NotImplementedException)
-            {
+            //if (filterContext.Exception is NotImplementedException)
+            //{
 
-            }
-            else if (filterContext.Exception is DivideByZeroException)
-            {
+            //}
+            //else if (filterContext.Exception is DivideByZeroException)
+            //{
 
-            }
+            //}
             filterContext.Result = new ViewResult()
             {
                 ViewName = "Error"
