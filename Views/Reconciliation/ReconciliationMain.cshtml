@@ -193,7 +193,7 @@
                             <tr>
                                 <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                        <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
                                         <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                                     </div>
                                 </th>
@@ -332,19 +332,19 @@
             <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_fw9ijhki.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         </div>
         <br />
-        
+
         <span class="row m-3">
             <span id="loadertext">Loading...</span>
         </span>
     </div>
-    
+
 
 </div>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>    
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/twilio-chat")
     <script>
@@ -366,7 +366,6 @@
 
             $(".glAccountDD").each(function (index, element) {
                 $(this).attr('id', 'item_gl_account_ref' + index);
-                console.log(element)
                 $(element).select2();
             });
 
@@ -384,13 +383,33 @@
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
+        function SelectAllClick(e) {
+            if (e.checked == false) {
+                sessionStorage.removeItem('SelectedRecords');
+                sessionStorage.removeItem('UnSelectedRecords');
+            }
+        }
         function SelectClick(e) {
             if (e.checked) {
-                var SelectedItems = sessionStorage.getItem('SelectedRecords') != null ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
+                UnSelectedRecords = UnSelectedRecords.filter(function (x) {
+                    return x != e.id
+                });
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
+
+                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
             }
             else {
-                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') != null ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
+                //Remove unselected items from selected Items List
+                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords')?.split(',') : [];
+                SelectedItems = SelectedItems.filter(function (x) {
+                    return x != e.id
+                });
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+
+
+                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
             }
         }
@@ -408,7 +427,7 @@
             loadChatPage(true, 1);
         }
         function XeroConnectionUpdate() {
-       
+
             var XConstatus = $('#XeroConnectionStatus');
             $("#OnDemandData").show();
             //if (XConstatus.val() == "True") {
@@ -646,6 +665,7 @@
                 return;
             }
             var type = 'Outstanding Payments';
+            var IsNotinBooks = $('#tabNotinBooks').hasClass('tabselect');
             if (IsNotinBooks == true) {
                 type = 'Unreconciled';
                 sessionStorage.setItem('Type', 0);
@@ -682,7 +702,7 @@
         }
 
         function onChangeglAccount(id, event) {
-            
+
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
@@ -700,9 +720,9 @@
 
         }
     function onChangeBankRule(id, event) {
-        
+
             var Selectedvalue = event.currentTarget.value;
-            
+
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
                 if (response.Message == 'Success') {
@@ -715,7 +735,7 @@
             })
         }
     function onChangeTc(id, event) {
-       
+
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
