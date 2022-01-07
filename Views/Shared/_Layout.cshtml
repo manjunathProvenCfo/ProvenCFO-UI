@@ -60,9 +60,7 @@
         </div>
     </main>
 
-    <script>
-    var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
-    </script>
+
     @Scripts.Render("~/bundles/layoutJS")
     @*@Scripts.Render("~/bundles/js/theme")*@
     <script src="~/assets/js/theme.js"></script>
@@ -72,7 +70,49 @@
 
     @*<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
 
+<script>
+        var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
+        var sessionTime = @(Convert.ToString(Session["SessionTimeout"]));
+        $(document).ready(function () {
+            var timeout = sessionTime * 1000;
+            $(document).bind("idle.idleTimer", function () {
 
+                // function you want to fire when the user goes idle
+                //$.timeoutDialog({ timeout: 1, countdown: 180, logout_redirect_url: 'http://www.aspdotnet-suresh.com', restart_on_yes: true });
+                ShowConfirmBoxWarningwithYesOrNoCallback("Loggin session out", "Do you really want to continue the session?", "Yes, continue it!", "Logout", function (isConfirmed) {
+
+                    if (isConfirmed) {
+                        ShowEnterInput('Loggin session extend', 'Plase enter your password.!', 'password', 'Please enter valid password..!', function (IsloginExtend) {
+                            if (IsloginExtend) {
+                                postAjaxSync("/Home/SessionTimeoutExtend?UserName=" + userEmailAddress + "&password=" + IsloginExtend, null, function (response) {
+
+                                    var res = response;
+                                    if (response == 'success') {
+                                        swal.close();
+                                    }
+                                    else {
+                                        ShowAlertBoxWarning('Wrong credentials..!', 'Entered user name and password is wrong..!', function () {
+                                            //postAjaxSync("/Home/LoginSessionExpaired", null, function (response) {
+                                            //});
+                                            window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
+                    }
+
+                })
+            });
+            $(document).bind("active.idleTimer", function () {
+
+                // function you want to fire when the user becomes active again
+            });
+            $.idleTimer(timeout);
+        });
+</script>
 
 </body>
 </html>
