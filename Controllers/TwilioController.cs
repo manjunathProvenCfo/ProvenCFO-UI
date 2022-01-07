@@ -27,6 +27,17 @@ namespace ProvenCfoUI.Controllers
 
         [HttpPost]
         [CheckSession]
+        public JsonResult CreateTwilioUser()
+        {
+            using (var twilioService = new TwilioService())
+            {
+                twilioService.CreateTwilioUser(User.UserId, User.LoginName);
+            }
+            return Json(true);
+        }
+
+        [HttpPost]
+        [CheckSession]
         public async Task<JsonResult> UpdateTwilioUserId(string UserId, string TwilioUserId)
         {
             bool IsSuccessful = false;

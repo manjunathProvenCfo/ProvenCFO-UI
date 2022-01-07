@@ -14,6 +14,8 @@ $(document).ready(function () {
         }
     });
 
+    createTwilioUser();
+
     AgencyDropdownPartialViewChange();
     //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
@@ -37,15 +39,15 @@ $(document).ready(function () {
 
     $('#ddlGrossRevenue').change(function () {
         var item = $(this);
-       
+
         RenderGrossRevenueChart(item.val());
     });
     $('#dllNetIncome').change(function () {
         var item = $(this);
-       
+
         RenderNetIncomeChart(item.val());
     });
-    
+
 });
 
 //function GetMonthDifference(data.StartDate, Enddate) {
@@ -69,7 +71,7 @@ function RenderGrossRevenueChart(Option) {
         }
         else {
             var xdata = ['No Data'];
-            var ydata = [0];      
+            var ydata = [0];
 
             LineChart(xdata, ydata, '#container1');
         }
@@ -78,14 +80,14 @@ function RenderGrossRevenueChart(Option) {
 }
 
 function RenderNetIncomeChart(Option) {
-    
+
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift();
             var xdata = response.Xdata.reverse(); ///['Oct', 'Nov', 'Dec'];
             var ydata = response.Ydata.reverse();//[100, 150, 200];
-        
+
             LineChart(xdata, ydata, '#container2');
         }
         else {
@@ -570,7 +572,7 @@ function AgencyDropdownPartialViewChange() {
                     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                     RenderNetIncomeChart($('#dllNetIncome').val());
                 }, 1000);
-              
+
                 GetAccountOutStanding();
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
@@ -783,7 +785,7 @@ function GetReconcilationData1() {
             utils.addProgressCircle("#divNotInBookPercentage1")
             //for (var i = 0; i < data.length; i++) {
 
-                
+
 
             //    if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
             //        $("#lblNotInBooksCount2").text(data[i].Count);
@@ -818,7 +820,7 @@ function GetReconcilationPostiveData() {
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
 
         if (response.Message == "Success") {
-           
+
             let data = response.ResultData;
             let totalSum = 0;
 
@@ -826,15 +828,15 @@ function GetReconcilationPostiveData() {
 
                 totalSum = totalSum + data[i].amount;
 
-               
-                
+
+
 
                 $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
-               
-               
+
+
                 $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
 
-               
+
             }
             if (data == 0) {
 
@@ -855,21 +857,21 @@ function GetReconcilationNegativeData() {
     getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
 
         if (response.Message == "Success") {
-           
+
             var data = response.ResultData;
             var totalSum = 0;
 
             for (var i = 0; i < data.length; i++) {
 
-                
+
 
                 $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
 
 
-               
-                
+
+
                 $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
-              
+
             }
             if (data == 0) {
 
@@ -1389,4 +1391,7 @@ function prepareReportMedia(report) {
                                     </div>
                                 </div>`;
     return reportHTML;
+}
+var createTwilioUser = function () {
+    postAjax("/Twilio/CreateTwilioUser", null, function () { });
 }
