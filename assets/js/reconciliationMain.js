@@ -177,6 +177,7 @@ $(document).ready(function () {
             $('#divChat').hide();
             $('#divFilter').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -192,6 +193,7 @@ $(document).ready(function () {
             $('#divFilter').hide();
             $('#divBulkUpdate').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
