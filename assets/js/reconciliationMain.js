@@ -45,6 +45,8 @@ $(document).ready(function () {
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
+        $('#divBulkUpdate').hide();
+        $('#divBulkUpdate').addClass('d-none');
         $('#divChat').show();
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
