@@ -74,26 +74,21 @@
         var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
         var sessionTime = @(Convert.ToString(Session["SessionTimeout"]));
         $(document).ready(function () {
-            var timeout = sessionTime * 1000;
-            $(document).bind("idle.idleTimer", function () {
-
-                // function you want to fire when the user goes idle
-                //$.timeoutDialog({ timeout: 1, countdown: 180, logout_redirect_url: 'http://www.aspdotnet-suresh.com', restart_on_yes: true });
-                ShowConfirmBoxWarningwithYesOrNoCallback("Loggin session out", "Do you really want to continue the session?", "Yes, continue it!", "Logout", function (isConfirmed) {
+            var timeout = sessionTime * 60000; //Convert Minutes to Milliseconds
+            $(document).bind("idle.idleTimer", function () {               
+                ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session ?", "Yes, continue working", "Logout", function (isConfirmed) {
 
                     if (isConfirmed) {
-                        ShowEnterInput('Loggin session extend', 'Plase enter your password.!', 'password', 'Please enter valid password..!', function (IsloginExtend) {
+                        ShowEnterInput('Continue Session', 'Plase enter your password', 'Password','password', 'Please enter valid password', function (IsloginExtend) {
                             if (IsloginExtend) {
                                 postAjaxSync("/Home/SessionTimeoutExtend?UserName=" + userEmailAddress + "&password=" + IsloginExtend, null, function (response) {
 
                                     var res = response;
                                     if (response == 'success') {
-                                        swal.close();
+                                        ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');
                                     }
                                     else {
-                                        ShowAlertBoxWarning('Wrong credentials..!', 'Entered user name and password is wrong..!', function () {
-                                            //postAjaxSync("/Home/LoginSessionExpaired", null, function (response) {
-                                            //});
+                                        ShowAlertBoxWarning('Wrong credentials..!', 'Entered user name and password is wrong..!', function () {                                           
                                             window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
                                         });
                                     }

@@ -109,11 +109,12 @@ function ShowConfirmBoxWarningwithYesOrNoCallback(title, text, confirmButtonText
         closeOnCancel: false       
     },callback);
 }
-function ShowEnterInput(title, text, inputPlacetext,Nullenterywarningmsg,callback =null) {
+function ShowEnterInput(title, text, inputType, inputPlacetext,Nullenterywarningmsg,callback =null) {
     swal({
         title: title,
         text: text,
         type: "input",
+        inputType: inputType,
         showCancelButton: true,
         closeOnConfirm: false,
         inputPlaceholder: inputPlacetext,
