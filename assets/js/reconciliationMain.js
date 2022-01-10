@@ -108,14 +108,29 @@ $(document).ready(function () {
     sessionStorage.clear();
 
     $('.checkbox-bulk-select-target').click(function () {
+        
         if ($(this).is(":checked")) {
+            
             $(this).closest('tr').addClass('bg-300');
         }
         else {
             $(this).closest("tr").removeClass('bg-300');
         }
     });
+    /* checkbox - bulk - purchases - select*/
+   
+    $('.checkbox-bulk-select').change(function () {  
+        if ($(this).is(":checked",true)) {
 
+            $(this).closest('table').addClass('bg-300');
+        }
+        else {
+            $(this).closest("table").removeClass('bg-300');
+        }
+        //$(".checkbox-bulk-select").attr('checked', false);
+        //$(this).closest('tr').css("background-color", "#ff0000");
+    });
+   
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
