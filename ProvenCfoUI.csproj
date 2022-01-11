@@ -231,6 +231,7 @@
     <Compile Include="Comman\CustomAuthenticationFilter.cs" />
     <Compile Include="Comman\CustomAuthorizeAttribute.cs" />
     <Compile Include="Comman\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Comman\Exception_Filters.cs" />
     <Compile Include="Comman\XeroInstance.cs" />
     <Compile Include="Controllers\AgencyServiceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -517,6 +518,11 @@
     <Content Include="assets\js\common.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
+    <Content Include="assets\css\jquery-ui.css" />
+    <Content Include="assets\js\jquery-ui.js" />
+    <Content Include="assets\css\jquery-ui.min.css" />
+    <Content Include="assets\js\jquery-ui.min.js" />
+    <Content Include="assets\js\jquery.idle-timer.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\lottie-player.js" />
     <Content Include="assets\js\popper.min.js" />
@@ -568,6 +574,9 @@
     <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js" />
     <Content Include="assets\lib\jquery-contextmenu\jquery.ui.position.min.js" />
     <Content Include="assets\lib\jquery-countdown\jquery.countdown.min.js" />
+    <Content Include="assets\lib\jquery-ui.min\jquery-ui.js" />
+    <Content Include="assets\lib\jquery-ui.min\jquery-ui.min.css" />
+    <Content Include="assets\lib\jquery-ui.min\jquery-ui.min.js" />
     <Content Include="assets\lib\jquery-validation\jquery.validate.min.js" />
     <Content Include="assets\lib\jquery.elastic\jquery.elastic.js" />
     <Content Include="assets\lib\jquery.events.input\jquery.events.input.js" />
@@ -1113,6 +1122,7 @@
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
     <Content Include="Views\Dashboard\DashboardError.cshtml" />
     <Content Include="Views\Communication\Notifications.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

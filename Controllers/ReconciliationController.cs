@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class ReconciliationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -158,7 +159,8 @@ namespace ProvenCfoUI.Controllers
                 List<string> Ids;
                 if (BPParameter.IsAllSelected == true)
                 {
-                    var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
+                    //var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
+                    var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
                     var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
                     if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
                     Ids = result.Select(x => x.id).ToList();

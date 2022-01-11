@@ -90,11 +90,42 @@ function ShowConfirmBoxBase(title, text, type, confirmButtonText, confirmButtonC
         showCancelButton: true,
         closeOnConfirm: false,
         confirmButtonText: confirmButtonText,
-        confirmButtonColor: confirmButtonColor
+        confirmButtonColor: confirmButtonColor        
     }, callback);
 }
 function ShowConfirmBoxWarning(title, text, confirmButtonText, callback = null) {
     ShowConfirmBoxBase(title, text, "warning", confirmButtonText, "#ec6c62", callback);
+}
+function ShowConfirmBoxWarningwithYesOrNoCallback(title, text, confirmButtonText, cancelButtonText, callback = null) {
+    swal({
+        title: title,//"Are you sure?",
+        text:  text, //"You will not be able to recover this imaginary file!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: confirmButtonText, // "Yes, delete it!",
+        cancelButtonText: cancelButtonText, //"No, cancel plx!",
+        closeOnConfirm: false,
+        closeOnCancel: false       
+    },callback);
+}
+function ShowEnterInput(title, text, inputType, inputPlacetext,Nullenterywarningmsg,callback =null) {
+    swal({
+        title: title,
+        text: text,
+        type: "input",
+        inputType: inputType,
+        showCancelButton: true,
+        closeOnConfirm: false,
+        inputPlaceholder: inputPlacetext,
+    }, function (inputValue) {
+        if (inputValue === false) return false;
+        if (inputValue === "") {
+            swal.showInputError(Nullenterywarningmsg);
+            return false
+        }
+        callback(inputValue);
+    });
 }
 //Alerts End
 
@@ -106,7 +137,7 @@ function showWaitMeLoader(SELECTOR,loadingMessage) {
         //progressBar, bouncePulse or img
         effect: 'win8_linear',
         text: loadingMessage,
-        bg: 'rgb(83,83,83)',
+        bg: 'rgba(0,0,0,0.75)',
         /*bg: 'rgba(255,255,255,0.7)',*/
         //color for background animation and text (string).
         color: '#000000',
@@ -120,6 +151,12 @@ function showWaitMeLoader(SELECTOR,loadingMessage) {
 }
 function hideWaitMeLoader(SELECTOR) {
     $(SELECTOR).waitMe('hide');
+}
+function showChatContentLoader() {
+    showWaitMeLoader(".card-chat-content", "Loading...");
+}
+function hideChatContentLoader() {
+    hideWaitMeLoader(".card-chat-content", "Loading...");
 }
 //Loader End
 

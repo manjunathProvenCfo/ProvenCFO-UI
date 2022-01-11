@@ -203,6 +203,7 @@ var setActiveChannel = function (channel) {
     //}
 
     channel.getMessages(Chat_Page_Size).then(function (page) {
+        hideChatContentLoader();
         activeChannelPage = page;
         activeChannelMessages = page.items;
         page.items.forEach(addMessage);
@@ -219,7 +220,7 @@ var setActiveChannel = function (channel) {
                 $lastReadMessageDiv = $channelMessages.children(`div.media:first`);
             $lastReadMessageDiv.before(`<div class="text-center fs--2 text-500 separator"><span>New Messages</span></div>`);
             $newMessagesDiv = $channelMessages.children('.separator');
-            if ($newMessagesDiv)
+            if ($newMessagesDiv && $newMessagesDiv.length > 0)
                 $newMessagesDiv[0].scrollIntoView();
         }
         else {

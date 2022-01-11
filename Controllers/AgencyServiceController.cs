@@ -14,6 +14,7 @@ using static ProvenCfoUI.Comman.Common;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class AgencyServiceController : BaseController, IDisposable
     {
         string errorMessage = string.Empty;

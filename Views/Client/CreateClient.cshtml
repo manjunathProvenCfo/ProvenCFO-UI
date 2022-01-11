@@ -367,51 +367,56 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-8 col-xl-5">
+
+
                             @if ((Model.Id != null || Model.Id > 0) && Model.clientXeroAccounts != null)
                             {
-                            <div class="dashboard-data-table">
-                                <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
-                                    <thead class="bg-200 text-900">
-                                        <tr>
-                                            <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
-                                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
-                                                </div>
-                                            </th>
-                                            <th class="sort pr-1 align-middle"> Account Name</th>
-                                            <th class="sort pr-1 align-middle"> Account Number</th>
-                                         
-                                        </tr>
-                                    </thead>
-                                    <tbody id="purchases">
+                                <div class="info">
+                                    <p><i>Please Sync the GL Account to get the latest Account</i> </p>
+                                </div>
+                                <div class="dashboard-data-table">
+                                    <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                                        <thead class="bg-200 text-900">
+                                            <tr>
+                                                <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                                        <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                                    </div>
+                                                </th>
+                                                <th class="sort pr-1 align-middle"> Account Name</th>
+                                                <th class="sort pr-1 align-middle"> Account Number</th>
 
-                                        @*@foreach (var item in Model.clientXeroAccounts)
-        {*@
-                                        @for (var i = 0; i < Model.clientXeroAccounts.Count(); i++)
-                                        {
-                                        <tr class="btn-reveal-trigger">
-                                            <td class="align-middle">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@Model.clientXeroAccounts[i].AccountID" value="@Model.clientXeroAccounts[i].IsActive" checked="@Model.clientXeroAccounts[i].IsActive" />
-                                                    <label class="custom-control-label" for="@Model.clientXeroAccounts[i].AccountID"></label>
-                                                    @Html.HiddenFor(Model => Model.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
-                                                    @Html.HiddenFor(Model => Model.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })
-                                                </div>
-                                            </td>
-                                            <td class="align-middle">
-                                                @Html.DisplayFor(it => it.clientXeroAccounts[i].Name)
-                                            </td>
-                                            <td class="align-middle">
-                                                @Html.DisplayFor(it => it.clientXeroAccounts[i].BankAccountNumber)
-                                            </td>                                            
-                                        </tr>
-                                        }
-                                    </tbody>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="purchases">
 
-                                </table>
+                                            @*@foreach (var item in Model.clientXeroAccounts)
+                        {*@
+                                            @for (var i = 0; i < Model.clientXeroAccounts.Count(); i++)
+                                            {
+                                                <tr class="btn-reveal-trigger">
+                                                    <td class="align-middle">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@Model.clientXeroAccounts[i].AccountID" value="@Model.clientXeroAccounts[i].IsActive" checked="@Model.clientXeroAccounts[i].IsActive" />
+                                                            <label class="custom-control-label" for="@Model.clientXeroAccounts[i].AccountID"></label>
+                                                            @Html.HiddenFor(Model => Model.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
+                                                            @Html.HiddenFor(Model => Model.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        @Html.DisplayFor(it => it.clientXeroAccounts[i].Name)
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        @Html.DisplayFor(it => it.clientXeroAccounts[i].BankAccountNumber)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
 
-                            </div>
+                                    </table>
+
+                                </div>
                             }
                         </div>
                     </div>

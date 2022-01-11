@@ -45,6 +45,8 @@ $(document).ready(function () {
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
+        $('#divBulkUpdate').hide();
+        $('#divBulkUpdate').addClass('d-none');
         $('#divChat').show();
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -106,14 +108,29 @@ $(document).ready(function () {
     sessionStorage.clear();
 
     $('.checkbox-bulk-select-target').click(function () {
+        
         if ($(this).is(":checked")) {
+            
             $(this).closest('tr').addClass('bg-300');
         }
         else {
             $(this).closest("tr").removeClass('bg-300');
         }
     });
+    /* checkbox - bulk - purchases - select*/
+   
+    $('.checkbox-bulk-select').change(function () {  
+        if ($(this).is(":checked",true)) {
 
+            $(this).closest('table').addClass('bg-300');
+        }
+        else {
+            $(this).closest("table").removeClass('bg-300');
+        }
+        //$(".checkbox-bulk-select").attr('checked', false);
+        //$(this).closest('tr').css("background-color", "#ff0000");
+    });
+   
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
@@ -177,6 +194,7 @@ $(document).ready(function () {
             $('#divChat').hide();
             $('#divFilter').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -192,6 +210,7 @@ $(document).ready(function () {
             $('#divFilter').hide();
             $('#divBulkUpdate').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');

@@ -20,6 +20,11 @@ namespace Proven.Service
             return await PostAsync<string>("Twilio/Token?identity=" + identity);
         }
 
+        public void CreateTwilioUser(string UserId, string identity)
+        {
+            Task.Run(async () => await PostAsync<bool>($"Twilio/CreateTwilioUser?UserId={UserId}&identity={identity}")).ConfigureAwait(false);
+        }
+
         public async Task<bool> UpdateTwilioUserId(string UserId, string TwilioUserId)
         {
             string queryString = $"UserId={UserId}&TwilioUserId={TwilioUserId}";
