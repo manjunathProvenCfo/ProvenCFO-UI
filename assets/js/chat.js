@@ -267,7 +267,7 @@ var renderParticipants = function () {
 
 }
 
-var handleParticipantClick = function (event) {
+var handleParticipantClick = async function (event) {
     
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
@@ -314,7 +314,7 @@ var handleParticipantClick = function (event) {
             createOrJoinExistingChannel(channelName, channelName, channel.IsPrivate, attributes);
         }
         else {
-            getChannelBySidAndJoin(channel.ChannelId);
+            await getChannelBySidAndJoin(channel.ChannelId);
         }
     }
     $chatEditorArea[0].emojioneArea.setFocus()

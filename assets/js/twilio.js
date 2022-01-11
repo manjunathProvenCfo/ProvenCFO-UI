@@ -93,8 +93,8 @@ var createAllChannels = function () {
     });
 }
 
-var getChannelBySidAndJoin = function (channelId) {
-    isConversationSyncListFetched();
+var getChannelBySidAndJoin = async function (channelId) {
+    await isConversationSyncListFetched();
     let existingChannel = twilioClient.conversations.conversations.get(channelId);
     if (isEmptyOrBlank(existingChannel)) {
         twilioClient.getConversationBySid(channelId).then(function (conv) {
