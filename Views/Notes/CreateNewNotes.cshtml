@@ -3,7 +3,17 @@
 @{
     ViewBag.Title = "Create New Note Description";
 }
+<style>
+    .tox-toolbar-overlord {
+        background-color: #fff;
+        display: flex;
+    }
 
+    
+    button#btnCreateNewNotesDescription {
+        padding-left: 2px;
+    }
+</style>
 
 <div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="notes-modal-label-1" aria-hidden="true" id="notes-modal-new">
     <div class="modal-dialog modal-lg mt-6" role="document">
@@ -22,7 +32,7 @@
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" for="Title">Title</span>
                                             @*<input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />*@
-                                            @Html.TextBoxFor(x => x.Title, new { @style = "width:89%" }) 
+                                            @Html.TextBoxFor(x => x.Title, new { @style = "width:89%" })
                                             @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger w-100" })
                                             @Html.HiddenFor(x => x.Id)
                                             @Html.HiddenFor(x => x.NoteCatId)
@@ -43,6 +53,7 @@
                                         <div class="form-group mb-3">
                                             <h5 class="mb-2 fs-0">Description</h5>
                                             <div class="min-vh-50 mh-25 border border-dark">
+                                               
                                                 @*@Html.EditorFor(x => x.Description, new { @style = "max-width:85%" })*@
                                                 @Html.TextAreaFor(x => x.Description, new { @class = "tinymce border" })
                                                 @*<textarea class="tinymce border" name="Description" id="Description" data-val="true" data-val-required="This field cannot be blank." required></textarea>*@
@@ -62,10 +73,11 @@
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                         </div>
-                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                        <div class="col-1 col-md-1 col-lg-1 col-xl-1">
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" id="btnCreateNewNotesDescription" type="button"> Create </button>
+
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" data-dismiss="modal" aria-label="Close" id="cancel">Cancel</button>
@@ -78,7 +90,6 @@
         </div>
     </div>
 </div>
-
 
 
 

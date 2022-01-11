@@ -392,6 +392,8 @@
             if (e.checked == false) {
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
+                $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
+
             }
         }
         function SelectClick(e) {
