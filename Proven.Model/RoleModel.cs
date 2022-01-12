@@ -22,6 +22,7 @@ namespace Proven.Model
         public string DisplayRoleName { get; set; }
         public Boolean? IsVisible { get; set; }
         public int? UserType { get; set; }
+        public int[] FeatureIds { get; set; }
     }
     public class RoleMainModel
     {

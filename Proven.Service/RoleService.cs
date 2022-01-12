@@ -122,7 +122,7 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel AddRoles(string name, string status, string userid,string DisplayRoleName,int UserType)
+        public RolesViewModel AddRoles(string name, string status, string userid, string DisplayRoleName, int UserType, int[] featurIds = null)
         {
 
             Proven.Model.RolesViewModel model = new RolesViewModel();           
@@ -132,6 +132,8 @@ namespace Proven.Service
             model.DisplayRoleName = DisplayRoleName;
             model.UserType = UserType;
             model.CreatedBy = userid;
+            model.FeatureIds = featurIds;
+            
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<RolesViewModel, Proven.Model.RolesViewModel>("Role/CreateRole", model).Result;
             //response = client.PostAsync("Role/CreateRole", content).Result;
@@ -149,7 +151,7 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel UpdateRoles(string id, string name, string status, string userid,string DisplayRoleName,int UserType)
+        public RolesViewModel UpdateRoles(string id, string name, string status, string userid,string DisplayRoleName,int UserType, int[] featurIds = null)
         {
             Proven.Model.RolesViewModel model = new RolesViewModel();
             model.Id = id;
@@ -158,6 +160,7 @@ namespace Proven.Service
             model.ModifiedBy = userid;
             model.DisplayRoleName = DisplayRoleName;
             model.UserType = UserType;
+            model.FeatureIds = featurIds;
            // var form = new Dictionary<string, string>
            //{
            //    {"Id", id},
