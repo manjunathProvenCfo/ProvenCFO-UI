@@ -1,10 +1,11 @@
 ﻿//Chat Code start
 var currentChannelUniqueNameGuid = "";
 var IsEnableAutomation = false;
+var IsSeletedAll = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
-   
+    bindIsSeletedAll();
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -72,6 +73,24 @@ var bindEnableAutomation = function () {
             }
         });
     }
+var bindIsSeletedAll = function () {
+   
+    var type = sessionStorage.getItem('Type');
+    var recType = 'Not in Books';
+    if (type != null && type == '1') {
+
+        recType = 'Not in Banks';
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+            if (IsAllSelected === false) {
+
+                $("#ibulkupdate").attr('disabled', true);
+                $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+
+            }
+
+}
 
 
 $(document).ready(function () {

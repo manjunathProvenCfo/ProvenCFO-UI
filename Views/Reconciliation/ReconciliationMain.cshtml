@@ -393,6 +393,12 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
+                $("#ibulkupdate").attr('disabled', true);
+                $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+            }
+            else {
+                $("#ibulkupdate").attr('disabled', false);
+                $("#ibulkupdate").attr('title', 'Bulk Update');
 
             }
         }
@@ -403,7 +409,8 @@
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
-
+                $("#ibulkupdate").attr('disabled', false);
+                $("#ibulkupdate").attr('title', 'Bulk Update');
                 var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
             }
@@ -414,10 +421,17 @@
                     return x != e.id
                 });
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
+               
+                   
+               
 
 
                 var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+                if (SelectedItems == 0) {
+                    $("#ibulkupdate").attr('disabled', true);
+                    $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+                }
             }
         }
 
@@ -652,7 +666,6 @@
 
         }
         function BulkActionReconcilation() {
-
             var GLaccount = $('#BA_filterGLaccounts').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
