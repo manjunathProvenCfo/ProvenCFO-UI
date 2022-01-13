@@ -6,6 +6,7 @@ $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
     EnableSelectedBulkUpdateButton();
+    //bindIsSeletedAll();
 
 
     $("#ichat").click(function () {
@@ -61,6 +62,20 @@ $(document).ready(function () {
     }
 });
 
+var bindEnableAutomation = function () {
+    getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
+
+            IsEnableAutomation = response.Data;
+            if (IsEnableAutomation === false) {
+                $("#OnDemandData").attr('disabled', true);
+                $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+
+            }
+
+        }
+    });
+}
 var EnableSelectedBulkUpdateButton = function () {
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
     var SelectedItems = sessionStorage.getItem('SelectedRecords');
