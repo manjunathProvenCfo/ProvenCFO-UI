@@ -82,6 +82,12 @@ namespace ProvenCfoUI.Controllers
                     objvm.DisplayRoleName = result.DisplayRoleName;
                     objvm.IsVisible = result.IsVisible;
                     objvm.UserType = result.UserType;
+                   if(result.FeatureIds != null && result.FeatureIds.Length > 0)
+                    { 
+
+                        objvm.MasterFeaturesList.Where(x => result.FeatureIds.Contains(x.Id)).ToList().ForEach(s => s.IsChecked = true);
+                    }
+                    
                     return View("AddRole", objvm);
                 }
             }
