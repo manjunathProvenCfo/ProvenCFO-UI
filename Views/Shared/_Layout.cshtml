@@ -47,15 +47,16 @@
                 @Html.Partial("_LeftNav")
             }
 
-            <div class="content">
+        <div class="content">
 
 
-                @Html.Action("TopNavigation", "Home")
+            @Html.Action("TopNavigation", "Home")
 
-                @RenderBody()
+            @RenderBody()
 
-                @Html.Partial("_Footer")
-            </div>
+            @Html.Partial("_Footer")
+            @Html.Partial("_PageLoader")
+        </div>
 
         </div>
     </main>

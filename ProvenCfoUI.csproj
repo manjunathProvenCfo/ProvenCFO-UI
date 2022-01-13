@@ -1123,6 +1123,7 @@
     <Content Include="Views\Dashboard\DashboardError.cshtml" />
     <Content Include="Views\Communication\Notifications.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_PageLoader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
