@@ -52,6 +52,7 @@ $(function () {
     }
 
     $reportYears.change(function (e) {
+       
         let year = parseInt($(this).val());
         $lblYears.text(year);
 
@@ -63,11 +64,11 @@ $(function () {
             $divReportPeriodMonths.parents(".card").show();
         }
         else {
+          
             if (year == currentYear) {
                 $divReportPeriodYearEnd.hide();
 
-                for (var i = 0; i < (12 - currentMonth + 1); i++) {
-
+                for (var i = 0; i < (11 - currentMonth + 1); i++) { 
                     if (i == 0)
                         $divReportPeriodQuarters.filter("[data-report-period='Q4']").hide();
                     else if (i == 3)
