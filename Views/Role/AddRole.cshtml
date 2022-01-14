@@ -142,7 +142,7 @@
                                     {
 
 
-                                        <div class="col-12 facility_service_permissions">
+                                        <div class="col-12 facility_service_permissions" id="section_@Model.MasterFeaturesList[i].FeaturName">
                                             <div class="permission-box">
                                                 @if (Model.UserType == 2 && (Model.MasterFeaturesList[i].FeatureCode != "ADM" && Model.MasterFeaturesList[i].FeatureCode != "STP"))
                                                 {
@@ -254,7 +254,10 @@
             }
         }
         $(document).ready(function () {
-
+            var userTypes = $('input[type=radio][name=UserType]');
+            if (userTypes[1].checked == true) {
+                HideAdminSetup();
+            }
             //
             var msg = $('#RoleCreateOrUpdate') != undefined ? $('#RoleCreateOrUpdate').val() : '';
 
@@ -278,7 +281,28 @@
                 $('select').val("Active");
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
+
+           
+            $('input[type=radio][name=UserType]').change(function () {
+                if (this.checked && this.value == '1') {
+                    $("#section_Administration").show();
+                    $("#section_Setup").show();
+                }
+                else {
+
+                    HideAdminSetup();
+                }
+
+            });
         });
+        var HideAdminSetup = function () {
+            $("#section_Administration").find("input[type='checkbox']")
+                .prop('checked', false);
+            $("#section_Setup").find("input[type='checkbox']")
+                .prop('checked', false);
+            $("#section_Administration").hide();
+            $("#section_Setup").hide();
+        }
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";
             $.ajax({
