@@ -16,6 +16,7 @@
     .page-link:hover {
         color: #000 !important;
     }
+
     .page-item.active .page-link {
         z-index: 3;
         color: #fff !important;
@@ -95,6 +96,8 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/reconciliationMain");
+
     <script>
 
         $(document).ready(function () {
@@ -133,23 +136,25 @@
                             window.location.reload();
                             UpdateXeroConnectionStatus();
 
-                        }, 2200);                      
+                        }, 2200);
                     }
                     else {
 
                     }
                 });
-            }, 2000);   
+            }, 2000);
         }
         function UpdateXeroConnectionStatus() {
             postAjax('/Integration/UpdateXeroConnectionStatus', null, function (data) {
                 if (data === true) {
                     XeroConnectionUpdate();
                     window.location.reload();
-                }                
+                }
             });
         }
         function XeroGlAccoutSync() {
+            debugger;
+            ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
@@ -158,7 +163,9 @@
                 else {
                     ShowAlertBoxSuccess("Success!", "GL Account synced with Xero successfully.", function () { window.location.reload(); });
                 }
+
             });
+          /*  HidelottieLoader();*/
         }
 
     </script>
