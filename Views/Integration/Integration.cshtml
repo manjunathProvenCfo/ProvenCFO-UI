@@ -127,6 +127,8 @@
         }
 
         function AgencyDropdownPartialViewChange() {
+           
+            ShowlottieLoader();
             setTimeout(function () {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
@@ -153,7 +155,7 @@
             });
         }
         function XeroGlAccoutSync() {
-            debugger;
+           
             ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {

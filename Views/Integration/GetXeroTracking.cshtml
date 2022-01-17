@@ -96,6 +96,8 @@
 
 
         function AgencyDropdownPartialViewChange() {
+          
+            ShowlottieLoader();
             setTimeout(function () {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
