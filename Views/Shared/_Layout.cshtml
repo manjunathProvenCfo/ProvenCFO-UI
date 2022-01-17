@@ -86,7 +86,8 @@
 
                                     var res = response;
                                     if (response == 'success') {
-                                        ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');
+                                        location.reload();
+                                       /* ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');*/
                                     }
                                     else {
                                         ShowAlertBoxWarning('Wrong credentials..!', 'Entered user name and password is wrong..!', function () {                                           
