@@ -144,56 +144,30 @@
 
                                         <div class="col-12 facility_service_permissions" id="section_@Model.MasterFeaturesList[i].FeaturName">
                                             <div class="permission-box">
-                                                @if (Model.UserType == 2 && (Model.MasterFeaturesList[i].FeatureCode != "ADM" && Model.MasterFeaturesList[i].FeatureCode != "STP"))
+
+                                                <h6>
+                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+                                                    <label>@Model.MasterFeaturesList[i].DisplayName</label>
+                                                    @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
+                                                    @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
+                                                </h6>
+
+                                                @for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
                                                 {
-                                                    <h6>
-                                                        @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
-                                                        <label>@Model.MasterFeaturesList[i].DisplayName</label>
-                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
-                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
-                                                    </h6>
-
-                                                    for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
+                                                    if (Model.MasterFeaturesList[j].ParentId == Model.MasterFeaturesList[i].Id)
                                                     {
-                                                        if (Model.MasterFeaturesList[j].ParentId == Model.MasterFeaturesList[i].Id)
-                                                        {
-                                                            <ul>
-                                                                <li>
+                                                        <ul>
+                                                            <li>
 
-                                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name ml-4 top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
-                                                                    <label>@Model.MasterFeaturesList[j].DisplayName</label>
-                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
-                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
-                                                                </li>
-                                                            </ul>
-                                                        }
+                                                                @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name ml-4 top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+                                                                <label>@Model.MasterFeaturesList[j].DisplayName</label>
+                                                                @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
+                                                                @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
+                                                            </li>
+                                                        </ul>
                                                     }
                                                 }
-                                                else if (Model.UserType == 1)
-                                                {
-                                                    <h6>
-                                                        @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
-                                                        <label>@Model.MasterFeaturesList[i].DisplayName</label>
-                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
-                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
-                                                    </h6>
 
-                                                    for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
-                                                    {
-                                                        if (Model.MasterFeaturesList[j].ParentId == Model.MasterFeaturesList[i].Id)
-                                                        {
-                                                            <ul>
-                                                                <li>
-
-                                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name ml-4 top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
-                                                                    <label>@Model.MasterFeaturesList[j].DisplayName</label>
-                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
-                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
-                                                                </li>
-                                                            </ul>
-                                                        }
-                                                    }
-                                                }
 
 
 
@@ -307,7 +281,7 @@
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
 
-           
+
             $('input[type=radio][name=UserType]').change(function () {
                 if (this.checked && this.value == '1') {
                     $("#section_Administration").show();
