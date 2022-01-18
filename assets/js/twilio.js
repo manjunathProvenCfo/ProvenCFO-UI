@@ -132,7 +132,8 @@ var joinChannel = function (channel) {
 var addMediaMessage = function (file) {
     const formData = new FormData();
     formData.append('file', file);
-    if (isEmptyOrBlank(activeChannel.channelState.lastMessage) && activeChannel.channelState.attributes.type === "public reconciliation") {
+    
+    if (activeChannel?.channelState?.attributes?.type === "public reconciliation") {
         UpdateReconciliationHasStatus(activeChannel.channelState.uniqueName);
     }
     activeChannel.sendMessage(formData).then(function (msg) {
@@ -171,7 +172,7 @@ var setActiveChannel = function (channel) {
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
         if (validateMessage(body)) {
-            if (isEmptyOrBlank(channel.channelState.lastMessage) && channel.channelState.attributes.type === "public reconciliation") {
+            if (channel.channelState.attributes.type === "public reconciliation") {
                 UpdateReconciliationHasStatus(channel.channelState.uniqueName);
             }
             channel.sendMessage(body).then(function () {
