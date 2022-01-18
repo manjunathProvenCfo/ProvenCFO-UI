@@ -319,8 +319,11 @@ var notificationMessageAddedAllChannels = function (msg) {
                 }
             })
         }
+        setTimeout(function () {
+            _audio.play();
+        },100)
         preapreAndBindNotifications([notifications[notifications.length - 1]], isNotificationPage, true);
-        _audio.play();
+        
     }
 }
 
@@ -468,7 +471,9 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                     $notifictionsList.find(".list-group-item:last").remove();
                 $notifictionsList.prepend(template);
             }
-            setReconciliationMentionIconColor(notifications);
+            
+            if (isLocationUrlContains("reconciliation"))
+                setReconciliationMentionIconColor(notifications);
         }
     }
     else {
