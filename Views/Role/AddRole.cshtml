@@ -169,6 +169,31 @@
                                                         }
                                                     }
                                                 }
+                                                else if (Model.UserType == 1)
+                                                {
+                                                    <h6>
+                                                        @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+                                                        <label>@Model.MasterFeaturesList[i].DisplayName</label>
+                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
+                                                        @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
+                                                    </h6>
+
+                                                    for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
+                                                    {
+                                                        if (Model.MasterFeaturesList[j].ParentId == Model.MasterFeaturesList[i].Id)
+                                                        {
+                                                            <ul>
+                                                                <li>
+
+                                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name ml-4 top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+                                                                    <label>@Model.MasterFeaturesList[j].DisplayName</label>
+                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
+                                                                    @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
+                                                                </li>
+                                                            </ul>
+                                                        }
+                                                    }
+                                                }
 
 
 
