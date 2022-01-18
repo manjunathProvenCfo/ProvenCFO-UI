@@ -47,15 +47,16 @@
                 @Html.Partial("_LeftNav")
             }
 
-            <div class="content">
+        <div class="content">
 
 
-                @Html.Action("TopNavigation", "Home")
+            @Html.Action("TopNavigation", "Home")
 
-                @RenderBody()
+            @RenderBody()
 
-                @Html.Partial("_Footer")
-            </div>
+            @Html.Partial("_Footer")
+            @Html.Partial("_PageLoader")
+        </div>
 
         </div>
     </main>
@@ -85,7 +86,8 @@
 
                                     var res = response;
                                     if (response == 'success') {
-                                        ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');
+                                        location.reload();
+                                       /* ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');*/
                                     }
                                     else {
                                         ShowAlertBoxWarning('Wrong credentials..!', 'Entered user name and password is wrong..!', function () {                                           

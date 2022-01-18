@@ -52,6 +52,7 @@ $(function () {
     }
 
     $reportYears.change(function (e) {
+       
         let year = parseInt($(this).val());
         $lblYears.text(year);
 
@@ -63,11 +64,11 @@ $(function () {
             $divReportPeriodMonths.parents(".card").show();
         }
         else {
+          
             if (year == currentYear) {
                 $divReportPeriodYearEnd.hide();
 
-                for (var i = 0; i < (12 - currentMonth + 1); i++) {
-
+                for (var i = 0; i < (11 - currentMonth + 1); i++) { 
                     if (i == 0)
                         $divReportPeriodQuarters.filter("[data-report-period='Q4']").hide();
                     else if (i == 3)
@@ -506,18 +507,20 @@ var deleteReports = function (deleteIds, period) {
 }
 
 var monthlySummaryOnClick = function (e, id) {
+    debugger;
     e.preventDefault();
     let el = $(e.currentTarget);
     let parentDiv = el.parents("#divReportPeriodCard");
     let data = parentDiv.data();
+  /*  var ClientID = $("#ddlclient option:selected").val();*/
     let agencyId = $("#ddlclient").val();
     let year = data.year;
     let period = data.reportPeriod;
 
-    postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}`, null, function (response) {
+    postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}&agencyId=${agencyId}`, null, function (response) {
         if (response.message == "success") {
             ShowAlertBoxSuccess("", "Report has been marked as Default report!")
-            bindReports(period);
+            bindReports(period, agencyId);
         }
     });
     return false;

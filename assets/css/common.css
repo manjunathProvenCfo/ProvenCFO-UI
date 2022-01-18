@@ -499,3 +499,72 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
             list-style: none;
             text-transform: capitalize;
         }
+.tabselect {
+    text-decoration: underline;
+}
+
+.loader-circle {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1110;
+    background-color: rgba(0,0,0,0.75);
+}
+
+    .loader-circle .spinner-border {
+        width: 4rem;
+        height: 4rem;
+        border: 0.5em solid #00be62;
+        border-right-color: transparent;
+    }
+
+.position-fixed {
+    position: fixed !important;
+}
+
+select#item_additional_tracking_category_ref {
+    width: 90px;
+}
+
+a.page-link {
+    background-color: #fff !important;
+    border-color: #d8e2ef !important;
+}
+
+.page-link:hover {
+    color: #000 !important;
+}
+
+select#item_gl_account_ref {
+    font-size: 13px !important;
+    width: 400px;
+}
+
+select#item_rule {
+    font-size: 13px !important;
+    width: 193px;
+}
+
+select#item_tracking_category_ref {
+    font-size: 13px !important;
+    width: 160px;
+}
+
+select#item_additional_tracking_category_ref {
+    font-size: 13px !important;
+    width: 160px;
+}
+/*  .page-item.active .page-link {
+        background-color: #fff !important;
+        border-color: #fff !important;
+    }*/
+.chat-message {
+    max-width: calc(100% - 2rem);
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff !important;
+    background-color: #00BE82 !important;
+}

@@ -1,10 +1,13 @@
 ﻿//Chat Code start
 var currentChannelUniqueNameGuid = "";
 var IsEnableAutomation = false;
+var IsSeletedAll = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
-   
+    EnableSelectedBulkUpdateButton();
+    //bindIsSeletedAll();
+
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -58,20 +61,38 @@ $(document).ready(function () {
         }
     }
 });
+
 var bindEnableAutomation = function () {
-        getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
-            if (response.Status === "Success") {
+    getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
 
-                IsEnableAutomation = response.Data;
-                if (IsEnableAutomation === false) {
-                    $("#OnDemandData").attr('disabled', true);
-                    $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+            IsEnableAutomation = response.Data;
+            if (IsEnableAutomation === false) {
+                $("#OnDemandData").attr('disabled', true);
+                $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
 
-                }
-              
             }
-        });
+
+        }
+    });
+}
+var EnableSelectedBulkUpdateButton = function () {
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+    if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
+        $("#ibulkupdate").attr('disabled', false);
+        $("#ibulkupdate").attr('title', 'Bulk Update');
+        
     }
+    else {
+        $("#ibulkupdate").attr('disabled', true);
+        $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+      
+    }
+}
+
+
+
 
 
 $(document).ready(function () {
@@ -224,9 +245,7 @@ $(document).ready(function () {
         if (IsEnableAutomation === false) {
             $("#OnDemandData").attr('disabled', true);
             return;
-        }
-            
-        
+        }        
             $("#Loader").removeAttr("style");
             var ClientID = $("#ddlclient option:selected").val();
             var RequestType = "On Demand";

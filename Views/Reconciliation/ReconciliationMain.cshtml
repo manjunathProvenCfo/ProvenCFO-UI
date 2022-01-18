@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Proven.Model.reconciliationVM>
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
-<style>
+@*<style>
     .tabselect {
         text-decoration: underline;
     }
@@ -70,7 +70,7 @@
         color: #fff !important;
         background-color: #00BE82 !important;
     }
-</style>
+</style>*@
 
 @Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
@@ -304,6 +304,10 @@
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
                                         <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
                                             <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+
+                                            @*<span class="far fa-comment fs--1 text-dark"></span>
+        <span class="far fa-comment fs--1"></span>
+        <span class="fas fa-comment fs--1"></span>*@
                                         </button>
                                     </td>
                                 </tr>
@@ -327,13 +331,13 @@
     </div>
 </div>
 
-<div class="position-fixed loader-circle" id="Loader" style="display:none;">
-    <div class="d-flex justify-content-center align-items-center vh-100">
+<!--<div class="position-fixed loader-circle" id="Loader" style="display:none;">
+    <div class="d-flex justify-content-center align-items-center vh-100">-->
         @*<div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
 
             </div>*@
-        <div class="row">
+        <!--<div class="row">
             <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_fw9ijhki.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         </div>
         <br />
@@ -344,7 +348,7 @@
     </div>
 
 
-</div>
+</div>-->
 
 
 @section Scripts {
@@ -393,32 +397,40 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
-
+           
             }
+           
+            EnableSelectedBulkUpdateButton();
+
         }
         function SelectClick(e) {
+           
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
-
+               
                 var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
+
             }
             else {
+
                 //Remove unselected items from selected Items List
                 var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords')?.split(',') : [];
                 SelectedItems = SelectedItems.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
-
-
                 var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+                
+             
             }
+          
+            EnableSelectedBulkUpdateButton();
         }
 
         function onCommentsClick(e, channelUniqueNameGuid) {
@@ -652,7 +664,6 @@
 
         }
         function BulkActionReconcilation() {
-
             var GLaccount = $('#BA_filterGLaccounts').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();

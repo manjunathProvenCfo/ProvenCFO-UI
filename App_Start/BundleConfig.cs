@@ -33,10 +33,12 @@ namespace ProvenCfoUI
              "~/assets/lib/sweetalert/sweetalert.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
-             "~/assets/lib/waitMe/waitMe.min.js",
-             "~/assets/js/jquery.idle-timer.js"             
+             "~/assets/lib/waitMe/waitMe.min.js",             
+             "~/assets/js/jquery.idle-timer.js"
             
-    ));
+
+
+            ));
             bundles.Add(new Bundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
              "~/assets/js/wrapper.js"

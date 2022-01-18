@@ -81,17 +81,35 @@
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @foreach (var usertype in (List<Proven.Model.UserTypesVM>)TempData["UserTypeList"])
                                         {
-                                            <span>
-                                                @if (Model.UserType == usertype.UserTypeID)
-                                                {
-                                                    @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID, new { @checked = "checked" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID)
-                                                }
-                                                @usertype.UserTypeName
-                                            </span>
+                                            if (Model.Id == null)
+                                            {
+                                                <span>
+                                                    @if (Model.UserType == usertype.UserTypeID)
+                                                    {
+                                                        @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID, new { @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID)
+                                                    }
+                                                    @usertype.UserTypeName
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    @if (Model.UserType == usertype.UserTypeID)
+                                                    {
+                                                        @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID, new { @checked = "checked", disabled = "disabled" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.RadioButtonFor(m => m.UserType, usertype.UserTypeID, new { disabled = "disabled" })
+                                                    }
+                                                    @usertype.UserTypeName
+                                                </span>
+                                            }
+
                                             <br />
 
                                         }
@@ -124,15 +142,15 @@
                                     {
 
 
-                                        <div class="col-12 facility_service_permissions">
+                                        <div class="col-12 facility_service_permissions" id="section_@Model.MasterFeaturesList[i].FeaturName">
                                             <div class="permission-box">
+
                                                 <h6>
-                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick= "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ","-") + "')" })
+                                                    @Html.CheckBoxFor(x => x.MasterFeaturesList[i].IsChecked, new { @class = "top_role_" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_topper(this.checked,'" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
                                                     <label>@Model.MasterFeaturesList[i].DisplayName</label>
                                                     @Html.HiddenFor(x => x.MasterFeaturesList[i].Id)
                                                     @Html.HiddenFor(x => x.MasterFeaturesList[i].DisplayName)
                                                 </h6>
-
 
                                                 @for (int j = 0; j < Model.MasterFeaturesList.Count; j++)
                                                 {
@@ -140,7 +158,8 @@
                                                     {
                                                         <ul>
                                                             <li>
-                                                                @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ","-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
+
+                                                                @Html.CheckBoxFor(x => x.MasterFeaturesList[j].IsChecked, new { @class = "name ml-4 top_roles top_tucker_" + Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-"), @onclick = "check_uncheck_checkbox(this.checked,'" + @Model.MasterFeaturesList[j].DisplayName.Replace(" ", "-") + "','" + @Model.MasterFeaturesList[i].DisplayName.Replace(" ", "-") + "')" })
                                                                 <label>@Model.MasterFeaturesList[j].DisplayName</label>
                                                                 @Html.HiddenFor(x => x.MasterFeaturesList[j].Id)
                                                                 @Html.HiddenFor(x => x.MasterFeaturesList[j].DisplayName)
@@ -148,6 +167,11 @@
                                                         </ul>
                                                     }
                                                 }
+
+
+
+
+
                                             </div>
                                         </div>
                                     }
@@ -229,7 +253,10 @@
             }
         }
         $(document).ready(function () {
-
+            var userTypes = $('input[type=radio][name=UserType]');
+            if (userTypes[1].checked == true) {
+                HideAdminSetup();
+            }
             //
             var msg = $('#RoleCreateOrUpdate') != undefined ? $('#RoleCreateOrUpdate').val() : '';
 
@@ -253,7 +280,28 @@
                 $('select').val("Active");
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
+
+
+            $('input[type=radio][name=UserType]').change(function () {
+                if (this.checked && this.value == '1') {
+                    $("#section_Administration").show();
+                    $("#section_Setup").show();
+                }
+                else {
+
+                    HideAdminSetup();
+                }
+
+            });
         });
+        var HideAdminSetup = function () {
+            $("#section_Administration").find("input[type='checkbox']")
+                .prop('checked', false);
+            $("#section_Setup").find("input[type='checkbox']")
+                .prop('checked', false);
+            $("#section_Administration").hide();
+            $("#section_Setup").hide();
+        }
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";
             $.ajax({

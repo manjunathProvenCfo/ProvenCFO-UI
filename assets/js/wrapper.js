@@ -251,3 +251,10 @@ var filterMap = function filterMap(map, pred) {
     }
     return result;
 }
+function ShowlottieLoader() {
+    $("#Loader").show();
+}
+function HidelottieLoader() {
+    $("#Loader").hide();
+
+}

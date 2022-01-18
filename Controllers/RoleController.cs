@@ -47,7 +47,7 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     ProvenCfoUI.Models.RolesViewModel result = new ProvenCfoUI.Models.RolesViewModel();
-                    result.UserType = 2;
+                    result.UserType = 1;
                     result.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.Id).ToList();
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     return View(result);
@@ -60,7 +60,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        //[HttpGet]
+        //[HttpGet]CreateRole
         [CheckSession]
         public ActionResult EditRole(string id)
         {
@@ -69,7 +69,7 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
-                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
+                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.Id).ToList();
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     var result = objRole.GetRoleById(id);
                     objvm.Id = result.Id;
@@ -82,6 +82,12 @@ namespace ProvenCfoUI.Controllers
                     objvm.DisplayRoleName = result.DisplayRoleName;
                     objvm.IsVisible = result.IsVisible;
                     objvm.UserType = result.UserType;
+                   if(result.FeatureIds != null && result.FeatureIds.Length > 0)
+                    { 
+
+                        objvm.MasterFeaturesList.Where(x => result.FeatureIds.Contains(x.Id)).ToList().ForEach(s => s.IsChecked = true);
+                    }
+                    
                     return View("AddRole", objvm);
                 }
             }
@@ -129,9 +135,10 @@ namespace ProvenCfoUI.Controllers
                         Models.RolesViewModel RoleVM = new Models.RolesViewModel();
                         var LoginUserid = Session["UserId"].ToString();
                         var result = new Proven.Model.RolesViewModel();
-
+                        int[] featurIds = Role.MasterFeaturesList.Where(x => x.IsChecked == true).Select(x => x.Id).ToArray();
                         if (Role.Id == null)
                         {
+                           
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                             RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                             var Existresult = objRole.GetRoleByName(Role.Name);
@@ -142,7 +149,7 @@ namespace ProvenCfoUI.Controllers
                                 return View("AddRole", RoleVM);
                             }
 
-                            result = objRole.AddRoles(Role.Name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName,Role.UserType.Value);
+                            result = objRole.AddRoles(Role.Name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName,Role.UserType.Value, featurIds);
                             ViewBag.ErrorMessage = "Created";
                         }
                         else
@@ -150,19 +157,20 @@ namespace ProvenCfoUI.Controllers
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                             RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                             var Existresult = objRole.GetRoleByName(Role.Name);
-                            RoleVM.Id = Role.Id;
+                            RoleVM.Id = Existresult.Id;
                             RoleVM.Name = Role.Name;
                             RoleVM.Status = Role.Status;
                             RoleVM.CreatedBy = Role.CreatedBy;
                             RoleVM.CreatedDate = Role.CreatedDate;
                             RoleVM.DisplayRoleName = Role.DisplayRoleName;
-                            RoleVM.UserType = Role.UserType;
+                            RoleVM.UserType = Existresult.UserType;
                             if (Existresult != null && Existresult.Id != Role.Id)
                             {
                                 ViewBag.ErrorMessage = "Exist";
                                 return View("AddRole", RoleVM);
+
                             }
-                            result = objRole.UpdateRoles(Role.Id, Role.Name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName, Role.UserType.Value);
+                            result = objRole.UpdateRoles(Role.Id, Role.Name, Role.Status.ToString().Trim(), LoginUserid, Role.DisplayRoleName, RoleVM.UserType.Value, featurIds);
                             ViewBag.ErrorMessage = "Updated";
                             return View("AddRole", RoleVM);
                         }

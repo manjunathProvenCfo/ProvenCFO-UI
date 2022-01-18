@@ -107,6 +107,12 @@
                         </a>
                     </li>
                 }
+            </ul>
+
+            <div class="navbar-vertical-divider">
+                <hr class="navbar-vertical-hr my-2">
+            </div>
+            <ul class="navbar-nav flex-column">
                 @if (Common.IsModuleAccessable("ADM"))
                 {
                     <li class="nav-item" id="menu_administration">
@@ -170,6 +176,9 @@
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
+                            <li class="nav-item" id="submenu_userroles">
+                                <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
+                            </li>
 
                             @if (Common.IsFeatureAccessable("INT"))
                             {
@@ -196,7 +205,7 @@
                         </ul>
                     </li>
                 }
-              
+
             </ul>
         </div>
     </div>
