@@ -9,7 +9,7 @@
         display: flex;
     }
 
-    
+
     button#btnCreateNewNotesDescription {
         padding-left: 2px;
     }
@@ -53,7 +53,7 @@
                                         <div class="form-group mb-3">
                                             <h5 class="mb-2 fs-0">Description</h5>
                                             <div class="min-vh-50 mh-25 border border-dark">
-                                               
+
                                                 @*@Html.EditorFor(x => x.Description, new { @style = "max-width:85%" })*@
                                                 @Html.TextAreaFor(x => x.Description, new { @class = "tinymce border" })
                                                 @*<textarea class="tinymce border" name="Description" id="Description" data-val="true" data-val-required="This field cannot be blank." required></textarea>*@
@@ -90,6 +90,3 @@
         </div>
     </div>
 </div>
-
-
-
