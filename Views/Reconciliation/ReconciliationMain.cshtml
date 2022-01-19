@@ -609,6 +609,9 @@
 
 
             url = replaceAll(url, '\&amp;', '&');
+            url = replaceAll(url, '#', '%23');
+            url = replaceAll(url, '(', '%28');
+            url = replaceAll(url, ')', '%29');
             window.location.href = url;
         }
 
