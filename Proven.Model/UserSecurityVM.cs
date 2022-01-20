@@ -21,6 +21,8 @@ namespace Proven.Model
         public string RoleId { get; set; }
         public string RoleName { get; set; }
         public string Status { get; set; }
+        public int UserType { get; set; }
+        public string UserTypeName { get; set; }
     }
     public class UserSecurityModel
     {
