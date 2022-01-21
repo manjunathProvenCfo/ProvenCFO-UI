@@ -173,7 +173,7 @@
                                     <a class="nav-link" href=@Url.Action("JobTitle", "Setup") name="submenu_jobtitles">Job Titles</a>
                                 </li>
                             }
-                            @if (!Common.IsFeatureAccessable("URL"))
+                            @if (Common.IsFeatureAccessable("URL"))
                             {
 
                                 <li class="nav-item" id="submenu_userroles">
