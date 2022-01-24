@@ -181,6 +181,7 @@ namespace ProvenCfoUI.Controllers
                             var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
                             objInvite.Rolelist = objrole.GetRoles().ResultData.Where(x => x.IsVisible == true && x.UserType == 2).ToList();
                             objInvite.AgencyName = objResult.Name;
+                            objInvite.SessionTimeout = "5";
                         }
                     }
                 }
@@ -208,10 +209,16 @@ namespace ProvenCfoUI.Controllers
                     objInvite.Email = result.Email;
                     objInvite.AgencyID = Convert.ToInt32(result.AgencyId);
                     objInvite.IsActive = Convert.ToString(result.IsActive);
-                    using (ClientService objClient = new ClientService())
+                    objInvite.SessionTimeout = "5";
+                    objInvite.RoleId = result.RoleId;
+                    using (RoleService objrole = new RoleService())
                     {
-                        var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
-                        objInvite.AgencyName = objResult.Name;
+                        using (ClientService objClient = new ClientService())
+                        {
+                            var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
+                            objInvite.AgencyName = objResult.Name;
+                            objInvite.Rolelist = objrole.GetRoles().ResultData.Where(x => x.IsVisible == true && x.UserType == 2).ToList();
+                        }
                     }
                 }
                 return View("InviteStaffByAgency", objInvite);
@@ -269,7 +276,7 @@ namespace ProvenCfoUI.Controllers
 
                                     }
 
-                                    var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid);
+                                    var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid, InviteUser.RoleId);
                                     if (result == null)
                                         ViewBag.Message = "Created";
                                     ViewBag.ErrorMessage = "Created";
@@ -278,7 +285,7 @@ namespace ProvenCfoUI.Controllers
                                 else
                                 {
 
-                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID));
+                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
                                     if (objInviteUser == null)
                                         ViewBag.Message = "Error";
                                     //ViewBag.Message = "Invitation Send Successfully";
@@ -319,7 +326,7 @@ namespace ProvenCfoUI.Controllers
                     using (InvitationServices obj = new InvitationServices())
                     {
                         var LoginUserid = Session["UserId"].ToString();
-                        user = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID));
+                        user = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), inviteStaffVM.roleid);
                         if (user == null)
                             ViewBag.Message = "Error";
                         //ViewBag.Message = "Invitation Send Successfully";
