@@ -458,7 +458,7 @@ namespace ProvenCfoUI.Controllers
                             InviteUserModel InvitationUsers = new InviteUserModel();
                             var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
                             //InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                            InvitationUsers.Rolelist = InvitationUsers.Rolelist.Where(x => x.IsVisible == true && x.UserType == 1).ToList();
+                            InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData.Where(x => x.IsVisible == true && x.UserType == 1).ToList();
                             InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                             InvitationUsers.Id = Convert.ToInt32(result.Id);
                             InvitationUsers.FirstName = result.FirstName;
