@@ -5399,6 +5399,7 @@ utils.$document.ready(function () {
                 toolbar: ['undo', 'bold']
             },
             statusbar: false,
+            contextmenu: false,
             plugins: 'link,image,lists,table,media',
             toolbar: 'styleselect | bold italic link bullist numlist image blockquote table media undo redo'
         });

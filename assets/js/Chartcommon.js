@@ -26,11 +26,12 @@ function LineChart(XseriesData,YseriesData,chartControlerId, optioncontoleid) {
         }).format(inputAmount);
         return usdAmount;
     }
+    
     function getFormatter(params) {
       
         const { name, value } = params[0];
         var date = new Date(name);
-        return `${name} , ${ConvertToUDS(value)}`;//`${months[0]} ${date.getDate()}, ${value}`;
+        return `${name},${ConvertToUDS(value)}`;//`${months[0]} ${date.getDate()}, ${value}`;
     }
     if ($echartsLineTotalSales) {
         const $this = $($echartsLineTotalSales);

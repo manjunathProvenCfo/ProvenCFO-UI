@@ -18,7 +18,7 @@ namespace ProvenCfoUI.Controllers
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Role
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         [CheckSession]
         public ActionResult Role()
         {

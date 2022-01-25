@@ -11,11 +11,11 @@ namespace ProvenCfoUI.Comman
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute, IPrincipal
     {
-        private readonly string[] allowedroles;
+        private readonly string[] allowedUsertype;
         private List<UserSecurityVM> _roleList;
-        public CustomAuthorizeAttribute(params string[] roles)
+        public CustomAuthorizeAttribute(params string[] usertype)
         {
-            this.allowedroles = roles;
+            this.allowedUsertype = usertype;
         }
 
         public IIdentity Identity => throw new NotImplementedException();      
@@ -52,9 +52,9 @@ namespace ProvenCfoUI.Comman
 
             if (_roleList != null && _roleList.Count > 0)
             {
-                foreach (var role in allowedroles)
+                foreach (var utype in allowedUsertype)
                 {
-                    var matchrolse = _roleList.Where(x => x.RoleName == role);
+                    var matchrolse = _roleList.Where(x => x.UserTypeName == utype);
                     if (matchrolse != null && matchrolse.Count() > 0) return true;
                 }
             }

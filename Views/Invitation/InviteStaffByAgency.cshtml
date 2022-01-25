@@ -101,6 +101,15 @@
                                         </div>
                                     }
                                 </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">User Role</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.Rolelist, "id", "DisplayRoleName"), "Select a User Role", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
@@ -111,6 +120,17 @@
                                         @*<span class="text-danger field-validation-error " data-valmsg-for="Email" data-valmsg-replace="true"><span id="EmailIdExist" class=""></span></span>*@
                                         @*   <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="EmailIdExist" class="">The Email id has been already taken.</span></span>*@
 
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">Invite valid for / In Days</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.SessionTimeout, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                                        @*<span class="text-danger field-validation-error " data-valmsg-for="Email" data-valmsg-replace="true"><span id="EmailIdExist" class=""></span></span>*@
+                                        @*   <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="EmailIdExist" class="">The Email id has been already taken.</span></span>*@
+                                        @Html.HiddenFor(x => x.SessionTimeout)
                                     </div>
                                 </div>
 

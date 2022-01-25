@@ -27,7 +27,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         public ActionResult InviteStaffList()
         {
             try
@@ -66,7 +66,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         InviteStaffViewModel emptyobj = new InviteStaffViewModel();
                         emptyobj.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                        emptyobj.Rolelist = emptyobj.Rolelist.Where(x => x.IsVisible == true).ToList();
+                        emptyobj.Rolelist = emptyobj.Rolelist.Where(x => x.IsVisible == true && x.UserType == 1).ToList();
                         emptyobj.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                         return View(emptyobj);
                     }
@@ -124,7 +124,7 @@ namespace ProvenCfoUI.Controllers
                             //     ViewBag.ErrorMessage = "";
                             // //ViewBag.ErrorMessage = "Sent";
                             //ViewBag.Message = "Invitation Send Successfully";
-                             return RedirectToAction("InviteStaffList");
+                            return RedirectToAction("InviteStaffList");
                         }
                     }
                 }
@@ -174,10 +174,15 @@ namespace ProvenCfoUI.Controllers
                 {
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                     objInvite.AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    using (ClientService objClient = new ClientService())
+                    using (RoleService objrole = new RoleService())
                     {
-                        var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
-                        objInvite.AgencyName = objResult.Name;
+                        using (ClientService objClient = new ClientService())
+                        {
+                            var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
+                            objInvite.Rolelist = objrole.GetRoles().ResultData.Where(x => x.IsVisible == true && x.UserType == 2).ToList();
+                            objInvite.AgencyName = objResult.Name;
+                            objInvite.SessionTimeout = "5";
+                        }
                     }
                 }
                 return View("InviteStaffByAgency", objInvite);
@@ -204,10 +209,16 @@ namespace ProvenCfoUI.Controllers
                     objInvite.Email = result.Email;
                     objInvite.AgencyID = Convert.ToInt32(result.AgencyId);
                     objInvite.IsActive = Convert.ToString(result.IsActive);
-                    using (ClientService objClient = new ClientService())
+                    objInvite.SessionTimeout = "5";
+                    objInvite.RoleId = result.RoleId;
+                    using (RoleService objrole = new RoleService())
                     {
-                        var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
-                        objInvite.AgencyName = objResult.Name;
+                        using (ClientService objClient = new ClientService())
+                        {
+                            var objResult = objClient.GetClientById(Convert.ToInt32(objInvite.AgencyID));
+                            objInvite.AgencyName = objResult.Name;
+                            objInvite.Rolelist = objrole.GetRoles().ResultData.Where(x => x.IsVisible == true && x.UserType == 2).ToList();
+                        }
                     }
                 }
                 return View("InviteStaffByAgency", objInvite);
@@ -230,53 +241,58 @@ namespace ProvenCfoUI.Controllers
                 {
                     try
                     {
-                        using (InvitationServices obj = new InvitationServices())
+                        using (RoleService objrole = new RoleService())
                         {
-                            var LoginUserid = Session["UserId"].ToString();
-                            InviteUser.Id = Convert.ToInt32(inviteStaffVM.id == null ? 0 : inviteStaffVM.id);
-                            InviteUser.FirstName = inviteStaffVM.FirstName;
-                            InviteUser.LastName = inviteStaffVM.LastName;
-                            InviteUser.Email = inviteStaffVM.Email;
-                            InviteUser.SessionTimeout = inviteStaffVM.SessionTimeout;
-                            InviteUser.AgencyID = inviteStaffVM.AgencyID;
-                            InviteUser.AgencyName = inviteStaffVM.AgencyName;
-                            if (inviteStaffVM.id == null || inviteStaffVM.id == 0)
+                            using (InvitationServices obj = new InvitationServices())
                             {
-                                inviteStaffVM.id = 0;
-
-                                using (AccountService objAccount = new AccountService())
+                                var LoginUserid = Session["UserId"].ToString();
+                                InviteUser.Id = Convert.ToInt32(inviteStaffVM.id == null ? 0 : inviteStaffVM.id);
+                                InviteUser.FirstName = inviteStaffVM.FirstName;
+                                InviteUser.LastName = inviteStaffVM.LastName;
+                                InviteUser.Email = inviteStaffVM.Email;
+                                InviteUser.SessionTimeout = inviteStaffVM.SessionTimeout;
+                                InviteUser.AgencyID = inviteStaffVM.AgencyID;
+                                InviteUser.AgencyName = inviteStaffVM.AgencyName;
+                                InviteUser.RoleId = inviteStaffVM.roleid;
+                                InviteUser.Rolelist = objrole.GetRoles().ResultData.Where(x => x.IsVisible == true && x.UserType == 2).ToList();
+                                if (inviteStaffVM.id == null || inviteStaffVM.id == 0)
                                 {
-                                    var AllAgenctyInvitation = objAccount.RegisteredUserListbyAgency(Convert.ToString(inviteStaffVM.AgencyID)).ResultData;
-                                    var IsExistAgencyUserInvitation = AllAgenctyInvitation.Where(x => x.Email == inviteStaffVM.Email).ToList();
-                                    if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 0).Count() > 0)
+                                    inviteStaffVM.id = 0;
+
+                                    using (AccountService objAccount = new AccountService())
                                     {
-                                        ViewBag.ErrorMessage = "InvitationSend";
-                                        return View("InviteStaffByAgency", InviteUser);
+                                        var AllAgenctyInvitation = objAccount.RegisteredUserListbyAgency(Convert.ToString(inviteStaffVM.AgencyID)).ResultData;
+                                        var IsExistAgencyUserInvitation = AllAgenctyInvitation.Where(x => x.Email == inviteStaffVM.Email).ToList();
+                                        if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 0).Count() > 0)
+                                        {
+                                            ViewBag.ErrorMessage = "InvitationSend";
+                                            return View("InviteStaffByAgency", InviteUser);
+                                        }
+                                        else if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 1).Count() > 0)
+                                        {
+                                            ViewBag.ErrorMessage = "UserAlreadyLinked";
+                                            return View("InviteStaffByAgency", InviteUser);
+                                        }
+
                                     }
-                                    else if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 1).Count() > 0)
-                                    {
-                                        ViewBag.ErrorMessage = "UserAlreadyLinked";
-                                        return View("InviteStaffByAgency", InviteUser);
-                                    }
+
+                                    var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid, InviteUser.RoleId);
+                                    if (result == null)
+                                        ViewBag.Message = "Created";
+                                    ViewBag.ErrorMessage = "Created";
 
                                 }
+                                else
+                                {
 
-                                var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid);
-                                if (result == null)
-                                    ViewBag.Message = "Created";
-                                ViewBag.ErrorMessage = "Created";
+                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
+                                    if (objInviteUser == null)
+                                        ViewBag.Message = "Error";
+                                    //ViewBag.Message = "Invitation Send Successfully";
+                                    ViewBag.ErrorMessage = "Updated";
+                                    return View("InviteStaffByAgency", InviteUser);
 
-                            }
-                            else
-                            {
-
-                                var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID));
-                                if (objInviteUser == null)
-                                    ViewBag.Message = "Error";
-                                //ViewBag.Message = "Invitation Send Successfully";
-                                ViewBag.ErrorMessage = "Updated";
-                                return View("InviteStaffByAgency", InviteUser);
-
+                                }
                             }
                         }
                     }
@@ -310,7 +326,7 @@ namespace ProvenCfoUI.Controllers
                     using (InvitationServices obj = new InvitationServices())
                     {
                         var LoginUserid = Session["UserId"].ToString();
-                        user = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID));
+                        user = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), inviteStaffVM.roleid);
                         if (user == null)
                             ViewBag.Message = "Error";
                         //ViewBag.Message = "Invitation Send Successfully";
@@ -441,8 +457,8 @@ namespace ProvenCfoUI.Controllers
                         {
                             InviteUserModel InvitationUsers = new InviteUserModel();
                             var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
-                            InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
-                            InvitationUsers.Rolelist = InvitationUsers.Rolelist.Where(x => x.IsVisible == true).ToList();
+                            //InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData.Where(x => x.IsVisible == true && x.UserType == 1).ToList();
                             InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                             InvitationUsers.Id = Convert.ToInt32(result.Id);
                             InvitationUsers.FirstName = result.FirstName;
@@ -614,7 +630,7 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate,  CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
                     string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
@@ -737,14 +753,14 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try
             {
                 using (InvitationServices obj = new InvitationServices())
                 {
-                    var objResult = obj.GetRegisteredStaffUserList();                    
+                    var objResult = obj.GetRegisteredStaffUserList();
                     return View(objResult.ResultData);
                 }
             }
