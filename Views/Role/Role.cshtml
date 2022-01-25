@@ -62,7 +62,9 @@
 
                         <th class="sort pr-1 align-middle" width="30%">Role Name</th>
                         <th class="sort pr-1 align-middle" width="30%">Role Display Name</th>
-                        <th class="sort pr-1 align-middle" width="30%">Status</th>
+                        <th class="sort pr-1 align-middle" width="20%">User Type</th>
+                        <th class="sort pr-1 align-middle" width="20%">Status</th>
+
                         <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
                     </tr>
                 </thead>
@@ -76,6 +78,9 @@
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.DisplayRoleName)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.UserTypeName)
                         </td>
 
                         <td class="align-middle">
@@ -100,6 +105,7 @@
                                     <i class="far fa-trash-alt"> </i>
                                 </a>
                             </span>
+
                             <span class="d-none d-sm-inline-block ml-2">
 
                                 @if (item.Status == "Active")
