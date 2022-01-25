@@ -4,6 +4,7 @@ using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class ReconciliationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -35,7 +37,7 @@ namespace ProvenCfoUI.Controllers
 
                     //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
                     //return View(objResult.ResultData);
-                    
+
                     int AgencyID = 0;
                     ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                     ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
@@ -46,7 +48,7 @@ namespace ProvenCfoUI.Controllers
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
-                    
+
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
@@ -75,7 +77,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
-                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
@@ -97,7 +99,7 @@ namespace ProvenCfoUI.Controllers
         {
 
             ViewBag.IsStaffUser = false;
-          
+
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
                 ReconciliationfilterModel Filter = new ReconciliationfilterModel();
@@ -157,9 +159,10 @@ namespace ProvenCfoUI.Controllers
                 List<string> Ids;
                 if (BPParameter.IsAllSelected == true)
                 {
-                    var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
+                    //var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
+                    var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
                     var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
-                    if(result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
                     Ids = result.Select(x => x.id).ToList();
                     foreach (var item in UnselectedIds)
                     {
@@ -168,7 +171,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 else
                 {
-                    var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords)? BPParameter.UnSelectedRecords.Split(','): new string[0];
+                    var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
                     Ids = BPParameter.SelectedItems.Split(',').ToList();
                     foreach (var item in UnselectedIds)
                     {
@@ -191,7 +194,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     return Json(new { Message = "NoRecords", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -347,7 +350,7 @@ namespace ProvenCfoUI.Controllers
             SelectListItem item1 = new SelectListItem();
             item1.Text = "Not Reconciled";
             item1.Value = "0";
-            listItem.Add(item1);           
+            listItem.Add(item1);
             return listItem;
         }
         public static List<SelectListItem> getDistincAccount(int AgencyID, string Type)
@@ -389,7 +392,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
-                       var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
 
@@ -405,7 +408,7 @@ namespace ProvenCfoUI.Controllers
                                                                            select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
                                 TempData["TrackingCategories"] = TCgroup;
                             }
-                            TempData["BankRule"] = getBankRule(); 
+                            TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
@@ -414,7 +417,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
-                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0);
+                    var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
@@ -521,7 +524,7 @@ namespace ProvenCfoUI.Controllers
                 var LoginUserid = Session["UserId"].ToString();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyId,CurrentStatus, LoginUserid).ResultData;
+                    var objResult = objReConcilation.GetXeroOnDemandRequestStatus(AgencyId, CurrentStatus, LoginUserid).ResultData;
                     return Json(new { data = "", Status = objResult.CurrentStatus, Message = objResult.CurrentStatus }, JsonRequestBehavior.AllowGet);
                 }
 
@@ -537,7 +540,7 @@ namespace ProvenCfoUI.Controllers
         public JsonResult GetXeroOnDemandRequestStatusById(int RequestID)
         {
             try
-            {                
+            {
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     var objResult = objReConcilation.GetXeroOnDemandRequestStatusById(RequestID).ResultData;
@@ -551,6 +554,30 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
+        [CheckSession]
+        public JsonResult GetIsEnableAutomation(int agencyId)
+        {
+            try
+            {
+                var IsEnableAutomation = false;
+                using (ClientService objClientService = new ClientService())
+                {
+                    CreateClientVM Clientvm = new CreateClientVM();
+                    var client = objClientService.GetClientById(agencyId);
+                    IsEnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
+                }
+                return Json(new { Data = IsEnableAutomation, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

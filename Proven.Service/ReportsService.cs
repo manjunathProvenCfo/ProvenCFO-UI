@@ -36,9 +36,9 @@ namespace Proven.Service
         {
             return PostAsync<APIResult<bool>, int[]>("Reports/Delete", Ids).Result;
         }
-        public APIResult<bool> MakeItMonthlySummary(int Id, int Year, string PeriodType)
+        public APIResult<bool> MakeItMonthlySummary(int Id, int Year, string PeriodType, int AgencyId)
         {
-            return PostAsync<APIResult<bool>>($"Reports/MakeItMonthlySummary?Id={Id}&year={Year}&PeriodType={PeriodType}").Result;
+            return PostAsync<APIResult<bool>>($"Reports/MakeItMonthlySummary?Id={Id}&year={Year}&PeriodType={PeriodType}&AgencyId={AgencyId}").Result;
         }
         public APIResult<bool> Rename(int Id, string FileName)
         {

@@ -10,6 +10,7 @@ using Proven.Model;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class TwilioController : BaseController
     {
         [HttpPost]
@@ -22,6 +23,17 @@ namespace ProvenCfoUI.Controllers
                 token = await twilioService.GetToken(Identity);
             }
             return Json(token);
+        }
+
+        [HttpPost]
+        [CheckSession]
+        public JsonResult CreateTwilioUser()
+        {
+            using (var twilioService = new TwilioService())
+            {
+                twilioService.CreateTwilioUser(User.UserId, User.LoginName);
+            }
+            return Json(true);
         }
 
         [HttpPost]
@@ -48,5 +60,14 @@ namespace ProvenCfoUI.Controllers
             return Json("");
         }
 
+        [HttpPost]
+        public JsonResult GenereateAllReconciliationTwilioConversationAndAddParticipants(int clientId)
+        {
+            using (var twilioService = new TwilioService())
+            {
+                twilioService.GenereateAllReconciliationTwilioConversationAndAddParticipants(clientId, User.UserId, User.LoginName);
+            }
+            return Json(true);
+        }
     }
 }

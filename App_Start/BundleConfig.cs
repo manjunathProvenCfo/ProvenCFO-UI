@@ -13,9 +13,9 @@ namespace ProvenCfoUI
                         "~/assets/lib/underscore.js/underscore-min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/layoutJS").Include(
-             "~/Scripts/jquery-{version}.js",
-             "~/assets/js/jquery.min.js",
-             "~/assets/js/popper.min.js",
+             "~/Scripts/jquery-{version}.min.js",
+             "~/assets/js/jquery.min.js",           
+             "~/assets/js/popper.min.js",         
              "~/assets/js/bootstrap.min.js",
              "~/assets/lib/moment.js/moment.min.js",
              "~/assets/lib/fortawesome/all.min.js",
@@ -33,8 +33,12 @@ namespace ProvenCfoUI
              "~/assets/lib/sweetalert/sweetalert.min.js",
              "~/assets/lib/superagent/dist/superagent.min.js",
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
-             "~/assets/lib/waitMe/waitMe.min.js"
-    ));
+             "~/assets/lib/waitMe/waitMe.min.js",             
+             "~/assets/js/jquery.idle-timer.js"
+            
+
+
+            ));
             bundles.Add(new Bundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
              "~/assets/js/wrapper.js"
@@ -114,7 +118,8 @@ namespace ProvenCfoUI
                 "~/assets/js/agencyHome.js"
                 ));
             bundles.Add(new Bundle("~/bundles/js/reconciliationMain").Include(
-                "~/assets/js/reconciliationMain.js"
+                "~/assets/js/reconciliationMain.js",
+                 "~/assets/js/lottie-player.js"
                 ));
             #region FileUploader
 

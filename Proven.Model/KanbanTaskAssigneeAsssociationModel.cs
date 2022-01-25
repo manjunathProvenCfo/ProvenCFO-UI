@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class KanbanTaskAssigneeAsssociationModel
     {
         public int Id { get; set; }
@@ -19,6 +20,7 @@ namespace Proven.Model
 
         public bool SingleMember { get; set; }
     }
+    [Serializable]
     public class KanbanTaskAssigneeAsssociationShortVM
     {
         public string Id { get; set; }

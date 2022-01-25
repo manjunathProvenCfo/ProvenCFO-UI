@@ -114,10 +114,10 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0">Invite valid for</label><br />
+                                        <label for="split-login-email" class="mb-0">Invite valid for / In Days</label><br />
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(m => m.SessionTimeout, new List<SelectListItem>() { new SelectListItem { Text = "24 Hours", Value = "24" } }, new { @class = "form-control text-box single-line" , @readonly = "readonly" })
+                                        @Html.DropDownListFor(m => m.SessionTimeout, new List<SelectListItem>() { new SelectListItem { Text = "5 Days", Value = "5" } }, new { @class = "form-control text-box single-line" , @readonly = "readonly" })
                                         @Html.ValidationMessageFor(model => model.SessionTimeout, "", new { @class = "text-danger" })
                                         @*<div class="input-group">
             <select class="custom-select" id="SessionTimeout" name="SessionTimeout">

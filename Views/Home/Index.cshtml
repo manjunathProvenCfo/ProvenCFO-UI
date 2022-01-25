@@ -21,7 +21,10 @@
         </div>
         @*@Html.Partial("_AgencySelection")*@
         @{
-            Html.RenderAction("AgencySelection", "AgencyService");
+            if (Session["UserId"] != null)
+            {
+                Html.RenderAction("AgencySelection", "AgencyService");
+            }
         }
     </div>
 
@@ -802,8 +805,12 @@
             }
         };
         $(function () {
-            docReady(totalSalesInit);
-            docReady(totalSalesInitTwo);
+            try {
+                docReady(totalSalesInit);
+                docReady(totalSalesInitTwo);
+            } catch (e) {
+                console.log(e);
+            }
         });
     </script>
 }

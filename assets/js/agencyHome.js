@@ -14,11 +14,13 @@ $(document).ready(function () {
         }
     });
 
+    createTwilioUser();
+
     AgencyDropdownPartialViewChange();
-    bindNotInBooksAndBanksCountDashboard();
+    //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
     KanbanCountWithIndividualPriority();
-    defaultReportsWidget();
+    //defaultReportsWidget();
     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
     RenderNetIncomeChart($('#dllNetIncome').val());
 
@@ -37,15 +39,15 @@ $(document).ready(function () {
 
     $('#ddlGrossRevenue').change(function () {
         var item = $(this);
-       
+
         RenderGrossRevenueChart(item.val());
     });
     $('#dllNetIncome').change(function () {
         var item = $(this);
-       
+
         RenderNetIncomeChart(item.val());
     });
-    
+
 });
 
 //function GetMonthDifference(data.StartDate, Enddate) {
@@ -69,7 +71,7 @@ function RenderGrossRevenueChart(Option) {
         }
         else {
             var xdata = ['No Data'];
-            var ydata = [0];      
+            var ydata = [0];
 
             LineChart(xdata, ydata, '#container1');
         }
@@ -78,14 +80,14 @@ function RenderGrossRevenueChart(Option) {
 }
 
 function RenderNetIncomeChart(Option) {
-    
+
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift();
             var xdata = response.Xdata.reverse(); ///['Oct', 'Nov', 'Dec'];
             var ydata = response.Ydata.reverse();//[100, 150, 200];
-        
+
             LineChart(xdata, ydata, '#container2');
         }
         else {
@@ -570,7 +572,7 @@ function AgencyDropdownPartialViewChange() {
                     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                     RenderNetIncomeChart($('#dllNetIncome').val());
                 }, 1000);
-              
+
                 GetAccountOutStanding();
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
@@ -582,14 +584,15 @@ function AgencyDropdownPartialViewChange() {
                 $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
 
                 GetReconcilationData();
-                GetReconcilationPostiveData();
-                GetReconcilationNegativeData();
-                bindNotInBooksAndBanksCountDashboard();
-                bindNotInBooksAndBanksCountDashboard1();
+                GetReconcilationData1();
+                //GetReconcilationPostiveData();
+                //GetReconcilationNegativeData();
+                //bindNotInBooksAndBanksCountDashboard();
+                //bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
                 /*GetTotalNotesCount();*/
                 SetUserPreferencesForAgency();
-                
+                defaultReportsWidget();
                 let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                 $('#spMonths').html(month);
                 $('#spClientAddress').html(data.CityName + ',' + data.StateName);
@@ -667,66 +670,154 @@ function AgencyDropdownPartialViewChange() {
 //    });
 //}
 
+//function GetReconcilationData() {
+
+
+//    var ClientID = $("#ddlclient option:selected").val();
+
+
+//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+
+//        if (response.Message == "Success") {
+
+
+
+//            var data = response.ResultData;
+
+
+//            let totalSum = 0;
+
+
+
+//            for (var i = 0; i < data.length; i++) {
+
+//                totalSum = totalSum + data[i].totalCount;
+//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+
+//                    $("#lblNotInBanksCount2").text(data[i].totalCount);
+//                }
+
+
+//                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+//                    $("#lblNotInBooksCount2").text(data[i].totalCount);
+//                }
+
+//            }
+
+//            if (data == 0) {
+
+//                //$("#lblNotInBanksCount2").text(data.totalCount);
+//                //$("#lblNotInBooksCount2").text(data.totalCount);
+//                $("#lblNotInBooksCount2").text(0);
+//                $("#lblNotInBanksCount2").text(0);
+//            }
+//            $("#lblNotInCount").text(totalSum);
+
+//        }
+
+//        error: (function (data) {
+
+//            window.location.reload();
+
+//            swal("Oops", "We couldn't connect to the server!", "error");
+//        });
+
+//    });
+//}
+var totalSum1;
+var totalSum2;
 function GetReconcilationData() {
-
-
     var ClientID = $("#ddlclient option:selected").val();
 
-
-    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
         if (response.Message == "Success") {
-
-
-
-            var data = response.ResultData;
-
-
-            let totalSum = 0;
-
-
-
-            for (var i = 0; i < data.length; i++) {
-
-                totalSum = totalSum + data[i].totalCount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-
-                    $("#lblNotInBanksCount2").text(data[i].totalCount);
-                }
-
-
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNotInBooksCount2").text(data[i].totalCount);
-                }
-
+            var percentage = 0;
+            totalSum1 = 0;
+            let data = response.ResultData;
+            if (data != null && data.length > 0) {
+                $("#lblNotInBanksCount2").text(data[0].Count);
+                $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                percentage = data[0].percentage.toFixed(0);
+                totalSum1 = data[0].Count;
             }
-
-            if (data == 0) {
-
-                //$("#lblNotInBanksCount2").text(data.totalCount);
-                //$("#lblNotInBooksCount2").text(data.totalCount);
-                $("#lblNotInBooksCount2").text(0);
-                $("#lblNotInBanksCount2").text(0);
+            else {
+                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
             }
-            $("#lblNotInCount").text(totalSum);
+            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+            utils.addProgressCircle("#lblNotInBankPercentage")
+
+            //for (var i = 0; i < data.length; i++) {
+
+            //    totalSum1 = totalSum + data[i].Count;
+            //    if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+            //        $("#lblNotInBanksCount2").text(data[i].Count);
+            //    }
+            //}
+
+            TotalSum(totalSum1, totalSum2);
+        }
+    })
+
+}
+function GetReconcilationData1() {
+    var ClientID = $("#ddlclient option:selected").val();
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        if (response.Message == "Success") {
+            var totalSum = 0;
+            var percentage = 0;
+            totalSum2 = 0;
+            let data = response.ResultData;
+            if (data != null && data.length > 0) {
+                $("#lblNotInBooksCount2").text(data[0].Count);
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                totalSum2 = data[0].Count;
+                percentage = data[0].percentage.toFixed(0);
+            }
+            else {
+                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+            }
+            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+            utils.addProgressCircle("#divNotInBookPercentage1")
+            //for (var i = 0; i < data.length; i++) {
+
+
+
+            //    if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+            //        $("#lblNotInBooksCount2").text(data[i].Count);
+            //    }
+
+            //}
+
+            TotalSum(totalSum1, totalSum2);
+
 
         }
+    })
+}
 
-        error: (function (data) {
+function TotalSum(totalSum1, totalSum2) {
+    let totalsum3 = 0;
+    if (isNaN(totalSum1 + totalSum2)) {
+        $("#lblNotInCount").addClass('d-none');
+    }
+    else {
+        $("#lblNotInCount").removeClass('d-none');
+        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        $("#lblNotInCount").text(totalsum3);
 
-            window.location.reload();
-
-            swal("Oops", "We couldn't connect to the server!", "error");
-        });
-
-    });
+    }
 }
 
 function GetReconcilationPostiveData() {
 
 
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
 
         if (response.Message == "Success") {
 
@@ -736,15 +827,16 @@ function GetReconcilationPostiveData() {
             for (var i = 0; i < data.length; i++) {
 
                 totalSum = totalSum + data[i].amount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
 
 
-                    $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
-                }
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
 
-                }
+
+                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
+
+
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
+
+
             }
             if (data == 0) {
 
@@ -762,26 +854,24 @@ function GetReconcilationNegativeData() {
 
 
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationNegCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
 
         if (response.Message == "Success") {
-
 
             var data = response.ResultData;
             var totalSum = 0;
 
             for (var i = 0; i < data.length; i++) {
 
-                totalSum = totalSum + data[i].amount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-
-                    $("#lblpostiveBanksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
 
 
-                }
-                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amount).replace('-', ''));
-                }
+                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
+
+
+
+
+                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
+
             }
             if (data == 0) {
 
@@ -851,8 +941,6 @@ function bindNotInBooksAndBanksCountDashboard1() {
 
             $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
             utils.addProgressCircle("#lblNotInBankPercentage")
-
-
 
         }
 
@@ -1269,8 +1357,10 @@ var totalSalesInitTwo = function totalSalesInitTwo() {
 var defaultReportsWidget = function () {
     var agencyId = $("#ddlclient option:selected").val();
     getAjax(`/Reports/GetDashboardReports?agencyId=${agencyId}`, null, function (response) {
-        var divMonthlyReports = $("#divMonthlyReports")
-        var divYearlyReports = $("#divYearlyReports")
+        var divMonthlyReports = $("#divMonthlyReports");
+        var divYearlyReports = $("#divYearlyReports");
+        divMonthlyReports.empty();
+        divYearlyReports.empty();
         if (response.DataMonthly.length > 0) {
             for (var i = 0; i < response.DataMonthly.length; i++) {
                 let reportHtml = prepareReportMedia(response.DataMonthly[i]);
@@ -1301,4 +1391,7 @@ function prepareReportMedia(report) {
                                     </div>
                                 </div>`;
     return reportHTML;
+}
+var createTwilioUser = function () {
+    postAjax("/Twilio/CreateTwilioUser", null, function () { });
 }

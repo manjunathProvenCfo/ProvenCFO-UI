@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class ChatChannel
     {
         public string ChannelId { get; set; }
@@ -20,6 +21,7 @@ namespace Proven.Model
         public string ReconciliationDescription { get; set; }
         public DateTime ReconciliationDate { get; set; }
         public decimal? ReconciliationAmount { get; set; }
+        public bool HasTwilioConversation { get; set; }
         #endregion
     }
 }

@@ -12,12 +12,13 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class TeamsController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Teams
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         public ActionResult TeamsList()
         {
             try

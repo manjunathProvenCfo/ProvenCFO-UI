@@ -16,6 +16,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class ReportsController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -261,13 +262,13 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
-        public JsonResult MakeItMonthlySummary(int Id, int Year, string PeriodType)
+        public JsonResult MakeItMonthlySummary(int Id, int Year, string PeriodType,int AgencyId)
         {
             try
             {
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var result = reportsService.MakeItMonthlySummary(Id, Year, PeriodType);
+                    var result = reportsService.MakeItMonthlySummary(Id, Year, PeriodType,AgencyId);
 
                     if (result != null)
                     {

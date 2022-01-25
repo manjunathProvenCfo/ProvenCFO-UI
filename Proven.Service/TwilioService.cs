@@ -18,45 +18,26 @@ namespace Proven.Service
         public async Task<string> GetToken(string identity)
         {
             return await PostAsync<string>("Twilio/Token?identity=" + identity);
-            //response = await client.PostAsync("Twilio/Token?identity=" + identity, null).ConfigureAwait(false);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            //    return JsonConvert.DeserializeObject<string>(content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
+        }
+
+        public void CreateTwilioUser(string UserId, string identity)
+        {
+            Task.Run(async () => await PostAsync<bool>($"Twilio/CreateTwilioUser?UserId={UserId}&identity={identity}")).ConfigureAwait(false);
         }
 
         public async Task<bool> UpdateTwilioUserId(string UserId, string TwilioUserId)
         {
             string queryString = $"UserId={UserId}&TwilioUserId={TwilioUserId}";
             return await PostAsync<bool>($"Twilio/UpdateTwilioUserId?{queryString}");
-            //response = await client.PostAsync($"Twilio/UpdateTwilioUserdId?{queryString}", null);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            //    return JsonConvert.DeserializeObject<bool>(content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
         }
 
         public async Task InsertUpdateTwilioConversation(TwilioConversations twilioConversations)
         {
             await client.PostAsync($"Twilio/InsertUpdateTwilioConversation", PreparePostContent(twilioConversations));
-            //response = await client.PostAsync($"Twilio/InsertUpdateTwilioConversation", PreparePostContent(twilioConversations));
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-            //}
+        }
+        public void GenereateAllReconciliationTwilioConversationAndAddParticipants(int clientId, string userId, string userEmail)
+        {
+            Task.Run(async () => await client.PostAsync($"Twilio/GenereateAllReconciliationTwilioConversationAndAddParticipants?clientId={clientId}&userId={userId}&userEmail={userEmail}", null).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         public void Dispose()

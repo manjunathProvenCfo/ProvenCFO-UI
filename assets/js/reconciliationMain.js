@@ -1,8 +1,14 @@
 ﻿//Chat Code start
 var currentChannelUniqueNameGuid = "";
-
+var IsEnableAutomation = false;
+var IsSeletedAll = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
+    bindEnableAutomation();
+    EnableSelectedBulkUpdateButton();
+    //bindIsSeletedAll();
+
+
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
         let elCheckbox = $("table tr.bg-300 td:first .checkbox-bulk-select-target");
@@ -42,6 +48,8 @@ $(document).ready(function () {
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
+        $('#divBulkUpdate').hide();
+        $('#divBulkUpdate').addClass('d-none');
         $('#divChat').show();
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -53,17 +61,49 @@ $(document).ready(function () {
         }
     }
 });
-//Chat Code end
+
+var bindEnableAutomation = function () {
+    getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
+
+            IsEnableAutomation = response.Data;
+            if (IsEnableAutomation === false) {
+                $("#OnDemandData").attr('disabled', true);
+                $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+
+            }
+
+        }
+    });
+}
+var EnableSelectedBulkUpdateButton = function () {
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+    if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
+        $("#ibulkupdate").attr('disabled', false);
+        $("#ibulkupdate").attr('title', 'Bulk Update');
+        
+    }
+    else {
+        $("#ibulkupdate").attr('disabled', true);
+        $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+      
+    }
+}
+
+
+
+
 
 $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
     bindNotInBooksAndBanksCount1();
-
+   
     LoadFilterData();
-
-
+   
+   
     XeroConnectionUpdate();
     var type = sessionStorage.getItem('Type');
     $('#divFilter').hide();
@@ -89,14 +129,29 @@ $(document).ready(function () {
     sessionStorage.clear();
 
     $('.checkbox-bulk-select-target').click(function () {
+        
         if ($(this).is(":checked")) {
+            
             $(this).closest('tr').addClass('bg-300');
         }
         else {
             $(this).closest("tr").removeClass('bg-300');
         }
     });
+    /* checkbox - bulk - purchases - select*/
+   
+    $('.checkbox-bulk-select').change(function () {  
+        if ($(this).is(":checked",true)) {
 
+            $(this).closest('table').addClass('bg-300');
+        }
+        else {
+            $(this).closest("table").removeClass('bg-300');
+        }
+        //$(".checkbox-bulk-select").attr('checked', false);
+        //$(this).closest('tr').css("background-color", "#ff0000");
+    });
+   
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
@@ -160,6 +215,7 @@ $(document).ready(function () {
             $('#divChat').hide();
             $('#divFilter').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -175,6 +231,7 @@ $(document).ready(function () {
             $('#divFilter').hide();
             $('#divBulkUpdate').hide();
             $('#divFilter').addClass('d-none');
+            location.reload();
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -185,29 +242,33 @@ $(document).ready(function () {
 
     $("#OnDemandData").click(function () {
 
-        $("#Loader").removeAttr("style");
-        var ClientID = $("#ddlclient option:selected").val();
+        if (IsEnableAutomation === false) {
+            $("#OnDemandData").attr('disabled', true);
+            return;
+        }        
+            $("#Loader").removeAttr("style");
+            var ClientID = $("#ddlclient option:selected").val();
+            var RequestType = "On Demand";
+            var RequestedAtUTC = '';
+            var CurrentStatus = "New";
+            var RequestCompletedAtUTC = '';
+            var Remark = '';
 
+            var AgencyName = '';
+            var CreatedBy = '';
+            var CreatedDate = '';
 
-        var RequestType = "On Demand";
-        var RequestedAtUTC = '';
-        var CurrentStatus = "New";
-        var RequestCompletedAtUTC = '';
-        var Remark = '';
+            var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+            postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+                if (response.Message == 'Success') {
+                    setTimeout(() => {
+                        reconcilationonstatusDemand(response.data.Id);
+                    }, 1000);
+                }
 
-        var AgencyName = '';
-        var CreatedBy = '';
-        var CreatedDate = '';
-        var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
-        postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
-            if (response.Message == 'Success') {
-                setTimeout(() => {
-                    reconcilationonstatusDemand(response.data.Id);
-                }, 1000);
-            }
-
-        });
-
+            });
+      
     });
+
 
 });

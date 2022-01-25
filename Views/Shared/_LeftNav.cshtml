@@ -19,9 +19,8 @@
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content perfect-scrollbar scrollbar">
             <ul class="navbar-nav flex-column">
-                @if (Common.IsModuleAccessable("CLS"))
-                {
-                    if (Common.IsFeatureAccessable("AGH"))
+               
+                    @if (Common.IsFeatureAccessable("HOM"))
                     {
                         <li class="nav-item" id="menu_home">
                             <a class="nav-link" href=@Url.Action("AgencyHome", "AgencyService") name="menu_home">
@@ -31,7 +30,7 @@
                             </a>
                         </li>
                     }
-                    if (Common.IsFeatureAccessable("RCN"))
+                    @if (Common.IsFeatureAccessable("RCN"))
                     {
                         <li class="nav-item" id="menu_reconciliation">
                             <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation") name="menu_reconciliation">
@@ -42,35 +41,40 @@
                             </a>
                         </li>
                     }
-                    <li class="nav-item" id="menu_intelligence">
-                        <a class="nav-link dropdown-indicator" href="#intelligence" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="intelligence" name="menu_intelligence">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon"><span class="fas fa-chart-line"></span></span><span class="nav-link-text">Intelligence</span>
-                            </div>
-                        </a>
-                        <ul class="nav collapse" id="intelligence" data-parent="#navbarVerticalCollapse">
-                            @if (Common.IsFeatureAccessable("AGH"))
-                            {
-                                <li class="nav-item" id="submenu_dashboards">
-                                    <a class="nav-link" href=@Url.Action("Dashboard", "Dashboard") name="submenu_dashboards">Dashboards</a>
-                                </li>
-                            }
-                            @if (Common.IsFeatureAccessable("RPT"))
-                            {
-                                <li class="nav-item" id="submenu_reports">
-                                    <a class="nav-link" href=@Url.Action("ReportsList", "Reports") name="submenu_reports">Reports</a>
-                                </li>
-
-                                <li class="nav-item" id="submenu_notes">
-                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">
-                                        <span class="nav-link-text">  Notes  <span class="badge badge-pill badge-soft-danger ml-3" id="lblTotalNotes"></span></span>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </li>
-                }
-                @if (Common.IsModuleAccessable("CLS"))
+                    @if (Common.IsFeatureAccessable("ITG"))
+                    {
+                        <li class="nav-item" id="menu_intelligence">
+                            <a class="nav-link dropdown-indicator" href="#intelligence" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="intelligence" name="menu_intelligence">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><span class="fas fa-chart-line"></span></span><span class="nav-link-text">Intelligence</span>
+                                </div>
+                            </a>
+                            <ul class="nav collapse" id="intelligence" data-parent="#navbarVerticalCollapse">
+                                @if (Common.IsFeatureAccessable("DBD"))
+                                {
+                                    <li class="nav-item" id="submenu_dashboards">
+                                        <a class="nav-link" href=@Url.Action("Dashboard", "Dashboard") name="submenu_dashboards">Dashboards</a>
+                                    </li>
+                                }
+                                @if (Common.IsFeatureAccessable("RPT"))
+                                {
+                                    <li class="nav-item" id="submenu_reports">
+                                        <a class="nav-link" href=@Url.Action("ReportsList", "Reports") name="submenu_reports">Reports</a>
+                                    </li>
+                                }
+                                @if (Common.IsFeatureAccessable("NTS"))
+                                {
+                                    <li class="nav-item" id="submenu_notes">
+                                        <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">
+                                            <span class="nav-link-text">  Notes  <span class="badge badge-pill badge-soft-danger ml-3" id="lblTotalNotes"></span></span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                
+                @if (Common.IsFeatureAccessable("COM"))
                 {
                     <li class="nav-item" id="menu_communication">
 
@@ -87,7 +91,7 @@
                                     <a class="nav-link" href=@Url.Action("NeedsMain", "Needs") name="submenu_needs">Needs</a>
                                 </li>
                             }
-                            @if (Common.IsFeatureAccessable("COM"))
+                            @if (Common.IsFeatureAccessable("CHT"))
                             {
                                 <li class="nav-item" id="submenu_chat">
                                     <a class="nav-link" href=@Url.Action("Chat", "Communication") name="submenu_chat">Chat</a>
@@ -107,7 +111,13 @@
                         </a>
                     </li>
                 }
-                @if (Common.IsModuleAccessable("ADM"))
+            </ul>
+
+            <div class="navbar-vertical-divider">
+                <hr class="navbar-vertical-hr my-2">
+            </div>
+            <ul class="navbar-nav flex-column">
+                @if (Common.IsFeatureAccessable("ADM"))
                 {
                     <li class="nav-item" id="menu_administration">
                         <a class="nav-link dropdown-indicator" href="#administration" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="administration" name="menu_administration">
@@ -120,6 +130,13 @@
                             {
                                 <li class="nav-item" id="submenu_staffusers">
                                     <a class="nav-link" href=@Url.Action("InviteStaffList","Invitation") name="submenu_staffusers">Staff Users</a>
+                                </li>
+
+                            }
+                            @if (Common.IsFeatureAccessable("AUR"))
+                            {
+                                <li class="nav-item" id="submenu_staffusers">
+                                    <a class="nav-link" href=@Url.Action("About","Home") name="submenu_staffusers">Agency Users</a>
                                 </li>
 
                             }
@@ -147,7 +164,7 @@
                     </li>
                 }
 
-                @if (Common.IsModuleAccessable("STP"))
+                @if (Common.IsFeatureAccessable("STP"))
                 {
                     <li class="nav-item" id="menu_setup">
 
@@ -170,17 +187,18 @@
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
-                            @if (Common.IsFeatureAccessable("INT"))
+                            
+                            @if (Common.IsFeatureAccessable("GLA"))
                             {
                                 <li class="nav-item" id="submenu_glAccount">
-                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_integration">GL Accounts</a>
+                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_GLaccounts">GL Accounts</a>
                                 </li>
                             }
 
-                            @if (Common.IsFeatureAccessable("INT"))
+                            @if (Common.IsFeatureAccessable("TCS"))
                             {
                                 <li class="nav-item" id="submenu_trackingCategories">
-                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_integration">Tracking Categories</a>
+                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_trackingcategories">Tracking Categories</a>
                                 </li>
                             }
                             @if (Common.IsFeatureAccessable("SYS"))
@@ -195,7 +213,7 @@
                         </ul>
                     </li>
                 }
-              
+
             </ul>
         </div>
     </div>

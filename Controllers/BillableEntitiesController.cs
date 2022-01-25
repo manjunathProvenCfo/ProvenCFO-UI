@@ -12,6 +12,7 @@ using System.Web.Mvc;
 namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class BillableEntitiesController : BaseController
     {
         string errorMessage = string.Empty;
@@ -20,7 +21,7 @@ namespace ProvenCfoUI.Controllers
         // GET: BillableEntities
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         public ActionResult GetAllBillableEntitiesList()
         {
             try

@@ -14,18 +14,20 @@ using static ProvenCfoUI.Comman.Common;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class AgencyServiceController : BaseController, IDisposable
     {
         string errorMessage = string.Empty;
         string errorDescription = string.Empty;
-       
+
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: AgencyService
         [CheckSession]
         public ActionResult AgencyHome()
         {
-
-            return View();
+            {
+                return View();
+            }
         }
         [CheckSession]
         public ActionResult AgencyXeroHome(string code, string scope, string state)
@@ -75,16 +77,15 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
-      
         public async Task<JsonResult> GetAccountOutStanding()
         {
             var returnData = new Dictionary<string, dynamic>();
             try
             {
                 if (XeroInstance.Instance.XeroConnectionStatus == true && !string.IsNullOrEmpty(Convert.ToString(XeroInstance.Instance.XeroContactIDofProvenCfo)))
-                {                   
+                {
                     var result = await XeroInstance.Instance.XeroService.GetContact(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID, XeroInstance.Instance.XeroContactIDofProvenCfo);
-                                        
+
                     if (result != null && result._Contacts.FirstOrDefault().Balances != null && result._Contacts.FirstOrDefault().Balances.AccountsPayable != null)
                     {
                         var Outstanding = result._Contacts.FirstOrDefault().Balances.AccountsPayable.Outstanding;
@@ -95,13 +96,13 @@ namespace ProvenCfoUI.Controllers
                     {
                         returnData.Add("data", "");
                         returnData.Add("Total", 0);
-                    }                                       
+                    }
                 }
                 else
                 {
                     returnData.Add("data", "");
-                    returnData.Add("Total", 0);                   
-                }                
+                    returnData.Add("Total", 0);
+                }
             }
             catch (Exception ex)
             {
@@ -115,6 +116,10 @@ namespace ProvenCfoUI.Controllers
         [ChildActionOnly]
         public ActionResult AgencySelection()
         {
+            if (Session["UserType"] == null)
+            {
+                return RedirectToAction("LoginSessionExpaired");
+            }
             AgencyClient objAgy = new AgencyClient();
             try
             {
@@ -123,12 +128,12 @@ namespace ProvenCfoUI.Controllers
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (TempData["ClientListActived"] == null)
                     {
-                        
+
                         var objResult = new List<ClientModel>();
                         var LoginUserid = Convert.ToString(User.UserId);
                         if (LoginUserid != "")
                         {
-                            if (Session["UserType"] != null && Convert.ToString( Session["UserType"]).Trim() == "2")
+                            if (Session["UserType"] != null && Convert.ToString(Session["UserType"]).Trim() == "2")
                             {
                                 objResult = objClient.GetClientListForAgecyUser(LoginUserid, true, false).ResultData;
                             }
@@ -229,14 +234,14 @@ namespace ProvenCfoUI.Controllers
             dynamic Xdata = null;
             dynamic Ydata = null;
             try
-            { 
+            {
                 if (XeroInstance.Instance.XeroConnectionStatus == true)
                 {
                     var pval = Common.getChartOptionValues(Option);
                     var result = await XeroInstance.Instance.XeroService.GetReportProfitAndLossAsync(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
-                   
-                    Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ","").Replace("31 ","").Replace("28 ","").Replace("29 ","")).ToArray();
-                    if (cType == ChartType.Revenue && result!= null && result.Reports.Count > 0)
+
+                    Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ", "").Replace("31 ", "").Replace("28 ", "").Replace("29 ", "")).ToArray();
+                    if (cType == ChartType.Revenue && result != null && result.Reports.Count > 0)
                     {
                         obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
                         Ydata = obj;
@@ -248,23 +253,24 @@ namespace ProvenCfoUI.Controllers
                             if (item.Rows != null && item.Rows.Count > 0 && item.Rows[0].Cells.Count > 0 && item.Rows[0].Cells[0].Value == "Net Income")
                             {
                                 Ydata = item.Rows[0].Cells.Select(x => x.Value).ToArray();
-                                
+
                             }
                         }
                         ///obj = result.Reports[0].Rows.Where(x => x.Rows[0].Cells.Select(y => y.Value).Contains("Net Income")).ToList()[0].Rows.LastOrDefault().Cells;
-                        
+
                     }
-                                      
-                    return Json(new { Xdata = Header, Ydata = Ydata,Status ="Success" }, JsonRequestBehavior.AllowGet);
+
+                    return Json(new { Xdata = Header, Ydata = Ydata, Status = "Success" }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new { Xdata = Header, Ydata = Ydata, Status = "No Data" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new {Status = "Error" }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = "Error" }, JsonRequestBehavior.AllowGet);
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
         }
     }
 }
+

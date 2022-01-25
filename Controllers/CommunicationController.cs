@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace ProvenCfoUI.Controllers
 {
+    [Exception_Filters]
     public class CommunicationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -72,7 +73,7 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
-        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId)
+        public async Task<JsonResult> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId, bool? onlyHasChatChannels)
         {
             try
             {
@@ -80,7 +81,7 @@ namespace ProvenCfoUI.Controllers
 
                 using (var communicationService = new CommunicationService())
                 {
-                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid, clientId);
+                    chatChannels = await communicationService.GetPublicChat(userId, userEmail, type, channelUniqueNameGuid, clientId, onlyHasChatChannels);
                 }
                 return Json(chatChannels, JsonRequestBehavior.AllowGet);
             }
@@ -149,6 +150,26 @@ namespace ProvenCfoUI.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateReconciliationHasStatus(string id)
+        {
+            try
+            {
+                bool isUpdated = false;
+
+                using (var communicationService = new CommunicationService())
+                {
+                    isUpdated = await communicationService.UpdateReconciliationHasStatus(id);
+                }
+                return Json(isUpdated, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

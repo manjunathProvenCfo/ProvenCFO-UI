@@ -18,9 +18,12 @@ namespace Proven.Service
         {
             return await GetAsync<List<ChatChannel>>($"Communication/GetChatParticipants?userId={UserID}&userEmail={userEmail}&clientId={clientId}");
         }
-        public async Task<List<ChatChannel>> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId)
+        public async Task<List<ChatChannel>> GetPublicChat(string userId, string userEmail, TwilioConversationsTypeEnum type, string channelUniqueNameGuid, int clientId, bool? onlyHasChatChannels)
         {
-            return await GetAsync<List<ChatChannel>>($"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}&clientId={clientId}");
+            string uri = $"Communication/GetPublicChat?userId={userId}&userEmail={userEmail}&type={(byte)type}&channelUniqueNameGuid={channelUniqueNameGuid}&clientId={clientId}";
+            if (onlyHasChatChannels != null)
+                uri = $"{uri}&onlyHasChatChannels={onlyHasChatChannels}";
+            return await GetAsync<List<ChatChannel>>(uri);
         }
 
         public async Task<IEnumerable<MentionUserVM>> FilterMentionUsers(string searchUser, int clientId)
@@ -35,6 +38,10 @@ namespace Proven.Service
         public async Task<List<ChatParticipants>> GetNotificationParticipantsByEmails(string emails)
         {
             return await GetAsync<List<ChatParticipants>>($"Communication/GetNotificationParticipantsByEmails?emails={emails}");
+        }
+        public async Task<bool> UpdateReconciliationHasStatus(string id)
+        {
+            return await PostAsync<bool>($"Communication/UpdateReconciliationHasStatus?id={id}");
         }
 
         public void Dispose()

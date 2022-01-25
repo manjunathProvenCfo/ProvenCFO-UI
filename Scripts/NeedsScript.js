@@ -379,7 +379,58 @@ function RemoveFile(e) {
         }
     });
 }
+//function DeleteNeedsCard(TaskId) {
+   
+//    swal({
+//        title: "Are you sure?",
+//        text: "Do you really want to delete this Card?",
+//        type: "warning",
+//        showCancelButton: true,
+//        closeOnConfirm: false,
+//        confirmButtonText: "Yes, delete it!",
+//        confirmButtonColor: "#ec6c62"
 
+//    },
+
+//        function () {
+           
+//            $.ajax({
+//                type: "POST",
+//                url: "/Needs/DeleteNeedsCard?TaskId=${TaskId}",
+                
+//            })
+//                .done(function (data) { 
+//                    sweetAlert
+//                        ({
+//                            title: "Deleted!",
+//                            text: "Card successfully deleted!",
+//                            type: "success"
+//                        },
+//                            function () {
+//                                window.location.reload();
+//                            });
+
+//                })
+                
+//        });
+//}
+var DeleteNeedsCard = function ( TaskId) {
+ 
+    ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this Card?", "Yes, remove it!", function (isConfirmed) {
+        if (isConfirmed == false)
+            return;
+       
+        postAjax(`/Needs/DeleteNeedsCard?TaskId=${TaskId}`, null, function (response) {
+            if (response.Status == "true") {
+                ShowAlertBoxSuccess("", "card has been removed successfully!")
+               
+            }
+           
+        });
+        window.location.reload();
+    });
+    return false;
+}
 function RemoveAttchment(attachmentId) {
 
     $('#att_' + attachmentId)[0].remove();
@@ -512,47 +563,53 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-    //var img = new Image();
-    //img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-    
-    //ev.dataTransfer.setDragImage(img, 0, 0);
-    /*ev.dataTransfer.clearData();*/
-   /* ev.currentTarget.style.background = "lightyellow";*/
+    //selectedTask = $(ev.data.source).attr('id');
+    //var count = parseInt($('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
+    //selectedTask = ev.target.id;    
+    ////count = count - 1;
+    //selectedColumnsid = $('#' + ev.target.id).parent().parent()[0].id;
+    //// $('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText = '(' + count + ')';
+    //ev.dataTransfer.setData("text", ev.target.id);
+}
 
-        
-    var count = parseInt($('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
-    selectedTask = ev.target.id;    
-    //count = count - 1;
-    selectedColumnsid = $('#' + ev.target.id).parent().parent()[0].id;
-    // $('#' + $('#' + ev.target.id).parent().parent()[0].id + ' h5 span')[0].innerText = '(' + count + ')';
-    ev.dataTransfer.setData("text", ev.target.id);
+var kanbanDrag = function (e) {
+    drag(e);
+}
+var kanbanDrop = function (event) {
+    drop(event);
 }
 
 function drop(ev) {
-    ev.preventDefault();
-    //var count = parseInt($('#' + $('#' + ev.target.id).parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
-    //var fromCount = parseInt($('#' + selectedColumnsid + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
-    var segmentType1 = '';
-    var data = ev.dataTransfer.getData("text");
-    if (ev.target.className.indexOf('kanban-items-container-new') == -1) {
-        $('#' + data).insertBefore($('#' + ev.target.closest(".kanban-item").id));
-        segmentType1 = ev.target.closest(".kanban-items-container-new").attributes['segmenttype'].value;
-    } else {
-        ev.target.appendChild(document.getElementById(data));
-        segmentType1 = ev.target.attributes['segmenttype'].value;
-    }
-    if (segmentType1 != '') {
+    segmentType1 = $(ev.data.source).closest('.kanban-items-container').attr("segmenttype");
+    selectedTask = $(ev.data.source).attr('id');
+    if (segmentType1 !== '') {
         UpdateTaskSegmentType(selectedTask, segmentType1);
         updateKanbanColumnsCount();
     }
+    ////var count = parseInt($('#' + $('#' + ev.target.id).parent()[0].id + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
+    ////var fromCount = parseInt($('#' + selectedColumnsid + ' h5 span')[0].innerText.replace('(', '').replace(')', ''));
+    //var segmentType1 = '';
+    //var data = ev.dataTransfer.getData("text");
+    //if (ev.target.className.indexOf('kanban-items-container') == -1) {
+    //    $('#' + data).insertBefore($('#' + ev.target.closest(".kanban-item").id));
+    //    segmentType1 = ev.target.closest(".kanban-items-container").attributes['segmenttype'].value;
+    //} else {
+    //    ev.target.appendChild(document.getElementById(data));
+    //    segmentType1 = ev.target.attributes['segmenttype'].value;
+    //}
+    //if (segmentType1 != '') {
+    //    UpdateTaskSegmentType(selectedTask, segmentType1);
+    //    updateKanbanColumnsCount();
+    //}
 }
 function updateKanbanColumnsCount() {
     var columns = $('.kanban-container .kanban-column');
     if (columns != null && columns.length > 0) {
         $.each(columns, function (key, col) {
             if (col != null && col.attributes['id'] != undefined) {
-                var cardscount = $('#' + col.attributes['id'].value + ' .kanban-item');
-                $('#' + col.attributes['id'].value + ' .kanban-column-header span')[0].innerText = '(' + cardscount.length + ')';
+                $(col).find('.kanban-column-header span').text(`(${$(col).find('.kanban-item-card:visible').length})`);
+                //var cardscount = $('#' + col.attributes['id'].value + ' .kanban-item');
+                //$('#' + col.attributes['id'].value + ' .kanban-column-header span')[0].innerText = '(' + cardscount.length + ')';
             }
         });
     }

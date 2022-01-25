@@ -13,11 +13,12 @@ namespace ProvenCfoUI.Controllers
 {
     //abcd
     [CustomAuthenticationFilter]
+    [Exception_Filters]
     public class SetupController : BaseController
     {
         // GET: Setup
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         [CheckSession]
         public ActionResult JobTitle()
         {

@@ -4,20 +4,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*@Styles.Render("~/bundles/customcss")
-@Scripts.Render("~/bundles/modernizr")*@
 
-
-<style>
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
-
-    .page-link:hover {
-        color: #000 !important;
-    }
-</style>
 
 
 <div class="card mb-3">
@@ -75,7 +62,9 @@
 
                         <th class="sort pr-1 align-middle" width="30%">Role Name</th>
                         <th class="sort pr-1 align-middle" width="30%">Role Display Name</th>
-                        <th class="sort pr-1 align-middle" width="30%">Status</th>
+                        <th class="sort pr-1 align-middle" width="20%">User Type</th>
+                        <th class="sort pr-1 align-middle" width="20%">Status</th>
+
                         <th class="no-sort align-middle text-center pr-3" width="10%">Actions</th>
                     </tr>
                 </thead>
@@ -85,10 +74,13 @@
                     <tr class="btn-reveal-trigger">
 
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.name)
+                            @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.DisplayRoleName)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.UserTypeName)
                         </td>
 
                         <td class="align-middle">
@@ -104,26 +96,27 @@
 
                         <td class="align-middle text-center pr-3">
                             <span class="d-none d-sm-inline-block">
-                                <a href='@Url.Action("EditRole", "Role", new { id = item.id})'>
+                                <a href='@Url.Action("EditRole", "Role", new { id = item.Id})'>
                                     <i class="far fa-edit"> </i>
                                 </a>
                             </span>
                             <span class="d-none d-sm-inline-block ml-2">
-                                <a href="#" onclick="deleteUser('@item.id')">
+                                <a href="#" onclick="deleteUser('@item.Id')">
                                     <i class="far fa-trash-alt"> </i>
                                 </a>
                             </span>
+
                             <span class="d-none d-sm-inline-block ml-2">
 
                                 @if (item.Status == "Active")
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.id, Status = "Inactive"})'>
+                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Inactive"})'>
                                         <i class="far far fas fa-power-off"> </i>
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.id, Status = "Active"})'>
+                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Active"})'>
                                         <i class="far far fas fa-plug"> </i>
                                     </a>
                                 }

@@ -3,18 +3,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*@Styles.Render("~/bundles/customcss")
-    @Scripts.Render("~/bundles/modernizr")*@
-<style>
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
-
-    .page-link:hover {
-        color: #000 !important;
-    }
-</style>
+    
 <div class="card mb-3">
     <div class="card-header">
         <div class="row align-items-center justify-content-between">
@@ -77,7 +66,8 @@
     </div>
 </div>
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/table")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
 
         $(document).ready(function () {
@@ -106,6 +96,8 @@
 
 
         function AgencyDropdownPartialViewChange() {
+          
+            ShowlottieLoader();
             setTimeout(function () {
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
@@ -123,15 +115,18 @@
             }, 2000);
         }
         function XeroTrackingCategoriesSync() {
+          
+            ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroTrackingCategorySync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
                     ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
                 }
                 else {
-                    ShowAlertBoxSuccess("Success!", "GL Account sync with Xero successfully.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Tracking Categories Synced with Xero successfully.", function () { window.location.reload(); });
                 }
             });
+           /* HidelottieLoader();*/
         }
 
     </script>

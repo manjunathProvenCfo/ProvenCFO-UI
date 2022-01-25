@@ -13,14 +13,13 @@ const Chat_Find_Mention_Page_Size = 10;
 
 
 var createTwilioClient = async function () {
-    //debugger
     if (!isEmptyOrBlank(twilioClient)) {
         await connectionStateConnectedMethods();
         return;
     }
     getTwilioToken(chat.userEmail);
     //logLevel: 'info'
-    Twilio.Conversations.Client.create(token, {})//logLevel: 'error'
+    Twilio.Conversations.Client.create(token, { logLevel: 'error'})//logLevel: 'error'
         .then(async function (createdClient) {
 
             twilioClient = createdClient;
@@ -94,8 +93,7 @@ var createAllChannels = function () {
     });
 }
 
-var getChannelBySidAndJoin = function (channelId) {
-    isConversationSyncListFetched();
+var getChannelBySidAndJoin = async function (channelId) {
     let existingChannel = twilioClient.conversations.conversations.get(channelId);
     if (isEmptyOrBlank(existingChannel)) {
         twilioClient.getConversationBySid(channelId).then(function (conv) {
@@ -106,6 +104,7 @@ var getChannelBySidAndJoin = function (channelId) {
 
         setActiveChannel(existingChannel);
     }
+    isConversationSyncListFetched();
 }
 
 var createOrJoinExistingChannel = function (friendlyName, uniqueName, isPrivate, attributes) {
@@ -133,6 +132,10 @@ var joinChannel = function (channel) {
 var addMediaMessage = function (file) {
     const formData = new FormData();
     formData.append('file', file);
+    
+    if (activeChannel?.channelState?.attributes?.type === "public reconciliation") {
+        UpdateReconciliationHasStatus(activeChannel.channelState.uniqueName);
+    }
     activeChannel.sendMessage(formData).then(function (msg) {
         setScrollPosition();
         if ($newMessagesDiv && $newMessagesDiv.length > 0)
@@ -169,6 +172,9 @@ var setActiveChannel = function (channel) {
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
         if (validateMessage(body)) {
+            if (channel.channelState.attributes.type === "public reconciliation") {
+                UpdateReconciliationHasStatus(channel.channelState.uniqueName);
+            }
             channel.sendMessage(body).then(function () {
                 //getTwilioToken();
                 //twilioClient.updateToken(token);
@@ -198,6 +204,7 @@ var setActiveChannel = function (channel) {
     //}
 
     channel.getMessages(Chat_Page_Size).then(function (page) {
+        hideChatContentLoader();
         activeChannelPage = page;
         activeChannelMessages = page.items;
         page.items.forEach(addMessage);
@@ -214,7 +221,7 @@ var setActiveChannel = function (channel) {
                 $lastReadMessageDiv = $channelMessages.children(`div.media:first`);
             $lastReadMessageDiv.before(`<div class="text-center fs--2 text-500 separator"><span>New Messages</span></div>`);
             $newMessagesDiv = $channelMessages.children('.separator');
-            if ($newMessagesDiv)
+            if ($newMessagesDiv && $newMessagesDiv.length > 0)
                 $newMessagesDiv[0].scrollIntoView();
         }
         else {
@@ -262,10 +269,11 @@ var setActiveChannel = function (channel) {
 var updateChannels = function (forReconciliationIconColor) {
     allSubscribedChannels = [];
     twilioClient.getSubscribedConversations({ limit: 100 }).then(page => {
-        getAllSubscribedChannels(page).then(allSubscribedChannels => {
+        getAllSubscribedChannels(page).then(async allSubscribedChannels => {
             allSubscribedChannels = allSubscribedChannels.sort(function (a, b) {
                 return a.friendlyName > b.friendlyName;
             });
+            await isConversationSyncListFetched();
             joinAndSortSubscribedChannels(allSubscribedChannels, forReconciliationIconColor);
 
         });
@@ -335,43 +343,7 @@ var joinAndSortSubscribedChannels = async function (subscribedChannels, forRecon
     let subscribedChannelsWithLastMessage = _.filter(subscribedChannelsLastMessage, x => x.lastMessage != null);
     let sorted = _.sortBy(subscribedChannelsWithLastMessage, function (o) { return o.lastMessage?.dateCreated; })
     sorted = sorted.reverse();
-    //Change reconciliation icon color
-    if (location.href.toLowerCase().indexOf("reconciliation") > -1) {
-        let colorChannelsDict = {};
-        sorted.forEach(function (sortedChannel) {
-            if ((sortedChannel.lastMessage?.index ?? -1) + 1 > 0) {
-                colorChannelsDict[sortedChannel.channelUniqueName] = 1;
-            }
-        });
-        let colorChannelsDictKeys = Object.keys(colorChannelsDict);
-        var $dtReconciliation = $('#tblreconcilation').DataTable();
-        $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
-            let elComment = $(obj).children("#btnComment");
-            let commentChannelUniqueName = elComment.data().id;
-            if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
-                if (colorChannelsDict[commentChannelUniqueName] === 1) {
-                    elComment.children().removeClass("text-dark");
-                }
-            }
-            if (chat.isReconciliationIconColorChanged === false) {
-                let channelFindMention = _.filter(subscribedChannelsByType, function (subscribedChannelByType) {
-                    return subscribedChannelByType.channelState.uniqueName === commentChannelUniqueName;
-                });
-
-                if (channelFindMention.length > 0) {
-                    await isConversationSyncListFetched();
-
-                    await setReconciliationIconColor(channelFindMention[0], commentChannelUniqueName);
-                }
-            }
-        });
-        var dtReconciliationPageNumber = $dtReconciliation.page();
-        $dtReconciliation.rows().invalidate().draw();
-        $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
-        chat.isReconciliationIconColorChanged = true;
-
-    }
-    //sort left side participants
+    
     let sortedParticipants = [];
     if (isEmptyOrBlank($participants))
         return;
@@ -451,6 +423,24 @@ var setReconciliationIconColor = async function (channelFindMentionFirst, commen
             }
         }
     });
+}
+
+var setReconciliationMentionIconColor = async function (notifications) {
+    if (!isLocationUrlContains("reconciliation"))
+        return;
+    let colorChannelsDictKeys = _.map(notifications, "channelUniqueName");
+    var $dtReconciliation = $('#tblreconcilation').DataTable();
+    $dtReconciliation.column($dtReconciliation.columns().header().length - 1).nodes().to$().each(async function (index, obj) {
+        let elComment = $(obj).children("#btnComment");
+        let commentChannelUniqueName = elComment.data().id;
+        if (colorChannelsDictKeys.indexOf(commentChannelUniqueName) > -1) {
+            elComment.children().remove();
+            elComment.append(`<span class="fas fa-comment fs--1"></span>`);
+        }
+    });
+    let dtReconciliationPageNumber = $dtReconciliation.page();
+    $dtReconciliation.rows().invalidate().draw();
+    $dtReconciliation.page(dtReconciliationPageNumber).draw(false);
 }
 
 var updateActiveChannel = function () {

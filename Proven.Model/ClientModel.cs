@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Proven.Model
 {
 
-
+    [Serializable]
     public class ClientModel
     {
         public int Id { get; set; }
@@ -53,6 +53,7 @@ namespace Proven.Model
         public List<City> CityList { get; set; }
         public List<State> StateList { get; set; }
         public List<BillableEntitiesVM> billableEntitiesList { get; set; }
+        public List<ClientXeroAccountsModel> clientXeroAccounts { get; set; }
         public List<TeamsVM> TeamList { get; set; }
         public string TeamName { get; set; }
         public string TeamMemberId1 { get; set; }
@@ -70,7 +71,8 @@ namespace Proven.Model
         public bool ReceiveQuarterlyReports { get; set; }
         public int?  DashboardId { get; set; }
         public string DashboardURLId { get; set; }
-        public bool? EnableAutomation { get; set; }
+        public string ReportId { get; set; }
+        public bool?   EnableAutomation { get; set; }
 
 
 

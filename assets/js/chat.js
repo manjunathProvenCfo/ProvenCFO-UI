@@ -35,6 +35,7 @@ var chat = {
 };
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+    showChatContentLoader();
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
@@ -91,8 +92,13 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
         if (event.keyCode === 13 && !event.shiftKey) {
             event.preventDefault();
-            if (event.type == "keydown")
-                $btnSendMessage[0].click();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else
+                    $btnSendMessage[0].click();
+            }
             else
                 activeChannel?.typing();
         }
@@ -158,7 +164,7 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
 var getChatParticipants = function () {
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
-        participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}`;
+        participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
     }
     getAjaxSync(participantsURL, null, function (response) {
         if (response.length > 0) {
@@ -261,7 +267,8 @@ var renderParticipants = function () {
 
 }
 
-var handleParticipantClick = function (event) {
+var handleParticipantClick = async function (event) {
+    
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
         throw 'Channel Index not found.'
@@ -271,7 +278,8 @@ var handleParticipantClick = function (event) {
     if (chat.channelIndex != index) {
         chat.channelIndex = index;
 
-        
+        showChatContentLoader();
+
         let channel = getChannelByChannelIndex();
         let participant = getChannelParticipnatByChannelIndex();
         $channelName.text(channel.ChannelName);
@@ -306,7 +314,7 @@ var handleParticipantClick = function (event) {
             createOrJoinExistingChannel(channelName, channelName, channel.IsPrivate, attributes);
         }
         else {
-            getChannelBySidAndJoin(channel.ChannelId);
+            await getChannelBySidAndJoin(channel.ChannelId);
         }
     }
     $chatEditorArea[0].emojioneArea.setFocus()
@@ -498,4 +506,9 @@ var selectSidebarParticipant = function () {
                 $participants.eq(0).click();
         }
     }
+}
+
+var UpdateReconciliationHasStatus = function (id) {
+    postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
+    });
 }

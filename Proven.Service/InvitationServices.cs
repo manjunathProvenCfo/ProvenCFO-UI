@@ -118,7 +118,7 @@ namespace Proven.Service
             //}
         }
 
-        public InviteUserModel UpdateInvitationAgency(string firstname, string lastname, string email, string status, string LoginUserid, string agencyid)
+        public InviteUserModel UpdateInvitationAgency(string firstname, string lastname, string email, string status, string LoginUserid, string agencyid,string RoleId)
         {
             var form = new Dictionary<string, string>
            {
@@ -127,7 +127,8 @@ namespace Proven.Service
                {"Email", email},
                {"AgencyID", agencyid },
                 {"IsActive",status },
-               {"ModifiedBy", LoginUserid}
+               {"ModifiedBy", LoginUserid},
+                { "RoleId",RoleId}
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/UpdateInvitatedAgencyUser", form).Result;
@@ -143,7 +144,7 @@ namespace Proven.Service
             //    throw new Exception(msg);
             //}
         }
-        public InviteUserModel AddInvitationAgency(string firstname, string lastname, string email, string sessiontimeout, string agencyid, string LoginUserid)
+        public InviteUserModel AddInvitationAgency(string firstname, string lastname, string email, string sessiontimeout, string agencyid, string LoginUserid, string RoleId)
         {
             var form = new Dictionary<string, string>
            {
@@ -153,7 +154,8 @@ namespace Proven.Service
                {"Email", email},
                {"sessiontimeout", sessiontimeout},
                {"UserId", LoginUserid},
-               {"AgencyID",agencyid }
+               {"AgencyID",agencyid },
+                { "RoleId",RoleId}
 
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");

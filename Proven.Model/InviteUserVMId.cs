@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
+    [Serializable]
     public class InviteUserVMId
     {
         public int? Id { get; set; }

@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+}
+
+
+@*<!DOCTYPE html>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Error</title>
+    </head>
+    <body>
+        <hgroup>
+            <h1>Error.</h1>
+            <h2>An error occurred while processing your request.</h2>
+        </hgroup>
+    </body>
+    </html>*@
+@Styles.Render("~/bundles/customcss")
+@Scripts.Render("~/bundles/modernizr")
+
+
+
+
+
+<div class="container" data-layout="container">
+    <div class="row flex-center min-vh-100 py-6 text-center">
+        <div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5">
+            <a class="d-flex flex-center mb-4" href=@Url.Action("AgencyHome", "AgencyService")><img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="150" />@*<span class="text-sans-serif font-weight-extra-bold fs-5 d-inline-block">falcon</span>*@</a>
+            <div class="card">
+                <div class="card-body p-4 p-sm-5">
+                    <div class="display-1 text-500 fs-error"></div>
+                    <p class="lead mt-4 text-800 text-sans-serif font-weight-semi-bold">
+                        &#x1F60a   Someting went wrong!
+                        <br /> Please try again or if it's repeated please connect admin.
+                    </p>
+
+                    <hr />
+                    <p>@*Page Is Under Maintenance*@</p><a class="btn btn-primary btn-sm mt-3" href=@Url.Action("AgencyHome", "AgencyService")><span class="fas fa-home mr-2"></span>Take me home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

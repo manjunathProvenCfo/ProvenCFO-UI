@@ -16,9 +16,9 @@ namespace Proven.Service
         private StringContent content;
 
 
-        public ReconciliationMainModel GetReconciliation(int ClientId, string type, int Isreconciled)
+        public ReconciliationMainModel GetReconciliation(int ClientId, string type, int Isreconciled,string userId,string userEmail)
         {
-            return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled).Result;
+            return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled+$"&userId={userId}&userEmail={userEmail}").Result;
         }
         public ReconciliationMainModel GetFilteredReconcilation(ReconciliationfilterModel Filter)
         {

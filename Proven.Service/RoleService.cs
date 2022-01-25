@@ -31,6 +31,14 @@ namespace Proven.Service
 
             //}
         }
+        public MasterFeaturesMainModel GetMasterFeatures()
+        {
+            return GetAsync<MasterFeaturesMainModel>("Role/GetMasterFeatures").Result;            
+        }
+        public UserTypeModel GetUserTypes()
+        {
+            return GetAsync<UserTypeModel>("Role/GetUserTypes").Result;            
+        }
 
         public RoleMainModel GetAllRoleInvitation()
         {
@@ -114,19 +122,20 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel AddRoles(string name, string status, string userid,string DisplayRoleName)
+        public RolesViewModel AddRoles(string name, string status, string userid, string DisplayRoleName, int UserType, int[] featurIds = null)
         {
 
-
-            var form = new Dictionary<string, string>
-           {
-               {"name", name},
-               {"Status",status },
-               {"CreatedBy", userid},
-                {"DisplayRoleName",DisplayRoleName }
-           };
+            Proven.Model.RolesViewModel model = new RolesViewModel();           
+            model.Name = name;
+            model.Status = status;
+            model.ModifiedBy = userid;
+            model.DisplayRoleName = DisplayRoleName;
+            model.UserType = UserType;
+            model.CreatedBy = userid;
+            model.FeatureIds = featurIds;
+            
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/CreateRole", form).Result;
+            return PostAsync<RolesViewModel, Proven.Model.RolesViewModel>("Role/CreateRole", model).Result;
             //response = client.PostAsync("Role/CreateRole", content).Result;
 
             //if (response.IsSuccessStatusCode)
@@ -142,18 +151,27 @@ namespace Proven.Service
             //}
         }
 
-        public RolesViewModel UpdateRoles(string id, string name, string status, string userid,string DisplayRoleName)
+        public RolesViewModel UpdateRoles(string id, string name, string status, string userid,string DisplayRoleName,int UserType, int[] featurIds = null)
         {
-            var form = new Dictionary<string, string>
-           {
-               {"Id", id},
-               {"name", name},
-               {"Status",status },
-               {"ModifiedBy", userid},
-                {"DisplayRoleName",DisplayRoleName }
-           };
+            Proven.Model.RolesViewModel model = new RolesViewModel();
+            model.Id = id;
+            model.Name = name;
+            model.Status = status;
+            model.ModifiedBy = userid;
+            model.DisplayRoleName = DisplayRoleName;
+            model.UserType = UserType;
+            model.FeatureIds = featurIds;
+           // var form = new Dictionary<string, string>
+           //{
+           //    {"Id", id},
+           //    {"name", name},
+           //    {"Status",status },
+           //    {"ModifiedBy", userid},
+           //     {"DisplayRoleName",DisplayRoleName },
+           //     { "UserType",UserType}
+           //};
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
-            return PostAsync<RolesViewModel, Dictionary<string, string>>("Role/UpdateRole", form).Result;
+            return PostAsync<RolesViewModel, Proven.Model.RolesViewModel>("Role/UpdateRole", model).Result;
             //response = client.PostAsync("Role/UpdateRole", content).Result;
 
             //if (response.IsSuccessStatusCode)

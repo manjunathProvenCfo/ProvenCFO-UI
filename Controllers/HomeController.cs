@@ -25,6 +25,7 @@ using System.Web.Security;
 namespace ProvenCfoUI.Controllers
 {
     //[Authorize]
+    [Exception_Filters]
     public class HomeController : BaseController
     {
         string errorMessage = string.Empty;
@@ -84,6 +85,7 @@ namespace ProvenCfoUI.Controllers
             {
                 try
                 {
+
                     using (AccountService obj = new AccountService())
                     {
                         CommonService commSrv;
@@ -98,7 +100,7 @@ namespace ProvenCfoUI.Controllers
                             //Session["UserType"] = result.resultData.UserType;
                             string userData = $"{result.resultData.Id},{result.resultData.FirstName},{loginVM.UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
                             FormsAuthentication.SetAuthCookie(userData, false);
-                            ViewBag.Sucess = "Login Sucessfully";
+                            ViewBag.Sucess = "Login Sucessfully";                            
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
                             var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
@@ -120,8 +122,8 @@ namespace ProvenCfoUI.Controllers
                                     break;
                                 default:
                                     ViewBag.ErrorMessage = "Email or Password not correct";
-                                    break;  
-                            }                            
+                                    break;
+                            }
                             Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
                             return View("Login");
                         }
@@ -714,10 +716,33 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
+        public ActionResult SessionTimeoutExtend(string UserName, string password)
+        {
+            using (AccountService obj = new AccountService())
+            {
+                var result = obj.LoginAccess(UserName, password);
+                if (result.resultData != null && !string.IsNullOrEmpty(result.resultData.Id) && result.status == true)
+                {
+                    CommonService commSrv = new CommonService();
+                    string userData = $"{result.resultData.Id},{result.resultData.FirstName},{UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
+                    FormsAuthentication.SetAuthCookie(userData, false);
+                    var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
+                    Session["LoggedInUserPreferences"] = objUserPref;
+                    var objUserRoleSec = commSrv.GetUserSecurityModels(UserName.ToString());
+                    Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
+                }
+                else
+                {
+                    return Json("Invalid", JsonRequestBehavior.AllowGet);
+                }
+            }
+                
+                //Session.Timeout = Session.Timeout + 20;
+            return Json("success", JsonRequestBehavior.AllowGet);
+        }
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager")]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try

@@ -154,6 +154,10 @@ body, .navbar-glass,
 .btn-link {
     color: #00BE82 !important;
 }
+.info {
+    background-color: #e7f3fe;
+    border-left: 6px solid #2196F3;
+}
 
 @media screen and (min-width: 1200px) and (max-width: 1680px) {
     .custom-form-width .col-xl-5 {
@@ -456,3 +460,111 @@ svg.svg-inline--fa.fa-comment.fa-w-16 {
     .chat-content-body .media-body.justify-content-end .text-primary:hover {
         color: #d9d9d9 !important;
     }
+
+.permission-box {
+    border: 1px solid #EFF3F8;
+    margin-top: 20px;
+    background: #fff;
+}
+
+    .permission-box h6 {
+        font-weight: 600;
+        font-size: 16px;
+        color: #33334F;
+        margin: 0;
+        padding: 12px 15px;
+        background: #f3f6fd;
+    }
+
+    .permission-box label {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .permission-box input {
+        cursor: pointer;
+        margin-right: 5px;
+    }
+
+    .permission-box ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+        .permission-box ul li {
+            width: 100%;
+            padding: 10px 15px;
+            list-style: none;
+            text-transform: capitalize;
+        }
+.tabselect {
+    text-decoration: underline;
+}
+
+.loader-circle {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1110;
+    background-color: rgba(0,0,0,0.75);
+}
+
+    .loader-circle .spinner-border {
+        width: 4rem;
+        height: 4rem;
+        border: 0.5em solid #00be62;
+        border-right-color: transparent;
+    }
+
+.position-fixed {
+    position: fixed !important;
+}
+
+select#item_additional_tracking_category_ref {
+    width: 90px;
+}
+
+a.page-link {
+    background-color: #fff !important;
+    border-color: #d8e2ef !important;
+}
+
+.page-link:hover {
+    color: #000 !important;
+}
+
+select#item_gl_account_ref {
+    font-size: 13px !important;
+    width: 400px;
+}
+
+select#item_rule {
+    font-size: 13px !important;
+    width: 193px;
+}
+
+select#item_tracking_category_ref {
+    font-size: 13px !important;
+    width: 160px;
+}
+
+select#item_additional_tracking_category_ref {
+    font-size: 13px !important;
+    width: 160px;
+}
+/*  .page-item.active .page-link {
+        background-color: #fff !important;
+        border-color: #fff !important;
+    }*/
+.chat-message {
+    max-width: calc(100% - 2rem);
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff !important;
+    background-color: #00BE82 !important;
+}
