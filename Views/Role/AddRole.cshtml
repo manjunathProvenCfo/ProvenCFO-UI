@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
-                                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                                         @*<span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="roleexist" class=""></span></span>*@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.DisplayRoleName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
-                                        @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(model => model.DisplayRoleName, "", new { @class = "text-danger" })
                                         @*<span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="Displayroleexist" class=""></span></span>*@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
