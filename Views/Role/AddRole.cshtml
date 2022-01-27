@@ -3,7 +3,12 @@
 @{
     ViewBag.Title = "";
 }
-
+<style>
+    .row.align-items-center.form-group {
+        margin-right: 1px !important;
+        
+    }
+</style>
 
 @using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
 {
@@ -74,6 +79,8 @@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
                                 </div>
+                            @*</div>
+                            <div class="col-12 col-lg-8 col-xl-6">*@
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">User Type</label>
@@ -119,22 +126,22 @@
 
 
                                 @*<div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-                                    </div>*@
+                <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+                <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+            </div>*@
 
 
                                 @*@for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
-                                    {
-                                        <div class="col-12 facility_service_permissions">
-                                            <div class="permission-box">
-                                                <h6>
-                                                    @Html.CheckBoxFor(model => model.MasterFeaturesList[i].IsChecked.Value, Model.MasterFeaturesList[i].IsChecked.Value)
-                                                    @Html.DisplayFor(model => model.MasterFeaturesList[i].DisplayName)
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    }*@
+            {
+                <div class="col-12 facility_service_permissions">
+                    <div class="permission-box">
+                        <h6>
+                            @Html.CheckBoxFor(model => model.MasterFeaturesList[i].IsChecked.Value, Model.MasterFeaturesList[i].IsChecked.Value)
+                            @Html.DisplayFor(model => model.MasterFeaturesList[i].DisplayName)
+                        </h6>
+                    </div>
+                </div>
+            }*@
 
                                 @for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
                                 {
@@ -178,7 +185,7 @@
                                 }
 
 
-                                <br/>
+                                <br />
 
 
 
