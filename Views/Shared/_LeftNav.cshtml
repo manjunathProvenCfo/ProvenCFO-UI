@@ -135,9 +135,10 @@
                             }
                             @if (Common.IsFeatureAccessable("AUR"))
                             {
-                                <li class="nav-item" id="submenu_staffusers">
-                                    <a class="nav-link" href=@Url.Action("About","Home") name="submenu_staffusers">Agency Users</a>
+                                <li class="nav-item" id="submenu_agencyusers">
+                                    <a class="nav-link" href=@Url.Action("GetAllAgencyUsers","Invitation") name="submenu_agencyusers">Agency Users</a>
                                 </li>
+                              
 
                             }
                             @if (Common.IsFeatureAccessable("CAG"))
