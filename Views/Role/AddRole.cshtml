@@ -234,8 +234,8 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
 
-        document.getElementById("roleexist").style.display = "none";
-        document.getElementById("Displayroleexist").style.display = "none";
+        if (document.getElementById("roleexist") != null && document.getElementById("roleexist") != undefined) document.getElementById("roleexist").style.display = "none";
+        if (document.getElementById("Displayroleexist") != null && document.getElementById("Displayroleexist") != undefined) document.getElementById("Displayroleexist").style.display = "none";
         function CheckExistValidation() {
             if ($("#name").val() === "" && $("#roleexist").html() !== "") {
                 $('#roleexist').hide();
