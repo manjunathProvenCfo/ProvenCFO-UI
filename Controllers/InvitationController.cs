@@ -27,7 +27,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult InviteStaffList()
         {
             try
@@ -56,7 +56,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetAllAgencyUsers()
         {
             try
@@ -825,7 +825,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try

@@ -742,7 +742,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try
