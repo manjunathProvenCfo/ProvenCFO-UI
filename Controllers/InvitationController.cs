@@ -56,6 +56,35 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        public ActionResult GetAllAgencyUsers()
+        {
+            try
+            {
+                using (InvitationServices obj = new InvitationServices())
+                {
+                    using (RoleService objrole = new RoleService())
+                    {
+                        using (SetupService objJob = new SetupService())
+                        {
+                            var objResult = obj.GetALLAgencyUserInvitation();
+                            objResult.Rolelist = objrole.GetAllRoleInvitation().ResultData;
+                            objResult.Rolelist = objResult.Rolelist.Where(x => x.IsVisible == true).ToList();
+                            objResult.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
+                            return View(objResult.ResultData);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+
+        }
+
+        [CheckSession]
         public ActionResult InviteStaff()
         {
             try
@@ -630,8 +659,51 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle, UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,  UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
                     string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
+                    return Json(filename, JsonRequestBehavior.AllowGet);
+                    /*UserRole = s.RoleName,*/
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw;
+            }
+
+        }
+
+        [CheckSession]
+        public JsonResult ExportToExcelAllAgencyUser()
+        {
+            try
+            {
+                using (InvitationServices objInviteUser = new InvitationServices())
+                {
+                    Utltity obj = new Utltity();
+                    var objResult = objInviteUser.GetALLAgencyUserInvitation().ResultData;
+                    foreach (var item in objResult)
+                    {
+                        if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
+                        {
+                            item.Status = "Invited";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                        {
+                            item.Status = "Active";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                        {
+                            item.Status = "Inactive";
+                        }
+                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                        {
+                            item.Status = "Inactive";
+                        }
+                    }
+                    var obj1 = objResult.Select(s => new
+                    { FirstName = s.FirstName, LastName = s.LastName,  Email = s.Email, Status = s.Status, AgencyName = s.AgencyName, CreatedDate = s.CreatedDate,  CreatedBy = s.CreatedByUser }).ToList();
+                    string filename = obj.ExportTOExcel("GetAllAgencyUsers", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
                 }
