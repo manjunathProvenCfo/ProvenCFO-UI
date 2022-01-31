@@ -62,30 +62,33 @@
 
                         <th class="sort pr-1 align-middle" width="15%">Code</th>
                         <th class="sort pr-1 align-middle" width="15%">Name</th>
-                        <th class="sort pr-1 align-middle" width="15%">Type</th>
-                        <th class="sort pr-1 align-middle" width="15%">Description</th>
+                        <th class="sort pr-1 align-middle" width="10%">Type</th>
+                        <th class="sort pr-1 align-middle" width="10%">Description</th>
+                        <th class="sort pr-1 align-middle" width="10%">Status</th>
 
                     </tr>
                 </thead>
                 <tbody id="purchases">
                     @foreach (var item in Model)
                     {
-                        <tr class="btn-reveal-trigger">
+                    <tr class="btn-reveal-trigger">
 
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Type)
-                            </td>
-                            <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Class)
-                            </td>
-
-                        </tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Class)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
                     }
                 </tbody>
 
