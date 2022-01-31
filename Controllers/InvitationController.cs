@@ -659,7 +659,7 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,  UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,  UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser,UserRoles = s.RoleName, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
                     string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
@@ -702,7 +702,7 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName,  Email = s.Email, Status = s.Status, AgencyName = s.AgencyName, CreatedDate = s.CreatedDate}).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName,  Email = s.Email, Status = s.Status, AgencyName = s.AgencyName, CreatedDate = s.CreatedDate,UserRoles=s.RoleName,CreatedBy= s.CreatedByUser,ModifyDate = s.ModifiedDate,ModifiedBy = s.ModifiedByUser}).ToList();
                     string filename = obj.ExportTOExcel("Master Agency Users List", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
