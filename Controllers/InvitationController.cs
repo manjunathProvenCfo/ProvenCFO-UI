@@ -140,7 +140,8 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Exist";
                                     return View("InviteStaff", InviteVM);
                                 }
-                                result = obj.AddInvitation(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.roleid, inviteStaffVM.jobid, inviteStaffVM.SessionTimeout, LoginUserid);
+                                result = obj.AddInvitation(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.roleid, inviteStaffVM.jobid, inviteStaffVM.SessionTimeout ="5", LoginUserid);
+                             
                                 if (result != null)
                                 {
                                     ViewBag.ErrorMessage = "Sent";
