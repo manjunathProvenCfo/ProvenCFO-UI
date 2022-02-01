@@ -38,7 +38,7 @@ namespace ProvenCfoUI.Controllers
 
                         ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                         ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
-                        var objResult = objIntegration.GetXeroGlAccount(AgencyID);
+                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
                         return View(objResult.ResultData);
                     }
                     return View();

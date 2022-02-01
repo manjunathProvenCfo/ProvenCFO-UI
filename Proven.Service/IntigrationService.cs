@@ -31,9 +31,9 @@ namespace Proven.Service
             //}
         }
 
-        public XeromainGlAccountVM GetXeroGlAccount(int AgencyID)
+        public XeromainGlAccountVM GetXeroGlAccount(int AgencyID,string XeroStatus)
         {
-            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroGlAccount?AgencyID=" + AgencyID).Result;
+            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroGlAccount?AgencyID=" + AgencyID + "&XeroStatus=" +  XeroStatus).Result;
             //response = client.GetAsync("Invitation/GetALLInvitation").Result;
             //if (response.IsSuccessStatusCode)
             //{
