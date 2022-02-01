@@ -126,7 +126,7 @@ $(document).ready(function () {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
     }
-    sessionStorage.clear();
+   /* sessionStorage.clear();*/
 
     $('.checkbox-bulk-select-target').click(function () {
         

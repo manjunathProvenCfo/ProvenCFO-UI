@@ -4,6 +4,11 @@
     ViewBag.Title = "";
    
 }
+<style>
+    .form-group.row{
+       margin-left: 100px !important;
+    }
+</style>
 
 
 @using (Html.BeginForm("CreateJobTitle", "Setup", FormMethod.Post))
@@ -77,15 +82,15 @@
                             <div class="form-group row">
                                 @if (Model.Id == 0)
                                 {
-                                    <button class="btn btn-primary btn-block mt-2 col-5" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateJobTitle", "Setup")">Create</button>
+                                    <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateJobTitle", "Setup")">Create</button>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-primary btn-block mt-2 col-5" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateJobTitle", "Setup")">Update</button>
+                                    <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateJobTitle", "Setup")">Update</button>
                                 }
 
                                 <div class="float-right">&nbsp;</div>
-                                <input type="button" value="Cancel" class="btn btn-primary btn-block mt-2 col-5" onclick="location.href='@Url.Action("JobTitle", "Setup")'" />
+                                <input type="button" value="Cancel" class="btn btn-primary " onclick="location.href='@Url.Action("JobTitle", "Setup")'" />
                                 
                             </div>
                             @*<div class="form-group">

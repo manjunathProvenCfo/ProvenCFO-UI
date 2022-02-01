@@ -17,7 +17,7 @@ namespace ProvenCfoUI.Controllers
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Integration
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         [CheckSession]
         public ActionResult Integration()
         {
@@ -38,7 +38,7 @@ namespace ProvenCfoUI.Controllers
 
                         ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                         ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
-                        var objResult = objIntegration.GetXeroGlAccount(AgencyID);
+                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
                         return View(objResult.ResultData);
                     }
                     return View();

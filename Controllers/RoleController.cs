@@ -18,7 +18,7 @@ namespace ProvenCfoUI.Controllers
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Role
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         [CheckSession]
         public ActionResult Role()
         {
@@ -156,7 +156,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                             RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
-                            var Existresult = objRole.GetRoleByName(Role.Name);
+                            var Existresult = objRole.GetRoleById(Role.Id); // objRole.GetRoleByName(Role.Name);
                             RoleVM.Id = Existresult.Id;
                             RoleVM.Name = Role.Name;
                             RoleVM.Status = Role.Status;
