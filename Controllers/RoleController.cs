@@ -156,7 +156,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                             RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
-                            var Existresult = objRole.GetRoleByName(Role.Name);
+                            var Existresult = objRole.GetRoleById(Role.Id); // objRole.GetRoleByName(Role.Name);
                             RoleVM.Id = Existresult.Id;
                             RoleVM.Name = Role.Name;
                             RoleVM.Status = Role.Status;
