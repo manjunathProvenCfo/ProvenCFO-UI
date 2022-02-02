@@ -660,7 +660,7 @@ namespace ProvenCfoUI.Controllers
                         }
                     }
                     var obj1 = objResult.Select(s => new
-                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,  UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser,UserRoles = s.RoleName, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser }).ToList();
+                    { FirstName = s.FirstName, LastName = s.LastName, JobTitle = s.JobTitle,  UserRole = s.RoleName, Email = s.Email, Status = s.Status, CreatedDate = s.CreatedDate, CreatedBy = s.CreatedByUser,UserRoles = s.RoleName, ModifiedDate = s.ModifiedDate, ModifiedBy = s.ModifiedByUser,LastLogin = s.LastLogin }).ToList();
                     string filename = obj.ExportTOExcel("Staff Users", obj.ToDataTable(obj1));
                     return Json(filename, JsonRequestBehavior.AllowGet);
                     /*UserRole = s.RoleName,*/
