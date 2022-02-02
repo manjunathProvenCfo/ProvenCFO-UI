@@ -82,7 +82,7 @@ namespace ProvenCfoUI.Controllers
                     objvm.DisplayRoleName = result.DisplayRoleName;
                     objvm.IsVisible = result.IsVisible;
                     objvm.UserType = result.UserType;
-                   if(result.FeatureIds != null && result.FeatureIds.Length > 0)
+                    if(result.FeatureIds != null && result.FeatureIds.Length > 0)
                     { 
 
                         objvm.MasterFeaturesList.Where(x => result.FeatureIds.Contains(x.Id)).ToList().ForEach(s => s.IsChecked = true);
@@ -109,7 +109,8 @@ namespace ProvenCfoUI.Controllers
                     objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                     var LoginUserid = Session["UserId"].ToString();
                     var resultdata = objRole.GetRoleById(id);
-                    var result = objRole.UpdateRoles(resultdata.Id, resultdata.Name, Status, LoginUserid, resultdata.DisplayRoleName, resultdata.UserType.Value);
+                   
+                    var result = objRole.UpdateRoles(resultdata.Id, resultdata.Name, Status, LoginUserid, resultdata.DisplayRoleName, resultdata.UserType.Value,resultdata.FeatureIds);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("Role");
