@@ -115,7 +115,7 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Username does not exist!";
                                     break;
                                 case "002":
-                                    ViewBag.ErrorMessage = "Invalid Password!";
+                                    ViewBag.ErrorMessage = "Sorry, the username and password you entered are not valid.";
                                     break;
                                 case "003":
                                     ViewBag.ErrorMessage = "User role has been deactived or deleted!";
