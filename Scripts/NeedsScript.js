@@ -616,6 +616,8 @@ function updateKanbanColumnsCount() {
 }
 
 function AgencyDropdownPartialViewChange() {
+
+    ShowlottieLoader();
     var ClientID = $("#ddlclient option:selected").val();
     //getTeamMembersList(ClientID);
     if (ClientID != null && ClientID != undefined && ClientID != '') {

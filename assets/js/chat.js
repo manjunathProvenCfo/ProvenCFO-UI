@@ -444,6 +444,8 @@ $("#divChatSiderbarFilters > button").click(function () {
 });
 
 function AgencyDropdownPartialViewChange() {
+   
+    ShowlottieLoader();
     setTimeout(function () {
         resetChatPage();
         loadChatPage();
@@ -451,6 +453,7 @@ function AgencyDropdownPartialViewChange() {
         $chatSiderbarFilterButtons.eq(0).addClass("btn-falcon-primary");
     }, 1)
     SetUserPreferencesForAgency();
+    window.location.reload();
 }
 
 var addMentionPlugin = function () {

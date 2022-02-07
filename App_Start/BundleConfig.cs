@@ -35,7 +35,8 @@ namespace ProvenCfoUI
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
              "~/assets/lib/waitMe/waitMe.min.js",             
              "~/assets/js/jquery.idle-timer.js"
-            
+              
+
 
 
             ));
@@ -104,6 +105,7 @@ namespace ProvenCfoUI
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
                         "~/assets/js/chat.js",
+                         "~/assets/js/lottie-player.js",
                         "~/assets/js/twilio.js"));
 
             bundles.Add(new Bundle("~/bundles/js/reports").Include(

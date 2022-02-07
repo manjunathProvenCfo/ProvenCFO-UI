@@ -22,16 +22,16 @@
                 </div>
             </div>
             <div id="dashboard-actions">-->
-                @*<button class="btn btn-falcon-default btn-sm" type="button">
-                        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-                    </button>*@
-                @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-                @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-                    </button>*@
-                <!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+@*<button class="btn btn-falcon-default btn-sm" type="button">
+        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
+    </button>*@
+@*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+@*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
+        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+        <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
+    </button>*@
+<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
                     <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
                     <span class="d-none d-sm-inline-block ml-1">
                         <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
@@ -45,12 +45,12 @@
 
 <div class="card-body px-0 pt-0">
     <div class="row no-gutters">-->
-        @*@Html.Partial("_AgencySelection")*@
-        @*@{
-            Html.RenderAction("AgencySelection", "AgencyService");
-        }*@
-        <!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
-            
+@*@Html.Partial("_AgencySelection")*@
+@*@{
+        Html.RenderAction("AgencySelection", "AgencyService");
+    }*@
+<!--<div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
+
         </div>
     </div>
 </div>-->
@@ -58,13 +58,14 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
         $('divClientDetials').addClass('d-none');
         $(document).ready(function () {
             AgencyDropdownPartialViewChange();
 
         });
-      
+
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
 
@@ -75,7 +76,7 @@
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
-                       // Write here what should happend once client selected
+                        // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
                     }
                     else {
@@ -85,10 +86,10 @@
                 error: function () {
                     // Write here what should happend when action result is errored.
                 }
-            });          
+            });
         }
-       
+
     </script>
-    
+
 }
 
