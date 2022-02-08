@@ -117,53 +117,7 @@
                 <hr class="navbar-vertical-hr my-2">
             </div>
             <ul class="navbar-nav flex-column">
-                @if (Common.IsFeatureAccessable("ADM"))
-                {
-                    <li class="nav-item" id="menu_administration">
-                        <a class="nav-link dropdown-indicator" href="#administration" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="administration" name="menu_administration">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon"><span class="fas fa-copy"></span></span><span class="nav-link-text">Administration</span>
-                            </div>
-                        </a>
-                        <ul class="nav collapse" id="administration" data-parent="#navbarVerticalCollapse">
-                            @if (Common.IsFeatureAccessable("SUR"))
-                            {
-                                <li class="nav-item" id="submenu_staffusers">
-                                    <a class="nav-link" href=@Url.Action("InviteStaffList","Invitation") name="submenu_staffusers">Staff Users</a>
-                                </li>
 
-                            }
-                            @if (Common.IsFeatureAccessable("AUR"))
-                            {
-                                <li class="nav-item" id="submenu_agencyusers">
-                                    <a class="nav-link" href=@Url.Action("GetAllAgencyUsers","Invitation") name="submenu_agencyusers">Agency Users</a>
-                                </li>
-                              
-
-                            }
-                            @if (Common.IsFeatureAccessable("CAG"))
-                            {
-
-                                <li class="nav-item" id="submenu_clientagencies">
-                                    <a class="nav-link" href=@Url.Action("ClientList", "Client") name="submenu_clientagencies">Clients</a>
-                                </li>
-                            }
-                            @if (Common.IsFeatureAccessable("TEM"))
-                            {
-                                <li class="nav-item" id="submenu_teams">
-                                    <a class="nav-link" href=@Url.Action("TeamsList", "Teams") name="submenu_teams">Teams</a>
-                                </li>
-
-                            }
-                            @if (Common.IsFeatureAccessable("BET"))
-                            {
-                                <li class="nav-item" id="submenu_billableentities">
-                                    <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
-                                </li>
-                            }
-                        </ul>
-                    </li>
-                }
 
                 @if (Common.IsFeatureAccessable("STP"))
                 {
@@ -188,7 +142,7 @@
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
-                            
+
                             @if (Common.IsFeatureAccessable("GLA"))
                             {
                                 <li class="nav-item" id="submenu_glAccount">
@@ -214,7 +168,53 @@
                         </ul>
                     </li>
                 }
+                @if (Common.IsFeatureAccessable("ADM"))
+                {
+                    <li class="nav-item" id="menu_administration">
+                        <a class="nav-link dropdown-indicator" href="#administration" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="administration" name="menu_administration">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-copy"></span></span><span class="nav-link-text">Administration</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="administration" data-parent="#navbarVerticalCollapse">
+                            @if (Common.IsFeatureAccessable("SUR"))
+                            {
+                                <li class="nav-item" id="submenu_staffusers">
+                                    <a class="nav-link" href=@Url.Action("InviteStaffList","Invitation") name="submenu_staffusers">Staff Users</a>
+                                </li>
 
+                            }
+                            @if (Common.IsFeatureAccessable("AUR"))
+                            {
+                                <li class="nav-item" id="submenu_agencyusers">
+                                    <a class="nav-link" href=@Url.Action("GetAllAgencyUsers","Invitation") name="submenu_agencyusers">Agency Users</a>
+                                </li>
+
+
+                            }
+                            @if (Common.IsFeatureAccessable("CAG"))
+                            {
+
+                                <li class="nav-item" id="submenu_clientagencies">
+                                    <a class="nav-link" href=@Url.Action("ClientList", "Client") name="submenu_clientagencies">Clients</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("TEM"))
+                            {
+                                <li class="nav-item" id="submenu_teams">
+                                    <a class="nav-link" href=@Url.Action("TeamsList", "Teams") name="submenu_teams">Teams</a>
+                                </li>
+
+                            }
+                            @if (Common.IsFeatureAccessable("BET"))
+                            {
+                                <li class="nav-item" id="submenu_billableentities">
+                                    <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
             </ul>
         </div>
     </div>

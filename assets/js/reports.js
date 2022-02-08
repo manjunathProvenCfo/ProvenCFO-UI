@@ -245,10 +245,13 @@ $(function () {
 });
 
 var AgencyDropdownPartialViewChange = function () {
+    
+    ShowlottieLoader();
     SetUserPreferencesForAgency();
     bindQuarter();
     bindReports("");
-    //window.location.reload();
+   /* HidelottieLoader();*/
+    window.location.reload();
 }
 
 var bindPage = function () {

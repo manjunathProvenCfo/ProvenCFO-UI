@@ -2172,6 +2172,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
 
         $(document).ready(function () {
@@ -2180,6 +2181,7 @@
         });
 
         function AgencyDropdownPartialViewChange() {
+
             var ClientID = $("#ddlclient option:selected").val();
 
             $.ajax({

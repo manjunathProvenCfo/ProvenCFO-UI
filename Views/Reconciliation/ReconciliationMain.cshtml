@@ -813,7 +813,7 @@
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
-
+            ShowlottieLoader();
             $.ajax({
                 url: '/AgencyService/GetClientDetails?id=' + ClientID,
                 type: "GET",
