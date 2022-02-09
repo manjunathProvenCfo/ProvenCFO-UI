@@ -790,14 +790,24 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
-        public JsonResult DeleteInvite(int id)
+        public bool DeleteInvite(int id)
         {
             try
             {
                 using (InvitationServices objInvite = new InvitationServices())
                 {
-                    var result = objInvite.DeleteInvite(id);
-                    return Json(result, JsonRequestBehavior.AllowGet);
+                   
+                    var results = objInvite.GetInvitationById(id);
+                    if (results != null)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        var result = objInvite.DeleteInvite(id);
+                        return false;
+                        //return Json(result, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             catch (Exception ex)
