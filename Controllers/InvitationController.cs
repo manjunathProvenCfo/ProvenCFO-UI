@@ -797,7 +797,7 @@ namespace ProvenCfoUI.Controllers
                 using (InvitationServices objInvite = new InvitationServices())
                 {
                    
-                    var results = objInvite.GetInvitationById(id);
+                    var results = objInvite.GetInvitationById1(id);
                     if (results != null)
                     {
                         return true;

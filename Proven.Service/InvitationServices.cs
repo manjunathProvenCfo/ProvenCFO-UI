@@ -65,6 +65,11 @@ namespace Proven.Service
 
             //}
         }
+        public InviteUserVMId GetInvitationById1(int id)
+        {
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitation1?id=" + id, true).Result;
+           
+        }
 
         public InviteUserVMId GetInvitationByEmail(string Email)
         {
