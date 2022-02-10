@@ -41,7 +41,13 @@ namespace ProvenCfoUI.Controllers
                         var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
                         TempData["CategoriesAndNotes"] = Categories;
                         var Summary = objClient.GetClientById(AgencyID);
+                      
                         TempData["NotesSummary"] = Summary;
+                        //var notesummary = objNotes.GetNotesStatus();
+                        //TempData["NotesSummarydata"] = notesummary;
+
+                        //var notesummary = objNotes.GetSummaryDetailByAgencyId(AgencyID);
+                        //TempData["NotesSummarydata"] = notesummary;
                         if (userType != "" && userType == "1")
                         {
                             ViewBag.IsEditMode = true;
