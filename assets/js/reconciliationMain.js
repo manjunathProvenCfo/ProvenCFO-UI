@@ -31,6 +31,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "button[id=btnComment]", function (e) {
+        
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
         showReconciliationChat(e.currentTarget.dataset.id);
         //$('#divFilter').hide();
@@ -45,6 +46,11 @@ $(document).ready(function () {
         //    loadChatPage(true, 1);
         //}
     });
+    $(document).on("click", "button[id=send-message]", function (e) {
+        addNewComment($('#message-body-input').val());
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    });
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
@@ -54,11 +60,14 @@ $(document).ready(function () {
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-        if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-            currentChannelUniqueNameGuid = channelUniqueNameGuid;
-            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1, true);
-        }
+        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
+        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    loadChatPage(true, 1, true);
+        //}
+
+        loadCommentsPage(channelUniqueNameGuid);
+        
     }
 });
 

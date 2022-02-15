@@ -515,6 +515,7 @@
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\Chartcommon.js" />
     <Content Include="assets\js\chat.js" />
+    <Content Include="assets\js\comments.js" />
     <Content Include="assets\js\common.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
@@ -1125,6 +1126,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_PageLoader.cshtml" />
     <Content Include="Views\Invitation\GetAllAgencyUsers.cshtml" />
+    <Content Include="Views\Shared\_communicationReconcilation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -73,7 +73,18 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Xero/GetXeroOnDemandRequestStatusById?RequestID=" + RequestID).Result;
         }
-
+        public ReturnModel InsertReconcilationComments(ReconciliationComments comment)
+        {
+            return PostAsync<ReturnModel, ReconciliationComments>("Reconciliation/InsertReconcilationComments", comment).Result;
+        }
+        public ReturnModel InsertReconcilationMentionedUsersDetails(ReconciliationCommentUserMention usermentioned)
+        {
+            return PostAsync<ReturnModel, ReconciliationCommentUserMention>("Reconciliation/InsertReconcilationMentionedUsersDetails", usermentioned).Result;
+        }
+        public XeroReconcilationDataOnDemandRequestMainModel getcommentsOnreconcliationId(int reconcliationId)
+        {
+            return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
+        }
         public void Dispose()
         {
             Dispose(true);
