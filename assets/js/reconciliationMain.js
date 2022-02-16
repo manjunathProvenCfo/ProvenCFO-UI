@@ -46,11 +46,7 @@ $(document).ready(function () {
         //    loadChatPage(true, 1);
         //}
     });
-    $(document).on("click", "button[id=send-message]", function (e) {
-        addNewComment($('#message-body-input').val());
-        $('#message-body-input').empty();
-        $('.emojionearea-editor').empty();
-    });
+   
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');

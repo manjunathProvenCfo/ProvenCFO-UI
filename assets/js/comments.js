@@ -77,11 +77,37 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         /*$participants.eq(0).click();*/
         hideChatContentLoader();
     });
-
-    $btnSendMessage.on("change", function (e) {
-        var commmentText = $messageBodyInput.val();
-
+    
+    $btnSendMessage.on("click", function (e) {
+        
+        addNewMessagetoChatwindow($('#message-body-input').val());
     });
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerText != '')
+                    addNewMessagetoChatwindow($editor[0].innerText);
+                }
+                    
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000)
 }
 
 var setCommentsHeader = function (reconciliationdata)
