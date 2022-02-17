@@ -77,9 +77,8 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         /*$participants.eq(0).click();*/
         hideChatContentLoader();
     });
-    
-    $btnSendMessage.on("click", function (e) {
         
+    $btnSendMessage.unbind().click(function () {
         addNewMessagetoChatwindow($('#message-body-input').val());
     });
     var addNewMessagetoChatwindow = async function (input) {
@@ -96,8 +95,8 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
                 else {
-                    if ($editor[0].innerText != '')
-                    addNewMessagetoChatwindow($editor[0].innerText);
+                    if ($editor[0].innerHTML != '')
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
                     
             }
