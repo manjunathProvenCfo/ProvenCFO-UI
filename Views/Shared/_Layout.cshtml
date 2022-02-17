@@ -74,9 +74,10 @@
 <script>
         var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
         var sessionTime = @(Convert.ToString(Session["SessionTimeout"]));
+        var apiurl = '@(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]))';
         $(document).ready(function () {
             var timeout = sessionTime * 60000; //Convert Minutes to Milliseconds
-            $(document).bind("idle.idleTimer", function () {               
+            $(document).bind("idle.idleTimer", function () {
                 ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session ?", "Yes, continue working", "Logout", function (isConfirmed) {
 
                     if (isConfirmed) {
@@ -90,7 +91,7 @@
                                        /* ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');*/
                                     }
                                     else {
-                                        ShowAlertBoxWarning('Incorrect Password', 'Entered user name and password is wrong..!', function () {                                           
+                                        ShowAlertBoxWarning('Incorrect Password', 'Entered user name and password is wrong..!', function () {
                                             window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
                                         });
                                     }

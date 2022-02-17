@@ -104,8 +104,10 @@ namespace ProvenCfoUI
                         "~/assets/lib/fancybox/jquery.fancybox.min.js"));
 
             bundles.Add(new Bundle("~/bundles/js/twilio-chat").Include(
-                        "~/assets/js/chat.js",
-                         "~/assets/js/lottie-player.js",
+                        "~/assets/js/chat.js",                        
+                        "~/assets/js/twilio.js"));
+            bundles.Add(new Bundle("~/bundles/js/reconcilation-comments").Include(
+                        "~/assets/js/comments.js",
                         "~/assets/js/twilio.js"));
 
             bundles.Add(new Bundle("~/bundles/js/reports").Include(

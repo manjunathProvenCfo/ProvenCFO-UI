@@ -6,6 +6,7 @@
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
+        @*@{var summary1 = (NotesSummarymainModel)TempData["NotesSummarydata"];}*@
         <div class="card notes-items-container">
             <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
             </div>
@@ -15,6 +16,14 @@
                     <div class="glyphicon-new-window">
                         @if (ViewBag.IsEditMode == true)
                         {
+
+                            @*<select id="Id" name="SummaryType">
+                                <option value="0"> select status</option>
+                                @foreach (var NotesSummaryVM in summary1?.ResultData)
+                                {
+                                    <option value="@NotesSummaryVM.Id">@NotesSummaryVM.SummaryType</option>
+                                }
+                            </select>*@
                             <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
                         }
                     </div>
@@ -22,23 +31,33 @@
             </div>
             <div class="card-body notes-item shadow-sm">
                 <div class="col-md-9">
+                    @*@Html.DropDownList(summary.EntityName, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select Entity", new { @class = "form-control" })*@
+                    @*<p class="mt-2 mb-0">@Html.Raw(summary1?.ResultData)</p>*@
+                    @*@foreach (var category in summary1?.ResultData)
+                    {
+                        @category.SummaryData
+                        
+                    }*@
+
+                    
+
                     <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
                     <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
                 </div>
 
                 <div class="Words">
                     @*@if (summary?.SummaryCreatedByFullName == "")
-                            {
-                                <span>&nbsp;</span>
-                            }
-                            else
-                            {
-                        <span>
-                            Created by:
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        else
+                        {
+                    <span>
+                        Created by:
 
-                            <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-                        </span>
-                            }*@
+                        <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+                    </span>
+                        }*@
 
                     @if (summary?.SummaryModifiedByFullName == "")
                     {

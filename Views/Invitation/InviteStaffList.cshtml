@@ -272,21 +272,36 @@
                         type: "Post"
                     })
                         .done(function (data) {
+                            
+                            if (data == "False") {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "User  has been successfully deleted.",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
 
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "Staff User is successfully deleted!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
+
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Can't Delete",
+                                        text: "This user  is associate with a Team and cannot be deleted.",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
                         })
-                        .error(function (data) {
+                        //.error(function (data) {
 
-                            swal("Oops", "We couldn't connect to the server!", "error");
-                        });
+                        //    swal("Oops", "We couldn't connect to the server!", "error");
+                        //});
                 });
         }
 

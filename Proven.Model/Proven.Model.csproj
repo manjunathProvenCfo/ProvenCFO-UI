@@ -72,9 +72,13 @@
     <Compile Include="NotesCategoriesModel.cs" />
     <Compile Include="NotesDescriptionModel.cs" />
     <Compile Include="NotesIndividualCountWithItsPercentage.cs" />
+    <Compile Include="NotesSummaryVM.cs" />
     <Compile Include="NotesUICountingsByAgencyId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReconcilationCountVM.cs" />
+    <Compile Include="ReconciliationComments.cs" />
+    <Compile Include="ReconciliationCommentsDetailsVM.cs" />
+    <Compile Include="ReconciliationCommentUserMention.cs" />
     <Compile Include="ReconciliationfilterModel.cs" />
     <Compile Include="reconciliationVM.cs" />
     <Compile Include="RegisteredUserModel.cs" />
