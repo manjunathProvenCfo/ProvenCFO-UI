@@ -28,6 +28,7 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClient = new ClientService())
                     {
                         int AgencyID = 0;
+                       
                         ViewBag.IsEditMode = false;
                         ViewBag.IsDraggable = false;
                         var userType = Convert.ToString(Session["UserType"]);
@@ -42,9 +43,15 @@ namespace ProvenCfoUI.Controllers
                         TempData["CategoriesAndNotes"] = Categories;
                         var Summary = objClient.GetClientById(AgencyID);
                         TempData["NotesSummary"] = Summary;
+                        if (Summary.Summaryid_ref == null)
+                        {
+                            Summary.Summaryid_ref = 1;
+                        }
                         var NoteSummaryData = objNotes.GetNotesStatus();
                         TempData["NotesSummarydata"] = NoteSummaryData.ResultData;
+                       
                         ViewBag.selectSummaryStatusText = NoteSummaryData.ResultData.Where(x => x.Id == Summary.Summaryid_ref).FirstOrDefault().SummaryData;
+                        
                         if (userType != "" && userType == "1")
                         {
                             ViewBag.IsEditMode = true;
