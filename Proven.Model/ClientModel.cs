@@ -83,7 +83,10 @@ namespace Proven.Model
         public DateTime? SummaryCreatedDate { get; set; }
         public string SummaryModifiedBy { get; set; }
         public string SummaryModifiedByFullName { get; set; }
-        public DateTime? SummaryModifiedDate { get; set; }        
+        public DateTime? SummaryModifiedDate { get; set; }
+        public int? Summaryid_ref { get; set; }
+        public string SummaryData { get; set; }
+
     }
 
     public class ClientMainModel
