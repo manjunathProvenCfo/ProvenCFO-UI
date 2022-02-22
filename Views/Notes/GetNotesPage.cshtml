@@ -25,7 +25,7 @@
                             //foreach (var notesSummaryVM in NoteSummaryData)
                             //{
 
-                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"),  new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
 
                             //    break;
 
@@ -38,12 +38,20 @@
                 </div>
               
             </div>
-            <div class="card-body notes-item shadow-sm col-md-9", id="summaryData">
-              
-                    @(ViewBag.selectSummaryStatusText)
+            <div class="card-body notes-item shadow-sm col-md-9" , id="summaryData">
 
-               
+                @{
+                    string val = ViewBag.selectSummaryStatusText;
 
+                    String[] frmt = val.Split('.');
+
+                }
+                @frmt[0] <span>.</span><br><br>
+
+                @for (var i = 1; i < frmt.Length-1; i++)
+                {
+                    @frmt[i] <span>.</span> 
+                }
             </div>
 
 
@@ -240,9 +248,14 @@
                
                 let id = $("#ddlSummary").val();
                 getAjax(`/Notes/UpdateClientRefId?id=${id}&clientId=${getClientId()} `, null, function (res) {
+                    
                     if (res.Message == 'Success') {
+                       
+                        let formate = res.Description+"";
 
-                        $("#summaryData").html(res.Description);
+
+                          $("#summaryData").html(formate.replace(".", ".<br><br>"));
+                      /*  $("#summaryData").html(res.Description);*/
                        
                     }
 
