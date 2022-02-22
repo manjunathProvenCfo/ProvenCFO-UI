@@ -25,7 +25,7 @@
                             //foreach (var notesSummaryVM in NoteSummaryData)
                             //{
 
-                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), "Status", new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"),  new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
 
                             //    break;
 
