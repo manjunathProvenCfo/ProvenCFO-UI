@@ -3,7 +3,11 @@
 @{
     ViewBag.Title = "GetNotesPage";
 }
-
+<style>
+    div#summaryData {
+        padding-top: 1px;
+    }
+</style>
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
@@ -21,7 +25,7 @@
                             //foreach (var notesSummaryVM in NoteSummaryData)
                             //{
 
-                               @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), "Status", new { @class = "form-control dropDownSelect2", @style = "width: 300.5px;", @id = "ddlSummary" })
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), "Status", new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
 
                             //    break;
 
@@ -32,50 +36,51 @@
                         }
                     </div>
                 </div>
+              
             </div>
-            <div class="card-body notes-item shadow-sm">
-                <div class="col-md-9">
+            <div class="card-body notes-item shadow-sm col-md-9", id="summaryData">
+              
+                    @(ViewBag.selectSummaryStatusText)
 
-                   
-                   
-                    
-                    <span id="summaryData">
-                        @(ViewBag.selectSummaryStatusText)
+               
 
-                    </span>
+            </div>
 
-                    @*<p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
-                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />*@
-                </div>
 
-                <div class="Words">
+
+
+                @*<p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
+        <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />*@
+
+
+                @*<div class="Words">*@
                     @*@if (summary?.SummaryCreatedByFullName == "")
-                        {
-                            <span>&nbsp;</span>
-                        }
-                        else
-                        {
-                    <span>
-                        Created by:
+                {
+                    <span>&nbsp;</span>
+                }
+                else
+                {
+            <span>
+                Created by:
 
-                        <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-                    </span>
-                        }*@
+                <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+            </span>
+                }*@
 
                     @*@if (summary?.SummaryModifiedByFullName == "")
-                    {
-                        <span>&nbsp;</span>
-                    }
-                    else
-                    {
-                        <span>
-                            Last Edited by:
-                            <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
-                        </span>
-                    }*@
+            {
+                <span>&nbsp;</span>
+            }
+            else
+            {
+                <span>
+                    Last Edited by:
+                    <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                </span>
+            }*@
 
-                </div>
-            </div>
+                @*</div>*@
+            
 
 
         </div>
