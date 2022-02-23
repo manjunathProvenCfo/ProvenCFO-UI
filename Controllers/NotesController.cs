@@ -28,6 +28,7 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClient = new ClientService())
                     {
                         int AgencyID = 0;
+                       
                         ViewBag.IsEditMode = false;
                         ViewBag.IsDraggable = false;
                         var userType = Convert.ToString(Session["UserType"]);
@@ -41,13 +42,16 @@ namespace ProvenCfoUI.Controllers
                         var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
                         TempData["CategoriesAndNotes"] = Categories;
                         var Summary = objClient.GetClientById(AgencyID);
-                      
                         TempData["NotesSummary"] = Summary;
-                        //var notesummary = objNotes.GetNotesStatus();
-                        //TempData["NotesSummarydata"] = notesummary;
-
-                        //var notesummary = objNotes.GetSummaryDetailByAgencyId(AgencyID);
-                        //TempData["NotesSummarydata"] = notesummary;
+                        if (Summary.Summaryid_ref == null)
+                        {
+                            Summary.Summaryid_ref = 1;
+                        }
+                        var NoteSummaryData = objNotes.GetNotesStatus();
+                        TempData["NotesSummarydata"] = NoteSummaryData.ResultData;
+                       
+                        ViewBag.selectSummaryStatusText = NoteSummaryData.ResultData.Where(x => x.Id == Summary.Summaryid_ref).FirstOrDefault().SummaryData;
+                        
                         if (userType != "" && userType == "1")
                         {
                             ViewBag.IsEditMode = true;
@@ -116,6 +120,47 @@ namespace ProvenCfoUI.Controllers
                 ClientModel result = new ClientModel();
                 result.SummaryCreatedBy = User.UserFullName;
                 return PartialView("UpdateNoteSummary", result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        //[CheckSession]
+        //[HttpGet]
+        //public ActionResult UpdateClientRefId()
+        //{
+        //    try
+        //    {
+        //        ClientModel result = new ClientModel();
+
+        //        return PartialView("UpdateClientRefId", result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
+        [HttpGet]
+        public JsonResult UpdateClientRefId(int id,int clientId)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    ClientModel clientModel = new ClientModel();
+                    NotesSummaryVM note = new NotesSummaryVM();
+                    clientModel.Summaryid_ref = id;
+
+                    clientModel.Id = clientId;
+                   
+                    var result = objNotes.UpdateClientRefId(clientModel);
+                  
+                   
+                    return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {

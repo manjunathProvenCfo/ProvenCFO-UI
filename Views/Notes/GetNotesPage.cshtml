@@ -1,12 +1,20 @@
-﻿@using Proven.Model
+﻿@*@model Proven.Model.NotesSummarymainModel*@
+@using Proven.Model
 @{
     ViewBag.Title = "GetNotesPage";
 }
-
+<style>
+    div#summaryData {
+        padding-top: 1px;
+        
+    }
+   
+</style>
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
-        @*@{var summary1 = (NotesSummarymainModel)TempData["NotesSummarydata"];}*@
+        @{var NoteSummaryData = (IEnumerable<NotesSummaryVM>)TempData["NotesSummarydata"];}
+       
         <div class="card notes-items-container">
             <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
             </div>
@@ -16,63 +24,73 @@
                     <div class="glyphicon-new-window">
                         @if (ViewBag.IsEditMode == true)
                         {
+                            //foreach (var notesSummaryVM in NoteSummaryData)
+                            //{
 
-                            @*<select id="Id" name="SummaryType">
-                                <option value="0"> select status</option>
-                                @foreach (var NotesSummaryVM in summary1?.ResultData)
-                                {
-                                    <option value="@NotesSummaryVM.Id">@NotesSummaryVM.SummaryType</option>
-                                }
-                            </select>*@
-                            <h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 290.5px;", @id = "ddlSummary" })
+
+                            //    break;
+
+
+                            //}
+
+                            @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
                         }
                     </div>
                 </div>
+              
             </div>
-            <div class="card-body notes-item shadow-sm">
-                <div class="col-md-9">
-                    @*@Html.DropDownList(summary.EntityName, new SelectList(Model.billableEntitiesList, "Id", "EntityName"), "Select Entity", new { @class = "form-control" })*@
-                    @*<p class="mt-2 mb-0">@Html.Raw(summary1?.ResultData)</p>*@
-                    @*@foreach (var category in summary1?.ResultData)
-                    {
-                        @category.SummaryData
-                        
-                    }*@
+            <div class="card-body notes-item shadow-sm col-md-10" , id="summaryData">
 
-                    
+                @{
+                    string val = ViewBag.selectSummaryStatusText;
 
-                    <p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
-                    <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />
-                </div>
+                    String[] frmt = val.Split('.');
 
-                <div class="Words">
+                }
+                @frmt[0]<span>.</span><br><br/>
+
+                @for (var i = 1; i < frmt.Length - 1; i++)
+                {
+                    @frmt[i]<span>.</span>
+                }
+            </div>
+
+
+
+
+                @*<p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
+        <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />*@
+
+
+                @*<div class="Words">*@
                     @*@if (summary?.SummaryCreatedByFullName == "")
-                        {
-                            <span>&nbsp;</span>
-                        }
-                        else
-                        {
-                    <span>
-                        Created by:
+                {
+                    <span>&nbsp;</span>
+                }
+                else
+                {
+            <span>
+                Created by:
 
-                        <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-                    </span>
-                        }*@
+                <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+            </span>
+                }*@
 
-                    @if (summary?.SummaryModifiedByFullName == "")
-                    {
-                        <span>&nbsp;</span>
-                    }
-                    else
-                    {
-                        <span>
-                            Last Edited by:
-                            <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
-                        </span>
-                    }
+                    @*@if (summary?.SummaryModifiedByFullName == "")
+            {
+                <span>&nbsp;</span>
+            }
+            else
+            {
+                <span>
+                    Last Edited by:
+                    <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                </span>
+            }*@
 
-                </div>
-            </div>
+                @*</div>*@
+            
 
 
         </div>
@@ -197,6 +215,7 @@
                     Html.RenderAction("CreateNewNotes", "Notes");
                     Html.RenderAction("OpenDescription", "Notes");
                     Html.RenderAction("UpdateNoteSummary", "Notes");
+                    //Html.RenderAction("UpdateClientRefId", "Notes");
                 }
             }
 
@@ -212,7 +231,9 @@
     <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
 
     @*For AgencySelectionDropdown*@
-    <script type="text/javascript">
+<script type="text/javascript">
+
+
         var $formValidator;
         $(document).ready(function () {
             var ClientID = $("#ddlclient option:selected").val();
@@ -223,15 +244,66 @@
                     ignore: ""
                 });
             $formValidator.settings.ignore = "";
+            $("#ddlSummary").val(@(summary?.Summaryid_ref));
+           
+            $("#ddlSummary").change(function () {
+               
+                let id = $("#ddlSummary").val();
+                getAjax(`/Notes/UpdateClientRefId?id=${id}&clientId=${getClientId()} `, null, function (res) {
+                    
+                    if (res.Message == 'Success') {
+                       
+                        let formate = res.Description+"";
+
+
+                          $("#summaryData").html(formate.replace(".",".<br><br>"));
+                        /*$("#summaryData").html(res.Description);*/
+                       
+                    }
+
+                })
+
+            })
+
 
         });
+        //$(document).ready(function () {
+        //    $('#NoteId').click(function () {
+        //        debugger;
+        //        var ClientID = $("#ddlclient option:selected").val();
+        //        var NoteID = $("#NoteId option:selected").val();
+        //        if (ClientID != null && ClientID != undefined && ClientID != '') {
+        //            $.ajax({
+        //                url: '/NotesController/GetNotesPage?id=' + ClientID + NoteID,
+        //                type: "GET",
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                success: function (data) {
+        //                    if (data != null) {
+        //                        $('#Notes-create-new-btn').show();//TODO
+        //                        SetUserPreferencesForAgency();
+        //                        window.location.reload();
+        //                    }
+        //                    else {
+        //                    }
+        //                },
+        //                error: function () {
+        //                }
+        //            });
+        //        }
+        //        else {
+        //            window.location.reload();
+        //        }
+        //    })
+        //});
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
+
             ShowlottieLoader();
             if (ClientID != null && ClientID != undefined && ClientID != '') {
                 $.ajax({
-                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID ,
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -272,7 +344,7 @@
             });
         }
 
-    </script>
+</script>
 
 
     <script type="text/javascript">
@@ -280,7 +352,7 @@
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
         });
-
+       
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
 
@@ -435,9 +507,8 @@
                 tinymce.get("txtSummary").setContent(content);
                 tinyMCE.activeEditor.setContent(content);
                 $("#notesummary-modal-new").modal("show");
-
-                $("#btnUpdateNoteSummary").text("Update");
-
+                 $("#summaryData").html(res.Description);
+             
             });
             $("#btnUpdateNoteSummary").click(function () {
                 var ClientID = $("#ddlclient option:selected").val();
@@ -450,6 +521,7 @@
                     if (response.Message == 'Success') {
                         let data = response.Data;
                         window.location.reload();
+                        $("#lblSummaryCreatedBy").text(data.Summaryid_ref);
                         $("#lblSummaryCreatedBy").text(data.SummaryCreatedByFullName);
                         $("#lblSummaryCreatedDate").text(moment(data.SummaryCreatedDate));
                         if (!isEmptyOrBlank(data.SummaryModifiedByFullName)) {

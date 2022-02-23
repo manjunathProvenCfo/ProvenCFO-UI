@@ -89,11 +89,24 @@ namespace Proven.Service
         {
             return GetAsync<NotesSummarymainModel>("Notes/GetNotesStatus").Result;
         }
-        public NotesSummarymainModel GetSummaryDetailByAgencyId( int AgencyID)
+      
+        public string UpdateClientRefId(ClientModel client)
         {
-            return GetAsync<NotesSummarymainModel>("Notes/GetSummaryDetailByAgencyId?AgencyID=" + AgencyID).Result;
+            return PostAsync<string, ClientModel>("Notes/UpdateClientRefId", client,false).Result;
         }
+        public ReturnModel updateCliteSummaryRefId(int Id, string SummaryData, string Status, bool IsDeleted, string SummaryType,string CreatedBy,DateTime CreatedDate)
+        {
+            NotesSummaryVM ndm = new NotesSummaryVM();
+            ndm.Id = Id;
+            ndm.SummaryData = SummaryData;
+            ndm.Status = Status;
+            ndm.IsDeleted = IsDeleted;
+            ndm.SummaryType = SummaryType;
+            ndm.CreatedBy = CreatedBy;
+            ndm.CreatedDate = CreatedDate;
 
+            return PostAsync<ReturnModel, NotesSummaryVM>("Notes/updateCliteSummaryRefId", ndm).Result;
+        }
 
         public void Dispose()
         {
