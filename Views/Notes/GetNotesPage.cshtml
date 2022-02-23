@@ -6,7 +6,9 @@
 <style>
     div#summaryData {
         padding-top: 1px;
+        
     }
+   
 </style>
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
@@ -25,7 +27,7 @@
                             //foreach (var notesSummaryVM in NoteSummaryData)
                             //{
 
-                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 250.5px;", @id = "ddlSummary" })
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 290.5px;", @id = "ddlSummary" })
 
                             //    break;
 
@@ -38,7 +40,7 @@
                 </div>
               
             </div>
-            <div class="card-body notes-item shadow-sm col-md-9" , id="summaryData">
+            <div class="card-body notes-item shadow-sm col-md-10" , id="summaryData">
 
                 @{
                     string val = ViewBag.selectSummaryStatusText;
@@ -46,11 +48,11 @@
                     String[] frmt = val.Split('.');
 
                 }
-                @frmt[0] <span>.</span><br><br>
+                @frmt[0]<span>.</span><br><br/>
 
-                @for (var i = 1; i < frmt.Length-1; i++)
+                @for (var i = 1; i < frmt.Length - 1; i++)
                 {
-                    @frmt[i] <span>.</span> 
+                    @frmt[i]<span>.</span>
                 }
             </div>
 
@@ -254,8 +256,8 @@
                         let formate = res.Description+"";
 
 
-                          $("#summaryData").html(formate.replace(".", ".<br><br>"));
-                      /*  $("#summaryData").html(res.Description);*/
+                          $("#summaryData").html(formate.replace(".",".<br><br>"));
+                        /*$("#summaryData").html(res.Description);*/
                        
                     }
 
