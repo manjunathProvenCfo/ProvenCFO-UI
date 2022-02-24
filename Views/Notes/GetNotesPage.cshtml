@@ -197,8 +197,16 @@
 
                             @*<hr>*@
                         </div>
-                        <h6 style="color: #00BE82; "> @Category.Labels</h6>
-                        @*<p>@Html.Raw(Category.Labels)</p>*@
+                        @if ((Category.Labels == null))
+                        {
+                            @Category.Labels
+                        }
+                        else
+                        {
+                            <h6 class="badge mr-1 py-2 bg-green"> @Category.Labels </h6>
+                        }
+                        @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
+
                     </div>
 
                                 }
@@ -396,7 +404,7 @@
             // }
             if (NotesId != null && NotesId !== "" && Isview == false) {
                 $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
-                UpdateLableForKanbanTask(NotesId, TagName);
+               /* UpdateLableForKanbanTask(NotesId, TagName);*/
                 $('#' + NotesId + ' .card-body .badge').empty();
                 $('#' + NotesId + ' .card-body').prepend('<div class="mb-2"><span class="badge py-2 me-1 mb-1 ' + className + '">' + TagName + '</span></div>')
             } else if (NotesId != null && NotesId !== "" && Isview == true) {
@@ -532,10 +540,10 @@
                         if (response.Description != null) {
                             let published = response.Description.IsPublished;
                             let title = response.Description.Title;
-
+                            let tag = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
-                           
+                            $('#divTag').val(tag);
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }

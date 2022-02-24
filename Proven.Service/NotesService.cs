@@ -42,7 +42,7 @@ namespace Proven.Service
             return PostAsync<ClientModel, ClientModel>("Notes/UpdateNoteSummary", client, true).Result;
         }
 
-        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID)
+        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID,string Labels)
         {
             NotesDescriptionModel ndm = new NotesDescriptionModel();
             ndm.Id = DescriptionId;
@@ -50,6 +50,7 @@ namespace Proven.Service
             ndm.Description = DescriptionText;
             ndm.IsPublished = IsPublished;
             ndm.ModifiedBy = LoginUserID;
+            ndm.Labels = Labels;
 
             return PostAsync<ReturnModel, NotesDescriptionModel>("Notes/UpdateNotesDescription", ndm).Result;
         }
