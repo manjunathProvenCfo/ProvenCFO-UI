@@ -33,6 +33,25 @@ var chat = {
     selectedRecentParticipantOnce: false,
     isReconciliationIconColorChanged: false
 };
+var CommentHtmls = {
+    ReconciliationHtml:`<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab">
+                        <div class="avatar avatar-xl status-offline">
+                            <img class="rounded-circle" src="/assets/img/team/default-logo.png" alt="">
+                        </div>
+                        <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-0 chat-contact-title" title="{account}">{account}</h6><span class="badge badge-primary fs--2" style="display:none" id="spanUnreadMsgCount">0</span>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="chat-contact-content pr-3">
+                                    <span class="channelReconciliationDescriptionSidebar">{agencyName}/{description}</span>
+                                </div>
+                                <div class="position-absolute b-0 r-0 hover-hide">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+}
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
     showChatContentLoader();
@@ -139,6 +158,43 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     if (isEmptyOrBlank(getParameterByName("isRecon")) === false && getParameterByName("isRecon") === "true") {
         $("#divChatSiderbarFilters > button[data-type=1]").click();
     }
+
+}
+
+var loadreconcilationcomments = function () {
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+
+    $channelMessages.empty();
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.trigger('change');
+    getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${chat.clientId}&MaxCount=${0}`, null, function (response) {
+        var Reconciliationdata = response;
+        if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
+            $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
+                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id);
+                $participantsContainer.append(recHtml);
+            });
+        } 
+        $participantsContainer.children(0)[0].click();
+        hideChatContentLoader();
+        /*$participants.eq(0).click();*/
+    });
 
 }
 var resetChatPage = function () {
@@ -437,7 +493,8 @@ $("#divChatSiderbarFilters > button").click(function () {
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];
-                loadChatPage(false, chat.type);
+                //loadChatPage(false, chat.type);
+                loadreconcilationcomments();
             }, 0)
         }
     }
@@ -478,7 +535,7 @@ var getMentions = function () {
 var selectSidebarParticipant = function () {
     if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true && isEmptyOrBlank(getParameterByName('reconChannelId')) === true) {
         if (chat.autoSelectParticipant === true) {
-            $participants.eq(0).click();
+            /*$participants.eq(0).click();*/
         }
     }
     else if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === false) {

@@ -198,7 +198,8 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         CommentText: InputcommentText,
         CreatedBy: chat.userId,
         CreatedDate: currentdate,
-        IsDeleted: false
+        IsDeleted: false,
+        AgencyId: chat.AgencyId
     }
     postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
         var r = response;
