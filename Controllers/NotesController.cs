@@ -100,8 +100,9 @@ namespace ProvenCfoUI.Controllers
                     var result = objNotes.GetNotesDescriptionById(NotesDescriptionId);
                     TempData["SelectedTitle"] = result.Title;
                     TempData["SelectedDescription"] = result.Description;
+                    TempData["Selectedtag"] = result.Labels;
                     Session["SelectedDescriptionId"] = result.Id;
-                    Session["Selectedtag"] =  result.Labels;
+                    //Session["Selectedtag"] =  result.Labels;
                     return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }

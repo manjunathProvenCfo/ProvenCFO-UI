@@ -536,7 +536,7 @@
         });
 
         function openEdit(e) {
-            debugger;
+            
             e.stopPropagation();
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
@@ -548,13 +548,16 @@
                 success: function (response) {
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
+                           
                             
                             let published = response.Description.IsPublished;
                             let title = response.Description.Title;
-                            let tag = response.Description.Labels;
+                            let tagName = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
-                            $('#divTag').val(tag);
+
+                            addTag('bg-green', tagName);
+                           
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
