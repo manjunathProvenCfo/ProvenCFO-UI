@@ -15,5 +15,6 @@ namespace Proven.Model
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool? IsDeleted { get; set; }
+        public int? AgencyId { get; set; }
     }
 }
