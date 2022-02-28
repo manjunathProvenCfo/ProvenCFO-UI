@@ -19,6 +19,7 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 var addMessageProcessed = [];
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -34,7 +35,7 @@ var chat = {
     isReconciliationIconColorChanged: false
 };
 var CommentHtmls = {
-    ReconciliationHtml:`<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab">
+    ReconciliationHtml:`<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="loadCommentsPage('{channelUniqueNameGuid}')">
                         <div class="avatar avatar-xl status-offline">
                             <img class="rounded-circle" src="/assets/img/team/default-logo.png" alt="">
                         </div>
@@ -50,7 +51,19 @@ var CommentHtmls = {
                                 </div>
                             </div>
                         </div>
-                    </div>`
+                    </div>`,
+    datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
+    commenthtml: `<div class="media p-3" data-timestamp="{date}"><div class= "media-body d-flex justify-content-end">
+                  <div class="w-100 w-xxl-75"><div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                    <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div></div>
+                    <div class="text-400 fs--2 text-right">{time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                </div></div></div></div>`,
+    otherscCommentshtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
+                    {text}
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`
 }
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
@@ -115,8 +128,15 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                 if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
-                else
-                    $btnSendMessage[0].click();
+                else {
+                    if (chat.type == 0) {
+                        $btnSendMessage[0].click();
+                    }
+                    else {
+                        if ($editor[0].innerHTML != '')
+                            addNewMessagetoChatwindow($editor[0].innerHTML);
+                    }                    
+                }                   
             }
             else
                 activeChannel?.typing();
@@ -160,6 +180,105 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     }
 
 }
+var loadCommentsPage = async function (channelUniqueNameGuid) {
+
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+
+    $(document).on("click", "button[id=btnComment]", function (e) {        
+        showReconciliationChat(e.currentTarget.dataset.id);       
+    });
+
+
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+        setCommentsHeader(response.resultData.reconciliationdata);
+        LoadAllComments(response.resultData.reconciliationComments);
+        //setParticipants(response);
+        //createTwilioClient();
+        /*$participants.eq(0).click();*/
+        setScrollPosition();
+        hideChatContentLoader();
+    });
+
+    $btnSendMessage.unbind().click(function () {
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    }
+    var addNewComment = function (inputText) {
+        var CurrentDate = new Date();
+        var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+        var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+        var CurrentTimestring = getCurrentTime(new Date);
+        var DateElement = $('#channel-messages #' + CurrentDateString);
+        if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+            var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+            $channelMessages.append(dhtml);
+        }
+        var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring);
+        $channelMessages.append(chtml);
+        SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+        setScrollPosition();
+        $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+    }
+    var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
+        var currentdate = new Date();
+        var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
+
+        var input = {
+            Id: 0,
+            ReconciliationId_ref: ReconciliationId,
+            CommentText: InputcommentText,
+            CreatedBy: chat.userId,
+            CreatedDate: currentdate,
+            IsDeleted: false,
+            AgencyId: chat.AgencyId
+        }
+        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+            var r = response;
+        });
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerHTML != '')
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000)
+}
 
 var loadreconcilationcomments = function () {
     showChatContentLoader();
@@ -187,14 +306,73 @@ var loadreconcilationcomments = function () {
         var Reconciliationdata = response;
         if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
             $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
-                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id);
+                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g,aReconciliation.id);
                 $participantsContainer.append(recHtml);
             });
         } 
         $participantsContainer.children(0)[0].click();
+        loadCommentsPage($participantsContainer.children(0)[0].id);
         hideChatContentLoader();
         /*$participants.eq(0).click();*/
     });
+
+}
+var setCommentsHeader = function (reconciliationdata) {
+    $channelReconciliationDescription.html("");
+    $channelReconciliationCompany.html("");
+    $channelReconciliationDate.html("");
+    $channelReconciliationAmount.html("");
+    $channelReconciliationDescription.html(`${reconciliationdata.company}/${reconciliationdata.description}`);
+    $channelReconciliationDate.html(`${formatDateMMDDYYYY(reconciliationdata.date)}`);
+    $channelReconciliationAmount.html(formatAmount(reconciliationdata.amount, true));
+    $channelName.text(reconciliationdata.account_name);
+}
+var LoadAllComments = function (ReconciliationComments) {
+    $channelMessages.empty();
+    if (ReconciliationComments != null && ReconciliationComments.length > 0) {
+
+        // this gives an object with dates as keys
+        const dategroups = ReconciliationComments.reduce((groups, game) => {
+            const date = game.createdDate.split('T')[0];
+            if (!groups[date]) {
+                groups[date] = [];
+            }
+            groups[date].push(game);
+            return groups;
+        }, {});
+
+        // Edit: to add it in the array format instead
+        const commentsgroupArrays = Object.keys(dategroups).map((date) => {
+            return {
+                date,
+                comments: dategroups[date]
+            };
+        });
+        $.each(commentsgroupArrays, function (index, aDates) {
+            var dtarray = aDates.date.split('-');
+            var datestring = monthNames[parseInt(dtarray[1]) - 1] + ' ' + dtarray[2] + ', ' + dtarray[0];
+            var dhtml = CommentHtmls.datehtml.replace('{id}', aDates.date.replace('-', '')).replace('{innerText}', datestring);
+            $channelMessages.append(dhtml);
+            $.each(aDates.comments, function (index, acomments) {
+
+                var UTCdate = getUTCDateTime(new Date(acomments.createdDateUTC));
+                var time = getCurrentTime(new Date(UTCdate));
+                var profileimgurl = acomments.commentedUserProfileImageurl;
+                var commentText = acomments.commentText;
+                var userName = acomments.commentedUserName;
+                if (acomments && acomments.createdBy == chat.userId) {
+                    var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time);
+                    $channelMessages.append(commentshtml);
+                }
+                else {
+                    var Otherscommentshtml = CommentHtmls.otherscCommentshtml.replace('{profileimgurl}', profileimgurl).replace('{text}', commentText).replace('{userName}', userName).replace('{date}', aDates.date.replace('-', '')).replace('{time}', time);
+                    $channelMessages.append(Otherscommentshtml);
+                }
+            });
+
+        });
+        var obj = 0;
+    }
 
 }
 var resetChatPage = function () {
@@ -207,6 +385,32 @@ var resetChatPage = function () {
 
     typingMembers = new Set();
     onlineOfflineMembers = new Object();
+}
+function getCurrentTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+function getUTCDateTime(date) {
+
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var seconds = date.getSeconds()
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
+    return strTime;
 }
 var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 var getPublicChatParticipants = function (channelUniqueNameGuid) {
