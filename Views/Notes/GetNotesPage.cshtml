@@ -116,7 +116,7 @@
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
                 containerCounter++;
-
+               
                 <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -356,8 +356,15 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+           
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
+           
+            $('#notes-modal-new').on('hidden.bs.modal', function () {
+                location.reload();
+
+            })
+
         });
 
         var gCurrentViewTaskId = '';
@@ -422,9 +429,10 @@
             $('#divTag ul').empty();
             $('#divTagView ul').empty();
         }
+       
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-
+               
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -437,9 +445,10 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-
+               
+               
                 $("#Description").val(tinymce.get("Description").getContent());
-                if ($("#Title").valid() === false || $("#Description").valid() == false)
+                if ($("#Title").valid() === false || $("#Description").valid() == false )
                     return;
                 var id = $('#Id').val();
                 var title = $('#Title').val();
@@ -527,6 +536,7 @@
         });
 
         function openEdit(e) {
+            debugger;
             e.stopPropagation();
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
@@ -538,6 +548,7 @@
                 success: function (response) {
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
+                            
                             let published = response.Description.IsPublished;
                             let title = response.Description.Title;
                             let tag = response.Description.Labels;
