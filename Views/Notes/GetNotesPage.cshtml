@@ -546,6 +546,7 @@
                 url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
                 //cache: false,
                 success: function (response) {
+                    debugger;
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
                            
@@ -555,9 +556,9 @@
                             let tagName = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
-
-                            addTag('bg-green', tagName);
-                           
+                            if (response.Description.Labels != null) {
+                                addTag('bg-green', tagName);
+                            }
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
