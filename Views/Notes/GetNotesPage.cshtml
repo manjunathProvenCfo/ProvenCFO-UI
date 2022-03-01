@@ -7,6 +7,7 @@
     div#summaryData {
         padding-top: 1px;
     }
+   
 </style>
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
@@ -546,7 +547,7 @@
                 url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
                 //cache: false,
                 success: function (response) {
-                    debugger;
+            
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
                            
