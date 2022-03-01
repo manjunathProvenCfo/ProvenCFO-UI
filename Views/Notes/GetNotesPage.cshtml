@@ -6,7 +6,6 @@
 <style>
     div#summaryData {
         padding-top: 1px;
-        
     }
    
 </style>
@@ -14,7 +13,7 @@
     <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
         @{var NoteSummaryData = (IEnumerable<NotesSummaryVM>)TempData["NotesSummarydata"];}
-       
+
         <div class="card notes-items-container">
             <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../assets/img/illustrations/corner-4.png);">
             </div>
@@ -38,7 +37,7 @@
                         }
                     </div>
                 </div>
-              
+
             </div>
             <div class="card-body notes-item shadow-sm col-md-10" , id="summaryData">
 
@@ -48,7 +47,7 @@
                     String[] frmt = val.Split('.');
 
                 }
-                @frmt[0]<span>.</span><br><br/>
+                @frmt[0]<span>.</span><br><br />
 
                 @for (var i = 1; i < frmt.Length - 1; i++)
                 {
@@ -59,38 +58,38 @@
 
 
 
-                @*<p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
-        <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />*@
+            @*<p class="mt-2 mb-0">@Html.Raw(summary?.Summary)</p>
+                <input type="hidden" id="hdnSummary" value="@(summary?.Summary)" />*@
 
 
-                @*<div class="Words">*@
-                    @*@if (summary?.SummaryCreatedByFullName == "")
+            @*<div class="Words">*@
+            @*@if (summary?.SummaryCreatedByFullName == "")
+                    {
+                        <span>&nbsp;</span>
+                    }
+                    else
+                    {
+                <span>
+                    Created by:
+
+                    <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
+                </span>
+                    }*@
+
+            @*@if (summary?.SummaryModifiedByFullName == "")
                 {
                     <span>&nbsp;</span>
                 }
                 else
                 {
-            <span>
-                Created by:
-
-                <span id="lblSummaryCreatedBy">@(summary?.SummaryCreatedByFullName)</span>, <span id="lblSummaryCreatedDate">@(summary?.SummaryCreatedDate)</span>
-            </span>
+                    <span>
+                        Last Edited by:
+                        <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
+                    </span>
                 }*@
 
-                    @*@if (summary?.SummaryModifiedByFullName == "")
-            {
-                <span>&nbsp;</span>
-            }
-            else
-            {
-                <span>
-                    Last Edited by:
-                    <span id="lblSummaryModifiedBy">@(summary?.SummaryModifiedByFullName)</span>, <span id="lblSummaryModifiedDate">@(summary?.SummaryModifiedDate)</span>
-                </span>
-            }*@
+            @*</div>*@
 
-                @*</div>*@
-            
 
 
         </div>
@@ -105,8 +104,12 @@
                 <div class="nav flex-column nav-pills">
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
-                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
+                        @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
+
+                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
+
                     }
+
                 </div>
             </div>
         </div>
@@ -118,8 +121,8 @@
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
                 containerCounter++;
-
-                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
+               
+                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id">
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
@@ -143,63 +146,73 @@
                                 counter++;
                                 if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
                                 {
-                                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
-                                            @if (ViewBag.IsEditMode == true)
-                                            {
-                                                <div class="d-flex align-items-center">
-                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
-                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                        @if (@Category.IsPublished.ToLower() == "published")
-                                                        {
-                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
-                                                        }
-                                                        else
-                                                        {
-                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
-                                                        }
-                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
-                                                    </div>
-                                                    <div class="ml-2" style=" font-size : 24px">
-                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                                            </a>
+                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                            @if (ViewBag.IsEditMode == true)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                        @if (@Category.IsPublished.ToLower() == "published")
+                                        {
+                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                        }
+                                        else
+                                        {
+                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                        }
+                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                    </div>
+                                    <div class="ml-2" style=" font-size : 24px">
+                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                            </a>
 
-                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
-                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
-                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
-                                                                <div class="dropdown-divider"></div>
-                                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ml-2" style="font-size:24px;">
-                                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
-                                                    </div>
-
-                                                </div>
-                                            }
-                                        </div>
-                                        <p> @Html.Raw(Category.Description)</p>
-
-                                        <div class="Words">
-                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
-                                            @if ((Category.ModifiedByUser == ""))
-                                            {
-                                                <span>&nbsp;</span>
-                                            }
-                                            else
-                                            {
-                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
-
-                                            }
-
-                                            @*<hr>*@
+                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="ml-2" style="font-size:24px;">
+                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                        <p> @Html.Raw(Category.Description)</p>
+
+                        <div class="Words">
+                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                            @if ((Category.ModifiedByUser == ""))
+                            {
+                                <span>&nbsp;</span>
+                            }
+                            else
+                            {
+                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+
+                            }
+
+                            @*<hr>*@
+                        </div>
+                        @if ((Category.Labels == null))
+                        {
+                            @Category.Labels
+                        }
+                        else
+                        {
+                            <h6 class="badge mr-1 py-2 bg-green"> @Category.Labels </h6>
+                        }
+                        @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
+
+                    </div>
 
                                 }
                             }
@@ -231,7 +244,7 @@
     <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
 
     @*For AgencySelectionDropdown*@
-<script type="text/javascript">
+    <script type="text/javascript">
 
 
         var $formValidator;
@@ -245,20 +258,20 @@
                 });
             $formValidator.settings.ignore = "";
             $("#ddlSummary").val(@(summary?.Summaryid_ref));
-           
+
             $("#ddlSummary").change(function () {
-               
+
                 let id = $("#ddlSummary").val();
                 getAjax(`/Notes/UpdateClientRefId?id=${id}&clientId=${getClientId()} `, null, function (res) {
-                    
+
                     if (res.Message == 'Success') {
-                       
+
                         let formate = res.Description+"";
 
 
                           $("#summaryData").html(formate.replace(".",".<br><br>"));
                         /*$("#summaryData").html(res.Description);*/
-                       
+
                     }
 
                 })
@@ -344,18 +357,87 @@
             });
         }
 
-</script>
-
+    </script>
 
     <script type="text/javascript">
         $(document).ready(function () {
+           
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
+           
+            $('#notes-modal-new').on('hidden.bs.modal', function () {
+                location.reload();
+
+            })
+
         });
+
+        var gCurrentViewTaskId = '';
+        function addTagOnView(TagNames) {
+
+            $('#divTag ul').empty();
+            $('#divTagView ul').empty();
+            if (TagNames != null) {
+
+                var tagName = TagNames.split(',');
+                if (tagName.length > 0) {
+                    tagName = tagName[0];
+                    switch (tagName) {
+                        case 'Relevant':
+                            addTag('badge-soft-success bg-green', 'Relevant', true);
+                            break;
+                        case 'Reliable':
+                            addTag('badge-soft-primary bg-green', 'Reliable', true);
+                            break;
+                        case 'Real Time':
+                            addTag('badge-soft-info bg-green', 'Real Time', true);
+                            break;
+                       
+                        default:
+                    }
+                }
+            }
+        }
+        function addTag(className, TagName, Isview = false) {
+            
+            var NotesId = gCurrentViewTaskId;
+            var tags = $('#divTag span');
+            $('#divTagView ul').empty();
+            $('#divTag ul').empty();
+            var IsNotDuplicate = false
+            //$.each(tags, function (key, value) {
+            //    if (value != undefined && value.innerText == TagName) {
+            //        IsNotDuplicate = true;
+            //    }
+            //});
+            //if (IsNotDuplicate == false) {
+            //$('#divTag').prepend('<span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true">' + TagName + '</span> <div class="dropdown-menu dropdown-md px-0 py-3 show" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start"><span class="input-group-btn"><a class="dropdown-item" href="#!"></a><div class="dropdown-item text-danger" onclick="EnterComments();">Remove Member</div></span></div>');
+
+            // }
+            if (NotesId != null && NotesId !== "" && Isview == false) {
+                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+               /* UpdateLableForKanbanTask(NotesId, TagName);*/
+                $('#' + NotesId + ' .card-body .badge').empty();
+                $('#' + NotesId + ' .card-body').prepend('<div class="mb-2"><span class="badge py-2 me-1 mb-1 ' + className + '">' + TagName + '</span></div>')
+            } else if (NotesId != null && NotesId !== "" && Isview == true) {
+
+                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+            }
+            else {
+
+                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+            }
+
+
+        }
+        function RemoveTags() {
+            $('#divTag ul').empty();
+            $('#divTagView ul').empty();
+        }
        
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-
+               
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -368,8 +450,10 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
+               
+               
                 $("#Description").val(tinymce.get("Description").getContent());
-                if ($("#Title").valid() === false || $("#Description").valid() == false)
+                if ($("#Title").valid() === false || $("#Description").valid() == false )
                     return;
                 var id = $('#Id').val();
                 var title = $('#Title').val();
@@ -378,6 +462,9 @@
                 var agencyId = $('#ClientID').val();
 
                 var isPublished = "Unpublished";
+                var Labels = $('#divTag span').map(function (i, opt) {
+                    return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
+                }).toArray().join(', ');
                 if ($("#chkPublished").prop("checked") === true) {
                     isPublished = "Published";
                 }
@@ -388,7 +475,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, };
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels };
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -454,6 +541,7 @@
         });
 
         function openEdit(e) {
+            
             e.stopPropagation();
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
@@ -463,13 +551,19 @@
                 url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
                 //cache: false,
                 success: function (response) {
+            
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
+                           
+                            
                             let published = response.Description.IsPublished;
                             let title = response.Description.Title;
-
+                            let tagName = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
+                            if (response.Description.Labels != null) {
+                                addTag('bg-green', tagName);
+                            }
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
@@ -507,8 +601,8 @@
                 tinymce.get("txtSummary").setContent(content);
                 tinyMCE.activeEditor.setContent(content);
                 $("#notesummary-modal-new").modal("show");
-                 $("#summaryData").html(res.Description);
-             
+                $("#summaryData").html(res.Description);
+
             });
             $("#btnUpdateNoteSummary").click(function () {
                 var ClientID = $("#ddlclient option:selected").val();

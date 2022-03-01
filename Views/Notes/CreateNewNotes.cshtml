@@ -37,7 +37,8 @@
                                             @Html.HiddenFor(x => x.Id)
                                             @Html.HiddenFor(x => x.NoteCatId)
                                             @Html.HiddenFor(x => x.AgencyId)
-                                            @Html.HiddenFor(x => x.Position)
+                                            @Html.HiddenFor(x => x.Position) 
+                                            
                                         </div>
                                         <div class="form-group mb-3">
                                             <div class="row">
@@ -49,6 +50,32 @@
                                                     <label class="custom-control-label" for="chkPublished"></label>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="mb-2 fs-0" >Tags</h5>
+                                            <div class="d-flex" id="divTag">
+                                            <div class="dropdown dropright">
+
+                                                <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle                                     dropdown-caret-none" data-toggle="dropdown" aria-haspopup="true" aria-
+                                                        expanded="false">
+                                                    <span class="fas fa-plus" style="font-size: 20px;"></span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
+                                                    <div class="dropdown-divider"></div>
+                                                    <div class="px-3">
+                                                        <button class=" dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag(' bg-green','Relevant');">Relevant</button>
+                                                        <button class=" dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag(' bg-green','Reliable');">Reliable</button>
+                                                        <button class=" dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag(' bg-green', 'Real Time');">Real Time</button>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                                </div>
+                                            <br />
+                                            @*</div>*@
+                                            @*<hr class="my-4" />*@
                                         </div>
                                         <div class="form-group mb-3">
                                             <h5 class="mb-2 fs-0">Description</h5>
