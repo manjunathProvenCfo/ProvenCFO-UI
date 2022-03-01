@@ -104,8 +104,12 @@
                 <div class="nav flex-column nav-pills">
                     @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
                     {
-                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="80">@Categories.NoteCategory</a>
+                        @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
+
+                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
+
                     }
+
                 </div>
             </div>
         </div>
@@ -118,7 +122,7 @@
             {
                 containerCounter++;
                
-                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id">
+                <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id">
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
