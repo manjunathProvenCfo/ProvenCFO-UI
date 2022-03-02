@@ -7,6 +7,14 @@
     div#summaryData {
         padding-top: 1px;
     }
+
+    .turquoiseblue {
+        background-color: #05768f !important;
+    }
+
+    .yellow {
+        background-color: #FFDB74 !important;
+    }
    
 </style>
 <div class="container-fluid p-0" data-layout="container">
@@ -193,11 +201,11 @@
                         }
                         else if ((Category.Labels == "Relevant"))
                         {
-                            <h6 class="badge mr-1 py-2 bg-light-blue text-white"> @Category.Labels </h6>
+                            <h6 class="badge mr-1 py-2 turquoiseblue text-white"> @Category.Labels </h6>
                         }
                         else if ((Category.Labels == "Real Time"))
                         {
-                            <h6 class="badge mr-1 py-2 bg-orange text-white"> @Category.Labels </h6>
+                            <h6 class="badge mr-1 py-2 yellow text-white"> @Category.Labels </h6>
                         }
                         else
                         {
@@ -396,10 +404,10 @@
                             addTag('bg-light-blue text-white',  'Relevant', true);
                             break;
                         case 'Reliable':
-                            addTag('bg-green text-white' , 'Reliable', true);
+                            addTag('turquoiseblue text-white' , 'Reliable', true);
                             break;
                         case 'Real Time':
-                            addTag('bg-orange text-white', 'Real Time', true);
+                            addTag('yellow text-white', 'Real Time', true);
                             break;
                        
                         default:
@@ -573,13 +581,13 @@
                             if (response.Description.Labels != null) {
                                 switch (tagName) {
                                     case 'Relevant':
-                                        addTag('bg-light-blue text-white', 'Relevant', true);
+                                        addTag('turquoiseblue text-white', 'Relevant', true);
                                         break;
                                     case 'Reliable':
                                         addTag('bg-green text-white', 'Reliable', true);
                                         break;
                                     case 'Real Time':
-                                        addTag('bg-orange text-white ', 'Real Time', true);
+                                        addTag('yellow text-white ', 'Real Time', true);
                                         break;
 
                                     default:
