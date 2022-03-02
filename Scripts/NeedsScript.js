@@ -978,16 +978,16 @@ function addTagOnView(TagNames) {
             tagName = tagName[0];
             switch (tagName) {
                 case 'Urgent':
-                    addTag('badge-soft-success bg-red', 'Urgent', true);
+                    addTag('badge-soft-success bg-red  text-white', 'Urgent', true);
                     break;
                 case 'High':
-                    addTag('badge-soft-primary bg-orange', 'High', true);
+                    addTag('badge-soft-primary bg-orange  text-white', 'High', true);
                     break;
                 case 'Medium':
-                    addTag('badge-soft-info bg-light-blue', 'Medium', true);
+                    addTag('badge-soft-info bg-light-blue  text-white', 'Medium', true);
                     break;
                 case 'Low':
-                    addTag('badge-soft-danger bg-green', 'Low', true);
+                    addTag('badge-soft-danger bg-green  text-white', 'Low', true);
                     break;
                 default:
             }
