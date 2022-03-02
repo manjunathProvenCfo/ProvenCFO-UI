@@ -71,7 +71,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
-        chat.type = 0;
+        chat.type = 1;
     else
         chat.type = type;
     if (isEmptyOrBlank(autoSelectParticipant))
@@ -181,7 +181,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-
+    debugger;
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -422,9 +422,14 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     });
 }
 var getChatParticipants = function () {
+    debugger;
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
         participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
+        $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
+        loadreconcilationcomments();
+       
+        
     }
     getAjaxSync(participantsURL, null, function (response) {
         if (response.length > 0) {
@@ -673,6 +678,7 @@ var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
     });
 }
 $("#divChatSiderbarFilters > button").click(function () {
+    debugger;
     var el = $(this);
     $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
     el.addClass("btn-falcon-primary");
