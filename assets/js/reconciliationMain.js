@@ -116,22 +116,25 @@ $(document).ready(function () {
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     if (type != null) {
-
+        
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
+            sessionStorage.clear();
         }
         else {
             $('#tabNotinBooks').removeClass('tabselect');
             $('#tabNotinBanks').addClass('tabselect');
+            sessionStorage.clear();
         }
+      
     }
 
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
     }
-   /* sessionStorage.clear();*/
+   
 
     $('.checkbox-bulk-select-target').click(function () {
         
