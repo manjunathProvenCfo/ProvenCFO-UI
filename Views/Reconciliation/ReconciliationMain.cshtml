@@ -609,7 +609,9 @@
         function FillterReset() {
             sessionStorage.removeItem('Filter');
             var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
-            window.location.href = url;
+            location.reload();
+            
+            //window.location.href = url;
         }
         function BulkActionCancel() {
 
@@ -619,7 +621,8 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
-                window.location.href = url;
+                location.reload();
+               /* window.location.href = url;*/
             });
 
         }
