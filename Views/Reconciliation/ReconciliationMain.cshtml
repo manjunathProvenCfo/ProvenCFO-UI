@@ -565,7 +565,7 @@
                 {
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
-                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
+                    ShowAlertBoxError("Error!", "Sorry,there was a problem getting data from Xero. please try again later.", function () { window.location.reload(); });
                 }
                 else {
                     var msg = 'Loading..'

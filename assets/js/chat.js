@@ -181,7 +181,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-    debugger;
+    
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -422,7 +422,7 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     });
 }
 var getChatParticipants = function () {
-    debugger;
+   
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
         participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
@@ -678,7 +678,7 @@ var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
     });
 }
 $("#divChatSiderbarFilters > button").click(function () {
-    debugger;
+   
     var el = $(this);
     $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
     el.addClass("btn-falcon-primary");
