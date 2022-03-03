@@ -1127,6 +1127,7 @@
     <Content Include="Views\Shared\_PageLoader.cshtml" />
     <Content Include="Views\Invitation\GetAllAgencyUsers.cshtml" />
     <Content Include="Views\Shared\_communicationReconcilation.cshtml" />
+    <Content Include="Views\Shared\_ReconcilationEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
