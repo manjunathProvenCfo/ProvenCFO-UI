@@ -425,8 +425,13 @@ var getChatParticipants = function () {
    
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
+      
         participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
-        $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
+      
+        /*$chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");*/
+       
+       
+      
         loadreconcilationcomments();
        
         
