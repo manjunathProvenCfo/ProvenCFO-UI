@@ -88,6 +88,8 @@ namespace ProvenCfoUI
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                          "~/Scripts/jquery.validate*"));
 
+           
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -116,7 +118,8 @@ namespace ProvenCfoUI
                 "~/assets/js/reports.js"
 
                 ));
-
+            bundles.Add(new ScriptBundle("~/bundles/js/imports").Include(
+                        "~/assets/js/reconciliationUploader.js"));
 
             bundles.Add(new Bundle("~/bundles/js/agencyHome").Include(
                 "~/assets/js/agencyHome.js"

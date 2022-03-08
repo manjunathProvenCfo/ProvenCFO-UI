@@ -510,7 +510,7 @@ var deleteReports = function (deleteIds, period) {
 }
 
 var monthlySummaryOnClick = function (e, id) {
-    debugger;
+   
     e.preventDefault();
     let el = $(e.currentTarget);
     let parentDiv = el.parents("#divReportPeriodCard");

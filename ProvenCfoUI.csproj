@@ -528,6 +528,7 @@
     <Content Include="assets\js\lottie-player.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\reconciliationMain.js" />
+    <Content Include="assets\js\reconciliationUploader.js" />
     <Content Include="assets\js\reports.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
@@ -1127,6 +1128,8 @@
     <Content Include="Views\Shared\_PageLoader.cshtml" />
     <Content Include="Views\Invitation\GetAllAgencyUsers.cshtml" />
     <Content Include="Views\Shared\_communicationReconcilation.cshtml" />
+    <Content Include="Views\Shared\_ReconcilationEmail.cshtml" />
+    <Content Include="Views\Reconciliation\_ReconciliationFileUploaderPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

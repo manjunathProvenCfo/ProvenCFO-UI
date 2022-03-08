@@ -7,6 +7,14 @@
     div#summaryData {
         padding-top: 1px;
     }
+
+    .turquoiseblue {
+        background-color: #05768f !important;
+    }
+
+    .yellow {
+        background-color: #FFDB74 !important;
+    }
    
 </style>
 <div class="container-fluid p-0" data-layout="container">
@@ -187,6 +195,22 @@
                             }
                         </div>
                         <p> @Html.Raw(Category.Description)</p>
+                        @if ((Category.Labels == null))
+                        {
+                            @Category.Labels
+                        }
+                        else if ((Category.Labels == "Relevant"))
+                        {
+                            <h6 class="badge mr-1 py-2 turquoiseblue text-white"> @Category.Labels </h6>
+                        }
+                        else if ((Category.Labels == "Real Time"))
+                        {
+                            <h6 class="badge mr-1 py-2 yellow text-white"> @Category.Labels </h6>
+                        }
+                        else
+                        {
+                            <h6 class="badge mr-1 py-2 bg-green text-white"> @Category.Labels </h6>
+                        }
 
                         <div class="Words">
                             Created by: @Category.CreatedByUser, @Category.CreatedDate
@@ -202,14 +226,7 @@
 
                             @*<hr>*@
                         </div>
-                        @if ((Category.Labels == null))
-                        {
-                            @Category.Labels
-                        }
-                        else
-                        {
-                            <h6 class="badge mr-1 py-2 bg-green"> @Category.Labels </h6>
-                        }
+
                         @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
 
                     </div>
@@ -384,13 +401,13 @@
                     tagName = tagName[0];
                     switch (tagName) {
                         case 'Relevant':
-                            addTag('badge-soft-success bg-green', 'Relevant', true);
+                            addTag('bg-light-blue text-white',  'Relevant', true);
                             break;
                         case 'Reliable':
-                            addTag('badge-soft-primary bg-green', 'Reliable', true);
+                            addTag('turquoiseblue text-white' , 'Reliable', true);
                             break;
                         case 'Real Time':
-                            addTag('badge-soft-info bg-green', 'Real Time', true);
+                            addTag('yellow text-white', 'Real Time', true);
                             break;
                        
                         default:
@@ -562,8 +579,22 @@
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
                             if (response.Description.Labels != null) {
-                                addTag('bg-green', tagName);
+                                switch (tagName) {
+                                    case 'Relevant':
+                                        addTag('turquoiseblue text-white', 'Relevant', true);
+                                        break;
+                                    case 'Reliable':
+                                        addTag('bg-green text-white', 'Reliable', true);
+                                        break;
+                                    case 'Real Time':
+                                        addTag('yellow text-white ', 'Real Time', true);
+                                        break;
+
+                                    default:
+                                }
+                               /* addTag('bg-green', tagName);*/
                             }
+                          
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
