@@ -78,7 +78,7 @@
         $(document).ready(function () {
             var timeout = sessionTime * 60000; //Convert Minutes to Milliseconds
             $(document).bind("idle.idleTimer", function () {
-                ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session ?", "Yes, continue working", "Logout", function (isConfirmed) {
+                ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session?", "Yes, continue working", "Logout", function (isConfirmed) {
 
                     if (isConfirmed) {
                         ShowEnterInput('Continue Session', 'Plase enter your password', 'Password','password', 'Please enter valid password', function (IsloginExtend) {

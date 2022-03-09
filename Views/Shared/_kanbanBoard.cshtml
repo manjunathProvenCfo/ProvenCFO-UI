@@ -25,6 +25,17 @@
         .kanban-item {
             padding-bottom: 10px;
         }
+        .turquoiseblue {
+            background-color: #05768f !important;
+        }
+
+        .yellow {
+            background-color: #FFDB74 !important;
+        }
+
+        .Roman {
+            background-color: #DE6057 !important;
+        }
     </style>
 
     <!-- ===============================================-->
@@ -96,15 +107,15 @@
                                             }
                                             @if (Tasks.Labels == "Urgent")
                                             {
-                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-success bg-red text-white">@Tasks.Labels</span></div>
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-success Roman text-white">@Tasks.Labels</span></div>
                                             }
                                             else if (Tasks.Labels == "High")
                                             {
-                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-primary bg-orange text-white">@Tasks.Labels</span></div>
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-primary yellow text-white">@Tasks.Labels</span></div>
                                             }
                                             else if (Tasks.Labels == "Medium")
                                             {
-                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-info bg-light-blue text-white">@Tasks.Labels</span></div>
+                                                <div class="mb-2"><span class="badge py-2 me-1 mb-1 badge-soft-info turquoiseblue text-white">@Tasks.Labels</span></div>
                                             }
                                             else if (Tasks.Labels == "Low")
                                             {
