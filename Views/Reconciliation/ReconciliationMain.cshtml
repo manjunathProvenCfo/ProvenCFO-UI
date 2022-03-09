@@ -73,7 +73,7 @@
 </style>*@
 <style>
     .modal-footer {
-        padding-right: 160px;
+        padding-right: 180px;
     }
 </style>
 
@@ -175,7 +175,7 @@
                                     </button>
 
 
-                               }
+                                 }
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import" style="display:none">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
@@ -975,7 +975,8 @@
         $(function () {
 
             $("#email").click(function () {
-                var ClientName = $("#ddlclient option:selected").text();
+               
+                var ClientName = $("#ddlclient option:selected").text();               
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBanksCount").val();
 
                 getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}`, null, function (response) {
