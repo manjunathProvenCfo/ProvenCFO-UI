@@ -972,7 +972,28 @@
             }
         }
 
-        
+        $(function () {
+
+            $("#email").click(function () {
+
+                $.ajax({
+                    type: "Get",
+                    url: "/Reconciliation/EmailSend",
+                    data: '',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (response) {
+                        $("#email-to").val(response);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
     </script>
 
 }

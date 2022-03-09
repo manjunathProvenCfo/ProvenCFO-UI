@@ -579,5 +579,14 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult EmailSend()
+        {
+            string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+            return Content(xml);
+            //XmlDocument doc = new XmlDocument();
+            //doc.LoadXml(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+            //return View();
+        }
     }
 }

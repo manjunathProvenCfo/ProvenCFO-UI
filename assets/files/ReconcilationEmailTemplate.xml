@@ -1,0 +1,14 @@
+﻿<EMAIL>
+  <SUBJECT>
+   Company Name 
+  </SUBJECT>
+  <BODY>
+    Hi,
+
+    In order to streamline our communication, we send out this recurring email with a link to our CFO App. Here is the link:
+    <a href=" https://appqa.provencfo.com/Reconciliation/ReconciliationMain">
+    Click here
+  </a>
+ 
+</BODY>
+</EMAIL>
