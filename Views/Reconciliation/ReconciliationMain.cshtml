@@ -168,14 +168,14 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-                                @if (ViewBag.IsStaffUser == true)
-                                {
+                                @*@if (ViewBag.IsStaffUser == true)
+                                {*@
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" style="display:none" data-toggle="modal" data-target="#myModal">
                                         <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
                                     </button>
 
 
-                                }
+                                @*}*@
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import" style="display:none">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
@@ -975,23 +975,18 @@
         $(function () {
 
             $("#email").click(function () {
+                var ClientName = $("#ddlclient option:selected").text();
+                var NotInBankUnreconciledItemsCount = $("#lblNotInBanksCount").val();
 
-                $.ajax({
-                    type: "Get",
-                    url: "/Reconciliation/EmailSend",
-                    data: '',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "text",
-                    success: function (response) {
-                        $("#email-to").val(response);
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}`, null, function (response) {
+                    if (response.Status == 'Success') {
+                        $("#email-to").val(response.Recipients);
+                        $("#email-subject").val(response.Subject);
+                        $("#ibody").html(response.Body);
                     }
                 });
+
+                
             });
         });
     </script>

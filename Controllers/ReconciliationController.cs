@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -580,10 +581,43 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public ActionResult EmailSend()
+        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount)
         {
-            string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
-            return Content(xml);
+            try
+            {
+                var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
+                var recipients = "";
+                url = url.Replace("/Api/", "");
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+
+                string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+
+                subject = subject.Replace("{CompanyName}", ClientName);
+                subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd-MMM-yyyy"));
+                body =body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+
+                body = body.Replace("{url}", url + "/Reconciliation/ReconciliationMain");
+                
+                return Json(new { Subject = subject, Body = body, Recipients = "", Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+            
+           // return Content(xml);
+
+            
             //XmlDocument doc = new XmlDocument();
             //doc.LoadXml(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
             //return View();
