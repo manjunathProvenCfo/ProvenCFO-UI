@@ -593,8 +593,8 @@ namespace ProvenCfoUI.Controllers
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
 
                     var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();
-                    var data = test.Select(x => x.Email);
+                    var test = result1.ResultData.ToList();                   
+                    var data = test.Where(x=>x.IsRegistered ==1 ).Select(x => x.Email);
                     url = url.Replace("/Api/", "");
                         XmlDocument doc = new XmlDocument();
                         doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
