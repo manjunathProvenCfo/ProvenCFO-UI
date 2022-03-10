@@ -581,27 +581,36 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount)
+        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount )
         {
             try
             {
-                var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
-                var recipients = "";
-                url = url.Replace("/Api/", "");
-                XmlDocument doc = new XmlDocument();
-                doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                using (AccountService obj = new AccountService())
+                {
+                    var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
 
-                string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
-                var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
-                var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+                    var test = result1.ResultData.ToList();
+                    var data = test.Select(x => x.Email);
+                    url = url.Replace("/Api/", "");
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
 
-                subject = subject.Replace("{CompanyName}", ClientName);
-                subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd-MMM-yyyy"));
-                body =body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));     
+                        var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                        var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                        subject = subject.Replace("{CompanyName}", ClientName);
+                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd-MMM-yyyy"));
+                        body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
 
-                body = body.Replace("{url}", url + "/Reconciliation/ReconciliationMain");
-                
-                return Json(new { Subject = subject, Body = body, Recipients = "", Status = "Success" }, JsonRequestBehavior.AllowGet);
+                        body = body.Replace("{url}", url + "/Reconciliation/ReconciliationMain");
+                    
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    
+                }
             }
             catch (Exception ex)
             {

@@ -975,10 +975,9 @@
         $(function () {
 
             $("#email").click(function () {
-               
+              
                 var ClientName = $("#ddlclient option:selected").text();               
-                var NotInBankUnreconciledItemsCount = $("#lblNotInBanksCount").val();
-
+                var NotInBankUnreconciledItemsCount = $("#lblNotInBanksCount").text();            
                 getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}`, null, function (response) {
                     if (response.Status == 'Success') {
                         $("#email-to").val(response.Recipients);

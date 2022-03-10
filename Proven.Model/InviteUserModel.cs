@@ -76,7 +76,7 @@ namespace Proven.Model
     {
         public bool Status { get; set; }
         public int statusCode { get; set; }
-        public List<InviteUserModel> ResultData { get; set; }
+        public IEnumerable<InviteUserModel> ResultData { get; set; }
         public List<RolesViewModel> Rolelist { get; set; }
         public List<JobTitleModel> JobTitlelist { get; set; }
         public List<InviteUserModel> StaffList { get; set; }
