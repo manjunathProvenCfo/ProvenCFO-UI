@@ -280,6 +280,7 @@
     <Content Include="assets\AvertaWebFont\TDF_EULA_WEB.txt" />
     <Content Include="assets\css\common.css" />
     <Content Include="assets\css\theme.css" />
+    <Content Include="assets\file\ReconcilationEmailTemplate.xml" />
     <Content Include="assets\img\chat\1.jpg" />
     <Content Include="assets\img\chat\10.jpg" />
     <Content Include="assets\img\chat\11.jpg" />

@@ -599,9 +599,9 @@ namespace ProvenCfoUI.Controllers
                     
                     url = url.Replace("/Api/", "");
                         XmlDocument doc = new XmlDocument();
-                        doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                        doc.Load(Server.MapPath("~/assets/file/ReconcilationEmailTemplate.xml"));
 
-                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));     
+                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/file/ReconcilationEmailTemplate.xml"));     
                         var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                         var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
                         subject = subject.Replace("{CompanyName}", ClientName);
