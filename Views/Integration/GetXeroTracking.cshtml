@@ -102,6 +102,7 @@
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
                     if (response != null) {
+                        ShowlottieLoader();
                         SetUserPreferencesForAgency();
                         setTimeout(function () {
                             window.location.reload();
