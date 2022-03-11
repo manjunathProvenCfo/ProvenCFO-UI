@@ -15,17 +15,20 @@
             <div class="modal-body">
                 <div class="card-body p-0">
                     <div class="border-bottom border-200">
-                        <input class="form-control border-0 outline-none px-card" type="email" aria-describedby="email-to" id="email-to" placeholder="To">
+                        <h5>To</h5>      
+                        <textarea class="form-control border-0 outline-none px-card" typeof="To" type="email" aria-describedby="email-to" id="email-to" readonly  style="height: 36px;  "></textarea>
                     </div>
+
                     <div class="navbar-vertical-divider">
 
                     </div>
-                    <input class="form-control border-0 outline-none px-card" id="email-subject" type="text" aria-describedby="email-subject" placeholder="Subject">
+                    <h5> Subject</h5>
+                    <input class="form-control border-0 outline-none px-card" id="email-subject" type="text" aria-describedby="email-subject" readonly >
+                   
+                    <div class="min-vh-20" id="ibody">
 
-                    <div class="min-vh-50" id="ibody">
 
-
-                        <input class="form-control border-0 outline-none px-card" >
+                        <input class="form-control border-0 outline-none px-card">
                     </div>
 
                 </div>
@@ -33,7 +36,7 @@
             </div>
             <div class="modal-footer ">
                 <button class="btn btn-primary btn-sm px-3 mr-2" onclick="sendMail(); return false" inputtype="text" aria-describedby="email-subject" placeholder="Subject">Send</button>
-                @*<button class="btn btn-primary btn-sm px-3 mr-2" id="emaisend"  type="submit">Send</button>*@
+               
 
                 <button type="button" class="btn btn-primary btn-sm px-3 mr-2" data-dismiss="modal">Close</button>
             </div>

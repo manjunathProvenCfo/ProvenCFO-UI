@@ -593,8 +593,10 @@ namespace ProvenCfoUI.Controllers
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
 
                     var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();                   
-                    var data = test.Where(x=>x.IsRegistered ==1 ).Select(x => x.Email);
+                    var test = result1.ResultData.ToList();
+                    
+                     var data = test.Where(x=>x.IsRegistered ==1 ).Select(x => x.Email);
+                    
                     url = url.Replace("/Api/", "");
                         XmlDocument doc = new XmlDocument();
                         doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
@@ -603,7 +605,7 @@ namespace ProvenCfoUI.Controllers
                         var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                         var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
                         subject = subject.Replace("{CompanyName}", ClientName);
-                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd-MMM-yyyy"));
+                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
                         body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
 
                         body = body.Replace("{url}", url + "/Reconciliation/ReconciliationMain");

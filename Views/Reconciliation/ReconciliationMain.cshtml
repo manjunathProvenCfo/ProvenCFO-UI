@@ -975,18 +975,20 @@
         $(function () {
 
             $("#email").click(function () {
-              
+           
                 var ClientName = $("#ddlclient option:selected").text();               
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBanksCount").text();            
                 getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}`, null, function (response) {
                     if (response.Status == 'Success') {
-                        $("#email-to").val(response.Recipients);
+                        var text = response.Recipients.toString().split(",");
+                        var str = text.join(', ');
+                        $("#email-to").val(str);
                         $("#email-subject").val(response.Subject);
                         $("#ibody").html(response.Body);
+
                     }
                 });
 
-                
             });
         });
     </script>
