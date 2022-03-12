@@ -1,6 +1,8 @@
-﻿var myDropzone_view;
+﻿
+
+var ImportDropzone_view;
 var $attachmentContainer;
-var myDropzone_view;
+
 const AllowdedMimeTypes = ".html";
 $(function () {
     $btnImportReconcilition = $("[id*='btnImportReconcilition']");
@@ -9,27 +11,29 @@ $(function () {
     $attachmentContainer = $("#attachmentContainer");
 
     $btnImportReconcilition.click(function (e) {
+        
         e.stopPropagation();
         e.preventDefault();
         let elUpload = $(this);
+        var agencyId = $("#ddlclient option:selected").val();
+        var agencyName = $("#ddlclient option:selected").text();
 
-
-        let agencyId = $("#ddlclient").val();
+   
 
 
 
 
         $uploaderModal.modal('show');
 
-        if (!isEmpty(myDropzone_view)) {
-            myDropzone_view.removeAllFiles();
-            myDropzone_view.destroy();
+        if (!isEmpty(ImportDropzone_view)) {
+            ImportDropzone_view.removeAllFiles();
+            ImportDropzone_view.destroy();
         }
 
         $attachmentContainer.html("");
         //Bind uploaer popup
         //bindUploaderAttachments(agencyId, year, period);
-
+        
         //templateHTML
         var previewNode = document.querySelector("#template");
         if (!isEmpty(previewNode)) {
@@ -37,9 +41,13 @@ $(function () {
             previewTemplate = previewNode.parentNode.innerHTML;
             previewNode.parentNode.removeChild(previewNode);
         }
-
-        myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
-            url: `/api/Client/GetClientList`, // Set the url
+        var year, period = 10;
+        Dropzone.autoDiscover = false;
+    
+        if(Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
+       
+        ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
+            url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${agencyName}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
             maxFilesize: 40,
             thumbnailWidth: 80,
@@ -48,11 +56,9 @@ $(function () {
             previewTemplate: previewTemplate,
             autoQueue: false, // Make sure the files aren't queued until manually added
             previewsContainer: "#previews", // Define the container to display the previews
-            clickable: "#reportUploader", // Define the element that should be used as click trigger to select files.
+            clickable: "#reconciliationUploader", // Define the element that should be used as click trigger to select files.
             success: function (file, response) {
-                //Load Reports
-                bindReports(period);
-
+                //Load Reports               
                 if (response != null && response.Status == 'Success') {
                     prepareAndPrependUploaderAttachment(response.File);
                 }
@@ -60,7 +66,7 @@ $(function () {
         });
 
         //view Page
-        myDropzone_view.on("addedfile", function (file) {
+        ImportDropzone_view.on("addedfile", function (file) {
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
                 let attr = $(obj).attr("src");
@@ -89,7 +95,7 @@ $(function () {
                     }
                 });
                 if (IsCanAddfiles == true) {
-                    myDropzone_view.enqueueFile(file);
+                    ImportDropzone_view.enqueueFile(file);
                 }
                 else {
                     ShowAlertBoxError('Exist!', 'Selected file is already uploaded.');
@@ -99,13 +105,13 @@ $(function () {
         });
 
         //view Page
-        myDropzone_view.on("sending", function (file) {
+        ImportDropzone_view.on("sending", function (file) {
             file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
         });
 
-        myDropzone_view.on("complete", function (file) {
+        ImportDropzone_view.on("complete", function (file) {
             if (file.status != "error")
-                myDropzone_view.removeFile(file);
+                ImportDropzone_view.removeFile(file);
         });
 
 

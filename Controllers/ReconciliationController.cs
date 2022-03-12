@@ -7,6 +7,7 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -632,6 +633,31 @@ namespace ProvenCfoUI.Controllers
             //XmlDocument doc = new XmlDocument();
             //doc.LoadXml(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
             //return View();
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UploadReconcilationReports(HttpPostedFileBase file, int agencyId,string agencyName)
+        {
+            try
+            {
+                BinaryReader b = new BinaryReader(file.InputStream);
+                byte[] binData = b.ReadBytes(file.ContentLength);
+
+                string result = System.Text.Encoding.UTF8.GetString(binData);
+                return Json(new { Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

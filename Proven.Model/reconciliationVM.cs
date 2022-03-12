@@ -47,4 +47,16 @@ namespace Proven.Model
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
     }
+
+    public class XeroReconciliationInputModel
+    {
+        public String HtmlString { get; set; }
+        public string CompanyName { get; set; }
+    }
+    public class XeroReconciliationOutputModel
+    {
+        public bool Status { get; set; }
+        public string ValidationStatus { get; set; }
+        public string ValidationMessage { get; set; }
+    }
 }
