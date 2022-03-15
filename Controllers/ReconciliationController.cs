@@ -590,8 +590,6 @@ namespace ProvenCfoUI.Controllers
             {
                 using (AccountService obj = new AccountService())
                 {
-                    //var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
-                    //var reconcilation = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["Reconcilation"]);
                     List<InviteUserModel> user = new List<InviteUserModel>();
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
@@ -600,9 +598,6 @@ namespace ProvenCfoUI.Controllers
                     var test = result1.ResultData.ToList();
                     
                      var data = test.Where(x=>x.IsRegistered ==1).Select(x => x.Email);
-                    
-                     //url = url.Replace("API/", "");
-                    
                     XmlDocument doc = new XmlDocument();
                         doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
 
