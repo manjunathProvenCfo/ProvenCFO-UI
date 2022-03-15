@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
  <EmailContent>
        <subject>{CompanyName} Reconciliation Questions - {TodaysDate}</subject>
-       
-       <body>
-      <![CDATA[Hi,
+
+   <body>
+     
+     <![CDATA[</br>
+     Hi,
 	    </br>
 	    </br>
 		In order to streamline our communication, we send out this recurring email with a link to our CFO App. Here is the link: <a href="{url}">Click here</a>
@@ -16,5 +18,5 @@
     </br>
     ProvenCFO
     ]]>
-		</body>
+   </body>
    </EmailContent>

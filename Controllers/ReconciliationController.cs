@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -589,6 +591,7 @@ namespace ProvenCfoUI.Controllers
                 using (AccountService obj = new AccountService())
                 {
                     var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
+                    //var reconcilation = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["Reconcilation"]);
                     List<InviteUserModel> user = new List<InviteUserModel>();
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
@@ -596,10 +599,11 @@ namespace ProvenCfoUI.Controllers
                     var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
                     var test = result1.ResultData.ToList();
                     
-                     var data = test.Where(x=>x.IsRegistered ==1 ).Select(x => x.Email);
+                     var data = test.Where(x=>x.IsRegistered ==1).Select(x => x.Email);
                     
-                    url = url.Replace("/Api/", "");
-                        XmlDocument doc = new XmlDocument();
+                     url = url.Replace("API/", "");
+                    
+                    XmlDocument doc = new XmlDocument();
                         doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
 
                         string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));     
@@ -609,7 +613,7 @@ namespace ProvenCfoUI.Controllers
                         subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
                         body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
 
-                        body = body.Replace("{url}", url + "/Reconciliation/ReconciliationMain");
+                        body = body.Replace("{url}", url + "/Reconciliation/reconciliationmain");
                     
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
                     
@@ -626,13 +630,6 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
-            
-           // return Content(xml);
-
-            
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
-            //return View();
         }
 
         [CheckSession]

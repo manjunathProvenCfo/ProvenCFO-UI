@@ -991,6 +991,23 @@
 
             });
         });
+
+        function sendMail() {
+            
+            var recip = $("#email-to").val();
+            var subject = $("#email-subject").val();
+            var body = $("#ibody").html();
+            var pdata = {
+                Recipents: recip,
+                Subject: subject,
+                Body:body,
+            };
+            postAjaxSync(apiurl + `Reconciliation/sendReconcilationEmail`, JSON.stringify(pdata), function (response) {
+                ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+            });
+          
+
+        }
     </script>
 
 }

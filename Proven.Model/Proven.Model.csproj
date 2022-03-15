@@ -56,6 +56,7 @@
     <Compile Include="ClientXeroAccountsModel.cs" />
     <Compile Include="ClientXeroAccountsVM.cs" />
     <Compile Include="CommonViewModel.cs" />
+    <Compile Include="EmailSendModel.cs" />
     <Compile Include="InviteUserModel.cs" />
     <Compile Include="InviteUserVMId.cs" />
     <Compile Include="JobTitleModel.cs" />
