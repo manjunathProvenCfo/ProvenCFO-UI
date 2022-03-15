@@ -584,13 +584,13 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount )
+        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount,string url)
         {
             try
             {
                 using (AccountService obj = new AccountService())
                 {
-                    var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
+                    //var url = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]);
                     //var reconcilation = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["Reconcilation"]);
                     List<InviteUserModel> user = new List<InviteUserModel>();
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
@@ -601,7 +601,7 @@ namespace ProvenCfoUI.Controllers
                     
                      var data = test.Where(x=>x.IsRegistered ==1).Select(x => x.Email);
                     
-                     url = url.Replace("API/", "");
+                     //url = url.Replace("API/", "");
                     
                     XmlDocument doc = new XmlDocument();
                         doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
@@ -613,7 +613,7 @@ namespace ProvenCfoUI.Controllers
                         subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
                         body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
 
-                        body = body.Replace("{url}", url + "/Reconciliation/reconciliationmain");
+                        body = body.Replace("{url}", url );
                     
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
                     
