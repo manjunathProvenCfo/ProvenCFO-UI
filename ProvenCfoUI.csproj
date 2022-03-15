@@ -280,6 +280,7 @@
     <Content Include="assets\AvertaWebFont\TDF_EULA_WEB.txt" />
     <Content Include="assets\css\common.css" />
     <Content Include="assets\css\theme.css" />
+    <Content Include="assets\files\ReconcilationEmailTemplate.xml" />
     <Content Include="assets\img\chat\1.jpg" />
     <Content Include="assets\img\chat\10.jpg" />
     <Content Include="assets\img\chat\11.jpg" />
@@ -436,7 +437,9 @@
     <Content Include="assets\img\kanban\Icon_PDF.png" />
     <Content Include="assets\img\kanban\Icon_Zip.png" />
     <Content Include="assets\img\kanban\I_Doc.png" />
+    <Content Include="assets\img\kanban\I_failure.png" />
     <Content Include="assets\img\kanban\I_PDF.png" />
+    <Content Include="assets\img\kanban\I_Success.png" />
     <Content Include="assets\img\kanban\I_Zip.png" />
     <Content Include="assets\img\logos\adidas.png" />
     <Content Include="assets\img\logos\amazon.png" />

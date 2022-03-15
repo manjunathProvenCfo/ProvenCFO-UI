@@ -7,9 +7,13 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -570,6 +574,85 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount,string url)
+        {
+            try
+            {
+                using (AccountService obj = new AccountService())
+                {
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+
+                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+                    var test = result1.ResultData.ToList();
+                    
+                     var data = test.Where(x=>x.IsRegistered ==1).Select(x => x.Email);
+                    XmlDocument doc = new XmlDocument();
+                        doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+
+                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));     
+                        var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                        var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                        subject = subject.Replace("{CompanyName}", ClientName);
+                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+                        body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+
+                        body = body.Replace("{url}", url );
+                    
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UploadReconcilationReports(HttpPostedFileBase file, int agencyId, string agencyName)
+        {
+            try
+            {
+                BinaryReader b = new BinaryReader(file.InputStream);
+                byte[] binData = b.ReadBytes(file.ContentLength);
+                var fileName = file.FileName;
+
+                string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+                using (ReconcilationService service = new ReconcilationService())
+                {
+                    XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+                    input.HtmlString = HTMLresult.Trim();
+                    input.CompanyName = agencyName;
+                    input.CompanyId = agencyId;
+
+                    var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+                    return Json(new { Status = "Success", result = result, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                }
+               
+            }
+            catch (Exception ex)
+            {
+
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 return Json(new
                 {

@@ -1,35 +1,41 @@
-﻿var myDropzone_view;
+﻿
+
+var ImportDropzone_view;
 var $attachmentContainer;
-var myDropzone_view;
+
 const AllowdedMimeTypes = ".html";
 $(function () {
     $btnImportReconcilition = $("[id*='btnImportReconcilition']");
     $uploaderModal = $("#report-uploader-modal");
     $reportUploader = $("#reportUploader");
     $attachmentContainer = $("#attachmentContainer");
+    $btnCloseImportreconciliation = $("#btnCloseImportreconciliation");
+
 
     $btnImportReconcilition.click(function (e) {
+        
         e.stopPropagation();
         e.preventDefault();
         let elUpload = $(this);
+        var agencyId = $("#ddlclient option:selected").val();
+        var agencyName = $("#ddlclient option:selected").text();
 
-
-        let agencyId = $("#ddlclient").val();
+   
 
 
 
 
         $uploaderModal.modal('show');
 
-        if (!isEmpty(myDropzone_view)) {
-            myDropzone_view.removeAllFiles();
-            myDropzone_view.destroy();
+        if (!isEmpty(ImportDropzone_view)) {
+            ImportDropzone_view.removeAllFiles();
+            ImportDropzone_view.destroy();
         }
 
         $attachmentContainer.html("");
         //Bind uploaer popup
         //bindUploaderAttachments(agencyId, year, period);
-
+        
         //templateHTML
         var previewNode = document.querySelector("#template");
         if (!isEmpty(previewNode)) {
@@ -37,9 +43,13 @@ $(function () {
             previewTemplate = previewNode.parentNode.innerHTML;
             previewNode.parentNode.removeChild(previewNode);
         }
-
-        myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
-            url: `/api/Client/GetClientList`, // Set the url
+        var year, period = 10;
+        Dropzone.autoDiscover = false;
+    
+        if(Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
+       
+        ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
+            url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${agencyName}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
             maxFilesize: 40,
             thumbnailWidth: 80,
@@ -48,19 +58,18 @@ $(function () {
             previewTemplate: previewTemplate,
             autoQueue: false, // Make sure the files aren't queued until manually added
             previewsContainer: "#previews", // Define the container to display the previews
-            clickable: "#reportUploader", // Define the element that should be used as click trigger to select files.
-            success: function (file, response) {
-                //Load Reports
-                bindReports(period);
-
+            clickable: "#reconciliationUploader", // Define the element that should be used as click trigger to select files.
+            success: function (file, response) {                                             
                 if (response != null && response.Status == 'Success') {
-                    prepareAndPrependUploaderAttachment(response.File);
+                    uploadedstatusload(response);
+                }
+                else {
                 }
             }
         });
 
         //view Page
-        myDropzone_view.on("addedfile", function (file) {
+        ImportDropzone_view.on("addedfile", function (file) {
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
                 let attr = $(obj).attr("src");
@@ -89,7 +98,7 @@ $(function () {
                     }
                 });
                 if (IsCanAddfiles == true) {
-                    myDropzone_view.enqueueFile(file);
+                    ImportDropzone_view.enqueueFile(file);
                 }
                 else {
                     ShowAlertBoxError('Exist!', 'Selected file is already uploaded.');
@@ -99,16 +108,42 @@ $(function () {
         });
 
         //view Page
-        myDropzone_view.on("sending", function (file) {
+        ImportDropzone_view.on("sending", function (file) {
             file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
         });
 
-        myDropzone_view.on("complete", function (file) {
+        ImportDropzone_view.on("complete", function (file) {
             if (file.status != "error")
-                myDropzone_view.removeFile(file);
+                ImportDropzone_view.removeFile(file);
         });
 
 
     });
+    var uploadedstatusload = function (obj) {        
+        let thumbnail = '../../assets/img/kanban/I_Success.png';
+        var status = 'Success';
+        var ErrorMsg = '';
+        if (obj.result.Status == false) {
+            thumbnail = '../../assets/img/kanban/I_failure.png';
+            status = 'Error'
+            ErrorMsg = obj.result.ValidationMessage;
+        }
+        
+        thumbnail = thumbnail.replace("~/", "../../");
+        var objdate = new Date();
+        var fileName = obj.FileName;
+
+        var reportAttachment = `<div class="media align-items-center mb-3" id="att_${0}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><span>Status :</span> <span>${status}</span><p class="mb-0">Uploaded at ${moment(objdate.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+        if (obj.result.Status == false) {
+            reportAttachment = `<div class="media align-items-center mb-3" id="att_${0}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><span>Status :</span> <span>${status}</span></br><span>Message :</span> <span>${ErrorMsg}</span><p class="mb-0">Uploaded at ${moment(objdate.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
+        }       
+        $attachmentContainer.prepend(reportAttachment);
+    }
+    $btnCloseImportreconciliation.click(function (e) {
+        ShowlottieLoader();
+        window.location.reload();
+    });
+    function RemoveFile(e) {
+    }
 
 });
