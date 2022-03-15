@@ -85,9 +85,9 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
         }
-        public ReturnModel XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput)
+        public XeroReconciliationOutputModelMainModel XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput)
         {
-            return PostAsync<ReturnModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput).Result;
+            return PostAsync<XeroReconciliationOutputModelMainModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput).Result;
         }
         public void Dispose()
         {

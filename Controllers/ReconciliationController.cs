@@ -634,15 +634,26 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
-        public JsonResult UploadReconcilationReports(HttpPostedFileBase file, int agencyId,string agencyName)
+        public JsonResult UploadReconcilationReports(HttpPostedFileBase file, int agencyId, string agencyName)
         {
             try
             {
                 BinaryReader b = new BinaryReader(file.InputStream);
                 byte[] binData = b.ReadBytes(file.ContentLength);
+                var fileName = file.FileName;
 
-                string result = System.Text.Encoding.UTF8.GetString(binData);
-                return Json(new { Status = "Success" }, JsonRequestBehavior.AllowGet);
+                string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+                using (ReconcilationService service = new ReconcilationService())
+                {
+                    XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+                    input.HtmlString = HTMLresult.Trim();
+                    input.CompanyName = agencyName;
+                    input.CompanyId = agencyId;
+
+                    var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+                    return Json(new { Status = "Success", result = result, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                }
+               
             }
             catch (Exception ex)
             {

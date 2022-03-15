@@ -52,11 +52,22 @@ namespace Proven.Model
     {
         public String HtmlString { get; set; }
         public string CompanyName { get; set; }
+        public int CompanyId { get; set; }
     }
     public class XeroReconciliationOutputModel
     {
         public bool Status { get; set; }
         public string ValidationStatus { get; set; }
         public string ValidationMessage { get; set; }
+    }
+    public class XeroReconciliationOutputModelMainModel
+    {
+        public bool Status { get; set; }
+        public int statusCode { get; set; }
+        public XeroReconciliationOutputModel ResultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+
     }
 }
