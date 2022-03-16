@@ -295,7 +295,7 @@ namespace ProvenCfoUI.Controllers
                     var result = obj.Register(registerVM.email, registerVM.passwordhash, registerVM.confirmpassword, registerVM.firstname, registerVM.lastname, registerVM.UserType, registerVM.AgencyID);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
-                    ViewBag.Sucess = "User Registered Sucessfully";
+                    ViewBag.Sucess = "User Registered Successfully";
                     return PartialView("_Userregisteredsuccessfully");
                 }
                 catch (Exception ex)
