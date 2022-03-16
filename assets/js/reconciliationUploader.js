@@ -9,6 +9,8 @@ $(function () {
     $uploaderModal = $("#report-uploader-modal");
     $reportUploader = $("#reportUploader");
     $attachmentContainer = $("#attachmentContainer");
+    $btnCloseImportreconciliation = $("#btnCloseImportreconciliation");
+
 
     $btnImportReconcilition.click(function (e) {
         
@@ -137,6 +139,10 @@ $(function () {
         }       
         $attachmentContainer.prepend(reportAttachment);
     }
+    $btnCloseImportreconciliation.click(function (e) {
+        ShowlottieLoader();
+        window.location.reload();
+    });
     function RemoveFile(e) {
     }
 
