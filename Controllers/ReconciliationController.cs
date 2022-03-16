@@ -58,20 +58,29 @@ namespace ProvenCfoUI.Controllers
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
 
-                            }
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
@@ -399,24 +408,33 @@ namespace ProvenCfoUI.Controllers
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
-                            }
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
+                            
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
