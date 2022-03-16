@@ -51,20 +51,36 @@ $(function () {
         ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
             url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${agencyName}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
-            maxFilesize: 40,
+            maxFilesize: 50000,           
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 20,
+            timeout: 0,
             previewTemplate: previewTemplate,
             autoQueue: false, // Make sure the files aren't queued until manually added
             previewsContainer: "#previews", // Define the container to display the previews
             clickable: "#reconciliationUploader", // Define the element that should be used as click trigger to select files.
-            success: function (file, response) {                                             
+            success: function (file, response) {
+                
                 if (response != null && response.Status == 'Success') {
-                    uploadedstatusload(response);
+                    setTimeout(function () {
+                        uploadedstatusload(response);
+                    }, 100);
                 }
                 else {
                 }
+            },
+            error: function (file, response) {
+                var data = {
+                    Status : "false",
+                    ValidationMessage : response
+
+                }
+                var objErrorresult = {
+                    result :data , FileName : file.fileName
+                }
+                uploadedstatusload(objErrorresult);
+                
             }
         });
 
