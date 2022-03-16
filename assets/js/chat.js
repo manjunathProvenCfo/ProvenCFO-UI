@@ -458,12 +458,17 @@ var getChatParticipants = function () {
             setOnlineOfflineMembersArray();
             renderParticipants();
         }
-        else {
-            if (chat.type === 0)
-                ShowAlertBoxWarning("No person exists for chat");
-            else if (chat.type === 1)
-                ShowAlertBoxWarning("No reconciliation exists for chat");
-        }
+        //else {
+            
+        //    if (chat.type === 1) {
+        //        debugger;
+        //        ShowAlertBoxWarning("No person exists for chat");
+        //    }
+        //    else if (chat.type === 0) {
+        //        debugger;
+        //        ShowAlertBoxWarning("No reconciliation exists for chat");
+        //    }
+        //}
     });
 }
 var setParticipants = function (response, type) {
