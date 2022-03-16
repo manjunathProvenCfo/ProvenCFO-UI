@@ -985,6 +985,9 @@
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
                         $("#email-to").val(str);
+                        if (str == "") {
+                            $("#sendbutton").attr("disabled", true);
+                        }
                         $("#email-subject").val(response.Subject);
                         $("#ibody").html(response.Body);
 
