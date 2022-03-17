@@ -12,14 +12,13 @@ $(function () {
     $btnCloseImportreconciliation = $("#btnCloseImportreconciliation");
 
 
-    $btnImportReconcilition.click(function (e) {
-        
+    $btnImportReconcilition.click(function (e) {       
         e.stopPropagation();
         e.preventDefault();
         let elUpload = $(this);
         var agencyId = $("#ddlclient option:selected").val();
         var agencyName = $("#ddlclient option:selected").text();
-
+        var encodeAgencyName = encodeURIComponent(agencyName)
    
 
 
@@ -49,7 +48,7 @@ $(function () {
         if(Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
        
         ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
-            url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${agencyName}`, // Set the url
+            url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${encodeAgencyName}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
             maxFilesize: 50000,           
             thumbnailWidth: 80,
