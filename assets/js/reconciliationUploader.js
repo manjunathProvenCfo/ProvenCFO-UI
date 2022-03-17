@@ -48,7 +48,7 @@ $(function () {
         if(Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
        
         ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
-            url: `/Reconciliation/UploadReconcilationReports?agencyId=${agencyId}&agencyName=${encodeAgencyName}`, // Set the url
+            url: `/Reconciliation/UploadReconcilationReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
             maxFilesize: 50000,           
             thumbnailWidth: 80,
@@ -60,16 +60,24 @@ $(function () {
             previewsContainer: "#previews", // Define the container to display the previews
             clickable: "#reconciliationUploader", // Define the element that should be used as click trigger to select files.
             success: function (file, response) {
-                
-                if (response != null && response.Status == 'Success') {
+               
+                if (    response != null && response.Status == 'Success') {
                     setTimeout(function () {
                         uploadedstatusload(response);
                     }, 100);
+                }
+                else if (response != null && response.Status == 'Inprogress')
+                {
+                    setTimeout(function () {
+                        uploadedstatusload(response);
+                    }, 100);
+                    ShowAlertBoxInfo("Info", response.result.ValidationMessage);
                 }
                 else {
                 }
             },
             error: function (file, response) {
+              
                 var data = {
                     Status : "false",
                     ValidationMessage : response
