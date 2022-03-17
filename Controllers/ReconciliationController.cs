@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -58,20 +60,29 @@ namespace ProvenCfoUI.Controllers
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
 
-                            }
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
@@ -399,24 +410,33 @@ namespace ProvenCfoUI.Controllers
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
-                            }
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
+                            
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
@@ -629,30 +649,65 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
-        public JsonResult UploadReconcilationReports(HttpPostedFileBase file, int agencyId, string agencyName)
+        public async Task<JsonResult> UploadReconcilationReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
         {
+            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            var fileName = file.FileName;
             try
             {
                 BinaryReader b = new BinaryReader(file.InputStream);
                 byte[] binData = b.ReadBytes(file.ContentLength);
-                var fileName = file.FileName;
+                
 
                 string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
                 using (ReconcilationService service = new ReconcilationService())
                 {
-                    XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+
+
+                   
                     input.HtmlString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;
 
-                    var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
-                    return Json(new { Status = "Success", result = result, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                    //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+
+                    using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
+                    {
+                        var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
+                        return Json(new { Status = "Success", result = response.ResultData, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-               
+            }
+            catch (OperationCanceledException)
+            {
+                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                objOutput.Status = true;
+                objOutput.ValidationStatus = "RequestCancelation";
+                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                return Json(new
+                {
+                    File = "",
+                    Status = "Inprogress",
+                    result = objOutput,
+                    FileName = fileName
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-
+                if (ex.InnerException.Message == "A task was canceled.")
+                {
+                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    objOutput.Status = true;
+                    objOutput.ValidationStatus = "RequestCancelation";
+                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    return Json(new
+                    {
+                        File = "",
+                        Status = "Inprogress",
+                        result = objOutput,
+                        FileName = fileName
+                    }, JsonRequestBehavior.AllowGet);
+                }
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 return Json(new
                 {
@@ -661,6 +716,8 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
+            
+            
         }
     }
 }

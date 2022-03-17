@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Proven.Service
@@ -85,9 +86,9 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
         }
-        public XeroReconciliationOutputModelMainModel XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput)
+        public async Task<XeroReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
         {
-            return PostAsync<XeroReconciliationOutputModelMainModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput).Result;
+            return await PostAsyncWithCancellationToken<XeroReconciliationOutputModelMainModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
         }
         public void Dispose()
         {

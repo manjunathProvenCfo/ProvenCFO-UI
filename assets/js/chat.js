@@ -309,9 +309,15 @@ var loadreconcilationcomments = function () {
                 var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g,aReconciliation.id);
                 $participantsContainer.append(recHtml);
             });
-        } 
-        $participantsContainer.children(0)[0].click();
-        loadCommentsPage($participantsContainer.children(0)[0].id);
+        }
+        if ($participantsContainer.children(0)[0] != undefined) {
+            $participantsContainer.children(0)[0].click();
+            loadCommentsPage($participantsContainer.children(0)[0].id);
+        }
+        else {
+            ShowAlertBoxWarning("No participant exists for chat");
+        }
+        
         hideChatContentLoader();
         /*$participants.eq(0).click();*/
     });
