@@ -203,9 +203,11 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         IsDeleted: false,
         AgencyId: chat.AgencyId
     }
-    postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
-        var r = response;
-    });
+    if (input.CreatedBy != null && input.CreatedBy != '') {
+        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+            var r = response;
+        });
+    }
 }
 function getCurrentTime(date) {
     var hours = date.getHours();

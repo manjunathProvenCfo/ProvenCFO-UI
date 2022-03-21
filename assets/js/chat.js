@@ -269,9 +269,12 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             IsDeleted: false,
             AgencyId: chat.AgencyId
         }
-        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
-            var r = response;
-        });
+        if (input.CreatedBy != null && input.CreatedBy != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+            });
+        }
+        
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
