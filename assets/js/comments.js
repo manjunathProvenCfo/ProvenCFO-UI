@@ -1,4 +1,5 @@
-﻿var $participantsContainer;
+﻿
+var $participantsContainer;
 var $participantFirst;
 var $participants;
 var $channelName;
@@ -70,6 +71,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+       
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         //setParticipants(response);
@@ -423,6 +425,7 @@ var setParticipants = function (response, type) {
         renderParticipants();
     }
     else {
+       
         ShowAlertBoxWarning("No participant exists for chat");
     }
 }
