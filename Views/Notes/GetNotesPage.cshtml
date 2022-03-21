@@ -31,17 +31,17 @@
                     <div class="d-flex">
                         @if (ViewBag.IsEditMode == true)
                         {
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal" style="height:35px;">
+                                <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                            </button>
 
-
-                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 290.5px;", @id = "ddlSummary" })
+                            @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 290.5px; ", @id = "ddlSummary" })
 
 
 
                             @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
-                            <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
-                                <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
-                            </button>
-                        }
+
+                         }
 
                     </div>
 
