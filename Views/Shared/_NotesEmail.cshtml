@@ -1,0 +1,56 @@
+﻿<div class="modal fade " id="myModal" role="dialog">
+
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width:130% !important">
+            <div class="modal-header">
+
+
+                <h5 class="modal-title">Notes Email</h5>
+
+                <button type="button" class="close" data-dismiss="modal"><span class="fas fa-times"></span></button>
+
+            </div>
+            <div class="modal-body">
+                <div class="card-body p-0">
+                    <div class="border-bottom border-200">
+                        <h5>To</h5>
+                        <textarea class="form-control border-0 outline-none px-card" typeof="To" type="email" aria-describedby="email-to" id="email-to" readonly style="overflow: hidden "></textarea>
+                    </div>
+
+                    <div class="navbar-vertical-divider">
+
+                    </div>
+                    <h5> Subject</h5>
+                    <input class="form-control border-0 outline-none px-card" id="email-subject" type="text" aria-describedby="email-subject" readonly>
+
+                    <div class="min-vh-20" id="ibody">
+
+
+                        <input class="form-control border-0 outline-none px-card">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer " style="padding-right: 230px;">
+                <button class="btn btn-primary btn-sm px-3 mr-2" onclick="sendMail(); return false" inputtype="text" aria-describedby="email-subject" placeholder="Subject" id="sendbutton">Send</button>
+
+
+                <button type="button" class="btn btn-primary btn-sm px-3 mr-2" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<style>
+    .modal.show .modal-dialog {
+        padding-top: 40px !important;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none;
+    }
+</style>
