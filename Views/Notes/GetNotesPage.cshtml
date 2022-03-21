@@ -28,22 +28,23 @@
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Status</h5>
                 <div class="dropdown">
-                    <div class="glyphicon-new-window">
+                    <div class="d-flex">
                         @if (ViewBag.IsEditMode == true)
                         {
-                            //foreach (var notesSummaryVM in NoteSummaryData)
-                            //{
+
 
                             @Html.DropDownList(Convert.ToString(summary.Summaryid_ref), new SelectList(NoteSummaryData, "Id", "SummaryType"), new { @class = "form-control dropDownSelect2", @style = "width: 290.5px;", @id = "ddlSummary" })
 
-                            //    break;
 
-
-                            //}
 
                             @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                            </button>
                         }
+
                     </div>
+
                 </div>
 
             </div>
@@ -129,7 +130,7 @@
             @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
             {
                 containerCounter++;
-               
+
                 <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id">
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -154,82 +155,82 @@
                                 counter++;
                                 if ((Category.IsPublished == "Published" && ViewBag.IsEditMode == false) || (ViewBag.IsEditMode == true))
                                 {
-                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h6 style="color: #00BE82; "> @Category.Title</h6>
-                            @if (ViewBag.IsEditMode == true)
-                            {
-                                <div class="d-flex align-items-center">
-                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
-                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                        @if (@Category.IsPublished.ToLower() == "published")
+                                    <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            @if (ViewBag.IsEditMode == true)
+                                            {
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2" style="font-size: 14px;" id="lblIsPublished">@Category.IsPublished</span>
+                                                    <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                        @if (@Category.IsPublished.ToLower() == "published")
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                                        }
+                                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+                                                    <div class="ml-2" style=" font-size : 24px">
+                                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
+                                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
+                                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
+                                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
+                                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
+                                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-2" style="font-size:24px;">
+                                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                        </div>
+                                        <p> @Html.Raw(Category.Description)</p>
+                                        @if ((Category.Labels == null))
                                         {
-                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id" checked>
+                                            @Category.Labels
+                                        }
+                                        else if ((Category.Labels == "Relevant"))
+                                        {
+                                            <h6 class="badge mr-1 py-2 turquoiseblue text-white"> @Category.Labels </h6>
+                                        }
+                                        else if ((Category.Labels == "Real Time"))
+                                        {
+                                            <h6 class="badge mr-1 py-2 yellow text-white"> @Category.Labels </h6>
                                         }
                                         else
                                         {
-                                            <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
+                                            <h6 class="badge mr-1 py-2 bg-green text-white"> @Category.Labels </h6>
                                         }
-                                        <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
-                                    </div>
-                                    <div class="ml-2" style=" font-size : 24px">
-                                        <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
-                                            <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
-                                                <i class="fas fa-ellipsis-v" data-fa-transform="shrink-6"></i>
-                                            </a>
 
-                                            <div class="dropdown-menu" aria-labelledby="dividerUSE">
-                                                <a class="dropdown-item" href="javascript:void(0)" descriptionId="@Category.Id" onclick="openEdit(event);">Edit</a>
-                                                <a class="dropdown-item" href="#" id="moveUp">Move Up</a>
-                                                <a class="dropdown-item" href="#" id="moveDown">Move Down</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" onclick="DeleteNotesDescription('@Category.Id')" style="color:#E63756;">Delete</a>
-                                            </div>
+                                        <div class="Words">
+                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            @if ((Category.ModifiedByUser == ""))
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                            else
+                                            {
+                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+
+                                            }
+
+                                            @*<hr>*@
                                         </div>
+
+                                        @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
+
                                     </div>
-                                    <div class="ml-2" style="font-size:24px;">
-                                        <i class="fas fa-check" data-fa-transform="shrink-6" onclick="ResolveNote('@Category.Id')"></i>
-                                    </div>
-
-                                </div>
-                            }
-                        </div>
-                        <p> @Html.Raw(Category.Description)</p>
-                        @if ((Category.Labels == null))
-                        {
-                            @Category.Labels
-                        }
-                        else if ((Category.Labels == "Relevant"))
-                        {
-                            <h6 class="badge mr-1 py-2 turquoiseblue text-white"> @Category.Labels </h6>
-                        }
-                        else if ((Category.Labels == "Real Time"))
-                        {
-                            <h6 class="badge mr-1 py-2 yellow text-white"> @Category.Labels </h6>
-                        }
-                        else
-                        {
-                            <h6 class="badge mr-1 py-2 bg-green text-white"> @Category.Labels </h6>
-                        }
-
-                        <div class="Words">
-                            Created by: @Category.CreatedByUser, @Category.CreatedDate
-                            @if ((Category.ModifiedByUser == ""))
-                            {
-                                <span>&nbsp;</span>
-                            }
-                            else
-                            {
-                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
-
-                            }
-
-                            @*<hr>*@
-                        </div>
-
-                        @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
-
-                    </div>
 
                                 }
                             }
@@ -252,6 +253,7 @@
         </div>
 
     </div>
+    @Html.Partial("_NeedsEmail", true)
 </div>
 
 @section Scripts{
@@ -749,6 +751,49 @@
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
+        }
+
+        $(function () {
+
+            $("#email").click(function () {
+                
+                var url = window.location.href;
+                let totalNotes = 0;
+
+                var ClientName = $("#ddlclient option:selected").text();
+                
+                $("#lblTotalNotesCount").text(totalNotes);
+                /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}`, null, function (response) {
+                    if (response.Status == 'Success') {
+                        var text = response.Recipients.toString().split(",");
+                        var str = text.join(', ');
+                        $("#email-to").val(str);
+                        if (str == "") {
+                            $("#sendbutton").attr("disabled", true);
+                        }
+                        $("#email-subject").val(response.Subject);
+                        $("#ibody").html(response.Body);
+
+                    }
+                });
+
+            });
+        });
+        function sendMail() {
+            var recip = $("#email-to").val();
+            var subject = $("#email-subject").val();
+            var body = $("#ibody").html();
+            var pdata = {
+                Recipents: recip,
+                Subject: subject,
+                Body: body,
+            };
+            postAjaxSync(apiurl + `Notes/sendNotesEmail`, JSON.stringify(pdata), function (response) {
+                ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+            });
+
+
         }
 
     </script>

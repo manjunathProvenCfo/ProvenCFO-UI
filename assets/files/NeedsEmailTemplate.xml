@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<EmailContent>
+  <subject>{CompanyName} Needs Question - {TodaysDate}</subject>
+
+  <body>
+
+    <![CDATA[</br>
+     Hi,
+	    </br>
+	    </br>
+		In order to streamline our communication, we send out this recurring email with a link to our CFO App. Here is the link: <a href="{url}">Click here</a>
+		</br>
+		</br>
+	     This week we have {totalTask} Total Task.]
+		</br>
+		</br>
+    Much thanks,
+    </br>
+    ProvenCFO
+    ]]>
+  </body>
+</EmailContent>
