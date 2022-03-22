@@ -211,8 +211,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $(document).on("click", "button[id=btnComment]", function (e) {
         showReconciliationChat(e.currentTarget.dataset.id);
     });
-
-
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    }
+    $btnSendMessage.unbind().click(function () {
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
@@ -222,24 +228,27 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
         }
+        else {
+            $gl_accountDropdown.prop("selected", true);;
+        }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
         }
+        else {
+            $tc_1_Dropdown.prop("selected", true);;
+        }
         if (tc2 != null) {
-            $tc_1_Dropdown.val(tc2);
+            $tc_2_Dropdown.val(tc2);
+        }
+        else {
+            $tc_2_Dropdown.prop("selected", true);;
         }
         setScrollPosition();
         hideChatContentLoader();
     });
 
-    $btnSendMessage.unbind().click(function () {
-        addNewMessagetoChatwindow($('#message-body-input').val());
-    });
-    var addNewMessagetoChatwindow = async function (input) {
-        addNewComment(input);
-        $('#message-body-input').empty();
-        $('.emojionearea-editor').empty();
-    }
+    
+   
     var addNewComment = function (inputText) {
         var CurrentDate = new Date();
         var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
@@ -259,7 +268,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         var currentdate = new Date();
         var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
-
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
         var input = {
             Id: 0,
             ReconciliationId_ref: ReconciliationId,
@@ -267,11 +276,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             CreatedBy: chat.userId,
             CreatedDate: currentdate,
             IsDeleted: false,
-            AgencyId: chat.AgencyId
+            AgencyId: AgencyId
         }
-        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
-            var r = response;
-        });
+        if (input.CreatedBy != null && input.CreatedBy != ''  && input.AgencyId != null && input.AgencyId != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+            });
+        }
+        
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
@@ -332,7 +344,7 @@ var loadreconcilationcomments = function () {
             loadCommentsPage($participantsContainer.children(0)[0].id);
         }
         else {
-            ShowAlertBoxWarning("No participant exists for chat");
+            //ShowAlertBoxWarning("No participant exists for chat");
         }
 
         hideChatContentLoader();
@@ -522,7 +534,7 @@ var setParticipants = function (response, type) {
     }
     else {
         
-        ShowAlertBoxWarning("No participant exists for chat");
+       // ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {
@@ -823,8 +835,7 @@ var UpdateReconciliationHasStatus = function (id) {
 
 var onChangeglAccount = function (event) {
     var id = chat.channelUniqueNameGuid;
-    var selectedValue = $gl_accountDropdown.val();
-    var selectedValue = event.currentTarget.value;
+    var selectedValue = $gl_accountDropdown.val();   
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
@@ -857,12 +868,12 @@ var onChangeTc = function (e) {
 }
 var onChangeAditinalTc = function (e) {
     var id = chat.channelUniqueNameGuid;
-    var Selectedvalue = $tc_2_Dropdown.val();
+    var selectedValue = $tc_2_Dropdown.val();
     var ClientID = $("#ddlclient option:selected").val();
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
-    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
         if (response.Message == 'Success') {
 
         }
