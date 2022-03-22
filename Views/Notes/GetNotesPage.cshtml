@@ -757,14 +757,19 @@
 
             $("#email").click(function () {
                 
-                var url = window.location.href;
+                var url = window.location.host;
+                var url1 = window.location.host;
+                var url2 = window.location.host;
+                var url3 = window.location.host;
+                var url4 = window.location.host;
+                var url5 = window.location.host;
                 let totalNotes = 0;
 
                 var ClientName = $("#ddlclient option:selected").text();
                 
                 $("#lblTotalNotesCount").text(totalNotes);
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}`, null, function (response) {
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url=${url4}&url=${url4}&url5=${url5}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');

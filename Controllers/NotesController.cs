@@ -444,7 +444,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string totalNotes)
+        public JsonResult EmailSend(string ClientName, string url, string url1, string url2, string url3, string url4, string url5, string totalNotes)
         {
             try
             {
@@ -467,8 +467,20 @@ namespace ProvenCfoUI.Controllers
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
                     body = body.Replace("{totalNotes}", totalNotes);
+                    var a = "https://" + url + "/Notes/GetNotesPage";
+                    var b = "https://" + url1 + "/Dashboard/Dashboard";
+                    var c = "https://" + url2 + "/Reports/ReportsList";
+                    var d = "https://" + url3 + "/Home/Login";
+                    var e = "https://" + url4 + "/Reconciliation/ReconciliationMain";
+                    var f = "https://" + url5 + "/Communication/Chat";
+                    body = body.Replace("{url}", a);
+                    body = body.Replace("{url1}", b);
+                    body = body.Replace("{url2}", c);
+                    body = body.Replace("{url3}", d);
+                    body = body.Replace("{url4}", e);
+                    body = body.Replace("{url5}", f);
 
-                    body = body.Replace("{url}", url);
+
 
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
 
