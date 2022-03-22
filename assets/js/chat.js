@@ -222,11 +222,20 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
         }
+        else {
+            $gl_accountDropdown.prop("selected", true);;
+        }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
         }
+        else {
+            $tc_1_Dropdown.prop("selected", true);;
+        }
         if (tc2 != null) {
-            $tc_1_Dropdown.val(tc2);
+            $tc_2_Dropdown.val(tc2);
+        }
+        else {
+            $tc_2_Dropdown.prop("selected", true);;
         }
         setScrollPosition();
         hideChatContentLoader();
@@ -826,8 +835,7 @@ var UpdateReconciliationHasStatus = function (id) {
 
 var onChangeglAccount = function (event) {
     var id = chat.channelUniqueNameGuid;
-    var selectedValue = $gl_accountDropdown.val();
-    var selectedValue = event.currentTarget.value;
+    var selectedValue = $gl_accountDropdown.val();   
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
@@ -860,12 +868,12 @@ var onChangeTc = function (e) {
 }
 var onChangeAditinalTc = function (e) {
     var id = chat.channelUniqueNameGuid;
-    var Selectedvalue = $tc_2_Dropdown.val();
+    var selectedValue = $tc_2_Dropdown.val();
     var ClientID = $("#ddlclient option:selected").val();
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
-    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
         if (response.Message == 'Success') {
 
         }
