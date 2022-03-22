@@ -211,8 +211,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $(document).on("click", "button[id=btnComment]", function (e) {
         showReconciliationChat(e.currentTarget.dataset.id);
     });
-
-
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    }
+    $btnSendMessage.unbind().click(function () {
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
@@ -241,14 +247,8 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         hideChatContentLoader();
     });
 
-    $btnSendMessage.unbind().click(function () {
-        addNewMessagetoChatwindow($('#message-body-input').val());
-    });
-    var addNewMessagetoChatwindow = async function (input) {
-        addNewComment(input);
-        $('#message-body-input').empty();
-        $('.emojionearea-editor').empty();
-    }
+    
+   
     var addNewComment = function (inputText) {
         var CurrentDate = new Date();
         var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
@@ -268,7 +268,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         var currentdate = new Date();
         var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
-        var AgencyId = chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId;        
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
         var input = {
             Id: 0,
             ReconciliationId_ref: ReconciliationId,
