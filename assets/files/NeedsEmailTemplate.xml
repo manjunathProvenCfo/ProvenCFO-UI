@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<EmailContent>
+  <subject>{CompanyName} Needs Question - {TodaysDate}</subject>
+
+  <body>
+
+    <![CDATA[</br>
+     Hi,
+	    </br>
+	    </br>
+      We have the following outstanding needs:
+      </br>
+      </br>
+      
+      
+     
+      </br>
+      </br>
+      Please log into the ProvenCFO App and provide us with the requested information.
+		</br>
+		</br>
+    Much thanks,
+    </br>
+    ProvenCFO
+    ]]>
+  </body>
+</EmailContent>

@@ -38,6 +38,7 @@ $(document).ready(function () {
             }
         }
     });
+    
     //view Page
     myDropzone_view.on("addedfile", function (file) {
 
@@ -1126,4 +1127,45 @@ function checkAttachment1() {
 }
 function CancelForCreate() {
     $("#kanban-modal-new").modal('hide');
+}
+$(function () {
+
+    $("#email").click(function () {
+       
+        var url = window.location.href;
+        let totalTask = 0;
+      
+        var ClientName = $("#ddlclient option:selected").text();
+         $("#lblTotalTasksCount").text(totalTask);
+        /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+
+            }
+        });
+
+    });
+});
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Needs/sendNeedEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
+
+
 }

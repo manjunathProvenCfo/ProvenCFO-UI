@@ -15,13 +15,14 @@ namespace Proven.Model
         public string Status { get; set; }
         public int AgencyId { get; set; }
     }
+    [Serializable]
     public class XeroTrackingOptionGroupVM
     {
         
         public string Name { get; set; }
         public List<XeroTrackingCategoriesVM> Options { get; set; }
     }
-
+    [Serializable]
     public class XeroTrackingMainCategoriesVM
     {
         public bool Status { get; set; }

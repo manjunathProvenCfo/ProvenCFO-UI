@@ -244,10 +244,16 @@
         }
 
         function check_uncheck_topper(top_id_checked, top_id) {
-            $('.top_tucker_' + top_id).prop("checked", top_id_checked);
+            if (top_id == "Home") {
+                HomeChecked();
+            }
+            else {
+                $('.top_tucker_' + top_id).prop("checked", top_id_checked);
+            }
         }
 
         function check_uncheck_checkbox(isChecked, parent_id, top_id) {
+           
             $('.top_role_' + top_id).prop("checked", true);
             if (isChecked) {
                 //$(".input_super_cat_" + parent_id).each(function () {
@@ -260,7 +266,9 @@
             }
         }
         $(document).ready(function () {
+            
             var userTypes = $('input[type=radio][name=UserType]');
+            HomeChecked();
             if (userTypes[1].checked == true) {
                 HideAdminSetup();
             }
@@ -291,6 +299,7 @@
             
 
             $('input[type=radio][name=UserType]').change(function () {
+                
                 if (this.checked && this.value == '1') {
                     $("#section_Administration").show();
                     $("#section_Setup").show();
@@ -303,6 +312,7 @@
             });
         });
         var ValidateRole = function () {
+            
             var featurs = $("input:checkbox:checked");
             var Name = $('#Name').val();
             var DisplayRoleName = $('#DisplayRoleName').val();
@@ -352,6 +362,11 @@
                 .prop('checked', false);
             $("#section_Administration").hide();
             $("#section_Setup").hide();
+        }
+        var HomeChecked = function () {
+            
+            $("#section_Home").find("input[type='checkbox']")
+                .prop('checked', true);
         }
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";

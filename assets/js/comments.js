@@ -1,4 +1,5 @@
-﻿var $participantsContainer;
+﻿
+var $participantsContainer;
 var $participantFirst;
 var $participants;
 var $channelName;
@@ -70,6 +71,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+       
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         //setParticipants(response);
@@ -191,7 +193,7 @@ var addNewComment = function (inputText) {
 var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var currentdate = new Date();
     var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
-   
+    var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
     var input = {
         Id:0,
         ReconciliationId_ref: ReconciliationId,
@@ -199,11 +201,13 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         CreatedBy: chat.userId,
         CreatedDate: currentdate,
         IsDeleted: false,
-        AgencyId: chat.AgencyId
+        AgencyId: AgencyId
     }
-    postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
-        var r = response;
-    });
+    if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
+        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+            var r = response;
+        });
+    }
 }
 function getCurrentTime(date) {
     var hours = date.getHours();
@@ -422,8 +426,8 @@ var setParticipants = function (response, type) {
         setOnlineOfflineMembersArray();
         renderParticipants();
     }
-    else {
-        ShowAlertBoxWarning("No participant exists for chat");
+    else {       
+        //ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {

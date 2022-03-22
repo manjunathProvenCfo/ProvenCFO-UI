@@ -19,6 +19,9 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 var addMessageProcessed = [];
+var $gl_accountDropdown;
+var $tc_1_Dropdown;
+var $tc_2_Dropdown;
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var chat = {
     userId: "",
@@ -35,7 +38,7 @@ var chat = {
     isReconciliationIconColorChanged: false
 };
 var CommentHtmls = {
-    ReconciliationHtml:`<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="loadCommentsPage('{channelUniqueNameGuid}')">
+    ReconciliationHtml: `<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="loadCommentsPage('{channelUniqueNameGuid}')">
                         <div class="avatar avatar-xl status-offline">
                             <img class="rounded-circle" src="/assets/img/team/default-logo.png" alt="">
                         </div>
@@ -67,6 +70,7 @@ var CommentHtmls = {
 }
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+   
     showChatContentLoader();
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
@@ -135,8 +139,8 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                     else {
                         if ($editor[0].innerHTML != '')
                             addNewMessagetoChatwindow($editor[0].innerHTML);
-                    }                    
-                }                   
+                    }
+                }
             }
             else
                 activeChannel?.typing();
@@ -199,31 +203,52 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+    $gl_accountDropdown = $('#gl_account');
+    $tc_1_Dropdown = $('#tracking_category_0');
+    $tc_2_Dropdown = $('#tracking_category_1');
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
 
-    $(document).on("click", "button[id=btnComment]", function (e) {        
-        showReconciliationChat(e.currentTarget.dataset.id);       
-    });
-
-
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
-        setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);
-        //setParticipants(response);
-        //createTwilioClient();
-        /*$participants.eq(0).click();*/
-        setScrollPosition();
-        hideChatContentLoader();
-    });
-
-    $btnSendMessage.unbind().click(function () {
-        addNewMessagetoChatwindow($('#message-body-input').val());
+    $(document).on("click", "button[id=btnComment]", function (e) {
+        showReconciliationChat(e.currentTarget.dataset.id);
     });
     var addNewMessagetoChatwindow = async function (input) {
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
     }
+    $btnSendMessage.unbind().click(function () {
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+        setCommentsHeader(response.resultData.reconciliationdata);
+        LoadAllComments(response.resultData.reconciliationComments);
+        var glaccount = response.resultData.reconciliationdata.gl_account_ref;
+        var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
+        var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
+        if (glaccount != null) {
+            $gl_accountDropdown.val(glaccount);
+        }
+        else {
+            $gl_accountDropdown.val($("#gl_account option:first").val());;
+        }
+        if (tc1 != null) {
+            $tc_1_Dropdown.val(tc1);
+        }
+        else {
+            $tc_1_Dropdown.val($('#tracking_category_0 option:first').val());;
+        }
+        if (tc2 != null) {
+            $tc_2_Dropdown.val(tc2);
+        }
+        else {
+            $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
+        }
+        setScrollPosition();
+        hideChatContentLoader();
+    });
+
+    
+   
     var addNewComment = function (inputText) {
         var CurrentDate = new Date();
         var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
@@ -243,7 +268,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         var currentdate = new Date();
         var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
-
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
         var input = {
             Id: 0,
             ReconciliationId_ref: ReconciliationId,
@@ -251,11 +276,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             CreatedBy: chat.userId,
             CreatedDate: currentdate,
             IsDeleted: false,
-            AgencyId: chat.AgencyId
+            AgencyId: AgencyId
         }
-        postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
-            var r = response;
-        });
+        if (input.CreatedBy != null && input.CreatedBy != ''  && input.AgencyId != null && input.AgencyId != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+            });
+        }
+        
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
@@ -281,6 +309,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 }
 
 var loadreconcilationcomments = function () {
+   
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -306,7 +335,7 @@ var loadreconcilationcomments = function () {
         var Reconciliationdata = response;
         if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
             $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
-                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g,aReconciliation.id);
+                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g, aReconciliation.id);
                 $participantsContainer.append(recHtml);
             });
         }
@@ -315,9 +344,9 @@ var loadreconcilationcomments = function () {
             loadCommentsPage($participantsContainer.children(0)[0].id);
         }
         else {
-            ShowAlertBoxWarning("No participant exists for chat");
+            //ShowAlertBoxWarning("No participant exists for chat");
         }
-        
+
         hideChatContentLoader();
         /*$participants.eq(0).click();*/
     });
@@ -428,54 +457,58 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     });
 }
 var getChatParticipants = function () {
-   
+    
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
-      
+
         participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
-      
+
         /*$chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");*/
-       
-       
-      
+
+
+
         loadreconcilationcomments();
-       
-        
+
+
     }
-    getAjaxSync(participantsURL, null, function (response) {
-        if (response.length > 0) {
-            chat.channels = response;
-            let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
-            chat.participants = [];
-            arrParticipants.forEach(x => {
-                if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
-                    chat.participants.push(x);
+    else {
+
+        getAjaxSync(participantsURL, null, function (response) {
+            if (response.length > 0) {
+                chat.channels = response;
+                let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
+                chat.participants = [];
+                arrParticipants.forEach(x => {
+                    if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
+                        chat.participants.push(x);
+                    }
+                });
+                for (var i = 0; i < chat.channels.length; i++) {
+                    if (chat.channels[i].IsPrivate === true) {
+                        chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
+                    }
+                    else {
+                        chat.channels[i].ChannelImage = Default_Profile_Image;
+                    }
                 }
-            });
-            for (var i = 0; i < chat.channels.length; i++) {
-                if (chat.channels[i].IsPrivate === true) {
-                    chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
-                }
-                else {
-                    chat.channels[i].ChannelImage = Default_Profile_Image;
-                }
+
+                setOnlineOfflineMembersArray();
+                renderParticipants();
             }
 
-            setOnlineOfflineMembersArray();
-            renderParticipants();
-        }
-        //else {
-            
-        //    if (chat.type === 1) {
-        //        debugger;
-        //        ShowAlertBoxWarning("No person exists for chat");
-        //    }
-        //    else if (chat.type === 0) {
-        //        debugger;
-        //        ShowAlertBoxWarning("No reconciliation exists for chat");
-        //    }
-        //}
-    });
+            //else {
+
+            //    if (chat.type === 1) {
+            //        debugger;
+            //        ShowAlertBoxWarning("No person exists for chat");
+            //    }
+            //    else if (chat.type === 0) {
+            //        debugger;
+            //        ShowAlertBoxWarning("No reconciliation exists for chat");
+            //    }
+            //}
+        });
+    }
 }
 var setParticipants = function (response, type) {
     if (response.length > 0) {
@@ -500,7 +533,8 @@ var setParticipants = function (response, type) {
         renderParticipants();
     }
     else {
-        ShowAlertBoxWarning("No participant exists for chat");
+        
+       // ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {
@@ -549,7 +583,7 @@ var renderParticipants = function () {
 }
 
 var handleParticipantClick = async function (event) {
-    
+
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
         throw 'Channel Index not found.'
@@ -727,7 +761,7 @@ $("#divChatSiderbarFilters > button").click(function () {
 });
 
 function AgencyDropdownPartialViewChange() {
-   
+
     ShowlottieLoader();
     setTimeout(function () {
         resetChatPage();
@@ -797,4 +831,55 @@ var selectSidebarParticipant = function () {
 var UpdateReconciliationHasStatus = function (id) {
     postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
     });
+}
+
+var onChangeglAccount = function (event) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $gl_accountDropdown.val();   
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+}
+var onChangeTc = function (e) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_1_Dropdown.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
+}
+var onChangeAditinalTc = function (e) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_2_Dropdown.val();
+    var ClientID = $("#ddlclient option:selected").val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
 }

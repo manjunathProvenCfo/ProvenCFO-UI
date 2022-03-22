@@ -280,6 +280,8 @@
     <Content Include="assets\AvertaWebFont\TDF_EULA_WEB.txt" />
     <Content Include="assets\css\common.css" />
     <Content Include="assets\css\theme.css" />
+    <Content Include="assets\files\NeedsEmailTemplate.xml" />
+    <Content Include="assets\files\NotesEmailTemplate.xml" />
     <Content Include="assets\files\ReconcilationEmailTemplate.xml" />
     <Content Include="assets\img\chat\1.jpg" />
     <Content Include="assets\img\chat\10.jpg" />
@@ -1133,6 +1135,8 @@
     <Content Include="Views\Shared\_communicationReconcilation.cshtml" />
     <Content Include="Views\Shared\_ReconcilationEmail.cshtml" />
     <Content Include="Views\Reconciliation\_ReconciliationFileUploaderPartial.cshtml" />
+    <Content Include="Views\Shared\_NeedsEmail.cshtml" />
+    <Content Include="Views\Shared\_NotesEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
