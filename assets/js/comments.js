@@ -426,9 +426,8 @@ var setParticipants = function (response, type) {
         setOnlineOfflineMembersArray();
         renderParticipants();
     }
-    else {
-       
-        ShowAlertBoxWarning("No participant exists for chat");
+    else {       
+        //ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {

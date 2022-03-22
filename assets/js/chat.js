@@ -335,7 +335,7 @@ var loadreconcilationcomments = function () {
             loadCommentsPage($participantsContainer.children(0)[0].id);
         }
         else {
-            ShowAlertBoxWarning("No participant exists for chat");
+            //ShowAlertBoxWarning("No participant exists for chat");
         }
 
         hideChatContentLoader();
@@ -525,7 +525,7 @@ var setParticipants = function (response, type) {
     }
     else {
         
-        ShowAlertBoxWarning("No participant exists for chat");
+       // ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {

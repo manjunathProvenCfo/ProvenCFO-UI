@@ -54,7 +54,7 @@
                             <div class="min-w-0">
                                 <h5 class="mb-0 text-truncate fs-0"><span class="">GL Account</span></h5>
                                 <div class="fs--2 text-400">                                    
-                                    @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" }) }
+                                    @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" }) 
                                 </div>
                             </div>
                         </div>
