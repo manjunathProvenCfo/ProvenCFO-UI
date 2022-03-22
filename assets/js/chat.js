@@ -229,19 +229,19 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             $gl_accountDropdown.val(glaccount);
         }
         else {
-            $gl_accountDropdown.prop("selected", true);;
+            $gl_accountDropdown.val($("#gl_account option:first").val());;
         }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
         }
         else {
-            $tc_1_Dropdown.prop("selected", true);;
+            $tc_1_Dropdown.val($('#tracking_category_0 option:first').val());;
         }
         if (tc2 != null) {
             $tc_2_Dropdown.val(tc2);
         }
         else {
-            $tc_2_Dropdown.prop("selected", true);;
+            $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
         }
         setScrollPosition();
         hideChatContentLoader();
