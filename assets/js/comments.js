@@ -193,7 +193,7 @@ var addNewComment = function (inputText) {
 var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var currentdate = new Date();
     var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
-   
+    var AgencyId = chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId;
     var input = {
         Id:0,
         ReconciliationId_ref: ReconciliationId,
@@ -201,9 +201,9 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         CreatedBy: chat.userId,
         CreatedDate: currentdate,
         IsDeleted: false,
-        AgencyId: chat.AgencyId
+        AgencyId: AgencyId
     }
-    if (input.CreatedBy != null && input.CreatedBy != '') {
+    if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
         postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
             var r = response;
         });
