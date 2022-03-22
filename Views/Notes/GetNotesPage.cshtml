@@ -769,7 +769,7 @@
                 
                 $("#lblTotalNotesCount").text(totalNotes);
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url=${url4}&url=${url4}&url5=${url5}`, null, function (response) {
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url4=${url4}&url5=${url5}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
