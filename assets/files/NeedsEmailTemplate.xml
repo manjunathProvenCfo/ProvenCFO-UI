@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <EmailContent>
-  <subject>{CompanyName} Needs Question - {TodaysDate}</subject>
+  <subject>{CompanyName} Needs Questions - {TodaysDate}</subject>
 
   <body>
 
@@ -13,7 +13,7 @@
       </br>
       
       
-     
+      {Needs Title} - {priority}
       </br>
       </br>
       Please log into the ProvenCFO App and provide us with the requested information.

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <EmailContent>
-  <subject>{CompanyName} Notes Question - {TodaysDate}</subject>
+  <subject>{CompanyName} Notes Questions - {TodaysDate}</subject>
 
   <body>
 
@@ -10,16 +10,11 @@
 	    </br>
       Each month we provide updated Financial Statements and Metrics to give you insight into your business. At a minimum we provide the following:
       </br>
-      . <a href="{url}">ProvenCFO Notes</a>
       </br>
-      . <a href="{url1}">Summary Dashboard</a>
-      </br>
-      . <a href="{url2}">Monthly Financial Report</a>
-		
-		</br>
-		</br>
-    
-    These items are all accessible via our <a href="{url3}">CFO App</a> . Each month these reports should not only be reviewed for accuracy, but also used to identify trends and to help with decision making. The timely response to our questions in the <a href="{url4}">Reconciliation tab</a>  or the <a href="{url5}">Chat tab </a> of our CFO App allows us to produce <b> relevant, reliable, and real-time</b> financial statements to help in your analysis. We're available to answer any questions or concerns you may have regarding these reports.
+      <ul> <li><a href="{url}">ProvenCFO Notes</a></li> <li><a href="{url1}">Summary Dashboard</a></li> <li><a href="{url2}">Monthly Financial Report</a></li> </ul>
+
+	
+    These items are all accessible via our <a href="{url3}">CFO App</a>. Each month these reports should not only be reviewed for accuracy, but also used to identify trends and to help with decision making. The timely response to our questions in the <a href="{url4}">Reconciliation tab</a>  or the <a href="{url5}">Chat tab</a> of our CFO App allows us to produce <b> relevant, reliable, and real-time</b> financial statements to help in your analysis. We're available to answer any questions or concerns you may have regarding these reports.
 
 	     
 		</br>

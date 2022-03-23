@@ -978,7 +978,8 @@
                 
                 var url = window.location.href;
                
-                var ClientName = $("#ddlclient option:selected").text();               
+                var ClientName = $("#ddlclient option:selected").text();
+                ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
                 getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}`, null, function (response) {
                     if (response.Status == 'Success') {
