@@ -756,7 +756,7 @@
         $(function () {
 
             $("#email").click(function () {
-                
+               
                 var url = window.location.host;
                 var url1 = window.location.host;
                 var url2 = window.location.host;
@@ -766,7 +766,8 @@
                 let totalNotes = 0;
 
                 var ClientName = $("#ddlclient option:selected").text();
-                
+
+                ClientName = encodeURIComponent(ClientName);
                 $("#lblTotalNotesCount").text(totalNotes);
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
                 getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url4=${url4}&url5=${url5}`, null, function (response) {

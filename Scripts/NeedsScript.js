@@ -38,7 +38,11 @@ $(document).ready(function () {
             }
         }
     });
-    
+    var myParam = location.search.split('yes=')[1];
+
+    if (myParam == "1") {
+        $("#email").show(); 
+    }
     //view Page
     myDropzone_view.on("addedfile", function (file) {
 
@@ -1136,6 +1140,7 @@ $(function () {
         let totalTask = 0;
       
         var ClientName = $("#ddlclient option:selected").text();
+        ClientName = encodeURIComponent(ClientName);
          $("#lblTotalTasksCount").text(totalTask);
         /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
         getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}`, null, function (response) {
