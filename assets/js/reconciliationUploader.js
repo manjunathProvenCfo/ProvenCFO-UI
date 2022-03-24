@@ -142,7 +142,7 @@ $(function () {
 
 
     });
-    var uploadedstatusload = function (obj) {        
+    var uploadedstatusload = function (obj) {
         let thumbnail = '../../assets/img/kanban/I_Success.png';
         var status = 'Success';
         var ErrorMsg = '';
@@ -155,6 +155,9 @@ $(function () {
         thumbnail = thumbnail.replace("~/", "../../");
         var objdate = new Date();
         var fileName = obj.FileName;
+        if (fileName == undefined) {
+            hide(thumbnail);
+        }
 
         var reportAttachment = `<div class="media align-items-center mb-3" id="att_${0}"><a class="text-decoration-none mr-3" href="${thumbnail}" data-fancybox="attachment-bg"><div class="bg-attachment"><div class="bg-holder rounded" style="background-image:url(${thumbnail.replace(/ /g, '%20')});background-size:115px 60px" onclick=""></div></div></a><div class="media-body fs--2"><h6 class="mb-1"><a class="text-decoration-none" href="~/assets/img/kanban/3.jpg" onclick="" data-fancybox="attachment-title">${obj.FileName}</a></h6><span>Status :</span> <span>${status}</span><p class="mb-0">Uploaded at ${moment(objdate.CreatedDate).format("MM/DD/YYYY")}</p></div></div>`;
         if (obj.result.Status == false) {
