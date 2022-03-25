@@ -690,21 +690,23 @@ namespace ProvenCfoUI.Controllers
 
                         List<string> TaskTitle = null;
                         List<string> Labels = null;
+                        var segmenttask = SegmentTasks.Where(x => x.Id =="1" && x.Id =="2").Select(x => x.Id).ToList();
+                        
                         var Task = "";
                         var Label = "";
-
-                        var itemCount = 0;
+                       
+                            var itemCount = 0;
 
                         //StringBuilder objtable = new StringBuilder();
                         //objtable.Append("<table>");
 
                         foreach (var item in KanbanTaskList)
                         {
-
+                            
                             TaskTitle = item.Select(x => x.TaskTitle).ToList();
                             Labels = item.Select(x => x.Labels).ToList();
 
-                            if (item.Count > 0 && itemCount <= 1)
+                            if (segmenttask.Count<2 && itemCount <= 1)
                             {
                                 foreach (var list in KanbanTaskList.Select((value, i) => new { i, value }))
 
