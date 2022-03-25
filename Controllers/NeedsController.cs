@@ -668,35 +668,106 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
-        public JsonResult EmailSend(string ClientName,string url,string totalTask)
+        public JsonResult EmailSend(string ClientName, string url, string totalTask)
         {
             try
             {
-                using (AccountService obj = new AccountService())
+                using (NeedsService objNeeds = new NeedsService())
                 {
-                    List<InviteUserModel> user = new List<InviteUserModel>();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    using (AccountService obj = new AccountService())
+                    {
+                        List<InviteUserModel> user = new List<InviteUserModel>();
+                        List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
 
-                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();
+                        var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+                        var test = result1.ResultData.ToList();
 
-                    var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+                        var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
+                        var AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                        var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData.ToList();
+                        var KanbanTaskList = SegmentTasks.Select(x => x.KanbanTaskList).ToList();
 
-                    string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
-                    var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
-                    var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
-                    subject = subject.Replace("{CompanyName}", ClientName);
-                    subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-                    body = body.Replace("{totalTask}", totalTask);
+                        List<string> TaskTitle = null;
+                        List<string> Labels = null;
+                        var Task = "";
+                        var Label = "";
 
-                    body = body.Replace("{url}", url);
+                        var itemCount = 0;
 
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                        //StringBuilder objtable = new StringBuilder();
+                        //objtable.Append("<table>");
 
+                        foreach (var item in KanbanTaskList)
+                        {
+
+                            TaskTitle = item.Select(x => x.TaskTitle).ToList();
+                            Labels = item.Select(x => x.Labels).ToList();
+
+                            if (item.Count > 0 && itemCount <= 1)
+                            {
+                                foreach (var list in KanbanTaskList.Select((value, i) => new { i, value }))
+
+                                {
+                                    var value = list.value;
+                                    var index = list.i;
+
+                                    if (index == 0)
+                                    {
+                                        foreach (var singleTask in TaskTitle)
+                                        {
+                                            Task += singleTask + ",";
+                                        }
+                                        foreach (var singleLabel in Labels)
+                                        {
+
+                                            Label += singleLabel + ",";
+                                        }
+
+                                        itemCount = itemCount+1;
+                                    }
+                                }
+                            }
+                        }
+
+                        string[] tokensTask = Task.Split(',');
+                        string[] tokenslabel = Label.Split(',');
+                        int k = 0;
+                        var taskPrint = "";
+                        var labelPrint = "";
+                        var taskLabelPrint = "";
+
+                        for (int i = 0; i < tokensTask.Length; i++)
+                        {
+                            taskPrint = tokensTask[i];
+
+                            for (int j = k; j < tokenslabel.Length-1; j++)
+                            {
+                                labelPrint = tokenslabel[j];
+
+                                k = j + 1;
+                                taskLabelPrint +="["+ taskPrint+"]" + " - " + "[" + labelPrint+"]" + "<br/> ";
+                                taskLabelPrint.Replace(", -" ,"");
+                                break;
+
+                            }
+                        }
+
+                        TempData["SegmentsAndTasks"] = SegmentTasks;
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+
+                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+                        var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                        var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                        subject = subject.Replace("{CompanyName}", ClientName);
+                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+                        body = body.Replace("{Needs Title}", taskLabelPrint.ToString());
+
+                        body = body.Replace("{url}", url);
+
+                        return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             catch (Exception ex)
@@ -711,6 +782,48 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+        //public JsonResult EmailSend(string ClientName,string url,string totalTask)
+        //{
+        //    try
+        //    {
+        //        using (AccountService obj = new AccountService())
+        //        {
+        //            List<InviteUserModel> user = new List<InviteUserModel>();
+        //            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+        //            var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+
+        //            var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+        //            var test = result1.ResultData.ToList();
+
+        //            var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
+        //            XmlDocument doc = new XmlDocument();
+        //            doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+
+        //            string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+        //            var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+        //            var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+        //            subject = subject.Replace("{CompanyName}", ClientName);
+        //            subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+        //            body = body.Replace("{totalTask}", totalTask);
+
+        //            body = body.Replace("{url}", url);
+
+        //            return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        return Json(new
+        //        {
+        //            File = "",
+        //            Status = "Error",
+        //            Message = ex.Message
+        //        }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
     }
 }

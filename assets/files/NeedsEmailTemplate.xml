@@ -11,14 +11,11 @@
       We have the following outstanding needs:
       </br>
       </br>
-      
-      
-      {Needs Title} - {priority}
-      </br>
-      </br>
-      Please log into the ProvenCFO App and provide us with the requested information.
+      {Needs Title} 
+     </br>
+      Please log into the <a href="{url}">ProvenCFO App</a> and provide us with the requested information.
 		</br>
-		</br>
+    </br>
     Much thanks,
     </br>
     ProvenCFO
