@@ -748,7 +748,7 @@ namespace ProvenCfoUI.Controllers
                                 labelPrint = tokenslabel[j];
 
                                 k = j + 1;
-                                taskLabelPrint +="["+ taskPrint+"]" + " - " + "[" + labelPrint+"]" + "<br/> ";
+                                taskLabelPrint += taskPrint+" - " + labelPrint + "<br/> ";
                                 taskLabelPrint.Replace(", -" ,"");
                                 break;
 
