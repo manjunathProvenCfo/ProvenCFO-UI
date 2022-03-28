@@ -2,8 +2,7 @@
 <EmailContent>
   <subject>{CompanyName} Notes Questions - {TodaysDate}</subject>
   <body>
-
-    <![CDATA[</br>  
+    <![CDATA[
      Hi,
 	    </br>
 	    </br>
