@@ -2,6 +2,7 @@
  <EmailContent>
        <subject>{CompanyName} Reconciliation Questions - {TodaysDate}</subject>
    <body>
+
      <![CDATA[</br>
      Hi,
 	    </br>
