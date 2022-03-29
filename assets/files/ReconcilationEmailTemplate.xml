@@ -1,10 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
  <EmailContent>
        <subject>{CompanyName} Reconciliation Questions - {TodaysDate}</subject>
-
    <body>
-     
-     <![CDATA[</br>
+     <![CDATA[
      Hi,
 	    </br>
 	    </br>

@@ -133,6 +133,9 @@ $(document).ready(function () {
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
+        ShowlottieLoader();
+        window.setTimeout(HidelottieLoader,5000);
+       /* window.location.reload();*/
     }
    
 
