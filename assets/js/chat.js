@@ -285,6 +285,11 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         }
         
     }
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+    }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
         if (event.keyCode === 13 && !event.shiftKey) {
@@ -870,6 +875,7 @@ var onChangeAditinalTc = function (e) {
     var id = chat.channelUniqueNameGuid;
     var selectedValue = $tc_2_Dropdown.val();
     var ClientID = $("#ddlclient option:selected").val();
+    ClientID = ClientID != '' ? ClientID : 0;
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
