@@ -312,10 +312,10 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Created";
 
                                 }
-                                else
+                                else 
                                 {
 
-                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
+                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive ="1", LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
                                     if (objInviteUser == null)
                                         ViewBag.Message = "Error";
                                     //ViewBag.Message = "Invitation Send Successfully";
