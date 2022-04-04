@@ -129,19 +129,7 @@
                             </div>
                         </a>
                         <ul class="nav collapse" id="setup" data-parent="#navbarVerticalCollapse">
-                            @if (Common.IsFeatureAccessable("JTL"))
-                            {
-                                <li class="nav-item" id="submenu_jobtitles">
-                                    <a class="nav-link" href=@Url.Action("JobTitle", "Setup") name="submenu_jobtitles">Job Titles</a>
-                                </li>
-                            }
-                            @if (Common.IsFeatureAccessable("URL"))
-                            {
-
-                                <li class="nav-item" id="submenu_userroles">
-                                    <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
-                                </li>
-                            }
+                           
 
                             @if (Common.IsFeatureAccessable("GLA"))
                             {
@@ -210,6 +198,20 @@
                             {
                                 <li class="nav-item" id="submenu_billableentities">
                                     <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
+                                </li>
+                            }
+
+                            @if (Common.IsFeatureAccessable("JTL"))
+                            {
+                                <li class="nav-item" id="submenu_jobtitles">
+                                    <a class="nav-link" href=@Url.Action("JobTitle", "Setup") name="submenu_jobtitles">Job Titles</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("URL"))
+                            {
+
+                                <li class="nav-item" id="submenu_userroles">
+                                    <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
                         </ul>
