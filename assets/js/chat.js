@@ -109,7 +109,7 @@ var CommentHtmls = {
     otherscAttachmentDocumentsHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
             <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
                 <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
-                   <a href="{FileScrPath}" target="_blank">OP-1.pdf</a>
+                   <a href="{FileScrPath}" target="_blank">{FileName}</a>
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
                     <span>{time}</span></div></div></div></div>`,
 }
@@ -540,10 +540,10 @@ var LoadAllComments = function (ReconciliationComments) {
                         case 'jfif':
                             var Imagehtml = '';
                             if (acomments && acomments.createdBy == chat.userId) {
-                                Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName);
+                                Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
                             }
                             else {
-                                Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName);
+                                Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
                             }
                             $channelMessages.append(Imagehtml);
                             break;
@@ -559,10 +559,10 @@ var LoadAllComments = function (ReconciliationComments) {
                         case 'docx':
                             var Dochtml = '';
                             if (acomments && acomments.createdBy == chat.userId) {
-                                Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName);
+                                Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
                             }
                             else {
-                                Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName);
+                                Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
                             }
                             $channelMessages.append(Dochtml);
                             //window.open(filepath, '_blank');
