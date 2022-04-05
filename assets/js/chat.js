@@ -66,7 +66,52 @@ var CommentHtmls = {
                 <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
                     {text}
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
-                    <span>{time}</span></div></div></div></div>`
+                    <span>{time}</span></div></div></div></div>`,
+    otherscAttachmentImageHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message chat-gallery justify-content-end">
+                    <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`,
+    SelfAttachmentImageHtml: `<div class="media p-3" id="{commentId}" data-index="6" data-sid="{commentId}" data-timestamp="{date}" data-media-sid="{commentId}">
+                                <div class="media-body d-flex justify-content-end">
+                                    <div class="w-100 w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                                            <div class="chat-message chat-gallery justify-content-end">
+                                                <div class="row mx-n1 justify-content-end">
+
+                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+                                            </div>
+                                        </div>
+                                        <div class="text-400 fs--2 text-right">
+                                            {time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`,
+    SelfAttachmentDocumentHtml: `<div class="media p-3" id="{commentId}" data-index="8" data-sid="{commentId}" data-timestamp="20220405" data-media-sid="{commentId}">
+                                <div class="media-body d-flex justify-content-end">
+                                    <div class="w-100 w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                                            <div class="chat-message chat-gallery justify-content-end bg-primary text-white p-2 rounded-soft">
+                                                <div class="row mx-n1 justify-content-end">
+
+                                                <a href="{FileScrPath}" target="_blank">{FileName}</a></div>
+                                            </div>
+                                        </div>
+                                        <div class="text-400 fs--2 text-right">
+                                            {time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`,
+    otherscAttachmentDocumentsHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
+                   <a href="{FileScrPath}" target="_blank">OP-1.pdf</a>
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`,
 }
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
@@ -173,7 +218,8 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                 ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
             }
             else {
-                addMediaMessage(file);
+                addMediaMessageLocalFolder(file);
+                //addMediaMessage(file);
             }
         })
     });
@@ -221,7 +267,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     });
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
         setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);
+        LoadAllComments(response.resultData.reconciliationComments);       
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
         var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
         var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
@@ -357,6 +403,76 @@ var loadreconcilationcomments = function () {
     });
 
 }
+
+var addMediaMessageLocalFolder = function (file) {
+    var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    var ReconciliationId = chat.channelUniqueNameGuid;
+    const formData = new FormData();
+    formData.append('file', file);
+    postFileAjaxSync(`/Reconciliation/UploadReconcilationAttachmentAsync?ReconciliationId=` + ReconciliationId + `&AgencyId=` + AgencyId, formData, function (response) {
+        debugger;
+        var r = response;
+        if (response.Status != "Success") {
+            ShowAlertBoxError("File uploader", "Error while file attachment.");
+            return;
+        }
+        addNewAttachment(response)
+    });
+}
+var addNewAttachment = function (attachment) {
+    if (attachment) {
+        var extension = attachment.FileType.replace(".", "");
+
+        var CurrentDate = new Date();
+        var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+        var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+        var CurrentTimestring = getCurrentTime(new Date);
+        var DateElement = $('#channel-messages #' + CurrentDateString);
+        if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+            var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+            $channelMessages.append(dhtml);
+        }
+        switch (extension.toLowerCase()) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'jfif':
+                var FileScrPath = attachment.FilePath;
+                var CommentId = attachment.CommentId;
+                var Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, CurrentTimestring).replace(/{FileScrPath}/g, FileScrPath);
+                $channelMessages.append(Imagehtml);
+                setScrollPosition();
+                break;
+            case 'zip':
+            case '7z':
+            case 'rar':
+            case 'pdf':
+            case 'txt':
+            case 'xls':
+            case 'xlsx':
+            case 'csv':
+            case 'doc':
+            case 'docx':
+                var FileScrPath = attachment.FilePath;
+                var CommentId = attachment.CommentId;
+                var FileName = attachment.FileName;
+                var Imagehtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, CurrentTimestring).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName);
+                $channelMessages.append(Imagehtml);
+                setScrollPosition();
+                //window.open(filepath, '_blank');
+                //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                break;
+            default:
+                break;
+        }
+
+    }
+}
+
+
+
 var setCommentsHeader = function (reconciliationdata) {
     $channelReconciliationDescription.html("");
     $channelReconciliationCompany.html("");
@@ -400,13 +516,62 @@ var LoadAllComments = function (ReconciliationComments) {
                 var profileimgurl = acomments.commentedUserProfileImageurl;
                 var commentText = acomments.commentText;
                 var userName = acomments.commentedUserName;
-                if (acomments && acomments.createdBy == chat.userId) {
-                    var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time);
-                    $channelMessages.append(commentshtml);
+                if (acomments && acomments.isAttachment == false) {
+                    if (acomments && acomments.createdBy == chat.userId) {
+                        var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time);
+                        $channelMessages.append(commentshtml);
+                    }
+                    else {
+                        var Otherscommentshtml = CommentHtmls.otherscCommentshtml.replace('{profileimgurl}', profileimgurl).replace('{text}', commentText).replace('{userName}', userName).replace('{date}', aDates.date.replace('-', '')).replace('{time}', time);
+                        $channelMessages.append(Otherscommentshtml);
+                    }
                 }
                 else {
-                    var Otherscommentshtml = CommentHtmls.otherscCommentshtml.replace('{profileimgurl}', profileimgurl).replace('{text}', commentText).replace('{userName}', userName).replace('{date}', aDates.date.replace('-', '')).replace('{time}', time);
-                    $channelMessages.append(Otherscommentshtml);
+                    var FileName = acomments.fileName;
+                    var FileScrPath = acomments.fileAttachmentPath;
+                    var CommentId = acomments.id;
+                    var FileExtention = acomments.fileType.replace(".", "");
+
+                    switch (FileExtention.toLowerCase()) {
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'png':
+                        case 'gif':
+                        case 'jfif':
+                            var Imagehtml = '';
+                            if (acomments && acomments.createdBy == chat.userId) {
+                                Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName);
+                            }
+                            else {
+                                Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName);
+                            }
+                            $channelMessages.append(Imagehtml);
+                            break;
+                        case 'zip':
+                        case '7z':
+                        case 'rar':
+                        case 'pdf':
+                        case 'txt':
+                        case 'xls':
+                        case 'xlsx':
+                        case 'csv':
+                        case 'doc':
+                        case 'docx':
+                            var Dochtml = '';
+                            if (acomments && acomments.createdBy == chat.userId) {
+                                Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName);
+                            }
+                            else {
+                                Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName);
+                            }
+                            $channelMessages.append(Dochtml);
+                            //window.open(filepath, '_blank');
+                            //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
             });
 

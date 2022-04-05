@@ -78,6 +78,10 @@ namespace Proven.Service
         {
             return PostAsync<ReturnModel, ReconciliationComments>("Reconciliation/InsertReconcilationComments", comment).Result;
         }
+        public ReturnNumberModel InsertReconcilationCommentsDetailsForAttachments(ReconciliationComments comment)
+        {
+            return PostAsync<ReturnNumberModel, ReconciliationComments>("Reconciliation/InsertReconcilationCommentsDetailsForAttachments", comment).Result;
+        }
         public ReturnModel InsertReconcilationMentionedUsersDetails(ReconciliationCommentUserMention usermentioned)
         {
             return PostAsync<ReturnModel, ReconciliationCommentUserMention>("Reconciliation/InsertReconcilationMentionedUsersDetails", usermentioned).Result;
@@ -89,6 +93,11 @@ namespace Proven.Service
         public async Task<XeroReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
         {
             return await PostAsyncWithCancellationToken<XeroReconciliationOutputModelMainModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
+        }        
+
+        public async Task InsertReconciliationCommentAttachmentDetails(List<ReconciliationCommentAttachments> attachmentData)
+        {
+            await client.PostAsync($"Reconciliation/InsertReconciliationCommentAttachmentDetails", PreparePostContent(attachmentData));
         }
         public void Dispose()
         {

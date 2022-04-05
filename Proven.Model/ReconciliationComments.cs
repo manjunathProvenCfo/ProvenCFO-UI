@@ -16,5 +16,7 @@ namespace Proven.Model
         public DateTime? CreatedDate { get; set; }
         public bool? IsDeleted { get; set; }
         public int? AgencyId { get; set; }
+
+        public Boolean? IsAttachment { get; set; }
     }
 }
