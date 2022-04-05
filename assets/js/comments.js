@@ -314,7 +314,7 @@ var LoadAllComments = function (ReconciliationComments) {
                 var profileimgurl = acomments.commentedUserProfileImageurl;
                 var commentText = acomments.commentText;
                 var userName = acomments.commentedUserName;
-                if (acomments && acomments.isAttachment == false) {
+                if (acomments && (acomments.isAttachment == null || acomments.isAttachment == false)) {
                     if (acomments && acomments.createdBy == chat.userId) {
                         var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time);
                         $channelMessages.append(commentshtml);
