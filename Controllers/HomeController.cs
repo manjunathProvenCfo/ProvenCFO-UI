@@ -67,7 +67,7 @@ namespace ProvenCfoUI.Controllers
         }
 
 
-        public ActionResult LoginSessionExpaired()
+        public ActionResult LoginSessionExpired()
         {
 
             return View();

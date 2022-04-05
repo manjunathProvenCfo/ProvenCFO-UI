@@ -81,7 +81,7 @@
                 ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session?", "Yes, continue working", "Logout", function (isConfirmed) {
 
                     if (isConfirmed) {
-                        ShowEnterInput('Continue Session', 'Plase enter your password', 'Password','password', 'Please enter valid password', function (IsloginExtend) {
+                        ShowEnterInput('Continue Session', 'Please enter your password', 'Password','Password', 'Please enter valid password', function (IsloginExtend) {
                             if (IsloginExtend) {
                                 postAjaxSync("/Home/SessionTimeoutExtend?UserName=" + userEmailAddress + "&password=" + IsloginExtend, null, function (response) {
 
@@ -92,7 +92,7 @@
                                     }
                                     else {
                                         ShowAlertBoxWarning('Incorrect Password', 'Entered user name and password is wrong..!', function () {
-                                            window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
+                                            window.location.href = window.location.origin + '/Home/LoginSessionExpired';
                                         });
                                     }
                                 });

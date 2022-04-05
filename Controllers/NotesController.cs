@@ -457,7 +457,7 @@ namespace ProvenCfoUI.Controllers
                     var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
                     var test = result1.ResultData.ToList();
 
-                    var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
+                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
                     XmlDocument doc = new XmlDocument();
                     doc.Load(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
 

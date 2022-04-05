@@ -312,10 +312,10 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Created";
 
                                 }
-                                else
+                                else 
                                 {
 
-                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive, LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
+                                    var objInviteUser = obj.UpdateInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.IsActive ="1", LoginUserid, Convert.ToString(inviteStaffVM.AgencyID), InviteUser.RoleId);
                                     if (objInviteUser == null)
                                         ViewBag.Message = "Error";
                                     //ViewBag.Message = "Invitation Send Successfully";
@@ -610,7 +610,7 @@ namespace ProvenCfoUI.Controllers
                             using (SetupService objJob = new SetupService())
                             {
                                 var LoginUserid = Session["UserId"].ToString();
-                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), /*Convert.ToString(Invite.IsActive),*/ Invite.UserId, LoginUserid, Invite.LinkedInProfile);
+                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile);
                                 result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                                 result.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                                 if (result == null)

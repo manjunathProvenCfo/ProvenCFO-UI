@@ -36,6 +36,7 @@ namespace Proven.Model
         public bool IsChatExist { get; set; }
         public string TwilioConversationId { get; set; }
         public bool has_twilio_conversation { get; set; }
+        public bool Iscurrent_user_mentioned { get; set; }
 
     }
     public class ReconciliationMainModel

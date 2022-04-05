@@ -683,7 +683,7 @@ namespace ProvenCfoUI.Controllers
                         var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
                         var test = result1.ResultData.ToList();
 
-                        var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
+                        var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
                         var AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                         var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData.ToList();
                         var KanbanTaskList = SegmentTasks.Select(x => x.KanbanTaskList).ToList();
