@@ -260,8 +260,8 @@ var createTwilioClientGlobal = async function () {
 
                 if (isNotificationsAlreadyFetched === false) {
                     isNotificationsAlreadyFetched = true;
-                    showWaitMeLoader($notifictionsList);
-                    showWaitMeLoader($divNotificationsCard);
+                   /* showWaitMeLoader($notifictionsList);*/
+                   /* showWaitMeLoader($divNotificationsCard);*/
 
                     await setNotificationMessageAddedListenerOnAllChannels();
 
@@ -504,8 +504,8 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
         }
     }
 
-    hideWaitMeLoader($notifictionsList);
-    hideWaitMeLoader($divNotificationsCard);
+   /* hideWaitMeLoader($notifictionsList);*/
+    /*hideWaitMeLoader($divNotificationsCard);*/
 
 }
 
