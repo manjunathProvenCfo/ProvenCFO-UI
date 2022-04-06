@@ -22,7 +22,7 @@ var addMessageProcessed = [];
 var $gl_accountDropdown;
 var $tc_1_Dropdown;
 var $tc_2_Dropdown;
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -115,7 +115,7 @@ var CommentHtmls = {
 }
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
-   
+
     showChatContentLoader();
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
@@ -231,7 +231,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-    
+
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -267,7 +267,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     });
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
         setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);       
+        LoadAllComments(response.resultData.reconciliationComments);
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
         var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
         var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
@@ -293,8 +293,8 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         hideChatContentLoader();
     });
 
-    
-   
+
+
     var addNewComment = function (inputText) {
         var CurrentDate = new Date();
         var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
@@ -324,12 +324,12 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             IsDeleted: false,
             AgencyId: AgencyId
         }
-        if (input.CreatedBy != null && input.CreatedBy != ''  && input.AgencyId != null && input.AgencyId != '') {
+        if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
             postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
                 var r = response;
             });
         }
-        
+
     }
     var addNewMessagetoChatwindow = async function (input) {
         addNewComment(input);
@@ -360,7 +360,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 }
 
 var loadreconcilationcomments = function () {
-   
+
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -527,50 +527,53 @@ var LoadAllComments = function (ReconciliationComments) {
                     }
                 }
                 else {
-                    var FileName = acomments.fileName;
-                    var FileScrPath = acomments.fileAttachmentPath;
-                    var CommentId = acomments.id;
-                    var FileExtention = acomments.fileType.replace(".", "");
+                    if (acomments.fileType != null) {
 
-                    switch (FileExtention.toLowerCase()) {
-                        case 'jpg':
-                        case 'jpeg':
-                        case 'png':
-                        case 'gif':
-                        case 'jfif':
-                            var Imagehtml = '';
-                            if (acomments && acomments.createdBy == chat.userId) {
-                                Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            else {
-                                Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            $channelMessages.append(Imagehtml);
-                            break;
-                        case 'zip':
-                        case '7z':
-                        case 'rar':
-                        case 'pdf':
-                        case 'txt':
-                        case 'xls':
-                        case 'xlsx':
-                        case 'csv':
-                        case 'doc':
-                        case 'docx':
-                            var Dochtml = '';
-                            if (acomments && acomments.createdBy == chat.userId) {
-                                Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            else {
-                                Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            $channelMessages.append(Dochtml);
-                            //window.open(filepath, '_blank');
-                            //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+                        var FileName = acomments.fileName;
+                        var FileScrPath = acomments.fileAttachmentPath;
+                        var CommentId = acomments.id;
+                        var FileExtention = acomments.fileType.replace(".", "");
 
-                            break;
-                        default:
-                            break;
+                        switch (FileExtention.toLowerCase()) {
+                            case 'jpg':
+                            case 'jpeg':
+                            case 'png':
+                            case 'gif':
+                            case 'jfif':
+                                var Imagehtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Imagehtml);
+                                break;
+                            case 'zip':
+                            case '7z':
+                            case 'rar':
+                            case 'pdf':
+                            case 'txt':
+                            case 'xls':
+                            case 'xlsx':
+                            case 'csv':
+                            case 'doc':
+                            case 'docx':
+                                var Dochtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Dochtml);
+                                //window.open(filepath, '_blank');
+                                //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             });
@@ -627,7 +630,7 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     });
 }
 var getChatParticipants = function () {
-    
+
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
 
@@ -703,8 +706,8 @@ var setParticipants = function (response, type) {
         renderParticipants();
     }
     else {
-        
-       // ShowAlertBoxWarning("No participant exists for chat");
+
+        // ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {
@@ -898,7 +901,7 @@ var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
     });
 }
 $("#divChatSiderbarFilters > button").click(function () {
-   
+
     var el = $(this);
     $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
     el.addClass("btn-falcon-primary");
@@ -1005,7 +1008,7 @@ var UpdateReconciliationHasStatus = function (id) {
 
 var onChangeglAccount = function (event) {
     var id = chat.channelUniqueNameGuid;
-    var selectedValue = $gl_accountDropdown.val();   
+    var selectedValue = $gl_accountDropdown.val();
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }

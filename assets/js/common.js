@@ -6,8 +6,10 @@ var $notifictionsDropDown = $("#navbarDropdownNotification");
 var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
+var $TopNotificaitonList = $("#TopNotificaitonList");
 var notifications = [];
 var addMessageProcessedGlobal = [];
+
 
 const _audio = new Audio("/assets/audio/notification.mp3");
 const chatPages = ["communication/chat"]//reconciliation
@@ -16,11 +18,43 @@ const timer = ms => new Promise(res => setTimeout(res, ms));
 
 var Default_Profile_Image = "/assets/img/team/default-logo.png";
 const Notification_Bell_Size = 2;
+var $NotificationHtmls = {
+    UnreadNotificationHtml: ` <div class="list-group-item">
+                            <a class="notification notification-flush bg-200" href="#!">
+                                <div class="notification-avatar">
+                                    <div class="avatar avatar-2xl mr-3">
+                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" />
+                                    </div>
+                                </div>
+                                <div class="notification-body" commentId="", reconciliationId ="" >
+                                    <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                                    <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span>
+                                </div>
+                            </a>
+                        </div>  `,
+    ReadNotificaitonHtml: `<div class="list-group-item">
+						<a class="border-bottom-0 notification notification-flush" href="#!">
+                            <div class="notification-avatar">
+                              <div class="avatar avatar-xl me-3">
+                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="">
+                              </div>
+                            </div>
+                            <div class="notification-body" commentId="", reconciliationId ="" >
+                              <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span>2d</span>
+                            </div>
+                          </a>
+						  </div>`
+}
 
 $(function () {
     //Twilio Chat
     twilioChatGlobal();
     //Twilio Chat
+
+    //local db notificiation
+    loadAllNotificationLoggedInUser();
+    //local db notificiation
 
     bindNotInBooksAndBanksCount();
     bindNotInBooksAndBanksCount1();
@@ -242,6 +276,51 @@ function HighlightMenu() {
 
 }
 //Layout page
+
+//Global Chat with Notifications (Non Twilio , Local DB) Start
+
+var loadAllNotificationLoggedInUser = function()
+{
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
+        if (response && response.status) {
+            var icount = 0;
+            response.resultData.forEach(function (obj) {
+                if (icount > 2) return false;
+                var NotificationHtml = '';
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of :" + obj.accountName
+                var mDate = new Date(obj.mentionedDate);
+                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                var Timestring = getCurrentTime(new Date);
+                if (obj.isunread != null && obj.isunread == true) {
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
+                }
+                else {
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
+                }
+                $TopNotificaitonList.append(NotificationHtml);
+                icount++;
+            })
+
+        }
+    });
+
+}
+function getCurrentTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+//Global Chat with Notifications (Non Twilio , Local DB) End
+
+
 
 //Global Chat with Notifications Start
 var getTwilioToken = function (email) {

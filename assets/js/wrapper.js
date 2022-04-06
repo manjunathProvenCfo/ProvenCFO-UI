@@ -1,4 +1,5 @@
-﻿//Ultility Functions
+﻿const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+//Ultility Functions
 function isEmpty(value) {
     return (typeof value === "undefined" || value === null);
 }

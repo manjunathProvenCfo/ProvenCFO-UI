@@ -515,6 +515,7 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                 }
                 catch (Exception ex)
@@ -591,10 +592,12 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                     else
                     {
                         ViewBag.ProfileUrl = string.Empty;
+                        ViewBag.UserId = string.Empty;
                     }
                 }
                 catch (Exception ex)

@@ -20,7 +20,7 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 var addMessageProcessed = [];
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -325,50 +325,53 @@ var LoadAllComments = function (ReconciliationComments) {
                     }
                 }
                 else {
-                    var FileName = acomments.fileName;
-                    var FileScrPath = acomments.fileAttachmentPath;
-                    var CommentId = acomments.id;
-                    var FileExtention = acomments.fileType.replace(".", "");
+                    if (acomments.fileType != null) {
 
-                    switch (FileExtention.toLowerCase()) {
-                        case 'jpg':
-                        case 'jpeg':
-                        case 'png':
-                        case 'gif':
-                        case 'jfif':
-                            var Imagehtml = '';
-                            if (acomments && acomments.createdBy == chat.userId) {
-                                Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            else {
-                                Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            $channelMessages.append(Imagehtml);                            
-                            break;
-                        case 'zip':
-                        case '7z':
-                        case 'rar':
-                        case 'pdf':
-                        case 'txt':
-                        case 'xls':
-                        case 'xlsx':
-                        case 'csv':
-                        case 'doc':
-                        case 'docx':
-                            var Dochtml = '';
-                            if (acomments && acomments.createdBy == chat.userId) {
-                                Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            else {
-                                Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
-                            }
-                            $channelMessages.append(Dochtml);                                                        
-                            //window.open(filepath, '_blank');
-                            //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+                        var FileName = acomments.fileName;
+                        var FileScrPath = acomments.fileAttachmentPath;
+                        var CommentId = acomments.id;
+                        var FileExtention = acomments.fileType.replace(".", "");
 
-                            break;
-                        default:
-                            break;
+                        switch (FileExtention.toLowerCase()) {
+                            case 'jpg':
+                            case 'jpeg':
+                            case 'png':
+                            case 'gif':
+                            case 'jfif':
+                                var Imagehtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Imagehtml);
+                                break;
+                            case 'zip':
+                            case '7z':
+                            case 'rar':
+                            case 'pdf':
+                            case 'txt':
+                            case 'xls':
+                            case 'xlsx':
+                            case 'csv':
+                            case 'doc':
+                            case 'docx':
+                                var Dochtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Dochtml);
+                                //window.open(filepath, '_blank');
+                                //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
 

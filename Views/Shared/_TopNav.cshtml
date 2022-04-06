@@ -46,12 +46,14 @@
                             <div class="col-auto"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>
                         </div>
                     </div>
-                    <div class="list-group list-group-flush font-weight-normal fs--1" id="navbarDropdownNotificationListGroup">
+                    <div class="list-group list-group-flush font-weight-normal fs--1" id="TopNotificaitonList">
                         <div class="list-group-title border-bottom">NEW</div>
+                        
                     </div>
-                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="/communication/notifications">View all</a></div>
+                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="../pages/notifications.html">View all</a></div>
                 </div>
             </div>
+
         </li>
 
         @*The notification One Ends here*@
@@ -69,7 +71,7 @@
             <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle" id="topProfilePicture" src="@(!string.IsNullOrEmpty(ViewBag.ProfileUrl)?  ViewBag.ProfileUrl:"../assets/img/team/default-logo.png")" alt="" />
+                    <img class="rounded-circle" id="topProfilePicture" src="@(!string.IsNullOrEmpty(ViewBag.ProfileUrl)?  ViewBag.ProfileUrl:"../assets/img/team/default-logo.png")" alt="" userid="@(ViewBag.UserId)" />
 
                 </div>
             </a>

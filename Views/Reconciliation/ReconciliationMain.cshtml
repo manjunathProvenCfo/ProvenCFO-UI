@@ -461,7 +461,7 @@
         }
 
     </script>
-    @Scripts.Render("~/bundles/js/reconciliationMain")
+
     <script>
         function drawnCallbackTblReconciliation(settings) {
             alert('')
@@ -1024,7 +1024,9 @@
 
 
         }
+        var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
     </script>
+    @Scripts.Render("~/bundles/js/reconciliationMain")
 
 }
 
