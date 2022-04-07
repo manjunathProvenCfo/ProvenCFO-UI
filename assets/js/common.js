@@ -284,7 +284,9 @@ var loadAllNotificationLoggedInUser = function()
     var userId = $('#topProfilePicture').attr('userid');
 
     getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
+      
         if (response && response.status) {
+            
             var icount = 0;
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
@@ -297,11 +299,13 @@ var loadAllNotificationLoggedInUser = function()
                 if (obj.isunread != null && obj.isunread == true) {
                     NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
                 }
+               
                 else {
                     NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
                 }
                 $TopNotificaitonList.append(NotificationHtml);
                 icount++;
+                
             })
 
         }
@@ -496,7 +500,25 @@ var findAndParseMentionInNotification = async function (channel) {
         return allMentionedMessages;
     });
 }
+$(function () {
 
+    $("#MarkallRead").click(function () {
+        
+        var userId = $('#topProfilePicture').attr('userid');
+
+        getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+
+            if (response == true) {
+                $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+                
+                location.reload();
+               
+                
+            }
+        });
+
+    });
+});
 var findMentionInMessageBody = function (msg) {
     let matches = [];
 
