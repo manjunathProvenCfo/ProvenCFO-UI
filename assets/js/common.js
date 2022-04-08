@@ -7,6 +7,7 @@ var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
 var $TopNotificaitonList = $("#TopNotificaitonList");
+var $TopNotificaitonList1 = $("#TopNotificaitonList1");
 var notifications = [];
 var addMessageProcessedGlobal = [];
 
@@ -54,6 +55,7 @@ $(function () {
 
     //local db notificiation
     loadAllNotificationLoggedInUser();
+    loadAllNotificationLoggedInUser1();
     //local db notificiation
 
     bindNotInBooksAndBanksCount();
@@ -277,6 +279,9 @@ function HighlightMenu() {
     }
 
 }
+
+
+
 //Layout page
 
 //Global Chat with Notifications (Non Twilio , Local DB) Start
@@ -295,7 +300,7 @@ var loadAllNotificationLoggedInUser = function()
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
-                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of :" + obj.accountName
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
                 var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
@@ -307,10 +312,47 @@ var loadAllNotificationLoggedInUser = function()
                 else {
                     NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
-                $TopNotificaitonList.append(NotificationHtml);
+                $TopNotificaitonList1.append(NotificationHtml);
                 icount++;
                 
             })
+           
+
+        }
+    });
+
+}
+
+var loadAllNotificationLoggedInUser1 = function () {
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
+
+        if (response && response.status) {
+
+            var icount = 0;
+            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
+            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
+            response.resultData.forEach(function (obj) {
+                if (icount > 2) return false;
+                var NotificationHtml = '';
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of: " + obj.accountName
+                var mDate = new Date(obj.mentionedDate);
+                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                var Timestring = getCurrentTime(new Date);
+                if (obj.isunread != null && obj.isunread == true) {
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+
+                else {
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+                $TopNotificaitonList.append(NotificationHtml);
+                icount++;
+
+            })
+
 
         }
     });
