@@ -44,15 +44,15 @@ var CommentHtmls = {
                     <div class="text-400 fs--2 text-right">{time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
                 </div></div></div></div>`,
     otherscCommentshtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
-            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
                 <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
                     {text}
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
                     <span>{time}</span></div></div></div></div>`,
     otherscAttachmentImageHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
-            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
                 <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message chat-gallery justify-content-end">
-                    <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+                    <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
 
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
                     <span>{time}</span></div></div></div></div>`,
@@ -63,7 +63,7 @@ var CommentHtmls = {
                                             <div class="chat-message chat-gallery justify-content-end">
                                                 <div class="row mx-n1 justify-content-end">
 
-                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
                                             </div>
                                         </div>
                                         <div class="text-400 fs--2 text-right">
@@ -89,7 +89,7 @@ var CommentHtmls = {
                                 </div>
                             </div>`,
     otherscAttachmentDocumentsHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
-            <img class="rounded-circle" src="{profileimgurl}" alt=""></div><div class="media-body"><div class="w-xxl-75">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
                 <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
                    <a href="{FileScrPath}" target="_blank">{FileName}</a>
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
@@ -656,7 +656,7 @@ var renderParticipants = function () {
         chat.channels[i]["Index"] = i;
         participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-email="` + (obj[i].IsPrivate === false ? '' : obj[i].ChatParticipants[0].Email.toLowerCase()) + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
                         <div class="avatar avatar-xl status-offline">
-                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ChannelImage) == true ? Default_Profile_Image : obj[i].ChannelImage) + `" alt="" />
+                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ChannelImage) == true ? Default_Profile_Image : obj[i].ChannelImage) + `" alt="" onerror="imgError(this);" />
 
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">

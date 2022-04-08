@@ -289,3 +289,8 @@ function HidelottieLoader() {
     $("#Loader").hide();
 
 }
+function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/img/team/default-logo.png";
+    return true;
+}

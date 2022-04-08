@@ -23,7 +23,7 @@ var $NotificationHtmls = {
                             <a class="notification notification-flush bg-200" href="#!">
                                 <div class="notification-avatar">
                                     <div class="avatar avatar-2xl mr-3">
-                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" />
+                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);" />
                                     </div>
                                 </div>
                                 <div class="notification-body"  commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
@@ -36,7 +36,7 @@ var $NotificationHtmls = {
 						<a class="border-bottom-0 notification notification-flush" href="#!">
                             <div class="notification-avatar">
                               <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="">
+                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);">
                               </div>
                             </div>
                             <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
@@ -569,7 +569,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                          <a class="notification notification-flush bg-200" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
                              <div class="notification-avatar">
                                  <div class="avatar avatar-2xl mr-3">
-                                     <img class="rounded-circle" src="${avatar}" alt="" />
+                                     <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);" />
 
                                  </div>
                              </div>
@@ -604,7 +604,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
             let template = `<a class="border-bottom-0 notification rounded-0 border-x-0 border-300" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
             <div class="notification-avatar">
                 <div class="avatar avatar-xl mr-3">
-                    <img class="rounded-circle" src="${avatar}" alt="">
+                    <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);">
 
                 </div>
             </div>
