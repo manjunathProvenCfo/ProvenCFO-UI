@@ -208,8 +208,7 @@ var addMediaMessageLocalFolder = function (file) {
     var ReconciliationId = chat.channelUniqueNameGuid;
     const formData = new FormData();
     formData.append('file', file);
-    postFileAjaxSync(`/Reconciliation/UploadReconcilationAttachmentAsync?ReconciliationId=` + ReconciliationId + `&AgencyId=` + AgencyId, formData, function (response) {
-        debugger;
+    postFileAjaxSync(`/Reconciliation/UploadReconcilationAttachmentAsync?ReconciliationId=` + ReconciliationId + `&AgencyId=` + AgencyId, formData, function (response) {       
         var r = response;
         if (response.Status != "Success") {
             ShowAlertBoxError("File uploader", "Error while file attachment.");

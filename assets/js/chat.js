@@ -22,6 +22,8 @@ var addMessageProcessed = [];
 var $gl_accountDropdown;
 var $tc_1_Dropdown;
 var $tc_2_Dropdown;
+var $communicationGLaccount;
+var $communicationTrackingCategories;
 
 var chat = {
     userId: "",
@@ -115,7 +117,8 @@ var CommentHtmls = {
 }
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
-
+    $('#menu_communication a').click();
+    $('#submenu_chat').addClass('active');
     showChatContentLoader();
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
@@ -144,6 +147,8 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+    $communicationGLaccount = $("#comTrackingCategories");
+    $communicationTrackingCategories = $("#comGLaccount");
 
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
@@ -229,6 +234,32 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         $("#divChatSiderbarFilters > button[data-type=1]").click();
     }
 
+
+    NoticiationNavigationLoad(chat.clientId);
+
+
+}
+var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
+    
+    $(".media").removeClass("active");
+    var Notification_agencyId = sessionStorage.getItem("Notification_agencyId");
+    var Notification_reconciliationId = sessionStorage.getItem("Notification_reconciliationId");
+    if (Notification_agencyId != null && Notification_agencyId != undefined && Notification_reconciliationId != null && Notification_reconciliationId != undefined) {
+        loadCommentsPage(Notification_reconciliationId);
+        $("#" + Notification_reconciliationId).addClass("active");
+        scrolltoselctedItem($("#" + Notification_reconciliationId));
+        sessionStorage.removeItem("Notification_agencyId");
+        sessionStorage.removeItem("Notification_reconciliationId");
+    } else {
+        loadCommentsPage(ReconcilationId);
+        $("#" + ReconcilationId).addClass("active");
+        scrolltoselctedItem($("#" + ReconcilationId));
+    }
+
+
+}
+var scrolltoselctedItem = function (element) {    
+    $(".contacts-list").animate({ scrollTop: element.position().top -70 });
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
 
@@ -391,8 +422,9 @@ var loadreconcilationcomments = function () {
             });
         }
         if ($participantsContainer.children(0)[0] != undefined) {
-            $participantsContainer.children(0)[0].click();
-            loadCommentsPage($participantsContainer.children(0)[0].id);
+            // $participantsContainer.children(0)[0].click();
+            // loadCommentsPage($participantsContainer.children(0)[0].id);
+            loadCommentsPageOnReconcilationId($participantsContainer.children(0)[0].id);
         }
         else {
             //ShowAlertBoxWarning("No participant exists for chat");
@@ -410,7 +442,7 @@ var addMediaMessageLocalFolder = function (file) {
     const formData = new FormData();
     formData.append('file', file);
     postFileAjaxSync(`/Reconciliation/UploadReconcilationAttachmentAsync?ReconciliationId=` + ReconciliationId + `&AgencyId=` + AgencyId, formData, function (response) {
-        debugger;
+
         var r = response;
         if (response.Status != "Success") {
             ShowAlertBoxError("File uploader", "Error while file attachment.");
@@ -485,6 +517,7 @@ var setCommentsHeader = function (reconciliationdata) {
 }
 var LoadAllComments = function (ReconciliationComments) {
     $channelMessages.empty();
+
     if (ReconciliationComments != null && ReconciliationComments.length > 0) {
 
         // this gives an object with dates as keys
@@ -667,19 +700,7 @@ var getChatParticipants = function () {
 
                 setOnlineOfflineMembersArray();
                 renderParticipants();
-            }
-
-            //else {
-
-            //    if (chat.type === 1) {
-            //        debugger;
-            //        ShowAlertBoxWarning("No person exists for chat");
-            //    }
-            //    else if (chat.type === 0) {
-            //        debugger;
-            //        ShowAlertBoxWarning("No reconciliation exists for chat");
-            //    }
-            //}
+            }            
         });
     }
 }
@@ -915,6 +936,7 @@ $("#divChatSiderbarFilters > button").click(function () {
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];
+                showHideReconcilationOptions(false);
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -926,12 +948,23 @@ $("#divChatSiderbarFilters > button").click(function () {
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];
+                showHideReconcilationOptions(true);
                 //loadChatPage(false, chat.type);
                 loadreconcilationcomments();
             }, 0)
         }
     }
 });
+function showHideReconcilationOptions(show) {
+    if (show == true) {
+        $communicationGLaccount.removeClass('d-none');
+        $communicationTrackingCategories.removeClass('d-none');
+    }
+    else {
+        $communicationGLaccount.addClass('d-none');
+        $communicationTrackingCategories.addClass('d-none');
+    }
+}
 
 function AgencyDropdownPartialViewChange() {
 

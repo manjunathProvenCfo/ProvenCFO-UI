@@ -47,7 +47,7 @@
                     </div>
                     @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
                     {
-                        <div class="col-3 col-sm-3 d-flex align-items-center">
+                        <div class="col-3 col-sm-3 d-flex align-items-center" id="comGLaccount">
                             <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
                                 <div class="fas fa-chevron-left"></div>
                             </a>
@@ -65,7 +65,7 @@
                         int count = 0;
                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                         {
-                            <div class="col-2 col-sm-2 d-flex align-items-center">
+                            <div class="col-2 col-sm-2 d-flex align-items-center" id="comTrackingCategories">
                                 <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
                                     <div class="fas fa-chevron-left"></div>
                                 </a>

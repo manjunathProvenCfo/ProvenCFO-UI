@@ -26,7 +26,7 @@ var $NotificationHtmls = {
                                         <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" />
                                     </div>
                                 </div>
-                                <div class="notification-body" commentId="", reconciliationId ="" >
+                                <div class="notification-body"  commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
                                     <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
                                     <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span>
                                 </div>
@@ -39,7 +39,7 @@ var $NotificationHtmls = {
                                 <img class="rounded-circle" src="{mentionedByProfilePic}" alt="">
                               </div>
                             </div>
-                            <div class="notification-body" commentId="", reconciliationId ="" >
+                            <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
                               <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
                               <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span>2d</span>
                             </div>
@@ -99,7 +99,9 @@ var twilioChatGlobal = function (isNotiAlreadyFetched) {
 var getClientId = function () {
     return $("#ddlclient option:selected").val();
 }
-
+var setClientId = function (Id) {
+    return $("#ddlclient").val(Id);
+}
 //Layout page
 var AgencyDropdownPartialViewChange = function () {
 
@@ -288,6 +290,8 @@ var loadAllNotificationLoggedInUser = function()
         if (response && response.status) {
             
             var icount = 0;
+            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
+            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
@@ -297,11 +301,11 @@ var loadAllNotificationLoggedInUser = function()
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
                 var Timestring = getCurrentTime(new Date);
                 if (obj.isunread != null && obj.isunread == true) {
-                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
                
                 else {
-                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text);
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
                 $TopNotificaitonList.append(NotificationHtml);
                 icount++;
@@ -321,6 +325,17 @@ function getCurrentTime(date) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
+}
+var ClientNotification = function (e) {
+    //var agencyId = e.currentTarget.attributes["agencyId"].value;
+    //var commentId = e.currentTarget.attributes["commentId"].value;
+    //var reconciliationId = e.currentTarget.attributes["reconciliationId"].value
+    sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+    sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+    window.location.href = "/Communication/Chat";
+    //$('#menu_communication a').click();
+    //setTimeout(function () { $('#submenu_chat a').click(); }, 500);
+
 }
 //Global Chat with Notifications (Non Twilio , Local DB) End
 
