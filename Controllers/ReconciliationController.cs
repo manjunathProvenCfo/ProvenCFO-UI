@@ -436,7 +436,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            
+
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
@@ -604,34 +604,47 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public JsonResult EmailSend(string ClientName,string NotInBankUnreconciledItemsCount,string url)
+        public JsonResult EmailSend(string ClientName, string NotInBankUnreconciledItemsCount, string url, string sentdate)
         {
             try
             {
                 using (AccountService obj = new AccountService())
                 {
                     List<InviteUserModel> user = new List<InviteUserModel>();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];         
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+
 
                     var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
                     var test = result1.ResultData.ToList();
-                    
-                     var data = test.Where(x=>x.IsRegistered ==1 && x.IsActive==1.ToString()).Select(x => x.Email);
+                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+
                     XmlDocument doc = new XmlDocument();
-                        doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                    doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
 
-                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));     
-                        var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
-                        var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
-                        subject = subject.Replace("{CompanyName}", ClientName);
-                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-                        body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+                    string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                    var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                    var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
 
-                        body = body.Replace("{url}", url );
-                    
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
-                    
+
+                    subject = subject.Replace("{CompanyName}", ClientName);
+                    subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+
+                    body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+                    body = body.Replace("{url}", url);
+                    //if (sentdate != "null")
+                    //{
+                    //    footer = footer.Replace("{LastSent}", sentdate);
+                    //}
+                    //else
+                    //{
+                    //    footer = "";
+
+                    //}
+                    footer= sentdate != "null"? footer.Replace("{LastSent}", sentdate) :  "";
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+
                 }
             }
             catch (Exception ex)
@@ -657,14 +670,14 @@ namespace ProvenCfoUI.Controllers
             {
                 BinaryReader b = new BinaryReader(file.InputStream);
                 byte[] binData = b.ReadBytes(file.ContentLength);
-                
+
 
                 string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
                 using (ReconcilationService service = new ReconcilationService())
                 {
 
 
-                   
+
                     input.HtmlString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;
@@ -716,8 +729,8 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
-            
-            
+
+
         }
 
         [CheckSession]

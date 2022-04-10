@@ -29,7 +29,7 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClient = new ClientService())
                     {
                         int AgencyID = 0;
-                       
+
                         ViewBag.IsEditMode = false;
                         ViewBag.IsDraggable = false;
                         var userType = Convert.ToString(Session["UserType"]);
@@ -50,9 +50,9 @@ namespace ProvenCfoUI.Controllers
                         }
                         var NoteSummaryData = objNotes.GetNotesStatus();
                         TempData["NotesSummarydata"] = NoteSummaryData.ResultData;
-                       
+
                         ViewBag.selectSummaryStatusText = NoteSummaryData.ResultData.Where(x => x.Id == Summary.Summaryid_ref).FirstOrDefault().SummaryData;
-                        
+
                         if (userType != "" && userType == "1")
                         {
                             ViewBag.IsEditMode = true;
@@ -147,7 +147,7 @@ namespace ProvenCfoUI.Controllers
         //    }
         //}
         [HttpGet]
-        public JsonResult UpdateClientRefId(int id,int clientId)
+        public JsonResult UpdateClientRefId(int id, int clientId)
         {
             try
             {
@@ -158,10 +158,10 @@ namespace ProvenCfoUI.Controllers
                     clientModel.Summaryid_ref = id;
 
                     clientModel.Id = clientId;
-                   
+
                     var result = objNotes.UpdateClientRefId(clientModel);
-                  
-                   
+
+
                     return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -252,7 +252,7 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var LoginUserid = Session["UserId"].ToString();
-                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished, LoginUserid,Notes.Labels).resultData;
+                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished, LoginUserid, Notes.Labels).resultData;
                     if (result == true)
                     {
                         return Json(new { Notes = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
@@ -444,7 +444,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string url1, string url2, string url3, string url4, string url5, string totalNotes)
+        public JsonResult EmailSend(string ClientName, string url, string url1, string url2, string url3, string url4, string url5, string totalNotes, string sentdate)
         {
             try
             {
@@ -462,10 +462,14 @@ namespace ProvenCfoUI.Controllers
                     doc.Load(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
 
                     string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
+
                     var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                     var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+
                     body = body.Replace("{totalNotes}", totalNotes);
                     var a = "https://" + url + "/Notes/GetNotesPage";
                     var b = "https://" + url1 + "/Dashboard/Dashboard";
@@ -480,9 +484,9 @@ namespace ProvenCfoUI.Controllers
                     body = body.Replace("{url4}", e);
                     body = body.Replace("{url5}", f);
 
+                    footer = footer.Replace("{LastSent}", sentdate);
 
-
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
                 }
             }

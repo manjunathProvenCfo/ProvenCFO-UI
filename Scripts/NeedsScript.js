@@ -1140,10 +1140,11 @@ $(function () {
         let totalTask = 0;
       
         var ClientName = $("#ddlclient option:selected").text();
+        getClientDate(ClientName);
         ClientName = encodeURIComponent(ClientName);
          $("#lblTotalTasksCount").text(totalTask);
         /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}`, null, function (response) {
+        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
             if (response.Status == 'Success') {
                 var text = response.Recipients.toString().split(",");
                 var str = text.join(', ');
@@ -1153,12 +1154,24 @@ $(function () {
                 }
                 $("#email-subject").val(response.Subject);
                 $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
 
             }
         });
 
     });
+
 });
+
+var text = "";
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        text = response.resultData;
+    });
+
+}
+
+
 function sendMail() {
     var recip = $("#email-to").val();
     var subject = $("#email-subject").val();

@@ -71,11 +71,11 @@
             background-color: #00BE82 !important;
         }
     </style>*@
-<style>
-    .modal-footer {
-        padding-right: 230px;
-    }
-</style>
+@*<style>
+        .modal-footer {
+            padding-right: 230px;
+        }
+    </style>*@
 
 
 @Styles.Render("~/bundles/css/twilio-chat")
@@ -985,13 +985,14 @@
         $(function () {
 
             $("#email").click(function () {
-
+                debugger;
                 var url = window.location.href;
 
                 var ClientName = $("#ddlclient option:selected").text();
+                getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}`, null, function (response) {
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${text}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
@@ -1001,6 +1002,7 @@
                         }
                         $("#email-subject").val(response.Subject);
                         $("#ibody").html(response.Body);
+                        $("#ifooter").html(response.LastSent);
 
                     }
                 });
@@ -1008,8 +1010,18 @@
             });
         });
 
-        function sendMail() {
+        var text = "";
+        function getClientDate(ClientName) {
+            getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+                text = response.resultData;
+                console.log(text);
+            });
 
+        }
+
+
+        function sendMail() {
+            debugger;
             var recip = $("#email-to").val();
             var subject = $("#email-subject").val();
             var body = $("#ibody").html();
@@ -1021,6 +1033,7 @@
             postAjaxSync(apiurl + `Reconciliation/sendReconcilationEmail`, JSON.stringify(pdata), function (response) {
                 ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
             });
+        }
 
 
         }

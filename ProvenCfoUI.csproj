@@ -1137,6 +1137,7 @@
     <Content Include="Views\Shared\_NeedsEmail.cshtml" />
     <Content Include="Views\Shared\_NotesEmail.cshtml" />
     <Content Include="Views\Home\LoginSessionExpired.cshtml" />
+    <Content Include="Views\Integration\GetBankAccounts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

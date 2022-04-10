@@ -123,7 +123,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         if (NewTasks.Labels == null)
                         {
-                            return Json(new { id = Task.Id,  Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
+                            return Json(new { id = Task.Id, Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
                         }
                         var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
                         if (result.Status == true)
@@ -493,7 +493,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        
+
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase file)
         {
@@ -654,13 +654,13 @@ namespace ProvenCfoUI.Controllers
         public JsonResult DeleteNeedsCard(int TaskId)
         {
             try
-            { 
-                    using (NeedsService objNeeds = new NeedsService())
-                    {
+            {
+                using (NeedsService objNeeds = new NeedsService())
+                {
 
-                        var results = objNeeds.DeleteNeedsCard(TaskId);
-                        return Json(results, JsonRequestBehavior.AllowGet);
-                    }
+                    var results = objNeeds.DeleteNeedsCard(TaskId);
+                    return Json(results, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {
@@ -668,7 +668,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string totalTask)
+        public JsonResult EmailSend(string ClientName, string url, string totalTask, string sentdate)
         {
             try
             {
@@ -690,23 +690,18 @@ namespace ProvenCfoUI.Controllers
 
                         List<string> TaskTitle = null;
                         List<string> Labels = null;
-                        var segmenttask = SegmentTasks.Where(x => x.Id =="1" && x.Id =="2").Select(x => x.Id).ToList();
-                        
+                        var segmenttask = SegmentTasks.Where(x => x.Id == "1" && x.Id == "2").Select(x => x.Id).ToList();
+
                         var Task = "";
                         var Label = "";
-                       
-                            var itemCount = 0;
-
-                        //StringBuilder objtable = new StringBuilder();
-                        //objtable.Append("<table>");
+                        var itemCount = 0;
 
                         foreach (var item in KanbanTaskList)
                         {
-                            
                             TaskTitle = item.Select(x => x.TaskTitle).ToList();
                             Labels = item.Select(x => x.Labels).ToList();
 
-                            if (segmenttask.Count<2 && itemCount <= 1)
+                            if (segmenttask.Count < 2 && itemCount <= 1)
                             {
                                 foreach (var list in KanbanTaskList.Select((value, i) => new { i, value }))
 
@@ -726,7 +721,7 @@ namespace ProvenCfoUI.Controllers
                                             Label += singleLabel + ",";
                                         }
 
-                                        itemCount = itemCount+1;
+                                        itemCount = itemCount + 1;
                                     }
                                 }
                             }
@@ -743,15 +738,14 @@ namespace ProvenCfoUI.Controllers
                         {
                             taskPrint = tokensTask[i];
 
-                            for (int j = k; j < tokenslabel.Length-1; j++)
+                            for (int j = k; j < tokenslabel.Length - 1; j++)
                             {
                                 labelPrint = tokenslabel[j];
 
                                 k = j + 1;
-                                taskLabelPrint += taskPrint+" - " + labelPrint + "<br/> ";
-                                taskLabelPrint.Replace(", -" ,"");
+                                taskLabelPrint += taskPrint + " - " + labelPrint + "<br/> ";
+                                taskLabelPrint.Replace(", -", "");
                                 break;
-
                             }
                         }
 
@@ -760,15 +754,20 @@ namespace ProvenCfoUI.Controllers
                         doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
 
                         string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+
                         var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                         var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                        var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+
                         subject = subject.Replace("{CompanyName}", ClientName);
                         subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-                        body = body.Replace("{Needs Title}", taskLabelPrint.ToString());
 
+                        body = body.Replace("{Needs Title}", taskLabelPrint.ToString());
                         body = body.Replace("{url}", url);
 
-                        return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                        footer = footer.Replace("{LastSent}", sentdate);
+
+                        return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
@@ -784,48 +783,6 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-        //public JsonResult EmailSend(string ClientName,string url,string totalTask)
-        //{
-        //    try
-        //    {
-        //        using (AccountService obj = new AccountService())
-        //        {
-        //            List<InviteUserModel> user = new List<InviteUserModel>();
-        //            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-        //            var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-
-        //            var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-        //            var test = result1.ResultData.ToList();
-
-        //            var data = test.Where(x => x.IsRegistered == 1).Select(x => x.Email);
-        //            XmlDocument doc = new XmlDocument();
-        //            doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
-
-        //            string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
-        //            var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
-        //            var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
-        //            subject = subject.Replace("{CompanyName}", ClientName);
-        //            subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-        //            body = body.Replace("{totalTask}", totalTask);
-
-        //            body = body.Replace("{url}", url);
-
-        //            return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success" }, JsonRequestBehavior.AllowGet);
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
-        //        return Json(new
-        //        {
-        //            File = "",
-        //            Status = "Error",
-        //            Message = ex.Message
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
 
     }
 }
