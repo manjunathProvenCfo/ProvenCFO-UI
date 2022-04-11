@@ -298,7 +298,7 @@ var loadAllNotificationLoggedInUser = function()
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
             response.resultData.forEach(function (obj) {
-                if (icount > 2) return false;
+                if (icount < 0) return false;
                 var NotificationHtml = '';
                 var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ", for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
@@ -560,8 +560,7 @@ var findAndParseMentionInNotification = async function (channel) {
 $(function () {
 
     $("#MarkallRead").click(function () {
-        debugger;
-        
+
         var userId = $('#topProfilePicture').attr('userid');
 
         getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
