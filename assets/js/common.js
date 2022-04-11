@@ -22,7 +22,7 @@ const Notification_Bell_Size = 2;
 var $NotificationHtmls = {
     UnreadNotificationHtml: ` <div class="list-group-item">
                             <a class="notification notification-flush bg-200" href="#!">
-                                <div class="notification-avatar">
+                                <div class="notification-avatar"> 
                                     <div class="avatar avatar-2xl mr-3">
                                         <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);" />
                                     </div>
@@ -300,7 +300,7 @@ var loadAllNotificationLoggedInUser = function()
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
-                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of: " + obj.accountName
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ",for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
                 var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
@@ -336,7 +336,7 @@ var loadAllNotificationLoggedInUser1 = function () {
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
-                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + " , for the account of: " + obj.accountName
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ",for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
                 var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
