@@ -42,7 +42,7 @@ var $NotificationHtmls = {
                             </div>
                             <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
                               <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span>2d</span>
+                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span></span>
                             </div>
                           </a>
 						  </div>`
@@ -300,7 +300,7 @@ var loadAllNotificationLoggedInUser = function()
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
-                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ",for the account of: " + obj.accountName
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ", for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
                 var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
@@ -336,7 +336,7 @@ var loadAllNotificationLoggedInUser1 = function () {
             response.resultData.forEach(function (obj) {
                 if (icount > 2) return false;
                 var NotificationHtml = '';
-                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ",for the account of: " + obj.accountName
+                var Text = "Mentioned you for the reconciliation item of amount $" + obj.amount + ", for the account of: " + obj.accountName
                 var mDate = new Date(obj.mentionedDate);
                 var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
                 var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
@@ -560,6 +560,7 @@ var findAndParseMentionInNotification = async function (channel) {
 $(function () {
 
     $("#MarkallRead").click(function () {
+        debugger;
         
         var userId = $('#topProfilePicture').attr('userid');
 
