@@ -642,7 +642,7 @@ namespace ProvenCfoUI.Controllers
                     //    footer = "";
 
                     //}
-                    footer= sentdate != "null"? footer.Replace("{LastSent}", sentdate) :  "";
+                    footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
                 }
@@ -751,15 +751,15 @@ namespace ProvenCfoUI.Controllers
                         objComment.CreatedBy = LoginUserid;
                         objComment.ReconciliationId_ref = ReconciliationId;
                         objComment.AgencyId = AgencyId;
-                        ReconciliationCommentId = service.InsertReconcilationCommentsDetailsForAttachments(objComment).resultData;                         
+                        ReconciliationCommentId = service.InsertReconcilationCommentsDetailsForAttachments(objComment).resultData;
                     }
 
                     ReconciliationCommentAttachments newfile = new ReconciliationCommentAttachments();
-                   List<ReconciliationCommentAttachments> newfiles = new List<ReconciliationCommentAttachments>();
+                    List<ReconciliationCommentAttachments> newfiles = new List<ReconciliationCommentAttachments>();
                     Guid objGuid = Guid.NewGuid();
-                    
+
                     string _FileName = Path.GetFileName(file.FileName);
-                    string File_path = Path.Combine(Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId),  _FileName);
+                    string File_path = Path.Combine(Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId), _FileName);
                     string Folder_path = Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId);
                     string File_path_scr = "../UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId + "/" + _FileName;
                     FileInfo fi = new FileInfo(_FileName);
@@ -773,13 +773,13 @@ namespace ProvenCfoUI.Controllers
                     newfile.CreatedDateUTC = DateTime.UtcNow;
                     newfiles.Add(newfile);
                     using (ReconcilationService service = new ReconcilationService())
-                    {                                                
-                      await service.InsertReconciliationCommentAttachmentDetails(newfiles);
+                    {
+                        await service.InsertReconciliationCommentAttachmentDetails(newfiles);
 
                     }
-                    Common.SaveStreamAsFile(Folder_path , file.InputStream,  _FileName);
+                    Common.SaveStreamAsFile(Folder_path, file.InputStream, _FileName);
 
-                    return Json(new { FilePath = File_path_scr, FileName = _FileName,FileType = newfile.FileType, Status = "Success", Message = "File attaced successfully.",CommentId = ReconciliationCommentId }, JsonRequestBehavior.AllowGet);
+                    return Json(new { FilePath = File_path_scr, FileName = _FileName, FileType = newfile.FileType, Status = "Success", Message = "File attaced successfully.", CommentId = ReconciliationCommentId }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -799,13 +799,6 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
 
-
-            return Json(new
-            {
-                File = "",
-                Status = "Error",
-                Message = ""
-            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
