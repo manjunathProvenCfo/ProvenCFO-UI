@@ -985,7 +985,6 @@
         $(function () {
 
             $("#email").click(function () {
-                debugger;
                 var url = window.location.href;
 
                 var ClientName = $("#ddlclient option:selected").text();
@@ -1014,14 +1013,12 @@
         function getClientDate(ClientName) {
             getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
                 text = response.resultData;
-                console.log(text);
             });
 
         }
 
 
         function sendMail() {
-            debugger;
             var recip = $("#email-to").val();
             var subject = $("#email-subject").val();
             var body = $("#ibody").html();
@@ -1036,8 +1033,9 @@
         }
 
 
-        }
+        
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+        
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
 

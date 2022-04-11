@@ -484,7 +484,8 @@ namespace ProvenCfoUI.Controllers
                     body = body.Replace("{url4}", e);
                     body = body.Replace("{url5}", f);
 
-                    footer = footer.Replace("{LastSent}", sentdate);
+                    //footer = footer.Replace("{LastSent}", sentdate);
+                    footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
 
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 

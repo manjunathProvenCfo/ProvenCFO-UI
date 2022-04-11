@@ -765,7 +765,9 @@ namespace ProvenCfoUI.Controllers
                         body = body.Replace("{Needs Title}", taskLabelPrint.ToString());
                         body = body.Replace("{url}", url);
 
-                        footer = footer.Replace("{LastSent}", sentdate);
+                        //footer = footer.Replace("{LastSent}", sentdate);
+                        footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
+
 
                         return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
                     }
