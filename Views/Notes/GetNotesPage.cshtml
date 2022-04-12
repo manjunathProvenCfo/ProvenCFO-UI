@@ -781,7 +781,7 @@
                         }
                         
                         $("#email-subject").val(response.Subject);
-                        $("#ibody").html(response.Body
+                        $("#ibody").html(response.Body);
                         $("#ifooter").html(response.LastSent);
                     }
                 });
@@ -791,7 +791,7 @@
 
         var text = "";
         function getClientDate(ClientName) {
-            getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+            getAjaxSync(apiurl + `Notes/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
                 text = response.resultData;
             });
 
