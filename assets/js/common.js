@@ -370,16 +370,19 @@ function getCurrentTime(date) {
     return strTime;
 }
 var ClientNotification = function (e) {
-    var userId = $('#topProfilePicture').attr('userid');
-
-    getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
-      
+    debugger;
+    var Userid = $('#topProfilePicture').attr('userid');
+    let agencyId = e.currentTarget.attributes["commentId"].value;
+    getAjaxSync(apiurl + `Reconciliation/UpdateNotificationbasedagency?Userid=${Userid}&agencyId=${agencyId}`, null, function (response) {
+        debugger;
         if (response == true) {
+         
             $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+            
             sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
             sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
             window.location.href = "/Communication/Chat";
-            /* location.reload();*/
+           
 
 
         }
