@@ -370,11 +370,11 @@ function getCurrentTime(date) {
     return strTime;
 }
 var ClientNotification = function (e) {
-    debugger;
+    
     var Userid = $('#topProfilePicture').attr('userid');
     let agencyId = e.currentTarget.attributes["commentId"].value;
     getAjaxSync(apiurl + `Reconciliation/UpdateNotificationbasedagency?Userid=${Userid}&agencyId=${agencyId}`, null, function (response) {
-        debugger;
+        
         if (response == true) {
          
             $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
