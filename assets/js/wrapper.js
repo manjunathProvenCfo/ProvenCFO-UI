@@ -1,4 +1,5 @@
-﻿//Ultility Functions
+﻿const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+//Ultility Functions
 function isEmpty(value) {
     return (typeof value === "undefined" || value === null);
 }
@@ -287,4 +288,9 @@ function ShowlottieLoader() {
 function HidelottieLoader() {
     $("#Loader").hide();
 
+}
+function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/img/team/default-logo.png";
+    return true;
 }

@@ -129,7 +129,7 @@
                             </div>
                         </a>
                         <ul class="nav collapse" id="setup" data-parent="#navbarVerticalCollapse">
-                           
+
 
                             @if (Common.IsFeatureAccessable("GLA"))
                             {
@@ -150,6 +150,13 @@
                                     <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_systemsettings">System Settings</a>
                                 </li>
                             }*@
+
+                            @*@if (Common.IsFeatureAccessable("BAC"))
+                             {
+                                <li class="nav-item" id="submenu_bankaccounts">
+                                    <a class="nav-link" href=@Url.Action("GetBankAccounts", "Integration") name="submenu_bankaccounts">Bank Account</a>
+                                </li>
+                             }*@
 
 
 

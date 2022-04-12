@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <EmailContent>
-  <subject>{CompanyName} Notes Questions - {TodaysDate}</subject>
-  <body>
-    <![CDATA[
+	<subject>{CompanyName} Notes Questions - {TodaysDate}</subject>
+	<body>
+		<![CDATA[
      Hi,
 	    </br>
 	    </br>
@@ -20,5 +20,10 @@
     </br>
     ProvenCFO
     ]]>
-  </body>
+	</body>
+	<footer>
+		<![CDATA[
+		 Last Sent on {LastSent}
+		 ]]>
+	</footer>
 </EmailContent>

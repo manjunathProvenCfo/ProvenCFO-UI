@@ -568,3 +568,7 @@ select#item_additional_tracking_category_ref {
     color: #fff !important;
     background-color: #00BE82 !important;
 }
+
+.notification-body {
+    padding-left: 10px;
+}

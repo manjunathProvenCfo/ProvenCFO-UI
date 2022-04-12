@@ -56,9 +56,19 @@
     @*@Scripts.Render("~/bundles/js/reconciliationMain")*@
     <script>
         $(document).ready(function () {
-            chat.userId = "@ViewBag.UserId";
-            chat.userEmail = "@ViewBag.UserEmail";
-            loadChatPage();
+            var NotificationagencyId = sessionStorage.getItem('Notification_agencyId');
+            if (NotificationagencyId != null && NotificationagencyId != undefined) {
+                var selctctedAgencyId = $("#ddlclient option:selected").val();
+                if (NotificationagencyId != selctctedAgencyId) {
+                    $("#ddlclient").val(NotificationagencyId).change();
+                }
+            }
+
+                chat.userId = "@ViewBag.UserId";
+                chat.userEmail = "@ViewBag.UserEmail";
+                loadChatPage();
+
+
         });
     </script>
 }

@@ -766,26 +766,37 @@
                 let totalNotes = 0;
 
                 var ClientName = $("#ddlclient option:selected").text();
-
+                getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 $("#lblTotalNotesCount").text(totalNotes);
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url4=${url4}&url5=${url5}`, null, function (response) {
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url4=${url4}&url5=${url5}&sentdate=${text}`, null, function (response) {
                     if (response.Status == 'Success') {
+                        debugger;
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
                         $("#email-to").val(str);
                         if (str == "") {
                             $("#sendbutton").attr("disabled", true);
                         }
+                        
                         $("#email-subject").val(response.Subject);
                         $("#ibody").html(response.Body);
-
+                        $("#ifooter").html(response.LastSent);
                     }
                 });
 
             });
         });
+
+        var text = "";
+        function getClientDate(ClientName) {
+            getAjaxSync(apiurl + `Notes/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+                text = response.resultData;
+            });
+
+        }
+
         function sendMail() {
             var recip = $("#email-to").val();
             var subject = $("#email-subject").val();

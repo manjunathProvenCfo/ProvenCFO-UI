@@ -6,8 +6,11 @@ var $notifictionsDropDown = $("#navbarDropdownNotification");
 var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
+var $TopNotificaitonList = $("#TopNotificaitonList");
+var $TopNotificaitonList1 = $("#TopNotificaitonList1");
 var notifications = [];
 var addMessageProcessedGlobal = [];
+
 
 const _audio = new Audio("/assets/audio/notification.mp3");
 const chatPages = ["communication/chat"]//reconciliation
@@ -16,11 +19,44 @@ const timer = ms => new Promise(res => setTimeout(res, ms));
 
 var Default_Profile_Image = "/assets/img/team/default-logo.png";
 const Notification_Bell_Size = 2;
+var $NotificationHtmls = {
+    UnreadNotificationHtml: ` <div class="list-group-item">
+                            <a class="notification notification-flush bg-200" href="#!">
+                                <div class="notification-avatar"> 
+                                    <div class="avatar avatar-2xl mr-3">
+                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);" />
+                                    </div>
+                                </div>
+                                <div class="notification-body"  commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
+                                    <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                                    <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span>
+                                </div>
+                            </a>
+                        </div>  `,
+    ReadNotificaitonHtml: `<div class="list-group-item">
+						<a class="border-bottom-0 notification notification-flush" href="#!">
+                            <div class="notification-avatar">
+                              <div class="avatar avatar-xl me-3">
+                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);">
+                              </div>
+                            </div>
+                            <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
+                              <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span></span>
+                            </div>
+                          </a>
+						  </div>`
+}
 
 $(function () {
     //Twilio Chat
     twilioChatGlobal();
     //Twilio Chat
+
+    //local db notificiation
+    loadAllNotificationLoggedInUser();
+    loadAllNotificationLoggedInUser1();
+    //local db notificiation
 
     bindNotInBooksAndBanksCount();
     bindNotInBooksAndBanksCount1();
@@ -65,7 +101,9 @@ var twilioChatGlobal = function (isNotiAlreadyFetched) {
 var getClientId = function () {
     return $("#ddlclient option:selected").val();
 }
-
+var setClientId = function (Id) {
+    return $("#ddlclient").val(Id);
+}
 //Layout page
 var AgencyDropdownPartialViewChange = function () {
 
@@ -241,7 +279,128 @@ function HighlightMenu() {
     }
 
 }
+
+
+
 //Layout page
+
+//Global Chat with Notifications (Non Twilio , Local DB) Start
+
+var loadAllNotificationLoggedInUser = function()
+{
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
+      
+        if (response && response.status) {
+            
+            var icount = 0;
+            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
+            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
+            response.resultData.forEach(function (obj) {
+                if (icount < 0) return false;
+                var NotificationHtml = '';
+                var agencyName = obj.agencyName;
+                var Text = "mentioned you in " + agencyName + " about a transaction for $" + obj.amount;
+                var mDate = new Date(obj.mentionedDate);
+                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                var Timestring = getCurrentTime(new Date);
+                if (obj.isunread != null && obj.isunread == true) {
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+               
+                else {
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+                $TopNotificaitonList1.append(NotificationHtml);
+                icount++;
+                
+            })
+           
+
+        }
+    });
+
+}
+
+var loadAllNotificationLoggedInUser1 = function () {
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
+
+        if (response && response.status) {
+
+            var icount = 0;
+            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
+            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
+            response.resultData.forEach(function (obj) {
+                if (icount > 2) return false;
+                var NotificationHtml = '';
+                var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
+                var mDate = new Date(obj.mentionedDate);
+                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                var Timestring = getCurrentTime(new Date);
+                if (obj.isunread != null && obj.isunread == true) {
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+
+                else {
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+                $TopNotificaitonList.append(NotificationHtml);
+                icount++;
+
+            })
+
+
+        }
+    });
+
+}
+function getCurrentTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+var ClientNotification = function (e) {
+    
+    var Userid = $('#topProfilePicture').attr('userid');
+    let agencyId = e.currentTarget.attributes["commentId"].value;
+    getAjaxSync(apiurl + `Reconciliation/UpdateNotificationbasedagency?Userid=${Userid}&agencyId=${agencyId}`, null, function (response) {
+        
+        if (response == true) {
+         
+            $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+            
+            sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+            sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+            window.location.href = "/Communication/Chat";
+           
+
+
+        }
+    });
+    //var agencyId = e.currentTarget.attributes["agencyId"].value;
+    //var commentId = e.currentTarget.attributes["commentId"].value;
+    //var reconciliationId = e.currentTarget.attributes["reconciliationId"].value
+
+    //sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+    //sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+    //window.location.href = "/Communication/Chat";
+    //$('#menu_communication a').click();
+    //setTimeout(function () { $('#submenu_chat a').click(); }, 500);
+
+}
+//Global Chat with Notifications (Non Twilio , Local DB) End
+
+
 
 //Global Chat with Notifications Start
 var getTwilioToken = function (email) {
@@ -260,8 +419,8 @@ var createTwilioClientGlobal = async function () {
 
                 if (isNotificationsAlreadyFetched === false) {
                     isNotificationsAlreadyFetched = true;
-                    showWaitMeLoader($notifictionsList);
-                    showWaitMeLoader($divNotificationsCard);
+                   /* showWaitMeLoader($notifictionsList);*/
+                   /* showWaitMeLoader($divNotificationsCard);*/
 
                     await setNotificationMessageAddedListenerOnAllChannels();
 
@@ -417,7 +576,25 @@ var findAndParseMentionInNotification = async function (channel) {
         return allMentionedMessages;
     });
 }
+$(function () {
 
+    $("#MarkallRead").click(function () {
+
+        var userId = $('#topProfilePicture').attr('userid');
+
+        getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+
+            if (response == true) {
+                $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+                
+                location.reload();
+               
+                
+            }
+        });
+
+    });
+});
 var findMentionInMessageBody = function (msg) {
     let matches = [];
 
@@ -453,7 +630,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                          <a class="notification notification-flush bg-200" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
                              <div class="notification-avatar">
                                  <div class="avatar avatar-2xl mr-3">
-                                     <img class="rounded-circle" src="${avatar}" alt="" />
+                                     <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);" />
 
                                  </div>
                              </div>
@@ -488,7 +665,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
             let template = `<a class="border-bottom-0 notification rounded-0 border-x-0 border-300" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
             <div class="notification-avatar">
                 <div class="avatar avatar-xl mr-3">
-                    <img class="rounded-circle" src="${avatar}" alt="">
+                    <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);">
 
                 </div>
             </div>
@@ -504,8 +681,8 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
         }
     }
 
-    hideWaitMeLoader($notifictionsList);
-    hideWaitMeLoader($divNotificationsCard);
+   /* hideWaitMeLoader($notifictionsList);*/
+    /*hideWaitMeLoader($divNotificationsCard);*/
 
 }
 
