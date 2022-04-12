@@ -370,12 +370,27 @@ function getCurrentTime(date) {
     return strTime;
 }
 var ClientNotification = function (e) {
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+      
+        if (response == true) {
+            $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+            sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+            sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+            window.location.href = "/Communication/Chat";
+            /* location.reload();*/
+
+
+        }
+    });
     //var agencyId = e.currentTarget.attributes["agencyId"].value;
     //var commentId = e.currentTarget.attributes["commentId"].value;
     //var reconciliationId = e.currentTarget.attributes["reconciliationId"].value
-    sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
-    sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
-    window.location.href = "/Communication/Chat";
+
+    //sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+    //sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+    //window.location.href = "/Communication/Chat";
     //$('#menu_communication a').click();
     //setTimeout(function () { $('#submenu_chat a').click(); }, 500);
 
