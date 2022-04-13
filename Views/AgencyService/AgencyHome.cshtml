@@ -5,6 +5,10 @@
     .disabled-link {
         pointer-events: none;
     }
+    a:hover {
+        color: #00d27a !important;
+    }
+   
 </style>
 @Styles.Render("~/bundles/css/fancybox")
 <div class="dashboard-frame">
@@ -79,7 +83,9 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
-                                <h6 class="mt-1">Not in Books </h6>
+
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
+                                @*<h6 class="mt-1">Not in Books </h6>*@
 
                                 <h1 id="lblNotInBooksCount2" style=" margin-left: 15px;">
                                     0
@@ -107,14 +113,15 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
-                                <h6 class="mt-1">Not in Banks </h6>
+                                <h6 class="mb-0 ml-2" ><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
+                                @*<h6 class="mt-1">Not in Banks </h6>*@
                                 @*<div class="fs--2 mt-3">
-                                        <div class="d-flex flex-between-center mb-1">
+                              <div class="d-flex flex-between-center mb-1">
 
 
-                                            <div class="d-xxl-none">993%</div>
-                                        </div>
-                                    </div>*@
+                                 <div class="d-xxl-none">993%</div>
+                                   </div>
+                                   </div>*@
                                 <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
 
 
@@ -147,7 +154,14 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
-                                <h6 class="mt-1">Needs List</h6>
+                                @*<h6 class="mb-0 ml-2"><a href="@Url.Action("Needs", "NeedsMain", new { Type = "Not in Banks" })">Needs List</a></h6>*@
+
+                                <h6>
+                                    <a class="" href=@Url.Action("NeedsMain", "Needs")>
+                                        Needs List<span class=""></span>
+                                    </a>
+                                </h6>
+
                                 <div class="fs--2 mt-3" id="needsCategoryDiv">
                                     <div class="d-flex flex-between-center mb-1">
                                         <div class="d-flex align-items-center"><span class="dot bg-red"></span><span class="font-weight-semi-bold">Urgent</span></div>
@@ -183,7 +197,11 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
-                                <h6 class="mt-1">Notes</h6>
+                                <h6>
+                                    <a class="" href=@Url.Action("GetNotesPage", "Notes")>
+                                        Notes<span class=""></span>
+                                    </a>
+                                </h6>
                                 <div class="fs--2 mt-3" id="notesCategoryDiv">
                                     <div class="d-flex flex-between-center mb-1">
                                         <div class="d-flex align-items-center"><span class="dot bg-light-blue"></span><span class="font-weight-semi-bold">Income</span></div>
@@ -495,4 +513,6 @@
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
         @Scripts.Render("~/bundles/js/agencyHome")
+
+        
     }
