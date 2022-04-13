@@ -74,13 +74,14 @@
 <script>
         var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
         var sessionTime = @(Convert.ToString(Session["SessionTimeout"]));
+        var apiurl = '@(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]))';
         $(document).ready(function () {
             var timeout = sessionTime * 60000; //Convert Minutes to Milliseconds
-            $(document).bind("idle.idleTimer", function () {               
-                ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session ?", "Yes, continue working", "Logout", function (isConfirmed) {
+            $(document).bind("idle.idleTimer", function () {
+                ShowConfirmBoxWarningwithYesOrNoCallback("Session Expired", "Would you like to continue your session?", "Yes, continue working", "Logout", function (isConfirmed) {
 
                     if (isConfirmed) {
-                        ShowEnterInput('Continue Session', 'Plase enter your password', 'Password','password', 'Please enter valid password', function (IsloginExtend) {
+                        ShowEnterInput('Continue Session', 'Please enter your password', 'Password','Password', 'Please enter valid password', function (IsloginExtend) {
                             if (IsloginExtend) {
                                 postAjaxSync("/Home/SessionTimeoutExtend?UserName=" + userEmailAddress + "&password=" + IsloginExtend, null, function (response) {
 
@@ -90,8 +91,8 @@
                                        /* ShowAlertBoxSuccess('Continue Session', 'Your session has been extened to ' + sessionTime + ' minutes.');*/
                                     }
                                     else {
-                                        ShowAlertBoxWarning('Incorrect Password', 'Entered user name and password is wrong..!', function () {                                           
-                                            window.location.href = window.location.origin + '/Home/LoginSessionExpaired';
+                                        ShowAlertBoxWarning('Incorrect Password', 'Entered user name and password is wrong..!', function () {
+                                            window.location.href = window.location.origin + '/Home/LoginSessionExpired';
                                         });
                                     }
                                 });

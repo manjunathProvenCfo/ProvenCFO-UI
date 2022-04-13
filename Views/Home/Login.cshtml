@@ -3,6 +3,17 @@
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+
+
+    string errorMsg = "";
+    string[] val=new string[] { };
+    if (ViewBag.ErrorMessage != null)
+    {
+
+        errorMsg = ViewBag.ErrorMessage;
+        val = errorMsg.Split('\n');
+
+    }
 }
 @*@Styles.Render("~/assets/AvertaWebFont/provencfo.css")
 @Styles.Render("~/bundles/customcss")*@
@@ -31,7 +42,9 @@
                     @if (@ViewBag.ErrorMessage != null)
                     {
                         <div class="alert alert-danger">
-                            <p>@ViewBag.ErrorMessage</p>
+                            @val[0]
+                            <center>@val[1]</center>
+                            
                         </div>
                     }
 

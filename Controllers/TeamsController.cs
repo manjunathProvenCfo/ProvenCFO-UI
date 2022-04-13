@@ -18,7 +18,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Teams
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult TeamsList()
         {
             try

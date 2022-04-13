@@ -1,4 +1,5 @@
-﻿//Ultility Functions
+﻿const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+//Ultility Functions
 function isEmpty(value) {
     return (typeof value === "undefined" || value === null);
 }
@@ -35,6 +36,33 @@ function baseAjaxCall(type, url, data, response, async) {
         }
     });
 }
+function baseFileAjaxCall(type, url, data, response, async) {
+    if (isEmpty(async))
+        async = true;
+
+    $.ajax({
+        type: type,
+        url: url,
+        data: data,
+        async: async,
+        contentType: false,// Not to set any content header  
+        processData: false, // Not to process data        
+        success: function (data) {
+            response(data);
+        },
+        error: function (err) {
+
+            console.log(err);
+            if (err.status == 5000) {
+                ShowAlertBoxError("Internal server error");
+            }
+            if (err.state() == "rejected") {
+                throw err;
+                //window.location.reload();
+            }
+        }
+    });
+}
 function getAjax(url, data, response) {
     baseAjaxCall('GET', url, data, response);
 }
@@ -55,6 +83,9 @@ function putAjax(url, data, response) {
 }
 function patchAjax(url, data, response) {
     baseAjaxCall('PATCH', url, data, response);
+}
+function postFileAjaxSync(url, data, response) {
+    baseFileAjaxCall('POST', url, data, response, false);
 }
 //Ajax wrapper end
 
@@ -257,4 +288,9 @@ function ShowlottieLoader() {
 function HidelottieLoader() {
     $("#Loader").hide();
 
+}
+function imgError(image) {
+    image.onerror = "";
+    image.src = "../assets/img/team/default-logo.png";
+    return true;
 }

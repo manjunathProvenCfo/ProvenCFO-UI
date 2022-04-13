@@ -33,6 +33,8 @@ namespace Proven.Model
         public int[] Positions { get; set; }
         public int TotalNotes { get; set; }
 
+        public string Labels { get; set; }
+
     }
     public class NotesDescriptionMainModel
     {

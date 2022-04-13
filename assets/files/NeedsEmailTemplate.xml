@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<EmailContent>
+  <subject>{CompanyName} Needs Questions - {TodaysDate}</subject>
+  <body>
+    <![CDATA[
+     Hi,
+	    </br>
+	    </br>
+      We have the following outstanding needs:
+      </br>
+      </br>
+      {Needs Title} 
+     </br>
+      Please log into the <a href="{url}">ProvenCFO App</a> and provide us with the requested information.
+		</br>
+    </br>
+    Much thanks,
+    </br>
+    ProvenCFO
+    ]]>
+  </body>
+	<footer>
+		<![CDATA[
+		 Last Sent on {LastSent}
+		 ]]>
+	</footer>
+</EmailContent>

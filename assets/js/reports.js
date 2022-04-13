@@ -245,10 +245,13 @@ $(function () {
 });
 
 var AgencyDropdownPartialViewChange = function () {
+    
+    ShowlottieLoader();
     SetUserPreferencesForAgency();
     bindQuarter();
     bindReports("");
-    //window.location.reload();
+   /* HidelottieLoader();*/
+    window.location.reload();
 }
 
 var bindPage = function () {
@@ -507,7 +510,7 @@ var deleteReports = function (deleteIds, period) {
 }
 
 var monthlySummaryOnClick = function (e, id) {
-    debugger;
+   
     e.preventDefault();
     let el = $(e.currentTarget);
     let parentDiv = el.parents("#divReportPeriodCard");

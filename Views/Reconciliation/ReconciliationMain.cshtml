@@ -2,75 +2,81 @@
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 @*<style>
-    .tabselect {
-        text-decoration: underline;
-    }
-
-    .loader-circle {
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        z-index: 1110;
-        background-color: rgba(0,0,0,0.75);
-    }
-
-        .loader-circle .spinner-border {
-            width: 4rem;
-            height: 4rem;
-            border: 0.5em solid #00be62;
-            border-right-color: transparent;
+        .tabselect {
+            text-decoration: underline;
         }
 
-    .position-fixed {
-        position: fixed !important;
-    }
+        .loader-circle {
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            z-index: 1110;
+            background-color: rgba(0,0,0,0.75);
+        }
 
-    select#item_additional_tracking_category_ref {
-        width: 90px;
-    }
+            .loader-circle .spinner-border {
+                width: 4rem;
+                height: 4rem;
+                border: 0.5em solid #00be62;
+                border-right-color: transparent;
+            }
 
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
+        .position-fixed {
+            position: fixed !important;
+        }
 
-    .page-link:hover {
-        color: #000 !important;
-    }
+        select#item_additional_tracking_category_ref {
+            width: 90px;
+        }
 
-    select#item_gl_account_ref {
-        font-size: 13px !important;
-        width: 400px;
-    }
+        a.page-link {
+            background-color: #fff !important;
+            border-color: #d8e2ef !important;
+        }
 
-    select#item_rule {
-        font-size: 13px !important;
-        width: 193px;
-    }
+        .page-link:hover {
+            color: #000 !important;
+        }
 
-    select#item_tracking_category_ref {
-        font-size: 13px !important;
-        width: 160px;
-    }
+        select#item_gl_account_ref {
+            font-size: 13px !important;
+            width: 400px;
+        }
 
-    select#item_additional_tracking_category_ref {
-        font-size: 13px !important;
-        width: 160px;
-    }
-    /*  .page-item.active .page-link {
-        background-color: #fff !important;
-        border-color: #fff !important;
-    }*/
-    .chat-message {
-        max-width: calc(100% - 2rem);
-    }
-    .page-item.active .page-link {
-        z-index: 3;
-        color: #fff !important;
-        background-color: #00BE82 !important;
-    }
-</style>*@
+        select#item_rule {
+            font-size: 13px !important;
+            width: 193px;
+        }
+
+        select#item_tracking_category_ref {
+            font-size: 13px !important;
+            width: 160px;
+        }
+
+        select#item_additional_tracking_category_ref {
+            font-size: 13px !important;
+            width: 160px;
+        }
+        /*  .page-item.active .page-link {
+            background-color: #fff !important;
+            border-color: #fff !important;
+        }*/
+        .chat-message {
+            max-width: calc(100% - 2rem);
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff !important;
+            background-color: #00BE82 !important;
+        }
+    </style>*@
+@*<style>
+        .modal-footer {
+            padding-right: 230px;
+        }
+    </style>*@
+
 
 @Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
@@ -131,7 +137,7 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="row align-items-center">
-                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
@@ -162,7 +168,17 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
+                                @if (ViewBag.IsStaffUser == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                        <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                    </button>
 
+
+                                }
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
+                                    <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
+                                </button>
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
@@ -191,7 +207,35 @@
                     </div>
                 </div>
             </div>
+
+
+            @*<form class="card">
+                    <div class="card-header bg-light">
+
+                        <h5 class="mb-0">New message</h5>
+
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="border-bottom border-200">
+                            <input class="form-control border-0 outline-none px-card" id="email-to" type="email" aria-describedby="email-to" placeholder="To">
+                        </div>
+                        <input class="form-control border-0 outline-none px-card" id="email-subject" type="text" aria-describedby="email-subject" placeholder="Subject">
+                        <div class="min-vh-50">
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer border-top border-200 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-primary btn-sm px-5 mr-2" type="submit">Send</button>
+
+                        </div>
+
+                    </div>
+                </form>*@
+
             <div class="card-body px-0 pt-0">
+
                 <div class="dashboard-data-table table-responsive">
                     <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
@@ -218,7 +262,7 @@
                                     <th class="sort pr-10 align-center ">Rule</th>
                                 }
 
-                                @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                @if (TempData["TrackingCategories"] != null)
                                 {
                                     foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
@@ -278,7 +322,7 @@
                                         </td>
                                     }
 
-                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                    @if (TempData["TrackingCategories"] != null)
                                     {
                                         int count = 0;
                                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
@@ -302,25 +346,42 @@
 
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+                                        @if (item.Iscurrent_user_mentioned == true)
+                                        {
+                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                                <span class="fas fa-comment fs--1"></span>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                                <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
 
-                                            @*<span class="far fa-comment fs--1 text-dark"></span>
-        <span class="far fa-comment fs--1"></span>
-        <span class="fas fa-comment fs--1"></span>*@
-                                        </button>
+                                                @*<span class="far fa-comment fs--1 text-dark"></span>
+                                                    <span class="far fa-comment fs--1"></span>
+                                                    <span class="fas fa-comment fs--1"></span>*@
+                                            </button>
+                                        }
+
                                     </td>
                                 </tr>
                             }
 
                         </tbody>
+
                     </table>
+
                 </div>
             </div>
         </div>
+
     </div>
+
+
+
     <div class="col-md-4 p-l-2 d-none" id="divChat">
-        @Html.Partial("_communication", true)
+        @*@Html.Partial("_communication", true)*@
+        @Html.Partial("_communicationReconcilation", true)
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divFilter">
         @Html.Partial("_reconcilationFilter", true)
@@ -329,15 +390,17 @@
         @Html.Partial("_reconcilationBulkupdate", true)
 
     </div>
+    @Html.Partial("_ReconciliationFileUploaderPartial")
+    @Html.Partial("_ReconcilationEmail", true)
 </div>
 
 <!--<div class="position-fixed loader-circle" id="Loader" style="display:none;">
     <div class="d-flex justify-content-center align-items-center vh-100">-->
-        @*<div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+@*<div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
 
-            </div>*@
-        <!--<div class="row">
+    </div>*@
+<!--<div class="row">
             <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_fw9ijhki.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         </div>
         <br />
@@ -355,7 +418,10 @@
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
-    @Scripts.Render("~/bundles/js/twilio-chat")
+    @Scripts.Render("~/bundles/js/kanban")
+    @*@Scripts.Render("~/bundles/js/twilio-chat")*@
+    @Scripts.Render("~/bundles/js/reconcilation-comments")
+    @Scripts.Render("~/bundles/js/imports")
     <script>
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
@@ -386,8 +452,16 @@
         });
 
         $("select").select2();
+
+        var myParam = location.search.split('yes=')[1];
+
+        if (myParam == "1") {
+            $("#email").show();
+            $("#btnImportReconcilition").show();
+        }
+
     </script>
-    @Scripts.Render("~/bundles/js/reconciliationMain")
+
     <script>
         function drawnCallbackTblReconciliation(settings) {
             alert('')
@@ -397,21 +471,21 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
-           
+
             }
-           
+
             EnableSelectedBulkUpdateButton();
 
         }
         function SelectClick(e) {
-           
+
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
-               
+
                 var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
 
@@ -426,10 +500,10 @@
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
                 var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-                
-             
+
+
             }
-          
+
             EnableSelectedBulkUpdateButton();
         }
 
@@ -471,7 +545,7 @@
                 {
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
-                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
+                    ShowAlertBoxError("Error!", "Sorry, there was a problem getting data from Xero. Please try again later.", function () { window.location.reload(); });
                 }
                 else {
                     var msg = 'Loading..'
@@ -515,6 +589,8 @@
         function FillterReset() {
             sessionStorage.removeItem('Filter');
             var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+            /*location.reload();*/
+
             window.location.href = url;
         }
         function BulkActionCancel() {
@@ -525,6 +601,7 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+               /* location.reload();*/
                 window.location.href = url;
             });
 
@@ -791,6 +868,7 @@
             var recType = 'Not in Books';
             if (type != null && type == '1') {
 
+
                 recType = 'Not in Banks';
             }
             var ClientID = $("#ddlclient option:selected").val();
@@ -813,7 +891,7 @@
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
-
+            ShowlottieLoader();
             $.ajax({
                 url: '/AgencyService/GetClientDetails?id=' + ClientID,
                 type: "GET",
@@ -904,9 +982,62 @@
             }
         }
 
+        $(function () {
+
+            $("#email").click(function () {
+                var url = window.location.href;
+
+                var ClientName = $("#ddlclient option:selected").text();
+                getClientDate(ClientName);
+                ClientName = encodeURIComponent(ClientName);
+                var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${text}`, null, function (response) {
+                    if (response.Status == 'Success') {
+                        var text = response.Recipients.toString().split(",");
+                        var str = text.join(', ');
+                        $("#email-to").val(str);
+                        if (str == "") {
+                            $("#sendbutton").attr("disabled", true);
+                        }
+                        $("#email-subject").val(response.Subject);
+                        $("#ibody").html(response.Body);
+                        $("#ifooter").html(response.LastSent);
+
+                    }
+                });
+
+            });
+        });
+
+        var text = "";
+        function getClientDate(ClientName) {
+            getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+                text = response.resultData;
+            });
+
+        }
 
 
+        function sendMail() {
+            var recip = $("#email-to").val();
+            var subject = $("#email-subject").val();
+            var body = $("#ibody").html();
+            var pdata = {
+                Recipents: recip,
+                Subject: subject,
+                Body:body,
+            };
+            postAjaxSync(apiurl + `Reconciliation/sendReconcilationEmail`, JSON.stringify(pdata), function (response) {
+                ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+            });
+        }
+
+
+        
+        var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+        
     </script>
+    @Scripts.Render("~/bundles/js/reconciliationMain")
 
 }
 

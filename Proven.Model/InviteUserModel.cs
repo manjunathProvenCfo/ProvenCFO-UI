@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Proven.Model
 {
     [Serializable]
@@ -76,7 +77,7 @@ namespace Proven.Model
     {
         public bool Status { get; set; }
         public int statusCode { get; set; }
-        public List<InviteUserModel> ResultData { get; set; }
+        public IEnumerable<InviteUserModel> ResultData { get; set; }
         public List<RolesViewModel> Rolelist { get; set; }
         public List<JobTitleModel> JobTitlelist { get; set; }
         public List<InviteUserModel> StaffList { get; set; }
@@ -86,7 +87,7 @@ namespace Proven.Model
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
     }
-
+    [Serializable]
     public class ReturnModel
     {
         public bool status { get; set; }
@@ -101,6 +102,15 @@ namespace Proven.Model
         public bool status { get; set; }
         public int statusCode { get; set; }
         public string[] resultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+    }
+    public class ReturnNumberModel
+    {
+        public bool status { get; set; }
+        public int statusCode { get; set; }
+        public int resultData { get; set; }
         public string message { get; set; }
         public object resourceType { get; set; }
         public object metaData { get; set; }

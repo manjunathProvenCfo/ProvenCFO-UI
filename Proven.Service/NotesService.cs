@@ -42,7 +42,7 @@ namespace Proven.Service
             return PostAsync<ClientModel, ClientModel>("Notes/UpdateNoteSummary", client, true).Result;
         }
 
-        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID)
+        public ReturnModel UpdateNotesDescription(int DescriptionId, string Title, string DescriptionText, string IsPublished, string LoginUserID,string Labels)
         {
             NotesDescriptionModel ndm = new NotesDescriptionModel();
             ndm.Id = DescriptionId;
@@ -50,6 +50,7 @@ namespace Proven.Service
             ndm.Description = DescriptionText;
             ndm.IsPublished = IsPublished;
             ndm.ModifiedBy = LoginUserID;
+            ndm.Labels = Labels;
 
             return PostAsync<ReturnModel, NotesDescriptionModel>("Notes/UpdateNotesDescription", ndm).Result;
         }
@@ -85,7 +86,28 @@ namespace Proven.Service
         {
             return GetAsync<NotesIndividualCountWithItsPercentageMainModel>("Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=" + AgencyId).Result;
         }
+        public NotesSummarymainModel GetNotesStatus()
+        {
+            return GetAsync<NotesSummarymainModel>("Notes/GetNotesStatus").Result;
+        }
+      
+        public string UpdateClientRefId(ClientModel client)
+        {
+            return PostAsync<string, ClientModel>("Notes/UpdateClientRefId", client,false).Result;
+        }
+        public ReturnModel updateCliteSummaryRefId(int Id, string SummaryData, string Status, bool IsDeleted, string SummaryType,string CreatedBy,DateTime CreatedDate)
+        {
+            NotesSummaryVM ndm = new NotesSummaryVM();
+            ndm.Id = Id;
+            ndm.SummaryData = SummaryData;
+            ndm.Status = Status;
+            ndm.IsDeleted = IsDeleted;
+            ndm.SummaryType = SummaryType;
+            ndm.CreatedBy = CreatedBy;
+            ndm.CreatedDate = CreatedDate;
 
+            return PostAsync<ReturnModel, NotesSummaryVM>("Notes/updateCliteSummaryRefId", ndm).Result;
+        }
 
         public void Dispose()
         {

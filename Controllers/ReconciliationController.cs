@@ -7,9 +7,15 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -51,23 +57,32 @@ namespace ProvenCfoUI.Controllers
 
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
-                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
 
-                            }
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
@@ -120,7 +135,7 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value).ResultData;
+                    TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
                     if (userType == "1")
                     {
                         ViewBag.IsStaffUser = true;
@@ -392,27 +407,36 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
-                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID).ResultData;
+                        var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
                         TempData["GLAccounts"] = glAccountList;
+                        List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                        if (objTCList != null && objTCList.Count > 0)
+                        {
+                            List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                       group p by p.Name into g
+                                                                       select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            TempData["TrackingCategories"] = TCgroup;
+                        }
 
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            if (objTCList != null && objTCList.Count > 0)
-                            {
-                                List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                                                                           group p by p.Name into g
-                                                                           select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                                TempData["TrackingCategories"] = TCgroup;
-                            }
+                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                            //if (objTCList != null && objTCList.Count > 0)
+                            //{
+                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                            //                                               group p by p.Name into g
+                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                            //    TempData["TrackingCategories"] = TCgroup;
+                            //}
                             TempData["BankRule"] = getBankRule();
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
+
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
@@ -578,6 +602,203 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public JsonResult EmailSend(string ClientName, string NotInBankUnreconciledItemsCount, string url, string sentdate)
+        {
+            try
+            {
+                using (AccountService obj = new AccountService())
+                {
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+
+
+                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+                    var test = result1.ResultData.ToList();
+                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+
+                    string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
+                    var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                    var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+
+
+                    subject = subject.Replace("{CompanyName}", ClientName);
+                    subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+
+                    body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
+                    body = body.Replace("{url}", url);
+                    //if (sentdate != "null")
+                    //{
+                    //    footer = footer.Replace("{LastSent}", sentdate);
+                    //}
+                    //else
+                    //{
+                    //    footer = "";
+
+                    //}
+                    footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> UploadReconcilationReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
+        {
+            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            var fileName = file.FileName;
+            try
+            {
+                BinaryReader b = new BinaryReader(file.InputStream);
+                byte[] binData = b.ReadBytes(file.ContentLength);
+
+
+                string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+                using (ReconcilationService service = new ReconcilationService())
+                {
+
+
+
+                    input.HtmlString = HTMLresult.Trim();
+                    input.CompanyName = agencyName;
+                    input.CompanyId = agencyId;
+
+                    //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+
+                    using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
+                    {
+                        var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
+                        return Json(new { Status = "Success", result = response.ResultData, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                objOutput.Status = true;
+                objOutput.ValidationStatus = "RequestCancelation";
+                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                return Json(new
+                {
+                    File = "",
+                    Status = "Inprogress",
+                    result = objOutput,
+                    FileName = fileName
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException.Message == "A task was canceled.")
+                {
+                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    objOutput.Status = true;
+                    objOutput.ValidationStatus = "RequestCancelation";
+                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    return Json(new
+                    {
+                        File = "",
+                        Status = "Inprogress",
+                        result = objOutput,
+                        FileName = fileName
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> UploadReconcilationAttachmentAsync(HttpPostedFileBase file, string ReconciliationId, int AgencyId)
+        {
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    var LoginUserid = Session["UserId"].ToString();
+                    int ReconciliationCommentId;
+                    using (ReconcilationService service = new ReconcilationService())
+                    {
+                        ReconciliationComments objComment = new ReconciliationComments();
+                        objComment.IsAttachment = true;
+                        objComment.IsDeleted = false;
+                        objComment.CreatedBy = LoginUserid;
+                        objComment.ReconciliationId_ref = ReconciliationId;
+                        objComment.AgencyId = AgencyId;
+                        ReconciliationCommentId = service.InsertReconcilationCommentsDetailsForAttachments(objComment).resultData;
+                    }
+
+                    ReconciliationCommentAttachments newfile = new ReconciliationCommentAttachments();
+                    List<ReconciliationCommentAttachments> newfiles = new List<ReconciliationCommentAttachments>();
+                    Guid objGuid = Guid.NewGuid();
+
+                    string _FileName = Path.GetFileName(file.FileName);
+                    string File_path = Path.Combine(Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId), _FileName);
+                    string Folder_path = Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId);
+                    string File_path_scr = "../UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId + "/" + _FileName;
+                    FileInfo fi = new FileInfo(_FileName);
+
+                    newfile.ReconciliationId_ref = ReconciliationId;
+                    newfile.FileType = fi.Extension;
+                    newfile.FileName = _FileName;
+                    newfile.FilePath = File_path_scr;
+                    newfile.ReconciliationCommentId_ref = ReconciliationCommentId;
+                    newfile.CreatedBy = LoginUserid;
+                    newfile.CreatedDateUTC = DateTime.UtcNow;
+                    newfiles.Add(newfile);
+                    using (ReconcilationService service = new ReconcilationService())
+                    {
+                        await service.InsertReconciliationCommentAttachmentDetails(newfiles);
+
+                    }
+                    Common.SaveStreamAsFile(Folder_path, file.InputStream, _FileName);
+
+                    return Json(new { FilePath = File_path_scr, FileName = _FileName, FileType = newfile.FileType, Status = "Success", Message = "File attaced successfully.", CommentId = ReconciliationCommentId }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { File = "", Status = "Failur", Message = "No files are attached.." }, JsonRequestBehavior.AllowGet);
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = "Error while sending attachment."
+                }, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

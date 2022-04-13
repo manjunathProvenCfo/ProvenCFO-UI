@@ -38,6 +38,11 @@ $(document).ready(function () {
             }
         }
     });
+    var myParam = location.search.split('yes=')[1];
+
+    if (myParam == "1") {
+        $("#email").show(); 
+    }
     //view Page
     myDropzone_view.on("addedfile", function (file) {
 
@@ -616,6 +621,8 @@ function updateKanbanColumnsCount() {
 }
 
 function AgencyDropdownPartialViewChange() {
+
+    ShowlottieLoader();
     var ClientID = $("#ddlclient option:selected").val();
     //getTeamMembersList(ClientID);
     if (ClientID != null && ClientID != undefined && ClientID != '') {
@@ -905,7 +912,7 @@ function addComment(data, UserFullName) {
     var commentobj = $('#divCommantsList');
     if (commentobj != null) {
         var profilePic = data.UserProfilePic != undefined && data.UserProfilePic != null && data.UserProfilePic != '' ? data.UserProfilePic : '../assets/img/team/avatar.png';
-        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName + '  : </a>' + data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
+        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName +': </a>'+ data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
         commentobj.prepend(commentHTMLelement);
         $('#txtComments').val('');
     }
@@ -976,16 +983,16 @@ function addTagOnView(TagNames) {
             tagName = tagName[0];
             switch (tagName) {
                 case 'Urgent':
-                    addTag('badge-soft-success bg-red', 'Urgent', true);
+                    addTag('badge-soft-success Roman  text-white', 'Urgent', true);
                     break;
                 case 'High':
-                    addTag('badge-soft-primary bg-orange', 'High', true);
+                    addTag('badge-soft-primary yellow  text-white', 'High', true);
                     break;
                 case 'Medium':
-                    addTag('badge-soft-info bg-light-blue', 'Medium', true);
+                    addTag('badge-soft-info turquoiseblue  text-white', 'Medium', true);
                     break;
                 case 'Low':
-                    addTag('badge-soft-danger bg-green', 'Low', true);
+                    addTag('badge-soft-danger bg-green  text-white', 'Low', true);
                     break;
                 default:
             }
@@ -1124,4 +1131,59 @@ function checkAttachment1() {
 }
 function CancelForCreate() {
     $("#kanban-modal-new").modal('hide');
+}
+$(function () {
+
+    $("#email").click(function () {
+       
+        var url = window.location.href;
+        let totalTask = 0;
+      
+        var ClientName = $("#ddlclient option:selected").text();
+        getClientDate(ClientName);
+        ClientName = encodeURIComponent(ClientName);
+         $("#lblTotalTasksCount").text(totalTask);
+        /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+
+            }
+        });
+
+    });
+
+});
+
+var text = "";
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Needs/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        text = response.resultData;
+    });
+
+}
+
+
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Needs/sendNeedEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
+
+
 }

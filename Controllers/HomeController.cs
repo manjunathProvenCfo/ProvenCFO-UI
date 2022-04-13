@@ -67,7 +67,7 @@ namespace ProvenCfoUI.Controllers
         }
 
 
-        public ActionResult LoginSessionExpaired()
+        public ActionResult LoginSessionExpired()
         {
 
             return View();
@@ -112,16 +112,16 @@ namespace ProvenCfoUI.Controllers
                             switch (result.message)
                             {
                                 case "001":
-                                    ViewBag.ErrorMessage = "Username does not exist!";
+                                    ViewBag.ErrorMessage = " \n Username does not  exist!";
                                     break;
                                 case "002":
-                                    ViewBag.ErrorMessage = "Invalid Password!";
+                                    ViewBag.ErrorMessage = "Sorry, the username and password you entered are not \n valid.";
                                     break;
                                 case "003":
-                                    ViewBag.ErrorMessage = "User role has been deactived or deleted!";
+                                    ViewBag.ErrorMessage = " \n User role has been deactived or deleted!";
                                     break;
                                 default:
-                                    ViewBag.ErrorMessage = "Email or Password not correct";
+                                    ViewBag.ErrorMessage = "\n Email or Password not  correct";
                                     break;
                             }
                             Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
@@ -295,7 +295,7 @@ namespace ProvenCfoUI.Controllers
                     var result = obj.Register(registerVM.email, registerVM.passwordhash, registerVM.confirmpassword, registerVM.firstname, registerVM.lastname, registerVM.UserType, registerVM.AgencyID);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
-                    ViewBag.Sucess = "User Registered Sucessfully";
+                    ViewBag.Sucess = "User Registered Successfully";
                     return PartialView("_Userregisteredsuccessfully");
                 }
                 catch (Exception ex)
@@ -515,6 +515,7 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                 }
                 catch (Exception ex)
@@ -591,10 +592,12 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                     else
                     {
                         ViewBag.ProfileUrl = string.Empty;
+                        ViewBag.UserId = string.Empty;
                     }
                 }
                 catch (Exception ex)
@@ -742,7 +745,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try

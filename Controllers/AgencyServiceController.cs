@@ -118,7 +118,7 @@ namespace ProvenCfoUI.Controllers
         {
             if (Session["UserType"] == null)
             {
-                return RedirectToAction("LoginSessionExpaired");
+                return RedirectToAction("LoginSessionExpired");
             }
             AgencyClient objAgy = new AgencyClient();
             try

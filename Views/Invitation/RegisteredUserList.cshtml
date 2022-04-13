@@ -75,6 +75,7 @@
                         <th class="sort pr-1 align-middle">Email Address</th>
                         @*<td class="sort pr-1 align-middle">Job Title</td>
                             <td class="sort pr-1 align-middle">Role</td>*@
+                        @*<th class="sort pr-1 align-middle">User Role </th>*@
                         <th class="sort pr-1 align-middle">Status </th>
 
                         <th class="sort pr-1 align-middle">Last Login (UTC)</th>
@@ -97,7 +98,7 @@
                             @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
                                 <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
 
-
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
 
                             <td class="align-middle">
 
@@ -188,6 +189,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
 
         var ExportToExcel = function () {
@@ -365,6 +367,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
+            ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             if (ClientID == '') {
                 $("#hideTable").addClass('d-none');

@@ -280,6 +280,9 @@
     <Content Include="assets\AvertaWebFont\TDF_EULA_WEB.txt" />
     <Content Include="assets\css\common.css" />
     <Content Include="assets\css\theme.css" />
+    <Content Include="assets\files\NeedsEmailTemplate.xml" />
+    <Content Include="assets\files\NotesEmailTemplate.xml" />
+    <Content Include="assets\files\ReconcilationEmailTemplate.xml" />
     <Content Include="assets\img\chat\1.jpg" />
     <Content Include="assets\img\chat\10.jpg" />
     <Content Include="assets\img\chat\11.jpg" />
@@ -436,7 +439,9 @@
     <Content Include="assets\img\kanban\Icon_PDF.png" />
     <Content Include="assets\img\kanban\Icon_Zip.png" />
     <Content Include="assets\img\kanban\I_Doc.png" />
+    <Content Include="assets\img\kanban\I_failure.png" />
     <Content Include="assets\img\kanban\I_PDF.png" />
+    <Content Include="assets\img\kanban\I_Success.png" />
     <Content Include="assets\img\kanban\I_Zip.png" />
     <Content Include="assets\img\logos\adidas.png" />
     <Content Include="assets\img\logos\amazon.png" />
@@ -515,6 +520,7 @@
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\Chartcommon.js" />
     <Content Include="assets\js\chat.js" />
+    <Content Include="assets\js\comments.js" />
     <Content Include="assets\js\common.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />
     <Content Include="assets\js\config.navbar-vertical.min.js" />
@@ -527,6 +533,7 @@
     <Content Include="assets\js\lottie-player.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\reconciliationMain.js" />
+    <Content Include="assets\js\reconciliationUploader.js" />
     <Content Include="assets\js\reports.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\theme.min.js" />
@@ -1081,7 +1088,6 @@
     <Content Include="Views\Home\InvalidInvite.cshtml" />
     <Content Include="Views\Invitation\EditInvitation.cshtml" />
     <Content Include="Views\Shared\_LayoutDefault.cshtml" />
-    <Content Include="Views\Home\LoginSessionExpaired.cshtml" />
     <Content Include="Views\Teams\TeamsList.cshtml" />
     <Content Include="Views\AgencyService\AgencyHome.cshtml" />
     <Content Include="Views\Teams\AddTeams.cshtml" />
@@ -1124,6 +1130,14 @@
     <Content Include="Views\Communication\Notifications.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_PageLoader.cshtml" />
+    <Content Include="Views\Invitation\GetAllAgencyUsers.cshtml" />
+    <Content Include="Views\Shared\_communicationReconcilation.cshtml" />
+    <Content Include="Views\Shared\_ReconcilationEmail.cshtml" />
+    <Content Include="Views\Reconciliation\_ReconciliationFileUploaderPartial.cshtml" />
+    <Content Include="Views\Shared\_NeedsEmail.cshtml" />
+    <Content Include="Views\Shared\_NotesEmail.cshtml" />
+    <Content Include="Views\Home\LoginSessionExpired.cshtml" />
+    <Content Include="Views\Integration\GetBankAccounts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

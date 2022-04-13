@@ -1,4 +1,17 @@
 ﻿@model  ProvenCfoUI.Models.KanbanTasksViewModel
+<style>
+    .turquoiseblue {
+        background-color: #05768f !important;
+    }
+
+    .yellow {
+        background-color: #FFDB74 !important;
+    }
+
+    .Roman {
+        background-color: #DE6057 !important;
+    }
+</style>
 <div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1" aria-hidden="true" id="kanban-modal-open">
     <div class="modal-dialog modal-lg mt-6" role="document">
         <div class="modal-content border-0">
@@ -51,10 +64,10 @@
                                                 <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
                                                 <div class="dropdown-divider"></div>
                                                 <div class="px-3">
-                                                    <button class="badge-soft-success dropdown-item rounded mb-2 bg-red" type="button" onclick="addTag('badge-soft-success bg-red','Urgent');">Urgent</button>
-                                                    <button class="badge-soft-primary dropdown-item rounded mb-2 bg-orange" type="button" onclick="addTag('badge-soft-primary bg-orange','High');">High</button>
-                                                    <button class="badge-soft-info dropdown-item rounded mb-2 bg-light-blue " type="button" onclick="addTag('badge-soft-info bg-light-blue', 'Medium');">Medium</button>
-                                                    <button class="badge-soft-danger dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag('badge-soft-danger bg-green','Low');">Low</button>
+                                                    <button class="badge-soft-success dropdown-item rounded mb-2 Roman text-white " type="button" onclick="addTag('badge-soft-success Roman text-white','Urgent');">Urgent</button>
+                                                    <button class="badge-soft-primary dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag('badge-soft-primary yellow text-white','High');">High</button>
+                                                    <button class="badge-soft-info dropdown-item rounded mb-2 turquoiseblue text-white " type="button" onclick="addTag('badge-soft-info turquoiseblue text-white', 'Medium');">Medium</button>
+                                                    <button class="badge-soft-danger dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag('badge-soft-danger bg-green text-white','Low');">Low</button>
                                                 </div>
                                                 <div class="dropdown-divider"></div>
 
@@ -64,7 +77,7 @@
                                     <hr class="my-4" />
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="col-lg-3">
                             <h6 class="mt-5 mt-lg-0">Add To Card</h6>
@@ -152,10 +165,10 @@
                                                     </button>
                                                     <span class="mx-1"></span>
                                                     @*<button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
-                                    <i class="glyphicon glyphicon-ban-circle"></i>
-                                    <input type="hidden" name="" value="" class="name" data-dz-name />
-                                    <span>Cancel</span>
-                                </button>*@
+                                                            <i class="glyphicon glyphicon-ban-circle"></i>
+                                                            <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                            <span>Cancel</span>
+                                                        </button>*@
                                                     <span class="mx-1"></span>
                                                     <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
                                                         <i class="glyphicon glyphicon-trash"></i>
@@ -183,14 +196,14 @@
                                             <div class="position-relative border rounded mb-3">
                                                 <form>
                                                     <textarea class="form-control border-0 rounded-bottom-0 resize-none" rows="3" id="txtComments"></textarea>
-                                                    <div class="d-flex flex-between-center bg-light rounded-bottom p-2 mt-1">
-                                                        <button class="btn btn-sm btn-primary" type="button" id="btnSaveComments">Save</button>
-                                                        <button class="btn btn-sm btn-primary" type="button" id="btnCancelComments">Cancel</button>
-                                                        <ul class="list-inline mb-0">
-                                                            <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-paperclip"></span></a></li>
-                                                            <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-at"></span></a></li>
-                                                            <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-image"></span></a></li>
-                                                        </ul>
+                                                    <div class="d-flex flex-center bg-light rounded-bottom p-2 mt-1">
+                                                        <button class="btn btn-sm btn-primary ml-2" type="button" id="btnSaveComments">Save</button>
+                                                        <button class="btn btn-sm btn-primary ml-2" type="button" id="btnCancelComments">Cancel</button>
+                                                        @*<ul class="list-inline mb-0">
+                                                                <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-paperclip"></span></a></li>
+                                                                <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-at"></span></a></li>
+                                                                <li class="list-inline-item mr-1"><a class="text-600 p-2 transition-base hover-200 rounded" href="#!"><span class="fas fa-image"></span></a></li>
+                                                            </ul>*@
                                                     </div>
                                                 </form>
                                             </div>

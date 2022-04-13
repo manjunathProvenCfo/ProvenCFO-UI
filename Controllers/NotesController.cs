@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -28,6 +29,7 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClient = new ClientService())
                     {
                         int AgencyID = 0;
+
                         ViewBag.IsEditMode = false;
                         ViewBag.IsDraggable = false;
                         var userType = Convert.ToString(Session["UserType"]);
@@ -42,6 +44,15 @@ namespace ProvenCfoUI.Controllers
                         TempData["CategoriesAndNotes"] = Categories;
                         var Summary = objClient.GetClientById(AgencyID);
                         TempData["NotesSummary"] = Summary;
+                        if (Summary.Summaryid_ref == null)
+                        {
+                            Summary.Summaryid_ref = 1;
+                        }
+                        var NoteSummaryData = objNotes.GetNotesStatus();
+                        TempData["NotesSummarydata"] = NoteSummaryData.ResultData;
+
+                        ViewBag.selectSummaryStatusText = NoteSummaryData.ResultData.Where(x => x.Id == Summary.Summaryid_ref).FirstOrDefault().SummaryData;
+
                         if (userType != "" && userType == "1")
                         {
                             ViewBag.IsEditMode = true;
@@ -90,7 +101,9 @@ namespace ProvenCfoUI.Controllers
                     var result = objNotes.GetNotesDescriptionById(NotesDescriptionId);
                     TempData["SelectedTitle"] = result.Title;
                     TempData["SelectedDescription"] = result.Description;
+                    TempData["Selectedtag"] = result.Labels;
                     Session["SelectedDescriptionId"] = result.Id;
+                    //Session["Selectedtag"] =  result.Labels;
                     return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -110,6 +123,47 @@ namespace ProvenCfoUI.Controllers
                 ClientModel result = new ClientModel();
                 result.SummaryCreatedBy = User.UserFullName;
                 return PartialView("UpdateNoteSummary", result);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+        //[CheckSession]
+        //[HttpGet]
+        //public ActionResult UpdateClientRefId()
+        //{
+        //    try
+        //    {
+        //        ClientModel result = new ClientModel();
+
+        //        return PartialView("UpdateClientRefId", result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
+        [HttpGet]
+        public JsonResult UpdateClientRefId(int id, int clientId)
+        {
+            try
+            {
+                using (NotesService objNotes = new NotesService())
+                {
+                    ClientModel clientModel = new ClientModel();
+                    NotesSummaryVM note = new NotesSummaryVM();
+                    clientModel.Summaryid_ref = id;
+
+                    clientModel.Id = clientId;
+
+                    var result = objNotes.UpdateClientRefId(clientModel);
+
+
+                    return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {
@@ -198,7 +252,7 @@ namespace ProvenCfoUI.Controllers
                 using (NotesService objNotes = new NotesService())
                 {
                     var LoginUserid = Session["UserId"].ToString();
-                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished, LoginUserid).resultData;
+                    var result = objNotes.UpdateNotesDescription(Notes.Id.Value, Notes.Title, Notes.Description, Notes.IsPublished, LoginUserid, Notes.Labels).resultData;
                     if (result == true)
                     {
                         return Json(new { Notes = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
@@ -388,6 +442,65 @@ namespace ProvenCfoUI.Controllers
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
+            }
+        }
+        public JsonResult EmailSend(string ClientName, string url, string url1, string url2, string url3, string url4, string url5, string totalNotes, string sentdate)
+        {
+            try
+            {
+                using (AccountService obj = new AccountService())
+                {
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+
+                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
+                    var test = result1.ResultData.ToList();
+
+                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
+
+                    string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
+
+                    var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                    var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+
+                    subject = subject.Replace("{CompanyName}", ClientName);
+                    subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+
+                    body = body.Replace("{totalNotes}", totalNotes);
+                    var a = "https://" + url + "/Notes/GetNotesPage";
+                    var b = "https://" + url1 + "/Dashboard/Dashboard";
+                    var c = "https://" + url2 + "/Reports/ReportsList";
+                    var d = "https://" + url3 + "/Home/Login";
+                    var e = "https://" + url4 + "/Reconciliation/ReconciliationMain";
+                    var f = "https://" + url5 + "/Communication/Chat";
+                    body = body.Replace("{url}", a);
+                    body = body.Replace("{url1}", b);
+                    body = body.Replace("{url2}", c);
+                    body = body.Replace("{url3}", d);
+                    body = body.Replace("{url4}", e);
+                    body = body.Replace("{url5}", f);
+
+                    //footer = footer.Replace("{LastSent}", sentdate);
+                    footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
+
+                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -31,6 +31,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "button[id=btnComment]", function (e) {
+        
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
         showReconciliationChat(e.currentTarget.dataset.id);
         //$('#divFilter').hide();
@@ -45,6 +46,7 @@ $(document).ready(function () {
         //    loadChatPage(true, 1);
         //}
     });
+   
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
@@ -54,11 +56,14 @@ $(document).ready(function () {
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-        if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-            currentChannelUniqueNameGuid = channelUniqueNameGuid;
-            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1, true);
-        }
+        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
+        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    loadChatPage(true, 1, true);
+        //}
+
+        loadCommentsPage(channelUniqueNameGuid);
+        
     }
 });
 
@@ -111,22 +116,28 @@ $(document).ready(function () {
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     if (type != null) {
-
+        
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
+            sessionStorage.clear();
         }
         else {
             $('#tabNotinBooks').removeClass('tabselect');
             $('#tabNotinBanks').addClass('tabselect');
+            sessionStorage.clear();
         }
+      
     }
 
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
+        ShowlottieLoader();
+        window.setTimeout(HidelottieLoader,5000);
+       /* window.location.reload();*/
     }
-    sessionStorage.clear();
+   
 
     $('.checkbox-bulk-select-target').click(function () {
         

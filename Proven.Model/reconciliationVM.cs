@@ -36,6 +36,7 @@ namespace Proven.Model
         public bool IsChatExist { get; set; }
         public string TwilioConversationId { get; set; }
         public bool has_twilio_conversation { get; set; }
+        public bool Iscurrent_user_mentioned { get; set; }
 
     }
     public class ReconciliationMainModel
@@ -46,5 +47,28 @@ namespace Proven.Model
         public string Message { get; set; }
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
+    }
+
+    public class XeroReconciliationInputModel
+    {
+        public String HtmlString { get; set; }
+        public string CompanyName { get; set; }
+        public int CompanyId { get; set; }
+    }
+    public class XeroReconciliationOutputModel
+    {
+        public bool Status { get; set; }
+        public string ValidationStatus { get; set; }
+        public string ValidationMessage { get; set; }
+    }
+    public class XeroReconciliationOutputModelMainModel
+    {
+        public bool Status { get; set; }
+        public int statusCode { get; set; }
+        public XeroReconciliationOutputModel ResultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+
     }
 }

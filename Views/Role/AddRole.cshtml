@@ -3,7 +3,12 @@
 @{
     ViewBag.Title = "";
 }
-
+<style>
+    .row.align-items-center.form-group {
+        margin-right: 1px !important;
+        
+    }
+</style>
 
 @using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
 {
@@ -48,7 +53,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
-                                        @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
+                                        @*@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })*@
                                         <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="roleexist" class=""></span></span>
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
@@ -59,7 +64,7 @@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.DisplayRoleName, new { htmlAttributes = new { @class = "form-control", onfocusout = "CheckExistValidation()" } })
-                                        @*@Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })*@
+                                        @*@Html.ValidationMessageFor(model => model.DisplayRoleName, "", new { @class = "text-danger" })*@
                                         <span class="text-danger field-validation-error " data-valmsg-for="name" data-valmsg-replace="true"><span id="Displayroleexist" class=""></span></span>
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
@@ -74,6 +79,8 @@
                                     </div>
                                     @*<input class="form-control" type="email" placeholder="Email address" id="txtEmail" />*@
                                 </div>
+                                @*</div>
+        <div class="col-12 col-lg-8 col-xl-6">*@
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">User Type</label>
@@ -119,23 +126,23 @@
 
 
                                 @*<div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-                                    </div>*@
+            <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+            <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+        </div>*@
 
 
                                 @*@for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
-                                    {
-                                        <div class="col-12 facility_service_permissions">
-                                            <div class="permission-box">
-                                                <h6>
-                                                    @Html.CheckBoxFor(model => model.MasterFeaturesList[i].IsChecked.Value, Model.MasterFeaturesList[i].IsChecked.Value)
-                                                    @Html.DisplayFor(model => model.MasterFeaturesList[i].DisplayName)
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    }*@
-
+        {
+            <div class="col-12 facility_service_permissions">
+                <div class="permission-box">
+                    <h6>
+                        @Html.CheckBoxFor(model => model.MasterFeaturesList[i].IsChecked.Value, Model.MasterFeaturesList[i].IsChecked.Value)
+                        @Html.DisplayFor(model => model.MasterFeaturesList[i].DisplayName)
+                    </h6>
+                </div>
+            </div>
+        }*@
+                                <span class="text-danger field-validation-error " data-valmsg-for="" data-valmsg-replace="true"><span id="SelectFeaturescheckbox" class="d-none"> Please select at least one option below. </span></span>
                                 @for (int i = 0; i < Model.MasterFeaturesList.Count; i++)
                                 {
                                     if (Model.MasterFeaturesList[i].ParentId == 0)
@@ -178,7 +185,7 @@
                                 }
 
 
-
+                                <br />
 
 
 
@@ -189,11 +196,11 @@
 
                                         @if (Model.Id == null)
                                         {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateRole", "Role")">Create</button>
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" onclick="return ValidateRole();" href="@Url.Action("CreateRole", "Role")">Create</button>
                                         }
                                         else
                                         {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateRole", "Role")">Update</button>
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" onclick="return ValidateRole();" href="@Url.Action("UpdateRole", "Role")">Update</button>
                                         }
 
                                         <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("Role", "Role")'" />
@@ -227,8 +234,8 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
 
-        document.getElementById("roleexist").style.display = "none";
-        document.getElementById("Displayroleexist").style.display = "none";
+        if (document.getElementById("roleexist") != null && document.getElementById("roleexist") != undefined) document.getElementById("roleexist").style.display = "none";
+        if (document.getElementById("Displayroleexist") != null && document.getElementById("Displayroleexist") != undefined) document.getElementById("Displayroleexist").style.display = "none";
         function CheckExistValidation() {
             if ($("#name").val() === "" && $("#roleexist").html() !== "") {
                 $('#roleexist').hide();
@@ -237,10 +244,16 @@
         }
 
         function check_uncheck_topper(top_id_checked, top_id) {
-            $('.top_tucker_' + top_id).prop("checked", top_id_checked);
+            if (top_id == "Home") {
+                HomeChecked();
+            }
+            else {
+                $('.top_tucker_' + top_id).prop("checked", top_id_checked);
+            }
         }
 
         function check_uncheck_checkbox(isChecked, parent_id, top_id) {
+           
             $('.top_role_' + top_id).prop("checked", true);
             if (isChecked) {
                 //$(".input_super_cat_" + parent_id).each(function () {
@@ -253,7 +266,9 @@
             }
         }
         $(document).ready(function () {
+            
             var userTypes = $('input[type=radio][name=UserType]');
+            HomeChecked();
             if (userTypes[1].checked == true) {
                 HideAdminSetup();
             }
@@ -280,9 +295,11 @@
                 $('select').val("Active");
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
-
+           
+            
 
             $('input[type=radio][name=UserType]').change(function () {
+                
                 if (this.checked && this.value == '1') {
                     $("#section_Administration").show();
                     $("#section_Setup").show();
@@ -294,6 +311,50 @@
 
             });
         });
+        var ValidateRole = function () {
+            
+            var featurs = $("input:checkbox:checked");
+            var Name = $('#Name').val();
+            var DisplayRoleName = $('#DisplayRoleName').val();
+            var returnVal = true;
+            if (featurs != null && featurs.length == 0) {
+                $('#SelectFeaturescheckbox').removeClass('d-none');
+                returnVal = false;
+            }
+            else {
+                $('#SelectFeaturescheckbox').addClass('d-none');
+            }
+            if (Name == '') {
+                $('#roleexist').show();
+                $('#roleexist').html('Role Name is a required field.');
+                returnVal = false;
+            }
+            else {
+                $('#roleexist').hide();
+                $('#roleexist').html('');
+            }
+            if (Name.length  > 50) {
+                $('#roleexist').show();
+                $('#roleexist').html('Maximum 50 characters exceeded.');
+                returnVal = false;
+            }
+            if (DisplayRoleName == '') {
+                $('#Displayroleexist').show();
+                $('#Displayroleexist').html('Role Display Name is a required field.');
+                returnVal = false;
+            }
+            else {
+                $('#Displayroleexist').hide();
+                $('#Displayroleexist').html('');
+            }
+            if (DisplayRoleName.length > 50) {
+                $('#Displayroleexist').show();
+                $('#Displayroleexist').html('Maximum 50 characters exceeded');
+                returnVal = false;
+            }
+           
+            return returnVal;
+        }
         var HideAdminSetup = function () {
             $("#section_Administration").find("input[type='checkbox']")
                 .prop('checked', false);
@@ -301,6 +362,11 @@
                 .prop('checked', false);
             $("#section_Administration").hide();
             $("#section_Setup").hide();
+        }
+        var HomeChecked = function () {
+            
+            $("#section_Home").find("input[type='checkbox']")
+                .prop('checked', true);
         }
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";

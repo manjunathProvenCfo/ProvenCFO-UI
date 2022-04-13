@@ -18,7 +18,7 @@ namespace ProvenCfoUI.Controllers
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Role
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         [CheckSession]
         public ActionResult Role()
         {
@@ -82,7 +82,7 @@ namespace ProvenCfoUI.Controllers
                     objvm.DisplayRoleName = result.DisplayRoleName;
                     objvm.IsVisible = result.IsVisible;
                     objvm.UserType = result.UserType;
-                   if(result.FeatureIds != null && result.FeatureIds.Length > 0)
+                    if(result.FeatureIds != null && result.FeatureIds.Length > 0)
                     { 
 
                         objvm.MasterFeaturesList.Where(x => result.FeatureIds.Contains(x.Id)).ToList().ForEach(s => s.IsChecked = true);
@@ -109,7 +109,8 @@ namespace ProvenCfoUI.Controllers
                     objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
                     var LoginUserid = Session["UserId"].ToString();
                     var resultdata = objRole.GetRoleById(id);
-                    var result = objRole.UpdateRoles(resultdata.Id, resultdata.Name, Status, LoginUserid, resultdata.DisplayRoleName, resultdata.UserType.Value);
+                   
+                    var result = objRole.UpdateRoles(resultdata.Id, resultdata.Name, Status, LoginUserid, resultdata.DisplayRoleName, resultdata.UserType.Value,resultdata.FeatureIds);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("Role");
@@ -156,7 +157,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                             RoleVM.MasterFeaturesList = objRole.GetMasterFeatures().ResultData;
-                            var Existresult = objRole.GetRoleByName(Role.Name);
+                            var Existresult = objRole.GetRoleById(Role.Id); // objRole.GetRoleByName(Role.Name);
                             RoleVM.Id = Existresult.Id;
                             RoleVM.Name = Role.Name;
                             RoleVM.Status = Role.Status;
