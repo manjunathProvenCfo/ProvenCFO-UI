@@ -1,81 +1,109 @@
-﻿@model List<Proven.Model.ClientXeroAccountsVM>
+﻿@model List<Proven.Model.XeroGlAccountVM>
+
 @{
-    ViewBag.Title = "CreateClient";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@*@Styles.Render("~/bundles/customcss")
+    @Scripts.Render("~/bundles/modernizr")*@
 
-
-
-@if (ViewData.ModelState.IsValid)
-{
-    if (@ViewBag.Name != null)
-    {
-        <b>
-            ClientName : @ViewBag.ClientName<br />
-            Email : @ViewBag.Email<br />
-            PhoneNumber : @ViewBag.PhoneNumber<br />
-            Address : @ViewBag.Address<br />
-            ContactPersonName : @ViewBag.ContactPersonName
-        </b>
+<style>
+    a.page-link {
+        background-color: #fff !important;
+        border-color: #d8e2ef !important;
     }
-}
 
-<script>
-    // document.getElementById("clientExist").style.display = "none";
-</script>
+    .page-link:hover {
+        color: #000 !important;
+    }
 
+    .page-item.active .page-link {
+        z-index: 3;
+        color: #fff !important;
+        background-color: #00BE82 !important;
+    }
+</style>
 
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0"> Bank Accounts  |  </h5>&nbsp;
+                @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+                @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+                <div class="error" id="XeroStatus"></div>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm">
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
 
-    @Html.ValidationSummary(true)
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions row">
+                    <div class="dz-error-message col-12"></div>
 
-    <div class="card">
-        <div class="card-body overflow-hidden">
-
-
-            <div class="card-body px-0 pt-0">
-                <div class="dashboard-data-table">
-                    <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
-                        <thead class="bg-200 text-900">
-                            <tr>
-
-
-                                <th class="sort pr-1 align-middle" width="15%">Account Name</th>
-                                <th class="sort pr-1 align-middle" width="15%">Account Number</th>
-                                <th class="sort pr-1 align-middle" width="10%">Type</th>
-                                <th class="sort pr-1 align-middle" width="10%">Status</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="purchases">
-                            @foreach (var item in Model)
-                            {
-                                <tr class="btn-reveal-trigger">
-
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.BankAccountNumber)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Type)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-
-                    </table>
+                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroGlAccoutSync();" id="spanSync">Sync From Xero</span></button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="card-body px-0 pt-0">
+        <div class="dashboard-data-table">
+            <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                <thead class="bg-200 text-900">
+                    <tr>
 
+                        @*<th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                            </div>
+                        </th>*@
+                        <th class="sort pr-1 align-middle" width="15%">Account Name</th>
+                        <th class="sort pr-1 align-middle" width="15%">Account Number</th>
+                        <th class="sort pr-1 align-middle" width="10%">Type</th>
+                        <th class="sort pr-1 align-middle" width="10%">Status</th>
 
+                    </tr>
+                </thead>
+                <tbody id="purchases">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="btn-reveal-trigger">
+                            @*<td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountId" value="@item.Status" checked="@Model.clientXeroAccounts[i].IsActive" />
+                                    <label class="custom-control-label" for="@Model.clientXeroAccounts[i].AccountID"></label>
+                                    @Html.HiddenFor(Model => Model.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
+                                    @Html.HiddenFor(Model => Model.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })
+                                </div>
+                            </td>*@
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.BankAccountNumber)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
 
-
+            </table>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
@@ -92,6 +120,7 @@
             }, 2000);
 
         });
+
 
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
@@ -160,8 +189,8 @@
 
     </script>
 
-
 }
+
 
 
 

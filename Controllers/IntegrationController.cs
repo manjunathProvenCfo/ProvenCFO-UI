@@ -3,6 +3,7 @@ using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,42 @@ namespace ProvenCfoUI.Controllers
                     }
                     if (AgencyID != 0)
                     {
-
                         ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                         ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
                         var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
+                        return View(objResult.ResultData);
+                    }
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+        [CheckSession]
+        [HttpGet]
+        public ActionResult GetBankAccounts()
+        {
+            try
+            {
+                using (IntigrationService objIntegration = new IntigrationService())
+                {
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    if (AgencyID != 0)
+                    {
+
+                        ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
+                        ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
+                        var objResult = objIntegration.GetXeroBankAccount(AgencyID, "ACTIVE");
                         return View(objResult.ResultData);
                     }
                     return View();
@@ -86,7 +119,7 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var objResult = objIntegration.GetXeroTracking(AgencyID);
-                        return View(objResult.ResultData);                        
+                        return View(objResult.ResultData);
                     }
                 }
 
@@ -121,7 +154,7 @@ namespace ProvenCfoUI.Controllers
                                 tc.AgencyId = ClientID;
                                 tc.Status = Convert.ToString(item.Status);
                                 tcList.Add(tc);
-                            }                           
+                            }
                         }
                         using (IntigrationService objInt = new IntigrationService())
                         {
@@ -194,6 +227,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
 
         [HttpPost]
         [CheckSession]

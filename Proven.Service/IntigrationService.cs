@@ -47,6 +47,22 @@ namespace Proven.Service
 
             //}
         }
+        public XeromainGlAccountVM GetXeroBankAccount(int AgencyID, string XeroStatus)
+        {
+            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroBankAccount?AgencyID=" + AgencyID + "&XeroStatus=" + XeroStatus).Result;
+            //response = client.GetAsync("Invitation/GetALLInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+
+            //}
+        }
         public XeroGlAccountVM create(XeroGlAccountVM test)
         {
             return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateXeroGlAccount1", test).Result;
