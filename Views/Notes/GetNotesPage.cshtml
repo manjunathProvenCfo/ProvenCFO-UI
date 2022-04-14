@@ -772,7 +772,7 @@
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
                 getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&url1=${url1}&url2=${url2}&url3=${url3}&url4=${url4}&url5=${url5}&sentdate=${text}`, null, function (response) {
                     if (response.Status == 'Success') {
-                        debugger;
+                      
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
                         $("#email-to").val(str);

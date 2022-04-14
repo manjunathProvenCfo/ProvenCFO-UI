@@ -78,7 +78,14 @@ function RenderGrossRevenueChart(Option) {
     });
 
 }
+function Tabclick(e, type) {  
+    sessionStorage.setItem('Type', type);
+    if (type == 1 ) {
 
+        $('#tabselectBank').addClass('tabselect');
+        $('#tabNotinBanks').removeClass('tabselect');
+    }
+}
 function RenderNetIncomeChart(Option) {
 
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
