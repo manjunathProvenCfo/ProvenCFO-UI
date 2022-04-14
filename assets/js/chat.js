@@ -25,6 +25,7 @@ var $tc_2_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
 
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -959,10 +960,12 @@ function showHideReconcilationOptions(show) {
     if (show == true) {
         $communicationGLaccount.removeClass('d-none');
         $communicationTrackingCategories.removeClass('d-none');
+        $tc_2_Dropdown.removeClass('d-none');
     }
     else {
         $communicationGLaccount.addClass('d-none');
         $communicationTrackingCategories.addClass('d-none');
+        $tc_2_Dropdown.addClass('d-none');
     }
 }
 
