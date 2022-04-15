@@ -1006,10 +1006,11 @@
                 var url = window.location.href;
 
                 var ClientName = $("#ddlclient option:selected").text();
+                var ClientId = $("#ddlclient option:selected").val();
                 getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${text}`, null, function (response) {
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${text}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');

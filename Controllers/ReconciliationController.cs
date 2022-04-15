@@ -645,20 +645,16 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public JsonResult EmailSend(string ClientName, string NotInBankUnreconciledItemsCount, string url, string sentdate)
+        public JsonResult EmailSend(string ClientName, string ClientId, string NotInBankUnreconciledItemsCount, string url, string sentdate)
         {
             try
             {
                 using (AccountService obj = new AccountService())
                 {
-                    List<InviteUserModel> user = new List<InviteUserModel>();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-
-
-                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();
-                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                    List<InviteUserModel> user = new List<InviteUserModel>();                    
+                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RCN");
+                    var Userslist = usersListwithRecPermission.ResultData;
+                    var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
 
                     XmlDocument doc = new XmlDocument();
                     doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
@@ -667,24 +663,12 @@ namespace ProvenCfoUI.Controllers
                     var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                     var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
                     var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
-
-
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-
                     body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
-                    body = body.Replace("{url}", url);
-                    //if (sentdate != "null")
-                    //{
-                    //    footer = footer.Replace("{LastSent}", sentdate);
-                    //}
-                    //else
-                    //{
-                    //    footer = "";
-
-                    //}
+                    body = body.Replace("{url}", url);                   
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
                 }
             }
