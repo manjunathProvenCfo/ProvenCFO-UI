@@ -69,11 +69,17 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
 
                         }
-
+                        
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
+                            if (Type == "Not in Banks")
+                            {
+                                ViewBag.isvisibleGlAccount = true;
+                                TempData["Action"] = getAction();
+                            }
+                           
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{
@@ -84,12 +90,15 @@ namespace ProvenCfoUI.Controllers
 
                             //}
                             TempData["BankRule"] = getBankRule();
+                          
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
                             ViewBag.IsBankRuleVisible = false;
+                            ViewBag.isvisibleGlAccount = false;
                         }
+                       
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
@@ -149,6 +158,7 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
                         }
                         TempData["BankRule"] = getBankRule();
+                        //TempData["Action"] = getAction();
                         TempData["ReconciledStatus"] = getReconciledStatus();
                     }
                     else
@@ -355,6 +365,27 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
+        public static List<SelectListItem> getAction()
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Text = "Marked as reconciled";
+            item.Value = "Marked as reconciled";
+            listItem.Add(item);
+            SelectListItem item1 = new SelectListItem();
+            item1.Text = "In Transit";
+            item1.Value = "In Transit";
+            listItem.Add(item1);
+            SelectListItem item2 = new SelectListItem();
+            item2.Text = "Match to existing";
+            item2.Value = "Match to existing";
+            listItem.Add(item2);
+            SelectListItem item3 = new SelectListItem();
+            item3.Text = "Researching";
+            item3.Value = "Researching";
+            listItem.Add(item3);
+            return listItem;
+        }
         public static List<SelectListItem> getReconciledStatus()
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -423,6 +454,15 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
+                            if (RecordsType == "Not in Banks")
+                            {
+                                ViewBag.isvisibleGlAccount = true;
+                                TempData["Action"] = getAction();
+                            }
+                            else
+                            {
+                                ViewBag.isvisibleGlAccount = false;
+                            }
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{
@@ -432,6 +472,7 @@ namespace ProvenCfoUI.Controllers
                             //    TempData["TrackingCategories"] = TCgroup;
                             //}
                             TempData["BankRule"] = getBankRule();
+                            
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else

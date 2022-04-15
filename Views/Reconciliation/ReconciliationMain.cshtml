@@ -252,17 +252,23 @@
                                 <th class="sort pr-1 align-middle">Description</th>
                                 <th class="sort pr-1 align-middle">Amount</th>
 
+                                @if ( ViewBag.isvisibleGlAccount == true)
+                                {
+                                    <th class="sort pr-10 align-center "> Action</th>
+                                }
 
-                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.isvisibleGlAccount == false)
                                 {
                                     <th class="sort pr-1 align-middle">GL Account</th>
                                 } @*<th></th>*@
-                                @if (ViewBag.IsBankRuleVisible == true)
+
+                                @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
                                 {
                                     <th class="sort pr-10 align-center ">Rule</th>
                                 }
 
-                                @if (TempData["TrackingCategories"] != null)
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
                                 {
                                     foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
@@ -278,93 +284,105 @@
                         <tbody id="purchases">
                             @foreach (var item in (List<Proven.Model.reconciliationVM>)TempData["ReconcilationData"])
                             {
-                                <tr class="btn-reveal-trigger cursor-pointer">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="@item.id" value="@item.Selected" />
+                            <tr class="btn-reveal-trigger cursor-pointer">
+                                <td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="@item.id" value="@item.Selected" />
 
-                                            <label class="custom-control-label" for="@item.id"></label>
+                                        <label class="custom-control-label" for="@item.id"></label>
+                                    </div>
+                                </td>
+                                <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
+                                <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
+                                <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
+                                @if (item.amount < 0)
+                                {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                                <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+                            }
+                            else
+                            { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                            <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+                        }
+
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.isvisibleGlAccount == false)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+
+                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+                                                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
-                                    <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
-                                    @if (item.amount < 0)
-                                    {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
-                                    <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
-                                }
-                                else
-                                { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
-                                <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
-                            }
-
-                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
-                                    {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
-
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
-                                                </div>
+                                } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
                                             </div>
-                                        </td>
-                                    } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
-                                    @if (ViewBag.IsBankRuleVisible == true)
-                                    {
-                                        <td class="sort pr-1 align-middle col-xs-1">
-                                            <div class="row justify-content-between">
-                                                <div class="col-auto">
-                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                    }
-
-                                    @if (TempData["TrackingCategories"] != null)
-                                    {
-                                        int count = 0;
-                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
-                                        {
-
-                                            <td class="sort pr-1 align-middle col-xs-1">
-                                                <div class="row justify-content-between">
-                                                    <div class="col-auto">
-                                                        @if (count == 0)
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)", style = "width: 180px;" }) }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)", style = "width: 180px;" })}
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            count++;
-                                        }
-
-                                    }
-                                    <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-                                        @if (item.Iscurrent_user_mentioned == true)
-                                        {
-                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                                <span class="fas fa-comment fs--1"></span>
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                                <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
-
-                                                @*<span class="far fa-comment fs--1 text-dark"></span>
-                                                    <span class="far fa-comment fs--1"></span>
-                                                    <span class="fas fa-comment fs--1"></span>*@
-                                            </button>
-                                        }
-
+                                        </div>
                                     </td>
-                                </tr>
+                                }
+
+                                @if (ViewBag.isvisibleGlAccount == true )
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["Action"], "Value", "Text", item.rule), "Set Action", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
+                                {
+                                    int count = 0;
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                                    {
+
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+                                                    @if (count == 0)
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)", style = "width: 180px;" }) }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)", style = "width: 180px;" })}
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        count++;
+                                    }
+
+                                }
+                                <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+                                    @if (item.Iscurrent_user_mentioned == true)
+                                    {
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="fas fa-comment fs--1"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+
+                                            @*<span class="far fa-comment fs--1 text-dark"></span>
+                    <span class="far fa-comment fs--1"></span>
+                    <span class="fas fa-comment fs--1"></span>*@
+                                        </button>
+                                    }
+
+                                </td>
+                            </tr>
                             }
 
                         </tbody>
