@@ -333,7 +333,7 @@
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
                                             <div class="col-auto">
-                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["Action"], "Value", "Text", item.rule), "Set Action", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
+                                                @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<SelectListItem>)TempData["Action"], "Value", "Text", item.ref_ReconciliationAction), "Set Action", new { @class = "form-control", style = "width: 120px;" })
                                             </div>
                                         </div>
                                     </td>
