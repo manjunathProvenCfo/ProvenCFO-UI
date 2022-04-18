@@ -28,8 +28,13 @@ namespace Proven.Model
         public bool? HasAttachments { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public string ExcludedAccountNumbers { get; set; }
+        public string IncludedAccountNumbers { get; set; }
+        public bool? ReceiveQuarterlyReports { get; set; }
+        public string XeroScope { get; set; }
+
     }
     public class ClientXeroAccountsMainModel
     {

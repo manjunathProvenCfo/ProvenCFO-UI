@@ -228,6 +228,63 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        public async Task<JsonResult> GetXeroBankAccountSync(int ClientID)
+        {
+            try
+            {
+                if (XeroInstance.Instance.XeroConnectionStatus == true)
+                {
+                    var result = await XeroInstance.Instance.XeroService.GetGLAccounts(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
+                    if (result._Accounts != null)
+                    {
+                        var accounts = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK" );
+                        List<ClientXeroAccountsVM> gl = new List<ClientXeroAccountsVM>();
+                        foreach (var item in accounts)
+                        {
+                            ClientXeroAccountsVM account = new ClientXeroAccountsVM();
+                            account.AccountID = Convert.ToString(item.AccountID);
+                            account.Code = item.Code;
+                            account.Name = item.Name;
+                            account.Status = Convert.ToString(item.Status);
+                            account.AgencyId_ref = ClientID;
+                            //account.UpdatedDateUTC = DateTime.UtcNow;
+                            account.Class = Convert.ToString(item.Class);
+                            account.Type = Convert.ToString(item.Type);
+                            account.TaxType = Convert.ToString(item.TaxType);
+                            //account.EnablePaymentsToAccount = Convert.ToString(item.EnablePaymentsToAccount);
+                            //account.ShowInExpenseClaims = Convert.ToString(item.ShowInExpenseClaims);
+                            account.BankAccountNumber = Convert.ToString(item.BankAccountNumber);
+                            account.BankAccountType = Convert.ToString(item.BankAccountType);
+                            account.CurrencyCode = Convert.ToString(item.CurrencyCode);
+                            account.ReportingCode = Convert.ToString(item.ReportingCode);
+                            account.HasAttachments = item.HasAttachments;
+                            //account.AddToWatchlist = item.AddToWatchlist;
+                            account.Id = 0;
+                            gl.Add(account);
+
+
+                        }
+                        using (IntigrationService objInt = new IntigrationService())
+                        {
+                            objInt.CreateXeroBankAccount(gl);
+                        }
+                    }
+
+                }
+                else
+                {
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
 
         [HttpPost]
         [CheckSession]

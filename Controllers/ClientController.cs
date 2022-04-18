@@ -190,7 +190,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.CityId = client.CityId;
                             Clientvm.Address = client.Address;
                             Clientvm.StateId = client.State;
-                            Clientvm.TeamId = Convert.ToInt32( client.TeamId);
+                            Clientvm.TeamId = Convert.ToInt32(client.TeamId);
                             Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();

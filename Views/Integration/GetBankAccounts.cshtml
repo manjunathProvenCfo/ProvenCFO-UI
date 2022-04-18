@@ -1,4 +1,4 @@
-﻿@model List<Proven.Model.XeroGlAccountVM>
+﻿@model List<Proven.Model.ClientXeroAccountsVM>
 
 @{
     ViewBag.Title = "Index";
@@ -34,21 +34,24 @@
                 <div class="error" id="XeroStatus"></div>
             </div>
             <div class="col-6 col-sm-auto ml-auto text-right pl-0">
-                <div class="d-none" id="purchases-actions">
-                    <div class="input-group input-group-sm">
-                        <select class="custom-select cus" aria-label="Bulk actions">
-                            <option selected="">Bulk actions</option>
+                @*<div class="d-none" id="purchases-actions">
+                        <div class="input-group input-group-sm">
+                            <select class="custom-select cus" aria-label="Bulk actions">
+                                <option selected="">Bulk actions</option>
 
-                            <option value="Delete">Delete</option>
-                            <option value="Archive">Archive</option>
-                        </select>
-                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
-                    </div>
-                </div>
+                                <option value="Delete">Delete</option>
+                                <option value="Archive">Archive</option>
+                            </select>
+                            <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                        </div>
+                    </div>*@
+
                 <div id="dashboard-actions row">
                     <div class="dz-error-message col-12"></div>
-
-                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroGlAccoutSync();" id="spanSync">Sync From Xero</span></button>
+                    <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
+                        <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
+                    </button>
+                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroBankAccountSync();" id="spanSync">Sync From Xero</span></button>
                 </div>
             </div>
         </div>
@@ -59,12 +62,12 @@
                 <thead class="bg-200 text-900">
                     <tr>
 
-                        @*<th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                        <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
                             <div class="custom-control custom-checkbox">
                                 <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
                                 <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                             </div>
-                        </th>*@
+                        </th>
                         <th class="sort pr-1 align-middle" width="15%">Account Name</th>
                         <th class="sort pr-1 align-middle" width="15%">Account Number</th>
                         <th class="sort pr-1 align-middle" width="10%">Type</th>
@@ -76,14 +79,14 @@
                     @foreach (var item in Model)
                     {
                         <tr class="btn-reveal-trigger">
-                            @*<td class="align-middle">
+                            <td class="align-middle">
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountId" value="@item.Status" checked="@Model.clientXeroAccounts[i].IsActive" />
-                                    <label class="custom-control-label" for="@Model.clientXeroAccounts[i].AccountID"></label>
-                                    @Html.HiddenFor(Model => Model.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
-                                    @Html.HiddenFor(Model => Model.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountID" value="@item.Status" checked="@item.IsActive" />
+                                    <label class="custom-control-label" for="@item.AccountID"></label>
+                                    @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
+                                    @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
                                 </div>
-                            </td>*@
+                            </td>
                             <td class="align-middle">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
@@ -104,22 +107,22 @@
         </div>
     </div>
 </div>
-
-
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    @Scripts.Render("~/bundles/js/reconciliationMain")
+    @* @Scripts.Render("~/bundles/js/reconciliationMain")*@
 
-    <script>
+<script>
 
         $(document).ready(function () {
             setTimeout(function () {
                 XeroConnectionUpdate();
 
-
             }, 2000);
 
         });
+        //$(document).ready(function () {
+        //    EnableSelectedBulkUpdateButton();
+        //});
 
 
         function XeroConnectionUpdate() {
@@ -142,7 +145,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-           
+            debugger;
 
             ShowlottieLoader();
             setTimeout(function () {
@@ -171,23 +174,129 @@
                 }
             });
         }
-        function XeroGlAccoutSync() {
+        function XeroBankAccountSync() {
 
             ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {
+            postAjax('/Integration/GetXeroBankAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
-                    ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
+                    ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
                 else {
-                    ShowAlertBoxSuccess("Success!", "GL Accounts synced with Xero successfully.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Bank Accounts synced with Xero successfully.", function () { window.location.reload(); });
                 }
 
             });
             /*  HidelottieLoader();*/
         }
 
-    </script>
+        var EnableSelectedBulkUpdateButton = function () {
+            var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+            var SelectedItems = sessionStorage.getItem('SelectedRecords');
+            if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
+                $("#ibulkupdate").attr('disabled', false);
+                $("#ibulkupdate").attr('title', 'Bulk Update');
+
+            }
+            else {
+                $("#ibulkupdate").attr('disabled', true);
+                $("#ibulkupdate").attr('title', 'Select A Row to Update.');
+
+            }
+        }
+
+        $('.checkbox-bulk-select-target').click(function () {
+
+            if ($(this).is(":checked")) {
+
+                $(this).closest('tr').addClass('bg-300');
+            }
+            else {
+                $(this).closest("tr").removeClass('bg-300');
+            }
+        });
+        /* checkbox - bulk - purchases - select*/
+
+        $('.checkbox-bulk-select').change(function () {
+            if ($(this).is(":checked", true)) {
+
+                $(this).closest('table').addClass('bg-300');
+            }
+            else {
+                $(this).closest("table").removeClass('bg-300');
+            }
+            //$(".checkbox-bulk-select").attr('checked', false);
+            //$(this).closest('tr').css("background-color", "#ff0000");
+        });
+
+        $("#clientExist").addClass('d-none');
+        $("#clientExist").html('');
+        $('#datepicker').attr('data-options', '{"dateFormat":"m/d/Y"}');
+
+        function GetUnselectedXeroaccouts() {
+            var ExcludedAccountId = '';
+            var IncludedAccountId = '';
+            var uncheckaccounts = $('.checkbox-bulk-select-target');
+            if (uncheckaccounts != null && uncheckaccounts != undefined) {
+                $.each(uncheckaccounts, function (key, val) {
+                    if (val != null && val.checked == false) {
+                        ExcludedAccountId = ExcludedAccountId != '' ? ExcludedAccountId + ',' + val.id : val.id;
+                    }
+                    else if (val != null && val.checked == true) {
+                        IncludedAccountId = IncludedAccountId != '' ? IncludedAccountId + ',' + val.id : val.id;
+                    }
+            });
+            }
+            $('#hidExcludedAccountNumbers').val(ExcludedAccountId);
+            $('#hidIncludedAccountNumbers').val(IncludedAccountId);
+        }
+        function CheckExistValidation() {
+            if ($("#ClientName").val() === "" && $("#clientExist").html() !== "") {
+                $('#clientExist').hide();
+                $("#clientExist").addClass('d-none');
+                $("#clientExist").html('');
+            }
+        }
+        // document.getElementById("clientExist").style.display = "none";
+        var msg = $('#CreateOrUpdate') != undefined ? $('#CreateOrUpdate').val() : '';
+
+        if (msg != undefined && msg != '' && msg == "Created") {
+            AddAlertRole();
+            $('#CreateOrUpdate').val('');
+        }
+        else if (msg != undefined && msg != '' && msg == "Updated") {
+            UpdateAlertRole();
+            $('#CreateOrUpdate').val('');
+        }
+        else if (msg != undefined && msg != '' && msg == "Exist") {
+            $('#clientExist').show();
+            $("#clientExist").removeClass('d-none');
+            $("#clientExist").html('This Client Agency name has been already taken.');
+            $('#CreateOrUpdate').val('');
+        }
+        function AddAlertRole() {
+            sweetAlert
+                ({
+                    title: "Created!",
+                    text: "New Client  created successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Client/ClientList'
+                    });
+        }
+        function UpdateAlertRole() {
+            sweetAlert
+                ({
+                    title: "Updated!",
+                    text: "Client  updated successfully!",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Client/ClientList'
+                    });
+        }
+</script>
 
 }
 
