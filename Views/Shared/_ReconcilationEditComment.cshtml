@@ -1,0 +1,57 @@
+﻿
+<div class="modal fade " id="EditCommentModal" role="dialog">
+
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+
+                <h5 class="modal-title">Reconciliation Email</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form class="chat-editor-area">
+                    <div class="w-100"><div id="typing-indicator"><span></span></div></div>
+                    <input class="d-none" type="file" multiple id="chat-file-upload" accept="image/*,application/pdf,.csv,.CSV, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain">
+                    <label class="mb-0 p-1 chat-file-upload cursor-pointer" for="chat-file-upload"><span class="fas fa-paperclip"></span></label>
+                    <div id="message-body-div_edit"><textarea id="message-body-input_edit" class="emojiarea border-0 outline-none shadow-none" data-options='{"placeholder":"Type your message","emojiPlaceholder":":smile_cat:","search":false,"tones":false,"filtersPosition":"bottom","recentEmojis":false}'></textarea></div>
+                    @*<textarea id="message-body-input" class="border-0 outline-none shadow-none"></textarea>*@
+                    <button id="send-message" class="btn btn-sm btn-send outline-none ml-2" type="button">Send</button>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between ">
+                <div class="min-vh-20" id="ifooter">
+
+
+                    <input class="form-control border-0 outline-none px-card">
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-sm px-3 mr-2" onclick="sendMail(); return false" inputtype="text" aria-describedby="email-subject" placeholder="Subject" id="sendbutton">Send</button>
+
+
+                    <button type="button" class="btn btn-primary btn-sm px-3 mr-2" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<style>
+    .modal-content {
+        width: 130% !important;
+    }
+
+    .modal.show .modal-dialog {
+        padding-top: 40px !important;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none;
+    }
+</style>

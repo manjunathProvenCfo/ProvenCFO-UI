@@ -237,7 +237,7 @@ namespace ProvenCfoUI.Controllers
                     var result = await XeroInstance.Instance.XeroService.GetGLAccounts(XeroInstance.Instance.XeroToken, XeroInstance.Instance.XeroTenentID);
                     if (result._Accounts != null)
                     {
-                        var accounts = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK" );
+                        var accounts = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK");
                         List<ClientXeroAccountsVM> gl = new List<ClientXeroAccountsVM>();
                         foreach (var item in accounts)
                         {
