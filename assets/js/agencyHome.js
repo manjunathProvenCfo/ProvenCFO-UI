@@ -562,7 +562,7 @@ function GetAccountOutStanding() {
 
 function AgencyDropdownPartialViewChange() {
     
-    ShowlottieLoader();
+    ShowlottieLoader(); 
     var ClientID = $("#ddlclient option:selected").val();
     //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
     //    if (response && response.URL != '') {
@@ -613,7 +613,7 @@ function AgencyDropdownPartialViewChange() {
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
                 
-
+                
 
             }
             
@@ -632,7 +632,8 @@ function AgencyDropdownPartialViewChange() {
                 $('.rounded-circle').removeClass('d-none');
                 
             }
-            HidelottieLoader();
+            
+            window.setTimeout(HidelottieLoader, 12250);
         },
         error: function () {
             $('#roleexist').hide();
@@ -658,11 +659,12 @@ function AgencyDropdownPartialViewChange() {
             $('.badge-soft-success').addClass('d-none');
             $('.badge-success').addClass('d-none');
             $('.rounded-circle').addClass('d-none');
-            HidelottieLoader();
+            window.setTimeout(hidelottieloader, 12250);
+            
         }
-
-        
-    });
+      
+  
+    }); 
    
 }
 

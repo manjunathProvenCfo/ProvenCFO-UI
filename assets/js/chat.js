@@ -122,10 +122,21 @@ var CommentHtmls = {
                     <span>{time}</span></div></div></div></div>`,
 }
 
+
+$(document).ready(function () {
+    
+    ShowlottieLoader();
+    window.setTimeout(HidelottieLoader, 7000);
+});
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+
+    
     $('#menu_communication a').click();
     $('#submenu_chat').addClass('active');
     showChatContentLoader();
+   
+
+    
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
@@ -172,7 +183,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         chat.autoSelectParticipant = true;
         getChatParticipants();
         createTwilioClient();
-    }
+    } 
 
     if (chat.channels.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
