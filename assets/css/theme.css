@@ -26679,6 +26679,7 @@ a.text-white:hover, a.text-white:focus {
     margin-bottom: 0.25rem;
     display: inline-block;
     position: relative;
+    margin-right: 0.25rem;
 }
 
 .message-settings {
