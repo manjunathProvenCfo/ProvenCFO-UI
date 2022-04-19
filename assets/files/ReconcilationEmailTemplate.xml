@@ -19,7 +19,7 @@
 	</body>
 	<footer>
 		<![CDATA[
-		 Last Sent on {LastSent} by {Username}
+		 Last Sent on {LastSent}
 		 ]]>
 	</footer>
 </EmailContent>
