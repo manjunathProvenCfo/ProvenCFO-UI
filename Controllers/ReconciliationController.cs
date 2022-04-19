@@ -79,6 +79,10 @@ namespace ProvenCfoUI.Controllers
                                 ViewBag.isvisibleGlAccount = true;
                                 TempData["Action"] = getAction();
                             }
+                            else
+                            {
+                                ViewBag.isvisibleGlAccount = false;
+                            }
                            
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
