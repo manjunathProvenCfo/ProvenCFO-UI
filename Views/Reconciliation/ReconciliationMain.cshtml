@@ -333,6 +333,17 @@
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
+                                                    @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<SelectListItem>)TempData["Action"], "Value", "Text", item.ref_ReconciliationAction), "Set Action", new { @class = "form-control", style = "width: 120px;", @onchange = "javascript:onChangeAction('" + item.id + "',event)" })
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+
+                                    @if (ViewBag.isvisibleGlAccount == true)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
                                                     @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<SelectListItem>)TempData["Action"], "Value", "Text", item.ref_ReconciliationAction), "Set Action", new { @class = "form-control", style = "width: 120px;" })
                                                 </div>
                                             </div>
@@ -842,6 +853,21 @@
 
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeAction(id, event) {
+
+            var Selectedvalue = event.currentTarget.value;
+
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }

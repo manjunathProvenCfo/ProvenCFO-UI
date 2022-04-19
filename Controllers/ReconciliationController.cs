@@ -374,19 +374,19 @@ namespace ProvenCfoUI.Controllers
             List<SelectListItem> listItem = new List<SelectListItem>();
             SelectListItem item = new SelectListItem();
             item.Text = "Marked as reconciled";
-            item.Value = "Marked as reconciled";
+            item.Value = "1";
             listItem.Add(item);
             SelectListItem item1 = new SelectListItem();
             item1.Text = "In Transit";
-            item1.Value = "In Transit";
+            item1.Value = "2";
             listItem.Add(item1);
             SelectListItem item2 = new SelectListItem();
             item2.Text = "Match to existing";
-            item2.Value = "Match to existing";
+            item2.Value = "3";
             listItem.Add(item2);
             SelectListItem item3 = new SelectListItem();
             item3.Text = "Researching";
-            item3.Value = "Researching";
+            item3.Value = "4";
             listItem.Add(item3);
             return listItem;
         }
@@ -507,12 +507,12 @@ namespace ProvenCfoUI.Controllers
         }
         [CheckSession]
         [HttpPost]
-        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional = 0)
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0)
         {
             //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
-                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
+                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
 
