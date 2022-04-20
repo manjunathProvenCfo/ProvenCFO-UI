@@ -47,6 +47,23 @@ namespace Proven.Service
 
             //}
         }
+        public ClientXeroAccountsMainModel GetXeroBankAccount(int AgencyID, string XeroStatus)
+        {
+           return GetAsync<ClientXeroAccountsMainModel>("Xero/GetXeroBankAccount?AgencyID=" + AgencyID + "&XeroStatus=" + XeroStatus).Result;
+            
+            //response = client.GetAsync("Invitation/GetALLInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
+
+            //}
+        }
         public XeroGlAccountVM create(XeroGlAccountVM test)
         {
             return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateXeroGlAccount1", test).Result;
@@ -54,6 +71,10 @@ namespace Proven.Service
         public XeroGlAccountVM CreateXeroGlAccount(List<XeroGlAccountVM> glAccounts)
         {           
             return PostAsync<XeroGlAccountVM, List<XeroGlAccountVM>>("Xero/CreateXeroGlAccount", glAccounts).Result;           
+        }
+        public ClientXeroAccountsVM CreateXeroBankAccount(List<ClientXeroAccountsVM> glAccounts)
+        {           
+            return PostAsync<ClientXeroAccountsVM, List<ClientXeroAccountsVM>>("Xero/CreateXeroBankAccount", glAccounts).Result;           
         }
         public XeroTrackingCategoriesVM CreateXeroTrackingCatogories(List<XeroTrackingCategoriesVM> TrackingCategories)
         {

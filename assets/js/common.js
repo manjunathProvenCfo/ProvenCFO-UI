@@ -303,15 +303,17 @@ var loadAllNotificationLoggedInUser = function()
                 var agencyName = obj.agencyName;
                 var Text = "mentioned you in " + agencyName + " about a transaction for $" + obj.amount;
                 var mDate = new Date(obj.mentionedDate);
-                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
-                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
-                var Timestring = getCurrentTime(new Date);
+                var UTCdate = getUTCDateTime(new Date(obj.mentionedDate));
+               
+                //var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = getDateDiff(new Date(UTCdate),new Date());  //monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                //var Timestring = getCurrentTime(new Date);
                 if (obj.isunread != null && obj.isunread == true) {
-                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
                
                 else {
-                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
                 $TopNotificaitonList1.append(NotificationHtml);
                 icount++;
@@ -339,15 +341,16 @@ var loadAllNotificationLoggedInUser1 = function () {
                 var NotificationHtml = '';
                 var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
                 var mDate = new Date(obj.mentionedDate);
-                var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
-                var StringForDisplay = monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
-                var Timestring = getCurrentTime(new Date);
+                var UTCdate = getUTCDateTime(new Date(obj.mentionedDate));
+                //var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = getDateDiff(new Date(UTCdate), new Date());  // monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                //var Timestring = getCurrentTime(new Date);
                 if (obj.isunread != null && obj.isunread == true) {
-                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
 
                 else {
-                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay + " " + Timestring).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
                 $TopNotificaitonList.append(NotificationHtml);
                 icount++;
@@ -731,3 +734,34 @@ var genereateAllReconciliationTwilioConversationAndAddParticipants = function ()
     }
 }
 //Global Chat with Notifications End
+
+
+var getDateDiff = function (date,now) {
+    var diff = (((now || (new Date())).getTime() - date.getTime()) / 1000),
+        day_diff = Math.floor(diff / 86400);
+    return day_diff == 0 && (
+        diff < 60 && "Just now" ||
+        diff < 120 && "1 minute ago" ||
+        diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
+        diff < 7200 && "1 hour ago" ||
+        diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
+        day_diff == 1 && "yesterday" ||
+        day_diff < 7 && day_diff + " days ago" ||
+        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
+}
+function getUTCDateTime(date) {
+
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var seconds = date.getSeconds()
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
+    return strTime;
+}

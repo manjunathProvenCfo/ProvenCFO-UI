@@ -9,6 +9,8 @@ var gCurrentViewTaskId = '';
 
 $(document).ready(function () {
     $('#divEditDescription').hide();
+    ShowlottieLoader();
+    window.setTimeout(HidelottieLoader, 7000);
     // Dropzone.autoDiscover = false;
     //view Page
     var previewNode_view = document.querySelector("#template_view");
@@ -1163,7 +1165,7 @@ $(function () {
 
 });
 
-var text = "";
+
 function getClientDate(ClientName) {
     getAjaxSync(apiurl + `Needs/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
         text = response.resultData;

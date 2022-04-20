@@ -25,6 +25,7 @@ var $tc_2_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
 
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -58,9 +59,14 @@ var CommentHtmls = {
                         </div>
                     </div>`,
     datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
-    commenthtml: `<div class="media p-3" data-timestamp="{date}"><div class= "media-body d-flex justify-content-end">
+    commenthtml: `<div class="media p-3" data-timestamp="{date}" id="msg_{commentId}"><div class= "media-body d-flex justify-content-end">
                   <div class="w-100 w-xxl-75"><div class="hover-actions-trigger d-flex align-items-center justify-content-end">
-                    <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div></div>
+                    <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>
+                    <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                       <li class="list-inline-item d-none"><a class="chat-option" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" onclick="CommentEdit('{commentId}');" aria-label="Edit" data-toggle="modal" data-target="#EditCommentModal" ><svg class="svg-inline--fa fa-edit fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img"  viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg><!-- <span class="fas fa-edit"></span> Font Awesome fontawesome.com --></a></li>
+                       <li class="list-inline-item"><a class="chat-option" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="CommentDelete('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                        </ul>
+                    </div>
                     <div class="text-400 fs--2 text-right">{time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
                 </div></div></div></div>`,
     otherscCommentshtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
@@ -116,10 +122,21 @@ var CommentHtmls = {
                     <span>{time}</span></div></div></div></div>`,
 }
 
+
+//$(document).ready(function () {
+    
+//    ShowlottieLoader();
+//    window.setTimeout(HidelottieLoader, 7000);
+//});
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+
+    
     $('#menu_communication a').click();
     $('#submenu_chat').addClass('active');
     showChatContentLoader();
+   
+
+    
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
@@ -166,13 +183,18 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         chat.autoSelectParticipant = true;
         getChatParticipants();
         createTwilioClient();
-    }
+    } 
 
     if (chat.channels.length > 0) {
         $participants = $("#chatParticipants div[id*='chat-link']");
         $participants.off('click');
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
+    }
+    var addNewMessagetoChatwindow = async function (input) {
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
@@ -235,7 +257,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     }
 
 
-    NoticiationNavigationLoad(chat.clientId);
+    //NoticiationNavigationLoad(chat.clientId);
 
 
 }
@@ -336,7 +358,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
             $channelMessages.append(dhtml);
         }
-        var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring);
+        var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
         $channelMessages.append(chtml);
         SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
         setScrollPosition();
@@ -358,6 +380,16 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
             postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
                 var r = response;
+                if (response.resultData != null) {                   
+                    var id = "msg_" + response.resultData;
+                    $('#msg_0').attr("id", id);
+                    if ($('#' + id + ' a').length > 0) {
+                        $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
+                    };
+                    if ($('#' + id + ' a').length > 1) {
+                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                    }
+                }
             });
         }
 
@@ -548,10 +580,11 @@ var LoadAllComments = function (ReconciliationComments) {
                 var time = getCurrentTime(new Date(UTCdate));
                 var profileimgurl = acomments.commentedUserProfileImageurl;
                 var commentText = acomments.commentText;
+                var commentId = acomments.id;
                 var userName = acomments.commentedUserName;
                 if (acomments && (acomments.isAttachment == null || acomments.isAttachment == false)) {
                     if (acomments && acomments.createdBy == chat.userId) {
-                        var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time);
+                        var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time).replace(/{commentId}/g, commentId);
                         $channelMessages.append(commentshtml);
                     }
                     else {
@@ -840,7 +873,31 @@ var insertUpdateTwilioConversation = function (objTwilioConversations) {
     postAjax("/Twilio/InsertUpdateTwilioConversation", JSON.stringify(objTwilioConversations), function (response) {
     });
 }
+var CommentDelete = function (CommentId) {
+    ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this message?", "Yes, remove it!", function (isConfirmed) {
+        if (isConfirmed == false)
+            return;
+        $('#msg_' + CommentId).remove();
+        if (CommentId > 0) { DeleteReconciliationComment(CommentId);}        
+    });
+}
+var CommentEdit = function (CommentId) {
+    var text = $('#msg_' + CommentId + ' .chat-message');
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.val(text.text());
 
+}
+var DeleteReconciliationComment = function (commentId) {
+    postAjaxSync(apiurl + `Reconciliation/DeleteReconciliationComment?CommentId=` + commentId, null, function (response) {
+        var r = response;
+        if (response.resultData == true) {
+            ShowAlertBoxSuccess("success", "Message has been removed successfully!")
+        }
+        else {
+            ShowAlertBoxError("Error", "Error while removing of message.")
+        }
+    });
+}
 
 var getChannelByChannelIndex = function () {
     return chat.channels[chat.channelIndex];
@@ -959,10 +1016,12 @@ function showHideReconcilationOptions(show) {
     if (show == true) {
         $communicationGLaccount.removeClass('d-none');
         $communicationTrackingCategories.removeClass('d-none');
+        $tc_2_Dropdown.removeClass('d-none');
     }
     else {
         $communicationGLaccount.addClass('d-none');
         $communicationTrackingCategories.addClass('d-none');
+        $tc_2_Dropdown.addClass('d-none');
     }
 }
 

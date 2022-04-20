@@ -47,9 +47,9 @@ namespace Proven.Service
         {
             return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId + "&Type=" + Type).Result;
         }
-        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional)
+        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional, int reconciliationActionId)
         {
-            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
+            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}&reconciliationActionId={6}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId);
             return PostAsync<ReturnModel>(result).Result;
         }
         public ReturnModel BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
@@ -99,6 +99,12 @@ namespace Proven.Service
         {
             await client.PostAsync($"Reconciliation/InsertReconciliationCommentAttachmentDetails", PreparePostContent(attachmentData));
         }
+        public ReconcilationmainActionOptionVM GetAllReconcilationAction()
+        {
+            return GetAsync<ReconcilationmainActionOptionVM>("Reconciliation/GetAllReconcilationAction").Result;
+
+        }
+
         public void Dispose()
         {
             Dispose(true);

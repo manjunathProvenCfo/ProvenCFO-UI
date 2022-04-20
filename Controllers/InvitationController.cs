@@ -796,18 +796,8 @@ namespace ProvenCfoUI.Controllers
             {
                 using (InvitationServices objInvite = new InvitationServices())
                 {
-                   
-                    var results = objInvite.GetInvitationById1(id);
-                    if (results != null)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        var result = objInvite.DeleteInvite(id);
-                        return false;
-                        //return Json(result, JsonRequestBehavior.AllowGet);
-                    }
+                    var result = objInvite.DeleteInvite(id);
+                    return result.resultData;                    
                 }
             }
             catch (Exception ex)

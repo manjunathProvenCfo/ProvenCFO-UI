@@ -45,28 +45,37 @@
             </div>
         </div>*@
 
-            <div class="row pb-1">
-                <div class="col-12">
-                    <h6 class="mb-0">GL Account</h6>
+          
+
+            @if (ViewBag.isvisibleGlAccount == false)
+            {
+                <div class="row pb-1">
+                    <div class="col-12">
+                        <h6 class="mb-0">GL Account</h6>
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="row pb-3">
                 <div class="col-12">
-                    @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Select GL Account",
-                                                               new { @class = " selectpicker form-control" })
+                    @if (ViewBag.isvisibleGlAccount == false)
+                    {
+                        @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Select GL Account",
+                                                                        new { @class = " selectpicker form-control" })
+                    }
                 </div>
             </div>
-
-
-            <div class="row pb-1">
-                <div class="col-12">
-                    <h6 class="mb-0">Bank Rule</h6>
+            @if (ViewBag.isvisibleGlAccount == false)
+            {
+                <div class="row pb-1">
+                    <div class="col-12">
+                        <h6 class="mb-0">Bank Rule</h6>
+                    </div>
                 </div>
-            </div>
+            }
             <div class="row pb-3">
                 <div class="col-12">
-                    @if (TempData["BankRule"] != null)
+                    @if (TempData["BankRule"] != null && ViewBag.isvisibleGlAccount == false)
                     {
 
                         @Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })
@@ -90,7 +99,7 @@
 
             <div class="row pb-1">
                 <div class="col-12">
-                    @if (TempData["TrackingCategories"] != null)
+                    @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
                     {
                         <h6 class="mb-0">Tracking Categories</h6>
                     }
@@ -100,7 +109,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    @if (TempData["TrackingCategories"] != null)
+                    @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
                     {
                         int count = 0;
                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])

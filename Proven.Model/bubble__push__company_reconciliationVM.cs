@@ -22,5 +22,6 @@ namespace Proven.Model
         public string type { get; set; }
         public String AgencyID { get; set; }
         public String IsDeleted { get; set; }
+        public string ref_ReconciliationAction { get; set; }
     }
 }

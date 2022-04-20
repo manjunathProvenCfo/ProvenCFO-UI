@@ -29,6 +29,8 @@ namespace Proven.Model
         public int? AgencyId { get; set; }
         public int? gl_account_ref { get; set; }
         public int? tracking_category_ref { get; set; }
+        public bool Selected { get; set; }
+
     }
 
     public class XeromainGlAccountVM

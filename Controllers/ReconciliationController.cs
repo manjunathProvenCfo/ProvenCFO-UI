@@ -55,7 +55,23 @@ namespace ProvenCfoUI.Controllers
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
 
-                    using (IntigrationService objIntegration = new IntigrationService())
+                    
+                    if (userType == "1")
+                    {
+                        var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                        getallAction.ForEach(x => x.ActionName = x.ActionName);
+                       
+                        if (Type == "Not in Banks")
+                        {
+                            ViewBag.isvisibleGlAccount = true;
+                            TempData["Action"] = getallAction;
+                        }
+                        else
+                        {
+                            ViewBag.isvisibleGlAccount = false;
+                        }
+                    }
+                        using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
@@ -69,11 +85,21 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
 
                         }
-
+                        
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
+                            //if (Type == "Not in Banks")
+                            //{
+                            //    ViewBag.isvisibleGlAccount = true;
+                            //    //TempData["Action"] = getAction();
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.isvisibleGlAccount = false;
+                            //}
+                           
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{
@@ -84,12 +110,15 @@ namespace ProvenCfoUI.Controllers
 
                             //}
                             TempData["BankRule"] = getBankRule();
+                          
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
                             ViewBag.IsBankRuleVisible = false;
+                            ViewBag.isvisibleGlAccount = false;
                         }
+                       
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
@@ -149,6 +178,7 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
                         }
                         TempData["BankRule"] = getBankRule();
+                        //TempData["Action"] = getAction();
                         TempData["ReconciledStatus"] = getReconciledStatus();
                     }
                     else
@@ -355,6 +385,27 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
+        //public static List<SelectListItem> getAction()
+        //{
+        //    List<SelectListItem> listItem = new List<SelectListItem>();
+        //    SelectListItem item = new SelectListItem();
+        //    item.Text = "Marked as reconciled";
+        //    item.Value = "1";
+        //    listItem.Add(item);
+        //    SelectListItem item1 = new SelectListItem();
+        //    item1.Text = "In Transit";
+        //    item1.Value = "2";
+        //    listItem.Add(item1);
+        //    SelectListItem item2 = new SelectListItem();
+        //    item2.Text = "Match to existing";
+        //    item2.Value = "3";
+        //    listItem.Add(item2);
+        //    SelectListItem item3 = new SelectListItem();
+        //    item3.Text = "Researching";
+        //    item3.Value = "4";
+        //    listItem.Add(item3);
+        //    return listItem;
+        //}
         public static List<SelectListItem> getReconciledStatus()
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -405,6 +456,18 @@ namespace ProvenCfoUI.Controllers
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                    getallAction.ForEach(x => x.ActionName = x.ActionName);
+
+                    if (RecordsType == "Not in Banks")
+                    {
+                        ViewBag.isvisibleGlAccount = true;
+                        TempData["Action"] = getallAction;
+                    }
+                    else
+                    {
+                        ViewBag.isvisibleGlAccount = false;
+                    }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
@@ -423,6 +486,15 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
+                            //if (RecordsType == "Not in Banks")
+                            //{
+                            //    ViewBag.isvisibleGlAccount = true;
+                            //    //TempData["Action"] = getAction();
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.isvisibleGlAccount = false;
+                            //}
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{
@@ -432,6 +504,7 @@ namespace ProvenCfoUI.Controllers
                             //    TempData["TrackingCategories"] = TCgroup;
                             //}
                             TempData["BankRule"] = getBankRule();
+                            
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
@@ -462,12 +535,12 @@ namespace ProvenCfoUI.Controllers
         }
         [CheckSession]
         [HttpPost]
-        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional = 0)
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0)
         {
             //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
-                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
+                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -604,20 +677,16 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        public JsonResult EmailSend(string ClientName, string NotInBankUnreconciledItemsCount, string url, string sentdate)
+        public JsonResult EmailSend(string ClientName, string ClientId, string NotInBankUnreconciledItemsCount, string url, string sentdate)
         {
             try
             {
                 using (AccountService obj = new AccountService())
                 {
-                    List<InviteUserModel> user = new List<InviteUserModel>();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-
-
-                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();
-                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                    List<InviteUserModel> user = new List<InviteUserModel>();                    
+                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RCN");
+                    var Userslist = usersListwithRecPermission.ResultData;
+                    var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
 
                     XmlDocument doc = new XmlDocument();
                     doc.Load(Server.MapPath("~/assets/files/ReconcilationEmailTemplate.xml"));
@@ -626,24 +695,12 @@ namespace ProvenCfoUI.Controllers
                     var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
                     var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
                     var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
-
-
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-
                     body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
-                    body = body.Replace("{url}", url);
-                    //if (sentdate != "null")
-                    //{
-                    //    footer = footer.Replace("{LastSent}", sentdate);
-                    //}
-                    //else
-                    //{
-                    //    footer = "";
-
-                    //}
+                    body = body.Replace("{url}", url);                   
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
                 }
             }

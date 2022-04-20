@@ -86,6 +86,10 @@ namespace Proven.Model
         public DateTime? SummaryModifiedDate { get; set; }
         public int? Summaryid_ref { get; set; }
         public string SummaryData { get; set; }
+        public bool? IsMailSend { get; set; }
+        public string MailSendDate { get; set; }
+        public string MailSendDateNotes { get; set; }
+        public string MailSendDateNeeds { get; set; }
 
     }
 

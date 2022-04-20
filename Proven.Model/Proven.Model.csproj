@@ -76,6 +76,7 @@
     <Compile Include="NotesSummaryVM.cs" />
     <Compile Include="NotesUICountingsByAgencyId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReconcilationActionOptionVM.cs" />
     <Compile Include="ReconcilationCountVM.cs" />
     <Compile Include="ReconciliationCommentAttachments.cs" />
     <Compile Include="ReconciliationComments.cs" />
