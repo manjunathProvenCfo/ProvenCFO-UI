@@ -481,6 +481,8 @@
     </script>
 
     <script>
+        var totalSum1;
+        var totalSum2;
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
@@ -932,6 +934,9 @@
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
+                        
+                        sessionStorage.setItem("LastMailSent", data.MailSendDate)
+                        
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
                         var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
@@ -949,8 +954,7 @@
         }
 
 
-        var totalSum1;
-        var totalSum2;
+       
         function bindNotInBooksAndBanksCount() {
 
             var ClientID = $("#ddlclient option:selected").val();
@@ -1022,10 +1026,11 @@
 
                 var ClientName = $("#ddlclient option:selected").text();
                 var ClientId = $("#ddlclient option:selected").val();
-                getClientDate(ClientName);
+                //getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${text}`, null, function (response) {
+                var LastMailSent = sessionStorage.getItem("LastMailSent");
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
@@ -1043,7 +1048,7 @@
             });
         });
 
-        var text = "";
+       
         function getClientDate(ClientName) {
             getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
                 text = response.resultData;

@@ -343,6 +343,7 @@
                         if (data != null) {
                             $('#Notes-create-new-btn').show();//TODO
                             SetUserPreferencesForAgency();
+                            LastMailSent = data.MailSendDate;
                             window.location.reload();
                         }
                         else {
@@ -762,7 +763,7 @@
                 let totalNotes = 0;
 
                 var ClientName = $("#ddlclient option:selected").text();
-                getClientDate(ClientName);
+                //getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 $("#lblTotalNotesCount").text(totalNotes);
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
@@ -785,13 +786,13 @@
             });
         });
 
-        var text = "";
-        function getClientDate(ClientName) {
-            getAjaxSync(apiurl + `Notes/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
-                text = response.resultData;
-            });
+        //var text = "";
+        //function getClientDate(ClientName) {
+        //    getAjaxSync(apiurl + `Notes/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        //        text = response.resultData;
+        //    });
 
-        }
+        //}
 
         function sendMail() {
             var recip = $("#email-to").val();

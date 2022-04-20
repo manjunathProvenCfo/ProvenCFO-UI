@@ -1165,7 +1165,7 @@ $(function () {
 
 });
 
-var text = "";
+
 function getClientDate(ClientName) {
     getAjaxSync(apiurl + `Needs/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
         text = response.resultData;
