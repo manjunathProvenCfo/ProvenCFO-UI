@@ -1026,7 +1026,7 @@
 
                 var ClientName = $("#ddlclient option:selected").text();
                 var ClientId = $("#ddlclient option:selected").val();
-                //getClientDate(ClientName);
+                getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
@@ -1051,7 +1051,7 @@
        
         function getClientDate(ClientName) {
             getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
-                text = response.resultData;
+                sessionStorage.setItem("LastMailSent", response.resultData);
             });
 
         }
