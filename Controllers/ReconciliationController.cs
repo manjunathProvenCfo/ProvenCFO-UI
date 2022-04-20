@@ -55,7 +55,23 @@ namespace ProvenCfoUI.Controllers
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
 
-                    using (IntigrationService objIntegration = new IntigrationService())
+                    
+                    if (userType == "1")
+                    {
+                        var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                        getallAction.ForEach(x => x.ActionName = x.ActionName);
+                       
+                        if (Type == "Not in Banks")
+                        {
+                            ViewBag.isvisibleGlAccount = true;
+                            TempData["Action"] = getallAction;
+                        }
+                        else
+                        {
+                            ViewBag.isvisibleGlAccount = false;
+                        }
+                    }
+                        using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
@@ -74,15 +90,15 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            if (Type == "Not in Banks")
-                            {
-                                ViewBag.isvisibleGlAccount = true;
-                                TempData["Action"] = getAction();
-                            }
-                            else
-                            {
-                                ViewBag.isvisibleGlAccount = false;
-                            }
+                            //if (Type == "Not in Banks")
+                            //{
+                            //    ViewBag.isvisibleGlAccount = true;
+                            //    //TempData["Action"] = getAction();
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.isvisibleGlAccount = false;
+                            //}
                            
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
@@ -369,27 +385,27 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
-        public static List<SelectListItem> getAction()
-        {
-            List<SelectListItem> listItem = new List<SelectListItem>();
-            SelectListItem item = new SelectListItem();
-            item.Text = "Marked as reconciled";
-            item.Value = "1";
-            listItem.Add(item);
-            SelectListItem item1 = new SelectListItem();
-            item1.Text = "In Transit";
-            item1.Value = "2";
-            listItem.Add(item1);
-            SelectListItem item2 = new SelectListItem();
-            item2.Text = "Match to existing";
-            item2.Value = "3";
-            listItem.Add(item2);
-            SelectListItem item3 = new SelectListItem();
-            item3.Text = "Researching";
-            item3.Value = "4";
-            listItem.Add(item3);
-            return listItem;
-        }
+        //public static List<SelectListItem> getAction()
+        //{
+        //    List<SelectListItem> listItem = new List<SelectListItem>();
+        //    SelectListItem item = new SelectListItem();
+        //    item.Text = "Marked as reconciled";
+        //    item.Value = "1";
+        //    listItem.Add(item);
+        //    SelectListItem item1 = new SelectListItem();
+        //    item1.Text = "In Transit";
+        //    item1.Value = "2";
+        //    listItem.Add(item1);
+        //    SelectListItem item2 = new SelectListItem();
+        //    item2.Text = "Match to existing";
+        //    item2.Value = "3";
+        //    listItem.Add(item2);
+        //    SelectListItem item3 = new SelectListItem();
+        //    item3.Text = "Researching";
+        //    item3.Value = "4";
+        //    listItem.Add(item3);
+        //    return listItem;
+        //}
         public static List<SelectListItem> getReconciledStatus()
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -440,6 +456,18 @@ namespace ProvenCfoUI.Controllers
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                    getallAction.ForEach(x => x.ActionName = x.ActionName);
+
+                    if (RecordsType == "Not in Banks")
+                    {
+                        ViewBag.isvisibleGlAccount = true;
+                        TempData["Action"] = getallAction;
+                    }
+                    else
+                    {
+                        ViewBag.isvisibleGlAccount = false;
+                    }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
@@ -458,15 +486,15 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            if (RecordsType == "Not in Banks")
-                            {
-                                ViewBag.isvisibleGlAccount = true;
-                                TempData["Action"] = getAction();
-                            }
-                            else
-                            {
-                                ViewBag.isvisibleGlAccount = false;
-                            }
+                            //if (RecordsType == "Not in Banks")
+                            //{
+                            //    ViewBag.isvisibleGlAccount = true;
+                            //    //TempData["Action"] = getAction();
+                            //}
+                            //else
+                            //{
+                            //    ViewBag.isvisibleGlAccount = false;
+                            //}
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{

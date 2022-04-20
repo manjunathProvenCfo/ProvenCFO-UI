@@ -122,11 +122,11 @@ var CommentHtmls = {
 }
 
 
-$(document).ready(function () {
+//$(document).ready(function () {
     
-    ShowlottieLoader();
-    window.setTimeout(HidelottieLoader, 7000);
-});
+//    ShowlottieLoader();
+//    window.setTimeout(HidelottieLoader, 7000);
+//});
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
 
     

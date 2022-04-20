@@ -99,6 +99,12 @@ namespace Proven.Service
         {
             await client.PostAsync($"Reconciliation/InsertReconciliationCommentAttachmentDetails", PreparePostContent(attachmentData));
         }
+        public ReconcilationmainActionOptionVM GetAllReconcilationAction()
+        {
+            return GetAsync<ReconcilationmainActionOptionVM>("Reconciliation/GetAllReconcilationAction").Result;
+
+        }
+
         public void Dispose()
         {
             Dispose(true);

@@ -444,7 +444,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string url1, string url2, string url3, string url4, string url5, string totalNotes, string sentdate)
+        public JsonResult EmailSend(string ClientName, string url, string totalNotes, string sentdate)
         {
             try
             {
@@ -471,18 +471,18 @@ namespace ProvenCfoUI.Controllers
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
 
                     body = body.Replace("{totalNotes}", totalNotes);
-                    var a = "https://" + url + "/Notes/GetNotesPage";
-                    var b = "https://" + url1 + "/Dashboard/Dashboard";
-                    var c = "https://" + url2 + "/Reports/ReportsList";
-                    var d = "https://" + url3 + "/Home/Login";
-                    var e = "https://" + url4 + "/Reconciliation/ReconciliationMain";
-                    var f = "https://" + url5 + "/Communication/Chat";
-                    body = body.Replace("{url}", a);
-                    body = body.Replace("{url1}", b);
-                    body = body.Replace("{url2}", c);
-                    body = body.Replace("{url3}", d);
-                    body = body.Replace("{url4}", e);
-                    body = body.Replace("{url5}", f);
+                    var notes = "https://" + url + "/Notes/GetNotesPage";
+                    var dashboard = "https://" + url + "/Dashboard/Dashboard";
+                    var report = "https://" + url + "/Reports/ReportsList";
+                    var login = "https://" + url + "/Home/Login";
+                    var reconcilation = "https://" + url + "/Reconciliation/ReconciliationMain";
+                    var chat = "https://" + url + "/Communication/Chat";
+                    body = body.Replace("{notes}", notes);
+                    body = body.Replace("{dashboard}", dashboard);
+                    body = body.Replace("{report}", report);
+                    body = body.Replace("{login}", login);
+                    body = body.Replace("{reconcilation}", reconcilation);
+                    body = body.Replace("{chat}", chat);
 
                     //footer = footer.Replace("{LastSent}", sentdate);
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
