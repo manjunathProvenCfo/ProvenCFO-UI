@@ -757,6 +757,7 @@
         $(function () {
 
             $("#email").click(function () {
+                
                
                 var url = window.location.host;
                
@@ -766,8 +767,9 @@
                 //getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 $("#lblTotalNotesCount").text(totalNotes);
+                var LastMailSent = sessionStorage.getItem("LastMailSent");
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&sentdate=${text}`, null, function (response) {
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&sentdate=${LastMailSent}`, null, function (response) {
                     if (response.Status == 'Success') {
                       
                         var text = response.Recipients.toString().split(",");

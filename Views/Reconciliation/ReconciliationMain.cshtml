@@ -764,7 +764,9 @@
 
         }
         function BulkActionReconcilation() {
+           
             var GLaccount = $('#BA_filterGLaccounts').val();
+            var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
             var reconcilationStatus = $('#BA_Status').val();
@@ -778,7 +780,7 @@
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
             }
@@ -795,7 +797,7 @@
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
                 AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus
+                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus, Action: Action
             };
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {

@@ -485,6 +485,7 @@ namespace ProvenCfoUI.Controllers
                     body = body.Replace("{chat}", chat);
 
                     //footer = footer.Replace("{LastSent}", sentdate);
+                    
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
 
                     return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
