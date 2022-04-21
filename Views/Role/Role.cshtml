@@ -43,22 +43,22 @@
                 <thead class="bg-200 text-900">
                     <tr>
                         @*<th class="no-sort pr-1 align-middle data-table-row-bulk-select">
-            <div class="custom-control custom-checkbox">
-                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
-                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
-            </div>
-        </th>*@
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                </div>
+                            </th>*@
                         @*<th class="sort pr-1 align-middle" width="45%"> Role Name</th>
 
-        <th class="sort pr-1 align-middle" width="45%">Status</th>
+                            <th class="sort pr-1 align-middle" width="45%">Status</th>
 
-        <th class="no-sort align-middle text-center" width="10%">Action</th>*@
+                            <th class="no-sort align-middle text-center" width="10%">Action</th>*@
 
                         @*<th class="sort pr-1 align-middle text-center">Delete</th>*@
 
                         @*<th class="no-sort pr-1 align-middle data-table-row-action">
-            Action
-        </th>*@
+                                Action
+                            </th>*@
 
                         <th class="sort pr-1 align-middle" width="30%">Role Name</th>
                         <th class="sort pr-1 align-middle" width="30%">Role Display Name</th>
@@ -71,61 +71,61 @@
                 <tbody id="purchases">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger">
+                        <tr class="btn-reveal-trigger">
 
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.DisplayRoleName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.UserTypeName)
-                        </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.DisplayRoleName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.UserTypeName)
+                            </td>
 
-                        <td class="align-middle">
-                            @if (item.Status == "Active")
-                            {
-                                <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
-                            }
-                        </td>
-
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-none d-sm-inline-block">
-                                <a href='@Url.Action("EditRole", "Role", new { id = item.Id})'>
-                                    <i class="far fa-edit"> </i>
-                                </a>
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-2">
-                                <a href="#" onclick="deleteUser('@item.Id')">
-                                    <i class="far fa-trash-alt"> </i>
-                                </a>
-                            </span>
-
-                            <span class="d-none d-sm-inline-block ml-2">
-
+                            <td class="align-middle">
                                 @if (item.Status == "Active")
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
                                 }
+                            </td>
 
-                            </span>
-                        </td>
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block">
+                                    <a href='@Url.Action("EditRole", "Role", new { id = item.Id})'>
+                                        <i class="far fa-edit"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    <a href="#" onclick="deleteUser('@item.Id')">
+                                        <i class="far fa-trash-alt"> </i>
+                                    </a>
+                                </span>
+
+                                <span class="d-none d-sm-inline-block ml-2">
+
+                                    @if (item.Status == "Active")
+                                    {
+                                        <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("DeactivateRole", "Role", new { id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
+
+                                </span>
+                            </td>
 
 
-                    </tr>
+                        </tr>
                     }
                 </tbody>
 
@@ -137,7 +137,7 @@
 @*@section Scripts {
         <script>
             var ExportToExcel = function () {
-               
+
                 ExportFileReq("Role", "ExportToExcel");
             }
 
@@ -166,6 +166,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
         var ExportToExcel = function () {
 
@@ -209,7 +210,7 @@
                         //data: { id: id },
                     })
                         .done(function (data) {
-                           
+
                             if (data == "true") {
                                 sweetAlert
                                     ({
@@ -221,7 +222,7 @@
                                             window.location.reload();
                                         });
 
-                                
+
                             }
                             else {
                                 sweetAlert
@@ -242,6 +243,10 @@
                         });
                 });
         }
+        $(document).ready(function () {
+            HidelottieLoader();
 
+
+        });
     </script>
 }

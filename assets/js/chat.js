@@ -122,12 +122,6 @@ var CommentHtmls = {
                     <span>{time}</span></div></div></div></div>`,
 }
 
-
-//$(document).ready(function () {
-    
-//    ShowlottieLoader();
-//    window.setTimeout(HidelottieLoader, 7000);
-//});
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
 
     
@@ -258,7 +252,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 
     //NoticiationNavigationLoad(chat.clientId);
-
+    HidelottieLoader();
 
 }
 var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
@@ -278,7 +272,7 @@ var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
         scrolltoselctedItem($("#" + ReconcilationId));
     }
 
-
+    HidelottieLoader();
 }
 var scrolltoselctedItem = function (element) {    
     $(".contacts-list").animate({ scrollTop: element.position().top -70 });

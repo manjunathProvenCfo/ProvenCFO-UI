@@ -92,7 +92,7 @@ $(function () {
 
         showHideQuarterBasedOnFlag();
         bindReports("");
-
+        HidelottieLoader();
     });
     $btnUpload.click(function (e) {
         e.stopPropagation();
@@ -334,12 +334,7 @@ var getReports = function (agencyId, year, period) {
     getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
         if (response.Status == "Error")
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
-        let reports = response.Data;
-        if (isEmptyOrBlank(period)) {
-            $(".report-card-body .report").remove()
-        }
-        else {
-            $(`.report-card-body[data-report-period='${period}'] .report`).remove()
+        let reports = response.Data; HidelottieLoader();
         }
         reports.forEach(function (obj) {
 

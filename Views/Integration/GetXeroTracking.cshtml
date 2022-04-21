@@ -75,6 +75,7 @@
                 XeroConnectionUpdate();
 
             }, 2000);
+          
         });
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
@@ -92,6 +93,7 @@
                 $('#btnSync').hide()//prop('disabled', true);
                 // $('#spanSync').prop('disabled', true);
             }
+            HidelottieLoader();
         }
 
 
@@ -127,9 +129,9 @@
                     ShowAlertBoxSuccess("Success!", "Tracking Categories Synced with Xero successfully.", function () { window.location.reload(); });
                 }
             });
-           /* HidelottieLoader();*/
+           
         }
-
+        
     </script>
 
 }
