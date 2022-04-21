@@ -24,6 +24,7 @@ var $tc_1_Dropdown;
 var $tc_2_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
+var $communicationAction;
 
 
 var chat = {
@@ -166,6 +167,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     $communicationGLaccount = $("#comTrackingCategories");
     $communicationTrackingCategories = $("#comGLaccount");
+    $communicationAction = $("#comAction");
 
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
@@ -284,7 +286,7 @@ var scrolltoselctedItem = function (element) {
     $(".contacts-list").animate({ scrollTop: element.position().top -70 });
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-
+    
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -305,6 +307,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $gl_accountDropdown = $('#gl_account');
     $tc_1_Dropdown = $('#tracking_category_0');
     $tc_2_Dropdown = $('#tracking_category_1');
+    $communicationAction = $('#BA_filterAction');
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
 
     $(document).on("click", "button[id=btnComment]", function (e) {
@@ -318,17 +321,25 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $btnSendMessage.unbind().click(function () {
         addNewMessagetoChatwindow($('#message-body-input').val());
     });
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {  
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
         var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
         var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
+        var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
         }
         else {
             $gl_accountDropdown.val($("#gl_account option:first").val());;
+        }
+
+        if (Action != null) {
+            $communicationAction.val(Action);
+        }
+        else {
+            $communicationAction.val($("#BA_filterAction option:first").val());;
         }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
@@ -1013,15 +1024,18 @@ $("#divChatSiderbarFilters > button").click(function () {
     }
 });
 function showHideReconcilationOptions(show) {
-    if (show == true) {
+    if (show == true) { 
         $communicationGLaccount.removeClass('d-none');
         $communicationTrackingCategories.removeClass('d-none');
         $tc_2_Dropdown.removeClass('d-none');
+        $communicationAction.removeClass('d-none');
+        location.reload();
     }
     else {
         $communicationGLaccount.addClass('d-none');
         $communicationTrackingCategories.addClass('d-none');
         $tc_2_Dropdown.addClass('d-none');
+        $communicationAction.addClass('d-none');
     }
 }
 
@@ -1113,6 +1127,25 @@ var onChangeglAccount = function (event) {
 
         }
     })
+}
+
+var onChangeAction = function (event) {
+    
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $communicationAction.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+    
 }
 var onChangeTc = function (e) {
     var id = chat.channelUniqueNameGuid;
