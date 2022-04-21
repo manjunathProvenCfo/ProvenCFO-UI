@@ -57,7 +57,7 @@
                 <div class="col-12">
                     @if (ViewBag.isvisibleGlAccount == true)
                     {
-                        @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Select Action",
+                        @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Pick Action",
                                                                         new { @class = " selectpicker form-control" })
                     }
                 </div>

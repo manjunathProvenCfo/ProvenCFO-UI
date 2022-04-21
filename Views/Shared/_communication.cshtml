@@ -45,22 +45,39 @@
                             </div>
                         </div>
                     </div>
-                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+
+                    @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 )
                     {
-                        <div class="col-3 col-sm-3 d-flex align-items-center" id="comGLaccount">
+                <div class="col-2 col-sm-2 d-flex align-items-center" id="comAction">
+                    <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
+                        <div class="fas fa-chevron-left"></div>
+                    </a>
+                    <div class="min-w-0">
+                        <h5 class="mb-0 text-truncate fs-0"><span class="">Action</span></h5>
+                        <div class="fs--2 text-400">
+
+                            @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Pick Action ", new { @class = "form-control", @onchange = "javascript:onChangeAction(event)", style = "width: 180px;" })
+
+                        </div>
+                    </div>
+                </div>
+                    }
+                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 )
+                    {
+                        <div class="col-2 col-sm-2 d-flex align-items-center" id="comGLaccount">
                             <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
                                 <div class="fas fa-chevron-left"></div>
                             </a>
                             <div class="min-w-0">
                                 <h5 class="mb-0 text-truncate fs-0"><span class="">GL Account</span></h5>
-                                <div class="fs--2 text-400">                                    
-                                    @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" }) 
+                                <div class="fs--2 text-400">
+                                    @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" })
                                 </div>
                             </div>
                         </div>
                     }
 
-                    @if (TempData["TrackingCategories"] != null)
+                    @if (TempData["TrackingCategories"] != null )
                     {
                         int count = 0;
                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
@@ -78,7 +95,7 @@
                                             @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc(event)", style = "width: 180px;" }) }
                                         else
                                         {
-                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}                                       
+                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}
                                     </div>
                                 </div>
                             </div>
