@@ -668,7 +668,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string totalTask, string sentdate)
+        public JsonResult EmailSend(string ClientName, string ClientId, string url, string totalTask, string sentdate)
         {
             try
             {
@@ -677,15 +677,10 @@ namespace ProvenCfoUI.Controllers
                     using (AccountService obj = new AccountService())
                     {
                         List<InviteUserModel> user = new List<InviteUserModel>();
-                        List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-
-                        var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                        var test = result1.ResultData.ToList();
-
-                        var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
-                        var AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                        var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData.ToList();
+                        var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "NDS");
+                        var Userslist = usersListwithRecPermission.ResultData;
+                        var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                        var SegmentTasks = objNeeds.GetAllSegments("Active", Convert.ToInt32(ClientId)).ResultData.ToList();
                         var KanbanTaskList = SegmentTasks.Select(x => x.KanbanTaskList).ToList();
 
                         List<string> TaskTitle = null;
@@ -769,7 +764,7 @@ namespace ProvenCfoUI.Controllers
                         footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
 
 
-                        return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+                        return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }

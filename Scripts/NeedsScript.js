@@ -1139,13 +1139,13 @@ $(function () {
        
         var url = window.location.href;
         let totalTask = 0;
-      
+        var ClientId = $("#ddlclient option:selected").val();
         var ClientName = $("#ddlclient option:selected").text();
         getClientDate(ClientName);
         ClientName = encodeURIComponent(ClientName);
          $("#lblTotalTasksCount").text(totalTask);
         /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
+        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
             if (response.Status == 'Success') {
                 var text = response.Recipients.toString().split(",");
                 var str = text.join(', ');
