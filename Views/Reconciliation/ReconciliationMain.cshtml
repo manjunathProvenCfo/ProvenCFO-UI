@@ -277,7 +277,7 @@
 
                                 }
 
-                                <th class="vikas no-sort align-middle data-table-row-action"></th>
+                                <th class="top no-sort align-middle data-table-row-action"></th>
 
                             </tr>
                         </thead>
@@ -888,6 +888,9 @@
         }
         function onChangeAditinalTc(id, event) {
             var Selectedvalue = event.currentTarget.value;
+            if (isEmptyOrBlank(Selectedvalue)) {
+                Selectedvalue = -1;
+            }
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
                 if (response.Message == 'Success') {
