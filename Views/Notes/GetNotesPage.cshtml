@@ -343,7 +343,8 @@
                         if (data != null) {
                             $('#Notes-create-new-btn').show();//TODO
                             SetUserPreferencesForAgency();
-                            LastMailSent = data.MailSendDate;
+                            sessionStorage.setItem("LastMailSent", data.MailSendDate)
+                            /*LastMailSent = data.MailSendDate;*/
                             window.location.reload();
                         }
                         else {
@@ -757,19 +758,18 @@
         $(function () {
 
             $("#email").click(function () {
-                
-               
                 var url = window.location.host;
                
                 let totalNotes = 0;
-
+                var ClientId = $("#ddlclient option:selected").val();
                 var ClientName = $("#ddlclient option:selected").text();
                 //getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
-                $("#lblTotalNotesCount").text(totalNotes);
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
+                $("#lblTotalNotesCount").text(totalNotes);
+                
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
-                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&url=${url}&totalNotes=${totalNotes}&sentdate=${LastMailSent}`, null, function (response) {
+                getAjax(`/Notes/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&totalNotes=${totalNotes}&sentdate=${LastMailSent}`, null, function (response) {
                     if (response.Status == 'Success') {
                       
                         var text = response.Recipients.toString().split(",");
@@ -795,6 +795,13 @@
         //    });
 
         //}
+
+        function getClientDate(ClientName) {
+            getAjaxSync(apiurl + `Notes/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+                sessionStorage.setItem("LastMailSent", response.resultData);
+            });
+
+        }
 
         function sendMail() {
             var recip = $("#email-to").val();
