@@ -132,12 +132,22 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     });
 
     $btnSendMessage.unbind().click(function () {
+        
         addNewMessagetoChatwindow($('#message-body-input').val());
+       
     });
     var addNewMessagetoChatwindow = async function (input) {
+        
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+        
+       
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
@@ -149,6 +159,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                 }
                 else {
                     if ($editor[0].innerHTML != '')
+                        
                         addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
 
@@ -421,6 +432,7 @@ var addDatehtml = function (input) {
 }
 
 var addNewComment = function (inputText) {
+ 
     var CurrentDate = new Date();
     var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
     var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();

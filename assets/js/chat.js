@@ -307,14 +307,23 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $(document).on("click", "button[id=btnComment]", function (e) {
         showReconciliationChat(e.currentTarget.dataset.id);
     });
+
+    $btnSendMessage.unbind().click(function () {
+       
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
     var addNewMessagetoChatwindow = async function (input) {
+       
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
     }
-    $btnSendMessage.unbind().click(function () {
-        addNewMessagetoChatwindow($('#message-body-input').val());
-    });
+    
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {  
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
@@ -400,9 +409,15 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
     }
     var addNewMessagetoChatwindow = async function (input) {
+     
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
