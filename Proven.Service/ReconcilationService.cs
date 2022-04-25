@@ -102,7 +102,15 @@ namespace Proven.Service
         public ReconcilationmainActionOptionVM GetAllReconcilationAction()
         {
             return GetAsync<ReconcilationmainActionOptionVM>("Reconciliation/GetAllReconcilationAction").Result;
+        }
+        public ReconciliationCommentAttachmentsMain getReconciliationCommentAttachments(int CommentId )
+        {
+            return GetAsync<ReconciliationCommentAttachmentsMain>("Reconciliation/getReconciliationCommentAttachments?reconiliationCommentId=" + CommentId).Result;
+        }
 
+        public ReturnModel DeleteReconciliationCommentAttachment(int CommentId)
+        {
+            return PostAsync<ReturnModel>("Reconciliation/DeleteReconciliationCommentAttachment?reconiliationCommentId=" + CommentId).Result;
         }
 
         public void Dispose()

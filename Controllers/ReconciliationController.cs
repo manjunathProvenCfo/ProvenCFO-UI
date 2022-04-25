@@ -55,12 +55,12 @@ namespace ProvenCfoUI.Controllers
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
 
-                    
+
                     if (userType == "1")
                     {
                         var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                         getallAction.ForEach(x => x.ActionName = x.ActionName);
-                       
+
                         if (Type == "Not in Banks")
                         {
                             ViewBag.isvisibleGlAccount = true;
@@ -71,7 +71,7 @@ namespace ProvenCfoUI.Controllers
                             ViewBag.isvisibleGlAccount = false;
                         }
                     }
-                        using (IntigrationService objIntegration = new IntigrationService())
+                    using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                         glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
@@ -85,7 +85,7 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
 
                         }
-                        
+
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
@@ -99,7 +99,7 @@ namespace ProvenCfoUI.Controllers
                             //{
                             //    ViewBag.isvisibleGlAccount = false;
                             //}
-                           
+
                             //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                             //if (objTCList != null && objTCList.Count > 0)
                             //{
@@ -110,7 +110,7 @@ namespace ProvenCfoUI.Controllers
 
                             //}
                             TempData["BankRule"] = getBankRule();
-                          
+
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
@@ -118,7 +118,7 @@ namespace ProvenCfoUI.Controllers
                             ViewBag.IsBankRuleVisible = false;
                             ViewBag.isvisibleGlAccount = false;
                         }
-                       
+
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
@@ -504,7 +504,7 @@ namespace ProvenCfoUI.Controllers
                             //    TempData["TrackingCategories"] = TCgroup;
                             //}
                             TempData["BankRule"] = getBankRule();
-                            
+
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
@@ -683,7 +683,7 @@ namespace ProvenCfoUI.Controllers
             {
                 using (AccountService obj = new AccountService())
                 {
-                    List<InviteUserModel> user = new List<InviteUserModel>();                    
+                    List<InviteUserModel> user = new List<InviteUserModel>();
                     var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RCN");
                     var Userslist = usersListwithRecPermission.ResultData;
                     var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
@@ -698,7 +698,7 @@ namespace ProvenCfoUI.Controllers
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
                     body = body.Replace("{NotInBankUnreconciledItemsCount}", NotInBankUnreconciledItemsCount);
-                    body = body.Replace("{url}", url);                   
+                    body = body.Replace("{url}", url);
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
                     return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
@@ -854,6 +854,45 @@ namespace ProvenCfoUI.Controllers
                     Status = "Error",
                     Message = "Error while sending attachment."
                 }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        [CheckSession]
+        [HttpPost]
+        public Task<JsonResult> DeleteReconciliationAttachment(int CommentId, int AgencyId)
+        {
+            try
+            {
+                using (ReconcilationService service = new ReconcilationService())
+                {
+                    var result = service.getReconciliationCommentAttachments(CommentId);
+                    if (result.Status == true)
+                    {
+                        var attachmentData = result.ResultData;
+                        
+                        if (attachmentData != null && !string.IsNullOrEmpty(attachmentData.FilePath))
+                        {                            
+                            Common.DeleteFile(attachmentData.FilePath);
+                        }
+                        var IsDeleted = service.DeleteReconciliationCommentAttachment(CommentId).resultData;
+                        if (IsDeleted == true)
+                        {
+                            return Task.FromResult(Json(new { File = "", Status = "Success", Message = "Attachment has been deleted.", CommentId = attachmentData.ReconciliationCommentId_ref }, JsonRequestBehavior.AllowGet));
+                        }
+                        
+                    }                    
+                }
+                return Task.FromResult(Json(new { File = "", Status = "Success", Message = "Attachment has been deleted."}, JsonRequestBehavior.AllowGet));
+            }
+            catch (Exception ex)
+            {
+
+                return Task.FromResult(Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = "Error while sending attachment."
+                }, JsonRequestBehavior.AllowGet));
             }
 
         }
