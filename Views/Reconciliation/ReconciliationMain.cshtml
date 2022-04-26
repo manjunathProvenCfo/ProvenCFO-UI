@@ -277,7 +277,7 @@
 
                                 }
 
-                                <th class="vikas no-sort align-middle data-table-row-action"></th>
+                                <th class="top no-sort align-middle data-table-row-action"></th>
 
                             </tr>
                         </thead>
@@ -764,7 +764,9 @@
 
         }
         function BulkActionReconcilation() {
+           
             var GLaccount = $('#BA_filterGLaccounts').val();
+            var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
             var reconcilationStatus = $('#BA_Status').val();
@@ -778,7 +780,7 @@
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
             }
@@ -795,7 +797,7 @@
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
                 AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus
+                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus, Action: Action
             };
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
@@ -853,7 +855,7 @@
             })
         }
         function onChangeAction(id, event) {
-
+           
             var Selectedvalue = event.currentTarget.value;
 
             var ClientID = $("#ddlclient option:selected").val();
@@ -886,6 +888,9 @@
         }
         function onChangeAditinalTc(id, event) {
             var Selectedvalue = event.currentTarget.value;
+            if (isEmptyOrBlank(Selectedvalue)) {
+                Selectedvalue = -1;
+            }
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
                 if (response.Message == 'Success') {
@@ -1077,6 +1082,12 @@
         
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
+    <script>
+        $(document).ready(function () {
+            HidelottieLoader();
+        });
+
+    </script>
 
 }
 

@@ -444,20 +444,17 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-        public JsonResult EmailSend(string ClientName, string url, string totalNotes, string sentdate)
+        public JsonResult EmailSend(string ClientName, string ClientId, string url, string totalNotes, string sentdate)
         {
             try
             {
                 using (AccountService obj = new AccountService())
                 {
                     List<InviteUserModel> user = new List<InviteUserModel>();
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-
-                    var result1 = obj.RegisteredUserListbyAgency(selectedAgency.PreferanceValue);
-                    var test = result1.ResultData.ToList();
-
-                    var data = test.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "NTS");
+                    var Userslist = usersListwithRecPermission.ResultData;
+                    var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                    
                     XmlDocument doc = new XmlDocument();
                     doc.Load(Server.MapPath("~/assets/files/NotesEmailTemplate.xml"));
 
@@ -485,9 +482,10 @@ namespace ProvenCfoUI.Controllers
                     body = body.Replace("{chat}", chat);
 
                     //footer = footer.Replace("{LastSent}", sentdate);
+                    
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
 
-                    return Json(new { Subject = subject, Body = body, Recipients = data, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
                 }
             }

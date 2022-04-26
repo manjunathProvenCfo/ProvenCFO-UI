@@ -27556,8 +27556,8 @@ div[data-collapse] + .kanban-item,
     max-height: calc(100vh - 15.625rem);
 }
 
-table.dataTable > thead .vikas::before,
-table.dataTable > thead .vikas::after {
+table.dataTable > thead .top::before,
+table.dataTable > thead .top::after {
     content: none !important;
 }
 

@@ -54,6 +54,7 @@
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/twilio-chat")
     @*@Scripts.Render("~/bundles/js/reconciliationMain")*@
+
     <script>
         $(document).ready(function () {
             var NotificationagencyId = sessionStorage.getItem('Notification_agencyId');
@@ -69,6 +70,10 @@
                 loadChatPage();
 
 
+        });
+
+        $(document).ready(function () {
+            HidelottieLoader();
         });
     </script>
 }

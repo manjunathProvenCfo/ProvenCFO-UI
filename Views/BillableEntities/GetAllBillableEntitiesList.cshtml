@@ -14,6 +14,7 @@
     .page-link:hover {
         color: #000 !important;
     }
+
     .page-item.active .page-link {
         z-index: 3;
         color: #fff !important;
@@ -72,65 +73,65 @@
                 <tbody id="purchases">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger">
+                        <tr class="btn-reveal-trigger">
 
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.EntityName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.XeroId)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.ProvenCFOXeroContactID)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.CrmId)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.XeroShortCode)
-                        </td>
-                        <td class="align-middle">
-                            @if (item.Status == "Active")
-                            {
-                                <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
-                            }
-                        </td>
-
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-sm-inline-block">
-                                <a href='@Url.Action("EditBillableEntity", "BillableEntities", new { id = item.Id})'>
-                                    <i class="far fa-edit"> </i>
-                                </a>
-                            </span>
-                            <span class="d-sm-inline-block ml-2">
-                                <a href="#" onclick="deleteBillableEntity('@item.Id')">
-                                    <i class="far fa-trash-alt"> </i>
-                                </a>
-                            </span>
-                            <span class="d-sm-inline-block ml-2">
-
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.EntityName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.XeroId)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.ProvenCFOXeroContactID)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.CrmId)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.XeroShortCode)
+                            </td>
+                            <td class="align-middle">
                                 @if (item.Status == "Active")
                                 {
-                                    <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary"> @(item.Status == "Active" ? "Active" : "Inactive")</span>
                                 }
+                            </td>
 
-                            </span>
-                        </td>
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-sm-inline-block">
+                                    <a href='@Url.Action("EditBillableEntity", "BillableEntities", new { id = item.Id})'>
+                                        <i class="far fa-edit"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-sm-inline-block ml-2">
+                                    <a href="#" onclick="deleteBillableEntity('@item.Id')">
+                                        <i class="far fa-trash-alt"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-sm-inline-block ml-2">
+
+                                    @if (item.Status == "Active")
+                                    {
+                                        <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("DeactivateBillableEntities", "BillableEntities", new { Id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
+
+                                </span>
+                            </td>
 
 
-                    </tr>
+                        </tr>
                     }
                 </tbody>
 
@@ -142,6 +143,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
         var ExportToExcel = function () {
 
@@ -213,13 +215,17 @@
                             }
                         })
                         .error(function (data) {
-                            
+
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
         }
 
+        $(document).ready(function () {
+            HidelottieLoader();
 
+
+        });
 
 
     </script>

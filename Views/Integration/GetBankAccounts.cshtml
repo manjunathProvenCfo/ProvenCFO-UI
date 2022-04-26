@@ -114,7 +114,7 @@
 }
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    @* @Scripts.Render("~/bundles/js/reconciliationMain")*@
+     @Scripts.Render("~/bundles/js/reconciliationMain")
 
     <script>
 
@@ -123,6 +123,7 @@
                 XeroConnectionUpdate();
 
             }, 2000);
+            $('#checkbox-bulk-purchases-select').parent().addClass("d-none");
 
         });
         //$(document).ready(function () {
@@ -192,7 +193,7 @@
                 }
 
             });
-            /*  HidelottieLoader();*/
+            
         }
 
         var EnableSelectedBulkUpdateButton = function () {
@@ -315,6 +316,7 @@
 
             });
         }
+      
     </script>
 
 }

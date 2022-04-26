@@ -57,37 +57,41 @@
         <div class="dashboard-data-table">
             <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
                 <thead class="bg-200 text-900">
-                    <tr>
-
-
-                        <th class="sort pr-1 align-middle" width="15%">Code</th>
-                        <th class="sort pr-1 align-middle" width="15%">Name</th>
-                        <th class="sort pr-1 align-middle" width="10%">Type</th>
-                        <th class="sort pr-1 align-middle" width="10%">Description</th>
-                        <th class="sort pr-1 align-middle" width="10%">Status</th>
+                    <tr class="row">
+                        <th class="sort pr-1 align-middle col-sm-1" >Code</th>
+                        <th class="sort pr-1 align-middle col-sm-3" >Name</th>
+                        <th class="sort pr-1 align-middle col-sm-1" >Type</th>
+                        <th class="sort pr-1 align-middle col-sm-3" >Description</th>
+                        <th class="sort pr-1 align-middle col-sm-1" >Status</th>
+                        <th class="sort pr-1 align-middle col-sm-2" >Review</th>
 
                     </tr>
                 </thead>
-                <tbody id="purchases">
+                <tbody id="purchases ">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger">
+                    <tr class="btn-reveal-trigger row">
 
-                        <td class="align-middle">
+                        <td class="align-middle col-sm-1">
                             @Html.DisplayFor(modelItem => item.Code)
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle col-sm-3">
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle col-sm-1">
                             @Html.DisplayFor(modelItem => item.Type)
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle col-sm-3">
                             @Html.DisplayFor(modelItem => item.Class)
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle col-sm-1">
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
+                        <td class="align-middle col-sm-2">
+                            @Html.DropDownListFor(modelItem => item.Review, new SelectList((List<SelectListItem>)TempData["GlAccountReview"], "Value", "Text", item.Review), "Select Review Interval", new { @class = "form-control", @onchange = "javascript:onChangeGlBankAccountReview('" + item.AccountId + "',event)", style = "width: 220px;" })
+                        </td>
+
+                        
                     </tr>
                     }
                 </tbody>
@@ -160,7 +164,7 @@
         }
         function XeroGlAccoutSync() {
            
-            ShowlottieLoader();
+           
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
@@ -171,7 +175,19 @@
                 }
 
             });
-          /*  HidelottieLoader();*/
+          
+        }
+
+        
+
+        function onChangeGlBankAccountReview(AccountID, event) {            
+            var Selectedvalue = event.currentTarget.value;
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax(apiurl + 'Xero/UpdateGlAccounts?AgencyID=' + ClientID + '&AccountID=' + AccountID + '&GlAccountReview=' + Selectedvalue , null, function (response) {
+                if (response.message != "Success") {
+                    ShowAlertBoxError("Error", "Changes are not updated.", function () { window.location.reload(); });
+                }                
+            })
         }
 
     </script>

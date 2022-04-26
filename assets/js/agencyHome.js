@@ -2,6 +2,7 @@
 $('divClientDetials').addClass('d-none');
 $(document).ready(function () {
 
+    HidelottieLoader();
     new Clipboard(".copyEmail", {
         text: function (trigger) {
 
@@ -47,6 +48,7 @@ $(document).ready(function () {
 
         RenderNetIncomeChart(item.val());
     });
+    
 
 });
 
@@ -293,6 +295,8 @@ function KanbanCountWithIndividualPriority() {
 
             $("#lblTotalTasksCount").text(TotalTasks);
         }
+
+        HidelottieLoader();
     });
 }
 
@@ -632,8 +636,7 @@ function AgencyDropdownPartialViewChange() {
                 $('.rounded-circle').removeClass('d-none');
                 
             }
-            
-            window.setTimeout(HidelottieLoader, 12250);
+           
         },
         error: function () {
             $('#roleexist').hide();
@@ -659,7 +662,7 @@ function AgencyDropdownPartialViewChange() {
             $('.badge-soft-success').addClass('d-none');
             $('.badge-success').addClass('d-none');
             $('.rounded-circle').addClass('d-none');
-            window.setTimeout(hidelottieloader, 12250);
+          
             
         }
       

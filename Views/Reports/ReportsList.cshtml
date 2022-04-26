@@ -102,5 +102,11 @@
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script type="text/javascript">
         var isReadonlyUser = @(Convert.ToString((bool)ViewBag.IsReadonlyUser).ToLower());
+
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
     </script>
 }

@@ -79,10 +79,7 @@ namespace Proven.Service
         public XeroTrackingCategoriesVM CreateXeroTrackingCatogories(List<XeroTrackingCategoriesVM> TrackingCategories)
         {
             return PostAsync<XeroTrackingCategoriesVM, List<XeroTrackingCategoriesVM>>("Xero/CreateXeroTracking", TrackingCategories).Result;
-        }
-
-
-
+        }      
         public void Dispose()
         {
             Dispose(true);

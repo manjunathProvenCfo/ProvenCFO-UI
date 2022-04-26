@@ -15,6 +15,7 @@ namespace Proven.Model
         public string Code { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
+        public string Review { get; set; }
         public string Type { get; set; }
         public string TaxType { get; set; }
         public string Class { get; set; }

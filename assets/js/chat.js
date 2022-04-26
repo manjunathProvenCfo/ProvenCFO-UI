@@ -24,6 +24,7 @@ var $tc_1_Dropdown;
 var $tc_2_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
+var $communicationAction;
 
 
 var chat = {
@@ -82,14 +83,18 @@ var CommentHtmls = {
 
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
                     <span>{time}</span></div></div></div></div>`,
-    SelfAttachmentImageHtml: `<div class="media p-3" id="{commentId}" data-index="6" data-sid="{commentId}" data-timestamp="{date}" data-media-sid="{commentId}">
+    SelfAttachmentImageHtml: `<div class="media p-3" id="att_{commentId}" data-index="6" data-sid="{commentId}" data-timestamp="{date}" data-media-sid="{commentId}">
                                 <div class="media-body d-flex justify-content-end">
                                     <div class="w-100 w-xxl-75">
                                         <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
                                             <div class="chat-message chat-gallery justify-content-end">
                                                 <div class="row mx-n1 justify-content-end">
 
-                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div>
+                                                    <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                                                <li class="list-inline-item"><a class="chat-option" type="attachment" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="DeleteAttachment('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                                                </ul>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="text-400 fs--2 text-right">
@@ -98,7 +103,7 @@ var CommentHtmls = {
                                     </div>
                                 </div>
                             </div>`,
-    SelfAttachmentDocumentHtml: `<div class="media p-3" id="{commentId}" data-index="8" data-sid="{commentId}" data-timestamp="20220405" data-media-sid="{commentId}">
+    SelfAttachmentDocumentHtml: `<div class="media p-3" id="att_{commentId}" data-index="8" data-sid="{commentId}" data-timestamp="20220405" data-media-sid="{commentId}">
                                 <div class="media-body d-flex justify-content-end">
                                     <div class="w-100 w-xxl-75">
                                         <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
@@ -107,6 +112,9 @@ var CommentHtmls = {
 
                                                 <a href="{FileScrPath}" target="_blank">{FileName}</a></div>
                                             </div>
+                                                <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                                                <li class="list-inline-item"><a class="chat-option" type="attachment" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="DeleteAttachment('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                                                </ul>
                                         </div>
                                         <div class="text-400 fs--2 text-right">
                                             {time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
@@ -122,12 +130,6 @@ var CommentHtmls = {
                     <span>{time}</span></div></div></div></div>`,
 }
 
-
-//$(document).ready(function () {
-    
-//    ShowlottieLoader();
-//    window.setTimeout(HidelottieLoader, 7000);
-//});
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
 
     
@@ -166,6 +168,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     $communicationGLaccount = $("#comTrackingCategories");
     $communicationTrackingCategories = $("#comGLaccount");
+    $communicationAction = $("#comAction");
 
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
@@ -258,7 +261,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 
     //NoticiationNavigationLoad(chat.clientId);
-
+    HidelottieLoader();
 
 }
 var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
@@ -278,13 +281,13 @@ var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
         scrolltoselctedItem($("#" + ReconcilationId));
     }
 
-
+    HidelottieLoader();
 }
 var scrolltoselctedItem = function (element) {    
     $(".contacts-list").animate({ scrollTop: element.position().top -70 });
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-
+    
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -305,30 +308,48 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $gl_accountDropdown = $('#gl_account');
     $tc_1_Dropdown = $('#tracking_category_0');
     $tc_2_Dropdown = $('#tracking_category_1');
+    $communicationAction = $('#BA_filterAction');
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
 
     $(document).on("click", "button[id=btnComment]", function (e) {
         showReconciliationChat(e.currentTarget.dataset.id);
     });
+
+    $btnSendMessage.unbind().click(function () {
+       
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
     var addNewMessagetoChatwindow = async function (input) {
+       
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
     }
-    $btnSendMessage.unbind().click(function () {
-        addNewMessagetoChatwindow($('#message-body-input').val());
-    });
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+    
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {  
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
         var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
         var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
+        var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
         }
         else {
             $gl_accountDropdown.val($("#gl_account option:first").val());;
+        }
+
+        if (Action != null) {
+            $communicationAction.val(Action);
+        }
+        else {
+            $communicationAction.val($("#BA_filterAction option:first").val());;
         }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
@@ -395,9 +416,15 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
     }
     var addNewMessagetoChatwindow = async function (input) {
+     
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
@@ -887,6 +914,20 @@ var CommentEdit = function (CommentId) {
     $messageBodyInput.val(text.text());
 
 }
+var DeleteAttachment = function (commentId) {
+    var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    postAjaxSync('/Reconciliation/DeleteReconciliationAttachment?CommentId=' + commentId + '&AgencyId=' + AgencyId, null, function (response) {
+        var r = response;
+        if (response.Status == "Success") {
+
+            $('#att_' + response.CommentId).remove();
+            ShowAlertBoxSuccess("success", "Message has been removed successfully!");
+        }
+        else {
+            ShowAlertBoxError("Error", "Error while removing of message.");
+        }
+    });
+}
 var DeleteReconciliationComment = function (commentId) {
     postAjaxSync(apiurl + `Reconciliation/DeleteReconciliationComment?CommentId=` + commentId, null, function (response) {
         var r = response;
@@ -1013,15 +1054,18 @@ $("#divChatSiderbarFilters > button").click(function () {
     }
 });
 function showHideReconcilationOptions(show) {
-    if (show == true) {
+    if (show == true) { 
         $communicationGLaccount.removeClass('d-none');
         $communicationTrackingCategories.removeClass('d-none');
         $tc_2_Dropdown.removeClass('d-none');
+        $communicationAction.removeClass('d-none');
+        location.reload();
     }
     else {
         $communicationGLaccount.addClass('d-none');
         $communicationTrackingCategories.addClass('d-none');
         $tc_2_Dropdown.addClass('d-none');
+        $communicationAction.addClass('d-none');
     }
 }
 
@@ -1113,6 +1157,25 @@ var onChangeglAccount = function (event) {
 
         }
     })
+}
+
+var onChangeAction = function (event) {
+    
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $communicationAction.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+    
 }
 var onChangeTc = function (e) {
     var id = chat.channelUniqueNameGuid;
