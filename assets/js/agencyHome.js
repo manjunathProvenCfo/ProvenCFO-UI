@@ -2,7 +2,7 @@
 $('divClientDetials').addClass('d-none');
 $(document).ready(function () {
 
-    HidelottieLoader();
+   
     new Clipboard(".copyEmail", {
         text: function (trigger) {
 
@@ -296,7 +296,7 @@ function KanbanCountWithIndividualPriority() {
             $("#lblTotalTasksCount").text(TotalTasks);
         }
 
-        HidelottieLoader();
+      
     });
 }
 
@@ -537,6 +537,7 @@ function getTeamMembersList() {
             // Write here what should happend when action result is errored.
         }
     });
+   
 }
 
 function GetAccountOutStanding() {
@@ -816,6 +817,7 @@ function GetReconcilationData1() {
 
         }
     })
+    HidelottieLoader();
 }
 
 function TotalSum(totalSum1, totalSum2) {
