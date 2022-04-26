@@ -312,8 +312,8 @@ namespace ProvenCfoUI.Controllers
             item1.Value = "Monthly";
             listItem.Add(item1);
             SelectListItem item2 = new SelectListItem();
-            item2.Text = "Quaterly";
-            item2.Value = "Quaterly";
+            item2.Text = "Quarterly";
+            item2.Value = "Quarterly";
             listItem.Add(item2);
             SelectListItem item3 = new SelectListItem();
             item3.Text = "Semi-Annual";
@@ -324,8 +324,8 @@ namespace ProvenCfoUI.Controllers
             item4.Value = "Annual";
             listItem.Add(item4);
             SelectListItem item5 = new SelectListItem();
-            item4.Text = "Never";
-            item4.Value = "Never";
+            item5.Text = "Never";
+            item5.Value = "Never";
             listItem.Add(item5);
             return listItem;
         }
