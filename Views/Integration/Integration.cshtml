@@ -60,11 +60,12 @@
                     <tr>
 
 
-                        <th class="sort pr-1 align-middle" width="15%">Code</th>
+                        <th class="sort pr-1 align-middle" width="10%">Code</th>
                         <th class="sort pr-1 align-middle" width="15%">Name</th>
                         <th class="sort pr-1 align-middle" width="10%">Type</th>
-                        <th class="sort pr-1 align-middle" width="10%">Description</th>
-                        <th class="sort pr-1 align-middle" width="10%">Status</th>
+                        <th class="sort pr-1 align-middle" width="5%">Description</th>
+                        <th class="sort pr-1 align-middle" width="5%">Status</th>
+                        <th class="sort pr-1 align-middle" width="10%">Review</th>
 
                     </tr>
                 </thead>
@@ -88,6 +89,11 @@
                         <td class="align-middle">
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
+                        <td class="align-middle">
+                            @Html.DropDownListFor(modelItem1 => item.Review, new SelectList((List<SelectListItem>)TempData["GlAccountReview"], "Value", "Text", item.Review), "Select Review Interval", new { @class = "form-control", @onchange = "javascript:onChangeGlBankAccountReview('" + item.Id + "',event)", style = "width: 175px;" })
+                        </td>
+
+                        
                     </tr>
                     }
                 </tbody>
@@ -160,7 +166,7 @@
         }
         function XeroGlAccoutSync() {
            
-            ShowlottieLoader();
+           
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
@@ -171,7 +177,25 @@
                 }
 
             });
-          /*  HidelottieLoader();*/
+          
+        }
+
+        
+
+        function onChangeGlBankAccountReview(id, event) {
+
+            var Selectedvalue = event.currentTarget.value;
+
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Integration/UpdateGlAccounts?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&GlAccountReview=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
         }
 
     </script>

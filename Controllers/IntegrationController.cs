@@ -22,11 +22,13 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult Integration()
         {
+            
             try
             {
+               
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-
+                    TempData["GlAccountReview"] = getGlAccountReview();
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
@@ -43,6 +45,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     return View();
                 }
+                
             }
             catch (Exception ex)
             {
@@ -88,8 +91,10 @@ namespace ProvenCfoUI.Controllers
         [HttpGet]
         public ActionResult AddXeroGlAccount()
         {
+            
             try
             {
+               
                 XeroGlAccountVM result = new XeroGlAccountVM();
                 return View(result);
             }
@@ -211,6 +216,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             objInt.CreateXeroGlAccount(gl);
                         }
+                        TempData["GlAccountReview"] = getGlAccountReview();
                     }
 
                 }
@@ -285,6 +291,18 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        [CheckSession]
+        [HttpPost]
+        public JsonResult UpdateGlAccounts(int AgencyID, string id, string GlAccountReview)
+        {
+            //BankRule = BankRule.Replace("0", "");
+            using (IntigrationService objReConcilation = new IntigrationService())
+            {
+                var objResult = objReConcilation.UpdateGlAccounts(AgencyID, id, GlAccountReview);
+                return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
 
         [HttpPost]
         [CheckSession]
@@ -293,6 +311,33 @@ namespace ProvenCfoUI.Controllers
             ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
             ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public static List<SelectListItem> getGlAccountReview()
+        {
+            
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            SelectListItem item = new SelectListItem();
+            item.Text = "Perpetual";
+            item.Value = "Perpetual";
+            listItem.Add(item);
+            SelectListItem item1 = new SelectListItem();
+            item1.Text = "Monthly";
+            item1.Value = "Monthly";
+            listItem.Add(item1);
+            SelectListItem item2 = new SelectListItem();
+            item2.Text = "Quaterly";
+            item2.Value = "Quaterly";
+            listItem.Add(item2);
+            SelectListItem item3 = new SelectListItem();
+            item3.Text = "Semi-Annual";
+            item3.Value = "Semi-Annual";
+            listItem.Add(item3);
+            SelectListItem item4 = new SelectListItem();
+            item4.Text = "Annual";
+            item4.Value = "Annual";
+            listItem.Add(item4);
+            return listItem;
         }
     }
 }
