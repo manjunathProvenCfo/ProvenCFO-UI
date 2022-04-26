@@ -343,7 +343,7 @@
                         if (data != null) {
                             $('#Notes-create-new-btn').show();//TODO
                             SetUserPreferencesForAgency();
-                            sessionStorage.setItem("LastMailSent", data.MailSendDate)
+                            sessionStorage.setItem("LastMailSent", data.MailSendDateNotes)
                             /*LastMailSent = data.MailSendDate;*/
                             window.location.reload();
                         }
@@ -758,12 +758,13 @@
         $(function () {
 
             $("#email").click(function () {
+                
                 var url = window.location.host;
                
                 let totalNotes = 0;
                 var ClientId = $("#ddlclient option:selected").val();
                 var ClientName = $("#ddlclient option:selected").text();
-                //getClientDate(ClientName);
+                getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
                 $("#lblTotalNotesCount").text(totalNotes);
