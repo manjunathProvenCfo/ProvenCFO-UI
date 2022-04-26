@@ -323,6 +323,10 @@ namespace ProvenCfoUI.Controllers
             item4.Text = "Annual";
             item4.Value = "Annual";
             listItem.Add(item4);
+            SelectListItem item5 = new SelectListItem();
+            item4.Text = "Never";
+            item4.Value = "Never";
+            listItem.Add(item5);
             return listItem;
         }
     }
