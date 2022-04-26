@@ -320,7 +320,7 @@ var loadAllNotificationLoggedInUser = function()
                 
             })
            
-
+            HidelottieLoader();
         }
     });
 
