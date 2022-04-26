@@ -289,21 +289,7 @@ namespace ProvenCfoUI.Controllers
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
-        }
-
-        [CheckSession]
-        [HttpPost]
-        public JsonResult UpdateGlAccounts(int AgencyID, string id, string GlAccountReview)
-        {
-            //BankRule = BankRule.Replace("0", "");
-            using (IntigrationService objReConcilation = new IntigrationService())
-            {
-                var objResult = objReConcilation.UpdateGlAccounts(AgencyID, id, GlAccountReview);
-                return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
-            }
-
-        }
-
+        }       
         [HttpPost]
         [CheckSession]
         public async Task<JsonResult> UpdateXeroConnectionStatus()

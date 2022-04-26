@@ -79,15 +79,7 @@ namespace Proven.Service
         public XeroTrackingCategoriesVM CreateXeroTrackingCatogories(List<XeroTrackingCategoriesVM> TrackingCategories)
         {
             return PostAsync<XeroTrackingCategoriesVM, List<XeroTrackingCategoriesVM>>("Xero/CreateXeroTracking", TrackingCategories).Result;
-        }
-
-        public XeromainGlAccountVM UpdateGlAccounts(int AgencyID, string id, string GlAccountReview)
-        {
-            string result = string.Format("Integration/UpdateGlAccounts?AgencyID={0}&id={1}&GlAccountReview={2}", AgencyID, id, GlAccountReview);
-            return PostAsync<XeromainGlAccountVM>(result).Result;
-        }
-
-
+        }      
         public void Dispose()
         {
             Dispose(true);
