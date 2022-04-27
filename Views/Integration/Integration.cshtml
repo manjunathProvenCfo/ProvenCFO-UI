@@ -59,11 +59,11 @@
             <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
                 <thead class="bg-200 text-900">
                     <tr class="row">
-                        <th class="sort pr-1 align-middle col-sm-1">Code</th>
-                        <th class="sort pr-1 align-middle col-sm-3">Name</th>
-                        <th class="sort pr-1 align-middle col-sm-1">Type</th>
-                        <th class="sort pr-1 align-middle col-sm-3">Description</th>
-                        <th class="sort pr-1 align-middle col-sm-1">Status</th>
+                        <th class="sort pr-1 align-middle col-sm-1" style="margin-left:1rem;">Code</th>
+                        <th class="sort pr-1 align-middle col-sm-2">Name</th>
+                        <th class="sort pr-1 align-middle col-sm-2">Type</th>
+                        <th class="sort pr-1 align-middle col-sm-2">Description</th>
+                        <th class="sort pr-1 align-middle col-sm-2">Status</th>
                         <th class="sort pr-1 align-middle col-sm-2">Review</th>
 
                     </tr>
@@ -73,19 +73,19 @@
                     {
                         <tr class="btn-reveal-trigger row">
 
-                            <td class="align-middle col-sm-1">
+                            <td class="align-middle col-sm-1" style="margin-left:1rem;">
                                 @Html.DisplayFor(modelItem => item.Code)
                             </td>
-                            <td class="align-middle col-sm-3">
+                            <td class="align-middle col-sm-2">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
-                            <td class="align-middle col-sm-1">
+                            <td class="align-middle col-sm-2">
                                 @Html.DisplayFor(modelItem => item.Type)
                             </td>
-                            <td class="align-middle col-sm-3">
+                            <td class="align-middle col-sm-2">
                                 @Html.DisplayFor(modelItem => item.Class)
                             </td>
-                            <td class="align-middle col-sm-1">
+                            <td class="align-middle col-sm-2">
                                 @Html.DisplayFor(modelItem => item.Status)
                             </td>
                             <td class="align-middle col-sm-2">
