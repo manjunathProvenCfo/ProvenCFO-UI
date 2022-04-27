@@ -1,4 +1,5 @@
-﻿@model List<Proven.Model.XeroGlAccountVM>
+﻿
+@model List<Proven.Model.XeroGlAccountVM>
 
 @{
     ViewBag.Title = "Index";
@@ -58,41 +59,41 @@
             <table id="clientlist" class="table table-sm table-dashboard fs--1 data-table border-bottom">
                 <thead class="bg-200 text-900">
                     <tr class="row">
-                        <th class="sort pr-1 align-middle col-sm-1" >Code</th>
-                        <th class="sort pr-1 align-middle col-sm-3" >Name</th>
-                        <th class="sort pr-1 align-middle col-sm-1" >Type</th>
-                        <th class="sort pr-1 align-middle col-sm-3" >Description</th>
-                        <th class="sort pr-1 align-middle col-sm-1" >Status</th>
-                        <th class="sort pr-1 align-middle col-sm-2" >Review</th>
+                        <th class="sort pr-1 align-middle col-sm-1">Code</th>
+                        <th class="sort pr-1 align-middle col-sm-3">Name</th>
+                        <th class="sort pr-1 align-middle col-sm-1">Type</th>
+                        <th class="sort pr-1 align-middle col-sm-3">Description</th>
+                        <th class="sort pr-1 align-middle col-sm-1">Status</th>
+                        <th class="sort pr-1 align-middle col-sm-2">Review</th>
 
                     </tr>
                 </thead>
                 <tbody id="purchases ">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger row">
+                        <tr class="btn-reveal-trigger row">
 
-                        <td class="align-middle col-sm-1">
-                            @Html.DisplayFor(modelItem => item.Code)
-                        </td>
-                        <td class="align-middle col-sm-3">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td class="align-middle col-sm-1">
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
-                        <td class="align-middle col-sm-3">
-                            @Html.DisplayFor(modelItem => item.Class)
-                        </td>
-                        <td class="align-middle col-sm-1">
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td class="align-middle col-sm-2">
-                            @Html.DropDownListFor(modelItem => item.Review, new SelectList((List<SelectListItem>)TempData["GlAccountReview"], "Value", "Text", item.Review), "Select Review Interval", new { @class = "form-control", @onchange = "javascript:onChangeGlBankAccountReview('" + item.AccountId + "',event)", style = "width: 220px;" })
-                        </td>
+                            <td class="align-middle col-sm-1">
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td class="align-middle col-sm-3">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="align-middle col-sm-1">
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td class="align-middle col-sm-3">
+                                @Html.DisplayFor(modelItem => item.Class)
+                            </td>
+                            <td class="align-middle col-sm-1">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td class="align-middle col-sm-2">
+                                @Html.DropDownListFor(modelItem => item.Review, new SelectList((IEnumerable<SelectListItem>)Newtonsoft.Json.JsonConvert.DeserializeObject<List<SelectListItem>>((string)TempData["GlAccountReview"]), "Value", "Text", item.Review), "Select Review Interval", new { @class = "form-control", @onchange = "javascript:onChangeGlBankAccountReview('" + item.AccountId + "',event)", style = "width: 220px;" })
+                            </td>
 
-                        
-                    </tr>
+
+                        </tr>
                     }
                 </tbody>
 
@@ -102,7 +103,7 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table")  
+    @Scripts.Render("~/bundles/js/table")
     <script>
 
         $(document).ready(function () {
@@ -133,7 +134,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-           
+
             ShowlottieLoader();
             setTimeout(function () {
                 var ClientID = $("#ddlclient option:selected").val();
@@ -161,30 +162,32 @@
             });
         }
         function XeroGlAccoutSync() {
-           
-           
+            ShowlottieLoader();
+
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroGLAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
+
                     ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
                 }
                 else {
                     ShowAlertBoxSuccess("Success!", "GL Accounts synced with Xero successfully.", function () { window.location.reload(); });
                 }
+                HidelottieLoader();
 
             });
-          
+
         }
 
-        
 
-        function onChangeGlBankAccountReview(AccountID, event) {            
+
+        function onChangeGlBankAccountReview(AccountID, event) {
             var Selectedvalue = event.currentTarget.value;
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax(apiurl + 'Xero/UpdateGlAccounts?AgencyID=' + ClientID + '&AccountID=' + AccountID + '&GlAccountReview=' + Selectedvalue , null, function (response) {
+            postAjax(apiurl + 'Xero/UpdateGlAccounts?AgencyID=' + ClientID + '&AccountID=' + AccountID + '&GlAccountReview=' + Selectedvalue, null, function (response) {
                 if (response.message != "Success") {
                     ShowAlertBoxError("Error", "Changes are not updated.", function () { window.location.reload(); });
-                }                
+                }
             })
         }
 
