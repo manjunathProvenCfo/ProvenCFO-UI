@@ -25,6 +25,7 @@ var $tc_2_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
 var $communicationAction;
+var $communication_DropDownAction;
 
 
 var chat = {
@@ -265,7 +266,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
 }
 var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
-    
+  
     $(".media").removeClass("active");
     var Notification_agencyId = sessionStorage.getItem("Notification_agencyId");
     var Notification_reconciliationId = sessionStorage.getItem("Notification_reconciliationId");
@@ -308,7 +309,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $gl_accountDropdown = $('#gl_account');
     $tc_1_Dropdown = $('#tracking_category_0');
     $tc_2_Dropdown = $('#tracking_category_1');
-    $communicationAction = $('#BA_filterAction');
+    $communication_DropDownAction = $('#BA_filterAction');
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
 
     $(document).on("click", "button[id=btnComment]", function (e) {
@@ -331,13 +332,28 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         $('.emojionearea-editor').val("");
     }
     
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {  
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
         var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
         var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
         var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
+        var ReconcilationType = response.resultData.reconciliationdata.type;
+        if (ReconcilationType == "Unreconciled") {
+            $communicationGLaccount.removeClass('d-none');
+            $communicationTrackingCategories.removeClass('d-none');
+            $tc_2_Dropdown.removeClass('d-none');
+            $tc_1_Dropdown.removeClass('d-none');
+            $communicationAction.addClass('d-none');
+        }
+        if (ReconcilationType == "Outstanding Payments") {
+            $communicationGLaccount.addClass('d-none');
+            $communicationTrackingCategories.addClass('d-none');
+            $tc_2_Dropdown.addClass('d-none');
+            $tc_1_Dropdown.addClass('d-none');
+            $communicationAction.removeClass('d-none');
+        }
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
         }
@@ -346,10 +362,10 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         }
 
         if (Action != null) {
-            $communicationAction.val(Action);
+            $communication_DropDownAction.val(Action);
         }
         else {
-            $communicationAction.val($("#BA_filterAction option:first").val());;
+            $communication_DropDownAction.val($("#BA_filterAction option:first").val());;
         }
         if (tc1 != null) {
             $tc_1_Dropdown.val(tc1);
@@ -473,6 +489,7 @@ var loadreconcilationcomments = function () {
     $messageBodyInput.val('').focus();
     $messageBodyInput.trigger('change');
     getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${chat.clientId}&MaxCount=${0}`, null, function (response) {
+       
         var Reconciliationdata = response;
         if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
             $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
@@ -1162,7 +1179,7 @@ var onChangeglAccount = function (event) {
 var onChangeAction = function (event) {
     
     var id = chat.channelUniqueNameGuid;
-    var selectedValue = $communicationAction.val();
+    var selectedValue = $communication_DropDownAction.val();
     if (isEmptyOrBlank(selectedValue)) {
         selectedValue = -1;
     }
