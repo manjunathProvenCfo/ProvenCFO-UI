@@ -35,14 +35,16 @@ namespace ProvenCfoUI
              "~/assets/lib/twilio/conversations/dist/twilio-conversations.min.js",
              "~/assets/lib/waitMe/waitMe.min.js",             
              "~/assets/js/jquery.idle-timer.js"
-              
+            
+
 
 
 
             ));
             bundles.Add(new Bundle("~/bundles/js/developer").Include(
              "~/assets/js/common.js",
-             "~/assets/js/wrapper.js"
+             "~/assets/js/wrapper.js",
+              "~/assets/js/lottie-player.js"
                ));
 
             bundles.Add(new ScriptBundle("~/bundles/js/select").Include(
@@ -125,8 +127,8 @@ namespace ProvenCfoUI
                 "~/assets/js/agencyHome.js"
                 ));
             bundles.Add(new Bundle("~/bundles/js/reconciliationMain").Include(
-                "~/assets/js/reconciliationMain.js",
-                 "~/assets/js/lottie-player.js"
+                "~/assets/js/reconciliationMain.js"
+               
                 ));
             #region FileUploader
 

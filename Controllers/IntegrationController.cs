@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Newtonsoft.Json;
 using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
@@ -25,10 +26,10 @@ namespace ProvenCfoUI.Controllers
             
             try
             {
-               
+                
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    TempData["GlAccountReview"] = getGlAccountReview();
+                    TempData["GlAccountReview"] = JsonConvert.SerializeObject(getGlAccountReview());
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     if (UserPref != null && UserPref.Count() > 0)
@@ -40,7 +41,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
                         ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
-                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
+                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");                       
                         return View(objResult.ResultData);
                     }
                     return View();
@@ -177,6 +178,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
         [CheckSession]
         public async Task<JsonResult> GetXeroGLAccountSync(int ClientID)
         {
@@ -216,7 +218,8 @@ namespace ProvenCfoUI.Controllers
                         {
                             objInt.CreateXeroGlAccount(gl);
                         }
-                        TempData["GlAccountReview"] = getGlAccountReview();
+
+                        TempData["GlAccountReview"] = JsonConvert.SerializeObject(getGlAccountReview());
                     }
 
                 }
@@ -289,7 +292,7 @@ namespace ProvenCfoUI.Controllers
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
             }
-        }       
+        }
         [HttpPost]
         [CheckSession]
         public async Task<JsonResult> UpdateXeroConnectionStatus()
