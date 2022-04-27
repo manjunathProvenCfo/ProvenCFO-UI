@@ -334,8 +334,13 @@ var getReports = function (agencyId, year, period) {
     getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
         if (response.Status == "Error")
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
-        let reports = response.Data; HidelottieLoader();
+        let reports = response.Data;
+        if (isEmptyOrBlank(period)) {
+            $(".report-card-body .report").remove();
         }
+        else {
+            $(`.report-card-body[data-report-period='${period}'] .report`).remove();
+        }        
         reports.forEach(function (obj) {
 
             let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
@@ -369,6 +374,7 @@ var getReports = function (agencyId, year, period) {
                                 </p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         });
+        HidelottieLoader();
     });
 }
 var addContextMenu = function () {
