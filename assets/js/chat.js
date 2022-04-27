@@ -26,6 +26,7 @@ var $communicationGLaccount;
 var $communicationTrackingCategories;
 var $communicationAction;
 var $communication_DropDownAction;
+var $tracking;
 
 
 var chat = {
@@ -169,6 +170,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     $communicationGLaccount = $("#comTrackingCategories");
     $communicationTrackingCategories = $("#comGLaccount");
+    $tracking = $("#tracking");
     $communicationAction = $("#comAction");
 
     $channelMessages.empty();
@@ -333,6 +335,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     }
     
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+       
         setCommentsHeader(response.resultData.reconciliationdata);
         LoadAllComments(response.resultData.reconciliationComments);
         var glaccount = response.resultData.reconciliationdata.gl_account_ref;
@@ -341,11 +344,13 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
         var ReconcilationType = response.resultData.reconciliationdata.type;
         if (ReconcilationType == "Unreconciled") {
+
             $communicationGLaccount.removeClass('d-none');
             $communicationTrackingCategories.removeClass('d-none');
             $tc_2_Dropdown.removeClass('d-none');
             $tc_1_Dropdown.removeClass('d-none');
             $communicationAction.addClass('d-none');
+            $tracking.removeClass('d-none');
         }
         if (ReconcilationType == "Outstanding Payments") {
             $communicationGLaccount.addClass('d-none');
@@ -353,6 +358,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             $tc_2_Dropdown.addClass('d-none');
             $tc_1_Dropdown.addClass('d-none');
             $communicationAction.removeClass('d-none');
+            $tracking.show();
         }
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);

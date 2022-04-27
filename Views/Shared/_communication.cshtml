@@ -82,8 +82,8 @@
                             </div>
                         </div>
                     }
-
-                    @if (TempData["TrackingCategories"] != null )
+                
+                    @if (TempData["TrackingCategories"] != null)
                     {
                         int count = 0;
                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
@@ -93,7 +93,7 @@
                                     <div class="fas fa-chevron-left"></div>
                                 </a>
                                 <div class="min-w-0">
-                                    <h5 class="mb-0 text-truncate fs-0"><span class="">@tcgroup.Name  </span></h5>
+                                    <h5 class="mb-0 text-truncate fs-0" id="tracking" style="display:none"><span class="">@tcgroup.Name  </span></h5>
                                     <div class="fs--2 text-400">
                                         @if (count == 0)
                                         {
@@ -109,6 +109,7 @@
                         }
 
                     }
+                
 
                     <div class="d-flex align-items-center">
                         <div class="col-12">
