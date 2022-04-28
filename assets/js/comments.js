@@ -227,12 +227,9 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 }
 
 var CommentDelete = function (CommentId) {
-    ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this message?", "Yes, remove it!", function (isConfirmed) {
-        if (isConfirmed == false)
-            return;
+   
         $('#msg_' + CommentId).remove();
         if (CommentId > 0) { DeleteReconciliationComment(CommentId) };
-    });
 }
 var CommentEdit = function (CommentId) {
    
@@ -245,14 +242,17 @@ var CommentEdit = function (CommentId) {
 
     
 }
+   
 var DeleteReconciliationComment = function (commentId) {
+  
     postAjaxSync(apiurl + `Reconciliation/DeleteReconciliationComment?CommentId=` + commentId, null, function (response) {
         var r = response;
         if (response.resultData == true) {
-            ShowAlertBoxSuccess("success", "Message has been removed successfully!")
+            
+            toastr.success("Message has been removed successfully!");
         }
         else {
-            ShowAlertBoxError("Error","Error while removing of message.")
+            toastr.warning("Error while removing of message.");
         }
     });
 }
@@ -261,12 +261,12 @@ var DeleteAttachment = function (commentId) {
     postAjaxSync('/Reconciliation/DeleteReconciliationAttachment?CommentId=' + commentId + '&AgencyId=' + AgencyId, null, function (response) {
         var r = response;
         if (response.Status == "Success") {
-            
             $('#att_' + response.CommentId).remove();
-            ShowAlertBoxSuccess("success", "Message has been removed successfully!");
+            toastr.success("Attachment has been removed successfully!");
+           
         }
         else {
-            ShowAlertBoxError("Error", "Error while removing of message.");
+            toastr.warning("Error while removing of Attachment.");
         }
     });
 }
