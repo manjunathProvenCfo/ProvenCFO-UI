@@ -605,7 +605,7 @@ function AgencyDropdownPartialViewChange() {
                 //bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
                 /*GetTotalNotesCount();*/
-                SetUserPreferencesForAgency();
+                /*SetUserPreferencesForAgency();*/
                 defaultReportsWidget();
                 let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                 $('#spMonths').html(month);
