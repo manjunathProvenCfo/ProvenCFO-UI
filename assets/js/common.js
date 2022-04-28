@@ -55,7 +55,7 @@ $(function () {
 
     //local db notificiation
     loadAllNotificationLoggedInUser();
-    loadAllNotificationLoggedInUser1();
+    loadAllNotificationLoggedInUserPage();
     //local db notificiation
 
     bindNotInBooksAndBanksCount();
@@ -219,31 +219,7 @@ function TotalSum(totalSum1, totalSum2) {
 
     }
 }
-//function bindNotInBooksAndBanksCount() {
 
-//    var ClientID = $("#ddlclient option:selected").val();
-
-//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-//        if (response.Message == "Success") {
-//            let data = response.ResultData;
-//            let totalSum = 0;
-//            for (var i = 0; i < data.length; i++) {
-//                totalSum = totalSum + data[i].totalCount;
-//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-//                    $("#lblNotInBanksCount").text(data[i].totalCount);
-//                }
-//                else {
-//                    $("#lblNotInBooksCount").text(data[i].totalCount);
-//                }
-//            }
-
-
-//            $("#lblNotInCount").text(totalSum);
-
-//        }
-//    })
-//}
 
 
 function HighlightMenu() {
@@ -326,7 +302,7 @@ var loadAllNotificationLoggedInUser = function()
 
 }
 
-var loadAllNotificationLoggedInUser1 = function () {
+var loadAllNotificationLoggedInUserPage = function () {
     var userId = $('#topProfilePicture').attr('userid');
 
     getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
