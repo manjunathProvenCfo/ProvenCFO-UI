@@ -16,14 +16,16 @@ $(document).ready(function () {
     });
 
     createTwilioUser();
-
+       
+   
     AgencyDropdownPartialViewChange();
     //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
-    KanbanCountWithIndividualPriority();
+    //KanbanCountWithIndividualPriority();
     //defaultReportsWidget();
-    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-    RenderNetIncomeChart($('#dllNetIncome').val());
+   
+    //RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+    //RenderNetIncomeChart($('#dllNetIncome').val());
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -40,12 +42,12 @@ $(document).ready(function () {
 
     $('#ddlGrossRevenue').change(function () {
         var item = $(this);
-
+        
         RenderGrossRevenueChart(item.val());
     });
     $('#dllNetIncome').change(function () {
         var item = $(this);
-
+       
         RenderNetIncomeChart(item.val());
     });
     
@@ -61,8 +63,9 @@ $(document).ready(function () {
 
 function RenderGrossRevenueChart(Option) {
 
-
+    
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${0}`, null, function (response) {
+       
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift()
@@ -89,8 +92,9 @@ function Tabclick(e, type) {
     }
 }
 function RenderNetIncomeChart(Option) {
-
+    
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
+        
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift();
@@ -582,10 +586,10 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                setTimeout(function () {
+               /* setTimeout(function () {*/
                     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                     RenderNetIncomeChart($('#dllNetIncome').val());
-                }, 1000);
+               /* }, 1000);*/
 
                 GetAccountOutStanding();
                 getTeamMembersList();

@@ -129,7 +129,7 @@ function SetUserPreferencesForAgency(callback) {
             }
             GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
-            HidelottieLoader();
+            //HidelottieLoader();
         },
         error: function (d) {
 
@@ -313,7 +313,7 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
             })
         }
     });
-    HidelottieLoader();
+    //HidelottieLoader();
 }
 function getCurrentTime(date) {
     var hours = date.getHours();
