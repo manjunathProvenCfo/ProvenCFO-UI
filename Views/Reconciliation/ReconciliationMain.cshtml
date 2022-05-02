@@ -312,7 +312,7 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            <div class="col-auto">
+                                            <div class="col-auto" data-toggle="tooltip" title=" Modified Date:  @item.GlAccountModifiedDateUTC  Modified By: @item.GlAccountModifiedBy " >
 
                                                 @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
                                                 @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
@@ -335,7 +335,8 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            <div class="col-auto">
+                                            <div class="col-auto" data-toggle="tooltip" title=" Modified Date:  @item.ActionModifiedDateUTC  Modified By: @item.ActionModifiedBy ">
+
                                                 @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
                                             </div>
                                         </div>
