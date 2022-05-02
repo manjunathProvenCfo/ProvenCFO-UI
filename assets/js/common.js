@@ -9,7 +9,7 @@ var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
 var $TopNotificaitonList = $("#TopNotificaitonList");
-var $TopNotificaitonList1 = $("#TopNotificaitonList1");
+var $FullNotificationList = $("#FullNotificationList");
 var notifications = [];
 var addMessageProcessedGlobal = [];
 
@@ -55,10 +55,7 @@ $(function () {
     twilioChatGlobal();
     //Twilio Chat
 
-    //local db notificiation
-    loadAllNotificationLoggedInUser();
-    loadAllNotificationLoggedInUserPage();
-    //local db notificiation
+    loadAllNotificationLoggedInUserPage(false);
    
     bindNotInBooksAndBanksCount();
     bindNotInBanksAndBanksCount();
@@ -277,55 +274,20 @@ function HighlightMenu() {
 
 //Global Chat with Notifications (Non Twilio , Local DB) Start
 
-var loadAllNotificationLoggedInUser = function () {
+
+var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
     var userId = $('#topProfilePicture').attr('userid');
-
+   
     getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
-
+   
         if (response && response.status) {
 
             var icount = 0;
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
             response.resultData.forEach(function (obj) {
-                if (icount < 0) return false;
-                var NotificationHtml = '';
-                var agencyName = obj.agencyName;
-                var Text = "mentioned you in " + agencyName + " about a transaction for $" + obj.amount;
-                var mDate = new Date(obj.mentionedDate);
-                var UTCdate = getUTCDateTime(new Date(obj.mentionedDate));
-
-                //var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
-                var StringForDisplay = getDateDiff(new Date(UTCdate), new Date());  //monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
-                //var Timestring = getCurrentTime(new Date);
-                if (obj.isunread != null && obj.isunread == true) {
-                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
-                }
-
-                else {
-                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
-                }
-                $TopNotificaitonList1.append(NotificationHtml);
-                icount++;
-
-            })            
-        }
-    });
-
-}
-
-var loadAllNotificationLoggedInUserPage = function () {
-    var userId = $('#topProfilePicture').attr('userid');
-
-    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
-
-        if (response && response.status) {
-
-            var icount = 0;
-            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
-            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
-            response.resultData.forEach(function (obj) {
-                if (icount > 2) return false;
+                
+                if (icount > 2 && IsloadAll == false) return false;
                 var NotificationHtml = '';
                 var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
                 var mDate = new Date(obj.mentionedDate);
@@ -340,15 +302,18 @@ var loadAllNotificationLoggedInUserPage = function () {
                 else {
                     NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
                 }
-                $TopNotificaitonList.append(NotificationHtml);
+                if (IsloadAll == false) {
+                    $TopNotificaitonList.append(NotificationHtml);
+                }                
+                else {
+                    $FullNotificationList.append(NotificationHtml);
+                }
                 icount++;
 
             })
-
-
         }
     });
-
+    HidelottieLoader();
 }
 function getCurrentTime(date) {
     var hours = date.getHours();
