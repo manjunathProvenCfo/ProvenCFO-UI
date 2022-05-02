@@ -312,12 +312,22 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            <div class="col-auto" data-toggle="tooltip" title=" Modified Date:  @item.GlAccountModifiedDateUTC  Modified By: @item.GlAccountModifiedBy " >
+                                            @if (item.GlAccountModifiedBy != null)
+                                            {
+                                                <div class="col-auto" id="Gltoggel" data-toggle="tooltip" data-html="true" title="Last Modified By: <br> @item.GlAccountModifiedBy <br> Last Modified Date:  @item.GlAccountModifiedDateUTC">
 
-                                                @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
-                                            </div>
+
+                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                        <div class="col-auto">
+                                            @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
                                         </div>
+                                             }
+                                            </div>
+                                            
                                     </td>
                                 } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
                                 @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
@@ -335,11 +345,20 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            <div class="col-auto" data-toggle="tooltip" title=" Modified Date:  @item.ActionModifiedDateUTC  Modified By: @item.ActionModifiedBy ">
+                                            @if (item.ActionModifiedBy != null)
+                                            {
+                                                <div class="col-auto" id="Actiontoggel" data-toggle="tooltip" data-html="true" title=" Last Modified By: <br> @item.ActionModifiedBy <br> Last Modified Date:  @item.ActionModifiedDateUTC ">
 
-                                                @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
-                                            </div>
+                                                    @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                        <div class="col-auto">
+                                            @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
                                         </div>
+                                            }
+                                            </div>
                                     </td>
                                 }
 
