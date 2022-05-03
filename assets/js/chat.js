@@ -112,7 +112,7 @@ var CommentHtmls = {
                                             <div class="chat-message chat-gallery justify-content-end bg-primary text-white p-2 rounded-soft">
                                                 <div class="row mx-n1 justify-content-end">
 
-                                                <a href="{FileScrPath}" target="_blank">{FileName}</a></div>
+                                                <a class="ColorattachmentText" href="{FileScrPath}" target="_blank">{FileName}</a></div>
                                             </div>
                                                 <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
                                                 <li class="list-inline-item"><a class="chat-option" type="attachment" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="DeleteAttachment('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
@@ -924,12 +924,10 @@ var insertUpdateTwilioConversation = function (objTwilioConversations) {
     });
 }
 var CommentDelete = function (CommentId) {
-    ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this message?", "Yes, remove it!", function (isConfirmed) {
-        if (isConfirmed == false)
-            return;
+  
         $('#msg_' + CommentId).remove();
         if (CommentId > 0) { DeleteReconciliationComment(CommentId);}        
-    });
+   
 }
 var CommentEdit = function (CommentId) {
     var text = $('#msg_' + CommentId + ' .chat-message');
@@ -944,10 +942,12 @@ var DeleteAttachment = function (commentId) {
         if (response.Status == "Success") {
 
             $('#att_' + response.CommentId).remove();
-            ShowAlertBoxSuccess("success", "Message has been removed successfully!");
+            toastr.success("Attachment has been removed successfully!");
+         
         }
         else {
-            ShowAlertBoxError("Error", "Error while removing of message.");
+            
+            toastr.warning("Error while removing of Attachment.");
         }
     });
 }
@@ -955,10 +955,10 @@ var DeleteReconciliationComment = function (commentId) {
     postAjaxSync(apiurl + `Reconciliation/DeleteReconciliationComment?CommentId=` + commentId, null, function (response) {
         var r = response;
         if (response.resultData == true) {
-            ShowAlertBoxSuccess("success", "Message has been removed successfully!")
+            toastr.success("Message has been removed successfully!");
         }
         else {
-            ShowAlertBoxError("Error", "Error while removing of message.")
+            toastr.warning("Error while removing of message.");
         }
     });
 }

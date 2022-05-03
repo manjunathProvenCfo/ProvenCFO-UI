@@ -39,6 +39,10 @@ namespace Proven.Model
         public bool Iscurrent_user_mentioned { get; set; }
         public int? ref_ReconciliationAction { get; set; }
 
+        public DateTime? ActionModifiedDateUTC { get; set; }
+        public DateTime? GlAccountModifiedDateUTC { get; set; }
+        public string GlAccountModifiedBy { get; set; }
+        public string ActionModifiedBy { get; set; }
     }
     public class ReconciliationMainModel
     {

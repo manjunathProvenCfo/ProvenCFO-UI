@@ -572,7 +572,10 @@ select#item_additional_tracking_category_ref {
 .notification-body {
     padding-left: 10px;
 }
-
+a.ColorattachmentText
+{
+    color: white !important;
+}
 /*.emojionearea-picker.emojionearea-picker-position-top.emojionearea-filters-position-bottom.emojionearea-search-position-top
 {
     display:none;

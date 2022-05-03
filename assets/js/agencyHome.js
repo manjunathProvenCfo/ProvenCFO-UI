@@ -16,14 +16,16 @@ $(document).ready(function () {
     });
 
     createTwilioUser();
-
+       
+   
     AgencyDropdownPartialViewChange();
     //bindNotInBooksAndBanksCountDashboard();
     NotesIndividualCountAndPercentageByAgencyId();
-    KanbanCountWithIndividualPriority();
+    //KanbanCountWithIndividualPriority();
     //defaultReportsWidget();
-    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-    RenderNetIncomeChart($('#dllNetIncome').val());
+   
+    //RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+    //RenderNetIncomeChart($('#dllNetIncome').val());
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -40,12 +42,12 @@ $(document).ready(function () {
 
     $('#ddlGrossRevenue').change(function () {
         var item = $(this);
-
+        
         RenderGrossRevenueChart(item.val());
     });
     $('#dllNetIncome').change(function () {
         var item = $(this);
-
+       
         RenderNetIncomeChart(item.val());
     });
     
@@ -61,8 +63,9 @@ $(document).ready(function () {
 
 function RenderGrossRevenueChart(Option) {
 
-
+    
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${0}`, null, function (response) {
+       
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift()
@@ -89,8 +92,9 @@ function Tabclick(e, type) {
     }
 }
 function RenderNetIncomeChart(Option) {
-
+    
     getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
+        
         if (response.Status == 'Success') {
             response.Xdata.shift();
             response.Ydata.shift();
@@ -582,10 +586,10 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                setTimeout(function () {
+               /* setTimeout(function () {*/
                     RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                     RenderNetIncomeChart($('#dllNetIncome').val());
-                }, 1000);
+               /* }, 1000);*/
 
                 GetAccountOutStanding();
                 getTeamMembersList();
@@ -596,7 +600,7 @@ function AgencyDropdownPartialViewChange() {
                 $('#spTeamName').html(String(data.TeamName));
 
                 $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
-
+               
                 GetReconcilationData();
                 GetReconcilationData1();
                 //GetReconcilationPostiveData();
@@ -605,7 +609,7 @@ function AgencyDropdownPartialViewChange() {
                 //bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
                 /*GetTotalNotesCount();*/
-                SetUserPreferencesForAgency();
+                /*SetUserPreferencesForAgency();*/
                 defaultReportsWidget();
                 let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                 $('#spMonths').html(month);
@@ -747,77 +751,103 @@ var totalSum1;
 var totalSum2;
 function GetReconcilationData() {
     var ClientID = $("#ddlclient option:selected").val();
-
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-        if (response.Message == "Success") {
-            var percentage = 0;
-            totalSum1 = 0;
-            let data = response.ResultData;
-            if (data != null && data.length > 0) {
-                $("#lblNotInBanksCount2").text(data[0].Count);
-                $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
-                $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
-                percentage = data[0].percentage.toFixed(0);
-                totalSum1 = data[0].Count;
+  
+    var percentage = 0;
+    totalSum1 = 0;
+    if (sessionStorage.getItem("NotInBanksData") == null) {
+        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+            if (response.Message == "Success") {
+               
+                let data = response.ResultData;
+                if (data != null && data.length > 0) {
+                    $("#lblNotInBanksCount2").text(data[0].Count);
+                    $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                    $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                    percentage = data[0].percentage.toFixed(0);
+                    totalSum1 = data[0].Count;
+                    sessionStorage.setItem("NotInBanksData", JSON.stringify(data));
+                }
+                else {
+                    $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                    $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+                }
+                $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                utils.addProgressCircle("#lblNotInBankPercentage")
+                TotalSum(totalSum1, totalSum2);
             }
-            else {
-                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-            }
-            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-            utils.addProgressCircle("#lblNotInBankPercentage")
+        })
+    }
+    else {
 
-            //for (var i = 0; i < data.length; i++) {
-
-            //    totalSum1 = totalSum + data[i].Count;
-            //    if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-            //        $("#lblNotInBanksCount2").text(data[i].Count);
-            //    }
-            //}
-
-            TotalSum(totalSum1, totalSum2);
+        let data = JSON.parse(sessionStorage.getItem("NotInBanksData"));
+        if (data != null && data.length > 0) {
+            $("#lblNotInBanksCount2").text(data[0].Count);
+            $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+            $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+            percentage = data[0].percentage.toFixed(0);
+            totalSum1 = data[0].Count;            
         }
-    })
+        else {
+            $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+            $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+        }
+        $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+        utils.addProgressCircle("#lblNotInBankPercentage")
+        TotalSum(totalSum1, totalSum2);
+
+    }
+    
 
 }
 function GetReconcilationData1() {
     var ClientID = $("#ddlclient option:selected").val();
-
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-        if (response.Message == "Success") {
-            var totalSum = 0;
-            var percentage = 0;
-            totalSum2 = 0;
-            let data = response.ResultData;
-            if (data != null && data.length > 0) {
-                $("#lblNotInBooksCount2").text(data[0].Count);
-                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
-                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
-                totalSum2 = data[0].Count;
-                percentage = data[0].percentage.toFixed(0);
+ 
+    var totalSum = 0;
+    var percentage = 0;
+    totalSum2 = 0;
+    if (sessionStorage.getItem("NotInBooksCount") == null) {
+        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+            if (response.Message == "Success") {
+                
+                let data = response.ResultData;
+                if (data != null && data.length > 0) {
+                    $("#lblNotInBooksCount2").text(data[0].Count);
+                    $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+                    $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+                    totalSum2 = data[0].Count;
+                    percentage = data[0].percentage.toFixed(0);
+                    sessionStorage.setItem("NotInBooksCount", JSON.stringify(data));
+                }
+                else {
+                    $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+                    $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+                }
+                $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                utils.addProgressCircle("#divNotInBookPercentage1")
+                TotalSum(totalSum1, totalSum2);
             }
-            else {
-                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-            }
-            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-            utils.addProgressCircle("#divNotInBookPercentage1")
-            //for (var i = 0; i < data.length; i++) {
-
-
-
-            //    if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-            //        $("#lblNotInBooksCount2").text(data[i].Count);
-            //    }
-
-            //}
-
-            TotalSum(totalSum1, totalSum2);
-
-
+        })
+    }
+    else {
+        var data = JSON.parse(sessionStorage.getItem("NotInBooksCount"));           
+        if (data != null && data.length > 0) {
+            $("#lblNotInBooksCount2").text(data[0].Count);
+            $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+            $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+            totalSum2 = data[0].Count;
+            percentage = data[0].percentage.toFixed(0);
+           
         }
-    })
-    HidelottieLoader();
+        else {
+            $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+            $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+        }
+        $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+        utils.addProgressCircle("#divNotInBookPercentage1")
+        TotalSum(totalSum1, totalSum2);
+    }
+    
+    
 }
 
 function TotalSum(totalSum1, totalSum2) {
@@ -833,139 +863,139 @@ function TotalSum(totalSum1, totalSum2) {
     }
 }
 
-function GetReconcilationPostiveData() {
+//function GetReconcilationPostiveData() {
 
 
-    var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+//    var ClientID = $("#ddlclient option:selected").val();
+//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
 
-        if (response.Message == "Success") {
+//        if (response.Message == "Success") {
 
-            let data = response.ResultData;
-            let totalSum = 0;
+//            let data = response.ResultData;
+//            let totalSum = 0;
 
-            for (var i = 0; i < data.length; i++) {
+//            for (var i = 0; i < data.length; i++) {
 
-                totalSum = totalSum + data[i].amount;
-
-
-
-
-                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
-
-
-                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
-
-
-            }
-            if (data == 0) {
-
-                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-            }
-        }
-
-
-    });
-
-}
-
-function GetReconcilationNegativeData() {
-
-
-    var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-
-        if (response.Message == "Success") {
-
-            var data = response.ResultData;
-            var totalSum = 0;
-
-            for (var i = 0; i < data.length; i++) {
-
-
-
-                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
+//                totalSum = totalSum + data[i].amount;
 
 
 
 
-                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
-
-            }
-            if (data == 0) {
-
-                $("#lblpostiveBanksCount").text(ConvertToUDS(0).replace('-', ''));
-                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-            }
-
-        }
-        else {
-            totalSum = totalSum + data[i].amount;
-        }
-
-    });
-}
+//                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
 
 
-function bindNotInBooksAndBanksCountDashboard() {
+//                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
 
-    var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
 
-        if (response.Message == "Success") {
+//            }
+//            if (data == 0) {
 
-            let data = response.ResultData;
+//                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+//                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+//            }
+//        }
 
-            let totalSum = 0;
 
-            for (var i = 0; i < data.length; i++) {
+//    });
 
-                percentage = data[i].percentage.toFixed(0);
+//}
 
-                totalSum = totalSum + data[i].totalCount;
-                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNotInBanksCount").text(data[i].totalCount);
-                }
-                else {
-                    $("#lblNotInBooksCount").text(data[i].totalCount);
-                }
-            }
-            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-            utils.addProgressCircle("#divNotInBookPercentage1")
+//function GetReconcilationNegativeData() {
 
-        }
 
-    })
-}
-function bindNotInBooksAndBanksCountDashboard1() {
+//    var ClientID = $("#ddlclient option:selected").val();
+//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
 
-    var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+//        if (response.Message == "Success") {
 
-        if (response.Message == "Success") {
-            let data = response.ResultData;
-            let totalSum = 0;
-            for (var i = 0; i < data.length; i++) {
+//            var data = response.ResultData;
+//            var totalSum = 0;
 
-                percentage = data[i].percentage.toFixed(0);
+//            for (var i = 0; i < data.length; i++) {
 
-                totalSum = totalSum + data[i].totalCount;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                    $("#lblNotInBooksCount").text(data[i].Count);
-                }
-                else {
-                    $("#divNotInBookPercentage").text(data[i].percentage);
-                }
-            }
 
-            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-            utils.addProgressCircle("#lblNotInBankPercentage")
 
-        }
+//                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
 
-    })
-}
+
+
+
+//                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
+
+//            }
+//            if (data == 0) {
+
+//                $("#lblpostiveBanksCount").text(ConvertToUDS(0).replace('-', ''));
+//                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+//            }
+
+//        }
+//        else {
+//            totalSum = totalSum + data[i].amount;
+//        }
+
+//    });
+//}
+
+
+//function bindNotInBooksAndBanksCountDashboard() {
+
+//    var ClientID = $("#ddlclient option:selected").val();
+//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+
+//        if (response.Message == "Success") {
+
+//            let data = response.ResultData;
+
+//            let totalSum = 0;
+
+//            for (var i = 0; i < data.length; i++) {
+
+//                percentage = data[i].percentage.toFixed(0);
+
+//                totalSum = totalSum + data[i].totalCount;
+//                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+//                    $("#lblNotInBanksCount").text(data[i].totalCount);
+//                }
+//                else {
+//                    $("#lblNotInBooksCount").text(data[i].totalCount);
+//                }
+//            }
+//            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+//            utils.addProgressCircle("#divNotInBookPercentage1")
+
+//        }
+
+//    })
+//}
+//function bindNotInBooksAndBanksCountDashboard1() {
+
+//    var ClientID = $("#ddlclient option:selected").val();
+//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+
+//        if (response.Message == "Success") {
+//            let data = response.ResultData;
+//            let totalSum = 0;
+//            for (var i = 0; i < data.length; i++) {
+
+//                percentage = data[i].percentage.toFixed(0);
+
+//                totalSum = totalSum + data[i].totalCount;
+//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+//                    $("#lblNotInBooksCount").text(data[i].Count);
+//                }
+//                else {
+//                    $("#divNotInBookPercentage").text(data[i].percentage);
+//                }
+//            }
+
+//            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+//            utils.addProgressCircle("#lblNotInBankPercentage")
+
+//        }
+
+//    })
+//}
 const camelize = (str) => {
     const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
         c ? c.toUpperCase() : ""
@@ -1393,6 +1423,7 @@ var defaultReportsWidget = function () {
                 divYearlyReports.append(reportHtml);
             }
         }
+        HidelottieLoader();
     });
 }
 function prepareReportMedia(report) {

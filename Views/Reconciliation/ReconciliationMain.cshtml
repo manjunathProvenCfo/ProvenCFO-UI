@@ -251,8 +251,10 @@
                                 <th class="sort pr-1 align-middle">Who</th>
                                 <th class="sort pr-1 align-middle">Description</th>
                                 <th class="sort pr-1 align-middle">Amount</th>
+                                
 
-                                @if (TempData["Action"] != null  && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 &&  ViewBag.isvisibleGlAccount == true)
+
+                                @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 && ViewBag.isvisibleGlAccount == true)
                                 {
                                     <th class="sort pr-10 align-center "> Action</th>
                                 }
@@ -297,88 +299,109 @@
                                 <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
                                 <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
                                 @if (item.amount < 0)
-                                    {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
-                                    <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
-                                }
-                                else
-                                { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
-                                <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+                                {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
+                                <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+                               
                             }
+                            else
+                            { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
+                            <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
+                        }
 
                                 @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.isvisibleGlAccount == false)
-                                    {
-                                <td class="sort pr-1 align-middle col-xs-1">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            @if (item.GlAccountModifiedBy != null && ViewBag.IsStaffUser == true)
+                                            {
+                                                <div class="col-auto" id="Gltoggel" data-toggle="tooltip" data-html="true" title="Last Modified by <br> @item.GlAccountModifiedBy <br>  @item.GlAccountModifiedDateUTC">
 
-                                            @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
+
+                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                        <div class="col-auto">
                                             @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
                                         </div>
-                                    </div>
-                                </td>
-                                    } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
+                                             }
+                                            </div>
+                                            
+                                    </td>
+                                } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
                                 @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
-                                    {
-                                <td class="sort pr-1 align-middle col-xs-1">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
+                                {
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            <div class="col-auto">
+                                                @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 120px;" })
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                    }
+                                    </td>
+                                }
 
                                 @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 && ViewBag.isvisibleGlAccount == true)
                                 {
-                                <td class="sort pr-1 align-middle col-xs-1">
-                                    <div class="row justify-content-between">
+                                    <td class="sort pr-1 align-middle col-xs-1">
+                                        <div class="row justify-content-between">
+                                            @if (item.ActionModifiedBy != null &&  ViewBag.IsStaffUser == true)
+                                            {
+                                                <div class="col-auto" id="Actiontoggel" data-toggle="tooltip" data-html="true" title=" Last Modified by <br> @item.ActionModifiedBy <br> @item.ActionModifiedDateUTC ">
+
+                                                    @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
+                                                </div>
+                                            }
+                                            else
+                                            {
                                         <div class="col-auto">
                                             @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
                                         </div>
-                                    </div>
-                                </td>
+                                            }
+                                            </div>
+                                    </td>
                                 }
 
                                 @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
+                                {
+                                    int count = 0;
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
-                                        int count = 0;
-                                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
-                                        {
 
-                                <td class="sort pr-1 align-middle col-xs-1">
-                                    <div class="row justify-content-between">
-                                        <div class="col-auto">
-                                            @if (count == 0)
-                                                        {
-                                            @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)", style = "width: 180px;" }) }
-                                                        else
-                                                        {
-                                            @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)", style = "width: 180px;" })}
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto">
+                                                    @if (count == 0)
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc('" + item.id + "',event)", style = "width: 180px;" }) }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(modelItem => item.additional_tracking_category_ref, new SelectList(tcgroup.Options, "Id", "Option", item.additional_tracking_category_ref), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc('" + item.id + "',event)", style = "width: 180px;" })}
 
-                                        </div>
-                                    </div>
-                                </td>
-                                            count++;
-                                        }
-
+                                                </div>
+                                            </div>
+                                        </td>
+                                        count++;
                                     }
+
+                                }
                                 <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
                                     @if (item.Iscurrent_user_mentioned == true)
-                                        {
-                                    <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                        <span class="fas fa-comment fs--1"></span>
-                                    </button>
-                                        }
-                                        else
-                                        {
-                                    <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                        <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+                                    {
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="fas fa-comment fs--1"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                            <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
 
-                                        @*<span class="far fa-comment fs--1 text-dark"></span>
-                <span class="far fa-comment fs--1"></span>
-                <span class="fas fa-comment fs--1"></span>*@
-                                    </button>
-                                        }
+                                            @*<span class="far fa-comment fs--1 text-dark"></span>
+                    <span class="far fa-comment fs--1"></span>
+                    <span class="fas fa-comment fs--1"></span>*@
+                                        </button>
+                                    }
 
                                 </td>
                             </tr>
@@ -435,11 +458,13 @@
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/kanban")
     @*@Scripts.Render("~/bundles/js/twilio-chat")*@
     @Scripts.Render("~/bundles/js/reconcilation-comments")
     @Scripts.Render("~/bundles/js/imports")
+    @Scripts.Render("~/bundles/js/toastr")
     <script>
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
@@ -764,7 +789,7 @@
 
         }
         function BulkActionReconcilation() {
-           
+
             var GLaccount = $('#BA_filterGLaccounts').val();
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
@@ -822,13 +847,14 @@
         }
 
         function onChangeglAccount(id, event) {
-
+           
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
             }
+            var userId = $('#topProfilePicture').attr('userId');
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id  + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&userId=' + userId, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }
@@ -842,7 +868,7 @@
     function onChangeBankRule(id, event) {
 
             var Selectedvalue = event.currentTarget.value;
-
+            
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
                 if (response.Message == 'Success') {
@@ -855,11 +881,15 @@
             })
         }
         function onChangeAction(id, event) {
-           
+            
             var Selectedvalue = event.currentTarget.value;
+            if (isEmptyOrBlank(Selectedvalue)) {
+                Selectedvalue = -1;
+            }
+            var userId = $('#topProfilePicture').attr('userId');
 
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue, null, function (response) {
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }
@@ -939,9 +969,9 @@
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
-                        
+
                         sessionStorage.setItem("LastMailSent", data.MailSendDate)
-                        
+
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
                         var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
@@ -959,7 +989,7 @@
         }
 
 
-       
+
         function bindNotInBooksAndBanksCount() {
 
             var ClientID = $("#ddlclient option:selected").val();
@@ -1053,7 +1083,7 @@
             });
         });
 
-       
+
         function getClientDate(ClientName) {
             getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
                 sessionStorage.setItem("LastMailSent", response.resultData);
@@ -1077,9 +1107,9 @@
         }
 
 
-        
+
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
-        
+
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
