@@ -312,7 +312,7 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            @if (item.GlAccountModifiedBy != null)
+                                            @if (item.GlAccountModifiedBy != null && ViewBag.IsStaffUser == true)
                                             {
                                                 <div class="col-auto" id="Gltoggel" data-toggle="tooltip" data-html="true" title="Last Modified by <br> @item.GlAccountModifiedBy <br>  @item.GlAccountModifiedDateUTC">
 
@@ -345,7 +345,7 @@
                                 {
                                     <td class="sort pr-1 align-middle col-xs-1">
                                         <div class="row justify-content-between">
-                                            @if (item.ActionModifiedBy != null)
+                                            @if (item.ActionModifiedBy != null &&  ViewBag.IsStaffUser == true)
                                             {
                                                 <div class="col-auto" id="Actiontoggel" data-toggle="tooltip" data-html="true" title=" Last Modified by <br> @item.ActionModifiedBy <br> @item.ActionModifiedDateUTC ">
 

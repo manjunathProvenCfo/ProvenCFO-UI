@@ -113,6 +113,15 @@ namespace ProvenCfoUI.Controllers
 
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
+                        else if(userType =="2" && Type == "Not in Banks")
+                        {
+                            var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                            getallAction.ForEach(x => x.ActionName = x.ActionName);
+                            ViewBag.isvisibleGlAccount = true;
+                            TempData["Action"] = getallAction;
+                            //ViewBag.IsBankRuleVisible = false;
+                            //ViewBag.isvisibleGlAccount = false;
+                        }
                         else
                         {
                             ViewBag.IsBankRuleVisible = false;
