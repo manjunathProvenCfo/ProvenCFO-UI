@@ -27,7 +27,7 @@ var $communicationTrackingCategories;
 var $communicationAction;
 var $communication_DropDownAction;
 var $tracking;
-
+var $trackingcat;
 
 var chat = {
     userId: "",
@@ -172,7 +172,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $communicationTrackingCategories = $("#comGLaccount");
     $tracking = $("#tracking");
     $communicationAction = $("#comAction");
-
+    $trackingcat = $("#trackingcat");
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
     $messageBodyInput.trigger('change');
@@ -351,14 +351,17 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             $tc_1_Dropdown.removeClass('d-none');
             $communicationAction.addClass('d-none');
             $tracking.removeClass('d-none');
+            
         }
         if (ReconcilationType == "Outstanding Payments") {
+            debugger;
             $communicationGLaccount.addClass('d-none');
             $communicationTrackingCategories.addClass('d-none');
             $tc_2_Dropdown.addClass('d-none');
             $tc_1_Dropdown.addClass('d-none');
             $communicationAction.removeClass('d-none');
             $tracking.show();
+            $trackingcat.addClass('d-none');
         }
         if (glaccount != null) {
             $gl_accountDropdown.val(glaccount);
