@@ -718,3 +718,7 @@ function getUTCDateTime(date) {
     var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
     return strTime;
 }
+function getLocalTime(utcdateString) {
+    var date = new Date(utcdateString + ' UTC');    
+    return date.toLocaleString();
+}
