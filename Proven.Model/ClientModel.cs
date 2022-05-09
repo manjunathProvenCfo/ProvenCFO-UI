@@ -73,6 +73,8 @@ namespace Proven.Model
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
         public bool?   EnableAutomation { get; set; }
+        public int? ThirdPartyAccountingApp_ref { get; set; }
+        public int? CompanyId { get; set; }
 
 
 
