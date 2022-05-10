@@ -138,7 +138,7 @@
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @foreach (var ThirdPartyAccountingApp_ref in (List<Proven.Model.ThirdPartyAccountingAppVM>)TempData["ThirdPartyAccountApp"])
                                         {
-                                            if (Model.Id == null)
+                                            if (Model.Id == null || Model.Id == 0)
                                             {
                                                 <span>
                                                     @if (Model.Id == ThirdPartyAccountingApp_ref.Id)
@@ -147,7 +147,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id)
+                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
                                                     }
                                                     @ThirdPartyAccountingApp_ref.Name
                                                 </span>
