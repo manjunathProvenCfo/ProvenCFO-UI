@@ -580,10 +580,11 @@ a.ColorattachmentText
 
 span#loadertext {
     padding-top: 350px;
+    margin-right: 150px
 }
 
 div#animation-container {
-    margin-left: 250px;
+    margin-left: 50px;
 }
 /*.emojionearea-picker.emojionearea-picker-position-top.emojionearea-filters-position-bottom.emojionearea-search-position-top
 {
