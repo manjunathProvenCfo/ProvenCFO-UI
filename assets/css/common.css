@@ -576,6 +576,15 @@ a.ColorattachmentText
 {
     color: white !important;
 }
+
+
+span#loadertext {
+    padding-top: 350px;
+}
+
+div#animation-container {
+    margin-left: 250px;
+}
 /*.emojionearea-picker.emojionearea-picker-position-top.emojionearea-filters-position-bottom.emojionearea-search-position-top
 {
     display:none;
