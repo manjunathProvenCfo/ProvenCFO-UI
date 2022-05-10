@@ -141,13 +141,13 @@
                                             if (Model.Id == null || Model.Id == 0)
                                             {
                                                 <span>
-                                                    @if (Model.Id == ThirdPartyAccountingApp_ref.Id)
+                                                    @if (Model.ThirdPartyAccountingApp_ref == ThirdPartyAccountingApp_ref.Id)
                                                     {
                                                         @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
+                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id)
                                                     }
                                                     @ThirdPartyAccountingApp_ref.Name
                                                 </span>
@@ -155,13 +155,13 @@
                                             else
                                             {
                                                 <span>
-                                                    @if (Model.Id == ThirdPartyAccountingApp_ref.Id)
+                                                    @if (Model.ThirdPartyAccountingApp_ref == ThirdPartyAccountingApp_ref.Id)
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked", disabled = "disabled" })
+                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { disabled = "disabled" })
+                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new {  })
                                                     }
                                                     @ThirdPartyAccountingApp_ref.Name
                                                 </span>
