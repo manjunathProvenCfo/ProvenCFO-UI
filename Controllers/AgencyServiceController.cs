@@ -168,20 +168,7 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
                     Common.ConnectXeroClient(client);
-                    //if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
-                    //{
-                    //    XeroInstance.Instance.XeroScope = client.XeroScope; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                    //    XeroInstance.Instance.XeroClientID = client.XeroClientID;
-                    //    XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
-                    //    //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
-                    //    XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope);
-                    //    XeroInstance.Instance.XeroService = Xero;
-                    //    Task.Run(async () =>
-                    //    {
-                    //        var token = await Xero.LoginXeroAccess();
-                    //        XeroInstance.Instance.XeroToken = token;
-                    //    });
-                    //}
+                    
 
 
                     return PartialView("_AgencySelection", objAgy);

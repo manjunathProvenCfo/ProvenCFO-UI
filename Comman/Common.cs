@@ -26,7 +26,7 @@ namespace ProvenCfoUI.Comman
             Option_1 = 1,
             Option_2 = 2,
             Option_3 = 3,
-            Option_4= 4,
+            Option_4 = 4,
             Option_5 = 5,
             Option_6 = 6,
             Option_7 = 7
@@ -205,11 +205,11 @@ namespace ProvenCfoUI.Comman
         public static void ConnectXeroClient(ClientModel client)
         {
 
-            if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
+            if (client != null && !string.IsNullOrEmpty(client.APIScope) && !string.IsNullOrEmpty(client.APIClientID) && !string.IsNullOrEmpty(client.APIClientSecret))
             {
-                XeroInstance.Instance.XeroScope = client.XeroScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                XeroInstance.Instance.XeroClientID = client.XeroClientID;
-                XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
+                XeroInstance.Instance.XeroScope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                XeroInstance.Instance.XeroClientID = client.APIClientID;
+                XeroInstance.Instance.XeroClientSecret = client.APIClientSecret;
                 XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
                 XeroInstance.Instance.XeroTenentID = client.XeroID;
                 if(!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
@@ -284,11 +284,11 @@ namespace ProvenCfoUI.Comman
 
         public static string getXeroLoginUrl(ClientModel client)
         {
-            if (client != null && !string.IsNullOrEmpty(client.XeroScope) && !string.IsNullOrEmpty(client.XeroClientID) && !string.IsNullOrEmpty(client.XeroClientSecret))
+            if (client != null && !string.IsNullOrEmpty(client.APIScope) && !string.IsNullOrEmpty(client.APIClientID) && !string.IsNullOrEmpty(client.APIClientSecret))
             {
-                XeroInstance.Instance.XeroScope = client.XeroScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                XeroInstance.Instance.XeroClientID = client.XeroClientID;
-                XeroInstance.Instance.XeroClientSecret = client.XeroClientSecret;
+                XeroInstance.Instance.XeroScope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                XeroInstance.Instance.XeroClientID = client.APIClientID;
+                XeroInstance.Instance.XeroClientSecret = client.APIClientSecret;
                 XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
                 XeroInstance.Instance.XeroTenentID = client.XeroID;
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
