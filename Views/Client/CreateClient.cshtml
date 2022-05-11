@@ -133,56 +133,54 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email">Third Party AccountApp</label>
+                                        <label for="split-login-email">Accounting Package</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @foreach (var ThirdPartyAccountingApp_ref in (List<Proven.Model.ThirdPartyAccountingAppVM>)TempData["ThirdPartyAccountApp"])
+                                        @foreach (var thirdPartyAccountingApp_ref in (List<Proven.Model.ThirdPartyAccountingAppVM>)TempData["ThirdPartyAccountApp"])
                                         {
                                             if (Model.Id == null || Model.Id == 0)
                                             {
                                                 <span>
-                                                    @if (Model.ThirdPartyAccountingApp_ref == ThirdPartyAccountingApp_ref.Id)
+                                                    @if (Model.ThirdPartyAccountingApp_ref == thirdPartyAccountingApp_ref.Id)
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
+                                                        @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id)
+                                                        @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id)
                                                     }
-                                                    @ThirdPartyAccountingApp_ref.Name
+                                                    @thirdPartyAccountingApp_ref.Name
                                                 </span>
                                             }
                                             else
                                             {
                                                 <span>
-                                                    @if (Model.ThirdPartyAccountingApp_ref == ThirdPartyAccountingApp_ref.Id)
+                                                    @if (Model.ThirdPartyAccountingApp_ref == thirdPartyAccountingApp_ref.Id)
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
+                                                        @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { @checked = "checked" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.RadioButtonFor(m => m.Id, ThirdPartyAccountingApp_ref.Id, new {  })
+                                                        @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { })
                                                     }
-                                                    @ThirdPartyAccountingApp_ref.Name
+                                                    @thirdPartyAccountingApp_ref.Name
                                                 </span>
                                             }
 
                                             <br />
 
                                         }
-                                    </div>                                  
+                                    </div>
                                 </div>
+
+
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> API Scope</label>
                                     </div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
 
-
-
-                                        @*@if (Model.Id == null || Model.Id == 0)
-                {*@
 
                                         @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
                                         new SelectListItem { Text = "openid", Value = "openid" },
@@ -217,18 +215,12 @@
                                         new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
                                         new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
                                         }, new { @class = " selectpicker form-control", @multiple = "multiple" })
-
                                         @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                        @*}
-                else
-                {
-
-                    @Html.EditorFor(model => model.XeroScope,"readonly", new { htmlAttributes = new { @class = "form-control",  @readonly = "readonly" } })
-                        @Html.ValidationMessageFor(model => model.XeroScope, "", new { @class = "text-danger" })
-                    }*@
-
                                     </div>
                                 </div>
+
+
+
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
@@ -248,7 +240,7 @@
                                         @Html.ValidationMessageFor(model => model.APIClientSecret, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xero">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Xero ID</label>
                                     </div>
@@ -257,7 +249,7 @@
                                         @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xerocontact">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Xero Contact ID For ProvenCFO</label>
                                     </div>
@@ -267,7 +259,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xeroasana">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Asana ID</label>
                                     </div>
@@ -277,7 +269,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xeroeverhour">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Everhour ID</label>
                                     </div>
@@ -287,7 +279,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xerocrm">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> CRM ID</label>
                                     </div>
@@ -297,13 +289,22 @@
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group" id="xeroshort">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email" class="mb-0"> Xero Short Code</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.EditorFor(model => model.XeroShortCode, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.ValidationMessageFor(model => model.XeroShortCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row align-items-center form-group" id="quickbookcompany" style="display:none">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> QuickBook Company ID</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="row align-items-center form-group">
@@ -507,6 +508,33 @@
         $(document).ready(function () {
             HidelottieLoader();
         });
+        $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
+           
+            if (this.checked && this.value == '1') {
+                $("#xeroshort").show();
+                $("#xerocrm").show();
+                $("#xeroeverhour").show();
+                $("#xeroasana").show();
+                $("#xerocontact").show();
+                $("#xero").show();
+                $("#quickbookcompany").hide();
+            }
+            else {
+
+                $("#xeroshort").hide();
+                $("#xerocrm").hide();
+                $("#xeroeverhour").hide();
+                $("#xeroasana").hide();
+                $("#xerocontact").hide();
+                $("#xero").hide();
+                $("#quickbookcompany").show();
+                
+               /* $("#XeroID").attr("disabled", "disabled")*/
+                /*$("#XeroID").removeAttr("data-val-required");*/
+            }
+
+        });
+
 
     </script>
 
