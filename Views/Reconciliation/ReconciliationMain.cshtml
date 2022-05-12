@@ -1,82 +1,6 @@
 ﻿@model IEnumerable<Proven.Model.reconciliationVM>
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
-@*<style>
-        .tabselect {
-            text-decoration: underline;
-        }
-
-        .loader-circle {
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            z-index: 1110;
-            background-color: rgba(0,0,0,0.75);
-        }
-
-            .loader-circle .spinner-border {
-                width: 4rem;
-                height: 4rem;
-                border: 0.5em solid #00be62;
-                border-right-color: transparent;
-            }
-
-        .position-fixed {
-            position: fixed !important;
-        }
-
-        select#item_additional_tracking_category_ref {
-            width: 90px;
-        }
-
-        a.page-link {
-            background-color: #fff !important;
-            border-color: #d8e2ef !important;
-        }
-
-        .page-link:hover {
-            color: #000 !important;
-        }
-
-        select#item_gl_account_ref {
-            font-size: 13px !important;
-            width: 400px;
-        }
-
-        select#item_rule {
-            font-size: 13px !important;
-            width: 193px;
-        }
-
-        select#item_tracking_category_ref {
-            font-size: 13px !important;
-            width: 160px;
-        }
-
-        select#item_additional_tracking_category_ref {
-            font-size: 13px !important;
-            width: 160px;
-        }
-        /*  .page-item.active .page-link {
-            background-color: #fff !important;
-            border-color: #fff !important;
-        }*/
-        .chat-message {
-            max-width: calc(100% - 2rem);
-        }
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff !important;
-            background-color: #00BE82 !important;
-        }
-    </style>*@
-@*<style>
-        .modal-footer {
-            padding-right: 230px;
-        }
-    </style>*@
-
 
 @Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
@@ -988,69 +912,69 @@
 
 
 
-        function bindNotInBooksAndBanksCount() {
+        //function bindNotInBooksAndBanksCount() {
 
-            var ClientID = $("#ddlclient option:selected").val();
+        //    var ClientID = $("#ddlclient option:selected").val();
 
-            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-                if (response.Message == "Success") {
+        //    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+        //        if (response.Message == "Success") {
 
-                    let data = response.ResultData;
+        //            let data = response.ResultData;
 
-                    var totalSum = 0;
+        //            var totalSum = 0;
 
-                    for (var i = 0; i < data.length; i++) {
+        //            for (var i = 0; i < data.length; i++) {
 
-                        totalSum1 = totalSum + data[i].Count;
-                        if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                            $("#lblNotInBanksCount").text(data[i].Count);
-                        }
-                    }
+        //                totalSum1 = totalSum + data[i].Count;
+        //                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+        //                    $("#lblNotInBanksCount").text(data[i].Count);
+        //                }
+        //            }
 
-                    TotalSum(totalSum1, totalSum2);
-                }
-            })
-        }
-
-
-        function bindNotInBooksAndBanksCount1() {
-            var ClientID = $("#ddlclient option:selected").val();
-
-            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-                if (response.Message == "Success") {
-
-                    let data = response.ResultData;
-                    var totalSum = 0;
-                    for (var i = 0; i < data.length; i++) {
-
-                      totalSum2 = totalSum + data[i].Count;
-
-                        if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                            $("#lblNotInBooksCount").text(data[i].Count);
-                        }
-
-                    }
-
-                    TotalSum(totalSum1, totalSum2);
+        //            TotalSum(totalSum1, totalSum2);
+        //        }
+        //    })
+        //}
 
 
-                }
-            })
-        }
+        //function bindNotInBooksAndBanksCount1() {
+        //    var ClientID = $("#ddlclient option:selected").val();
+
+        //    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        //        if (response.Message == "Success") {
+
+        //            let data = response.ResultData;
+        //            var totalSum = 0;
+        //            for (var i = 0; i < data.length; i++) {
+
+        //              totalSum2 = totalSum + data[i].Count;
+
+        //                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+        //                    $("#lblNotInBooksCount").text(data[i].Count);
+        //                }
+
+        //            }
+
+        //            TotalSum(totalSum1, totalSum2);
 
 
-        function TotalSum(totalSum1, totalSum2) {
-            let totalsum3 = 0;
-            if (isNaN(totalSum1 + totalSum2)) {
-                $("#lblNotInCount").addClass('d-none');
-            }
-            else {
-                $("#lblNotInCount").removeClass('d-none');
-                totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
-                $("#lblNotInCount").text(totalsum3) ;
+        //        }
+        //    })
+        //}
 
-            }
-        }
+
+        //function TotalSum(totalSum1, totalSum2) {
+        //    let totalsum3 = 0;
+        //    if (isNaN(totalSum1 + totalSum2)) {
+        //        $("#lblNotInCount").addClass('d-none');
+        //    }
+        //    else {
+        //        $("#lblNotInCount").removeClass('d-none');
+        //        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        //        $("#lblNotInCount").text(totalsum3) ;
+
+        //    }
+        //}
 
         $(function () {
 
