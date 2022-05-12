@@ -582,7 +582,7 @@
                 if (response.Message == "SUCCESS") {
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
-                    ShowAlertBoxSuccess("Success!", "Successfully extracted data from Xero.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully synched with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
@@ -597,10 +597,10 @@
                             msg = 'Sent on-demand data extract request.'
                             break;
                         case 'INITIATED':
-                            msg = ' Logging into Xero...'
+                            msg = '      Logging into Xero...'
                             break;
                         case 'INITIATED 1':
-                            msg = ' Logging into Xero...'
+                            msg = '      Logging into Xero...'
                             break;
                         case 'WAITING FOR OTP':
                             msg = 'Waiting for OTP to log in to Xero.';
