@@ -178,13 +178,16 @@ function bindNotInBooksAndBanksCount() {
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
-        totalNotInBanksData = data.Count;
-        $("#lblNotInBanksCount").text(data.Count);        
+       
+        $("#lblNotInBanksCount").text(data[0].Count);
+        totalNotInBanksData = data[0].Count;
     }
     else {
-        totalNotInBanksData = 0;
         $("#lblNotInBanksCount").text(0);
+        totalNotInBanksData = 0;
+        
     }
+    
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
@@ -208,19 +211,23 @@ function bindNotInBanksAndBanksCount() {
 }
 var bindNotInBooksData = function (data) {
     if (data != null) {
-        totalNotInBooksData = data.Count;
-        $("#lblNotInBooksCount").text(data.Count);
+      
+        
+        $("#lblNotInBooksCount").text(data[0].Count);
+        totalNotInBooksData = data[0].Count;
 
     }
     else {
-        totalNotInBooksData = 0;
         $("#lblNotInBooksCount").text(0);
+        totalNotInBooksData = 0;
+       
     }
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
 function TotalSum(totalNotInBanksData, totalNotInBooksData) {
+   
     let totalsum3 = 0;
     if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
         $("#lblNotInCount").addClass('d-none');
