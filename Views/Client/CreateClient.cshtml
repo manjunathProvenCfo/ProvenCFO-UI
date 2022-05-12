@@ -234,6 +234,14 @@
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> API Scope</label>
                                         </div>
+
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none">
+                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting" },
+                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment" },
+                                            new SelectListItem { Text = "openid", Value = "openid" },
+                                            }, new { @class = " selectpicker form-control", @multiple = "multiple" })
+                                            @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
+                                        </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
 
 
@@ -396,26 +404,26 @@
 
                                 </fieldset>
 
-                                    <div class="row align-items-center form-group">
+                                <div class="row align-items-center form-group">
 
+                                </div>
+
+
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @if (Model.Id == null || Model.Id == 0)
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Create</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-primary" type="submit" id="btnCreate" onclick="GetUnselectedXeroaccouts();" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
+                                        }
+                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
                                     </div>
-
-
-
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @if (Model.Id == null || Model.Id == 0)
-                                            {
-                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateClient", "Client")">Create</button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-primary" type="submit" id="btnCreate" onclick="GetUnselectedXeroaccouts();" name="submit" href="@Url.Action("CreateClient", "Client")">Update</button>
-                                            }
-                                            <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("ClientList", "Client")'" />
-                                        </div>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -445,6 +453,10 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+   
+    
+
     <script>
 
         $(function () {
@@ -532,24 +544,24 @@
             HidelottieLoader();
         });
         $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
-           
             if (this.checked && this.value == '1') {
                 $("#xeroshort").show();
                 $("#xerocrm").show();
-                //$("#xeroeverhour").show();
-                //$("#xeroasana").show();
-                //$("#xerocontact").show();
                 $("#xero").show();
+                $('#divxeroscopeoption').removeClass('d-none');
                 $("#quickbookcompany").hide();
+                $("#divQuickbookscopeoption").hide();
             }
             else {
 
                 $("#xeroshort").hide();
-                //$("#xerocrm").hide();
-                //$("#xeroeverhour").hide();
-                //$("#xeroasana").hide();
                 $("#xerocontact").hide();
                 $("#xero").hide();
+                $('#divxeroscopeoption').addClass('d-none');
+                $("#divQuickbookscopeoption").show();
+
+
+                $('#XeroScopeArray').val();
                 $("#quickbookcompany").show();
             }
 
