@@ -118,7 +118,7 @@ $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
-    bindNotInBooksAndBanksCount1();
+    /*bindNotInBooksAndBanksCount1();*/
    
     LoadFilterData();
    
