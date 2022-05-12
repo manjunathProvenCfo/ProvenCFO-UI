@@ -36,7 +36,7 @@ namespace ProvenCfoUI.Models
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]
         public DateTime? StartDate { get; set; }
-        [Required(ErrorMessage = "Xero ID is a required field")]
+        //[Required(ErrorMessage = "Xero ID is a required field")]
         public string XeroID { get; set; }
         [Required(ErrorMessage = "Xero Client ID is a required field")]
         public string APIClientID { get; set; }
@@ -61,6 +61,8 @@ namespace ProvenCfoUI.Models
         public string CrmId { get; set; }
         [Range(0, 99999999999, ErrorMessage = "Dashboard ID must be between 0 and 99999999999")]
         public int? DashboardId { get; set; }
+        public int? QuickBooksCompanyId { get; set; }
+        public int? ThirdPartyAccountingApp_ref { get; set; }
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
 
@@ -68,7 +70,7 @@ namespace ProvenCfoUI.Models
 
         public string ExcludedAccountNumbers { get; set; }
         public string IncludedAccountNumbers { get; set; }
-        public int? ThirdPartyAccountingApp_ref { get; set; }
+      
         public int? CompanyId { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
