@@ -180,6 +180,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         using (BillableEntitiesService objEntities = new BillableEntitiesService())
                         {
+                           
                             CreateClientVM Clientvm = new CreateClientVM();
                             var client = objClientService.GetClientById(Id);
                             Clientvm.Id = client.Id;
@@ -213,7 +214,7 @@ namespace ProvenCfoUI.Controllers
                             //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
                             //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
                             //}
-
+                            TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
                             Clientvm.APIScope = client.APIScope;
                             Clientvm.APIClientID = client.APIClientID;
@@ -228,7 +229,9 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
                             Clientvm.ReportId = client.ReportId;
-                            TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
+                            Clientvm.ThirdPartyAccountingApp_ref = client.ThirdPartyAccountingApp_ref;
+                            Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
+                            
 
                             return View("CreateClient", Clientvm);
                         }
