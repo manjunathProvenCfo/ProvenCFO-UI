@@ -236,9 +236,9 @@
                                         </div>
 
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none">
-                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting" },
-                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment" },
-                                            new SelectListItem { Text = "openid", Value = "openid" },
+                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
+                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
+                                            new SelectListItem { Text = "openid", Value = "openid",Selected = true },
                                             }, new { @class = " selectpicker form-control", @multiple = "multiple" })
                                             @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                         </div>
@@ -246,18 +246,18 @@
 
 
                                             @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
-                                            new SelectListItem { Text = "openid", Value = "openid" },
-                                            new SelectListItem { Text = "profile", Value = "profile" },
-                                            new SelectListItem { Text = "email", Value = "email" },
-                                            new SelectListItem { Text = "offline_access", Value = "offline_access" },
-                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
-                                           new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" },
+                                            new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                                            new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                                            new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                                            new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                                           new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
                                             new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
-                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read" },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read",Selected = true  },
                                             new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
                                             new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
                                             new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
-                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings" },
+                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
                                             new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
                                             new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
                                             new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
@@ -330,6 +330,16 @@
                                             @Html.ValidationMessageFor(model => model.XeroShortCode, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
+
+                                    <div class="row align-items-center form-group" id="quickbookcompany" style="display:none">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                            <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                            @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
                                 </fieldset>
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border col-xl-4">Third Party Links</legend>
@@ -365,15 +375,7 @@
                                     </div>
 
 
-                                    <div class="row align-items-center form-group" id="quickbookcompany" style="display:none">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+                                   
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> Dashboard ID</label>
