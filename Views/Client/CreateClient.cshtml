@@ -207,17 +207,18 @@
 
                                                 else
                                                 {
-                                                    <span>
-                                                        @if (Model.ThirdPartyAccountingApp_ref == thirdPartyAccountingApp_ref.Id)
-                                                        {
-                                                            @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { @checked = "checked", disabled = "disabled" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { disabled = "disabled" })
-                                                        }
-                                                        @thirdPartyAccountingApp_ref.Name
-                                                    </span>
+                                        <span>
+                                            @if (Model.ThirdPartyAccountingApp_ref == thirdPartyAccountingApp_ref.Id)
+                                            {
+                                                @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { @checked = "checked", disabled = "disabled" })
+                                            }
+                                            else 
+                                            {
+                                                @Html.RadioButtonFor(m => m.ThirdPartyAccountingApp_ref, thirdPartyAccountingApp_ref.Id, new { disabled = "disabled" })
+                                            }
+                                           
+                                            @thirdPartyAccountingApp_ref.Name
+                                        </span>
                                                 }
 
                                                 <br />
@@ -232,19 +233,9 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0"> API Scope</label>
+                                        <label for="split-login-email" class="mb-0"> API Client Scope</label>
                                     </div>
                                     @if (Model.ThirdPartyAccountingApp_ref == 2)
-                                    {
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
-                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
-                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
-                                            new SelectListItem { Text = "openid", Value = "openid",Selected = true },
-                                            }, new { @class = " selectpicker form-control", @multiple = "multiple" })
-                                            @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                        </div>
-                                    }
-                                    else if (Model.ThirdPartyAccountingApp_ref == 0)
                                     {
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
                                             @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
@@ -257,13 +248,14 @@
                                     else
                                     {
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none;">
-                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
-                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
-                                            new SelectListItem { Text = "openid", Value = "openid",Selected = true },
+                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true  },
+                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment", Selected = true  },
+                                            new SelectListItem { Text = "openid", Value = "openid" , Selected = true  },
                                             }, new { @class = " selectpicker form-control", @multiple = "multiple" })
                                             @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                         </div>
                                     }
+
                                     @if (Model.ThirdPartyAccountingApp_ref == 1)
                                     {
 
@@ -307,48 +299,6 @@
                                         </div>
                                     }
 
-                                    @if (Model.ThirdPartyAccountingApp_ref == null)
-                                    {
-
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
-
-
-                                            @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
-                                            new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
-                                            new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
-                                            new SelectListItem { Text = "email", Value = "email",Selected = true  },
-                                            new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
-                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
-                                           new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
-                                            new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
-                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read",Selected = true  },
-                                            new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
-                                            new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
-                                            new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
-                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
-                                            new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
-                                            new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
-                                            new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
-                                            new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
-                                            new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
-                                            new SelectListItem { Text = "assets", Value = "assets" },
-                                            new SelectListItem { Text = "assets.read", Value = "assets.read" },
-                                            new SelectListItem { Text = "files", Value = "files" },
-                                            new SelectListItem { Text = "files.read", Value = "files.read" },
-                                            new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
-                                            new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
-                                            new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
-                                            new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
-                                            new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
-                                            new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
-                                            new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
-                                            new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
-                                            new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
-                                            new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
-                                            }, new { @class = " selectpicker form-control", @multiple = "multiple" })
-                                            @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                        </div>
-                                    }
                                 </div>
 
 
