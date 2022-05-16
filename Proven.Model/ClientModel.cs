@@ -93,7 +93,7 @@ namespace Proven.Model
         public string MailSendDateNotes { get; set; }
         public string MailSendDateNeeds { get; set; }
 
-        public  int? QuickBooksCompanyId { get; set; }
+        public  Int64? QuickBooksCompanyId { get; set; }
 
     }
 
