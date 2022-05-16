@@ -316,7 +316,7 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
                     $FullNotificationList.append(NotificationHtml);
                 }
                 icount++;
-
+                HidelottieLoader();
             })
         }
     });

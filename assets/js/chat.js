@@ -354,7 +354,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             
         }
         if (ReconcilationType == "Outstanding Payments") {
-            debugger;
+           
             $communicationGLaccount.addClass('d-none');
             $communicationTrackingCategories.addClass('d-none');
             $tc_2_Dropdown.addClass('d-none');
