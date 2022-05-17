@@ -293,7 +293,6 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
             response.resultData.forEach(function (obj) {
-                
                 if (icount > 2 && IsloadAll == false) return false;
                 var NotificationHtml = '';
                 var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
@@ -697,6 +696,7 @@ var genereateAllReconciliationTwilioConversationAndAddParticipants = function ()
 
 
 var getDateDiff = function (date, now) {
+    
     var diff = (((now || (new Date())).getTime() - date.getTime()) / 1000),
         day_diff = Math.floor(diff / 86400);
     return day_diff == 0 && (
@@ -707,8 +707,14 @@ var getDateDiff = function (date, now) {
         diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
         day_diff == 1 && "yesterday" ||
         day_diff < 7 && day_diff + " days ago" ||
-        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
+        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago" ||
+        day_diff < 365 && Math.ceil(day_diff /60) + " Month ago"
+      /*  diff < 31536000 && Math.ceil(diff / 2592000 ) + " Month ago"*/
+       
+        ;
 }
+
+
 function getUTCDateTime(date) {
 
     var dt = date.getDate();
