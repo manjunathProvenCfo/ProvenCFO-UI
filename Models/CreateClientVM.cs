@@ -38,11 +38,11 @@ namespace ProvenCfoUI.Models
         public DateTime? StartDate { get; set; }
         //[Required(ErrorMessage = "Xero ID is a required field")]
         public string XeroID { get; set; }
-        [Required(ErrorMessage = "App Client ID is a required field")]
+        [Required(ErrorMessage = "API Client ID is a required field")]
         public string APIClientID { get; set; }
-        [Required(ErrorMessage = "App Client Secret is a required field")]
+        [Required(ErrorMessage = "API Client Secret is a required field")]
         public string APIClientSecret { get; set; }
-        [Required(ErrorMessage = "App Scope is a required field")]
+        [Required(ErrorMessage = "API Scope is a required field")]
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
         //[Required(ErrorMessage = "Xero Scope is a required field.")]
