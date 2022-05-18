@@ -90,6 +90,7 @@
     <Compile Include="State.cs" />
     <Compile Include="TeamsVM.cs" />
     <Compile Include="TeamUserAssociationVM.cs" />
+    <Compile Include="ThirdPartyAccountingAppVM.cs" />
     <Compile Include="TwilioConversations.cs" />
     <Compile Include="TwilioConversationsTypeEnum.cs" />
     <Compile Include="UserAgencyLinkVM.cs" />

@@ -41,6 +41,9 @@ namespace Proven.Model
 
         public DateTime? ActionModifiedDateUTC { get; set; }
         public DateTime? GlAccountModifiedDateUTC { get; set; }
+
+        public DateTime? ActionModifiedDate { get; set; }
+        public DateTime? GlAccountModifiedDate { get; set; }
         public string GlAccountModifiedBy { get; set; }
         public string ActionModifiedBy { get; set; }
     }

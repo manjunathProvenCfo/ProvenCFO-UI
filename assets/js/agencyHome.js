@@ -553,6 +553,7 @@ function GetAccountOutStanding() {
         dataType: "json",
         success: function (data) {
             if (data != null && data != '') {
+                
                 $('#spOutSanding').html(ConvertToUDS(data.Total));
             }
             else {
@@ -560,6 +561,7 @@ function GetAccountOutStanding() {
             }
         },
         error: function (e) {
+            
             $('#spOutSanding').html(ConvertToUDS(0));
             console.log(e);
         }
@@ -587,11 +589,12 @@ function AgencyDropdownPartialViewChange() {
         success: function (data) {
             if (data != null) {
                /* setTimeout(function () {*/
-                    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-                    RenderNetIncomeChart($('#dllNetIncome').val());
+                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+                RenderNetIncomeChart($('#dllNetIncome').val());
+              
                /* }, 1000);*/
 
-                GetAccountOutStanding();
+                
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
                 $('#roleexist').show();

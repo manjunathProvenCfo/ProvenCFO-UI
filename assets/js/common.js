@@ -178,13 +178,16 @@ function bindNotInBooksAndBanksCount() {
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
-        totalNotInBanksData = data.Count;
-        $("#lblNotInBanksCount").text(data.Count);        
+       
+        $("#lblNotInBanksCount").text(data[0].Count);
+        totalNotInBanksData = data[0].Count;
     }
     else {
-        totalNotInBanksData = 0;
         $("#lblNotInBanksCount").text(0);
+        totalNotInBanksData = 0;
+        
     }
+    
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
@@ -208,19 +211,23 @@ function bindNotInBanksAndBanksCount() {
 }
 var bindNotInBooksData = function (data) {
     if (data != null) {
-        totalNotInBooksData = data.Count;
-        $("#lblNotInBooksCount").text(data.Count);
+      
+        
+        $("#lblNotInBooksCount").text(data[0].Count);
+        totalNotInBooksData = data[0].Count;
 
     }
     else {
-        totalNotInBooksData = 0;
         $("#lblNotInBooksCount").text(0);
+        totalNotInBooksData = 0;
+       
     }
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
 function TotalSum(totalNotInBanksData, totalNotInBooksData) {
+   
     let totalsum3 = 0;
     if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
         $("#lblNotInCount").addClass('d-none');
@@ -286,7 +293,6 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
             response.resultData.forEach(function (obj) {
-                
                 if (icount > 2 && IsloadAll == false) return false;
                 var NotificationHtml = '';
                 var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
@@ -309,7 +315,7 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
                     $FullNotificationList.append(NotificationHtml);
                 }
                 icount++;
-
+                HidelottieLoader();
             })
         }
     });
@@ -690,6 +696,7 @@ var genereateAllReconciliationTwilioConversationAndAddParticipants = function ()
 
 
 var getDateDiff = function (date, now) {
+    
     var diff = (((now || (new Date())).getTime() - date.getTime()) / 1000),
         day_diff = Math.floor(diff / 86400);
     return day_diff == 0 && (
@@ -700,8 +707,14 @@ var getDateDiff = function (date, now) {
         diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
         day_diff == 1 && "yesterday" ||
         day_diff < 7 && day_diff + " days ago" ||
-        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
+        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago" ||
+        day_diff < 365 && Math.ceil(day_diff /60) + " Month ago"
+      /*  diff < 31536000 && Math.ceil(diff / 2592000 ) + " Month ago"*/
+       
+        ;
 }
+
+
 function getUTCDateTime(date) {
 
     var dt = date.getDate();
@@ -717,4 +730,8 @@ function getUTCDateTime(date) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
     return strTime;
+}
+function getLocalTime(utcdateString) {
+    var date = new Date(utcdateString + ' UTC');    
+    return date.toLocaleString();
 }

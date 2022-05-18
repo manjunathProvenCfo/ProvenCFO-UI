@@ -7,6 +7,20 @@ $(document).ready(function () {
     bindEnableAutomation();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
+    
+    $(".lastmodified").each(function () {
+        var utctime = $(this).find('select').attr("utcdate");
+        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
+        
+        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {            
+            var localtime = getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            $(this).attr("data-original-title", msg);
+        }
+        else {
+            $(this).attr("data-original-title", "No Modification yet.");
+        }        
+    });
 
 
     $("#ichat").click(function () {
@@ -104,7 +118,7 @@ $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
-    bindNotInBooksAndBanksCount1();
+    /*bindNotInBooksAndBanksCount1();*/
    
     LoadFilterData();
    

@@ -124,7 +124,7 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "\n Email or Password not  correct";
                                     break;
                             }
-                            Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
+                            Utltity.Log4NetInfoLog(ViewBag.ErrorMessage + " , User Name: " + loginVM.UserName);
                             return View("Login");
                         }
                     }
