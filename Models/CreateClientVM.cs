@@ -61,7 +61,9 @@ namespace ProvenCfoUI.Models
         public string CrmId { get; set; }
         [Range(0, 99999999999, ErrorMessage = "Dashboard ID must be between 0 and 99999999999")]
         public int? DashboardId { get; set; }
+        [Range(0, 9999999999999999999, ErrorMessage = "QuickBook Company Id must be between 0 and 9999999999999999999")]
         public Int64? QuickBooksCompanyId { get; set; }
+        
         public int? ThirdPartyAccountingApp_ref { get; set; }
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
