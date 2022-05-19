@@ -283,12 +283,11 @@ function HighlightMenu() {
 
 
 var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
+    var Count = (IsloadAll == true?0:5);
     var userId = $('#topProfilePicture').attr('userid');
    
-    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
-   
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}&MaxRecordscount=${Count}`, null, function (response) {   
         if (response && response.status) {
-
             var icount = 0;
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
