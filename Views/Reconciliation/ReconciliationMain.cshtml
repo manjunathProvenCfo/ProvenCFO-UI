@@ -352,7 +352,14 @@
         @Html.Partial("_reconcilationBulkupdate", true)
 
     </div>
+    @if(ViewBag.isthirdparty == true)
+    {
+    @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+    }
+    else 
+    {
     @Html.Partial("_ReconciliationFileUploaderPartial")
+    }
     @Html.Partial("_ReconcilationEmail", true)
     @Html.Partial("_ReconcilationEditComment", true)
 </div>

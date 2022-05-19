@@ -71,6 +71,15 @@ namespace ProvenCfoUI.Controllers
                             ViewBag.isvisibleGlAccount = false;
                         }
                     }
+                    using (ClientService objClientService = new ClientService())
+                    {
+                        var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                        var ThirdPartyAccountingApp_ref = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                        if (ThirdPartyAccountingApp_ref == 2)
+                        {
+                            ViewBag.isthirdparty = true;
+                        }
+                    }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
@@ -476,6 +485,15 @@ namespace ProvenCfoUI.Controllers
                     else
                     {
                         ViewBag.isvisibleGlAccount = false;
+                    }
+                    using (ClientService objClientService = new ClientService())
+                    {
+                        var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                        var ThirdPartyAccountingApp_ref = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                        if(ThirdPartyAccountingApp_ref == 2)
+                        {
+                            ViewBag.isthirdparty = true;
+                        }
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
