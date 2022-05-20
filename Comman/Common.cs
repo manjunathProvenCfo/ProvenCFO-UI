@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Proven.Model;
 using Proven.Service;
+using Proven.Service.AccountingPackage;
 using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Xero.NetStandard.OAuth2.Token;
 
 namespace ProvenCfoUI.Comman
 {
@@ -179,10 +181,7 @@ namespace ProvenCfoUI.Comman
                         dt.Rows.Add(dr);
                     }
                 }
-
             }
-
-
             return dt;
         }
         public void Dispose()
@@ -207,51 +206,66 @@ namespace ProvenCfoUI.Comman
 
             if (client != null && !string.IsNullOrEmpty(client.APIScope) && !string.IsNullOrEmpty(client.APIClientID) && !string.IsNullOrEmpty(client.APIClientSecret))
             {
-                XeroInstance.Instance.XeroScope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                XeroInstance.Instance.XeroClientID = client.APIClientID;
-                XeroInstance.Instance.XeroClientSecret = client.APIClientSecret;
-                XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
-                XeroInstance.Instance.XeroTenentID = client.XeroID;
-                if(!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
+                AccountingPackageInstance.Instance.Scope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                AccountingPackageInstance.Instance.ClientID = client.APIClientID;
+                AccountingPackageInstance.Instance.ClientSecret = client.APIClientSecret;
+                AccountingPackageInstance.Instance.XeroAppName = "ProvenCfo_web";
+                AccountingPackageInstance.Instance.XeroTenentID = client.XeroID;
+                if (!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
                 {
-                    XeroInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
-                }                
+                    AccountingPackageInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
+                }
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
+                AccountingAppFatory<IXeroToken, TokenInfoVM> AppPackage = null;
+                switch (client.ThirdPartyAccountingApp_ref.Value)
+                {
+                    case 1:
+                        AppPackage = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                        break;
+                    case 2:
+                        AppPackage = new QuickbooksLocalService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                        break;
+                    default:
+                        break;
+                }
+               
+                //XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName)
 
-                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
+
                 lock (XeroLock)
                 {
                     Task.Run(async () =>
                     {
-                        var XeroTokenInfoSaved = Xero.GetSavedXeroToken(client.Id).ResultData;
-                        if (XeroTokenInfoSaved != null)
+                        TokenInfoVM TokenInfoSaved = AppPackage.GetSavedToken(client.Id).ResultData;
+                        if (TokenInfoSaved != null)
                         {
                             try
                             {
-                                var SavedToken = Xero.getTokenFormat(XeroTokenInfoSaved);
-                                XeroInstance.Instance.XeroService = Xero;
-                                var token = await Xero.RefreshToken(SavedToken);
-                                CleanToken();
-                                XeroTokenInfoSaved.access_token = token.AccessToken;
-                                XeroTokenInfoSaved.id_token = token.IdToken;
-                                XeroTokenInfoSaved.refresh_token = token.RefreshToken;
-                                XeroTokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
-                                XeroTokenInfoSaved.ModifiedDate = DateTime.Now;
-                                XeroTokenInfoSaved.AppName = XeroInstance.Instance.XeroAppName;
-                                XeroTokenInfoSaved.ConnectionStatus = "SUCCESS";
-                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
-                                XeroInstance.Instance.XeroToken = token;
-                                XeroInstance.Instance.XeroConnectionStatus = true;
-                                XeroInstance.Instance.XeroConnectionMessage = string.Empty;
+                                var SavedToken = AppPackage.getTokenFormat(TokenInfoSaved);
+                                //AccountingPackageInstance.Instance.XeroService = AppPackage;
+                                var token = await AppPackage.RefreshToken(SavedToken);
+                                //CleanToken();
+                                TokenInfoSaved.access_token = token.AccessToken;
+                                TokenInfoSaved.id_token = token.IdToken;
+                                TokenInfoSaved.refresh_token = token.RefreshToken;
+                                TokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                TokenInfoSaved.ModifiedDate = DateTime.Now;
+                                TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
+                                TokenInfoSaved.ConnectionStatus = "SUCCESS";
+                                TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
+                                AppPackage.UpdateToken(TokenInfoSaved);
+                                AccountingPackageInstance.Instance.XeroToken = token;
+                                AccountingPackageInstance.Instance.ConnectionStatus = true;
+                                AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
                             }
                             catch (Exception ex)
                             {
                                 log.Error(Utltity.Log4NetExceptionLog(ex));
-                                XeroTokenInfoSaved.ConnectionStatus = "ERROR";
-                                Xero.UpdateXeroToken(XeroTokenInfoSaved);
-                                CleanToken();                                
-                                XeroInstance.Instance.XeroConnectionMessage = ex.Message;
+                                TokenInfoSaved.ConnectionStatus = "ERROR";
+                                AppPackage.UpdateToken(TokenInfoSaved);
+                                CleanToken();
+                                AccountingPackageInstance.Instance.ConnectionMessage = ex.Message;
                                 throw;
                             }
                         }
@@ -259,53 +273,53 @@ namespace ProvenCfoUI.Comman
                         {
                             Utltity.Log4NetInfoLog("Insufficient client information");
                             CleanToken();
-                            XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
+                            AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";
                         }
                     });
                 }
+
             }
             else
             {
                 Utltity.Log4NetInfoLog("Insufficient client information");
                 CleanToken();
-                XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
+                AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";
             }
         }
-
         private static void CleanToken()
         {
-            XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-            XeroInstance.Instance.XeroClientID = string.Empty;
-            XeroInstance.Instance.XeroClientSecret = string.Empty;
-            XeroInstance.Instance.XeroToken = null;
-            XeroInstance.Instance.XeroConnectionMessage = "";
-            XeroInstance.Instance.XeroConnectionStatus = false;
+            AccountingPackageInstance.Instance.Scope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+            AccountingPackageInstance.Instance.ClientID = string.Empty;
+            AccountingPackageInstance.Instance.ClientSecret = string.Empty;
+            AccountingPackageInstance.Instance.XeroToken = null;
+            AccountingPackageInstance.Instance.ConnectionMessage = "";
+            AccountingPackageInstance.Instance.ConnectionStatus = false;
         }
-
         public static string getXeroLoginUrl(ClientModel client)
         {
             if (client != null && !string.IsNullOrEmpty(client.APIScope) && !string.IsNullOrEmpty(client.APIClientID) && !string.IsNullOrEmpty(client.APIClientSecret))
             {
-                XeroInstance.Instance.XeroScope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                XeroInstance.Instance.XeroClientID = client.APIClientID;
-                XeroInstance.Instance.XeroClientSecret = client.APIClientSecret;
-                XeroInstance.Instance.XeroAppName = "ProvenCfo_web";
-                XeroInstance.Instance.XeroTenentID = client.XeroID;
+                AccountingPackageInstance.Instance.Scope = client.APIScope;//"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                AccountingPackageInstance.Instance.ClientID = client.APIClientID;
+                AccountingPackageInstance.Instance.ClientSecret = client.APIClientSecret;
+                AccountingPackageInstance.Instance.XeroAppName = "ProvenCfo_web";
+                AccountingPackageInstance.Instance.XeroTenentID = client.XeroID;
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
-                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
-                XeroInstance.Instance.XeroService = Xero;
-
-                try
+                using (XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
                 {
-                    var url = Xero.BuildLoginUri();
-                    return url;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
 
+                    //AccountingPackageInstance.Instance.XeroService = Xero;
 
+                    try
+                    {
+                        var url = Xero.BuildLoginUri();
+                        return url;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
             }
             return string.Empty;
         }
@@ -315,7 +329,7 @@ namespace ProvenCfoUI.Comman
             DateTime datetime = DateTime.Now;
             switch (Option)
             {
-                case ChartOptions.Option_0:                   
+                case ChartOptions.Option_0:
                     int currQuarter = (datetime.Month - 1) / 3 + 1;
                     result.StartDate = null; //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
                     result.EndDate = null; //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
@@ -374,8 +388,8 @@ namespace ProvenCfoUI.Comman
         {
             if (string.IsNullOrEmpty(code))
             {
-                XeroService Xero = new XeroService(XeroInstance.Instance.XeroClientID, XeroInstance.Instance.XeroClientSecret, XeroInstance.Instance.XeroScope, XeroInstance.Instance.XeroAppName);
-                XeroInstance.Instance.XeroService = Xero;
+                XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                AccountingPackageInstance.Instance.XeroService = (IAccouningPackage<IXeroToken, TokenInfoVM>)Xero;
                 Task.Run(async () =>
                 {
                     try
@@ -383,35 +397,35 @@ namespace ProvenCfoUI.Comman
                         var token = await Xero.LoginXeroAccesswithCode(code);
                         if (DateTime.UtcNow > token.ExpiresAtUtc)
                         {
-                            await Xero.RefreshToken(token);
+                            token = await Xero.RefreshToken(token);
                         }
-                        XeroInstance.Instance.XeroToken = token;
-                        XeroInstance.Instance.XeroConnectionStatus = true;
-                        XeroInstance.Instance.XeroConnectionMessage = string.Empty;
+                        AccountingPackageInstance.Instance.XeroToken = token;
+                        AccountingPackageInstance.Instance.ConnectionStatus = true;
+                        AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
                     }
                     catch (Exception ex)
                     {
-                        XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                        XeroInstance.Instance.XeroClientID = string.Empty;
-                        XeroInstance.Instance.XeroClientSecret = string.Empty;
-                        XeroInstance.Instance.XeroToken = null;
-                        XeroInstance.Instance.XeroConnectionStatus = false;
-                        XeroInstance.Instance.XeroConnectionMessage = ex.Message;
+                        AccountingPackageInstance.Instance.Scope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                        AccountingPackageInstance.Instance.ClientID = string.Empty;
+                        AccountingPackageInstance.Instance.ClientSecret = string.Empty;
+                        AccountingPackageInstance.Instance.XeroToken = null;
+                        AccountingPackageInstance.Instance.ConnectionStatus = false;
+                        AccountingPackageInstance.Instance.ConnectionMessage = ex.Message;
                         throw;
                     }
                 });
             }
             else
             {
-                XeroInstance.Instance.XeroScope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
-                XeroInstance.Instance.XeroClientID = string.Empty;
-                XeroInstance.Instance.XeroClientSecret = string.Empty;
-                XeroInstance.Instance.XeroToken = null;
-                XeroInstance.Instance.XeroConnectionMessage = "Insufficient client information";
-                XeroInstance.Instance.XeroConnectionStatus = false;
+                AccountingPackageInstance.Instance.Scope = string.Empty; //"accounting.transactions payroll.payruns payroll.settings accounting.contacts projects accounting.settings payroll.employees files";
+                AccountingPackageInstance.Instance.ClientID = string.Empty;
+                AccountingPackageInstance.Instance.ClientSecret = string.Empty;
+                AccountingPackageInstance.Instance.XeroToken = null;
+                AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";
+                AccountingPackageInstance.Instance.ConnectionStatus = false;
             }
         }
-       
+
 
     }
 
