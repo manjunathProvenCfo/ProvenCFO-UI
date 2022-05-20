@@ -494,6 +494,8 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.isthirdparty = true;
                         }
+                        var thirdparty = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                        TempData["NotInBank"] = thirdparty;
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
@@ -816,6 +818,8 @@ namespace ProvenCfoUI.Controllers
 
 
         }
+
+
 
         [CheckSession]
         [HttpPost]

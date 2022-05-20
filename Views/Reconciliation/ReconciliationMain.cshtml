@@ -99,7 +99,8 @@
                                     </button>
 
 
-                                }
+                                 }
+                                
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
@@ -352,13 +353,13 @@
         @Html.Partial("_reconcilationBulkupdate", true)
 
     </div>
-    @if(ViewBag.isthirdparty == true)
+    @if (ViewBag.isthirdparty == true)
     {
-    @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+        @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
     }
-    else 
+    else
     {
-    @Html.Partial("_ReconciliationFileUploaderPartial")
+        @Html.Partial("_ReconciliationFileUploaderPartial")
     }
     @Html.Partial("_ReconcilationEmail", true)
     @Html.Partial("_ReconcilationEditComment", true)
@@ -916,8 +917,15 @@
                 }
             });
         }
+        $("input[id$='Notinbook']").click(function () {
+            $("#BankAccount").show();
 
+        });
+        $("input[id$='Notinbank']").click(function () {
+            $("#BankAccount").hide();
 
+        });
+        
 
         //function bindNotInBooksAndBanksCount() {
 
@@ -1038,6 +1046,8 @@
 
 
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+
+
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
