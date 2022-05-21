@@ -467,7 +467,52 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
 
 
-    
+    var addNewComment = function (inputText) {
+        var CurrentDate = new Date();
+        var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+        var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+        var CurrentTimestring = getCurrentTime(new Date);
+        var DateElement = $('#channel-messages #' + CurrentDateString);
+        if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+            var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+            $channelMessages.append(dhtml);
+        }
+        var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
+        $channelMessages.append(chtml);
+        SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+        setScrollPosition();
+        $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+    }
+    var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
+        var currentdate = new Date();
+        var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+        var input = {
+            Id: 0,
+            ReconciliationId_ref: ReconciliationId,
+            CommentText: InputcommentText,
+            CreatedBy: chat.userId,
+            CreatedDate: currentdate,
+            IsDeleted: false,
+            AgencyId: AgencyId
+        }
+        if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+                if (response.resultData != null) {
+                    var id = "msg_" + response.resultData;
+                    $('#msg_0').attr("id", id);
+                    if ($('#' + id + ' a').length > 0) {
+                        $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
+                    };
+                    if ($('#' + id + ' a').length > 1) {
+                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                    }
+                }
+            });
+        }
+
+    }
     var addNewMessagetoChatwindow = async function (input) {
 
         if (input == "") {
