@@ -74,11 +74,9 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClientService = new ClientService())
                     {
                         var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
-                        var ThirdPartyAccountingApp_ref = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
-                        if (ThirdPartyAccountingApp_ref == 2)
-                        {
-                            ViewBag.isthirdparty = true;
-                        }
+                        ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                        var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                        TempData["NotInBank"] = AccountingPackage;
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
@@ -489,13 +487,10 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClientService = new ClientService())
                     {
                         var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
-                        var ThirdPartyAccountingApp_ref = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
-                        if(ThirdPartyAccountingApp_ref == 2)
-                        {
-                            ViewBag.isthirdparty = true;
-                        }
-                        var thirdparty = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
-                        TempData["NotInBank"] = thirdparty;
+                        ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                       
+                        var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                        TempData["NotInBank"] = AccountingPackage;
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
@@ -621,26 +616,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        //[CheckSession]
-        //public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
-        //{
-        //    try
-        //    {
-
-        //        using (ReconcilationService objReConcilation = new ReconcilationService())
-        //        {
-        //            var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
-        //            return Json(objResult, JsonRequestBehavior.AllowGet);
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
-        //        throw ex;
-        //    }
-        //}
-
+       
         [CheckSession]
         [HttpGet]
         public JsonResult GetXeroOnDemandRequestStatus(int AgencyId, string CurrentStatus)
@@ -764,6 +740,79 @@ namespace ProvenCfoUI.Controllers
 
 
 
+                    input.HtmlString = HTMLresult.Trim();
+                    input.CompanyName = agencyName;
+                    input.CompanyId = agencyId;
+
+                    //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+
+                    using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
+                    {
+                        var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
+                        return Json(new { Status = "Success", result = response.ResultData, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                objOutput.Status = true;
+                objOutput.ValidationStatus = "RequestCancelation";
+                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                return Json(new
+                {
+                    File = "",
+                    Status = "Inprogress",
+                    result = objOutput,
+                    FileName = fileName
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException.Message == "A task was canceled.")
+                {
+                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    objOutput.Status = true;
+                    objOutput.ValidationStatus = "RequestCancelation";
+                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    return Json(new
+                    {
+                        File = "",
+                        Status = "Inprogress",
+                        result = objOutput,
+                        FileName = fileName
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> UploadReconcilationQuickBookReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
+        {
+            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            var fileName = file.FileName;
+            try
+            {
+                BinaryReader b = new BinaryReader(file.InputStream);
+                byte[] binData = b.ReadBytes(file.ContentLength);
+
+
+                string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+                using (ReconcilationService service = new ReconcilationService())
+                {
+
+
+                   
                     input.HtmlString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;

@@ -365,7 +365,7 @@
                                                 <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" , @data_val_number = "The field QuickBooks Company ID must be a number" } })
                                                 @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -378,7 +378,7 @@
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                
-                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" ,@data_val_number= "The field QuickBooks Company Id must be a number" } }  )
+                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" ,@data_val_number= "The field QuickBooks Company ID must be a number" } }  )
                                                 @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>

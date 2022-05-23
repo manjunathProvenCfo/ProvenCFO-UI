@@ -4,25 +4,25 @@ var ImportDropzone_view;
 var $attachmentContainer;
 
 const AllowdedMimeTypes = ".html";
+const AllowdedMimeQuickBookTypes = ".xls, .xlsx, .csv";
 $(function () {
+    
     $btnImportReconcilition = $("[id*='btnImportReconcilition']");
     $uploaderModal = $("#report-uploader-modal");
     $reportUploader = $("#reportUploader");
     $attachmentContainer = $("#attachmentContainer");
     $btnCloseImportreconciliation = $("#btnCloseImportreconciliation");
+    $btnImportQuickBookReconcilition = $("[id*='btnImportQuickBookReconcilition']");
+
+    $btnImportReconcilition.click(function (e) {
 
 
-    $btnImportReconcilition.click(function (e) {       
         e.stopPropagation();
         e.preventDefault();
         let elUpload = $(this);
         var agencyId = $("#ddlclient option:selected").val();
         var agencyName = $("#ddlclient option:selected").text();
         var encodeAgencyName = encodeURIComponent(agencyName)
-   
-
-
-
 
         $uploaderModal.modal('show');
 
@@ -34,7 +34,7 @@ $(function () {
         $attachmentContainer.html("");
         //Bind uploaer popup
         //bindUploaderAttachments(agencyId, year, period);
-        
+
         //templateHTML
         var previewNode = document.querySelector("#template");
         if (!isEmpty(previewNode)) {
@@ -44,12 +44,22 @@ $(function () {
         }
         var year, period = 10;
         Dropzone.autoDiscover = false;
-    
-        if(Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
+
+        if (Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
+        var AccountingPackage = $('#hdAccointingPackage').val();
+        if (AccountingPackage == 2) {
+            ImportUploader = `/Reconciliation/UploadReconcilationQuickBookReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`; // Set the u
+            acceptedFiles = AllowdedMimeQuickBookTypes;
+        }
+        else {
+            ImportUploader = `/Reconciliation/UploadReconcilationReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`; 
+            acceptedFiles = AllowdedMimeTypes;
+        }
        
         ImportDropzone_view = new Dropzone("#reconciliationUploader", { // Make the div a dropzone
-            url: `/Reconciliation/UploadReconcilationReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`, // Set the url
-            acceptedFiles: AllowdedMimeTypes,
+            
+            url: ImportUploader, // Set the url
+            acceptedFiles: acceptedFiles,
             maxFilesize: 50000,           
             thumbnailWidth: 80,
             thumbnailHeight: 80,
@@ -90,7 +100,6 @@ $(function () {
                 
             }
         });
-
         //view Page
         ImportDropzone_view.on("addedfile", function (file) {
             //Remove Preview Div
@@ -142,6 +151,7 @@ $(function () {
 
 
     });
+
     var uploadedstatusload = function (obj) {
         let thumbnail = '../../assets/img/kanban/I_Success.png';
         var status = 'Success';
