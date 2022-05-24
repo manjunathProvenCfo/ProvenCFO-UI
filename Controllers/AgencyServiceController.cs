@@ -180,12 +180,11 @@ namespace ProvenCfoUI.Controllers
                     {
                         objAgy.SelectedClientNameID = objAgy.ClientList[0].Id;
                     }
-
-                    var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
-                    //Common.ConnectXeroClient(client);
-                    AccountingPackageInstance.Instance.ClientModel = client;
-
-
+                    if (AccountingPackageInstance.Instance.ClientModel == null || (AccountingPackageInstance.Instance.ClientModel != null && AccountingPackageInstance.Instance.ClientModel.Id != objAgy.SelectedClientNameID))
+                    {
+                        var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();                        
+                        AccountingPackageInstance.Instance.ClientModel = client;
+                    }                   
                     return PartialView("_AgencySelection", objAgy);
                 }
             }

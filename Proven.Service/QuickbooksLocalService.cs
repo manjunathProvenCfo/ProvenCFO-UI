@@ -122,7 +122,7 @@ namespace Proven.Service
 
         public override ReturnModel UpdateToken(V tokenInfoVM)
         {
-            return ProdPostAsync<ReturnModel, V>("Xero/UpdateXeroToken", tokenInfoVM).Result;
+            return ProdPostAsync<ReturnModel, V>("Xero/UpdateToken", tokenInfoVM).Result;
         }
         public override Task<T> GetBankSummary(V xeroToken, string XeroTenentID)
         {

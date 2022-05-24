@@ -31,9 +31,9 @@ namespace Proven.Service
             //}
         }
 
-        public XeromainGlAccountVM GetXeroGlAccount(int AgencyID,string XeroStatus)
+        public XeromainGlAccountVM GetXeroGlAccount(int AgencyID,string Status)
         {
-            return GetAsync<XeromainGlAccountVM>("Xero/GetXeroGlAccount?AgencyID=" + AgencyID + "&XeroStatus=" +  XeroStatus).Result;
+            return GetAsync<XeromainGlAccountVM>("Xero/GetGlAccount?AgencyID=" + AgencyID + "&Status=" +  Status).Result;
             //response = client.GetAsync("Invitation/GetALLInvitation").Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -47,9 +47,9 @@ namespace Proven.Service
 
             //}
         }
-        public ClientXeroAccountsMainModel GetXeroBankAccount(int AgencyID, string XeroStatus)
+        public ClientXeroAccountsMainModel GetXeroBankAccount(int AgencyID, string Status)
         {
-           return GetAsync<ClientXeroAccountsMainModel>("Xero/GetXeroBankAccount?AgencyID=" + AgencyID + "&XeroStatus=" + XeroStatus).Result;
+           return GetAsync<ClientXeroAccountsMainModel>("Xero/GetBankAccount?AgencyID=" + AgencyID + "&Status=" + Status).Result;
             
             //response = client.GetAsync("Invitation/GetALLInvitation").Result;
             //if (response.IsSuccessStatusCode)
@@ -66,11 +66,11 @@ namespace Proven.Service
         }
         public XeroGlAccountVM create(XeroGlAccountVM test)
         {
-            return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateXeroGlAccount1", test).Result;
+            return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateGlAccount1", test).Result;
         }
         public XeroGlAccountVM CreateGlAccount(List<XeroGlAccountVM> glAccounts)
         {           
-            return PostAsync<XeroGlAccountVM, List<XeroGlAccountVM>>("Xero/CreateXeroGlAccount", glAccounts).Result;           
+            return PostAsync<XeroGlAccountVM, List<XeroGlAccountVM>>("Xero/CreateGlAccount", glAccounts).Result;           
         }
         public ClientXeroAccountsVM CreateXeroBankAccount(List<ClientXeroAccountsVM> glAccounts)
         {           

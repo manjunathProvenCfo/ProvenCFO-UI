@@ -261,7 +261,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountingPackage\AccountingAppFatory.cs" />
+    <Compile Include="AccountingPackage\AccountingAppFactory .cs" />
     <Compile Include="AccountingPackage\AccountingPackageData.cs" />
     <Compile Include="AccountingPackage\QuickBooksData.cs" />
     <Compile Include="AccountingPackage\XeroData.cs" />
