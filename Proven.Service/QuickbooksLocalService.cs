@@ -51,8 +51,8 @@ namespace Proven.Service
         {
             TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
             _service = new DataService(objToken.access_token,Convert.ToInt64(TenentID), true);
-            var res = await _service.QueryAsync<Account>("SELECT * FROM Customer");
-            return (V)Convert.ChangeType(res, typeof(V));
+            var res = await _service.QueryAsync<Account>("SELECT * FROM Account");
+            return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
         }
 
         public override Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)

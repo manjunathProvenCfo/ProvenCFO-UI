@@ -45,6 +45,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                         ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                        ViewBag.AccountingPackageId = AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref;
                         var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
                         return View(objResult.ResultData);
                     }
@@ -79,6 +80,7 @@ namespace ProvenCfoUI.Controllers
 
                         ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                         ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                        ViewBag.AccountingPackageId = AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref;
                         var objResult = objIntegration.GetXeroBankAccount(AgencyID, "ACTIVE");
                         return View(objResult.ResultData);
                     }
@@ -202,7 +204,7 @@ namespace ProvenCfoUI.Controllers
                             Token = AccountingPackageInstance.Instance.XeroToken;
                             break;
                         case 2:
-                            AppPackage = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Account>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                            AppPackage = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Account[]>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
                             Token = AccountingPackageInstance.Instance.QuickBooksToken;
                             break;
                         default:
@@ -212,38 +214,61 @@ namespace ProvenCfoUI.Controllers
                     //{
 
                     var result = await AppPackage.GetGLAccounts(Token, AccountingPackageInstance.Instance.TenentID);
-                    if (result._Accounts != null)
+                    if (result!= null)
                     {
+                        
                         List<XeroGlAccountVM> gl = new List<XeroGlAccountVM>();
                         switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref.Value)
                         {
                             case 1:
-                                foreach (var item in result._Accounts)
+                                if (result._Accounts != null)
+                                {
+                                    foreach (var item in result._Accounts)
+                                    {
+                                        XeroGlAccountVM account = new XeroGlAccountVM();
+                                        account.AccountId = Convert.ToString(item.AccountID);
+                                        account.Code = item.Code;
+                                        account.Name = item.Name;
+                                        account.Status = Convert.ToString(item.Status);
+                                        account.AgencyId = ClientID;
+                                        account.UpdatedDateUTC = DateTime.UtcNow;
+                                        account.Class = Convert.ToString(item.Class);
+                                        account.Type = Convert.ToString(item.Type);
+                                        account.TaxType = Convert.ToString(item.TaxType);
+                                        account.EnablePaymentsToAccount = Convert.ToString(item.EnablePaymentsToAccount);
+                                        account.ShowInExpenseClaims = Convert.ToString(item.ShowInExpenseClaims);
+                                        account.BankAccountNumber = Convert.ToString(item.BankAccountNumber);
+                                        account.BankAccountType = Convert.ToString(item.BankAccountType);
+                                        account.CurrencyCode = Convert.ToString(item.CurrencyCode);
+                                        account.ReportingCode = Convert.ToString(item.ReportingCode);
+                                        account.HasAttachments = Convert.ToString(item.HasAttachments);
+                                        account.AddToWatchlist = Convert.ToString(item.AddToWatchlist);
+                                        account.Id = 0;
+                                        gl.Add(account);
+
+                                    }
+                                }
+                                
+                                break;
+                            case 2:
+                                QuickBooksSharp.Entities.Account[] accounts = (QuickBooksSharp.Entities.Account[])result;
+                                foreach (var item in accounts)
                                 {
                                     XeroGlAccountVM account = new XeroGlAccountVM();
-                                    account.AccountId = Convert.ToString(item.AccountID);
-                                    account.Code = item.Code;
+                                    account.AccountId = Convert.ToString(item.Id);                                    
                                     account.Name = item.Name;
-                                    account.Status = Convert.ToString(item.Status);
+                                    account.Status = Convert.ToString(item.Active == true? "ACTIVE": "INACTIVE");
                                     account.AgencyId = ClientID;
                                     account.UpdatedDateUTC = DateTime.UtcNow;
-                                    account.Class = Convert.ToString(item.Class);
-                                    account.Type = Convert.ToString(item.Type);
-                                    account.TaxType = Convert.ToString(item.TaxType);
-                                    account.EnablePaymentsToAccount = Convert.ToString(item.EnablePaymentsToAccount);
-                                    account.ShowInExpenseClaims = Convert.ToString(item.ShowInExpenseClaims);
-                                    account.BankAccountNumber = Convert.ToString(item.BankAccountNumber);
-                                    account.BankAccountType = Convert.ToString(item.BankAccountType);
-                                    account.CurrencyCode = Convert.ToString(item.CurrencyCode);
-                                    account.ReportingCode = Convert.ToString(item.ReportingCode);
-                                    account.HasAttachments = Convert.ToString(item.HasAttachments);
-                                    account.AddToWatchlist = Convert.ToString(item.AddToWatchlist);
+                                    account.Class = Convert.ToString(item.Classification);
+                                    account.Type = Convert.ToString(item.AccountType);                                   
+                                    account.BankAccountNumber = Convert.ToString("");
+                                    account.BankAccountType = Convert.ToString(item.AccountType);
+                                    account.CurrencyCode = Convert.ToString(item.CurrencyRef.value);                                    
                                     account.Id = 0;
                                     gl.Add(account);
 
                                 }
-                                break;
-                            case 2:
 
                                 break;
                             default:
@@ -280,6 +305,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (AccountingPackageInstance.Instance.ConnectionStatus == true)
                 {
+
                     using (XeroService<IXeroToken, Accounts> AccountingPackageService = new XeroService<IXeroToken, Accounts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.TenentID, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
                     {
 
@@ -295,23 +321,17 @@ namespace ProvenCfoUI.Controllers
                                 account.Code = item.Code;
                                 account.Name = item.Name;
                                 account.Status = Convert.ToString(item.Status);
-                                account.AgencyId_ref = ClientID;
-                                //account.UpdatedDateUTC = DateTime.UtcNow;
+                                account.AgencyId_ref = ClientID;                                
                                 account.Class = Convert.ToString(item.Class);
                                 account.Type = Convert.ToString(item.Type);
-                                account.TaxType = Convert.ToString(item.TaxType);
-                                //account.EnablePaymentsToAccount = Convert.ToString(item.EnablePaymentsToAccount);
-                                //account.ShowInExpenseClaims = Convert.ToString(item.ShowInExpenseClaims);
+                                account.TaxType = Convert.ToString(item.TaxType);                                
                                 account.BankAccountNumber = Convert.ToString(item.BankAccountNumber);
                                 account.BankAccountType = Convert.ToString(item.BankAccountType);
                                 account.CurrencyCode = Convert.ToString(item.CurrencyCode);
                                 account.ReportingCode = Convert.ToString(item.ReportingCode);
-                                account.HasAttachments = item.HasAttachments;
-                                //account.AddToWatchlist = item.AddToWatchlist;
+                                account.HasAttachments = item.HasAttachments;                              
                                 account.Id = 0;
                                 gl.Add(account);
-
-
                             }
                             using (IntigrationService objInt = new IntigrationService())
                             {

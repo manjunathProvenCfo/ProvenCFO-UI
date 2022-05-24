@@ -1,6 +1,7 @@
 ﻿
 @model List<Proven.Model.XeroGlAccountVM>
 
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -48,8 +49,16 @@
                 </div>
                 <div id="dashboard-actions row">
                     <div class="dz-error-message col-12"></div>
+                    @Html.Hidden("AccountingPackageId", (object)@ViewBag.AccountingPackageId, new { @Id = "AccountingPackageId" });
+                    @if (ViewBag.AccountingPackageId == 2)
+                    {
+                        <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroGlAccoutSync();" id="spanSync">Sync From QuickBooks</span></button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroGlAccoutSync();" id="spanSync">Sync From Xero</span></button>
+                    }
 
-                    <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroGlAccoutSync();" id="spanSync">Sync From Xero</span></button>
                 </div>
             </div>
         </div>
@@ -119,7 +128,14 @@
             var XMessage = $('#XeroStatusMessage');
             var XStatus = $('#XeroStatus');
             if (XConstatus.val() == "True") {
-                XStatus.text("Xero connected");
+                var AccountingPackageId = $('#AccountingPackageId').val();
+                if (AccountingPackageId != undefined && AccountingPackageId != null && AccountingPackageId == 2) {
+                    XStatus.text("QuickBooks connected");
+                }
+                else {
+                    XStatus.text("Xero connected");
+                }
+                
                 XStatus.css('color', 'green');
                 $('#btnSync').show();//prop('disabled', false);
                 HidelottieLoader();
