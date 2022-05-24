@@ -102,6 +102,12 @@ $(function () {
         });
         //view Page
         ImportDropzone_view.on("addedfile", function (file) {
+            if (AccountingPackage == 2) {
+                if (this.files.length > 1) {
+                    this.removeAllFiles()
+                    this.addFile(file);
+                }
+            }
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
                 let attr = $(obj).attr("src");
