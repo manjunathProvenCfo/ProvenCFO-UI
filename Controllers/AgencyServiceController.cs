@@ -48,7 +48,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     Utltity obj = new Utltity();
                     var objResultClient = objClient.GetClientById(id);
-                    Common.ConnectXeroClient(objResultClient);
+                    Common.ConnectClientAccoutingPackage(objResultClient);
                     return Json(objResultClient, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -86,22 +86,32 @@ namespace ProvenCfoUI.Controllers
             {
                 if (AccountingPackageInstance.Instance.ConnectionStatus == true && !string.IsNullOrEmpty(Convert.ToString(AccountingPackageInstance.Instance.XeroContactIDofProvenCfo)))
                 {
-                    using (XeroService<IXeroToken, Contacts> AccountingPackageService = new XeroService<IXeroToken, Contacts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
+                    switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref)
                     {
-                        var result = await AccountingPackageService.GetContact(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.XeroTenentID, AccountingPackageInstance.Instance.XeroContactIDofProvenCfo);
+                        case 1:
+                            using (XeroService<IXeroToken, Contacts> AccountingPackageService = new XeroService<IXeroToken, Contacts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
+                            {
+                                var result = await AccountingPackageService.GetContact(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, AccountingPackageInstance.Instance.XeroContactIDofProvenCfo);
 
-                        if (result != null && result._Contacts.FirstOrDefault().Balances != null && result._Contacts.FirstOrDefault().Balances.AccountsPayable != null)
-                        {
-                            var Outstanding = result._Contacts.FirstOrDefault().Balances.AccountsPayable.Outstanding;
-                            returnData.Add("data", "");
-                            returnData.Add("Total", Outstanding);
-                        }
-                        else
-                        {
+                                if (result != null && result._Contacts.FirstOrDefault().Balances != null && result._Contacts.FirstOrDefault().Balances.AccountsPayable != null)
+                                {
+                                    var Outstanding = result._Contacts.FirstOrDefault().Balances.AccountsPayable.Outstanding;
+                                    returnData.Add("data", "");
+                                    returnData.Add("Total", Outstanding);
+                                }
+                                else
+                                {
+                                    returnData.Add("data", "");
+                                    returnData.Add("Total", 0);
+                                }
+                            }
+                            break;
+                        default:
                             returnData.Add("data", "");
                             returnData.Add("Total", 0);
-                        }
+                            break;
                     }
+
                 }
                 else
                 {
@@ -173,7 +183,7 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
                     //Common.ConnectXeroClient(client);
-
+                    AccountingPackageInstance.Instance.ClientModel = client;
 
 
                     return PartialView("_AgencySelection", objAgy);
@@ -230,32 +240,31 @@ namespace ProvenCfoUI.Controllers
                 if (AccountingPackageInstance.Instance.ConnectionStatus == true)
                 {
                     var pval = Common.getChartOptionValues(Option);
-                    using (XeroService<IXeroToken, ReportWithRows> AccountingPackageService = new XeroService<IXeroToken, ReportWithRows>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
+                    if (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref == 1)
                     {
-
-                        var result = await AccountingPackageService.GetReportProfitAndLossAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.XeroTenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
-
-                        Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ", "").Replace("31 ", "").Replace("28 ", "").Replace("29 ", "")).ToArray();
-                        if (cType == ChartType.Revenue && result != null && result.Reports.Count > 0)
+                        using (XeroService<IXeroToken, ReportWithRows> AccountingPackageService = new XeroService<IXeroToken, ReportWithRows>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
                         {
-                            obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
-                            Ydata = obj;
-                        }
-                        else if (cType == ChartType.NetIncome && result != null && result.Reports.Count > 0)
-                        {
-                            foreach (var item in result.Reports[0].Rows)
+
+                            var result = await AccountingPackageService.GetReportProfitAndLossAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
+
+                            Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ", "").Replace("31 ", "").Replace("28 ", "").Replace("29 ", "")).ToArray();
+                            if (cType == ChartType.Revenue && result != null && result.Reports.Count > 0)
                             {
-                                if (item.Rows != null && item.Rows.Count > 0 && item.Rows[0].Cells.Count > 0 && item.Rows[0].Cells[0].Value == "Net Income")
+                                obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
+                                Ydata = obj;
+                            }
+                            else if (cType == ChartType.NetIncome && result != null && result.Reports.Count > 0)
+                            {
+                                foreach (var item in result.Reports[0].Rows)
                                 {
-                                    Ydata = item.Rows[0].Cells.Select(x => x.Value).ToArray();
-
+                                    if (item.Rows != null && item.Rows.Count > 0 && item.Rows[0].Cells.Count > 0 && item.Rows[0].Cells[0].Value == "Net Income")
+                                    {
+                                        Ydata = item.Rows[0].Cells.Select(x => x.Value).ToArray();
+                                    }
                                 }
                             }
-                            ///obj = result.Reports[0].Rows.Where(x => x.Rows[0].Cells.Select(y => y.Value).Contains("Net Income")).ToList()[0].Rows.LastOrDefault().Cells;
-
+                            return Json(new { Xdata = Header, Ydata = Ydata, Status = "Success" }, JsonRequestBehavior.AllowGet);
                         }
-
-                        return Json(new { Xdata = Header, Ydata = Ydata, Status = "Success" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 return Json(new { Xdata = Header, Ydata = Ydata, Status = "No Data" }, JsonRequestBehavior.AllowGet);

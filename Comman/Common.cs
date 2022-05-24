@@ -1,7 +1,8 @@
-﻿using log4net;
+﻿
+using QuickBooksSharp;
+using log4net;
 using Proven.Model;
 using Proven.Service;
-using Proven.Service.AccountingPackage;
 using ProvenCfoUI.Helper;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace ProvenCfoUI.Comman
 {
     public class Common : IDisposable
     {
+        
         protected static List<UserSecurityVM> _roleList;
         private bool isDisposed = false;
         public static string RegxPasswordMatch = @"(?=.*\d)(?=.*[A-Za-z]).{8,}";
@@ -201,7 +203,7 @@ namespace ProvenCfoUI.Comman
             }
             isDisposed = true;
         }
-        public static void ConnectXeroClient(ClientModel client)
+        public static void ConnectClientAccoutingPackage(ClientModel client)
         {
 
             if (client != null && !string.IsNullOrEmpty(client.APIScope) && !string.IsNullOrEmpty(client.APIClientID) && !string.IsNullOrEmpty(client.APIClientSecret))
@@ -210,21 +212,23 @@ namespace ProvenCfoUI.Comman
                 AccountingPackageInstance.Instance.ClientID = client.APIClientID;
                 AccountingPackageInstance.Instance.ClientSecret = client.APIClientSecret;
                 AccountingPackageInstance.Instance.XeroAppName = "ProvenCfo_web";
-                AccountingPackageInstance.Instance.XeroTenentID = client.XeroID;
+                
                 if (!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
                 {
                     AccountingPackageInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
                 }
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
-                AccountingAppFatory<IXeroToken, TokenInfoVM> AppPackage = null;
+                dynamic AppPackage = null ;
                 switch (client.ThirdPartyAccountingApp_ref.Value)
                 {
                     case 1:
+                        AccountingPackageInstance.Instance.TenentID = client.XeroID;
                         AppPackage = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
                         break;
                     case 2:
-                        AppPackage = new QuickbooksLocalService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                        AccountingPackageInstance.Instance.TenentID = Convert.ToString(client.QuickBooksCompanyId);
+                        AppPackage = new QuickbooksLocalService<TokenResponse, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
                         break;
                     default:
                         break;
@@ -242,20 +246,36 @@ namespace ProvenCfoUI.Comman
                         {
                             try
                             {
+                                
                                 var SavedToken = AppPackage.getTokenFormat(TokenInfoSaved);
                                 //AccountingPackageInstance.Instance.XeroService = AppPackage;
                                 var token = await AppPackage.RefreshToken(SavedToken);
                                 //CleanToken();
-                                TokenInfoSaved.access_token = token.AccessToken;
-                                TokenInfoSaved.id_token = token.IdToken;
-                                TokenInfoSaved.refresh_token = token.RefreshToken;
-                                TokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                switch (client.ThirdPartyAccountingApp_ref.Value)
+                                {
+                                    case 1:
+                                        TokenInfoSaved.access_token = token.AccessToken;
+                                        TokenInfoSaved.id_token = token.IdToken;
+                                        TokenInfoSaved.refresh_token = token.RefreshToken;
+                                        TokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                        AccountingPackageInstance.Instance.XeroToken = token;
+                                        break;
+                                    case 2:
+                                        TokenInfoSaved.access_token = Convert.ToString(token.access_token);
+                                        TokenInfoSaved.id_token = Convert.ToString(token.id_token);
+                                        TokenInfoSaved.refresh_token = Convert.ToString(token.refresh_token);
+                                        TokenInfoSaved.expires_in = Convert.ToInt32(token.expires_in.TotalSeconds);
+                                        AccountingPackageInstance.Instance.QuickBooksToken = token;
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 TokenInfoSaved.ModifiedDate = DateTime.Now;
                                 TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
                                 TokenInfoSaved.ConnectionStatus = "SUCCESS";
                                 TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
                                 AppPackage.UpdateToken(TokenInfoSaved);
-                                AccountingPackageInstance.Instance.XeroToken = token;
+                                
                                 AccountingPackageInstance.Instance.ConnectionStatus = true;
                                 AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
                             }
@@ -303,7 +323,7 @@ namespace ProvenCfoUI.Comman
                 AccountingPackageInstance.Instance.ClientID = client.APIClientID;
                 AccountingPackageInstance.Instance.ClientSecret = client.APIClientSecret;
                 AccountingPackageInstance.Instance.XeroAppName = "ProvenCfo_web";
-                AccountingPackageInstance.Instance.XeroTenentID = client.XeroID;
+                AccountingPackageInstance.Instance.TenentID = client.XeroID;
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
                 using (XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
                 {

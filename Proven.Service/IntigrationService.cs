@@ -68,7 +68,7 @@ namespace Proven.Service
         {
             return PostAsync<XeroGlAccountVM, XeroGlAccountVM>("Xero/CreateXeroGlAccount1", test).Result;
         }
-        public XeroGlAccountVM CreateXeroGlAccount(List<XeroGlAccountVM> glAccounts)
+        public XeroGlAccountVM CreateGlAccount(List<XeroGlAccountVM> glAccounts)
         {           
             return PostAsync<XeroGlAccountVM, List<XeroGlAccountVM>>("Xero/CreateXeroGlAccount", glAccounts).Result;           
         }

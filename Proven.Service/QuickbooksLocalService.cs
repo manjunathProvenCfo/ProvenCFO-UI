@@ -1,9 +1,10 @@
-﻿using Proven.Model;
+﻿using Newtonsoft.Json;
+using Proven.Model;
 using Proven.Service.AccountingPackage;
+using QuickBooksSharp;
+using QuickBooksSharp.Entities;
+//using QuickBooksSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Proven.Service
@@ -15,12 +16,15 @@ namespace Proven.Service
         string _ClientSecret;
         string _scopes;
         string _callbackurl;
+        private DataService _service;
         public QuickbooksLocalService(string ClientId, string ClientSecret, string scopes, string CallbackUrl = "")
         {
             _ClientId = ClientId;
             _ClientSecret = ClientSecret;
             _scopes = scopes;
             _callbackurl = CallbackUrl;
+            
+            
         }
 
         public override Task<T> ConnnectApp(V Token)
@@ -43,9 +47,12 @@ namespace Proven.Service
             throw new NotImplementedException();
         }
 
-        public override Task<V> GetGLAccounts(T Token, string TenentID)
+        public override async Task<V> GetGLAccounts(T Token, string TenentID)
         {
-            throw new NotImplementedException();
+            TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            _service = new DataService(objToken.access_token,Convert.ToInt64(TenentID), true);
+            var res = await _service.QueryAsync<Account>("SELECT * FROM Customer");
+            return (V)Convert.ChangeType(res, typeof(V));
         }
 
         public override Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
@@ -55,12 +62,36 @@ namespace Proven.Service
 
         public override AppTokenInfoMain GetSavedToken(int AgencyID)
         {
-            throw new NotImplementedException();
+            var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<AppTokenInfoMain>(_content);
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
+
+            }
         }
 
         public override T getTokenFormat(V TokenInfo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TokenResponse objToken = new TokenResponse();
+                TokenInfoVM SavedToken = (TokenInfoVM)Convert.ChangeType(TokenInfo, typeof(TokenInfoVM));
+                objToken.id_token = SavedToken.id_token;
+                objToken.access_token = SavedToken.access_token;
+                objToken.refresh_token = SavedToken.refresh_token;                             
+                return (T)Convert.ChangeType(objToken, typeof(T));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
         }
 
         public override Task<V> GetTrackingCategories(T Token, string TenentID)
@@ -78,14 +109,20 @@ namespace Proven.Service
             throw new NotImplementedException();
         }
 
-        public override Task<T> RefreshToken(T Token)
+        public override async Task<T> RefreshToken(T Token)
         {
-            throw new NotImplementedException();
+            var quickbookToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            var res = await new AuthenticationService().RefreshOAuthTokenAsync(_ClientId, _ClientSecret, quickbookToken.refresh_token);
+
+            //if (res.refresh_token != Convert.ToString(Token))
+            //    TestHelper.PersistNewRefreshToken(res.refresh_token);
+            return (T)Convert.ChangeType(res, typeof(T));
+            //throw new NotImplementedException();
         }
 
         public override ReturnModel UpdateToken(V tokenInfoVM)
         {
-            throw new NotImplementedException();
+            return ProdPostAsync<ReturnModel, V>("Xero/UpdateXeroToken", tokenInfoVM).Result;
         }
         public override Task<T> GetBankSummary(V xeroToken, string XeroTenentID)
         {

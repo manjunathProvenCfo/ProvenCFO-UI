@@ -24,7 +24,7 @@ namespace QuickBooksSharp
         {
             return new Url("https://appcenter.intuit.com/connect/oauth2")
                         .SetQueryParam("client_id", clientId)
-                        .SetQueryParam("scope", string.Join(' ', scopes))
+                        .SetQueryParam("scope", string.Join(" ", scopes))
                         .SetQueryParam("redirect_uri", redirectUrl)
                         .SetQueryParam("response_type", "code")
                         .SetQueryParam("state", state)
@@ -62,21 +62,30 @@ namespace QuickBooksSharp
         /// <returns></returns>
         public async Task<TokenResponse> RefreshOAuthTokenAsync(string clientId, string clientSecret, string refreshToken)
         {
-            return await _client.SendAsync<TokenResponse>(() =>
+            try
             {
-                var request = new HttpRequestMessage(HttpMethod.Post, TOKEN_ENDPOINT_URL)
+                var result = await _client.SendAsync<TokenResponse>(() =>
                 {
+                    var request = new HttpRequestMessage(HttpMethod.Post, TOKEN_ENDPOINT_URL)
+                    {
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                     Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                                {
+                                    {
                                     { "refresh_token", refreshToken },
                                     { "grant_type", "refresh_token" },
-                                })
+                                    })
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 };
-                this.AddAuthenticationHeader(request, clientId, clientSecret);
-                return request;
-            });
+                    this.AddAuthenticationHeader(request, clientId, clientSecret);
+                    return request;
+                });
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task RevokeOAuthTokenAsync(string clientId, string clientSecret, string tokenOrRefreshToken)
