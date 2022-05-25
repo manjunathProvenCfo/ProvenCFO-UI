@@ -15,6 +15,7 @@ namespace Proven.Service.AccountingPackage
         public abstract Task<V> GetContact(T Token, string TenentID = "", Guid? ContactID = null);
         public abstract Task<V> GetContacts(T Token, string TenentID = "");
         public abstract Task<V> GetGLAccounts(T Token, string TenentID);
+        public abstract Task<V> GetBankAccounts(T Token, string TenentID);
         public abstract Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null);
         public abstract AppTokenInfoMain GetSavedToken(int AgencyID);
         public abstract T getTokenFormat(V TokenInfo);
