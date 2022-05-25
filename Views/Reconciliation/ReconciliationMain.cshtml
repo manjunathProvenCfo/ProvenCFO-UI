@@ -518,7 +518,7 @@
                 if (response.Message == "SUCCESS") {
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
-                    ShowAlertBoxSuccess("Success!", "Successfully synched with Xero.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully synced with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
