@@ -510,7 +510,7 @@
             //}
         }
         function reconcilationonstatusDemand(RequestID) {
-
+            
             var ClientID = $("#ddlclient option:selected").val();
 
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
@@ -533,10 +533,10 @@
                             msg = 'Sent on-demand data extract request.'
                             break;
                         case 'INITIATED':
-                            msg = '      Logging  in  to  Xero...'
+                            msg = 'Logging  in to Xero...'
                             break;
                         case 'INITIATED 1':
-                            msg = '      Logging  in  to  Xero...'
+                            msg = 'Logging in to  Xero...'
                             break;
                         case 'WAITING FOR OTP':
                             msg = 'Waiting for OTP to log in to Xero.';
