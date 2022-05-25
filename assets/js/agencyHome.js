@@ -591,7 +591,7 @@ function AgencyDropdownPartialViewChange() {
                /* setTimeout(function () {*/
                 RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                 RenderNetIncomeChart($('#dllNetIncome').val());
-              
+                MenuOptionHideAndShow(ClientID);
                /* }, 1000);*/
 
                 
