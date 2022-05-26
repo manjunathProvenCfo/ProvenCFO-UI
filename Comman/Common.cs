@@ -212,7 +212,9 @@ namespace ProvenCfoUI.Comman
                 AccountingPackageInstance.Instance.ClientID = client.APIClientID;
                 AccountingPackageInstance.Instance.ClientSecret = client.APIClientSecret;
                 AccountingPackageInstance.Instance.XeroAppName = "ProvenCfo_web";
-                
+                AccountingPackageInstance.Instance.ClientModel = client;
+
+
                 if (!string.IsNullOrEmpty(client.XeroContactIDforProvenCfo) && Guid.TryParse(client.XeroContactIDforProvenCfo, out Guid result))
                 {
                     AccountingPackageInstance.Instance.XeroContactIDofProvenCfo = new Guid(client.XeroContactIDforProvenCfo);
