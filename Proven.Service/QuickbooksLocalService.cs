@@ -5,6 +5,7 @@ using QuickBooksSharp;
 using QuickBooksSharp.Entities;
 //using QuickBooksSharp;
 using System;
+using System.Configuration;
 using System.Threading.Tasks;
 
 namespace Proven.Service
@@ -49,12 +50,29 @@ namespace Proven.Service
 
         public override async Task<V> GetGLAccounts(T Token, string TenentID)
         {
+            bool IsProdEnviroment = false;
+            var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
+            if(TenentID == SandboxCompanyId) {
+                IsProdEnviroment = true;
+            }
             TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
-            _service = new DataService(objToken.access_token,Convert.ToInt64(TenentID), true);
+            _service = new DataService(objToken.access_token,Convert.ToInt64(TenentID), IsProdEnviroment);
             var res = await _service.QueryAsync<Account>("SELECT * FROM Account");
             return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
         }
-
+        public override async Task<V> GetBankAccounts(T Token, string TenentID)
+        {
+            bool IsProdEnviroment = false;
+            var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
+            if (TenentID == SandboxCompanyId)
+            {
+                IsProdEnviroment = true;
+            }
+            TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            _service = new DataService(objToken.access_token, Convert.ToInt64(TenentID), IsProdEnviroment);
+            var res = await _service.QueryAsync<Account>("Select * from Account where AccountType = 'Bank'");
+            return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
+        }
         public override Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
         {
             throw new NotImplementedException();
