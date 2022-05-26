@@ -114,7 +114,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script>
-
+        var AccountingPackage = 'Xero';
         $(document).ready(function () {
             setTimeout(function () {
                 XeroConnectionUpdate();
@@ -131,9 +131,11 @@
                 var AccountingPackageId = $('#AccountingPackageId').val();
                 if (AccountingPackageId != undefined && AccountingPackageId != null && AccountingPackageId == 2) {
                     XStatus.text("QuickBooks connected");
+                    AccountingPackage = "QuickBooks";
                 }
                 else {
                     XStatus.text("Xero connected");
+                    AccountingPackage = "Xero";
                 }
                 
                 XStatus.css('color', 'green');
@@ -187,7 +189,7 @@
                     ShowAlertBoxError("Error", "GL Account not updated.", function () { window.location.reload(); });
                 }
                 else {
-                    ShowAlertBoxSuccess("Success!", "GL Accounts synced with Xero successfully.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "GL Accounts synced with " + AccountingPackage + " successfully.", function () { window.location.reload(); });
                 }
                 HidelottieLoader();
 
