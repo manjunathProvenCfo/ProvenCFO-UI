@@ -174,7 +174,8 @@
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                             <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input"})
+                                                @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
+                                               
                                                 <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
                                             </div>
 
@@ -588,8 +589,9 @@
         $(document).ready(function () {
             HidelottieLoader();
         });
+
         $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
-          
+            
             if (this.checked && this.value == '1') {
                 $("#xeroshort").show();
                 $("#xerocrm").show();
@@ -598,15 +600,17 @@
                 $('#divxeroscopeoption').removeClass('d-none');
                 $("#quickbookcompany").hide();
                 $("#divQuickbookscopeoption").hide();
-                $("#EnableAutomation").prop("disabled", false)
+                $("#EnableAutomation").prop("disabled", false);
             }
             else {
+                $('#EnableAutomation').prop('checked', true);
                 $("#xeroshort").hide();
                 $("#xerocontact").hide();
                 $("#xero").hide();
                 $('#divxeroscopeoption').addClass('d-none');
                 $("#divQuickbookscopeoption").show();
-                $("#EnableAutomation").prop("disabled", true)
+                $('#EnableAutomation').trigger('click');
+                $("#EnableAutomation").prop("disabled", true);
                 $('#XeroScopeArray').val();
                 $("#quickbookcompany").show();
             }
