@@ -19,5 +19,10 @@
 @*</div>*@
 @*</div>*@
 @section Scripts {
-    @Scripts.Render("~/bundles/js/select")    
+    <script>
+            $(document).ready(function () {
+                    HidelottieLoader();
+            });
+    </script>
+    @Scripts.Render("~/bundles/js/select")
 }
