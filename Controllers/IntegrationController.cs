@@ -200,7 +200,7 @@ namespace ProvenCfoUI.Controllers
                     switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref.Value)
                     {
                         case 1:
-                            AppPackage = new XeroService<IXeroToken, Accounts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                            AppPackage = new XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Model.Accounting.Account>>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
                             Token = AccountingPackageInstance.Instance.XeroToken;
                             break;
                         case 2:
@@ -221,9 +221,9 @@ namespace ProvenCfoUI.Controllers
                         switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref.Value)
                         {
                             case 1:
-                                if (result._Accounts != null)
+                                if (result != null)
                                 {
-                                    foreach (var item in result._Accounts)
+                                    foreach (var item in result)
                                     {
                                         XeroGlAccountVM account = new XeroGlAccountVM();
                                         account.AccountId = Convert.ToString(item.AccountID);
@@ -313,7 +313,7 @@ namespace ProvenCfoUI.Controllers
                     switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref.Value)
                     {
                         case 1:
-                            AppPackage = new XeroService<IXeroToken, Accounts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
+                            AppPackage = new XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Model.Accounting.Account>>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName);
                             Token = AccountingPackageInstance.Instance.XeroToken;
                             break;
                         case 2:
@@ -330,11 +330,11 @@ namespace ProvenCfoUI.Controllers
                         switch (AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref)
                         {
                             case 1:
-                                if (result._Accounts != null)
+                                if (result != null)
                                 {
-                                    Accounts XeroAccounts = result;
-                                    var xaccounts = XeroAccounts._Accounts;
-                                    foreach (var item in xaccounts)
+                                    List<Xero.NetStandard.OAuth2.Model.Accounting.Account> XeroAccounts = result;
+                                    var xaccounts = XeroAccounts;
+                                    foreach (var item in XeroAccounts)
                                     {
                                         ClientXeroAccountsVM account = new ClientXeroAccountsVM();
                                         account.AccountID = Convert.ToString(item.AccountID);

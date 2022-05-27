@@ -234,13 +234,14 @@ namespace Proven.Service
         {
             var Token = (IXeroToken)xeroToken;
             var result = await _accountinstance.GetAccountsAsync(Token.AccessToken, XeroTenentID);
-            return (V)Convert.ChangeType(result, typeof(V));
+            return (V)Convert.ChangeType(result._Accounts, typeof(V));
         }
         public override async Task<V> GetBankAccounts(T Token, string TenentID)
         {
             var objToken = (IXeroToken)Token;
+            
             var result = await _accountinstance.GetAccountsAsync(objToken.AccessToken, TenentID);
-            var finalresult  = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK");
+            var finalresult  = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK").ToList();
             return (V)Convert.ChangeType(finalresult, typeof(V));
         }
         public override async Task<V> GetTrackingCategories(T xeroToken, string XeroTenentID)
