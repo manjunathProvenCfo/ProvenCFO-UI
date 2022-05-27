@@ -572,7 +572,7 @@ function GetAccountOutStanding() {
 
 
 function AgencyDropdownPartialViewChange() {
-    
+
     ShowlottieLoader(); 
     var ClientID = $("#ddlclient option:selected").val();
     //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
@@ -676,7 +676,10 @@ function AgencyDropdownPartialViewChange() {
       
   
     }); 
-   
+    window.onerror = function (e) {
+        console.log(e);
+        HidelottieLoader();
+    };
 }
 
 //function GetTotalNotesCount() {
