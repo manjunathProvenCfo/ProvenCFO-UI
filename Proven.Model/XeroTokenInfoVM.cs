@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Proven.Model
 {
     [Serializable]
-    public class XeroTokenInfoVM
+    public class TokenInfoVM
     {
         public int Id { get; set; }
         public String id_token { get; set; }
@@ -24,12 +24,14 @@ namespace Proven.Model
         public int? IsDeleted { get; set; }
         public int AgencyID { get; set; }
         public string ConnectionStatus { get; set; }
+        public int? ThirdPartyAccountingAppId_ref { get; set; }
     }
-    public class XeromainTokenInfo
+    public class AppTokenInfoMain
     {
         public bool Status { get; set; }
+
         public int statusCode { get; set; }
-        public XeroTokenInfoVM ResultData { get; set; }
+        public TokenInfoVM ResultData { get; set; }
         public string message { get; set; }
         public object resourceType { get; set; }
         public object metaData { get; set; }

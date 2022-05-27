@@ -1,0 +1,82 @@
+﻿<div class="modal theme-modal fade" tabindex="-1" role="dialog" aria-labelledby="report-modal-label-1" aria-hidden="true" id="report-uploader-modal">
+    <div class="modal-dialog modal-lg mt-6" role="document">
+        <div class="modal-content border-0">
+            <div class="position-absolute t-0 r-0 mt-3 mr-3 z-index-1">
+                <button class=" close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" data-dismiss="modal" id="btnCloseImportreconciliation" aria-label="Close"><span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3" style="position: inherit !important;"></span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="bg-light rounded-soft-top px-4 py-3">
+                    <h4 class="mb-1" id="report-modal-label-title">Upload QuickBooks Bank report files  </h4>
+                </div>
+                <td>
+                    <div class="controls">
+                        <fieldset id="Group1" name="Group1" style="margin-left: 20px;">
+                            <label><input id="Notinbook" name="Radio1" type="radio" value="Not In BOOK" checked /> Not In Books <br /></label>
+                            <label style="margin-left:40px;"><input id="Notinbank" name="Radio1" type="radio" value="Not In Banks" /> Not In Banks <br /></label>
+
+                        </fieldset>
+                    </div>
+                    <div class="row pb-3" style="margin-left: 20px;" id="BankAccount">
+                        @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.ClientXeroAccountsVM>)TempData["NotInBank"], "Id", "Name"), "Select Bank Account", new { @class = " selectpicker form-control", style = "width:225px; margin-left:20px;" })
+                    </div>
+                </td>
+            </div>
+
+            <div class="p-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="reconciliationUploader" class="dropzone dropzone-multiple">
+                            <div class="dz-message text-center" data-dz-message="data-dz-message"> <img class="me-2" src="../../../assets/img/icons/cloud-upload.svg" width="25" alt=""><strong>Drop your files here or Click here to browse from your computer</strong></div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div id="attachmentContainer">
+                        </div>
+                        <div class="media align-items-center mb-3">
+                            <div class="table table-striped files" id="previewTemplate">
+
+                                <div id="template" class="file-row">
+                                    <strong style="color: red;">Please upload the file to save.</strong>
+                                    <!-- This is used as the file preview template -->
+                                    <div>
+                                        <span class="preview"><img data-dz-thumbnail /></span>
+                                    </div>
+                                    <div>
+                                        <p class="name" data-dz-name></p>
+                                        <strong class="error text-danger" data-dz-errormessage></strong>
+                                    </div>
+                                    <div>
+                                        <p class="size" data-dz-size></p>
+                                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                        </div>
+                                    </div>
+                                    <div id="actions">
+                                        <button class="text-600 font-weight-semi-bold start" style="border: none; background: transparent; font-size: 12px;" id="btnDropzoneUpload">
+                                            <i class="glyphicon glyphicon-upload"></i>
+                                            <span>Upload</span>
+                                        </button>
+                                        <span class="mx-1"></span>
+                                        @*<button data-dz-remove class=" cancel" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);">
+                                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                                <input type="hidden" name="" value="" class="name" data-dz-name />
+                                                <span>Cancel</span>
+                                            </button>*@
+                                        <span class="mx-1"></span>
+                                        <button data-dz-remove class="delete" style="border: none; background: transparent; font-size: 12px;" onclick="RemoveFile(event);" id="btnDropzoneRemove">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            <input type="hidden" name="" value="" class="name" data-dz-name />
+                                            <span>Remove</span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table table-striped files col-12" id="previews"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

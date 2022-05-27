@@ -92,6 +92,7 @@
                             </div>*@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
+
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
@@ -100,13 +101,17 @@
 
 
                                 }
+                                <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
+                               
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
+                               
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
-                                @if (ViewBag.IsStaffUser == true)
+
+                                @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                 }
@@ -352,7 +357,14 @@
         @Html.Partial("_reconcilationBulkupdate", true)
 
     </div>
-    @Html.Partial("_ReconciliationFileUploaderPartial")
+    @if (ViewBag.AccountingPackage == 2)
+    {
+        @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+    }
+    else
+    {
+        @Html.Partial("_ReconciliationFileUploaderPartial")
+    }
     @Html.Partial("_ReconcilationEmail", true)
     @Html.Partial("_ReconcilationEditComment", true)
 </div>
@@ -498,7 +510,7 @@
             //}
         }
         function reconcilationonstatusDemand(RequestID) {
-
+            
             var ClientID = $("#ddlclient option:selected").val();
 
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
@@ -506,7 +518,7 @@
                 if (response.Message == "SUCCESS") {
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
-                    ShowAlertBoxSuccess("Success!", "Successfully synched with Xero.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully synced with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
@@ -521,10 +533,10 @@
                             msg = 'Sent on-demand data extract request.'
                             break;
                         case 'INITIATED':
-                            msg = '      Logging  in  to  Xero...'
+                            msg = 'Logging  in to Xero...'
                             break;
                         case 'INITIATED 1':
-                            msg = '      Logging  in  to  Xero...'
+                            msg = 'Logging in to  Xero...'
                             break;
                         case 'WAITING FOR OTP':
                             msg = 'Waiting for OTP to log in to Xero.';
@@ -909,8 +921,15 @@
                 }
             });
         }
+        $("input[id$='Notinbook']").click(function () {
+            $("#BankAccount").show();
 
+        });
+        $("input[id$='Notinbank']").click(function () {
+            $("#BankAccount").hide();
 
+        });
+        
 
         //function bindNotInBooksAndBanksCount() {
 
@@ -1031,6 +1050,8 @@
 
 
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+
+
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")

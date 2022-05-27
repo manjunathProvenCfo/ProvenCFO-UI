@@ -45,8 +45,8 @@ namespace ProvenCfoUI.Controllers
                     //return View(objResult.ResultData);
 
                     int AgencyID = 0;
-                    ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
-                    ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
+                    ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
+                    ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
@@ -70,6 +70,13 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.isvisibleGlAccount = false;
                         }
+                    }
+                    using (ClientService objClientService = new ClientService())
+                    {
+                        var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                        ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                        var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                        TempData["NotInBank"] = AccountingPackage;
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
@@ -449,8 +456,8 @@ namespace ProvenCfoUI.Controllers
             try
             {
                 string RecordsType = NotInBooks;
-                ViewBag.XeroConnectionStatus = XeroInstance.Instance.XeroConnectionStatus;
-                ViewBag.XeroStatusMessage = XeroInstance.Instance.XeroConnectionMessage;
+                ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
+                ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
 
                 //  return View();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
@@ -476,6 +483,14 @@ namespace ProvenCfoUI.Controllers
                     else
                     {
                         ViewBag.isvisibleGlAccount = false;
+                    }
+                    using (ClientService objClientService = new ClientService())
+                    {
+                        var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                        ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+                       
+                        var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                        TempData["NotInBank"] = AccountingPackage;
                     }
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
@@ -601,26 +616,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        //[CheckSession]
-        //public JsonResult GetXeroOnDemandRequestStatus(string CurrentStatus)
-        //{
-        //    try
-        //    {
-
-        //        using (ReconcilationService objReConcilation = new ReconcilationService())
-        //        {
-        //            var objResult = objReConcilation.GetXeroOnDemandRequestStatus(CurrentStatus);
-        //            return Json(objResult, JsonRequestBehavior.AllowGet);
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
-        //        throw ex;
-        //    }
-        //}
-
+       
         [CheckSession]
         [HttpGet]
         public JsonResult GetXeroOnDemandRequestStatus(int AgencyId, string CurrentStatus)
@@ -798,6 +794,81 @@ namespace ProvenCfoUI.Controllers
 
 
         }
+
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> UploadReconcilationQuickBookReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
+        {
+            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            var fileName = file.FileName;
+            try
+            {
+                BinaryReader b = new BinaryReader(file.InputStream);
+                byte[] binData = b.ReadBytes(file.ContentLength);
+
+
+                string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+                using (ReconcilationService service = new ReconcilationService())
+                {
+
+
+                   
+                    input.HtmlString = HTMLresult.Trim();
+                    input.CompanyName = agencyName;
+                    input.CompanyId = agencyId;
+
+                    //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
+
+                    using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
+                    {
+                        var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
+                        return Json(new { Status = "Success", result = response.ResultData, FileName = fileName }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                objOutput.Status = true;
+                objOutput.ValidationStatus = "RequestCancelation";
+                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                return Json(new
+                {
+                    File = "",
+                    Status = "Inprogress",
+                    result = objOutput,
+                    FileName = fileName
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException.Message == "A task was canceled.")
+                {
+                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    objOutput.Status = true;
+                    objOutput.ValidationStatus = "RequestCancelation";
+                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    return Json(new
+                    {
+                        File = "",
+                        Status = "Inprogress",
+                        result = objOutput,
+                        FileName = fileName
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+
+
 
         [CheckSession]
         [HttpPost]

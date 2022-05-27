@@ -56,7 +56,7 @@ $(function () {
     //Twilio Chat
 
     loadAllNotificationLoggedInUserPage(false);
-   
+
     bindNotInBooksAndBanksCount();
     bindNotInBanksAndBanksCount();
 
@@ -82,7 +82,7 @@ $(function () {
         HighlightMenu();
 
     });
-
+    MenuOptionHideAndShow(getClientId());
 })
 
 var twilioChatGlobal = function (isNotiAlreadyFetched) {
@@ -108,7 +108,8 @@ var AgencyDropdownPartialViewChange = function () {
 
 }
 var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
-    ShowlottieLoader(); 
+    ShowlottieLoader();
+    MenuOptionHideAndShow(getClientId());
     sessionStorage.removeItem("NotInBooksCount")
     sessionStorage.removeItem("NotInBanksData")
     SetUserPreferencesForAgency(callback);
@@ -138,6 +139,53 @@ function SetUserPreferencesForAgency(callback) {
 
 }
 
+var MenuOptionHideAndShow = function (AgencyId) {
+
+    try {
+        var agencyJson = sessionStorage.getItem('AgencyDetails');
+        var agencyInfo = JSON.parse(agencyJson);
+        if (agencyInfo == null || (agencyInfo != null && agencyInfo.id != AgencyId)) {
+            getAjaxSync(apiurl + `Client/GetClientById?ClientId=${AgencyId}`, null, function (response) {
+
+                if (response.resultData != null) {
+                    var agencyDetils = '{'
+                        + '"id" : ' + response.resultData.id + ','
+                        + '"name"  : "' + response.resultData.name + '",'
+                        + '"thirdPartyAccountingApp_ref" : ' + response.resultData.thirdPartyAccountingApp_ref + ''
+                        + '}';
+                    sessionStorage.setItem("AgencyDetails", agencyDetils);
+                    if (response.resultData != null && response.resultData.thirdPartyAccountingApp_ref != null && response.resultData.thirdPartyAccountingApp_ref == 2) {
+                        $('#submenu_trackingCategories').addClass('d-none');
+                    }
+                    else {
+                        $('#submenu_trackingCategories').removeClass('d-none');
+                    }
+                }
+            });
+        }
+        else {
+            if (agencyInfo != null && agencyInfo.thirdPartyAccountingApp_ref != null && agencyInfo.thirdPartyAccountingApp_ref == 2) {
+                $('#submenu_trackingCategories').addClass('d-none');
+            }
+            else {
+                $('#submenu_trackingCategories').removeClass('d-none');
+            }
+        }
+    } catch (e) {
+        console.log(e);
+
+    }
+}
+function selectProps(...props) {
+    return function (obj) {
+        const newObj = {};
+        props.forEach(name => {
+            newObj[name] = obj[name];
+        });
+
+        return newObj;
+    }
+}
 function GetTotalNotesCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
@@ -162,7 +210,7 @@ var totalNotInBooksData;
 function bindNotInBooksAndBanksCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
-   
+
     if (sessionStorage.getItem("NotInBanksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
             if (response.Message == "Success") {
@@ -178,23 +226,23 @@ function bindNotInBooksAndBanksCount() {
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
-       
+
         $("#lblNotInBanksCount").text(data[0].Count);
         totalNotInBanksData = data[0].Count;
     }
     else {
         $("#lblNotInBanksCount").text(0);
         totalNotInBanksData = 0;
-        
+
     }
-    
+
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
 function bindNotInBanksAndBanksCount() {
     var ClientID = $("#ddlclient option:selected").val();
-   
+
     if (sessionStorage.getItem("NotInBooksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
@@ -211,8 +259,8 @@ function bindNotInBanksAndBanksCount() {
 }
 var bindNotInBooksData = function (data) {
     if (data != null) {
-      
-        
+
+
         $("#lblNotInBooksCount").text(data[0].Count);
         totalNotInBooksData = data[0].Count;
 
@@ -220,14 +268,14 @@ var bindNotInBooksData = function (data) {
     else {
         $("#lblNotInBooksCount").text(0);
         totalNotInBooksData = 0;
-       
+
     }
     TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
 function TotalSum(totalNotInBanksData, totalNotInBooksData) {
-   
+
     let totalsum3 = 0;
     if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
         $("#lblNotInCount").addClass('d-none');
@@ -283,12 +331,11 @@ function HighlightMenu() {
 
 
 var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
+    var Count = (IsloadAll == true ? 0 : 5);
     var userId = $('#topProfilePicture').attr('userid');
-   
-    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}`, null, function (response) {
-   
-        if (response && response.status) {
 
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}&MaxRecordscount=${Count}`, null, function (response) {
+        if (response && response.status) {
             var icount = 0;
             var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
             if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
@@ -310,7 +357,7 @@ var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
                 }
                 if (IsloadAll == false) {
                     $TopNotificaitonList.append(NotificationHtml);
-                }                
+                }
                 else {
                     $FullNotificationList.append(NotificationHtml);
                 }
@@ -696,7 +743,7 @@ var genereateAllReconciliationTwilioConversationAndAddParticipants = function ()
 
 
 var getDateDiff = function (date, now) {
-    
+
     var diff = (((now || (new Date())).getTime() - date.getTime()) / 1000),
         day_diff = Math.floor(diff / 86400);
     return day_diff == 0 && (
@@ -708,9 +755,9 @@ var getDateDiff = function (date, now) {
         day_diff == 1 && "yesterday" ||
         day_diff < 7 && day_diff + " days ago" ||
         day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago" ||
-        day_diff < 365 && Math.ceil(day_diff /60) + " Month ago"
-      /*  diff < 31536000 && Math.ceil(diff / 2592000 ) + " Month ago"*/
-       
+        day_diff < 365 && Math.ceil(day_diff / 60) + " Month ago"
+        /*  diff < 31536000 && Math.ceil(diff / 2592000 ) + " Month ago"*/
+
         ;
 }
 
@@ -732,6 +779,6 @@ function getUTCDateTime(date) {
     return strTime;
 }
 function getLocalTime(utcdateString) {
-    var date = new Date(utcdateString + ' UTC');    
+    var date = new Date(utcdateString + ' UTC');
     return date.toLocaleString();
 }

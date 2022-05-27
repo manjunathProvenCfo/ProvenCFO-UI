@@ -175,6 +175,7 @@
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                             <div class="custom-control custom-switch custom-control-inline  mr-0">
                                                 @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
+                                               
                                                 <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
                                             </div>
 
@@ -365,7 +366,7 @@
                                                 <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" , @data_val_number = "The field QuickBooks Company ID must be a number" } })
                                                 @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -374,10 +375,11 @@
                                     {
                                         <div class="row align-items-center form-group" id="quickbookcompany" style="display:none;">
                                             <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                                <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
+                                                <label for="split-login-email"  class="mb-0"> QuickBooks Company ID</label>
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" } })
+                                               
+                                                @Html.EditorFor(model => model.QuickBooksCompanyId, new { htmlAttributes = new { @class = "form-control" ,@data_val_number= "The field QuickBooks Company ID must be a number" } }  )
                                                 @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -587,7 +589,9 @@
         $(document).ready(function () {
             HidelottieLoader();
         });
+
         $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
+            
             if (this.checked && this.value == '1') {
                 $("#xeroshort").show();
                 $("#xerocrm").show();
@@ -596,16 +600,17 @@
                 $('#divxeroscopeoption').removeClass('d-none');
                 $("#quickbookcompany").hide();
                 $("#divQuickbookscopeoption").hide();
+                $("#EnableAutomation").prop("disabled", false);
             }
             else {
-
+                $('#EnableAutomation').prop('checked', true);
                 $("#xeroshort").hide();
                 $("#xerocontact").hide();
                 $("#xero").hide();
                 $('#divxeroscopeoption').addClass('d-none');
                 $("#divQuickbookscopeoption").show();
-
-
+                $('#EnableAutomation').trigger('click');
+                $("#EnableAutomation").prop("disabled", true);
                 $('#XeroScopeArray').val();
                 $("#quickbookcompany").show();
             }

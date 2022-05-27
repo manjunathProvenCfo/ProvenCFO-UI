@@ -5,10 +5,10 @@
     .disabled-link {
         pointer-events: none;
     }
+
     a:hover {
         color: #00d27a !important;
     }
-   
 </style>
 @Styles.Render("~/bundles/css/fancybox")
 <div class="dashboard-frame">
@@ -113,15 +113,15 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
-                                <h6 class="mb-0 ml-2" id="tabselectBank"onclick="Tabclick(event,1)"; ><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
+                                <h6 class="mb-0 ml-2" id="tabselectBank" onclick="Tabclick(event,1)" ;><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 @*<h6 class="mt-1">Not in Banks </h6>*@
                                 @*<div class="fs--2 mt-3">
-                              <div class="d-flex flex-between-center mb-1">
+                                    <div class="d-flex flex-between-center mb-1">
 
 
-                                 <div class="d-xxl-none">993%</div>
-                                   </div>
-                                   </div>*@
+                                       <div class="d-xxl-none">993%</div>
+                                         </div>
+                                         </div>*@
                                 <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
 
 
@@ -339,7 +339,7 @@
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl">
                                         @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
-                                        <img class="rounded-circle" id="spProfileImage2" onerror="imgError(this);"/>
+                                        <img class="rounded-circle" id="spProfileImage2" onerror="imgError(this);" />
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -369,7 +369,7 @@
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl">
                                         @*<img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />*@
-                                        <img class="rounded-circle" id="spProfileImage3"  onerror="imgError(this);"/>
+                                        <img class="rounded-circle" id="spProfileImage3" onerror="imgError(this);" />
 
                                     </div>
                                     <div class="media-body ml-3">
@@ -499,7 +499,7 @@
 
     @section Scripts {
         @*@Scripts.Render("~/bundles/jqueryval");*@
-        @*@Scripts.Render("~/bundles/layoutJS");*@
+        @*@Scripts.Render("~/bundles/layoutJS")*@
 
         @Scripts.Render("~//bundles/js/chart")
         @Scripts.Render("~/bundles/js/select")
@@ -507,12 +507,10 @@
         @Scripts.Render("~/bundles/js/toastr")
         @Scripts.Render("~/bundles/js/clipboard")
         @Scripts.Render("~/bundles/js/fancybox")
+        @Scripts.Render("~/bundles/js/agencyHome")
         @*@Scripts.Render("~/bundles/js/reconciliationMain")*@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-
-        @Scripts.Render("~/bundles/js/agencyHome")
-
-        
+       
     }

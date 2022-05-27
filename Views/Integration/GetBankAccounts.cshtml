@@ -51,9 +51,19 @@
                     <div id="dashboard-actions row">
                         <div class="dz-error-message col-12"></div>
                         @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="submit" title="Update">
-                            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
-                        </button>*@
-                        <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroBankAccountSync();" id="spanSync">Sync From Xero</span></button>
+            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
+        </button>*@
+
+                        @Html.Hidden("AccountingPackageId", (object)@ViewBag.AccountingPackageId, new { @Id = "AccountingPackageId" })
+                        @if (ViewBag.AccountingPackageId == 2)
+                        {
+                            <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroBankAccountSync();" id="spanSync">Sync From QuickBooks</span></button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-falcon-default btn-sm" type="button" id="btnSync"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1" onclick="XeroBankAccountSync();" id="spanSync">Sync From Xero</span></button>
+                        }
+
                     </div>
                 </div>
             </div>
@@ -115,7 +125,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script>
-
+        var AccountingPackage = 'Xero';
         $(document).ready(function () {
             setTimeout(function () {
                 XeroConnectionUpdate();
@@ -134,14 +144,22 @@
             var XMessage = $('#XeroStatusMessage');
             var XStatus = $('#XeroStatus');
             if (XConstatus.val() == "True") {
-                XStatus.text("Xero connected");
+                var AccountingPackageId = $('#AccountingPackageId').val();
+                if (AccountingPackageId != undefined && AccountingPackageId != null && AccountingPackageId == 2) {
+                    XStatus.text("QuickBooks connected");
+                    AccountingPackage = "QuickBooks";
+                }
+                else {
+                    XStatus.text("Xero connected");
+                    AccountingPackage = "Xero";
+                }
                 XStatus.css('color', 'green');
                 $('#btnSync').show();//prop('disabled', false);
                 HidelottieLoader();
                 //$('#spanSync').prop('disabled', false);
             }
             else {
-                XStatus.text('Error Connecting to Xero :' + XMessage.val());
+                XStatus.text('Error Connecting to Xero: ' + XMessage.val());
                 XStatus.css('color', 'red');
                 $('#btnSync').hide()//prop('disabled', true);
                 // $('#spanSync').prop('disabled', true);
@@ -179,6 +197,7 @@
             });
         }
         function XeroBankAccountSync() {
+            debugger;
 
             ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
@@ -187,7 +206,8 @@
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
                 else {
-                    ShowAlertBoxSuccess("Success!", "Bank Accounts synced with Xero successfully.", function () { window.location.reload(); });
+                    debugger;
+                    ShowAlertBoxSuccess("Success!", "Bank Accounts synced with " + AccountingPackage + " successfully.", function () { window.location.reload(); });
                 }
 
             });

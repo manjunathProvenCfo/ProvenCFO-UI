@@ -572,7 +572,7 @@ function GetAccountOutStanding() {
 
 
 function AgencyDropdownPartialViewChange() {
-    
+
     ShowlottieLoader(); 
     var ClientID = $("#ddlclient option:selected").val();
     //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
@@ -591,7 +591,7 @@ function AgencyDropdownPartialViewChange() {
                /* setTimeout(function () {*/
                 RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                 RenderNetIncomeChart($('#dllNetIncome').val());
-              
+                MenuOptionHideAndShow(ClientID);
                /* }, 1000);*/
 
                 
@@ -676,7 +676,10 @@ function AgencyDropdownPartialViewChange() {
       
   
     }); 
-   
+    window.onerror = function (e) {
+        console.log(e);
+        HidelottieLoader();
+    };
 }
 
 //function GetTotalNotesCount() {

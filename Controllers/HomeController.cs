@@ -93,18 +93,20 @@ namespace ProvenCfoUI.Controllers
                         if (result.resultData != null && !string.IsNullOrEmpty(result.resultData.Id) && result.status == true)
                         {
                             commSrv = new CommonService();
-                            //Session["UserId"] = result.resultData.Id.ToString();
-                            //Session["UserName"] = result.resultData.FirstName;
-                            //Session["LoginName"] = loginVM.UserName.ToString();
-                            //Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
-                            //Session["UserType"] = result.resultData.UserType;
                             string userData = $"{result.resultData.Id},{result.resultData.FirstName},{loginVM.UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
                             FormsAuthentication.SetAuthCookie(userData, false);
-                            ViewBag.Sucess = "Login Sucessfully";                            
+                            ViewBag.Sucess = "Login Sucessfully";
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
                             var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
                             Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
+
+                            using (ClientService objClient = new ClientService())
+                            {
+                                var client = objClient.GetClientById(Convert.ToInt32(objUserPref.FirstOrDefault().PreferanceValue));
+                                AccountingPackageInstance.Instance.ClientModel = client;
+                            }
+
                             return RedirectToAction("AgencyHome", "AgencyService");
                         }
                         else
@@ -128,6 +130,7 @@ namespace ProvenCfoUI.Controllers
                             return View("Login");
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -398,8 +401,8 @@ namespace ProvenCfoUI.Controllers
             Session.Abandon();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
-            XeroInstance.Instance.XeroToken = null;
-            XeroInstance.Instance.XeroConnectionStatus = false;
+            AccountingPackageInstance.Instance.XeroToken = null;
+            AccountingPackageInstance.Instance.ConnectionStatus = false;
         }
 
 
@@ -739,8 +742,8 @@ namespace ProvenCfoUI.Controllers
                     return Json("Invalid", JsonRequestBehavior.AllowGet);
                 }
             }
-                
-                //Session.Timeout = Session.Timeout + 20;
+
+            //Session.Timeout = Session.Timeout + 20;
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
