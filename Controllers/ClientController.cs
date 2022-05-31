@@ -361,7 +361,7 @@ namespace ProvenCfoUI.Controllers
                     var client = objClientService.GetClientById(id);
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                         client.DashboardId.ToString(),client.DashboardURLId.ToString(),client.ReportId, string.Empty,string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref),Convert.ToInt64(client.QuickBooksCompanyId));
+                        Convert.ToString(client.DashboardId),client.DashboardURLId,client.ReportId, string.Empty,string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref),Convert.ToInt64(client.QuickBooksCompanyId));
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");
