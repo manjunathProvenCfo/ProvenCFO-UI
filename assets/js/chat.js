@@ -417,23 +417,27 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
         var ReconcilationType = response.resultData.reconciliationdata.type;
         if (ReconcilationType == "Unreconciled") {
-
+            
             $communicationGLaccount.removeClass('d-none');
             $communicationTrackingCategories.removeClass('d-none');
             $tc_2_Dropdown.removeClass('d-none');
             $tc_1_Dropdown.removeClass('d-none');
             $communicationAction.addClass('d-none');
             $tracking.removeClass('d-none');
-
+            $trackingcat.removeClass('d-none');
+            $('#tracking_category_2').removeClass('d-none');
+            $('#trackingcat1').removeClass('d-none');
         }
         if (ReconcilationType == "Outstanding Payments") {
-
+            
             $communicationGLaccount.addClass('d-none');
             $communicationTrackingCategories.addClass('d-none');
             $tc_2_Dropdown.addClass('d-none');
             $tc_1_Dropdown.addClass('d-none');
             $communicationAction.removeClass('d-none');
-            $tracking.show();
+            $tracking.addClass('d-none');
+            $('#tracking_category_2').addClass('d-none');
+            $('#trackingcat1').addClass('d-none');
             $trackingcat.addClass('d-none');
         }
         if (glaccount != null) {

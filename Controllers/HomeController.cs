@@ -123,7 +123,7 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = " \n User role has been deactivated or deleted!";
                                     break;
                                 case "004":
-                                    ViewBag.ErrorMessage = " \n Staff User has been deactivated or deleted!";
+                                    ViewBag.ErrorMessage = " \n User has been deactivated or deleted!";
                                     break;
                                 default:
                                     ViewBag.ErrorMessage = "\n Email or Password not correct";

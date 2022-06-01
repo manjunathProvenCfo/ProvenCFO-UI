@@ -97,14 +97,20 @@
                                     <div class="fs--2 text-400">
                                         @if (count == 0)
                                         {
-                                            <h5 class="mb-0 text-truncate fs-0" id="tracking" style=""><span class="">@tcgroup.Name  </span></h5>
+                                            <h5 class="mb-0 text-truncate fs-0 " id="tracking" style=""><span class="">@tcgroup.Name  </span></h5>
 
                                             @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc(event)", style = "width: 180px;" }) }
-                                        else
+                                        else if (count == 1)
                                         {
                                             <h5 class="mb-0 text-truncate fs-0" id="trackingcat" style=""><span class="">@tcgroup.Name  </span></h5>
 
                                             @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}
+                                        else
+                                        {
+                                            <h5 class="mb-0 text-truncate fs-0" id="trackingcat1" style=""><span class="">@tcgroup.Name  </span></h5>
+
+                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}
+                                        
                                     </div>
                                 </div>
                             </div>
