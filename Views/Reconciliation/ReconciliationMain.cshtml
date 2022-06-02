@@ -1051,7 +1051,19 @@
 
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 
-
+        var onChangeAditinalBA = function (e) {
+            var BankAccount = $("#BA_filterBankAccounts option:selected").text();
+            if (BankAccount =="Select Bank Account") {
+                $("#btnDropzoneUpload").attr('disabled', true);
+                $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                $("#btnDropzoneUpload").attr('title', 'Bank Account are not selected.');
+            }
+            else {
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
+        }
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")

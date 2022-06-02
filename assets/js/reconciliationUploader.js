@@ -23,7 +23,7 @@ $(function () {
         var agencyId = $("#ddlclient option:selected").val();
         var agencyName = $("#ddlclient option:selected").text();
         var encodeAgencyName = encodeURIComponent(agencyName)
-
+       
         $uploaderModal.modal('show');
 
         if (!isEmpty(ImportDropzone_view)) {
@@ -41,13 +41,16 @@ $(function () {
             previewNode.id = "";
             previewTemplate = previewNode.parentNode.innerHTML;
             previewNode.parentNode.removeChild(previewNode);
+            
         }
         var year, period = 10;
         Dropzone.autoDiscover = false;
 
         if (Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
         var AccountingPackage = $('#hdAccointingPackage').val();
+        
         if (AccountingPackage == 2) {
+            
             ImportUploader = `/Reconciliation/UploadReconcilationQuickBookReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`; // Set the u
             acceptedFiles = AllowdedMimeQuickBookTypes;
         }
@@ -103,10 +106,23 @@ $(function () {
         //view Page
         ImportDropzone_view.on("addedfile", function (file) {
             if (AccountingPackage == 2) {
+               
                 if (this.files.length > 1) {
                     this.removeAllFiles()
                     this.addFile(file);
                 }
+            }
+            var BankAccount = $("#BA_filterBankAccounts option:selected").text();
+            if (AccountingPackage == 2) {
+                if (BankAccount == "Select Bank Account") {
+
+                    $("#btnDropzoneUpload").attr('disabled', true);
+                    $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                    $("#btnDropzoneUpload").attr('title', 'Bank Account are not selected.');
+
+                }
+                
+
             }
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
@@ -118,8 +134,11 @@ $(function () {
             });
 
             //Remove Upload Button for errored files
-            setTimeout(function () { $(".file-row.dz-error #btnDropzoneUpload").remove(); }, 10)
-
+           
+           
+                setTimeout(function () { $(".file-row.dz-error #btnDropzoneUpload").remove(); }, 10)
+            
+           
 
             file.previewElement.querySelector(".start").onclick = function () {
                 if (file.status === "error") {
