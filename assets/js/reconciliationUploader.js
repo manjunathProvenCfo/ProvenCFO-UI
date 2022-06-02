@@ -141,6 +141,12 @@ $(function () {
            
 
             file.previewElement.querySelector(".start").onclick = function () {
+                if (AccountingPackage == 2) {
+                    if (file.status === "error") {
+                        ShowAlertBoxError("Error", 'You  can only upload files with extension .xls, .xlsx, or .csv.');
+                        return;
+                    }
+                }
                 if (file.status === "error") {
                     ShowAlertBoxError("Error", `You can't upload ${file.name} file.`);
                     return;
