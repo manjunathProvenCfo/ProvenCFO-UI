@@ -2,9 +2,10 @@
 
 var ImportDropzone_view;
 var $attachmentContainer;
-
+var ImportUploader;
 const AllowdedMimeTypes = ".html";
 const AllowdedMimeQuickBookTypes = ".xls, .xlsx, .csv";
+var encodeAgencyName;
 $(function () {
     
     $btnImportReconcilition = $("[id*='btnImportReconcilition']");
@@ -50,7 +51,8 @@ $(function () {
         var AccountingPackage = $('#hdAccointingPackage').val();
         
         if (AccountingPackage == 2) {
-            
+           
+            accountName = $("#QBO_AccountsFilter option:selected");
             ImportUploader = `/Reconciliation/UploadReconcilationQuickBookReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`; // Set the u
             acceptedFiles = AllowdedMimeQuickBookTypes;
         }
@@ -101,6 +103,14 @@ $(function () {
                 }
                 uploadedstatusload(objErrorresult);
                 
+            },            
+            init: function () {
+                var _this = this;
+                this.on("processing", function (file) {
+                    var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+                    ImportUploader = ImportUploader + `&accountName=${BankAccount}`; // Set the u                    
+                    this.options.url = ImportUploader;
+                });
             }
         });
         //view Page
@@ -112,8 +122,10 @@ $(function () {
                     this.addFile(file);
                 }
             }
-            var BankAccount = $("#BA_filterBankAccounts option:selected").text();
-            if (AccountingPackage == 2) {
+
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();            
+           
+            if (AccountingPackage == 2) {               
                 if (BankAccount == "Select Bank Account") {
 
                     $("#btnDropzoneUpload").attr('disabled', true);

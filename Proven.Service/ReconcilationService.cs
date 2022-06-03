@@ -90,10 +90,14 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
         }
-        public async Task<XeroReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(XeroReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
+        public async Task<ReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(ReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
         {
-            return await PostAsyncWithCancellationToken<XeroReconciliationOutputModelMainModel, XeroReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
-        }        
+            return await PostAsyncWithCancellationToken<ReconciliationOutputModelMainModel, ReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
+        }
+        public async Task<ReconciliationOutputModelMainModel> QuickBooksExtractionofManualImportedDatafromCSV(ReconciliationInputModel QBOInput, CancellationToken? cancellationToken = null)
+        {
+            return await PostAsyncWithCancellationToken<ReconciliationOutputModelMainModel, ReconciliationInputModel>("Reconciliation/QuickBooksExtractionofManualImportedDatafromCSV", QBOInput, cancellationToken);
+        }
 
         public async Task InsertReconciliationCommentAttachmentDetails(List<ReconciliationCommentAttachments> attachmentData)
         {
