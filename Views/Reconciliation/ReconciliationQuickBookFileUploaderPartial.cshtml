@@ -17,7 +17,7 @@
                         </fieldset>
                     </div>
                     <div class="row pb-3" style="margin-left: 20px;" id="BankAccount">
-                        @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.ClientXeroAccountsVM>)TempData["NotInBank"], "Id", "Name"), "Select Bank Account", new { @class = " selectpicker form-control", style = "width:225px; margin-left:20px;" })
+                        @Html.DropDownList("QBO_AccountsFilter", new SelectList((List<Proven.Model.ClientXeroAccountsVM>)TempData["NotInBank"], "Id", "Name"), "Select Bank Account", new { @class = " selectpicker form-control", @onchange = "javascript:onChangeAditinalBA(event)", style = "width:225px; margin-left:20px;" })
                     </div>
                 </td>
             </div>
@@ -79,4 +79,4 @@
         </div>
     </div>
 </div>
-</div>
+

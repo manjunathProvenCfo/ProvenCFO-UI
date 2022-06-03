@@ -114,19 +114,19 @@ namespace ProvenCfoUI.Controllers
                             switch (result.message)
                             {
                                 case "001":
-                                    ViewBag.ErrorMessage = " \n Username does not  exist!";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                                 case "002":
-                                    ViewBag.ErrorMessage = "Sorry, the username and password you entered are not \n valid.";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                                 case "003":
-                                    ViewBag.ErrorMessage = " \n User role has been deactivated or deleted!";
+                                    ViewBag.ErrorMessage = "  \n The username or password you have entered is invalid.";
                                     break;
                                 case "004":
-                                    ViewBag.ErrorMessage = " \n Staff User has been deactivated or deleted!";
+                                    ViewBag.ErrorMessage = "  \n The username or password you have entered is invalid.";
                                     break;
                                 default:
-                                    ViewBag.ErrorMessage = "\n Email or Password not correct";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                             }
                             Utltity.Log4NetInfoLog(ViewBag.ErrorMessage + " , User Name: " + loginVM.UserName);

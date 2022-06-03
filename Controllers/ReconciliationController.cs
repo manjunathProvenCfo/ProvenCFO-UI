@@ -7,6 +7,7 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -726,7 +727,7 @@ namespace ProvenCfoUI.Controllers
         [HttpPost]
         public async Task<JsonResult> UploadReconcilationReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
         {
-            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            ReconciliationInputModel input = new ReconciliationInputModel();
             var fileName = file.FileName;
             try
             {
@@ -740,7 +741,7 @@ namespace ProvenCfoUI.Controllers
 
 
 
-                    input.HtmlString = HTMLresult.Trim();
+                    input.HtmlorCsvString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;
 
@@ -755,7 +756,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (OperationCanceledException)
             {
-                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                 objOutput.Status = true;
                 objOutput.ValidationStatus = "RequestCancelation";
                 objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
@@ -771,7 +772,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ex.InnerException.Message == "A task was canceled.")
                 {
-                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                     objOutput.Status = true;
                     objOutput.ValidationStatus = "RequestCancelation";
                     objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
@@ -797,9 +798,9 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
-        public async Task<JsonResult> UploadReconcilationQuickBookReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName)
+        public async Task<JsonResult> UploadReconcilationQuickBookReportsAsync(HttpPostedFileBase file, int agencyId, string agencyName, string accountName)
         {
-            XeroReconciliationInputModel input = new XeroReconciliationInputModel();
+            ReconciliationInputModel input = new ReconciliationInputModel();
             var fileName = file.FileName;
             try
             {
@@ -808,27 +809,30 @@ namespace ProvenCfoUI.Controllers
 
 
                 string HTMLresult = System.Text.Encoding.UTF8.GetString(binData);
+
+               
                 using (ReconcilationService service = new ReconcilationService())
                 {
 
 
                    
-                    input.HtmlString = HTMLresult.Trim();
+                    input.HtmlorCsvString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;
-
+                    input.Type = "Unreconciled";
+                    input.AccountName = accountName;
                     //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
 
                     using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
                     {
-                        var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
+                        var response = await service.QuickBooksExtractionofManualImportedDatafromCSV(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
                         return Json(new { Status = "Success", result = response.ResultData, FileName = fileName }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
             catch (OperationCanceledException)
             {
-                XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                 objOutput.Status = true;
                 objOutput.ValidationStatus = "RequestCancelation";
                 objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
@@ -844,7 +848,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ex.InnerException.Message == "A task was canceled.")
                 {
-                    XeroReconciliationOutputModel objOutput = new XeroReconciliationOutputModel();
+                    ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                     objOutput.Status = true;
                     objOutput.ValidationStatus = "RequestCancelation";
                     objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";

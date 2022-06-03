@@ -923,10 +923,29 @@
         }
         $("input[id$='Notinbook']").click(function () {
             $("#BankAccount").show();
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount == "Select Bank Account") {
+
+                $("#btnDropzoneUpload").attr('disabled', true);
+                $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
+            }
+            else {
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
 
         });
         $("input[id$='Notinbank']").click(function () {
             $("#BankAccount").hide();
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount == "Select Bank Account") {
+
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
 
         });
         
@@ -1051,7 +1070,19 @@
 
         var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 
-
+        var onChangeAditinalBA = function (e) {
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount =="Select Bank Account") {
+                $("#btnDropzoneUpload").attr('disabled', true);
+                $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
+            }
+            else {
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
+        }
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")

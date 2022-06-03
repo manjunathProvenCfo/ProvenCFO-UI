@@ -57,23 +57,25 @@ namespace Proven.Model
         public object MetaData { get; set; }
     }
 
-    public class XeroReconciliationInputModel
+    public class ReconciliationInputModel
     {
-        public String HtmlString { get; set; }
+        public String HtmlorCsvString { get; set; }
         public string CompanyName { get; set; }
-        public int CompanyId { get; set; }
+        public string AccountName { get; set; }
+        public int? CompanyId { get; set; }
+        public string Type { get; set; }
     }
-    public class XeroReconciliationOutputModel
+    public class ReconciliationOutputModel
     {
         public bool Status { get; set; }
         public string ValidationStatus { get; set; }
         public string ValidationMessage { get; set; }
     }
-    public class XeroReconciliationOutputModelMainModel
+    public class ReconciliationOutputModelMainModel
     {
         public bool Status { get; set; }
         public int statusCode { get; set; }
-        public XeroReconciliationOutputModel ResultData { get; set; }
+        public ReconciliationOutputModel ResultData { get; set; }
         public string message { get; set; }
         public object resourceType { get; set; }
         public object metaData { get; set; }

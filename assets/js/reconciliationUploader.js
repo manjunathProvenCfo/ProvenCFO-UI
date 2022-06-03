@@ -2,9 +2,10 @@
 
 var ImportDropzone_view;
 var $attachmentContainer;
-
+var ImportUploader;
 const AllowdedMimeTypes = ".html";
 const AllowdedMimeQuickBookTypes = ".xls, .xlsx, .csv";
+var encodeAgencyName;
 $(function () {
     
     $btnImportReconcilition = $("[id*='btnImportReconcilition']");
@@ -23,7 +24,7 @@ $(function () {
         var agencyId = $("#ddlclient option:selected").val();
         var agencyName = $("#ddlclient option:selected").text();
         var encodeAgencyName = encodeURIComponent(agencyName)
-
+       
         $uploaderModal.modal('show');
 
         if (!isEmpty(ImportDropzone_view)) {
@@ -41,13 +42,17 @@ $(function () {
             previewNode.id = "";
             previewTemplate = previewNode.parentNode.innerHTML;
             previewNode.parentNode.removeChild(previewNode);
+            
         }
         var year, period = 10;
         Dropzone.autoDiscover = false;
 
         if (Dropzone.instances.length > 0) Dropzone.instances.forEach(dz => dz.destroy())
         var AccountingPackage = $('#hdAccointingPackage').val();
+        
         if (AccountingPackage == 2) {
+           
+            accountName = $("#QBO_AccountsFilter option:selected");
             ImportUploader = `/Reconciliation/UploadReconcilationQuickBookReportsAsync?agencyId=${agencyId}&agencyName=${encodeAgencyName}`; // Set the u
             acceptedFiles = AllowdedMimeQuickBookTypes;
         }
@@ -98,15 +103,38 @@ $(function () {
                 }
                 uploadedstatusload(objErrorresult);
                 
+            },            
+            init: function () {
+                var _this = this;
+                this.on("processing", function (file) {
+                    var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+                    ImportUploader = ImportUploader + `&accountName=${BankAccount}`; // Set the u                    
+                    this.options.url = ImportUploader;
+                });
             }
         });
         //view Page
         ImportDropzone_view.on("addedfile", function (file) {
             if (AccountingPackage == 2) {
+               
                 if (this.files.length > 1) {
                     this.removeAllFiles()
                     this.addFile(file);
                 }
+            }
+
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();            
+           
+            if (AccountingPackage == 2) {               
+                if (BankAccount == "Select Bank Account") {
+
+                    $("#btnDropzoneUpload").attr('disabled', true);
+                    $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                    $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
+
+                }
+                
+
             }
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
@@ -118,10 +146,19 @@ $(function () {
             });
 
             //Remove Upload Button for errored files
-            setTimeout(function () { $(".file-row.dz-error #btnDropzoneUpload").remove(); }, 10)
-
+           
+           
+                setTimeout(function () { $(".file-row.dz-error #btnDropzoneUpload").remove(); }, 10)
+            
+           
 
             file.previewElement.querySelector(".start").onclick = function () {
+                if (AccountingPackage == 2) {
+                    if (file.status === "error") {
+                        ShowAlertBoxError("Error", 'You  can only upload files with extension .xls, .xlsx, or .csv.');
+                        return;
+                    }
+                }
                 if (file.status === "error") {
                     ShowAlertBoxError("Error", `You can't upload ${file.name} file.`);
                     return;
