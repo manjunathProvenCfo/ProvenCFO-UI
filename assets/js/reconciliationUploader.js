@@ -118,7 +118,7 @@ $(function () {
 
                     $("#btnDropzoneUpload").attr('disabled', true);
                     $('#btnDropzoneUpload').css('cursor', 'not-allowed');
-                    $("#btnDropzoneUpload").attr('title', 'Bank Account are not selected.');
+                    $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
 
                 }
                 
