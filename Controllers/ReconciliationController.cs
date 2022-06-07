@@ -197,6 +197,18 @@ namespace ProvenCfoUI.Controllers
                         TempData["BankRule"] = getBankRule();
                         //TempData["Action"] = getAction();
                         TempData["ReconciledStatus"] = getReconciledStatus();
+                        var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                        getallAction.ForEach(x => x.ActionName = x.ActionName);
+
+                        if (Type == "Outstanding Payments")
+                        {
+                            ViewBag.isvisibleGlAccount = true;
+                            TempData["Action"] = getallAction;
+                        }
+                        else
+                        {
+                            ViewBag.isvisibleGlAccount = false;
+                        }
                     }
                     else
                     {
