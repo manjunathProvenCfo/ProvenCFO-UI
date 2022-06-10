@@ -16,10 +16,8 @@ $(document).ready(function () {
     });
 
     createTwilioUser();
-       
-   
     AgencyDropdownPartialViewChange();
-    //bindNotInBooksAndBanksCountDashboard();
+   /* bindNotInBooksAndBanksCountDashboard();*/
     NotesIndividualCountAndPercentageByAgencyId();
     //KanbanCountWithIndividualPriority();
     //defaultReportsWidget();
@@ -248,7 +246,6 @@ var color = {
 };
 
 function KanbanCountWithIndividualPriority() {
-
     var ClientID = $("#ddlclient option:selected").val();
     getAjax(`/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
         let data = response.ResultData;
@@ -407,9 +404,10 @@ var colors = {
 };
 
 function NotesIndividualCountAndPercentageByAgencyId() {
+   
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-        let data = response.ResultData;
+    getAjaxSync(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+        let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
         for (key in colors) {
@@ -420,21 +418,22 @@ function NotesIndividualCountAndPercentageByAgencyId() {
 
             $("#notesCategoryDiv").append(htmltext);
         }
-
         var result = {};
         if (data != undefined && data.length > 0) {
-
             for (var i = 0; i < data.length; i++) {
-                let NoteCategoryName = data[i].NoteCategoryName;
-                let NoteCategoryCount = data[i].NoteCategoryCount;
+                let NoteCategoryName = data[i].noteCategoryName;
+                let NoteCategoryCount = data[i].noteCategoryCount;
+                let TotalNotes = data[i].totalNotes;
                 var tempObj = { value: NoteCategoryCount, name: NoteCategoryName };
                 result[NoteCategoryName] = tempObj;
+                $("#lblTotalNotesCount").text(TotalNotes);
             }
         }
         else {
+            let TotalNotes = 0;
+            $("#lblTotalNotesCount").text(TotalNotes);         
             var tempObj = { value: 1, name: "no data" };
             result["no data"] = tempObj;
-
         }
 
         for (key in result) {
@@ -443,15 +442,6 @@ function NotesIndividualCountAndPercentageByAgencyId() {
         }
 
         NotesChart(Object.values(result));
-        if (response.Message == "Success") {
-
-            let TotalNotes = 0;
-
-            for (var i = 0; i < data.length; i++) {
-                TotalNotes = Number(data[i].TotalNotes);
-            }
-            $("#lblTotalNotesCount").text(TotalNotes);
-        }
     });
 }
 
@@ -596,7 +586,7 @@ function AgencyDropdownPartialViewChange() {
 
                 
                 getTeamMembersList();
-                NotesIndividualCountAndPercentageByAgencyId();
+                /*NotesIndividualCountAndPercentageByAgencyId();*/
                 $('#roleexist').show();
                 $('.spClientName').html(String(data.Name));
                 $('.spEntityName').html(String(data.EntityName));

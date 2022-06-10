@@ -404,46 +404,46 @@ namespace ProvenCfoUI.Controllers
             //return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
         }
 
-        [CheckSession]
-        public JsonResult TotalNotesCountByAgencyId(string AgencyId)
-        {
-            try
-            {
+        //[CheckSession]
+        //public JsonResult TotalNotesCountByAgencyId(string AgencyId)
+        //{
+        //    try
+        //    {
 
-                using (NotesService objNotes = new NotesService())
-                {
-                    var objResult = objNotes.TotalNotesCountByAgencyId(Convert.ToString(AgencyId));
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
-                }
+        //        using (NotesService objNotes = new NotesService())
+        //        {
+        //            var objResult = objNotes.TotalNotesCountByAgencyId(Convert.ToString(AgencyId));
+        //            return Json(objResult, JsonRequestBehavior.AllowGet);
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
 
 
-        [CheckSession]
-        [HttpGet]
-        public JsonResult NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
-        {
-            try
-            {
-                using (NotesService objNotes = new NotesService())
-                {
-                    var objResult = objNotes.NotesIndividualCountAndPercentageByAgencyId(Convert.ToString(AgencyId));
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
-                }
+        //[CheckSession]
+        //[HttpGet]
+        //public JsonResult NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
+        //{
+        //    try
+        //    {
+        //        using (NotesService objNotes = new NotesService())
+        //        {
+        //            var objResult = objNotes.NotesIndividualCountAndPercentageByAgencyId(Convert.ToString(AgencyId));
+        //            return Json(objResult, JsonRequestBehavior.AllowGet);
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
         public JsonResult EmailSend(string ClientName, string ClientId, string url, string totalNotes, string sentdate)
         {
             try

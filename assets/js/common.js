@@ -61,7 +61,6 @@ $(function () {
     bindNotInBanksAndBanksCount();
 
     GetTotalNotesCount();
-
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
         $("#home").addClass("show");
     }
@@ -187,22 +186,23 @@ function selectProps(...props) {
     }
 }
 function GetTotalNotesCount() {
-
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-        if (response.Message == "Success") {
-
-            let data = response.ResultData;
-            let TotalNotes = 0;
-
-            for (var i = 0; i < data.length; i++) {
-                TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+    getAjaxSync(apiurl + `Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+        if (response.message == "Success") {
+            let data = response.resultData;
+            if (data != undefined && data.length > 0) {
+                let TotalNotes = data[0].totalNotes;
+                $("#lblTotalNotes").text(TotalNotes);
             }
-            $("#lblTotalNotes").text(TotalNotes);
+            else {
+                let TotalNotes = 0;
+                $("#lblTotalNotes").text(TotalNotes);
+            }           
         }
     });
 }
+
+
 
 
 var totalNotInBanksData;
@@ -428,9 +428,6 @@ var createTwilioClientGlobal = async function () {
 
                 if (isNotificationsAlreadyFetched === false) {
                     isNotificationsAlreadyFetched = true;
-                    /* showWaitMeLoader($notifictionsList);*/
-                    /* showWaitMeLoader($divNotificationsCard);*/
-
                     await setNotificationMessageAddedListenerOnAllChannels();
 
                     var isNotificationPage = isLocationUrlContains("communication/notifications")
