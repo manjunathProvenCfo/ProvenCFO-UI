@@ -1217,7 +1217,6 @@
     <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js.map" />
     <Content Include="assets\lib\underscore.js\underscore-min.js.map" />
     <Content Include="assets\lib\lottie-player\lf20_fw9ijhki.json" />
-    <None Include="bundleconfig.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

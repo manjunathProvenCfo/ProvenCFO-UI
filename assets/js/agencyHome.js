@@ -586,7 +586,7 @@ function AgencyDropdownPartialViewChange() {
 
                 
                 getTeamMembersList();
-                /*NotesIndividualCountAndPercentageByAgencyId();*/
+                NotesIndividualCountAndPercentageByAgencyId();
                 $('#roleexist').show();
                 $('.spClientName').html(String(data.Name));
                 $('.spEntityName').html(String(data.EntityName));
