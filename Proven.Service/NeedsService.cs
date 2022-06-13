@@ -352,10 +352,10 @@ namespace Proven.Service
 
         }
 
-        public KanbanCountWithIndividualPriorityMainModel KanbanCountWithIndividualPriority(string AgencyId)
-        {
-            return GetAsync<KanbanCountWithIndividualPriorityMainModel>("Needs/KanbanCountWithIndividualPriority?AgencyId=" + AgencyId).Result;
-        }
+        //public KanbanCountWithIndividualPriorityMainModel KanbanCountWithIndividualPriority(string AgencyId)
+        //{
+        //    return GetAsync<KanbanCountWithIndividualPriorityMainModel>("Needs/KanbanCountWithIndividualPriority?AgencyId=" + AgencyId).Result;
+        //}
         public void Dispose()
         {
             Dispose(true);

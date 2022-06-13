@@ -247,9 +247,8 @@ var color = {
 
 function KanbanCountWithIndividualPriority() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
-        let data = response.ResultData;
-
+    getAjaxSync(apiurl + `/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response){
+        let data = response.resultData;
         $("#needsCategoryDiv").children().remove();
         for (key in color) {
             var htmltext = `<div class="d-flex align-items-center">
@@ -264,14 +263,19 @@ function KanbanCountWithIndividualPriority() {
         if (data != undefined && data.length > 0) {
 
             for (var i = 0; i < data.length; i++) {
-                let KanbanTaskLabelName = data[i].KanbanTaskLabelName;
-                let LabelNameCount = data[i].LabelNameCount;
+                let KanbanTaskLabelName = data[i].kanbanTaskLabelName;
+                let LabelNameCount = data[i].labelNameCount;
+                let TotalTasks = 0;
+                TotalTasks = data[i].totalTasks;
+                $("#lblTotalTasksCount").text(TotalTasks);
                 var tempObj1 = { value: LabelNameCount, name: KanbanTaskLabelName };
 
                 results[KanbanTaskLabelName] = tempObj1;
             }
         }
         else {
+            let TotalTasks = 0;
+            $("#lblTotalTasksCount").text(TotalTasks);
             var tempObj = { value: 1, name: "no data" };
             results["no data"] = tempObj;
 
@@ -284,20 +288,17 @@ function KanbanCountWithIndividualPriority() {
 
         }
 
-
         NeedsChart(Object.values(results));
-        if (response.Message == "Success") {
+        //if (response.Message == "Success") {
 
-            let TotalTasks = 0;
+        //    let TotalTasks = 0;
 
-            for (var i = 0; i < data.length; i++) {
-                TotalTasks = Number(data[i].TotalTasks);
-            }
+        //    for (var i = 0; i < data.length; i++) {
+        //        TotalTasks = Number(data[i].totalTasks);
+        //    }
 
-            $("#lblTotalTasksCount").text(TotalTasks);
-        }
-
-      
+        //    $("#lblTotalTasksCount").text(TotalTasks);
+        //}
     });
 }
 
@@ -404,7 +405,6 @@ var colors = {
 };
 
 function NotesIndividualCountAndPercentageByAgencyId() {
-   
     var ClientID = $("#ddlclient option:selected").val();
     getAjaxSync(apiurl + `/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
