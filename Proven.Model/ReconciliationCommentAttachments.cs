@@ -19,6 +19,7 @@ namespace Proven.Model
         public DateTime? CreatedDateUTC { get; set; }
         public string CreatedBy { get; set; }
     }
+    [Serializable]
     public class ReconciliationCommentAttachmentsVM
     {
         public int Id { get; set; }
@@ -31,6 +32,7 @@ namespace Proven.Model
         public DateTime? CreatedDateUTC { get; set; }
         public string CreatedBy { get; set; }
     }
+
     public class ReconciliationCommentAttachmentsMain
     {
         public bool Status { get; set; }
