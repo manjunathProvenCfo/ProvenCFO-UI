@@ -252,7 +252,7 @@ function bindNotInBanksAndBanksCount() {
         });
     }
     else {
-        data = sessionStorage.getItem("NotInBooksData");
+        data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
         bindNotInBooksData(data);
     }
 
