@@ -516,12 +516,16 @@
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
                 if (response.Message == "SUCCESS") {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
                     ShowAlertBoxSuccess("Success!", "Successfully synced with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
                     ShowAlertBoxError("Error!", "Sorry, there was a problem getting data from Xero. Please try again later.", function () { window.location.reload(); });
@@ -549,13 +553,11 @@
                             break;
                         case 'SUCCESS':
                             msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. ';
-                            sessionStorage.removeItem("NotInBooksData");
-                            sessionStorage.removeItem("NotInBanksData");
+                           
                             break;
                         case 'FAILED':
                             msg = 'Error while data extratction from Xero. Please try after some time. ';
-                            sessionStorage.removeItem("NotInBooksData");
-                            sessionStorage.removeItem("NotInBanksData");
+                           
                             break;
 
                         default:
