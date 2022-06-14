@@ -247,7 +247,7 @@ var color = {
 
 function KanbanCountWithIndividualPriority() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response){
+    getAjaxSync(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
         $("#needsCategoryDiv").children().remove();
         for (key in color) {
@@ -406,7 +406,7 @@ var colors = {
 
 function NotesIndividualCountAndPercentageByAgencyId() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjaxSync(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
