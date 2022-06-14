@@ -549,12 +549,12 @@
                             break;
                         case 'SUCCESS':
                             msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. ';
-                            sessionStorage.removeItem("NotInBooksCount");
+                            sessionStorage.removeItem("NotInBooksData");
                             sessionStorage.removeItem("NotInBanksData");
                             break;
                         case 'FAILED':
                             msg = 'Error while data extratction from Xero. Please try after some time. ';
-                            sessionStorage.removeItem("NotInBooksCount");
+                            sessionStorage.removeItem("NotInBooksData");
                             sessionStorage.removeItem("NotInBanksData");
                             break;
 

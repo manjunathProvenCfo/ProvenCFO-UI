@@ -803,7 +803,7 @@ function GetReconcilationData1() {
     var totalSum = 0;
     var percentage = 0;
     totalSum2 = 0;
-    if (sessionStorage.getItem("NotInBooksCount") == null) {
+    if (sessionStorage.getItem("NotInBooksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
                 
@@ -814,7 +814,7 @@ function GetReconcilationData1() {
                     $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                     totalSum2 = data[0].Count;
                     percentage = data[0].percentage.toFixed(0);
-                    sessionStorage.setItem("NotInBooksCount", JSON.stringify(data));
+                    sessionStorage.setItem("NotInBooksData", JSON.stringify(data));
                 }
                 else {
                     $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
@@ -827,7 +827,7 @@ function GetReconcilationData1() {
         })
     }
     else {
-        var data = JSON.parse(sessionStorage.getItem("NotInBooksCount"));           
+        var data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
         if (data != null && data.length > 0) {
             $("#lblNotInBooksCount2").text(data[0].Count);
             $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));

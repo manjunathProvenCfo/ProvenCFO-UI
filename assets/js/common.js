@@ -109,7 +109,7 @@ var AgencyDropdownPartialViewChange = function () {
 var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
     ShowlottieLoader();
     MenuOptionHideAndShow(getClientId());
-    sessionStorage.removeItem("NotInBooksCount");
+    sessionStorage.removeItem("NotInBooksData");
     sessionStorage.removeItem("NotInBanksData");
     SetUserPreferencesForAgency(callback);
 }
@@ -246,13 +246,13 @@ function bindNotInBanksAndBanksCount() {
     if (sessionStorage.getItem("NotInBooksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
-                sessionStorage.setItem("NotInBooksCount", JSON.stringify(response.ResultData));
+                sessionStorage.setItem("NotInBooksData", JSON.stringify(response.ResultData));
                 bindNotInBooksData(response.ResultData);
             }
         });
     }
     else {
-        data = sessionStorage.getItem("NotInBooksCount");
+        data = sessionStorage.getItem("NotInBooksData");
         bindNotInBooksData(data);
     }
 
