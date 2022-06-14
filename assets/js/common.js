@@ -109,8 +109,8 @@ var AgencyDropdownPartialViewChange = function () {
 var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
     ShowlottieLoader();
     MenuOptionHideAndShow(getClientId());
-    sessionStorage.removeItem("NotInBooksCount")
-    sessionStorage.removeItem("NotInBanksData")
+    sessionStorage.removeItem("NotInBooksCount");
+    sessionStorage.removeItem("NotInBanksData");
     SetUserPreferencesForAgency(callback);
 }
 function SetUserPreferencesForAgency(callback) {

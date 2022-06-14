@@ -219,6 +219,8 @@ $(function () {
     }
     $btnCloseImportreconciliation.click(function (e) {
         ShowlottieLoader();
+        sessionStorage.removeItem("NotInBooksCount");
+        sessionStorage.removeItem("NotInBanksData");
         window.location.reload();
     });
     function RemoveFile(e) {
