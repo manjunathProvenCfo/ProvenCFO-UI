@@ -132,7 +132,7 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/table")
     <script>
         var ExportToExcel = function () {
 
@@ -201,11 +201,16 @@
                             }
                         })
                         .error(function (data) {
-                          
+
                             swal("Oops", "We couldn't connect to the server! Please try again", "error");
                         });
                 });
         }
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
 
     </script>
 }

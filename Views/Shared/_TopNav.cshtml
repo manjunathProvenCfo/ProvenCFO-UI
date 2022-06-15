@@ -28,9 +28,10 @@
 
         @*The Setting one*@
 
-        <li class="nav-item dropdown dropdown-on-hover ">
+        @*<li class="nav-item dropdown dropdown-on-hover ">
             <a class="nav-link active" id="navbarDropdownSetting" href="#" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"><span class="fa fa-cog fs-4" data-fa-transform="shrink-6"></span></a>
-        </li>
+        </li>*@
+
         @*The Setting Ends here*@
 
         @*Here I am Attaching the line..*@
@@ -43,15 +44,17 @@
                             <div class="col-auto">
                                 <h6 class="card-header-title mb-0">Notifications</h6>
                             </div>
-                            @*<div class="col-auto"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>*@
+                            <div class="col-auto" id="MarkallRead"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>
                         </div>
                     </div>
-                    <div class="list-group list-group-flush font-weight-normal fs--1" id="navbarDropdownNotificationListGroup">
-                        @*<div class="list-group-title border-bottom">NEW</div>*@
+                    <div class="list-group list-group-flush font-weight-normal fs--1" id="TopNotificaitonList">
+                        <div class="list-group-title border-bottom">NEW</div>
+                        
                     </div>
-                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="/communication/notifications">View all</a></div>
+                    <div class="card-footer text-center border-top" id="top"><a class="card-link d-block" href="../Communication/notifications">View all</a></div>
                 </div>
             </div>
+
         </li>
 
         @*The notification One Ends here*@
@@ -69,7 +72,7 @@
             <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                 <div class="avatar avatar-xl">
-                    <img class="rounded-circle" id="topProfilePicture" src="@(!string.IsNullOrEmpty(ViewBag.ProfileUrl)?  ViewBag.ProfileUrl:"../assets/img/team/default-logo.png")" alt="" />
+                    <img class="rounded-circle" id="topProfilePicture" src="@(!string.IsNullOrEmpty(ViewBag.ProfileUrl)?  ViewBag.ProfileUrl:"../assets/img/team/default-logo.png")" alt="" onerror="this.onerror=null;this.src='../assets/img/team/avatar.png';" userid="@(ViewBag.UserId)" />
 
                 </div>
             </a>

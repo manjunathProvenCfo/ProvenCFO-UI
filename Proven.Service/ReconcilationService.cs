@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Proven.Service
@@ -46,9 +47,9 @@ namespace Proven.Service
         {
             return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId + "&Type=" + Type).Result;
         }
-        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional)
+        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional, int reconciliationActionId,string UserId)
         {
-            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional);
+            string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}&reconciliationActionId={6}&UserId={7}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId);
             return PostAsync<ReturnModel>(result).Result;
         }
         public ReturnModel BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
@@ -72,6 +73,48 @@ namespace Proven.Service
         public XeroReconcilationDataOnDemandRequestMainModel GetXeroOnDemandRequestStatusById(int RequestID)
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Xero/GetXeroOnDemandRequestStatusById?RequestID=" + RequestID).Result;
+        }
+        public ReturnModel InsertReconcilationComments(ReconciliationComments comment)
+        {
+            return PostAsync<ReturnModel, ReconciliationComments>("Reconciliation/InsertReconcilationComments", comment).Result;
+        }
+        public ReturnNumberModel InsertReconcilationCommentsDetailsForAttachments(ReconciliationComments comment)
+        {
+            return PostAsync<ReturnNumberModel, ReconciliationComments>("Reconciliation/InsertReconcilationCommentsDetailsForAttachments", comment).Result;
+        }
+        public ReturnModel InsertReconcilationMentionedUsersDetails(ReconciliationCommentUserMention usermentioned)
+        {
+            return PostAsync<ReturnModel, ReconciliationCommentUserMention>("Reconciliation/InsertReconcilationMentionedUsersDetails", usermentioned).Result;
+        }
+        public XeroReconcilationDataOnDemandRequestMainModel getcommentsOnreconcliationId(int reconcliationId)
+        {
+            return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
+        }
+        public async Task<ReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(ReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
+        {
+            return await PostAsyncWithCancellationToken<ReconciliationOutputModelMainModel, ReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
+        }
+        public async Task<ReconciliationOutputModelMainModel> QuickBooksExtractionofManualImportedDatafromCSV(ReconciliationInputModel QBOInput, CancellationToken? cancellationToken = null)
+        {
+            return await PostAsyncWithCancellationToken<ReconciliationOutputModelMainModel, ReconciliationInputModel>("Reconciliation/QuickBooksExtractionofManualImportedDatafromCSV", QBOInput, cancellationToken);
+        }
+
+        public async Task InsertReconciliationCommentAttachmentDetails(List<ReconciliationCommentAttachments> attachmentData)
+        {
+            await client.PostAsync($"Reconciliation/InsertReconciliationCommentAttachmentDetails", PreparePostContent(attachmentData));
+        }
+        public ReconcilationmainActionOptionVM GetAllReconcilationAction()
+        {
+            return GetAsync<ReconcilationmainActionOptionVM>("Reconciliation/GetAllReconcilationAction").Result;
+        }
+        public ReconciliationCommentAttachmentsMain getReconciliationCommentAttachments(int CommentId )
+        {
+            return GetAsync<ReconciliationCommentAttachmentsMain>("Reconciliation/getReconciliationCommentAttachments?reconiliationCommentId=" + CommentId).Result;
+        }
+
+        public ReturnModel DeleteReconciliationCommentAttachment(int CommentId)
+        {
+            return PostAsync<ReturnModel>("Reconciliation/DeleteReconciliationCommentAttachment?reconiliationCommentId=" + CommentId).Result;
         }
 
         public void Dispose()

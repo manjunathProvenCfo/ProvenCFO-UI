@@ -11,7 +11,7 @@
 
         </div><a class="navbar-brand" href=@Url.Action("AgencyHome", "AgencyService")>
             <div class="d-flex align-items-center py-3">
-                <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="120" />
+                <img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" height="38" width="120" />
             </div>
         </a>
 
@@ -117,6 +117,52 @@
                 <hr class="navbar-vertical-hr my-2">
             </div>
             <ul class="navbar-nav flex-column">
+
+
+                @if (Common.IsFeatureAccessable("STP"))
+                {
+                    <li class="nav-item" id="menu_setup">
+
+                        <a class="nav-link dropdown-indicator" href="#setup" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="setup" name="menu_setup">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-fire"></span></span><span class="nav-link-text">Setup</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="setup" data-parent="#navbarVerticalCollapse">
+
+
+                            @if (Common.IsFeatureAccessable("GLA"))
+                            {
+                                <li class="nav-item" id="submenu_glAccount">
+                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_GLaccounts">GL Accounts</a>
+                                </li>
+                            }
+
+                            @if (Common.IsFeatureAccessable("TCS"))
+                            {
+                                <li class="nav-item" id="submenu_trackingCategories">
+                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_trackingcategories">Tracking Categories</a>
+                                </li>
+                            }
+                            @*@if (Common.IsFeatureAccessable("SYS"))
+                            {
+                                <li class="nav-item" id="submenu_systemsettings">
+                                    <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_systemsettings">System Settings</a>
+                                </li>
+                            }*@
+
+                            @if (Common.IsFeatureAccessable("BAC"))
+                             {
+                                <li class="nav-item" id="submenu_bankaccount">
+                                    <a class="nav-link" href=@Url.Action("GetBankAccounts", "Integration") name="submenu_bankaccount">Bank Accounts</a>
+                                </li>
+                             }
+
+
+
+                        </ul>
+                    </li>
+                }
                 @if (Common.IsFeatureAccessable("ADM"))
                 {
                     <li class="nav-item" id="menu_administration">
@@ -135,9 +181,10 @@
                             }
                             @if (Common.IsFeatureAccessable("AUR"))
                             {
-                                <li class="nav-item" id="submenu_staffusers">
-                                    <a class="nav-link" href=@Url.Action("About","Home") name="submenu_staffusers">Agency Users</a>
+                                <li class="nav-item" id="submenu_agencyusers">
+                                    <a class="nav-link" href=@Url.Action("GetAllAgencyUsers","Invitation") name="submenu_agencyusers">Agency Users</a>
                                 </li>
+
 
                             }
                             @if (Common.IsFeatureAccessable("CAG"))
@@ -160,20 +207,7 @@
                                     <a class="nav-link" href=@Url.Action("GetAllBillableEntitiesList", "BillableEntities") name="submenu_billableentities"> Billable Entities </a>
                                 </li>
                             }
-                        </ul>
-                    </li>
-                }
 
-                @if (Common.IsFeatureAccessable("STP"))
-                {
-                    <li class="nav-item" id="menu_setup">
-
-                        <a class="nav-link dropdown-indicator" href="#setup" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="setup" name="menu_setup">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon"><span class="fas fa-fire"></span></span><span class="nav-link-text">Setup</span>
-                            </div>
-                        </a>
-                        <ul class="nav collapse" id="setup" data-parent="#navbarVerticalCollapse">
                             @if (Common.IsFeatureAccessable("JTL"))
                             {
                                 <li class="nav-item" id="submenu_jobtitles">
@@ -187,33 +221,9 @@
                                     <a class="nav-link" href=@Url.Action("Role", "Role") name="submenu_userroles">User Roles</a>
                                 </li>
                             }
-                            
-                            @if (Common.IsFeatureAccessable("GLA"))
-                            {
-                                <li class="nav-item" id="submenu_glAccount">
-                                    <a class="nav-link" href=@Url.Action("Integration", "Integration") name="submenu_GLaccounts">GL Accounts</a>
-                                </li>
-                            }
-
-                            @if (Common.IsFeatureAccessable("TCS"))
-                            {
-                                <li class="nav-item" id="submenu_trackingCategories">
-                                    <a class="nav-link" href=@Url.Action("GetXeroTracking", "Integration") name="submenu_trackingcategories">Tracking Categories</a>
-                                </li>
-                            }
-                            @if (Common.IsFeatureAccessable("SYS"))
-                            {
-                                <li class="nav-item" id="submenu_systemsettings">
-                                    <a class="nav-link" href=@Url.Action("About", "Home") name="submenu_systemsettings">System Settings</a>
-                                </li>
-                            }
-
-
-
                         </ul>
                     </li>
                 }
-
             </ul>
         </div>
     </div>

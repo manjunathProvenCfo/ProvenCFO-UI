@@ -28,8 +28,8 @@ namespace Proven.Model
         public DateTime? CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
         public string XeroID { get; set; }
-        public string XeroClientID { get; set; }
-        public string XeroClientSecret { get; set; }
+        public string APIClientID { get; set; }
+        public string APIClientSecret { get; set; }
         public string XeroContactIDforProvenCfo { get; set; }
         public string AsanaId { get; set; }
         public string EverhourId { get; set; }
@@ -39,7 +39,7 @@ namespace Proven.Model
         // public string[] XeroScope { get; set; }
         public string[] XeroScopeArray { get; set; }
         public string XeroScopeString { get; set; }
-         public string XeroScope { get; set; }
+        public string APIScope { get; set; }
         public string CityName { get; set; }
         public string StateName { get; set; }
         public int BillableEntityId { get; set; }
@@ -73,6 +73,8 @@ namespace Proven.Model
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
         public bool?   EnableAutomation { get; set; }
+        public int? ThirdPartyAccountingApp_ref { get; set; }
+        public int? CompanyId { get; set; }
 
 
 
@@ -83,7 +85,16 @@ namespace Proven.Model
         public DateTime? SummaryCreatedDate { get; set; }
         public string SummaryModifiedBy { get; set; }
         public string SummaryModifiedByFullName { get; set; }
-        public DateTime? SummaryModifiedDate { get; set; }        
+        public DateTime? SummaryModifiedDate { get; set; }
+        public int? Summaryid_ref { get; set; }
+        public string SummaryData { get; set; }
+        public bool? IsMailSend { get; set; }
+        public string MailSendDate { get; set; }
+        public string MailSendDateNotes { get; set; }
+        public string MailSendDateNeeds { get; set; }
+
+        public  Int64? QuickBooksCompanyId { get; set; }
+
     }
 
     public class ClientMainModel

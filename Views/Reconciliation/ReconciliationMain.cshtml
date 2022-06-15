@@ -1,76 +1,6 @@
 ﻿@model IEnumerable<Proven.Model.reconciliationVM>
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
-@*<style>
-    .tabselect {
-        text-decoration: underline;
-    }
-
-    .loader-circle {
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        z-index: 1110;
-        background-color: rgba(0,0,0,0.75);
-    }
-
-        .loader-circle .spinner-border {
-            width: 4rem;
-            height: 4rem;
-            border: 0.5em solid #00be62;
-            border-right-color: transparent;
-        }
-
-    .position-fixed {
-        position: fixed !important;
-    }
-
-    select#item_additional_tracking_category_ref {
-        width: 90px;
-    }
-
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
-
-    .page-link:hover {
-        color: #000 !important;
-    }
-
-    select#item_gl_account_ref {
-        font-size: 13px !important;
-        width: 400px;
-    }
-
-    select#item_rule {
-        font-size: 13px !important;
-        width: 193px;
-    }
-
-    select#item_tracking_category_ref {
-        font-size: 13px !important;
-        width: 160px;
-    }
-
-    select#item_additional_tracking_category_ref {
-        font-size: 13px !important;
-        width: 160px;
-    }
-    /*  .page-item.active .page-link {
-        background-color: #fff !important;
-        border-color: #fff !important;
-    }*/
-    .chat-message {
-        max-width: calc(100% - 2rem);
-    }
-    .page-item.active .page-link {
-        z-index: 3;
-        color: #fff !important;
-        background-color: #00BE82 !important;
-    }
-</style>*@
 
 @Styles.Render("~/bundles/css/twilio-chat")
 <!--<div class="card mb-4 ">
@@ -131,7 +61,7 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="row align-items-center">
-                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0);">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
                                 <span class="fas fa-book"></span>
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
@@ -163,10 +93,25 @@
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
 
+                                @if (ViewBag.IsStaffUser == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                        <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                    </button>
+
+
+                                }
+                                <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
+                               
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
+                                    <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
+                                </button>
+                               
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
-                                @if (ViewBag.IsStaffUser == true)
+
+                                @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                 }
@@ -191,7 +136,35 @@
                     </div>
                 </div>
             </div>
+
+
+            @*<form class="card">
+                    <div class="card-header bg-light">
+
+                        <h5 class="mb-0">New message</h5>
+
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="border-bottom border-200">
+                            <input class="form-control border-0 outline-none px-card" id="email-to" type="email" aria-describedby="email-to" placeholder="To">
+                        </div>
+                        <input class="form-control border-0 outline-none px-card" id="email-subject" type="text" aria-describedby="email-subject" placeholder="Subject">
+                        <div class="min-vh-50">
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer border-top border-200 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-primary btn-sm px-5 mr-2" type="submit">Send</button>
+
+                        </div>
+
+                    </div>
+                </form>*@
+
             <div class="card-body px-0 pt-0">
+
                 <div class="dashboard-data-table table-responsive">
                     <table class="table table-sm table-dashboard fs--1 data-table border-bottom" id="tblreconcilation" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
                         <thead class="bg-200 text-900">
@@ -209,16 +182,24 @@
                                 <th class="sort pr-1 align-middle">Amount</th>
 
 
-                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+
+                                @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 && ViewBag.isvisibleGlAccount == true)
+                                {
+                                    <th class="sort pr-10 align-center "> Action</th>
+                                }
+
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.isvisibleGlAccount == false)
                                 {
                                     <th class="sort pr-1 align-middle">GL Account</th>
                                 } @*<th></th>*@
-                                @if (ViewBag.IsBankRuleVisible == true)
+
+                                @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
                                 {
                                     <th class="sort pr-10 align-center ">Rule</th>
                                 }
 
-                                @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
                                 {
                                     foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                                     {
@@ -227,7 +208,7 @@
 
                                 }
 
-                                <th class="vikas no-sort align-middle data-table-row-action"></th>
+                                <th class="top no-sort align-middle data-table-row-action"></th>
 
                             </tr>
                         </thead>
@@ -249,25 +230,34 @@
                                     @if (item.amount < 0)
                                     {@*<td class="sort pr-1 align-middle text-danger col-xs-1">$(@Html.DisplayFor(modelItem => item.amount))</td>*@
                                     <td class="sort pr-1 align-middle text-danger col-xs-1">@Convert.ToString(Html.DisplayFor(modelItem => item.amount)).Replace("-", "")</td>
+
                                 }
                                 else
                                 { @*<td class="sort pr-1 align-middle col-xs-1">$@Html.DisplayFor(modelItem => item.amount)</td>*@
                                 <td class="sort pr-1 align-middle col-xs-1"> @Html.DisplayFor(modelItem => item.amount)</td>
                             }
 
-                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.isvisibleGlAccount == false)
                                     {
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
-                                                <div class="col-auto">
-
-                                                    @*@Html.DropDownList("gl_account", new SelectList(ViewBag.GLAccounts, "Id", "Name"), "Pick Account", new { @class = "form-control" })*@
-                                                    @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
-                                                </div>
+                                                @if (ViewBag.IsStaffUser == true)
+                                                {
+                                                    <div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="@item.GlAccountModifiedDateUTC" ModifiedBy="@item.GlAccountModifiedBy" title="No Modification yet.">
+                                                        @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;", @utcdate = string.Format("{0:dd MMM yyyy hh:mm:ss tt}", @item.GlAccountModifiedDateUTC), @ModifiedBy = @item.GlAccountModifiedBy })
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-auto">
+                                                        @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;" })
+                                                    </div>
+                                                }
                                             </div>
+
                                         </td>
                                     } @*<td class="sort pr-1 align-middle"><span class="fas fa-plus-circle"></span></td>*@
-                                    @if (ViewBag.IsBankRuleVisible == true)
+                                    @if (ViewBag.IsBankRuleVisible == true && ViewBag.isvisibleGlAccount == false)
                                     {
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
@@ -278,7 +268,28 @@
                                         </td>
                                     }
 
-                                    @if (TempData["TrackingCategories"] != null && ViewBag.IsBankRuleVisible == true)
+                                    @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0 && ViewBag.isvisibleGlAccount == true)
+                                    {
+                                        <td class="sort pr-1 align-middle col-xs-1">
+                                            <div class="row justify-content-between">
+                                                @if (item.ActionModifiedBy != null && ViewBag.IsStaffUser == true)
+                                                {
+                                                    <div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
+                                                        @*<div utcdate="@item.GlAccountModifiedDateUTC", ModifiedBy="@item.GlAccountModifiedBy" ></div>*@
+                                                        @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;", @utcdate = string.Format("{0:dd MMM yyyy hh:mm:ss tt}", @item.ActionModifiedDateUTC), @ModifiedBy = @item.ActionModifiedBy })
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-auto">
+                                                        @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;" })
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+
+                                    @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
                                     {
                                         int count = 0;
                                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
@@ -302,25 +313,42 @@
 
                                     }
                                     <td id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
-                                        <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                            <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+                                        @if (item.Iscurrent_user_mentioned == true)
+                                        {
+                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                                <span class="fas fa-comment fs--1"></span>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                                <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
 
-                                            @*<span class="far fa-comment fs--1 text-dark"></span>
-        <span class="far fa-comment fs--1"></span>
-        <span class="fas fa-comment fs--1"></span>*@
-                                        </button>
+                                                @*<span class="far fa-comment fs--1 text-dark"></span>
+                                                    <span class="far fa-comment fs--1"></span>
+                                                    <span class="fas fa-comment fs--1"></span>*@
+                                            </button>
+                                        }
+
                                     </td>
                                 </tr>
                             }
 
                         </tbody>
+
                     </table>
+
                 </div>
             </div>
         </div>
+
     </div>
+
+
+
     <div class="col-md-4 p-l-2 d-none" id="divChat">
-        @Html.Partial("_communication", true)
+        @*@Html.Partial("_communication", true)*@
+        @Html.Partial("_communicationReconcilation", true)
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divFilter">
         @Html.Partial("_reconcilationFilter", true)
@@ -329,15 +357,25 @@
         @Html.Partial("_reconcilationBulkupdate", true)
 
     </div>
+    @if (ViewBag.AccountingPackage == 2)
+    {
+        @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+    }
+    else
+    {
+        @Html.Partial("_ReconciliationFileUploaderPartial")
+    }
+    @Html.Partial("_ReconcilationEmail", true)
+    @Html.Partial("_ReconcilationEditComment", true)
 </div>
 
 <!--<div class="position-fixed loader-circle" id="Loader" style="display:none;">
     <div class="d-flex justify-content-center align-items-center vh-100">-->
-        @*<div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+@*<div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
 
-            </div>*@
-        <!--<div class="row">
+    </div>*@
+<!--<div class="row">
             <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_fw9ijhki.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         </div>
         <br />
@@ -354,8 +392,13 @@
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
-    @Scripts.Render("~/bundles/js/twilio-chat")
+    @Scripts.Render("~/bundles/js/kanban")
+    @*@Scripts.Render("~/bundles/js/twilio-chat")*@
+    @Scripts.Render("~/bundles/js/reconcilation-comments")
+    @Scripts.Render("~/bundles/js/imports")
+    @Scripts.Render("~/bundles/js/toastr")
     <script>
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
@@ -386,9 +429,19 @@
         });
 
         $("select").select2();
+
+        var myParam = location.search.split('yes=')[1];
+
+        if (myParam == "1") {
+            $("#email").show();
+            $("#btnImportReconcilition").show();
+        }
+
     </script>
-    @Scripts.Render("~/bundles/js/reconciliationMain")
+
     <script>
+        var totalSum1;
+        var totalSum2;
         function drawnCallbackTblReconciliation(settings) {
             alert('')
         }
@@ -397,21 +450,21 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
-           
+
             }
-           
+
             EnableSelectedBulkUpdateButton();
 
         }
         function SelectClick(e) {
-           
+
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
-               
+
                 var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
 
@@ -426,10 +479,10 @@
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
                 var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-                
-             
+
+
             }
-          
+
             EnableSelectedBulkUpdateButton();
         }
 
@@ -457,21 +510,25 @@
             //}
         }
         function reconcilationonstatusDemand(RequestID) {
-
+            
             var ClientID = $("#ddlclient option:selected").val();
 
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
                 if (response.Message == "SUCCESS") {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
-                    ShowAlertBoxSuccess("Success!", "Successfully extracted data from Xero.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully synced with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
-                    ShowAlertBoxError("Error!", "Error while data extracton from Xero. please try again", function () { window.location.reload(); });
+                    ShowAlertBoxError("Error!", "Sorry, there was a problem getting data from Xero. Please try again later.", function () { window.location.reload(); });
                 }
                 else {
                     var msg = 'Loading..'
@@ -480,25 +537,27 @@
                             msg = 'Sent on-demand data extract request.'
                             break;
                         case 'INITIATED':
-                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            msg = 'Logging  in to Xero...'
                             break;
                         case 'INITIATED 1':
-                            msg = 'Initiated data extraction from Xero and logging into Xero.'
+                            msg = 'Logging in to  Xero...'
                             break;
                         case 'WAITING FOR OTP':
-                            msg = 'Waiting for OTP to log-in to Xero.';
+                            msg = 'Waiting for OTP to log in to Xero.';
                             break;
                         case 'LOGGED-IN':
-                            msg = 'Log in successfully to Xero.'
+                            msg = 'Logged in successfully to Xero.'
                             break;
                         case 'GETTING DATA':
                             msg = 'Reconciliation data extracting for a selected agency. ';
                             break;
                         case 'SUCCESS':
-                            msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. '
+                            msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. ';
+                           
                             break;
                         case 'FAILED':
-                            msg = 'Error while data extratction from Xero. Please try after some time. '
+                            msg = 'Error while data extratction from Xero. Please try after some time. ';
+                           
                             break;
 
                         default:
@@ -515,6 +574,8 @@
         function FillterReset() {
             sessionStorage.removeItem('Filter');
             var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+            /*location.reload();*/
+
             window.location.href = url;
         }
         function BulkActionCancel() {
@@ -525,6 +586,7 @@
                 sessionStorage.removeItem('SelectedRecords');
                 sessionStorage.removeItem('UnSelectedRecords');
                 var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+               /* location.reload();*/
                 window.location.href = url;
             });
 
@@ -667,7 +729,9 @@
 
         }
         function BulkActionReconcilation() {
+
             var GLaccount = $('#BA_filterGLaccounts').val();
+            var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
             var reconcilationStatus = $('#BA_Status').val();
@@ -681,7 +745,7 @@
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0)) {
+            if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
             }
@@ -698,7 +762,7 @@
                  GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
                 AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus
+                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus, Action: Action
             };
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
@@ -728,8 +792,9 @@
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
             }
+            var userId = $('#topProfilePicture').attr('userId');
             var ClientID = $("#ddlclient option:selected").val();
-            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id  + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&userId=' + userId, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }
@@ -746,6 +811,25 @@
 
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+
+                }
+
+            })
+        }
+        function onChangeAction(id, event) {
+
+            var Selectedvalue = event.currentTarget.value;
+            if (isEmptyOrBlank(Selectedvalue)) {
+                Selectedvalue = -1;
+            }
+            var userId = $('#topProfilePicture').attr('userId');
+
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }
@@ -774,6 +858,9 @@
         }
         function onChangeAditinalTc(id, event) {
             var Selectedvalue = event.currentTarget.value;
+            if (isEmptyOrBlank(Selectedvalue)) {
+                Selectedvalue = -1;
+            }
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
                 if (response.Message == 'Success') {
@@ -790,6 +877,7 @@
             var type = sessionStorage.getItem('Type');
             var recType = 'Not in Books';
             if (type != null && type == '1') {
+
 
                 recType = 'Not in Banks';
             }
@@ -813,7 +901,7 @@
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
-
+            ShowlottieLoader();
             $.ajax({
                 url: '/AgencyService/GetClientDetails?id=' + ClientID,
                 type: "GET",
@@ -821,6 +909,9 @@
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
+
+                        sessionStorage.setItem("LastMailSent", data.MailSendDate)
+
                         // Write here what should happend once client selected
                         SetUserPreferencesForAgency();
                         var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
@@ -836,75 +927,175 @@
                 }
             });
         }
+        $("input[id$='Notinbook']").click(function () {
+            $("#BankAccount").show();
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount == "Select Bank Account") {
 
-
-        var totalSum1;
-        var totalSum2;
-        function bindNotInBooksAndBanksCount() {
-
-            var ClientID = $("#ddlclient option:selected").val();
-
-            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-                if (response.Message == "Success") {
-
-                    let data = response.ResultData;
-
-                    var totalSum = 0;
-
-                    for (var i = 0; i < data.length; i++) {
-
-                        totalSum1 = totalSum + data[i].Count;
-                        if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                            $("#lblNotInBanksCount").text(data[i].Count);
-                        }
-                    }
-
-                    TotalSum(totalSum1, totalSum2);
-                }
-            })
-        }
-
-
-        function bindNotInBooksAndBanksCount1() {
-            var ClientID = $("#ddlclient option:selected").val();
-
-            getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-                if (response.Message == "Success") {
-
-                    let data = response.ResultData;
-                    var totalSum = 0;
-                    for (var i = 0; i < data.length; i++) {
-
-                      totalSum2 = totalSum + data[i].Count;
-
-                        if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                            $("#lblNotInBooksCount").text(data[i].Count);
-                        }
-
-                    }
-
-                    TotalSum(totalSum1, totalSum2);
-
-
-                }
-            })
-        }
-
-
-        function TotalSum(totalSum1, totalSum2) {
-            let totalsum3 = 0;
-            if (isNaN(totalSum1 + totalSum2)) {
-                $("#lblNotInCount").addClass('d-none');
+                $("#btnDropzoneUpload").attr('disabled', true);
+                $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
             }
             else {
-                $("#lblNotInCount").removeClass('d-none');
-                totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
-                $("#lblNotInCount").text(totalsum3) ;
-
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
             }
+
+        });
+        $("input[id$='Notinbank']").click(function () {
+            $("#BankAccount").hide();
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount == "Select Bank Account") {
+
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
+
+        });
+        
+
+        //function bindNotInBooksAndBanksCount() {
+
+        //    var ClientID = $("#ddlclient option:selected").val();
+
+        //    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+        //        if (response.Message == "Success") {
+
+        //            let data = response.ResultData;
+
+        //            var totalSum = 0;
+
+        //            for (var i = 0; i < data.length; i++) {
+
+        //                totalSum1 = totalSum + data[i].Count;
+        //                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
+        //                    $("#lblNotInBanksCount").text(data[i].Count);
+        //                }
+        //            }
+
+        //            TotalSum(totalSum1, totalSum2);
+        //        }
+        //    })
+        //}
+
+
+        //function bindNotInBooksAndBanksCount1() {
+        //    var ClientID = $("#ddlclient option:selected").val();
+
+        //    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        //        if (response.Message == "Success") {
+
+        //            let data = response.ResultData;
+        //            var totalSum = 0;
+        //            for (var i = 0; i < data.length; i++) {
+
+        //              totalSum2 = totalSum + data[i].Count;
+
+        //                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
+        //                    $("#lblNotInBooksCount").text(data[i].Count);
+        //                }
+
+        //            }
+
+        //            TotalSum(totalSum1, totalSum2);
+
+
+        //        }
+        //    })
+        //}
+
+
+        //function TotalSum(totalSum1, totalSum2) {
+        //    let totalsum3 = 0;
+        //    if (isNaN(totalSum1 + totalSum2)) {
+        //        $("#lblNotInCount").addClass('d-none');
+        //    }
+        //    else {
+        //        $("#lblNotInCount").removeClass('d-none');
+        //        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        //        $("#lblNotInCount").text(totalsum3) ;
+
+        //    }
+        //}
+
+        $(function () {
+
+            $("#email").click(function () {
+                var url = window.location.href;
+
+                var ClientName = $("#ddlclient option:selected").text();
+                var ClientId = $("#ddlclient option:selected").val();
+                getClientDate(ClientName);
+                ClientName = encodeURIComponent(ClientName);
+                var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
+                var LastMailSent = sessionStorage.getItem("LastMailSent");
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
+                    if (response.Status == 'Success') {
+                        var text = response.Recipients.toString().split(",");
+                        var str = text.join(', ');
+                        $("#email-to").val(str);
+                        if (str == "") {
+                            $("#sendbutton").attr("disabled", true);
+                        }
+                        $("#email-subject").val(response.Subject);
+                        $("#ibody").html(response.Body);
+                        $("#ifooter").html(response.LastSent);
+
+                    }
+                });
+
+            });
+        });
+
+
+        function getClientDate(ClientName) {
+            getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+                sessionStorage.setItem("LastMailSent", response.resultData);
+            });
+
         }
 
 
+        function sendMail() {
+            var recip = $("#email-to").val();
+            var subject = $("#email-subject").val();
+            var body = $("#ibody").html();
+            var pdata = {
+                Recipents: recip,
+                Subject: subject,
+                Body:body,
+            };
+            postAjaxSync(apiurl + `Reconciliation/sendReconcilationEmail`, JSON.stringify(pdata), function (response) {
+                ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+            });
+        }
+
+
+
+        var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+
+        var onChangeAditinalBA = function (e) {
+            var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+            if (BankAccount =="Select Bank Account") {
+                $("#btnDropzoneUpload").attr('disabled', true);
+                $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+                $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
+            }
+            else {
+                $("#btnDropzoneUpload").attr('disabled', false);
+                $('#btnDropzoneUpload').css('cursor', '');
+                $("#btnDropzoneUpload").attr('title', '');
+            }
+        }
+
+    </script>
+    @Scripts.Render("~/bundles/js/reconciliationMain")
+    <script>
+        $(document).ready(function () {
+            HidelottieLoader();
+        });
 
     </script>
 

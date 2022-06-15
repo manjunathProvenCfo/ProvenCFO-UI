@@ -12,12 +12,14 @@ using System.Net.Http;
 using IdentityModel.Client;
 using Newtonsoft.Json;
 using Proven.Model;
+using Proven.Service.AccountingPackage;
 
 namespace Proven.Service
 {
-    public class XeroService : BaseService
+    public class XeroService<T, V> :  AccountingAppFatory<T, V>, IDisposable
     {
-        private const string V = @"https://provencfoqa.codewarriorsllc.com/AgencyService/AgencyHome";
+        private bool isDisposed = false;
+        private const string Vurl = @"https://provencfoqa.codewarriorsllc.com/AgencyService/AgencyHome";
         string _ClientId;
         string _ClientSecret;
         string _scopes;
@@ -25,7 +27,7 @@ namespace Proven.Service
         XeroClient XeroClient;
         private AccountingApi _accountinstance;
         XeroConfiguration xeroConfig;
-        IXeroToken _XeroToken;        
+        IXeroToken _XeroToken;
         public XeroService(string ClientId, string ClientSecret, string scopes, string AppName, string CallbackUrl = "")
         {
             _ClientId = ClientId;
@@ -34,7 +36,7 @@ namespace Proven.Service
             _callbackurl = CallbackUrl;
             xeroConfig = new XeroConfiguration();
             xeroConfig.AppName = AppName;
-            xeroConfig.CallbackUri =  new Uri(V);
+            xeroConfig.CallbackUri = new Uri(Vurl);
             xeroConfig.ClientId = _ClientId;
             xeroConfig.ClientSecret = _ClientSecret;
             xeroConfig.Scope = _scopes;
@@ -43,12 +45,13 @@ namespace Proven.Service
             _accountinstance = new AccountingApi();
 
         }
-        public async Task<IXeroToken> LoginXeroAccess()
+        public override async Task<T> LoginAccess()
         {
             try
-            {               
-                return await XeroClient.RequestClientCredentialsTokenAsync();
-                    
+            {
+                var result = await XeroClient.RequestClientCredentialsTokenAsync();
+                return (T)result;
+
             }
             catch (Exception ex)
             {
@@ -58,12 +61,13 @@ namespace Proven.Service
             //return await RequestClientCredentialsTokenAsync();            
 
         }
-        
-        public async Task<IXeroToken> LoginXeroAccesswithCode(string code)
+
+        public override async Task<T> LoginXeroAccesswithCode(string code)
         {
             try
             {
-                return await XeroClient.RequestAccessTokenAsync(code);
+                var result = await XeroClient.RequestAccessTokenAsync(code);
+                return (T)result;
             }
             catch (Exception ex)
             {
@@ -76,7 +80,7 @@ namespace Proven.Service
         {
             try
             {
-               var  XeroClient1 = new XeroClient(xeroConfig);
+                var XeroClient1 = new XeroClient(xeroConfig);
                 var clientState = Guid.NewGuid().ToString();
                 var url = XeroClient1.BuildLoginUri();
                 return url;
@@ -89,20 +93,21 @@ namespace Proven.Service
             //return await RequestClientCredentialsTokenAsync();            
 
         }
-        public IXeroToken getTokenFormat(XeroTokenInfoVM xeroTokenInfo)
+        public override T getTokenFormat(V TokenInfoVM)
         {
             try
             {
+                var Token = (TokenInfoVM)Convert.ChangeType(TokenInfoVM, typeof(TokenInfoVM));
                 IXeroToken token = new XeroOAuth2Token
                 {
                     //AccessToken = xeroTokenInfo.access_token,
-                    RefreshToken = xeroTokenInfo.refresh_token,
-                    
-                   // IdToken = xeroTokenInfo.id_token
+                    RefreshToken = Token.refresh_token,
+
+                    // IdToken = xeroTokenInfo.id_token
                     // This is required for refresh logic down in GetCurrentValidTokenAsync.
                     //ExpiresAtUtc =  DateTime.MaxValue
                 };
-                return token;
+                return (T)token;
             }
             catch (Exception ex)
             {
@@ -112,12 +117,14 @@ namespace Proven.Service
             //return await RequestClientCredentialsTokenAsync();            
 
         }
-        public async Task<IXeroToken> RefreshToken(IXeroToken xeroToken)
+        public override async Task<T> RefreshToken(T xeroToken)
         {
             try
-            {                
+            {
+                IXeroToken objToken = (IXeroToken)xeroToken;//(IXeroToken)Convert.ChangeType(xeroToken, typeof(IXeroToken));
                 //return await XeroClient.RefreshAccessTokenAsync(xeroToken);
-                return await XeroClient.RefreshAccessTokenAsync(xeroToken);
+                var result = await XeroClient.RefreshAccessTokenAsync(objToken);
+                return (T)result;
             }
             catch (Exception ex)
             {
@@ -127,45 +134,39 @@ namespace Proven.Service
             //return await RequestClientCredentialsTokenAsync();            
 
         }
-        public XeromainTokenInfo GetSavedXeroToken(int AgencyID)
+        public override AppTokenInfoMain GetSavedToken(int AgencyID)
         {
-            //return GetAsync<XeromainTokenInfo>("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var _content = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<AppTokenInfoMain>(_content);
+            }
+            else
+            {
+                string msg = response.ReasonPhrase;
+                throw new Exception(msg);
 
-            //if (Convert.ToString(Prodclient.BaseAddress).IndexOf("provencfoapi") != -1) // This is a temporary code, In order to avoid bug
-            //{
-                var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var _content = response.Content.ReadAsStringAsync().Result;
-                    return JsonConvert.DeserializeObject<XeromainTokenInfo>(_content);
-                }
-                else
-                {
-                    string msg = response.ReasonPhrase;
-                    throw new Exception(msg);
-
-                }
-            //}
-            //else
-            //{
-            //    return null;
-            //}
+            }
         }
-        public ReturnModel UpdateXeroToken(XeroTokenInfoVM tokenInfoVM)
+        public override ReturnModel UpdateToken(V tokenInfoVM)
         {
-            return ProdPostAsync<ReturnModel, XeroTokenInfoVM>("Xero/UpdateXeroToken", tokenInfoVM).Result;
-            
+            return ProdPostAsync<ReturnModel, V>("Xero/UpdateToken", tokenInfoVM).Result;
+
         }
 
-        public async Task<List<Tenant>> ConnnectApp(IXeroToken xeroToken)
+        public override async Task<T> ConnnectApp(V Token)
         {
-            //return await RequestClientCredentialsTokenAsync();            
-            return await XeroClient.GetConnectionsAsync(xeroToken);
+            //return await RequestClientCredentialsTokenAsync();
+            var objToken = (IXeroToken)Convert.ChangeType(Token, typeof(IXeroToken));
+            var result = await XeroClient.GetConnectionsAsync(objToken);
+            return (T)Convert.ChangeType(result, typeof(List<T>));
         }
-        public async Task<List<Tenant>> GetConnections()
+        public override async Task<V> GetConnections()
         {
-            var Token = LoginXeroAccess();
-            return await XeroClient.GetConnectionsAsync(Token.Result);
+            IXeroToken Token = (IXeroToken)LoginAccess().Result;
+            var result = await XeroClient.GetConnectionsAsync(Token);
+            return (V)Convert.ChangeType(result, typeof(List<V>));
         }
         /// <summary>
         /// Requests a fully formed IXeroToken with list of tenants filled
@@ -203,41 +204,72 @@ namespace Proven.Service
         /// <param name="xeroToken"></param>
         /// <returns>List of Tenants attached to accesstoken</returns>
 
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Contacts> GetContacts(IXeroToken xeroToken, string XeroTenentID)
-        {            
-            return await _accountinstance.GetContactsAsync(xeroToken.AccessToken, XeroTenentID);
+        public override async Task<V> GetContacts(T xeroToken, string XeroTenentID = "")
+        {
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetContactsAsync(Token.AccessToken, XeroTenentID);
+            return (V)Convert.ChangeType(result, typeof(V));
         }
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Contacts> GetContact(IXeroToken xeroToken, string XeroTenentID, Guid ContactID)
-        {            
-            return await _accountinstance.GetContactAsync(xeroToken.AccessToken, XeroTenentID, ContactID);
+        public override async Task<V> GetContact(T xeroToken, string XeroTenentID = "", Guid? ContactID = null)
+        {
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetContactAsync(Token.AccessToken, XeroTenentID, ContactID.Value);
+            return (V)Convert.ChangeType(result, typeof(V));
         }
 
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.ReportWithRows> GetBankSummary(IXeroToken xeroToken, string XeroTenentID)
+        public override async Task<T> GetBankSummary(V xeroToken, string XeroTenentID)
         {
-            var obj = await _accountinstance.GetReportBankSummaryAsync(xeroToken.AccessToken, XeroTenentID);
-            return obj;
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetReportBankSummaryAsync(Token.AccessToken, XeroTenentID);
+            return (T)Convert.ChangeType(result, typeof(T));
         }
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Invoices> GetInvoices(IXeroToken xeroToken, string XeroTenentID)
+        public override async Task<V> GetInvoices(T xeroToken, string XeroTenentID)
         {
             var freshToken = await RefreshToken(xeroToken);
-            var obj = await _accountinstance.GetInvoicesAsync(freshToken.AccessToken, XeroTenentID);
-            return obj;
+            var freshedToken = (IXeroToken)Convert.ChangeType(freshToken, typeof(IXeroToken));
+            var result = await _accountinstance.GetInvoicesAsync(freshedToken.AccessToken, XeroTenentID);
+            return (V)Convert.ChangeType(result, typeof(V));
         }
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.Accounts> GetGLAccounts(IXeroToken xeroToken, string XeroTenentID)
+        public override async Task<V> GetGLAccounts(T xeroToken, string XeroTenentID)
         {
-            var obj = await _accountinstance.GetAccountsAsync(xeroToken.AccessToken, XeroTenentID);
-            return obj;
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetAccountsAsync(Token.AccessToken, XeroTenentID);
+            return (V)Convert.ChangeType(result._Accounts, typeof(V));
         }
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.TrackingCategories> GetTrackingCategories(IXeroToken xeroToken, string XeroTenentID)
+        public override async Task<V> GetBankAccounts(T Token, string TenentID)
         {
-            var obj = await _accountinstance.GetTrackingCategoriesAsync(xeroToken.AccessToken, XeroTenentID);
-            return obj;
+            var objToken = (IXeroToken)Token;
+            
+            var result = await _accountinstance.GetAccountsAsync(objToken.AccessToken, TenentID);
+            var finalresult  = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK").ToList();
+            return (V)Convert.ChangeType(finalresult, typeof(V));
         }
-        public async Task<Xero.NetStandard.OAuth2.Model.Accounting.ReportWithRows> GetReportProfitAndLossAsync(IXeroToken xeroToken, string XeroTenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods =null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null,bool? standardLayout = null ,bool? paymentsOnly = null)
+        public override async Task<V> GetTrackingCategories(T xeroToken, string XeroTenentID)
         {
-            var obj = await _accountinstance.GetReportProfitAndLossAsync(xeroToken.AccessToken, XeroTenentID,fromDate,toDate,periods,timeframe,trackingCategoryID,trackingCategoryID2,trackingOptionID,trackingOptionID2,standardLayout,paymentsOnly);
-            return obj;
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetTrackingCategoriesAsync(Token.AccessToken, XeroTenentID);
+            return (V)Convert.ChangeType(result, typeof(V));
+        }
+        public override async Task<V> GetReportProfitAndLossAsync(T xeroToken, string XeroTenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
+        {
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetReportProfitAndLossAsync(Token.AccessToken, XeroTenentID, fromDate, toDate, periods, timeframe, trackingCategoryID, trackingCategoryID2, trackingOptionID, trackingOptionID2, standardLayout, paymentsOnly);
+            return (V)Convert.ChangeType(result, typeof(V));
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.isDisposed)
+            {
+                return;
+            }
+            this.isDisposed = true;
         }
 
+       
     }
 }

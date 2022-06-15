@@ -99,7 +99,14 @@
 @section Scripts{
     @Scripts.Render("~/bundles/js/kanban")
     @Scripts.Render("~/bundles/js/reports")
+   
     <script type="text/javascript">
         var isReadonlyUser = @(Convert.ToString((bool)ViewBag.IsReadonlyUser).ToLower());
+
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
     </script>
 }

@@ -6,20 +6,20 @@
 }
 
 @*<style>
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
+        a.page-link {
+            background-color: #fff !important;
+            border-color: #d8e2ef !important;
+        }
 
-    .page-link:hover {
-        color: #000 !important;
-    }
-    .page-item.active .page-link {
-        z-index: 3;
-        color: #fff !important;
-        background-color: #00BE82 !important;
-    }
-</style>*@
+        .page-link:hover {
+            color: #000 !important;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff !important;
+            background-color: #00BE82 !important;
+        }
+    </style>*@
 @*<div>@Html.Partial("_Header")</div>*@
 
 <div class="card mb-3">
@@ -54,11 +54,11 @@
                         <span class="d-none d-sm-inline-block ml-1">Export</span>
                     </button>
                     @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-                        <span class="d-none d-sm-inline-block ml-1">
-                            <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
-                        </span>
-                    </button>*@
+                            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ml-1">
+                                <a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>
+                            </span>
+                        </button>*@
                 </div>
             </div>
         </div>
@@ -187,7 +187,7 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/table")
     <script>
 
 
@@ -232,16 +232,22 @@
 
                         if (data === false) {
                             ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () { window.location.reload(); });
-                            
+
                         }
                         else {
-                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () { window.location.reload();});
+                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () { window.location.reload(); });
                         }
-                        
+
                     });
                 });
 
         }
+
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
 
     </script>
 }

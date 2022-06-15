@@ -734,7 +734,7 @@ var addChannelMessagesScrollEvent = function () {
         //        }
         //    });
         //}
-        if (activeChannel === null) return;
+        if (activeChannel === null || activeChannel === undefined) return;
         let lastIndex = activeChannel.lastReadMessageIndex;
         lastIndex = 0;
         let newestMessageIndex = $channelMessages.children('.media:last').attr('data-index');

@@ -568,3 +568,27 @@ select#item_additional_tracking_category_ref {
     color: #fff !important;
     background-color: #00BE82 !important;
 }
+
+.notification-body {
+    padding-left: 10px;
+}
+a.ColorattachmentText
+{
+    color: white !important;
+}
+
+
+/*span#loadertext {
+    padding-left: 920px;
+}*/
+/*div#\ loadercenter {
+    padding-left: 650px;
+    padding-top: 300px;
+}*/
+/*div#animation-container {
+    margin-left: 50px;
+}*/
+/*.emojionearea-picker.emojionearea-picker-position-top.emojionearea-filters-position-bottom.emojionearea-search-position-top
+{
+    display:none;
+}*/

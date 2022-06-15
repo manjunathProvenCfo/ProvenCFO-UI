@@ -19,7 +19,7 @@ namespace ProvenCfoUI.Comman
             AgencyClient objAgy = new AgencyClient();
             Controller controller = filterContext.Controller as Controller;
             var session = HttpContext.Current.Session;
-            if (XeroInstance.Instance.XeroToken == null)
+            if (AccountingPackageInstance.Instance.XeroToken == null)
             {
                 using (ClientService objClient = new ClientService())
                 {
@@ -35,7 +35,7 @@ namespace ProvenCfoUI.Comman
                     }
                     objAgy.ClientList = (List<ClientModel>)controller.TempData["ClientListActived"];
                     var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
-                    Common.ConnectXeroClient(client);
+                    Common.ConnectClientAccoutingPackage(client);
                 }
             }
         }

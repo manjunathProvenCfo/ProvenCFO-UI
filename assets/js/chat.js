@@ -19,6 +19,17 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 var addMessageProcessed = [];
+var $gl_accountDropdown;
+var $tc_1_Dropdown;
+var $tc_2_Dropdown;
+var $tc_3_Dropdown;
+var $communicationGLaccount;
+var $communicationTrackingCategories;
+var $communicationAction;
+var $communication_DropDownAction;
+var $tracking;
+var $trackingcat;
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -33,13 +44,108 @@ var chat = {
     selectedRecentParticipantOnce: false,
     isReconciliationIconColorChanged: false
 };
+var CommentHtmls = {
+    ReconciliationHtml: `<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="loadCommentsPage('{channelUniqueNameGuid}')">
+                        <div class="avatar avatar-xl status-offline">
+                            <img class="rounded-circle" src="/assets/img/team/default-logo.png" alt="">
+                        </div>
+                        <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-0 chat-contact-title" title="{account}">{account}</h6><span class="badge badge-primary fs--2" style="display:none" id="spanUnreadMsgCount">0</span>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="chat-contact-content pr-3">
+                                    <span class="channelReconciliationDescriptionSidebar">{agencyName}/{description}</span>
+                                </div>
+                                <div class="position-absolute b-0 r-0 hover-hide">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+    datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
+    commenthtml: `<div class="media p-3" data-timestamp="{date}" id="msg_{commentId}"><div class= "media-body d-flex justify-content-end">
+                  <div class="w-100 w-xxl-75"><div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                    <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>
+                    <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                       <li class="list-inline-item d-none"><a class="chat-option" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" onclick="CommentEdit('{commentId}');" aria-label="Edit" data-toggle="modal" data-target="#EditCommentModal" ><svg class="svg-inline--fa fa-edit fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img"  viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg><!-- <span class="fas fa-edit"></span> Font Awesome fontawesome.com --></a></li>
+                       <li class="list-inline-item"><a class="chat-option" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="CommentDelete('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                        </ul>
+                    </div>
+                    <div class="text-400 fs--2 text-right">{time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                </div></div></div></div>`,
+    otherscCommentshtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
+                    {text}
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`,
+    otherscAttachmentImageHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message chat-gallery justify-content-end">
+                    <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div></div>
+
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`,
+    SelfAttachmentImageHtml: `<div class="media p-3" id="att_{commentId}" data-index="6" data-sid="{commentId}" data-timestamp="{date}" data-media-sid="{commentId}">
+                                <div class="media-body d-flex justify-content-end">
+                                    <div class="w-100 w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                                            <div class="chat-message chat-gallery justify-content-end">
+                                                <div class="row mx-n1 justify-content-end">
+
+                                                <div class="col-6 col-md-4 px-1" style="min-width: 50px;"><a href="{FileScrPath}" class="data-fancybox" data-fancybox="twilio-gallery" data-caption="Image2.PNG"><img src="{FileScrPath}" alt="" onerror="imgError(this);" class="img-fluid rounded mb-2" onload="setScrollPosition();"></a></div>
+                                                    <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                                                <li class="list-inline-item"><a class="chat-option" type="attachment" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="DeleteAttachment('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-400 fs--2 text-right">
+                                            {time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`,
+    SelfAttachmentDocumentHtml: `<div class="media p-3" id="att_{commentId}" data-index="8" data-sid="{commentId}" data-timestamp="20220405" data-media-sid="{commentId}">
+                                <div class="media-body d-flex justify-content-end">
+                                    <div class="w-100 w-xxl-75">
+                                        <div class="hover-actions-trigger d-flex align-items-center justify-content-end">
+                                            <div class="chat-message chat-gallery justify-content-end bg-primary text-white p-2 rounded-soft">
+                                                <div class="row mx-n1 justify-content-end">
+
+                                                <a class="ColorattachmentText" href="{FileScrPath}" target="_blank">{FileName}</a></div>
+                                            </div>
+                                                <ul class="hover-actions position-relative list-inline mb-0 text-400 ms-2">
+                                                <li class="list-inline-item"><a class="chat-option" type="attachment" href="#!" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Remove" onclick="DeleteAttachment('{commentId}');" aria-label="Remove"><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash-alt" role="img" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg><!-- <span class="fas fa-trash-alt"></span> Font Awesome fontawesome.com --></a></li>
+                                                </ul>
+                                        </div>
+                                        <div class="text-400 fs--2 text-right">
+                                            {time}<span class="ml-2 text-success" data-fa-i2svg=""><svg class="svg-inline--fa fa-check fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`,
+    otherscAttachmentDocumentsHtml: `<div class="media p-3" data-timestamp="{date}"><div class="avatar avatar-l mr-2">
+            <img class="rounded-circle" src="{profileimgurl}" alt="" onerror="imgError(this);"></div><div class="media-body"><div class="w-xxl-75">
+                <div class="hover-actions-trigger d-flex align-items-center"><div class="chat-message bg-200 p-2 rounded-soft">
+                   <a href="{FileScrPath}" target="_blank">{FileName}</a>
+                    </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
+                    <span>{time}</span></div></div></div></div>`,
+}
 
 var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
+
+
+    $('#menu_communication a').click();
+    $('#submenu_chat').addClass('active');
     showChatContentLoader();
+
+
+
     if (isEmptyOrBlank(isPublicChatOnly))
         isPublicChatOnly = false;
     if (isEmptyOrBlank(type))
-        chat.type = 0;
+        chat.type = 1;
     else
         chat.type = type;
     if (isEmptyOrBlank(autoSelectParticipant))
@@ -63,7 +169,11 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
-
+    $communicationGLaccount = $("#comTrackingCategories");
+    $communicationTrackingCategories = $("#comGLaccount");
+    $tracking = $("#tracking");
+    $communicationAction = $("#comAction");
+    $trackingcat = $("#trackingcat");
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
     $messageBodyInput.trigger('change');
@@ -88,6 +198,84 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
     }
+    var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
+        var currentdate = new Date();
+        var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+        var input = {
+            Id: 0,
+            ReconciliationId_ref: ReconciliationId,
+            CommentText: InputcommentText,
+            CreatedBy: chat.userId,
+            CreatedDate: currentdate,
+            IsDeleted: false,
+            AgencyId: AgencyId
+        }
+        if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+                if (response.resultData != null) {
+                    var id = "msg_" + response.resultData;
+                    $('#msg_0').attr("id", id);
+                    if ($('#' + id + ' a').length > 0) {
+                        $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
+                    };
+                    if ($('#' + id + ' a').length > 1) {
+                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                    }
+                }
+            });
+        }
+
+    }
+    var addNewMessagetoChatwindow = async function (input) {
+        let addNewComment = function (inputText) {
+            var CurrentDate = new Date();
+            var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+            var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+            var CurrentTimestring = getCurrentTime(new Date);
+            var DateElement = $('#channel-messages #' + CurrentDateString);
+            if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+                var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+                $channelMessages.append(dhtml);
+            }
+            var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
+            $channelMessages.append(chtml);
+            SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+            setScrollPosition();
+            $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+        }
+
+        if (addNewComment) {
+
+            addNewComment(input);
+        } else {
+
+            let addNewComment = function (inputText) {
+                var CurrentDate = new Date();
+                var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+                var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+                var CurrentTimestring = getCurrentTime(new Date);
+                var DateElement = $('#channel-messages #' + CurrentDateString);
+                if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+                    var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+                    $channelMessages.append(dhtml);
+                }
+                var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
+                $channelMessages.append(chtml);
+                SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+                setScrollPosition();
+                $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+            }
+
+            addNewComment(input);
+
+        }
+        // $('#message-body-input').empty();
+        //  $('.emojionearea-editor').empty();
+
+        $("div[role=application]")[0].children[0].innerHTML = '';
+    }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
         if (event.keyCode === 13 && !event.shiftKey) {
@@ -96,8 +284,15 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                 if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
-                else
-                    $btnSendMessage[0].click();
+                else {
+                    if (chat.type == 0) {
+                        $btnSendMessage[0].click();
+                    }
+                    else {
+                        if ($editor[0].innerHTML != '')
+                            addNewMessagetoChatwindow($editor[0].innerHTML);
+                    }
+                }
             }
             else
                 activeChannel?.typing();
@@ -130,7 +325,8 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                 ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
             }
             else {
-                addMediaMessage(file);
+                addMediaMessageLocalFolder(file);
+                //addMediaMessage(file);
             }
         })
     });
@@ -138,6 +334,458 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     //Notification Reconciliation chat selection
     if (isEmptyOrBlank(getParameterByName("isRecon")) === false && getParameterByName("isRecon") === "true") {
         $("#divChatSiderbarFilters > button[data-type=1]").click();
+    }
+
+
+    //NoticiationNavigationLoad(chat.clientId);
+    HidelottieLoader();
+
+}
+var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
+
+    $(".media").removeClass("active");
+    var Notification_agencyId = sessionStorage.getItem("Notification_agencyId");
+    var Notification_reconciliationId = sessionStorage.getItem("Notification_reconciliationId");
+    if (Notification_agencyId != null && Notification_agencyId != undefined && Notification_reconciliationId != null && Notification_reconciliationId != undefined) {
+        loadCommentsPage(Notification_reconciliationId);
+        $("#" + Notification_reconciliationId).addClass("active");
+        scrolltoselctedItem($("#" + Notification_reconciliationId));
+        sessionStorage.removeItem("Notification_agencyId");
+        sessionStorage.removeItem("Notification_reconciliationId");
+    } else {
+        loadCommentsPage(ReconcilationId);
+        $("#" + ReconcilationId).addClass("active");
+        scrolltoselctedItem($("#" + ReconcilationId));
+    }
+
+    HidelottieLoader();
+}
+var scrolltoselctedItem = function (element) {
+    $(".contacts-list").animate({ scrollTop: element.position().top - 70 });
+}
+var loadCommentsPage = async function (channelUniqueNameGuid) {
+
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+    $gl_accountDropdown = $('#gl_account');
+    $tc_1_Dropdown = $('#tracking_category_0');
+    $tc_2_Dropdown = $('#tracking_category_1');
+    $tc_3_Dropdown = $('#tracking_category_2');
+    $communication_DropDownAction = $('#BA_filterAction');
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+
+    $(document).on("click", "button[id=btnComment]", function (e) {
+        showReconciliationChat(e.currentTarget.dataset.id);
+    });
+
+    $btnSendMessage.unbind().click(function () {
+
+        addNewMessagetoChatwindow($('#message-body-input').val());
+    });
+    var addNewMessagetoChatwindow = async function (input) {
+
+        if (input == "") {
+            return;
+        }
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+    }
+
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+
+        setCommentsHeader(response.resultData.reconciliationdata);
+        LoadAllComments(response.resultData.reconciliationComments);
+        var glaccount = response.resultData.reconciliationdata.gl_account_ref;
+        var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
+        var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
+        var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
+        var ReconcilationType = response.resultData.reconciliationdata.type;
+        if (ReconcilationType == "Unreconciled") {
+            
+            $communicationGLaccount.removeClass('d-none');
+            $communicationTrackingCategories.removeClass('d-none');
+            $tc_2_Dropdown.removeClass('d-none');
+            $tc_1_Dropdown.removeClass('d-none');
+            $communicationAction.addClass('d-none');
+            $tracking.removeClass('d-none');
+            $trackingcat.removeClass('d-none');
+            $('#tracking_category_2').removeClass('d-none');
+            $('#trackingcat1').removeClass('d-none');
+        }
+        if (ReconcilationType == "Outstanding Payments") {
+            
+            $communicationGLaccount.addClass('d-none');
+            $communicationTrackingCategories.addClass('d-none');
+            $tc_2_Dropdown.addClass('d-none');
+            $tc_1_Dropdown.addClass('d-none');
+            $communicationAction.removeClass('d-none');
+            $tracking.addClass('d-none');
+            $('#tracking_category_2').addClass('d-none');
+            $('#trackingcat1').addClass('d-none');
+            $trackingcat.addClass('d-none');
+        }
+        if (glaccount != null) {
+            $gl_accountDropdown.val(glaccount);
+        }
+        else {
+            $gl_accountDropdown.val($("#gl_account option:first").val());;
+        }
+
+        if (Action != null) {
+            $communication_DropDownAction.val(Action);
+        }
+        else {
+            $communication_DropDownAction.val($("#BA_filterAction option:first").val());;
+        }
+        if (tc1 != null) {
+            $tc_1_Dropdown.val(tc1);
+        }
+        else {
+            $tc_1_Dropdown.val($('#tracking_category_0 option:first').val());;
+        }
+        if (tc2 != null) {
+            $tc_2_Dropdown.val(tc2);
+        }
+        else {
+            $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
+        }
+        if (tc3 != null) {
+            $tc_3_Dropdown.val(tc2);
+        }
+        else {
+            $tc_3_Dropdown.val($('#tracking_category_2  option:first').val());;
+        }
+
+
+        setScrollPosition();
+        hideChatContentLoader();
+    });
+
+
+
+    var addNewComment = function (inputText) {
+        var CurrentDate = new Date();
+        var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+        var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+        var CurrentTimestring = getCurrentTime(new Date);
+        var DateElement = $('#channel-messages #' + CurrentDateString);
+        if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+            var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+            $channelMessages.append(dhtml);
+        }
+        var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
+        $channelMessages.append(chtml);
+        SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+        setScrollPosition();
+        $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+    }
+    var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
+        var currentdate = new Date();
+        var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
+        var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+        var input = {
+            Id: 0,
+            ReconciliationId_ref: ReconciliationId,
+            CommentText: InputcommentText,
+            CreatedBy: chat.userId,
+            CreatedDate: currentdate,
+            IsDeleted: false,
+            AgencyId: AgencyId
+        }
+        if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
+            postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                var r = response;
+                if (response.resultData != null) {
+                    var id = "msg_" + response.resultData;
+                    $('#msg_0').attr("id", id);
+                    if ($('#' + id + ' a').length > 0) {
+                        $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
+                    };
+                    if ($('#' + id + ' a').length > 1) {
+                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                    }
+                }
+            });
+        }
+
+    }
+    var addNewMessagetoChatwindow = async function (input) {
+
+        if (input == "") {
+            return;
+        }
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerHTML != '')
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000)
+}
+
+var loadreconcilationcomments = function () {
+
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+
+    $channelMessages.empty();
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.trigger('change');
+    getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${chat.clientId}&MaxCount=${0}`, null, function (response) {
+
+        var Reconciliationdata = response;
+        if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
+            $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
+                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g, aReconciliation.id);
+                $participantsContainer.append(recHtml);
+            });
+        }
+        if ($participantsContainer.children(0)[0] != undefined) {
+            // $participantsContainer.children(0)[0].click();
+            // loadCommentsPage($participantsContainer.children(0)[0].id);
+            loadCommentsPageOnReconcilationId($participantsContainer.children(0)[0].id);
+        }
+        else {
+            //ShowAlertBoxWarning("No participant exists for chat");
+        }
+
+        hideChatContentLoader();
+        /*$participants.eq(0).click();*/
+    });
+
+}
+
+var addMediaMessageLocalFolder = function (file) {
+    var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    var ReconciliationId = chat.channelUniqueNameGuid;
+    const formData = new FormData();
+    formData.append('file', file);
+    postFileAjaxSync(`/Reconciliation/UploadReconcilationAttachmentAsync?ReconciliationId=` + ReconciliationId + `&AgencyId=` + AgencyId, formData, function (response) {
+
+        var r = response;
+        if (response.Status != "Success") {
+            ShowAlertBoxError("File uploader", "Error while file attachment.");
+            return;
+        }
+        addNewAttachment(response)
+    });
+}
+var addNewAttachment = function (attachment) {
+    if (attachment) {
+        var extension = attachment.FileType.replace(".", "");
+
+        var CurrentDate = new Date();
+        var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+        var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+        var CurrentTimestring = getCurrentTime(new Date);
+        var DateElement = $('#channel-messages #' + CurrentDateString);
+        if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+            var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+            $channelMessages.append(dhtml);
+        }
+        switch (extension.toLowerCase()) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+            case 'jfif':
+                var FileScrPath = attachment.FilePath;
+                var CommentId = attachment.CommentId;
+                var Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, CurrentTimestring).replace(/{FileScrPath}/g, FileScrPath);
+                $channelMessages.append(Imagehtml);
+                setScrollPosition();
+                break;
+            case 'zip':
+            case '7z':
+            case 'rar':
+            case 'pdf':
+            case 'txt':
+            case 'xls':
+            case 'xlsx':
+            case 'csv':
+            case 'doc':
+            case 'docx':
+                var FileScrPath = attachment.FilePath;
+                var CommentId = attachment.CommentId;
+                var FileName = attachment.FileName;
+                var Imagehtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, CurrentTimestring).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName);
+                $channelMessages.append(Imagehtml);
+                setScrollPosition();
+                //window.open(filepath, '_blank');
+                //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                break;
+            default:
+                break;
+        }
+
+    }
+}
+
+
+
+var setCommentsHeader = function (reconciliationdata) {
+    $channelReconciliationDescription.html("");
+    $channelReconciliationCompany.html("");
+    $channelReconciliationDate.html("");
+    $channelReconciliationAmount.html("");
+    $channelReconciliationDescription.html(`${reconciliationdata.company}/${reconciliationdata.description}`);
+    $channelReconciliationDate.html(`${formatDateMMDDYYYY(reconciliationdata.date)}`);
+    $channelReconciliationAmount.html(formatAmount(reconciliationdata.amount, true));
+    $channelName.text(reconciliationdata.account_name);
+}
+var LoadAllComments = function (ReconciliationComments) {
+    $channelMessages.empty();
+
+    if (ReconciliationComments != null && ReconciliationComments.length > 0) {
+
+        // this gives an object with dates as keys
+        const dategroups = ReconciliationComments.reduce((groups, game) => {
+            const date = game.createdDate.split('T')[0];
+            if (!groups[date]) {
+                groups[date] = [];
+            }
+            groups[date].push(game);
+            return groups;
+        }, {});
+
+        // Edit: to add it in the array format instead
+        const commentsgroupArrays = Object.keys(dategroups).map((date) => {
+            return {
+                date,
+                comments: dategroups[date]
+            };
+        });
+        $.each(commentsgroupArrays, function (index, aDates) {
+            var dtarray = aDates.date.split('-');
+            var datestring = monthNames[parseInt(dtarray[1]) - 1] + ' ' + dtarray[2] + ', ' + dtarray[0];
+            var dhtml = CommentHtmls.datehtml.replace('{id}', aDates.date.replace('-', '')).replace('{innerText}', datestring);
+            $channelMessages.append(dhtml);
+            $.each(aDates.comments, function (index, acomments) {
+
+                var UTCdate = getUTCDateTime(new Date(acomments.createdDateUTC));
+                var time = getCurrentTime(new Date(UTCdate));
+                var profileimgurl = acomments.commentedUserProfileImageurl;
+                var commentText = acomments.commentText;
+                var commentId = acomments.id;
+                var userName = acomments.commentedUserName;
+                if (acomments && (acomments.isAttachment == null || acomments.isAttachment == false)) {
+                    if (acomments && acomments.createdBy == chat.userId) {
+                        var commentshtml = CommentHtmls.commenthtml.replace('{date}', aDates.date.replace('-', '')).replace('{innerText}', commentText).replace('{time}', time).replace(/{commentId}/g, commentId);
+                        $channelMessages.append(commentshtml);
+                    }
+                    else {
+                        var Otherscommentshtml = CommentHtmls.otherscCommentshtml.replace('{profileimgurl}', profileimgurl).replace('{text}', commentText).replace('{userName}', userName).replace('{date}', aDates.date.replace('-', '')).replace('{time}', time);
+                        $channelMessages.append(Otherscommentshtml);
+                    }
+                }
+                else {
+                    if (acomments.fileType != null) {
+
+                        var FileName = acomments.fileName;
+                        var FileScrPath = acomments.fileAttachmentPath;
+                        var CommentId = acomments.id;
+                        var FileExtention = acomments.fileType.replace(".", "");
+
+                        switch (FileExtention.toLowerCase()) {
+                            case 'jpg':
+                            case 'jpeg':
+                            case 'png':
+                            case 'gif':
+                            case 'jfif':
+                                var Imagehtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Imagehtml = CommentHtmls.SelfAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Imagehtml = CommentHtmls.otherscAttachmentImageHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Imagehtml);
+                                break;
+                            case 'zip':
+                            case '7z':
+                            case 'rar':
+                            case 'pdf':
+                            case 'txt':
+                            case 'xls':
+                            case 'xlsx':
+                            case 'csv':
+                            case 'doc':
+                            case 'docx':
+                                var Dochtml = '';
+                                if (acomments && acomments.createdBy == chat.userId) {
+                                    Dochtml = CommentHtmls.SelfAttachmentDocumentHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                else {
+                                    Dochtml = CommentHtmls.otherscAttachmentDocumentsHtml.replace(/{commentId}/g, CommentId).replace(/{time}/g, time).replace(/{FileScrPath}/g, FileScrPath).replace(/{FileName}/g, FileName).replace('{userName}', userName).replace('{profileimgurl}', profileimgurl);
+                                }
+                                $channelMessages.append(Dochtml);
+                                //window.open(filepath, '_blank');
+                                //setTimeout(function () { $('.fancybox-button--close').click(); }, 500);
+
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            });
+
+        });
+        var obj = 0;
     }
 
 }
@@ -152,6 +800,32 @@ var resetChatPage = function () {
     typingMembers = new Set();
     onlineOfflineMembers = new Object();
 }
+function getCurrentTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+function getUTCDateTime(date) {
+
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var seconds = date.getSeconds()
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
+    return strTime;
+}
 var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
 var getPublicChatParticipants = function (channelUniqueNameGuid) {
     resetChatPage();
@@ -162,39 +836,46 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     });
 }
 var getChatParticipants = function () {
+
     let participantsURL = `/Communication/ChatParticipants?UserId=${chat.userId}&userEmail=${chat.userEmail}&clientId=${chat.clientId}`;
     if (chat.type === 1) {
-        participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
-    }
-    getAjaxSync(participantsURL, null, function (response) {
-        if (response.length > 0) {
-            chat.channels = response;
-            let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
-            chat.participants = [];
-            arrParticipants.forEach(x => {
-                if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
-                    chat.participants.push(x);
-                }
-            });
-            for (var i = 0; i < chat.channels.length; i++) {
-                if (chat.channels[i].IsPrivate === true) {
-                    chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
-                }
-                else {
-                    chat.channels[i].ChannelImage = Default_Profile_Image;
-                }
-            }
 
-            setOnlineOfflineMembersArray();
-            renderParticipants();
-        }
-        else {
-            if (chat.type === 0)
-                ShowAlertBoxWarning("No person exists for chat");
-            else if (chat.type === 1)
-                ShowAlertBoxWarning("No reconciliation exists for chat");
-        }
-    });
+        participantsURL = `/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=&clientId=${chat.clientId}&onlyHasChatChannels=true`;
+
+        /*$chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");*/
+
+
+
+        loadreconcilationcomments();
+
+
+    }
+    else {
+
+        getAjaxSync(participantsURL, null, function (response) {
+            if (response.length > 0) {
+                chat.channels = response;
+                let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
+                chat.participants = [];
+                arrParticipants.forEach(x => {
+                    if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
+                        chat.participants.push(x);
+                    }
+                });
+                for (var i = 0; i < chat.channels.length; i++) {
+                    if (chat.channels[i].IsPrivate === true) {
+                        chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
+                    }
+                    else {
+                        chat.channels[i].ChannelImage = Default_Profile_Image;
+                    }
+                }
+
+                setOnlineOfflineMembersArray();
+                renderParticipants();
+            }
+        });
+    }
 }
 var setParticipants = function (response, type) {
     if (response.length > 0) {
@@ -219,7 +900,8 @@ var setParticipants = function (response, type) {
         renderParticipants();
     }
     else {
-        ShowAlertBoxWarning("No participant exists for chat");
+
+        // ShowAlertBoxWarning("No participant exists for chat");
     }
 }
 var setOnlineOfflineMembersArray = function () {
@@ -237,7 +919,7 @@ var renderParticipants = function () {
         chat.channels[i]["Index"] = i;
         participants = participants + ` <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-` + i + `" data-email="` + (obj[i].IsPrivate === false ? '' : obj[i].ChatParticipants[0].Email.toLowerCase()) + `" data-index="` + i + `" data-channelId="` + obj[i].ChannelId + `" data-toggle="tab" data-target="#chat" role="tab">
                         <div class="avatar avatar-xl status-offline">
-                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ChannelImage) == true ? Default_Profile_Image : obj[i].ChannelImage) + `" alt="" />
+                            <img class="rounded-circle" src="`+ (isEmptyOrBlank(obj[i].ChannelImage) == true ? Default_Profile_Image : obj[i].ChannelImage) + `" alt="" onerror="imgError(this);" />
 
                         </div>
                         <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -268,7 +950,7 @@ var renderParticipants = function () {
 }
 
 var handleParticipantClick = async function (event) {
-    
+
     let index = event.currentTarget.dataset.index;
     if (isEmpty(index)) {
         throw 'Channel Index not found.'
@@ -331,7 +1013,45 @@ var insertUpdateTwilioConversation = function (objTwilioConversations) {
     postAjax("/Twilio/InsertUpdateTwilioConversation", JSON.stringify(objTwilioConversations), function (response) {
     });
 }
+var CommentDelete = function (CommentId) {
 
+    $('#msg_' + CommentId).remove();
+    if (CommentId > 0) { DeleteReconciliationComment(CommentId); }
+
+}
+var CommentEdit = function (CommentId) {
+    var text = $('#msg_' + CommentId + ' .chat-message');
+    $messageBodyInput.val('').focus();
+    $messageBodyInput.val(text.text());
+
+}
+var DeleteAttachment = function (commentId) {
+    var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    postAjaxSync('/Reconciliation/DeleteReconciliationAttachment?CommentId=' + commentId + '&AgencyId=' + AgencyId, null, function (response) {
+        var r = response;
+        if (response.Status == "Success") {
+
+            $('#att_' + response.CommentId).remove();
+            toastr.success("Attachment has been removed successfully!");
+
+        }
+        else {
+
+            toastr.warning("Error while removing of Attachment.");
+        }
+    });
+}
+var DeleteReconciliationComment = function (commentId) {
+    postAjaxSync(apiurl + `Reconciliation/DeleteReconciliationComment?CommentId=` + commentId, null, function (response) {
+        var r = response;
+        if (response.resultData == true) {
+            toastr.success("Message has been removed successfully!");
+        }
+        else {
+            toastr.warning("Error while removing of message.");
+        }
+    });
+}
 
 var getChannelByChannelIndex = function () {
     return chat.channels[chat.channelIndex];
@@ -413,6 +1133,7 @@ var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
     });
 }
 $("#divChatSiderbarFilters > button").click(function () {
+
     var el = $(this);
     $chatSiderbarFilterButtons.removeClass("btn-falcon-primary").addClass("btn-falcon-default");
     el.addClass("btn-falcon-primary");
@@ -426,6 +1147,7 @@ $("#divChatSiderbarFilters > button").click(function () {
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];
+                showHideReconcilationOptions(false);
                 loadChatPage(false, chat.type);
             }, 0)
         }
@@ -437,13 +1159,32 @@ $("#divChatSiderbarFilters > button").click(function () {
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];
-                loadChatPage(false, chat.type);
+                showHideReconcilationOptions(true);
+                //loadChatPage(false, chat.type);
+                loadreconcilationcomments();
             }, 0)
         }
     }
 });
+function showHideReconcilationOptions(show) {
+    if (show == true) {
+        $communicationGLaccount.removeClass('d-none');
+        $communicationTrackingCategories.removeClass('d-none');
+        $tc_2_Dropdown.removeClass('d-none');
+        $communicationAction.removeClass('d-none');
+        location.reload();
+    }
+    else {
+        $communicationGLaccount.addClass('d-none');
+        $communicationTrackingCategories.addClass('d-none');
+        $tc_2_Dropdown.addClass('d-none');
+        $communicationAction.addClass('d-none');
+    }
+}
 
 function AgencyDropdownPartialViewChange() {
+
+    ShowlottieLoader();
     setTimeout(function () {
         resetChatPage();
         loadChatPage();
@@ -451,6 +1192,7 @@ function AgencyDropdownPartialViewChange() {
         $chatSiderbarFilterButtons.eq(0).addClass("btn-falcon-primary");
     }, 1)
     SetUserPreferencesForAgency();
+    window.location.reload();
 }
 
 var addMentionPlugin = function () {
@@ -475,7 +1217,7 @@ var getMentions = function () {
 var selectSidebarParticipant = function () {
     if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === true && isEmptyOrBlank(getParameterByName('reconChannelId')) === true) {
         if (chat.autoSelectParticipant === true) {
-            $participants.eq(0).click();
+            /*$participants.eq(0).click();*/
         }
     }
     else if (isEmptyOrBlank(getParameterByName('WithTeamMember')) === false) {
@@ -511,4 +1253,94 @@ var selectSidebarParticipant = function () {
 var UpdateReconciliationHasStatus = function (id) {
     postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
     });
+}
+
+var onChangeglAccount = function (event) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $gl_accountDropdown.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + selectedValue + '&BankRule=' + 0 + '&TrackingCategory=' + 0, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+}
+
+var onChangeAction = function (event) {
+
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $communication_DropDownAction.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+
+}
+var onChangeTc = function (e) {   
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_1_Dropdown.val();
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
+}
+function onChangeAditinalTc1(e) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_3_Dropdown.val();
+    var ClientID = $("#ddlclient option:selected").val();
+    ClientID = ClientID != '' ? ClientID : 0;
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
+}
+var onChangeAditinalTc = function (e) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_2_Dropdown.val();
+    var ClientID = $("#ddlclient option:selected").val();
+    ClientID = ClientID != '' ? ClientID : 0;
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
 }

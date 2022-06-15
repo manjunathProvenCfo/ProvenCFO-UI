@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -122,7 +123,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         if (NewTasks.Labels == null)
                         {
-                            return Json(new { id = Task.Id,  Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
+                            return Json(new { id = Task.Id, Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
                         }
                         var result = objNeeds.CreateNewTask(NewTasks, LoginUserid);
                         if (result.Status == true)
@@ -492,7 +493,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-        
+
         [HttpPost]
         public JsonResult UploadFile(HttpPostedFileBase file)
         {
@@ -629,37 +630,37 @@ namespace ProvenCfoUI.Controllers
         }
 
 
-        [CheckSession]
-        [HttpGet]
-        public JsonResult KanbanCountWithIndividualPriority(string AgencyId)
-        {
-            try
-            {
-                using (NeedsService objNeeds = new NeedsService())
-                {
-                    var objResult = objNeeds.KanbanCountWithIndividualPriority(Convert.ToString(AgencyId));
-                    return Json(objResult, JsonRequestBehavior.AllowGet);
-                }
+        //[CheckSession]
+        //[HttpGet]
+        //public JsonResult KanbanCountWithIndividualPriority(string AgencyId)
+        //{
+        //    try
+        //    {
+        //        using (NeedsService objNeeds = new NeedsService())
+        //        {
+        //            var objResult = objNeeds.KanbanCountWithIndividualPriority(Convert.ToString(AgencyId));
+        //            return Json(objResult, JsonRequestBehavior.AllowGet);
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //        throw ex;
+        //    }
+        //}
 
         [CheckSession]
         public JsonResult DeleteNeedsCard(int TaskId)
         {
             try
-            { 
-                    using (NeedsService objNeeds = new NeedsService())
-                    {
+            {
+                using (NeedsService objNeeds = new NeedsService())
+                {
 
-                        var results = objNeeds.DeleteNeedsCard(TaskId);
-                        return Json(results, JsonRequestBehavior.AllowGet);
-                    }
+                    var results = objNeeds.DeleteNeedsCard(TaskId);
+                    return Json(results, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {
@@ -667,7 +668,118 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+        public JsonResult EmailSend(string ClientName, string ClientId, string url, string totalTask, string sentdate)
+        {
+            try
+            {
+                using (NeedsService objNeeds = new NeedsService())
+                {
+                    using (AccountService obj = new AccountService())
+                    {
+                        List<InviteUserModel> user = new List<InviteUserModel>();
+                        var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "NDS");
+                        var Userslist = usersListwithRecPermission.ResultData;
+                        var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+                        var SegmentTasks = objNeeds.GetAllSegments("Active", Convert.ToInt32(ClientId)).ResultData.ToList();
+                        var KanbanTaskList = SegmentTasks.Select(x => x.KanbanTaskList).ToList();
 
+                        List<string> TaskTitle = null;
+                        List<string> Labels = null;
+                        var segmenttask = SegmentTasks.Where(x => x.Id == "1" && x.Id == "2").Select(x => x.Id).ToList();
+
+                        var Task = "";
+                        var Label = "";
+                        var itemCount = 0;
+
+                        foreach (var item in KanbanTaskList)
+                        {
+                            TaskTitle = item.Select(x => x.TaskTitle).ToList();
+                            Labels = item.Select(x => x.Labels).ToList();
+
+                            if (segmenttask.Count < 2 && itemCount <= 1)
+                            {
+                                foreach (var list in KanbanTaskList.Select((value, i) => new { i, value }))
+
+                                {
+                                    var value = list.value;
+                                    var index = list.i;
+
+                                    if (index == 0)
+                                    {
+                                        foreach (var singleTask in TaskTitle)
+                                        {
+                                            Task += singleTask + ",";
+                                        }
+                                        foreach (var singleLabel in Labels)
+                                        {
+
+                                            Label += singleLabel + ",";
+                                        }
+
+                                        itemCount = itemCount + 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        string[] tokensTask = Task.Split(',');
+                        string[] tokenslabel = Label.Split(',');
+                        int k = 0;
+                        var taskPrint = "";
+                        var labelPrint = "";
+                        var taskLabelPrint = "";
+
+                        for (int i = 0; i < tokensTask.Length; i++)
+                        {
+                            taskPrint = tokensTask[i];
+
+                            for (int j = k; j < tokenslabel.Length - 1; j++)
+                            {
+                                labelPrint = tokenslabel[j];
+
+                                k = j + 1;
+                                taskLabelPrint += taskPrint + " - " + labelPrint + "<br/> ";
+                                taskLabelPrint.Replace(", -", "");
+                                break;
+                            }
+                        }
+
+                        TempData["SegmentsAndTasks"] = SegmentTasks;
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+
+                        string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/NeedsEmailTemplate.xml"));
+
+                        var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                        var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                        var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+
+                        subject = subject.Replace("{CompanyName}", ClientName);
+                        subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+
+                        body = body.Replace("{Needs Title}", taskLabelPrint.ToString());
+                        body = body.Replace("{url}", url);
+
+                        //footer = footer.Replace("{LastSent}", sentdate);
+                        footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
+
+
+                        return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
     }
 }

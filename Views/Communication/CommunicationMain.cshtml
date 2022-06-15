@@ -35,7 +35,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100 active" id="chat-link-0" data-toggle="tab" data-target="#chat-0" role="tab" aria-controls="chat-0" aria-selected="true">
                             <div class="avatar avatar-xl status-online">
-                                <img class="rounded-circle" src="~/assets/img/team/2.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/2.jpg" alt="" onerror="imgError(this);"/>
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -94,7 +94,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-2" data-toggle="tab" data-target="#chat-2" role="tab" aria-controls="chat-2" aria-selected="true">
                             <div class="avatar avatar-xl">
-                                <img class="rounded-circle" src="~/assets/img/team/1.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/1.jpg" alt="" onerror="imgError(this);" />
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -122,7 +122,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100 unread-message" id="chat-link-3" data-toggle="tab" data-target="#chat-3" role="tab" aria-controls="chat-3" aria-selected="true">
                             <div class="avatar avatar-xl status-online">
-                                <img class="rounded-circle" src="~/assets/img/team/13.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/13.jpg" alt="" onerror="imgError(this);" />
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -149,7 +149,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100 unread-message" id="chat-link-4" data-toggle="tab" data-target="#chat-4" role="tab" aria-controls="chat-4" aria-selected="true">
                             <div class="avatar avatar-xl status-online">
-                                <img class="rounded-circle" src="~/assets/img/team/4.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/4.jpg" alt="" onerror="imgError(this);" />
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -203,7 +203,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-6" data-toggle="tab" data-target="#chat-6" role="tab" aria-controls="chat-6" aria-selected="true">
                             <div class="avatar avatar-xl status-online">
-                                <img class="rounded-circle" src="~/assets/img/team/10.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/10.jpg" alt="" onerror="imgError(this);" />
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -230,7 +230,7 @@
 
                         <div class="media chat-contact hover-actions-trigger w-100" id="chat-link-7" data-toggle="tab" data-target="#chat-7" role="tab" aria-controls="chat-7" aria-selected="true">
                             <div class="avatar avatar-xl status-online">
-                                <img class="rounded-circle" src="~/assets/img/team/11.jpg" alt="" />
+                                <img class="rounded-circle" src="~/assets/img/team/11.jpg" alt="" onerror="imgError(this);" />
 
                             </div>
                             <div class="media-body chat-contact-body ml-2 d-md-none d-lg-block">
@@ -2172,6 +2172,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
 
         $(document).ready(function () {
@@ -2180,6 +2181,7 @@
         });
 
         function AgencyDropdownPartialViewChange() {
+
             var ClientID = $("#ddlclient option:selected").val();
 
             $.ajax({

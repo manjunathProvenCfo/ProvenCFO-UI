@@ -21,7 +21,7 @@ namespace ProvenCfoUI.Controllers
         // GET: BillableEntities
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetAllBillableEntitiesList()
         {
             try

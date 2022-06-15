@@ -7,6 +7,20 @@ $(document).ready(function () {
     bindEnableAutomation();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
+    
+    $(".lastmodified").each(function () {
+        var utctime = $(this).find('select').attr("utcdate");
+        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
+        
+        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {            
+            var localtime = getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            $(this).attr("data-original-title", msg);
+        }
+        else {
+            $(this).attr("data-original-title", "No Modification yet.");
+        }        
+    });
 
 
     $("#ichat").click(function () {
@@ -31,6 +45,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "button[id=btnComment]", function (e) {
+        
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
         showReconciliationChat(e.currentTarget.dataset.id);
         //$('#divFilter').hide();
@@ -45,6 +60,7 @@ $(document).ready(function () {
         //    loadChatPage(true, 1);
         //}
     });
+   
     var showReconciliationChat = function (channelUniqueNameGuid) {
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
@@ -54,11 +70,14 @@ $(document).ready(function () {
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-        if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-            currentChannelUniqueNameGuid = channelUniqueNameGuid;
-            chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-            loadChatPage(true, 1, true);
-        }
+        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
+        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
+        //    loadChatPage(true, 1, true);
+        //}
+
+        loadCommentsPage(channelUniqueNameGuid);
+        
     }
 });
 
@@ -99,7 +118,7 @@ $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
-    bindNotInBooksAndBanksCount1();
+    /*bindNotInBooksAndBanksCount1();*/
    
     LoadFilterData();
    
@@ -111,22 +130,26 @@ $(document).ready(function () {
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     if (type != null) {
-
+        
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
+            sessionStorage.clear();
         }
         else {
             $('#tabNotinBooks').removeClass('tabselect');
             $('#tabNotinBanks').addClass('tabselect');
+            sessionStorage.clear();
         }
+      
     }
 
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
+       /* window.location.reload();*/
     }
-    sessionStorage.clear();
+   
 
     $('.checkbox-bulk-select-target').click(function () {
         

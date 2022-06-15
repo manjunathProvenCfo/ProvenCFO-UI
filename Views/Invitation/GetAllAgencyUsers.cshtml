@@ -1,0 +1,230 @@
+﻿@*@{
+        ViewBag.Title = "GetAllAgencyUsers";
+    }*@
+
+@model  List<Proven.Model.InviteUserModel>
+
+@{
+    ViewBag.Title = "GetAllAgencyUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<style>
+        a.page-link {
+            background-color: #fff !important;
+            border-color: #d8e2ef !important;
+        }
+
+        .page-link:hover {
+            color: #000 !important;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff !important;
+            background-color: #00BE82 !important;
+        }
+    </style>*@
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-6 col-sm-auto d-flex align-items-center pr-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agency Users</h5>
+            </div>
+            <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                <div class="d-none" id="purchases-actions">
+                    <div class="input-group input-group-sm">
+                        <select class="custom-select cus" aria-label="Bulk actions">
+                            <option selected="">Bulk actions</option>
+                            <option value="Delete">Delete</option>
+                            <option value="Archive">Archive</option>
+                        </select>
+                        <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
+                    </div>
+                </div>
+                <div id="dashboard-actions">
+                    @*<button class="btn btn-falcon-default btn-sm" type="button">
+                            <a href=@Url.Action("InviteStaff","Invitation")><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Invite</span></a>
+                        </button>*@
+
+                    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
+                    <button class="btn btn-falcon-default btn-sm ml-2" type="button" onclick="ExportToExcel()">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Export</span>
+                    </button>
+                    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a></span></button>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-0 pt-0">
+        <div class="dashboard-data-table">
+            <table id="inviteuser" class="table table-sm table-dashboard fs--1 data-table border-bottom">
+                <thead class="bg-200 text-900">
+                    <tr>
+                        <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                            <div class="custom-control custom-checkbox">
+                                @* <input type="checkbox" id="checkBoxAll" class="custom-checkbox" />*@
+
+                                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select"
+                                       type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                            </div>
+                        </th>
+                        <th class="sort pr-1 align-middle">First Name</th>
+                        <th class="sort pr-2 align-middle">Last Name</th>
+                        <th class="sort pr-3 align-middle">Email Address</th>
+                        <th class="sort pr-4 align-middle">Agency</th>
+                        <th class="sort pr-7 align-middle">User Role </th>
+                        @*<th class="sort pr-5 align-middle">Role</th>*@
+                        @*<td class="sort pr-6 align-middle" style="max-width:5% !important">LinkedIn Profile </td>*@
+                        <th class="sort pr-7 align-middle">Status </th>
+                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        @*<th class="no-sort align-middle text-center pr-3">Actions</th>*@
+
+
+
+                    </tr>
+                </thead>
+                <tbody id="purchases">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="btn-reveal-trigger">
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id=@item.Id value="@item.Id" />
+                                    <label class="custom-control-label" for=@item.Id></label>
+                                </div>
+                            </td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.AgencyName)</td>
+                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
+                            @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.LinkedInProfile)</td>*@
+
+                            <td class="align-middle">
+
+
+                                @if (item.IsRegistered == 0 && Convert.ToString(item.IsActive) == "1")
+                                {
+                                    <span class="badge badge-pill badge-primary">Invited</span>
+                                }
+                                else if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                {
+                                    <span class="badge badge-pill badge-success">Active</span>
+                                }
+                                else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                                {
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
+                                }
+                                else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                {
+                                    <span class="badge badge-pill badge-secondary">Inactive</span>
+                                }
+                            </td>
+                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+
+
+                            @*<td class="align-middle text-center pr-3">
+                                    <span class="d-none d-sm-inline-block ml-1">
+                                        @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Edit" href='@Url.Action("NavigateToEdit", "Invitation", new { id = item.Id })'>
+                                                <i class="far fa-edit"> </i>
+                                            </a>
+                                        }
+                                    </span>
+                                    <span class="d-none d-sm-inline-block ml-1">
+                                        @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 0)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Cancel Invitation" href="#" onclick=" cancelInvite('@item.Id')">
+                                                <i class="fas fa-dot-circle"></i>
+                                            </a>
+                                        }
+                                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Delete User" href="javascript:void(0)" onclick="deleteInvite('@item.Id')">
+                                                <i class="far fa-trash-alt"> </i>
+                                            </a>
+                                        }
+                                    </span>
+                                    <span class="d-none d-sm-inline-block ml-1">
+
+
+                                        @if (Convert.ToString(item.IsActive) == "1" && item.IsRegistered == 1)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Deactivate" href='@Url.Action("DeactivateInvite", "Invitation", new { id = item.Id, Status = "Active"})'>
+                                                <i class="far far fas fa-plug"> </i>
+                                            </a>
+                                        }
+                                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 0)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                                <i class="far far fas fa-power-off"> </i>
+                                            </a>
+
+                                        }
+                                        else if (Convert.ToString(item.IsActive) == "0" && item.IsRegistered == 1)
+                                        {
+                                            <a data-toggle="tooltip" data-placement="top" title="Activate" href='@Url.Action("DeactivateInvite", "Invitation", new { id = item.Id, Status = "Inactive"})'>
+                                                <i class="far far fas fa-power-off"> </i>
+                                            </a>
+                                        }
+
+
+
+                                    </span>
+
+                                </td>*@
+
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table")
+    @Scripts.Render("~/bundles/js/reconciliationMain")
+    <script>
+
+        var ExportToExcel = function () {
+
+            ExportFileReq("Invitation", "ExportToExcelAllAgencyUser");
+        }
+
+
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    //use window.location.href for redirect to download action for download the file
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
+
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
+    </script>
+
+}

@@ -6,20 +6,20 @@
 }
 
 @*<style>
-    a.page-link {
-        background-color: #fff !important;
-        border-color: #d8e2ef !important;
-    }
+        a.page-link {
+            background-color: #fff !important;
+            border-color: #d8e2ef !important;
+        }
 
-    .page-link:hover {
-        color: #000 !important;
-    }
-    .page-item.active .page-link {
-        z-index: 3;
-        color: #fff !important;
-        background-color: #00BE82 !important;
-    }
-</style>*@
+        .page-link:hover {
+            color: #000 !important;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff !important;
+            background-color: #00BE82 !important;
+        }
+    </style>*@
 
 <div class="card mb-3">
     <div class="card-header">
@@ -70,6 +70,7 @@
                         <th class="sort pr-1 align-middle">First Name</th>
                         <th class="sort pr-2 align-middle">Last Name</th>
                         <th class="sort pr-3 align-middle">Email Address</th>
+                        <th class="sort pr-3 align-middle">User Role</th>
                         <th class="sort pr-4 align-middle">Job Title</th>
                         @*<th class="sort pr-5 align-middle">Role</th>*@
                         @*<td class="sort pr-6 align-middle" style="max-width:5% !important">LinkedIn Profile </td>*@
@@ -94,6 +95,8 @@
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.FirstName)</td>
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.LastName)</td>
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.RoleName)</td>
+
                             <td class="align-middle"> @Html.DisplayFor(modelItem => item.JobTitle)</td>
                             @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.RoleName)</td>*@
                             @*<td class="align-middle"> @Html.DisplayFor(modelItem => item.LinkedInProfile)</td>*@
@@ -185,8 +188,11 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/table")
+  
     <script>
+
+        
 
         var ExportToExcel = function () {
 
@@ -270,20 +276,35 @@
                     })
                         .done(function (data) {
 
-                            sweetAlert
-                                ({
-                                    title: "Deleted!",
-                                    text: "Staff User is successfully deleted!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.reload();
-                                    });
-                        })
-                        .error(function (data) {
+                            if (data == "False") {
+                                sweetAlert
+                                    ({
+                                        title: "Deleted!",
+                                        text: "User  has been successfully deleted.",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
 
-                            swal("Oops", "We couldn't connect to the server!", "error");
-                        });
+
+                            }
+                            else {
+                                sweetAlert
+                                    ({
+                                        title: "Can't Delete",
+                                        text: "This user  is associate with a Team and cannot be deleted.",
+                                        type: "warning"
+                                    },
+                                        function () {
+                                            window.location.reload();
+                                        });
+                            }
+                        })
+                    //.error(function (data) {
+
+                    //    swal("Oops", "We couldn't connect to the server!", "error");
+                    //});
                 });
         }
 
@@ -322,7 +343,16 @@
                             swal("Oops", "We couldn't connect to the server!", "error");
                         });
                 });
+
+
+           
         }
+        $(document).ready(function () {
+            HidelottieLoader();
+
+
+        });
+       
     </script>
 }
 

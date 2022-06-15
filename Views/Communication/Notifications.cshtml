@@ -2,22 +2,28 @@
     ViewBag.Title = "Notifications";
 }
 
-<div class="card overflow-hidden mb-3" id="divNotificationsCard">
-    <div class="card-header bg-light">
+
+<div class="card card-notification shadow-none" style="max-width: 110rem">
+    <div class="card-header">
         <div class="row justify-content-between align-items-center">
-            <div class="col-sm-auto">
-                <h5 class="mb-1 mb-md-0">Your Notifications</h5>
+            <div class="col-auto">
+                <h6 class="card-header-title mb-0">Your Notifications</h6>
             </div>
-            <div class="col-sm-auto fs--1">
-                @*<a class="text-sans-serif" href="#!">Mark all as read</a>*@
-                @*<a class="text-sans-serif ml-2 ml-sm-3" href="#notification-settings-modal" data-toggle="modal">Notification settings</a>*@
-            </div>
+            <div class="col-auto" id="MarkallRead"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>
         </div>
     </div>
-    <div class="card-body fs--1 p-0">
+    <div class="list-group list-group-flush font-weight-normal fs--1 " id="FullNotificationList">
+        <div class="list-group-title border-bottom">NEW</div>
 
     </div>
-</div>
-@section Scripts {
 
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            loadAllNotificationLoggedInUserPage(true);
+        });
+    </script>
+    
 }

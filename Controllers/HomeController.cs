@@ -67,7 +67,7 @@ namespace ProvenCfoUI.Controllers
         }
 
 
-        public ActionResult LoginSessionExpaired()
+        public ActionResult LoginSessionExpired()
         {
 
             return View();
@@ -93,18 +93,20 @@ namespace ProvenCfoUI.Controllers
                         if (result.resultData != null && !string.IsNullOrEmpty(result.resultData.Id) && result.status == true)
                         {
                             commSrv = new CommonService();
-                            //Session["UserId"] = result.resultData.Id.ToString();
-                            //Session["UserName"] = result.resultData.FirstName;
-                            //Session["LoginName"] = loginVM.UserName.ToString();
-                            //Session["UserFullName"] = result.resultData.FirstName + " " + result.resultData.LastName;
-                            //Session["UserType"] = result.resultData.UserType;
                             string userData = $"{result.resultData.Id},{result.resultData.FirstName},{loginVM.UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
                             FormsAuthentication.SetAuthCookie(userData, false);
-                            ViewBag.Sucess = "Login Sucessfully";                            
+                            ViewBag.Sucess = "Login Sucessfully";
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
                             var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
                             Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
+
+                            using (ClientService objClient = new ClientService())
+                            {
+                                var client = objClient.GetClientById(Convert.ToInt32(objUserPref.FirstOrDefault().PreferanceValue));
+                                AccountingPackageInstance.Instance.ClientModel = client;
+                            }
+
                             return RedirectToAction("AgencyHome", "AgencyService");
                         }
                         else
@@ -112,22 +114,26 @@ namespace ProvenCfoUI.Controllers
                             switch (result.message)
                             {
                                 case "001":
-                                    ViewBag.ErrorMessage = "Username does not exist!";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                                 case "002":
-                                    ViewBag.ErrorMessage = "Invalid Password!";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                                 case "003":
-                                    ViewBag.ErrorMessage = "User role has been deactived or deleted!";
+                                    ViewBag.ErrorMessage = "  \n The username or password you have entered is invalid.";
+                                    break;
+                                case "004":
+                                    ViewBag.ErrorMessage = "  \n The username or password you have entered is invalid.";
                                     break;
                                 default:
-                                    ViewBag.ErrorMessage = "Email or Password not correct";
+                                    ViewBag.ErrorMessage = " \n The username or password you have entered is invalid.";
                                     break;
                             }
-                            Utltity.Log4NetInfoLog(ViewBag.ErrorMessage);
+                            Utltity.Log4NetInfoLog(ViewBag.ErrorMessage + " , User Name: " + loginVM.UserName);
                             return View("Login");
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -295,7 +301,7 @@ namespace ProvenCfoUI.Controllers
                     var result = obj.Register(registerVM.email, registerVM.passwordhash, registerVM.confirmpassword, registerVM.firstname, registerVM.lastname, registerVM.UserType, registerVM.AgencyID);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
-                    ViewBag.Sucess = "User Registered Sucessfully";
+                    ViewBag.Sucess = "User Registered Successfully";
                     return PartialView("_Userregisteredsuccessfully");
                 }
                 catch (Exception ex)
@@ -398,8 +404,8 @@ namespace ProvenCfoUI.Controllers
             Session.Abandon();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
-            XeroInstance.Instance.XeroToken = null;
-            XeroInstance.Instance.XeroConnectionStatus = false;
+            AccountingPackageInstance.Instance.XeroToken = null;
+            AccountingPackageInstance.Instance.ConnectionStatus = false;
         }
 
 
@@ -515,6 +521,7 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                 }
                 catch (Exception ex)
@@ -591,10 +598,12 @@ namespace ProvenCfoUI.Controllers
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
                         ViewBag.ProfileUrl = model.ProfileImage;
+                        ViewBag.UserId = userid;
                     }
                     else
                     {
                         ViewBag.ProfileUrl = string.Empty;
+                        ViewBag.UserId = string.Empty;
                     }
                 }
                 catch (Exception ex)
@@ -736,13 +745,13 @@ namespace ProvenCfoUI.Controllers
                     return Json("Invalid", JsonRequestBehavior.AllowGet);
                 }
             }
-                
-                //Session.Timeout = Session.Timeout + 20;
+
+            //Session.Timeout = Session.Timeout + 20;
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult GetRegisterdStaffUserList()
         {
             try

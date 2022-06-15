@@ -1,4 +1,6 @@
-﻿var twilioClient;
+﻿
+
+var twilioClient;
 var notificationChannels;
 var notificationChannelParticipants;
 var isNotificationsAlreadyFetched = false;
@@ -6,8 +8,11 @@ var $notifictionsDropDown = $("#navbarDropdownNotification");
 var $notifictionsList = $("#navbarDropdownNotificationListGroup");
 var $divNotificationsCard = $("#divNotificationsCard");
 var $divNotificationsCardBody = $("#divNotificationsCard .card-body");
+var $TopNotificaitonList = $("#TopNotificaitonList");
+var $FullNotificationList = $("#FullNotificationList");
 var notifications = [];
 var addMessageProcessedGlobal = [];
+
 
 const _audio = new Audio("/assets/audio/notification.mp3");
 const chatPages = ["communication/chat"]//reconciliation
@@ -16,17 +21,46 @@ const timer = ms => new Promise(res => setTimeout(res, ms));
 
 var Default_Profile_Image = "/assets/img/team/default-logo.png";
 const Notification_Bell_Size = 2;
+var $NotificationHtmls = {
+    UnreadNotificationHtml: ` <div class="list-group-item">
+                            <a class="notification notification-flush bg-200" href="#!">
+                                <div class="notification-avatar"> 
+                                    <div class="avatar avatar-2xl mr-3">
+                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);" />
+                                    </div>
+                                </div>
+                                <div class="notification-body"  commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
+                                    <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                                    <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span>
+                                </div>
+                            </a>
+                        </div>  `,
+    ReadNotificaitonHtml: `<div class="list-group-item">
+						<a class="border-bottom-0 notification notification-flush" href="#!">
+                            <div class="notification-avatar">
+                              <div class="avatar avatar-xl me-3">
+                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);">
+                              </div>
+                            </div>
+                            <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
+                              <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
+                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span></span>
+                            </div>
+                          </a>
+						  </div>`
+}
 
 $(function () {
     //Twilio Chat
     twilioChatGlobal();
     //Twilio Chat
 
+    loadAllNotificationLoggedInUserPage(false);
+
     bindNotInBooksAndBanksCount();
-    bindNotInBooksAndBanksCount1();
+    bindNotInBanksAndBanksCount();
 
     GetTotalNotesCount();
-
     if ((sessionStorage.getItem('SelectedMenu') == null || sessionStorage.getItem('SelectedMenu') == '') && (sessionStorage.getItem('SelectedSubMenu') == null || sessionStorage.getItem('SelectedSubMenu') == '')) {
         $("#home").addClass("show");
     }
@@ -47,7 +81,7 @@ $(function () {
         HighlightMenu();
 
     });
-
+    MenuOptionHideAndShow(getClientId());
 })
 
 var twilioChatGlobal = function (isNotiAlreadyFetched) {
@@ -65,12 +99,18 @@ var twilioChatGlobal = function (isNotiAlreadyFetched) {
 var getClientId = function () {
     return $("#ddlclient option:selected").val();
 }
-
+var setClientId = function (Id) {
+    return $("#ddlclient").val(Id);
+}
 //Layout page
 var AgencyDropdownPartialViewChange = function () {
 
 }
 var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
+    ShowlottieLoader();
+    MenuOptionHideAndShow(getClientId());
+    sessionStorage.removeItem("NotInBooksData");
+    sessionStorage.removeItem("NotInBanksData");
     SetUserPreferencesForAgency(callback);
 }
 function SetUserPreferencesForAgency(callback) {
@@ -89,6 +129,7 @@ function SetUserPreferencesForAgency(callback) {
             }
             GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
+            //HidelottieLoader();
         },
         error: function (d) {
 
@@ -97,115 +138,155 @@ function SetUserPreferencesForAgency(callback) {
 
 }
 
-function GetTotalNotesCount() {
+var MenuOptionHideAndShow = function (AgencyId) {
 
-    var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    try {
+        var agencyJson = sessionStorage.getItem('AgencyDetails');
+        var agencyInfo = JSON.parse(agencyJson);
+        if (agencyInfo == null || (agencyInfo != null && agencyInfo.id != AgencyId)) {
+            getAjaxSync(apiurl + `Client/GetClientById?ClientId=${AgencyId}`, null, function (response) {
 
-        if (response.Message == "Success") {
-
-            let data = response.ResultData;
-            let TotalNotes = 0;
-
-            for (var i = 0; i < data.length; i++) {
-                TotalNotes = TotalNotes + Number(data[i].TotalNotes);
+                if (response.resultData != null) {
+                    var agencyDetils = '{'
+                        + '"id" : ' + response.resultData.id + ','
+                        + '"name"  : "' + response.resultData.name + '",'
+                        + '"thirdPartyAccountingApp_ref" : ' + response.resultData.thirdPartyAccountingApp_ref + ''
+                        + '}';
+                    sessionStorage.setItem("AgencyDetails", agencyDetils);
+                    if (response.resultData != null && response.resultData.thirdPartyAccountingApp_ref != null && response.resultData.thirdPartyAccountingApp_ref == 2) {
+                        $('#submenu_trackingCategories').addClass('d-none');
+                    }
+                    else {
+                        $('#submenu_trackingCategories').removeClass('d-none');
+                    }
+                }
+            });
+        }
+        else {
+            if (agencyInfo != null && agencyInfo.thirdPartyAccountingApp_ref != null && agencyInfo.thirdPartyAccountingApp_ref == 2) {
+                $('#submenu_trackingCategories').addClass('d-none');
             }
-            $("#lblTotalNotes").text(TotalNotes);
+            else {
+                $('#submenu_trackingCategories').removeClass('d-none');
+            }
+        }
+    } catch (e) {
+        console.log(e);
+
+    }
+}
+function selectProps(...props) {
+    return function (obj) {
+        const newObj = {};
+        props.forEach(name => {
+            newObj[name] = obj[name];
+        });
+
+        return newObj;
+    }
+}
+function GetTotalNotesCount() {
+    var ClientID = $("#ddlclient option:selected").val();
+    getAjaxSync(apiurl + `Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+        if (response.message == "Success") {
+            let data = response.resultData;
+            if (data != undefined && data.length > 0) {
+                let TotalNotes = data[0].totalNotes;
+                $("#lblTotalNotes").text(TotalNotes);
+            }
+            else {
+                let TotalNotes = 0;
+                $("#lblTotalNotes").text(TotalNotes);
+            }           
         }
     });
 }
 
 
-var totalSum1;
-var totalSum2;
+
+
+var totalNotInBanksData;
+var totalNotInBooksData;
 function bindNotInBooksAndBanksCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
 
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-        if (response.Message == "Success") {
-
-            let data = response.ResultData;
-
-            var totalSum = 0;
-
-            for (var i = 0; i < data.length; i++) {
-
-                totalSum1 = totalSum + data[i].Count;
-                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-                    $("#lblNotInBanksCount").text(data[i].Count);
-                }
+    if (sessionStorage.getItem("NotInBanksData") == null) {
+        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+            if (response.Message == "Success") {
+                sessionStorage.setItem("NotInBanksData", JSON.stringify(response.ResultData));
+                bindNotInBanksData(response.ResultData);
             }
+        });
+    }
+    else {
+        let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
+        bindNotInBanksData(data);
+    }
+}
+var bindNotInBanksData = function (data) {
+    if (data != null) {
 
-            TotalSum(totalSum1, totalSum2);
-        }
-    })
+        $("#lblNotInBanksCount").text(data[0].Count);
+        totalNotInBanksData = data[0].Count;
+    }
+    else {
+        $("#lblNotInBanksCount").text(0);
+        totalNotInBanksData = 0;
+
+    }
+
+    TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
-function bindNotInBooksAndBanksCount1() {
+function bindNotInBanksAndBanksCount() {
     var ClientID = $("#ddlclient option:selected").val();
 
-    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-        if (response.Message == "Success") {
-
-            let data = response.ResultData;
-            var totalSum = 0;
-            for (var i = 0; i < data.length; i++) {
-
-                totalSum2 = totalSum + data[i].Count;
-
-                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-                    $("#lblNotInBooksCount").text(data[i].Count);
-                }
-
+    if (sessionStorage.getItem("NotInBooksData") == null) {
+        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+            if (response.Message == "Success") {
+                sessionStorage.setItem("NotInBooksData", JSON.stringify(response.ResultData));
+                bindNotInBooksData(response.ResultData);
             }
+        });
+    }
+    else {
+        data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
+        bindNotInBooksData(data);
+    }
 
-            TotalSum(totalSum1, totalSum2);
+}
+var bindNotInBooksData = function (data) {
+    if (data != null) {
 
 
-        }
-    })
+        $("#lblNotInBooksCount").text(data[0].Count);
+        totalNotInBooksData = data[0].Count;
+
+    }
+    else {
+        $("#lblNotInBooksCount").text(0);
+        totalNotInBooksData = 0;
+
+    }
+    TotalSum(totalNotInBanksData, totalNotInBooksData);
 }
 
 
-function TotalSum(totalSum1, totalSum2) {
+function TotalSum(totalNotInBanksData, totalNotInBooksData) {
+
     let totalsum3 = 0;
-    if (isNaN(totalSum1 + totalSum2)) {
+    if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
         $("#lblNotInCount").addClass('d-none');
     }
     else {
         $("#lblNotInCount").removeClass('d-none');
-        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+        totalsum3 = isNaN(totalNotInBanksData + totalNotInBooksData) ? 0 : Number(totalNotInBanksData + totalNotInBooksData);
         $("#lblNotInCount").text(totalsum3);
-
     }
 }
-//function bindNotInBooksAndBanksCount() {
 
-//    var ClientID = $("#ddlclient option:selected").val();
-
-//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-//        if (response.Message == "Success") {
-//            let data = response.ResultData;
-//            let totalSum = 0;
-//            for (var i = 0; i < data.length; i++) {
-//                totalSum = totalSum + data[i].totalCount;
-//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-//                    $("#lblNotInBanksCount").text(data[i].totalCount);
-//                }
-//                else {
-//                    $("#lblNotInBooksCount").text(data[i].totalCount);
-//                }
-//            }
-
-
-//            $("#lblNotInCount").text(totalSum);
-
-//        }
-//    })
-//}
 
 
 function HighlightMenu() {
@@ -241,7 +322,94 @@ function HighlightMenu() {
     }
 
 }
+
+
+
 //Layout page
+
+//Global Chat with Notifications (Non Twilio , Local DB) Start
+
+
+var loadAllNotificationLoggedInUserPage = function (IsloadAll) {
+    var Count = (IsloadAll == true ? 0 : 5);
+    var userId = $('#topProfilePicture').attr('userid');
+
+    getAjaxSync(apiurl + `Reconciliation/getAllNotification?Userid=${userId}&MaxRecordscount=${Count}`, null, function (response) {
+        if (response && response.status) {
+            var icount = 0;
+            var UnreadNotificaitonCount = response.resultData.filter(x => x.isunread == true).length;
+            if (UnreadNotificaitonCount <= 0) $notifictionsDropDown.removeClass("notification-indicator");
+            response.resultData.forEach(function (obj) {
+                if (icount > 2 && IsloadAll == false) return false;
+                var NotificationHtml = '';
+                var Text = "mentioned you in " + obj.agencyName + " about a transaction for $" + obj.amount;
+                var mDate = new Date(obj.mentionedDate);
+                var UTCdate = getUTCDateTime(new Date(obj.mentionedDate));
+                //var DateString = mDate.getFullYear() + '' + ('0' + (mDate.getMonth() + 1)).slice(-2) + '' + ('0' + mDate.getDate()).slice(-2);
+                var StringForDisplay = getDateDiff(new Date(UTCdate), new Date());  // monthNames[mDate.getMonth()] + ' ' + ('0' + mDate.getDate()).slice(-2) + ', ' + mDate.getFullYear();
+                //var Timestring = getCurrentTime(new Date);
+                if (obj.isunread != null && obj.isunread == true) {
+                    NotificationHtml = $NotificationHtmls.UnreadNotificationHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+
+                else {
+                    NotificationHtml = $NotificationHtmls.ReadNotificaitonHtml.replace("{mentionedByProfilePic}", obj.commentedByUserProfilePic).replace("{mentionedByName}", obj.mentionedByUserName).replace("{datetime}", StringForDisplay).replace("{text}", Text).replace("{commentId}", obj.reconciliationCommentId_ref).replace("{reconciliationId}", obj.reconciliationId_ref).replace("{agencyId}", obj.agencyId);
+                }
+                if (IsloadAll == false) {
+                    $TopNotificaitonList.append(NotificationHtml);
+                }
+                else {
+                    $FullNotificationList.append(NotificationHtml);
+                }
+                icount++;
+                HidelottieLoader();
+            })
+        }
+    });
+    //HidelottieLoader();
+}
+function getCurrentTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+var ClientNotification = function (e) {
+
+    var Userid = $('#topProfilePicture').attr('userid');
+    let agencyId = e.currentTarget.attributes["commentId"].value;
+    getAjaxSync(apiurl + `Reconciliation/UpdateNotificationbasedagency?Userid=${Userid}&agencyId=${agencyId}`, null, function (response) {
+
+        if (response == true) {
+
+            $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+
+            sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+            sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+            window.location.href = "/Communication/Chat";
+
+
+
+        }
+    });
+    //var agencyId = e.currentTarget.attributes["agencyId"].value;
+    //var commentId = e.currentTarget.attributes["commentId"].value;
+    //var reconciliationId = e.currentTarget.attributes["reconciliationId"].value
+
+    //sessionStorage.setItem('Notification_agencyId', e.currentTarget.attributes["agencyId"].value);
+    //sessionStorage.setItem('Notification_reconciliationId', e.currentTarget.attributes["reconciliationId"].value);
+    //window.location.href = "/Communication/Chat";
+    //$('#menu_communication a').click();
+    //setTimeout(function () { $('#submenu_chat a').click(); }, 500);
+
+}
+//Global Chat with Notifications (Non Twilio , Local DB) End
+
+
 
 //Global Chat with Notifications Start
 var getTwilioToken = function (email) {
@@ -260,9 +428,6 @@ var createTwilioClientGlobal = async function () {
 
                 if (isNotificationsAlreadyFetched === false) {
                     isNotificationsAlreadyFetched = true;
-                    showWaitMeLoader($notifictionsList);
-                    showWaitMeLoader($divNotificationsCard);
-
                     await setNotificationMessageAddedListenerOnAllChannels();
 
                     var isNotificationPage = isLocationUrlContains("communication/notifications")
@@ -321,9 +486,9 @@ var notificationMessageAddedAllChannels = function (msg) {
         }
         setTimeout(function () {
             _audio.play();
-        },100)
+        }, 100)
         preapreAndBindNotifications([notifications[notifications.length - 1]], isNotificationPage, true);
-        
+
     }
 }
 
@@ -417,7 +582,25 @@ var findAndParseMentionInNotification = async function (channel) {
         return allMentionedMessages;
     });
 }
+$(function () {
 
+    $("#MarkallRead").click(function () {
+
+        var userId = $('#topProfilePicture').attr('userid');
+
+        getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+
+            if (response == true) {
+                $notifictionsList.removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+
+                location.reload();
+
+
+            }
+        });
+
+    });
+});
 var findMentionInMessageBody = function (msg) {
     let matches = [];
 
@@ -453,7 +636,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                          <a class="notification notification-flush bg-200" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
                              <div class="notification-avatar">
                                  <div class="avatar avatar-2xl mr-3">
-                                     <img class="rounded-circle" src="${avatar}" alt="" />
+                                     <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);" />
 
                                  </div>
                              </div>
@@ -471,7 +654,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                     $notifictionsList.find(".list-group-item:last").remove();
                 $notifictionsList.prepend(template);
             }
-            
+
             if (isLocationUrlContains("reconciliation"))
                 setReconciliationMentionIconColor(notifications);
         }
@@ -488,7 +671,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
             let template = `<a class="border-bottom-0 notification rounded-0 border-x-0 border-300" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
             <div class="notification-avatar">
                 <div class="avatar avatar-xl mr-3">
-                    <img class="rounded-circle" src="${avatar}" alt="">
+                    <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);">
 
                 </div>
             </div>
@@ -504,8 +687,8 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
         }
     }
 
-    hideWaitMeLoader($notifictionsList);
-    hideWaitMeLoader($divNotificationsCard);
+    /* hideWaitMeLoader($notifictionsList);*/
+    /*hideWaitMeLoader($divNotificationsCard);*/
 
 }
 
@@ -554,3 +737,45 @@ var genereateAllReconciliationTwilioConversationAndAddParticipants = function ()
     }
 }
 //Global Chat with Notifications End
+
+
+var getDateDiff = function (date, now) {
+
+    var diff = (((now || (new Date())).getTime() - date.getTime()) / 1000),
+        day_diff = Math.floor(diff / 86400);
+    return day_diff == 0 && (
+        diff < 60 && "Just now" ||
+        diff < 120 && "1 minute ago" ||
+        diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
+        diff < 7200 && "1 hour ago" ||
+        diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
+        day_diff == 1 && "yesterday" ||
+        day_diff < 7 && day_diff + " days ago" ||
+        day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago" ||
+        day_diff < 365 && Math.ceil(day_diff / 60) + " Month ago"
+        /*  diff < 31536000 && Math.ceil(diff / 2592000 ) + " Month ago"*/
+
+        ;
+}
+
+
+function getUTCDateTime(date) {
+
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var seconds = date.getSeconds()
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm + ' UTC';
+    return strTime;
+}
+function getLocalTime(utcdateString) {
+    var date = new Date(utcdateString + ' UTC');
+    return date.toLocaleString();
+}

@@ -1,4 +1,5 @@
 ﻿
+
 $('divClientDetials').addClass('d-none');
 var selectedTask = '';
 var selectedColumnsid = '';
@@ -8,6 +9,7 @@ var gCurrentViewTaskId = '';
 
 
 $(document).ready(function () {
+    HidelottieLoader();
     $('#divEditDescription').hide();
     // Dropzone.autoDiscover = false;
     //view Page
@@ -38,6 +40,11 @@ $(document).ready(function () {
             }
         }
     });
+    var myParam = location.search.split('yes=')[1];
+
+    if (myParam == "1") {
+        $("#email").show(); 
+    }
     //view Page
     myDropzone_view.on("addedfile", function (file) {
 
@@ -616,6 +623,8 @@ function updateKanbanColumnsCount() {
 }
 
 function AgencyDropdownPartialViewChange() {
+
+    ShowlottieLoader();
     var ClientID = $("#ddlclient option:selected").val();
     //getTeamMembersList(ClientID);
     if (ClientID != null && ClientID != undefined && ClientID != '') {
@@ -751,8 +760,8 @@ function getAgencyMembersList(ClientId) {
             if (response.Message == 'Success') {
                 sessionStorage.setItem('getAgencyMembersList', JSON.stringify(response.TeamMembers));
                 response.TeamMembers.forEach(function (item) {
-                    $('#ulTeamMembersList').append('<li onclick="addMembers(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
-                    $('#ulTeamMembersList_view').append('<li onclick="addMember_view(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
+                    $('#ulTeamMembersList').append('<li onclick="addMembers(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" onerror="imgError(this);"/></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
+                    $('#ulTeamMembersList_view').append('<li onclick="addMember_view(event);" id=' + item.Id + '><a class="media align-items-center text-decoration-none hover-200 py-1 px-3" href="#"><div class="avatar avatar-xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" onerror="imgError(this);"/></div><div class="media-body"><h6 class="mb-0">' + item.FirstName + ' ' + item.LastName + '</h6></div></a></li>');
                 });
                 return true;
             }
@@ -781,9 +790,8 @@ function addMembersOnviewLoad(AssigneeList) {
 
         $.each(AssigneeList, function (key, item) {
             if (item != null) {
-
                 if ($('#ulAddedMembers_view #li_' + item.UserId_Ref).length == 0) {
-                    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + item.UserId_Ref + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + item.UserId_Ref + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + item.UserName + '</a></h6><p  class="mb-0 fs--2">' + item.UserName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + item.UserId_Ref + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + item.UserId_Ref + ' onclick="EnterComments();" userid=' + item.UserId_Ref + '>Remove Member</div></span></div></li>');
+                    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + item.UserId_Ref + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" onerror="imgError(this);" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + item.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + item.UserId_Ref + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + item.UserName + '</a></h6><p  class="mb-0 fs--2">' + item.UserName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + item.UserId_Ref + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + item.UserId_Ref + ' onclick="EnterComments();" userid=' + item.UserId_Ref + '>Remove Member</div></span></div></li>');
                 }
             }
         });
@@ -905,7 +913,7 @@ function addComment(data, UserFullName) {
     var commentobj = $('#divCommantsList');
     if (commentobj != null) {
         var profilePic = data.UserProfilePic != undefined && data.UserProfilePic != null && data.UserProfilePic != '' ? data.UserProfilePic : '../assets/img/team/avatar.png';
-        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName + '  : </a>' + data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
+        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" onerror="imgError(this);" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName +': </a>'+ data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
         commentobj.prepend(commentHTMLelement);
         $('#txtComments').val('');
     }
@@ -925,7 +933,7 @@ function addMembers(e) {
     if (assignedMembers.length > 0) {
         assignedMembers.remove();
     }
-    $('#ulAddedMembers').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
+    $('#ulAddedMembers').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" onerror="imgError(this);"/></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
 }
 function addMember_view(e) {
     var element = $('#' + e.currentTarget.id + ' h6');
@@ -943,9 +951,9 @@ function addMember_view(e) {
         assignedMembers.remove();
     }
 
-    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
+    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" onerror="imgError(this);" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
     MainPageelement.empty();
-    MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
+    MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" onerror="imgError(this);" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
     addNewAssigneeToKanbanTask(SelectMember.Id, true);
 }
 
@@ -961,8 +969,8 @@ function addMembers_view(e) {
     }
     var getAgencyMembersList = JSON.parse(sessionStorage.getItem('getAgencyMembersList'));
     var SelectMember = getAgencyMembersList.find(x => x.Id === e.currentTarget.id);
-    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
-    MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
+    $('#ulAddedMembers_view').prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" onerror="imgError(this);" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div><div onclick="RemoveMember_view(' + singlCode + SelectMember.Id + singlCode + ');" class="media-body"><h6 class="mb-0"><a class="stretched-link text-900" href="#">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</a></h6><p  class="mb-0 fs--2">' + SelectMember.FirstName + ' ' + SelectMember.LastName + '</p></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '>Remove Member</div></span></div></li>');
+    MainPageelement.prepend('<li class="nav-item dropdown"  id="li_' + SelectMember.Id + '"><a class="nav-link p-0 dropdown-toggle dropdown-caret-none" href="#!" data-toggle="dropdown"><div class="avatar avatar-xl"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" onerror="imgError(this);" /></div></a><div class="dropdown-menu dropdown-md px-0 py-3"><div class="media align-items-center px-3"><div class="avatar avatar-2xl mr-2"><img class="rounded-circle" src="' + SelectMember.ProfileImage + '" alt="" /></div></div><hr class="my-2" /><span onclick="EnterComments(event);" userid=' + SelectMember.Id + ' class="input-group-btn"><a class="dropdown-item" href="#!">.</a><div class="dropdown-item text-danger" id=REM_' + SelectMember.Id + ' onclick="EnterComments();" userid=' + SelectMember.Id + '></div></span></div></li>');
     addNewAssigneeToKanbanTask(SelectMember.Id);
 }
 
@@ -976,16 +984,16 @@ function addTagOnView(TagNames) {
             tagName = tagName[0];
             switch (tagName) {
                 case 'Urgent':
-                    addTag('badge-soft-success bg-red', 'Urgent', true);
+                    addTag('badge-soft-success Roman  text-white', 'Urgent', true);
                     break;
                 case 'High':
-                    addTag('badge-soft-primary bg-orange', 'High', true);
+                    addTag('badge-soft-primary yellow  text-white', 'High', true);
                     break;
                 case 'Medium':
-                    addTag('badge-soft-info bg-light-blue', 'Medium', true);
+                    addTag('badge-soft-info turquoiseblue  text-white', 'Medium', true);
                     break;
                 case 'Low':
-                    addTag('badge-soft-danger bg-green', 'Low', true);
+                    addTag('badge-soft-danger bg-green  text-white', 'Low', true);
                     break;
                 default:
             }
@@ -1124,4 +1132,57 @@ function checkAttachment1() {
 }
 function CancelForCreate() {
     $("#kanban-modal-new").modal('hide');
+}
+$(function () {
+
+    $("#email").click(function () {
+       
+        var url = window.location.href;
+        let totalTask = 0;
+        var ClientId = $("#ddlclient option:selected").val();
+        var ClientName = $("#ddlclient option:selected").text();
+        getClientDate(ClientName);
+        ClientName = encodeURIComponent(ClientName);
+         $("#lblTotalTasksCount").text(totalTask);
+        /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+        getAjax(`/Needs/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+
+            }
+        });
+
+    });
+
+});
+
+
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Needs/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        text = response.resultData;
+    });
+
+}
+
+
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Needs/sendNeedEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
 }

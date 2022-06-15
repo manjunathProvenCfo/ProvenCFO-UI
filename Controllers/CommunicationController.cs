@@ -17,6 +17,7 @@ namespace ProvenCfoUI.Controllers
     public class CommunicationController : BaseController
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+       
         // GET: Communication
         [CheckSession]
         public ActionResult CommunicationMain()
@@ -28,10 +29,40 @@ namespace ProvenCfoUI.Controllers
         [HttpGet]
         public ActionResult Chat()
         {
+            int AgencyID = 0;
+           
             try
             {
                 ViewBag.UserId = Convert.ToString(Session["UserId"]);
                 ViewBag.UserEmail = Convert.ToString(Session["LoginName"]);
+                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                if (UserPref != null && UserPref.Count() > 0)
+                {
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                }
+                using (ReconcilationService objReConcilation = new ReconcilationService())
+                {
+                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                    getallAction.ForEach(x => x.ActionName = x.ActionName);
+                    TempData["Action"] = getallAction;
+                    
+                }
+                    using (IntigrationService objIntegration = new IntigrationService())
+                {
+
+                    var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
+                    glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
+                    TempData["GLAccounts"] = glAccountList;
+                    List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                    if (objTCList != null && objTCList.Count > 0)
+                    {
+                        List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                                   group p by p.Name into g
+                                                                   select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                        TempData["TrackingCategories"] = TCgroup;
+                    }
+                }
                 return View();
             }
             catch (Exception ex)

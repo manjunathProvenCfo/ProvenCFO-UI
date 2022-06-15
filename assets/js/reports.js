@@ -92,7 +92,7 @@ $(function () {
 
         showHideQuarterBasedOnFlag();
         bindReports("");
-
+        HidelottieLoader();
     });
     $btnUpload.click(function (e) {
         e.stopPropagation();
@@ -245,10 +245,13 @@ $(function () {
 });
 
 var AgencyDropdownPartialViewChange = function () {
+    
+    ShowlottieLoader();
     SetUserPreferencesForAgency();
     bindQuarter();
     bindReports("");
-    //window.location.reload();
+   /* HidelottieLoader();*/
+    window.location.reload();
 }
 
 var bindPage = function () {
@@ -333,11 +336,11 @@ var getReports = function (agencyId, year, period) {
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
         let reports = response.Data;
         if (isEmptyOrBlank(period)) {
-            $(".report-card-body .report").remove()
+            $(".report-card-body .report").remove();
         }
         else {
-            $(`.report-card-body[data-report-period='${period}'] .report`).remove()
-        }
+            $(`.report-card-body[data-report-period='${period}'] .report`).remove();
+        }        
         reports.forEach(function (obj) {
 
             let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
@@ -371,6 +374,7 @@ var getReports = function (agencyId, year, period) {
                                 </p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         });
+        HidelottieLoader();
     });
 }
 var addContextMenu = function () {
@@ -507,7 +511,7 @@ var deleteReports = function (deleteIds, period) {
 }
 
 var monthlySummaryOnClick = function (e, id) {
-    debugger;
+   
     e.preventDefault();
     let el = $(e.currentTarget);
     let parentDiv = el.parents("#divReportPeriodCard");

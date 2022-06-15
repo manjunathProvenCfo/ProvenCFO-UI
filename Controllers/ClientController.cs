@@ -19,7 +19,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Client
         [CheckSession]
-        [CustomAuthorize("Administrator", "Super Administrator", "Manager", "Staff User")]
+        [CustomAuthorize("Staff User")]
         public ActionResult ClientList()
         {
             try
@@ -76,9 +76,9 @@ namespace ProvenCfoUI.Controllers
                         Team = s.TeamName.ToString(),
                         Xero_Contact_ID_For_ProvenCfo = s.XeroContactIDforProvenCfo,
                         XeroID = s.XeroID,
-                        XeroClientID = s.XeroClientID,
-                        XeroClientSecret = s.XeroClientSecret,
-                        XeroScope = s.XeroScope,
+                        XeroClientID = s.APIClientID,
+                        XeroClientSecret = s.APIClientSecret,
+                        XeroScope = s.APIScope,
                         Asana_ID = s.AsanaId,
                         Everhour_ID = s.EverhourId,
                         CRM_ID = s.CrmId,
@@ -154,6 +154,8 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                             Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
+                            Clientvm.ThirdPartyAccountingApp_ref = 1;
+                            TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                             return View(Clientvm);
                         }
                     }
@@ -178,7 +180,9 @@ namespace ProvenCfoUI.Controllers
                     {
                         using (BillableEntitiesService objEntities = new BillableEntitiesService())
                         {
+                           
                             CreateClientVM Clientvm = new CreateClientVM();
+                           
                             var client = objClientService.GetClientById(Id);
                             Clientvm.Id = client.Id;
                             Clientvm.PhoneNumber = client.PhoneNumber;
@@ -190,7 +194,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.CityId = client.CityId;
                             Clientvm.Address = client.Address;
                             Clientvm.StateId = client.State;
-                            Clientvm.TeamId = Convert.ToInt32( client.TeamId);
+                            Clientvm.TeamId = Convert.ToInt32(client.TeamId);
                             Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
@@ -211,11 +215,11 @@ namespace ProvenCfoUI.Controllers
                             //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
                             //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
                             //}
-
+                            TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
-                            Clientvm.XeroScope = client.XeroScope;
-                            Clientvm.XeroClientID = client.XeroClientID;
-                            Clientvm.XeroClientSecret = client.XeroClientSecret;
+                            Clientvm.APIScope = client.APIScope;
+                            Clientvm.APIClientID = client.APIClientID;
+                            Clientvm.APIClientSecret = client.APIClientSecret;
                             Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
                             Clientvm.XeroContactIDforProvenCfo = client.XeroContactIDforProvenCfo;
                             Clientvm.AsanaId = client.AsanaId;
@@ -226,6 +230,17 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
                             Clientvm.ReportId = client.ReportId;
+                            if (client.ThirdPartyAccountingApp_ref == null)
+                            {
+                                Clientvm.ThirdPartyAccountingApp_ref = 1;
+
+                            }
+                            else
+                            {
+                                Clientvm.ThirdPartyAccountingApp_ref = client.ThirdPartyAccountingApp_ref;
+                            }
+                            Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
+                            
 
                             return View("CreateClient", Clientvm);
                         }
@@ -254,6 +269,7 @@ namespace ProvenCfoUI.Controllers
                         {
                             using (BillableEntitiesService objEntities = new BillableEntitiesService())
                             {
+                                
                                 CreateClientVM Clientvm = new CreateClientVM();
                                 Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
                                 var LoginUserid = Session["UserId"].ToString();
@@ -269,6 +285,7 @@ namespace ProvenCfoUI.Controllers
 
                                 if (createClientVM.Id == 0)
                                 {
+                                    TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     if (ClientExist != null)
                                     {
@@ -280,16 +297,18 @@ namespace ProvenCfoUI.Controllers
                                     //string.Join(",", Client);s
                                     if (Clientvm.XeroScopeArray != null)
                                     {
-                                        createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
                                     //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
-                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId),Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId,createClientVM.ReportId);
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId));
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Created";
                                 }
                                 else
                                 {
+                                    //var exitclient = obj.GetClientById(createClientVM.Id);
+                                    TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
                                     createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
@@ -302,10 +321,11 @@ namespace ProvenCfoUI.Controllers
                                     }
                                     if (Clientvm.XeroScopeArray != null)
                                     {
-                                        createClientVM.XeroScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
+                                    
+                                  var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid,Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode,Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId,createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0 ,Convert.ToInt64(createClientVM.QuickBooksCompanyId));
 
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid,Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.XeroScope, createClientVM.XeroClientID, createClientVM.XeroClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode,Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId,createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers);
 
 
 
@@ -340,8 +360,8 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objClientService.GetClientById(id);
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
-                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.XeroScope, client.XeroClientSecret, client.XeroClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                         client.DashboardId.ToString(),client.DashboardURLId.ToString(),client.ReportId, string.Empty,string.Empty);
+                    var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
+                        Convert.ToString(client.DashboardId),client.DashboardURLId,client.ReportId, string.Empty,string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref),Convert.ToInt64(client.QuickBooksCompanyId));
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

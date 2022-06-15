@@ -36,18 +36,18 @@ namespace ProvenCfoUI.Models
         public int BillableEntityId { get; set; }
         //[Required(ErrorMessage = "Start Date is a required field.")]
         public DateTime? StartDate { get; set; }
-        [Required(ErrorMessage = "Xero ID is a required field")]
+        //[Required(ErrorMessage = "Xero ID is a required field")]
         public string XeroID { get; set; }
-        [Required(ErrorMessage = "Xero Client ID is a required field")]
-        public string XeroClientID { get; set; }
-        [Required(ErrorMessage = "Xero Client Secret is a required field")]
-        public string XeroClientSecret { get; set; }
-        [Required(ErrorMessage = "Xero Scope is a required field")]
+        [Required(ErrorMessage = "API Client ID is a required field")]
+        public string APIClientID { get; set; }
+        [Required(ErrorMessage = "API Client Secret is a required field")]
+        public string APIClientSecret { get; set; }
+        [Required(ErrorMessage = "API Scope is a required field")]
         public string[] XeroScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
         //[Required(ErrorMessage = "Xero Scope is a required field.")]
         
-        public string XeroScope { get; set; }
+        public string APIScope { get; set; }
 
         [Required(ErrorMessage = "Start Date is a required field.")]
         public string StartDateText { get; set; }
@@ -59,8 +59,13 @@ namespace ProvenCfoUI.Models
         public string AsanaId { get; set; }
         public string EverhourId { get; set; }
         public string CrmId { get; set; }
-        [Range(0, 99999999999, ErrorMessage = "Dashboard ID must be between 0 and 99999999999")]
+        [Range(0, 9999999, ErrorMessage = "Dashboard ID must be between 0 and 9999999")]
         public int? DashboardId { get; set; }
+
+        [Range(0, 9999999999999999999, ErrorMessage = "QuickBook Company Id must be between 0 and 9999999999999999999")]
+        public Int64? QuickBooksCompanyId { get; set; }
+        
+        public int? ThirdPartyAccountingApp_ref { get; set; }
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
 
@@ -68,6 +73,8 @@ namespace ProvenCfoUI.Models
 
         public string ExcludedAccountNumbers { get; set; }
         public string IncludedAccountNumbers { get; set; }
+      
+        public int? CompanyId { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
         public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }

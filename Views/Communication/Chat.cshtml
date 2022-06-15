@@ -3,6 +3,7 @@
 }
 
 @Styles.Render("~/bundles/css/twilio-chat")
+<link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 @*<link href="~/assets/lib/mentiony/jquery.mentiony.css" rel="stylesheet" />*@
 @*<link href="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.css" rel="stylesheet" />*@
 <style type="text/css">
@@ -44,20 +45,36 @@
     }
 </style>
 
-@*<div class="card-body py-0 px-0 pt-0">
-
-    </div>*@
 @Html.Partial("_communication", false)
 
 @section Scripts {
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
     @Scripts.Render("~/bundles/js/twilio-chat")
+    @Scripts.Render("~/bundles/js/toastr")
+
+
+
+
     <script>
         $(document).ready(function () {
-            chat.userId = "@ViewBag.UserId";
-            chat.userEmail = "@ViewBag.UserEmail";
-            loadChatPage();
+            var NotificationagencyId = sessionStorage.getItem('Notification_agencyId');
+            if (NotificationagencyId != null && NotificationagencyId != undefined) {
+                var selctctedAgencyId = $("#ddlclient option:selected").val();
+                if (NotificationagencyId != selctctedAgencyId) {
+                    $("#ddlclient").val(NotificationagencyId).change();
+                }
+            }
+
+                chat.userId = "@ViewBag.UserId";
+                chat.userEmail = "@ViewBag.UserEmail";
+                loadChatPage();
+
+
+        });
+
+        $(document).ready(function () {
+            HidelottieLoader();
         });
     </script>
 }

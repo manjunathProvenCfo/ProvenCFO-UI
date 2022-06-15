@@ -36,7 +36,16 @@ namespace Proven.Model
         public bool IsChatExist { get; set; }
         public string TwilioConversationId { get; set; }
         public bool has_twilio_conversation { get; set; }
+        public bool Iscurrent_user_mentioned { get; set; }
+        public int? ref_ReconciliationAction { get; set; }
 
+        public DateTime? ActionModifiedDateUTC { get; set; }
+        public DateTime? GlAccountModifiedDateUTC { get; set; }
+
+        public DateTime? ActionModifiedDate { get; set; }
+        public DateTime? GlAccountModifiedDate { get; set; }
+        public string GlAccountModifiedBy { get; set; }
+        public string ActionModifiedBy { get; set; }
     }
     public class ReconciliationMainModel
     {
@@ -46,5 +55,31 @@ namespace Proven.Model
         public string Message { get; set; }
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
+    }
+    [Serializable]
+    public class ReconciliationInputModel
+    {
+        public String HtmlorCsvString { get; set; }
+        public string CompanyName { get; set; }
+        public string AccountName { get; set; }
+        public int? CompanyId { get; set; }
+        public string Type { get; set; }
+    }
+    [Serializable]
+    public class ReconciliationOutputModel
+    {
+        public bool Status { get; set; }
+        public string ValidationStatus { get; set; }
+        public string ValidationMessage { get; set; }
+    }
+    public class ReconciliationOutputModelMainModel
+    {
+        public bool Status { get; set; }
+        public int statusCode { get; set; }
+        public ReconciliationOutputModel ResultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+
     }
 }

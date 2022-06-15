@@ -13,11 +13,14 @@
 @*<label for="basic-example">Select an Agency</label>*@
 <div>
     @Html.DropDownListFor(model => model.SelectedClientNameID, new SelectList(Model.ClientList.OrderBy(x => x.Name), "Id", "Name"), "Select Agency...", new { @class = "form-control selectpicker", @id = "ddlclient", @onchange = "AgencyDropdownPartialViewChangeGlobalWithCallback(AgencyDropdownPartialViewChange);" })
+
+  
 </div>
 @*</div>*@
 @*</div>*@
 @*</div>*@
 @*</div>*@
 @section Scripts {
-    @Scripts.Render("~/bundles/js/select")    
+   
+    @Scripts.Render("~/bundles/js/select")
 }

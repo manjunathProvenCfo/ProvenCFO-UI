@@ -67,7 +67,6 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
 
         $(document).ready(function () {
@@ -75,6 +74,7 @@
                 XeroConnectionUpdate();
 
             }, 2000);
+          
         });
         function XeroConnectionUpdate() {
             var XConstatus = $('#XeroConnectionStatus');
@@ -87,11 +87,12 @@
                 //$('#spanSync').prop('disabled', false);
             }
             else {
-                XStatus.text('Error Connecting to Xero :' + XMessage.val());
+                XStatus.text('Error Connecting to Xero: ' + XMessage.val());
                 XStatus.css('color', 'red');
                 $('#btnSync').hide()//prop('disabled', true);
                 // $('#spanSync').prop('disabled', true);
             }
+            HidelottieLoader();
         }
 
 
@@ -102,6 +103,7 @@
                 var ClientID = $("#ddlclient option:selected").val();
                 getAjaxSync(`/AgencyService/GetClientDetails?id=` + ClientID, null, function (response) {
                     if (response != null) {
+                        ShowlottieLoader();
                         SetUserPreferencesForAgency();
                         setTimeout(function () {
                             window.location.reload();
@@ -126,9 +128,9 @@
                     ShowAlertBoxSuccess("Success!", "Tracking Categories Synced with Xero successfully.", function () { window.location.reload(); });
                 }
             });
-           /* HidelottieLoader();*/
+           
         }
-
+        
     </script>
 
 }

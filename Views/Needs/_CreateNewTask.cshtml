@@ -3,6 +3,19 @@
 @{
     ViewBag.Title = "Change new Task";
 }
+<style>
+    .turquoiseblue {
+        background-color: #05768f !important;
+    }
+
+    .yellow {
+        background-color: #FFDB74 !important;
+    }
+
+    .Roman {
+        background-color: #DE6057 !important;
+    }
+</style>
 @*@using (Html.BeginForm("CreateRole", "Role", FormMethod.Post))
     {
         @Html.AntiForgeryToken()*@
@@ -23,7 +36,7 @@
                 </div>
                 <div class="p-4">
                     <div class="row">
-                        <div class="col-lg-9">
+                        <div class="col-lg-12">
                             <div class="media">
                                 <span class="fa-stack ml-n1 mr-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-user" data-fa-transform="shrink-2"></i></span>
                                 <div class="media-body">
@@ -61,10 +74,10 @@
                                                 <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
                                                 <div class="dropdown-divider"></div>
                                                 <div class="px-3">
-                                                    <button class="badge-soft-success dropdown-item rounded mb-2 bg-red" type="button" onclick="addTag('badge-soft-success bg-red','Urgent');">Urgent</button>
-                                                    <button class="badge-soft-primary dropdown-item rounded mb-2 bg-orange" type="button" onclick="addTag('badge-soft-primary bg-orange','High');">High</button>
-                                                    <button class="badge-soft-info dropdown-item rounded mb-2 bg-light-blue " type="button" onclick="addTag('badge-soft-info bg-light-blue', 'Medium');">Medium</button>
-                                                    <button class="badge-soft-danger dropdown-item rounded mb-2 bg-green" type="button" onclick="addTag('badge-soft-danger bg-green','Low');">Low</button>
+                                                    <button class="badge-soft-success dropdown-item rounded mb-2 Roman text-white" type="button" onclick="addTag('badge-soft-success Roman  text-white','Urgent');">Urgent</button>
+                                                    <button class="badge-soft-primary dropdown-item rounded mb-2 yellow   text-white" type="button" onclick="addTag('badge-soft-primary yellow   text-white','High');">High</button>
+                                                    <button class="badge-soft-info dropdown-item rounded mb-2 turquoiseblue  text-white " type="button" onclick="addTag('badge-soft-info turquoiseblue  text-white', 'Medium');">Medium</button>
+                                                    <button class="badge-soft-danger dropdown-item rounded mb-2 bg-green  text-white" type="button" onclick="addTag('badge-soft-danger bg-green  text-white','Low');">Low</button>
                                                 </div>
                                                 <div class="dropdown-divider"></div>
 
@@ -75,7 +88,7 @@
                                 </div>
                             </div>                           
                         </div>
-                        <div class="col-lg-3">
+                        <!--<div class="col-lg-3">
                             <h6 class="mt-5 mt-lg-0">Add To Card</h6>
                             <ul class="nav flex-lg-column fs--1">
                                 <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-user mr-2"></span>Members</a></li>
@@ -86,11 +99,11 @@
                             <h6 class="mt-3 d-none">Actions</h6>
                             <ul class="nav flex-lg-column fs--1 d-none">
                                 <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="far fa-copy mr-2"> </span>Save</a></li>
-                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-arrow-right mr-2"></span>Move</a></li>
+                                <li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"> <span class="fas fa-arrow-right mr-2"></span>Move</a></li>-->
                                 @*<li class="nav-item mr-2 mr-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-trash-alt mr-2"></span>Remove</a></li>*@
-                            </ul>
+                            <!--</ul>
 
-                        </div>
+                        </div>-->
 
                     </div>
                     <div class="row">
@@ -185,14 +198,16 @@
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
-                        </div>
-                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
-                        </div>
-                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" id="btnCreateNewTicket" type="button"> Create </button>
                         </div>
                         <div class="col-2 col-md-2 col-lg-2 col-xl-2">
                             <button class="btn btn-primary" id="cancel" onclick="CancelForCreate()">Cancel</button>
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                           
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+                           
                         </div>
                     </div>
                 </div>

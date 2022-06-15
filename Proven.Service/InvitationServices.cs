@@ -31,7 +31,22 @@ namespace Proven.Service
 
             //}
         }
+        public InviteUserMainModel GetALLAgencyUserInvitation()
+        {
+            return GetAsync<InviteUserMainModel>("Invitation/GetALLAgencyUserInvitation").Result;
+            //response = client.GetAsync("Invitation/GetALLInvitation").Result;
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var _content = response.Content.ReadAsStringAsync().Result;
+            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
+            //}
+            //else
+            //{
+            //    string msg = response.ReasonPhrase;
+            //    throw new Exception(msg);
 
+            //}
+        }
         public InviteUserVMId GetInvitationById(int id)
         {
             return GetAsync<InviteUserVMId>("Invitation/GetInvitation?id=" + id, true).Result;
@@ -49,6 +64,11 @@ namespace Proven.Service
             //    throw new Exception(msg);
 
             //}
+        }
+        public InviteUserVMId GetInvitationById1(int id)
+        {
+            return GetAsync<InviteUserVMId>("Invitation/GetInvitation1?id=" + id, true).Result;
+           
         }
 
         public InviteUserVMId GetInvitationByEmail(string Email)

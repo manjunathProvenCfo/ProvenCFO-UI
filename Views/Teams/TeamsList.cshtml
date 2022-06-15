@@ -13,6 +13,7 @@
     .page-link:hover {
         color: #000 !important;
     }
+
     .page-item.active .page-link {
         z-index: 3;
         color: #fff !important;
@@ -129,7 +130,7 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/js/table");
+    @Scripts.Render("~/bundles/js/table")
     <script>
         var ExportToExcel = function () {
 
@@ -205,7 +206,11 @@
                 });
         }
 
+        $(document).ready(function () {
+            HidelottieLoader();
 
+
+        });
 
 
     </script>

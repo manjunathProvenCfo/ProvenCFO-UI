@@ -15,6 +15,7 @@ namespace Proven.Model
         public string Code { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
+        public string Review { get; set; }
         public string Type { get; set; }
         public string TaxType { get; set; }
         public string Class { get; set; }
@@ -28,8 +29,13 @@ namespace Proven.Model
         public bool? HasAttachments { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public string ExcludedAccountNumbers { get; set; }
+        public string IncludedAccountNumbers { get; set; }
+        public bool? ReceiveQuarterlyReports { get; set; }
+        public string XeroScope { get; set; }
+
     }
     public class ClientXeroAccountsMainModel
     {

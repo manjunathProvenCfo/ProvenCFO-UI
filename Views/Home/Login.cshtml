@@ -3,6 +3,17 @@
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+
+
+    string errorMsg = "";
+    string[] val=new string[] { };
+    if (ViewBag.ErrorMessage != null)
+    {
+
+        errorMsg = ViewBag.ErrorMessage;
+        val = errorMsg.Split('\n');
+
+    }
 }
 @*@Styles.Render("~/assets/AvertaWebFont/provencfo.css")
 @Styles.Render("~/bundles/customcss")*@
@@ -28,11 +39,15 @@
 
             <div class="row flex-center min-vh-100 py-6">
                 <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                    @if (@ViewBag.ErrorMessage != null)
+                    @if (@ViewBag.ErrorMessage != null  && val.Length > 0)
                     {
-                        <div class="alert alert-danger">
-                            <p>@ViewBag.ErrorMessage</p>
-                        </div>
+                    <div class="alert alert-danger">
+                        @val[0]
+                        @if(val.Length > 1)
+                        {
+                        <center>@val[1]</center>
+                        }
+                    </div>
                     }
 
                     @if (@ViewBag.Sucess != null)

@@ -233,21 +233,12 @@ namespace Proven.Service
         }
         public InviteUserMainModel RegisteredUserListbyAgency(string selectedAgency)
         {
-            return GetAsync<InviteUserMainModel>("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;
-            //response = client.GetAsync("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var _content = response.Content.ReadAsStringAsync().Result;
-            //    return JsonConvert.DeserializeObject<InviteUserMainModel>(_content);
-            //}
-            //else
-            //{
-            //    string msg = response.ReasonPhrase;
-            //    throw new Exception(msg);
-
-            //}
+            return GetAsync<InviteUserMainModel>("Account/GetRegisteredUsersByAgency?AgencyId=" + selectedAgency).Result;           
         }
-
+        public InviteUserMainModel GetRegisteredUsersByAgencyWithReqPermission(string selectedAgency,string RequiredPermissionCode)
+        {
+            return GetAsync<InviteUserMainModel>("Account/GetRegisteredUsersByAgencyWithReqPermission?AgencyId=" + selectedAgency + "&RequiredPermissionCode=" + RequiredPermissionCode).Result;
+        }
 
         public UserDetailMainModel GetUserDetail(string id)
         {

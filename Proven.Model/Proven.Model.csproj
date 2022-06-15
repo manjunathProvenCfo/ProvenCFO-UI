@@ -56,6 +56,7 @@
     <Compile Include="ClientXeroAccountsModel.cs" />
     <Compile Include="ClientXeroAccountsVM.cs" />
     <Compile Include="CommonViewModel.cs" />
+    <Compile Include="EmailSendModel.cs" />
     <Compile Include="InviteUserModel.cs" />
     <Compile Include="InviteUserVMId.cs" />
     <Compile Include="JobTitleModel.cs" />
@@ -72,9 +73,15 @@
     <Compile Include="NotesCategoriesModel.cs" />
     <Compile Include="NotesDescriptionModel.cs" />
     <Compile Include="NotesIndividualCountWithItsPercentage.cs" />
+    <Compile Include="NotesSummaryVM.cs" />
     <Compile Include="NotesUICountingsByAgencyId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReconcilationActionOptionVM.cs" />
     <Compile Include="ReconcilationCountVM.cs" />
+    <Compile Include="ReconciliationCommentAttachments.cs" />
+    <Compile Include="ReconciliationComments.cs" />
+    <Compile Include="ReconciliationCommentsDetailsVM.cs" />
+    <Compile Include="ReconciliationCommentUserMention.cs" />
     <Compile Include="ReconciliationfilterModel.cs" />
     <Compile Include="reconciliationVM.cs" />
     <Compile Include="RegisteredUserModel.cs" />
@@ -83,6 +90,7 @@
     <Compile Include="State.cs" />
     <Compile Include="TeamsVM.cs" />
     <Compile Include="TeamUserAssociationVM.cs" />
+    <Compile Include="ThirdPartyAccountingAppVM.cs" />
     <Compile Include="TwilioConversations.cs" />
     <Compile Include="TwilioConversationsTypeEnum.cs" />
     <Compile Include="UserAgencyLinkVM.cs" />
