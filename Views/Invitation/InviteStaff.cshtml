@@ -2,41 +2,24 @@
 @{
     ViewBag.Title = "InviteStaff";
 }
-@*@model ProvenCfoUI.Areas.Model.ManageRolesViewModel*@
 
 
-<!--@if (ViewData.ModelState.IsValid)
-{
-    if (@ViewBag.Name != null)
-    {
-        <b>
-            Name : @ViewBag.Name<br />
-            Email : @ViewBag.Email<br />
-            Role : @ViewBag.Role<br />
-            SessionTimeout : @ViewBag.SessionTimeout
-        </b>
-    }
-}-->
-@*hey*@
+
+
 
 
 
 
 @using (Html.BeginForm())
 {
-    @*@Html.ValidationSummary(true)*@
+
     @Html.AntiForgeryToken()
 
 
 
     <div class="card mb-3">
         <div class="card-body overflow-hidden">
-            @*@if (@ViewBag.Message != null)
-        {
-            <div class="alert alert-success">
-                <p class="mb-0">@ViewBag.Message</p>
-            </div>
-        }*@
+
             @if (@ViewBag.ErrorMessage != null)
             {
                 @Html.Hidden("InviteCreate", (object)@ViewBag.ErrorMessage, new { @id = "InviteCreate" });
@@ -114,19 +97,10 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        @*<label for="split-login-email" class="mb-0">Invite valid for / In Days</label><br />*@
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @*@Html.DropDownListFor(m => m.SessionTimeout, new List<SelectListItem>() { new SelectListItem { Text = "5 Days", Value = "5" } }, new { @class = "form-control text-box single-line" , @readonly = "readonly" })
-                                        @Html.ValidationMessageFor(model => model.SessionTimeout, "", new { @class = "text-danger" })*@
 
                                         @Html.HiddenFor(m => m.SessionTimeout)
-
-                                        @*<div class="input-group">
-            <select class="custom-select" id="SessionTimeout" name="SessionTimeout">
-                <option  value="1">24 Hours</option>
-            </select>
-        </div>*@
                                     </div>
                                 </div>
 
@@ -134,13 +108,10 @@
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        <button class="btn btn-primary" type="submit">Send Invitation</button>                                        
+                                        <button class="btn btn-primary" type="submit">Send Invitation</button>
                                         <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("InviteStaffList", "Invitation")'" />
-                                        @*@Html.ActionLink("Cancel", "InviteStaffList", "Invitation", new { }, new { @class = "btn btn-primary ml-2" })*@
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </form>
@@ -148,92 +119,88 @@
             </div>
         </div>
     </div>
-
-
 }
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script >
-       
+    <script>
 
-    document.getElementById("EmailIdExist").style.display = "none";
-    $(document).ready(function () {
 
-       
-        var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
-       
-        if (msg != undefined && msg != '' && msg == "Sent") {
-           
-            AddAlertRole();
-            $('#InviteCreate').val('');
-        }
-       
-        if (msg != undefined && msg != '' && msg == "Exist") {
+        document.getElementById("EmailIdExist").style.display = "none";
+        $(document).ready(function () {
 
-            $('#EmailIdExist').show();
-            $('#EmailIdExist').html('This Email id has been already taken.')
 
-            //ExistAlertRole();
-            $('#InviteCreate').val('');
+            var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
 
-        }
+            if (msg != undefined && msg != '' && msg == "Sent") {
 
-        $("#btnClear").click(function () {
-            $('select').val("Active");
-            $(this).closest('form').find("input[type=text], textarea").val("");
-        });
-    });
-    var ExportFileReq = function (Controller, jAction, rData) {
-        if (rData == undefined) rData = "{}";
-        $.ajax({
-            type: "POST",
-            url: '/' + Controller + '/' + jAction,
-            contentType: "application/json; charset=utf-8",
-            data: rData,
-            dataType: "json",
-        }).done(function (FileName) {
-            //get the file name for download
-            if (FileName != "") {
-                //use window.location.href for redirect to download action for download the file
-                var dPath = '/Base/Download?fileName=' + FileName;
-                window.location.href = dPath;
-
+                AddAlertRole();
+                $('#InviteCreate').val('');
             }
+            if (msg != undefined && msg != '' && msg == "Exist") {
+                $('#EmailIdExist').show();
+                $('#EmailIdExist').html('This Email id has been already taken.')
+                $('#InviteCreate').val('');
+            }
+
+            $("#btnClear").click(function () {
+                $('select').val("Active");
+                $(this).closest('form').find("input[type=text], textarea").val("");
+            });
+            HidelottieLoader();
         });
-    };
+        var ExportFileReq = function (Controller, jAction, rData) {
+            if (rData == undefined) rData = "{}";
+            $.ajax({
+                type: "POST",
+                url: '/' + Controller + '/' + jAction,
+                contentType: "application/json; charset=utf-8",
+                data: rData,
+                dataType: "json",
+            }).done(function (FileName) {
+                //get the file name for download
+                if (FileName != "") {
+                    var dPath = '/Base/Download?fileName=' + FileName;
+                    window.location.href = dPath;
+
+                }
+            });
+        };
 
 
-    function AddAlertRole() {
-     
-        sweetAlert
-            ({
-                title: "Sent!",
-                text: "staff user invitation has been sent.",
-                type: "success"
-            },
-                function () {
-                    window.location.href = '/Invitation/InviteStaffList'
-                });
-    }
+        function AddAlertRole() {
 
-    function ExistAlertRole() {
-        sweetAlert
-            ({
-                title: "Exist!",
+            sweetAlert
+                ({
+                    title: "Sent!",
+                    text: "staff user invitation has been sent.",
+                    type: "success"
+                },
+                    function () {
+                        window.location.href = '/Invitation/InviteStaffList'
+                    });
+        }
 
-                text: "This Email id already exist!",
+        function ExistAlertRole() {
+            sweetAlert
+                ({
+                    title: "Exist!",
 
-                type: "warning"
-            },
-                function () {
-                    //window.location.href = '/Role/Role'
-                });
-    }
+                    text: "This Email id already exist!",
 
+                    type: "warning"
+                },
+                    function () {
+                        //window.location.href = '/Role/Role'
+                    });
+        }
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
 
-</script>
+    </script>
 }
 
 
