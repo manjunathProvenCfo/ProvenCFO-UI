@@ -102,11 +102,11 @@
 
                                 }
                                 <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
-                               
+
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
-                               
+
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
@@ -440,6 +440,7 @@
     </script>
 
     <script>
+         Dropzone.autoDiscover = false;
         var totalSum1;
         var totalSum2;
         function drawnCallbackTblReconciliation(settings) {
@@ -510,7 +511,7 @@
             //}
         }
         function reconcilationonstatusDemand(RequestID) {
-            
+
             var ClientID = $("#ddlclient option:selected").val();
 
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
@@ -712,8 +713,7 @@
 
             }
 
-            }
-
+        }
         function Tabclick(e, type) {
             sessionStorage.setItem('Type', type);
             if (type == 0) {
@@ -954,7 +954,7 @@
             }
 
         });
-        
+
 
         //function bindNotInBooksAndBanksCount() {
 
