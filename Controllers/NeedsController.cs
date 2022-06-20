@@ -21,6 +21,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Needs
         [CheckSession]
+        [OutputCache(Duration = 20)]
         public ActionResult NeedsMain()
         {
             try
