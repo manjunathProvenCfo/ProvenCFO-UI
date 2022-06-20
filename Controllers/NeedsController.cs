@@ -31,12 +31,6 @@ namespace ProvenCfoUI.Controllers
                     int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                     ViewBag.IsEditMode = false;
                     var userType = Convert.ToString(Session["UserType"]);
-                    //List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                    //if (UserPref != null && UserPref.Count() > 0)
-                    //{
-                    //    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    //    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    //}
                     var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData;
                     TempData["SegmentsAndTasks"] = SegmentTasks;
                     if (userType != "" && userType == "1")
