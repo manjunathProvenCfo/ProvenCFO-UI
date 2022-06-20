@@ -41,18 +41,10 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    int AgencyID = 0;
+                    int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                     ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                     ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
-                    if (UserPref != null && UserPref.Count() > 0)
-                    {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    }
-
-
                     if (userType == "1")
                     {
                         var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
@@ -396,16 +388,9 @@ namespace ProvenCfoUI.Controllers
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    int AgencyID = 0;
+                    int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                     ViewBag.IsStaffUser = false;
-                    var userType = Convert.ToString(Session["UserType"]);
-                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-
-                    if (UserPref != null && UserPref.Count() > 0)
-                    {
-                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    }
+                    var userType = Convert.ToString(Session["UserType"]);                   
                     var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                     getallAction.ForEach(x => x.ActionName = x.ActionName);
 
@@ -490,14 +475,9 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
-                var AgencyID = 0;
+                
+                int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                 var LoginUserid = Convert.ToString(Session["UserId"].ToString());
-                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                if (UserPref != null && UserPref.Count() > 0)
-                {
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                }
                 XeroReconcilationDataOnDemandRequestVM xero = new XeroReconcilationDataOnDemandRequestVM();
                 model.RequestType = "On Demand";
                 model.RequestedAtUTC = xero.RequestedAtUTC;
