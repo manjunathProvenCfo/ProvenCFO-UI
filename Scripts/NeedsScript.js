@@ -257,9 +257,8 @@ $(document).ready(function () {
 
     });
     $('.kanban-item-card').click(function (e) {
-
         var TaskID = 0;
-
+        var createUTCDate = new Date();
         var elements = e.currentTarget.children[0].children;
         ClearViewPage();
         $.each(elements, function (key, value) {
@@ -289,6 +288,7 @@ $(document).ready(function () {
 
                         //}, 1000); 
                         $('#Reporter').html(response.Task.ReporterName);
+                        $('#createNewtask_DateOpen').text(getUTCDateTime(createUTCDate));
                         addMembersOnviewLoad(response.Task.KanbanAssigneesList);
                         addAttachmentOnviewLoad(response.Task.KanbanAttachments, true, true);
                         addcommentsList(response.Task.KanbanComments);
