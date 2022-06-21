@@ -102,6 +102,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         NewTasks.DueDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpDueDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
                     }
+
                     NewTasks.Priority = Task.Priority;
                     NewTasks.Reporter = LoginUserid;
                     NewTasks.Assignee = Task.Assignee;
@@ -109,6 +110,7 @@ namespace ProvenCfoUI.Controllers
                     NewTasks.Labels = Task.Labels;
                     NewTasks.Status = "Active";
                     NewTasks.CreatedBy = LoginUserid;
+                    NewTasks.CreatedDate = Task.CreatedDate;
                     NewTasks.IsDeleted = false;
                     NewTasks.EstimatedHours = Task.EstimatedHours;
                     NewTasks.TaskType = Task.TaskType;
