@@ -22,6 +22,7 @@ namespace CFO.Model.ViewModels
         public string Bankrule { get; set; }
         public string TrackingCategory1 { get; set; }
         public string TrackingCategory2  { get; set; }
+        public string ref_reconciliationAction { get; set; }
 
         public reconcilationType? FilterType { get; set; }
         public int? AgencyID { get; set; }

@@ -56,7 +56,7 @@ namespace Proven.Model
         public object ResourceType { get; set; }
         public object MetaData { get; set; }
     }
-
+    [Serializable]
     public class ReconciliationInputModel
     {
         public String HtmlorCsvString { get; set; }
@@ -65,6 +65,7 @@ namespace Proven.Model
         public int? CompanyId { get; set; }
         public string Type { get; set; }
     }
+    [Serializable]
     public class ReconciliationOutputModel
     {
         public bool Status { get; set; }

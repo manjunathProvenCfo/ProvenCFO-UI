@@ -78,14 +78,14 @@ namespace Proven.Service
             return PostAsync<NotesDescriptionModel, object>("Notes/DragAndDropNotesDescription", objNotes).Result;
         }
 
-        public NotesCountModel TotalNotesCountByAgencyId(string AgencyId)
-        {
-            return GetAsync <NotesCountModel>("Notes/TotalNotesCountByAgencyId?AgencyId=" + AgencyId).Result;
-        }
-        public NotesIndividualCountWithItsPercentageMainModel NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
-        {
-            return GetAsync<NotesIndividualCountWithItsPercentageMainModel>("Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=" + AgencyId).Result;
-        }
+        //public NotesCountModel TotalNotesCountByAgencyId(string AgencyId)
+        //{
+        //    return GetAsync <NotesCountModel>("Notes/TotalNotesCountByAgencyId?AgencyId=" + AgencyId).Result;
+        //}
+        //public NotesIndividualCountWithItsPercentageMainModel NotesIndividualCountAndPercentageByAgencyId(string AgencyId)
+        //{
+        //    return GetAsync<NotesIndividualCountWithItsPercentageMainModel>("Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=" + AgencyId).Result;
+        //}
         public NotesSummarymainModel GetNotesStatus()
         {
             return GetAsync<NotesSummarymainModel>("Notes/GetNotesStatus").Result;

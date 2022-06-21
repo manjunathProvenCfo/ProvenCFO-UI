@@ -22,6 +22,7 @@ var addMessageProcessed = [];
 var $gl_accountDropdown;
 var $tc_1_Dropdown;
 var $tc_2_Dropdown;
+var $tc_3_Dropdown;
 var $communicationGLaccount;
 var $communicationTrackingCategories;
 var $communicationAction;
@@ -384,6 +385,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $gl_accountDropdown = $('#gl_account');
     $tc_1_Dropdown = $('#tracking_category_0');
     $tc_2_Dropdown = $('#tracking_category_1');
+    $tc_3_Dropdown = $('#tracking_category_2');
     $communication_DropDownAction = $('#BA_filterAction');
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
 
@@ -465,6 +467,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         else {
             $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
         }
+        if (tc3 != null) {
+            $tc_3_Dropdown.val(tc2);
+        }
+        else {
+            $tc_3_Dropdown.val($('#tracking_category_2  option:first').val());;
+        }
+
+
         setScrollPosition();
         hideChatContentLoader();
     });
@@ -1280,7 +1290,7 @@ var onChangeAction = function (event) {
     })
 
 }
-var onChangeTc = function (e) {
+var onChangeTc = function (e) {   
     var id = chat.channelUniqueNameGuid;
     var selectedValue = $tc_1_Dropdown.val();
     if (isEmptyOrBlank(selectedValue)) {
@@ -1288,6 +1298,25 @@ var onChangeTc = function (e) {
     }
     var ClientID = $("#ddlclient option:selected").val();
     postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+
+    })
+}
+function onChangeAditinalTc1(e) {
+    var id = chat.channelUniqueNameGuid;
+    var selectedValue = $tc_3_Dropdown.val();
+    var ClientID = $("#ddlclient option:selected").val();
+    ClientID = ClientID != '' ? ClientID : 0;
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + selectedValue, null, function (response) {
         if (response.Message == 'Success') {
 
         }

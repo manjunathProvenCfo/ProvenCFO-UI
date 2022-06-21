@@ -102,11 +102,11 @@
 
                                 }
                                 <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
-                               
+
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
                                 </button>
-                               
+
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
@@ -440,6 +440,7 @@
     </script>
 
     <script>
+         Dropzone.autoDiscover = false;
         var totalSum1;
         var totalSum2;
         function drawnCallbackTblReconciliation(settings) {
@@ -510,18 +511,22 @@
             //}
         }
         function reconcilationonstatusDemand(RequestID) {
-            
+
             var ClientID = $("#ddlclient option:selected").val();
 
             getAjax(`/Reconciliation/GetXeroOnDemandRequestStatusById?RequestID=${RequestID}`, null, function (response) {
 
                 if (response.Message == "SUCCESS") {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.' ;
                     $('#loadertext').text(msg);
                     ShowAlertBoxSuccess("Success!", "Successfully synced with Xero.", function () { window.location.reload(); });
                 }
                 else if (response.Message == "FAILED")
                 {
+                    sessionStorage.removeItem("NotInBooksData");
+                    sessionStorage.removeItem("NotInBanksData");
                     msg = 'Reconciliation data extracted successfully. Please wait for page to refresh.';
                     $('#loadertext').text(msg);
                     ShowAlertBoxError("Error!", "Sorry, there was a problem getting data from Xero. Please try again later.", function () { window.location.reload(); });
@@ -548,10 +553,12 @@
                             msg = 'Reconciliation data extracting for a selected agency. ';
                             break;
                         case 'SUCCESS':
-                            msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. '
+                            msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. ';
+                           
                             break;
                         case 'FAILED':
-                            msg = 'Error while data extratction from Xero. Please try after some time. '
+                            msg = 'Error while data extratction from Xero. Please try after some time. ';
+                           
                             break;
 
                         default:
@@ -706,8 +713,7 @@
 
             }
 
-            }
-
+        }
         function Tabclick(e, type) {
             sessionStorage.setItem('Type', type);
             if (type == 0) {
@@ -948,7 +954,7 @@
             }
 
         });
-        
+
 
         //function bindNotInBooksAndBanksCount() {
 

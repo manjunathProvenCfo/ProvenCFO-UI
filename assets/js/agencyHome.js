@@ -16,10 +16,8 @@ $(document).ready(function () {
     });
 
     createTwilioUser();
-       
-   
     AgencyDropdownPartialViewChange();
-    //bindNotInBooksAndBanksCountDashboard();
+   /* bindNotInBooksAndBanksCountDashboard();*/
     NotesIndividualCountAndPercentageByAgencyId();
     //KanbanCountWithIndividualPriority();
     //defaultReportsWidget();
@@ -248,11 +246,9 @@ var color = {
 };
 
 function KanbanCountWithIndividualPriority() {
-
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
-        let data = response.ResultData;
-
+    getAjaxSync(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
+        let data = response.resultData;
         $("#needsCategoryDiv").children().remove();
         for (key in color) {
             var htmltext = `<div class="d-flex align-items-center">
@@ -267,14 +263,19 @@ function KanbanCountWithIndividualPriority() {
         if (data != undefined && data.length > 0) {
 
             for (var i = 0; i < data.length; i++) {
-                let KanbanTaskLabelName = data[i].KanbanTaskLabelName;
-                let LabelNameCount = data[i].LabelNameCount;
+                let KanbanTaskLabelName = data[i].kanbanTaskLabelName;
+                let LabelNameCount = data[i].labelNameCount;
+                let TotalTasks = 0;
+                TotalTasks = data[i].totalTasks;
+                $("#lblTotalTasksCount").text(TotalTasks);
                 var tempObj1 = { value: LabelNameCount, name: KanbanTaskLabelName };
 
                 results[KanbanTaskLabelName] = tempObj1;
             }
         }
         else {
+            let TotalTasks = 0;
+            $("#lblTotalTasksCount").text(TotalTasks);
             var tempObj = { value: 1, name: "no data" };
             results["no data"] = tempObj;
 
@@ -287,20 +288,17 @@ function KanbanCountWithIndividualPriority() {
 
         }
 
-
         NeedsChart(Object.values(results));
-        if (response.Message == "Success") {
+        //if (response.Message == "Success") {
 
-            let TotalTasks = 0;
+        //    let TotalTasks = 0;
 
-            for (var i = 0; i < data.length; i++) {
-                TotalTasks = Number(data[i].TotalTasks);
-            }
+        //    for (var i = 0; i < data.length; i++) {
+        //        TotalTasks = Number(data[i].totalTasks);
+        //    }
 
-            $("#lblTotalTasksCount").text(TotalTasks);
-        }
-
-      
+        //    $("#lblTotalTasksCount").text(TotalTasks);
+        //}
     });
 }
 
@@ -408,8 +406,8 @@ var colors = {
 
 function NotesIndividualCountAndPercentageByAgencyId() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjax(`/Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
-        let data = response.ResultData;
+    getAjaxSync(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+        let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
         for (key in colors) {
@@ -420,21 +418,22 @@ function NotesIndividualCountAndPercentageByAgencyId() {
 
             $("#notesCategoryDiv").append(htmltext);
         }
-
         var result = {};
         if (data != undefined && data.length > 0) {
-
             for (var i = 0; i < data.length; i++) {
-                let NoteCategoryName = data[i].NoteCategoryName;
-                let NoteCategoryCount = data[i].NoteCategoryCount;
+                let NoteCategoryName = data[i].noteCategoryName;
+                let NoteCategoryCount = data[i].noteCategoryCount;
+                let TotalNotes = data[i].totalNotes;
                 var tempObj = { value: NoteCategoryCount, name: NoteCategoryName };
                 result[NoteCategoryName] = tempObj;
+                $("#lblTotalNotesCount").text(TotalNotes);
             }
         }
         else {
+            let TotalNotes = 0;
+            $("#lblTotalNotesCount").text(TotalNotes);         
             var tempObj = { value: 1, name: "no data" };
             result["no data"] = tempObj;
-
         }
 
         for (key in result) {
@@ -443,17 +442,10 @@ function NotesIndividualCountAndPercentageByAgencyId() {
         }
 
         NotesChart(Object.values(result));
-        if (response.Message == "Success") {
-
-            let TotalNotes = 0;
-
-            for (var i = 0; i < data.length; i++) {
-                TotalNotes = Number(data[i].TotalNotes);
-            }
-            $("#lblTotalNotesCount").text(TotalNotes);
-        }
     });
 }
+
+
 
 function getTeamMembersList() {
     var ClientID = $("#ddlclient option:selected").val();
@@ -811,7 +803,7 @@ function GetReconcilationData1() {
     var totalSum = 0;
     var percentage = 0;
     totalSum2 = 0;
-    if (sessionStorage.getItem("NotInBooksCount") == null) {
+    if (sessionStorage.getItem("NotInBooksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
                 
@@ -822,7 +814,7 @@ function GetReconcilationData1() {
                     $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                     totalSum2 = data[0].Count;
                     percentage = data[0].percentage.toFixed(0);
-                    sessionStorage.setItem("NotInBooksCount", JSON.stringify(data));
+                    sessionStorage.setItem("NotInBooksData", JSON.stringify(data));
                 }
                 else {
                     $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
@@ -835,7 +827,7 @@ function GetReconcilationData1() {
         })
     }
     else {
-        var data = JSON.parse(sessionStorage.getItem("NotInBooksCount"));           
+        var data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
         if (data != null && data.length > 0) {
             $("#lblNotInBooksCount2").text(data[0].Count);
             $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
