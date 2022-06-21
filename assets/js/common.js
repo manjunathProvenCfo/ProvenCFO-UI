@@ -107,7 +107,7 @@ var AgencyDropdownPartialViewChange = function () {
 
 }
 var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
-    ShowlottieLoader();
+    //ShowlottieLoader();
     MenuOptionHideAndShow(getClientId());
     sessionStorage.removeItem("NotInBooksData");
     sessionStorage.removeItem("NotInBanksData");
@@ -129,7 +129,7 @@ function SetUserPreferencesForAgency(callback) {
             }
             GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
-            //HidelottieLoader();
+           // HidelottieLoader();
         },
         error: function (d) {
 
