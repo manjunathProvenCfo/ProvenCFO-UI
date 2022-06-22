@@ -21,16 +21,22 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Needs
         [CheckSession]
-        [OutputCache(Duration = 20)]
+       
         public ActionResult NeedsMain()
         {
             try
             {
                 using (NeedsService objNeeds = new NeedsService())
                 {
-                    int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
-                    ViewBag.IsEditMode = false;
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    ViewBag.IsEditMode = false;
                     var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData;
                     TempData["SegmentsAndTasks"] = SegmentTasks;
                     if (userType != "" && userType == "1")
