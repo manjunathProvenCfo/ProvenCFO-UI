@@ -120,7 +120,7 @@
                 XeroConnectionUpdate();
 
             }, 2000);
-
+            HidelottieLoader();
         });
 
         function XeroConnectionUpdate() {
@@ -215,7 +215,10 @@
                 }
             })
         }
-
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 
 }
