@@ -220,6 +220,8 @@
                 $('select').val("Active");
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
+
+            HidelottieLoader();
         });
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";

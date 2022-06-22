@@ -167,8 +167,6 @@
                     return false;
                 }
 
-
-
                 var formData = new FormData();
                 formData.append("Fileupload", "Profile")
                 var totalFiles = document.getElementById("profile-image").files.length;
@@ -250,6 +248,7 @@
                 }
             });
 
+            HidelottieLoader();
         });
 
 
@@ -466,15 +465,13 @@
                     type: "warning"
                 },
                     function () {
-                        //window.location.href = '/Role/Role'
+                       
                     });
         }
 
-
-
-
-
-                                                                /////////END///////////////////////////////////
-
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 }

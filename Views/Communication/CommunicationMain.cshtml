@@ -1,4 +1,5 @@
 ﻿
+
 @{
     ViewBag.Title = "CommunicationMain";
 }
@@ -2177,6 +2178,7 @@
 
         $(document).ready(function () {
             AgencyDropdownPartialViewChange();
+            HidelottieLoader();
 
         });
 
@@ -2203,7 +2205,10 @@
                 }
             });
         }
-
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 
 }

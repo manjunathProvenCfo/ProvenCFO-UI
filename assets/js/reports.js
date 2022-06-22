@@ -521,8 +521,7 @@ var monthlySummaryOnClick = function (e, id) {
     let year = data.year;
     let period = data.reportPeriod;
 
-    postAjax(apiurl + `Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}&agencyId=${agencyId}`, null, function (response) {
-        debugger;
+    postAjax(apiurl + `Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}&agencyId=${agencyId}`, null, function (response) {     
         if (response.message == "Success") {
             ShowAlertBoxSuccess("", "Report has been marked as Default report!")
             bindReports(period, agencyId);

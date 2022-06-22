@@ -29,7 +29,7 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-        [OutputCache(Duration = 20)]
+       
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
@@ -41,10 +41,16 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                     ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                     ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }                  
                     if (userType == "1")
                     {
                         var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
@@ -378,7 +384,7 @@ namespace ProvenCfoUI.Controllers
             }
             return listItem;
         }
-        [OutputCache(Duration = 20)]
+       
         public ActionResult ReconciliationMain()
         {
             try
@@ -387,10 +393,16 @@ namespace ProvenCfoUI.Controllers
                 ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                 using (ReconcilationService objReConcilation = new ReconcilationService())
-                {
-                    int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
-                    ViewBag.IsStaffUser = false;
-                    var userType = Convert.ToString(Session["UserType"]);                   
+                {                 
+                    int AgencyID = 0;
+                    List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    var userType = Convert.ToString(Session["UserType"]);
+                    if (UserPref != null && UserPref.Count() > 0)
+                    {
+                        var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                        AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                    }
+                    ViewBag.IsStaffUser = false;            
                     var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                     getallAction.ForEach(x => x.ActionName = x.ActionName);
 

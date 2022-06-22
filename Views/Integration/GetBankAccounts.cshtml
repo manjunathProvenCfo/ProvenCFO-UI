@@ -132,7 +132,7 @@
 
             }, 2000);
             $('#checkbox-bulk-purchases-select').parent().addClass("d-none");
-
+            HidelottieLoader();
         });
         //$(document).ready(function () {
         //    EnableSelectedBulkUpdateButton();
@@ -171,6 +171,7 @@
                 XStatus.css('color', 'red');
                 $('#btnSync').hide()//prop('disabled', true);
                 // $('#spanSync').prop('disabled', true);
+                HidelottieLoader();
             }
         }
 
@@ -205,16 +206,13 @@
             });
         }
         function XeroBankAccountSync() {
-            debugger;
-
             ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroBankAccountSync?ClientID=' + ClientID, null, function (data) {
                 if (data === false) {
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
-                else {
-                    debugger;
+                else {               
                     ShowAlertBoxSuccess("Success!", "Bank Accounts synced with " + AccountingPackage + " successfully.", function () { window.location.reload(); });
                 }
 
@@ -342,7 +340,10 @@
 
             });
         }
-      
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 
 }
