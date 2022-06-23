@@ -474,11 +474,13 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var currentdate = new Date();
     var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
     var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    var CreatedBy = $('#topProfilePicture').attr('userId');
     var input = {
         Id: 0,
         ReconciliationId_ref: ReconciliationId,
         CommentText: InputcommentText,
-        CreatedBy: chat.userId,
+        //CreatedBy: chat.userId,
+        CreatedBy: CreatedBy,
         CreatedDate: currentdate,
         IsDeleted: false,
         AgencyId: AgencyId
