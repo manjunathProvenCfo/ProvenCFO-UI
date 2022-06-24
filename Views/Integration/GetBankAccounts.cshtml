@@ -51,8 +51,8 @@
                     <div id="dashboard-actions row">
                         <div class="dz-error-message col-12"></div>
                         @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="submit" title="Update">
-            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
-        </button>*@
+                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
+                            </button>*@
 
                         @Html.Hidden("AccountingPackageId", (object)@ViewBag.AccountingPackageId, new { @Id = "AccountingPackageId" })
                         @if (ViewBag.AccountingPackageId == 2)
@@ -84,44 +84,61 @@
                             <th class="sort pr-1 align-middle" width="15%">Account Number</th>
                             <th class="sort pr-1 align-middle" width="10%">Type</th>
                             <th class="sort pr-1 align-middle" width="10%">Status</th>
+                            <th class="sort pr-1 align-middle" width="10%">Actions</th>
+
 
                         </tr>
                     </thead>
                     <tbody id="purchases">
-                        
-                            @foreach (var item in Model)
-                            {
-                                <tr class="btn-reveal-trigger">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountID" value="@item.Status" checked="@item.IsActive" onclick="CheckBankAccount(event);"/>
-                                            <label class="custom-control-label" for="@item.AccountID"></label>
-                                            @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
-                            @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.BankAccountNumber)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Type)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                </tr>
-                            }
-                       
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="btn-reveal-trigger">
+                                <td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountID" value="@item.Status" checked="@item.IsActive" onclick="CheckBankAccount(event);" />
+                                        <label class="custom-control-label" for="@item.AccountID"></label>
+                                        @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
+                                            @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.BankAccountNumber)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td class="align-middle">
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Edit" data-toggle="modal" data-target="#myModal">
+                                        <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                    </button>
+                                  
+                                    <span class="d-none d-sm-inline-block ml-2" style="color:green">
+
+                                        <i class="fa fa-minus-circle"> </i>
+
+                                    </span>
+                                </td>
+
+                            </tr>
+                        }
+
                     </tbody>
 
                 </table>
             </div>
+
         </div>
     </div>
+
 }
+@Html.Partial("_PladLoginPartial", true)
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script>
@@ -140,13 +157,13 @@
 
 
         function XeroConnectionUpdate() {
-         
+
             var XConstatus = $('#XeroConnectionStatus');
             var XMessage = $('#XeroStatusMessage');
             var XStatus = $('#XeroStatus');
             var AccountingPackageId = $('#AccountingPackageId').val();
             if (XConstatus.val() == "True") {
-               
+
                 if (AccountingPackageId != undefined && AccountingPackageId != null && AccountingPackageId == 2) {
                     XStatus.text("QuickBooks connected");
                     AccountingPackage = "QuickBooks";
@@ -165,7 +182,7 @@
                     XStatus.text('Error Connecting to QuickBooks ');
                 }
                 else {
-                   
+
                     XStatus.text('Error Connecting to Xero');
                 }
                 XStatus.css('color', 'red');
@@ -176,7 +193,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-            
+
 
             ShowlottieLoader();
             setTimeout(function () {
@@ -212,12 +229,12 @@
                 if (data === false) {
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
-                else {               
+                else {
                     ShowAlertBoxSuccess("Success!", "Bank Accounts synced with " + AccountingPackage + " successfully.", function () { window.location.reload(); });
                 }
 
             });
-            
+
         }
 
         var EnableSelectedBulkUpdateButton = function () {
@@ -327,7 +344,7 @@
                     });
         }
         var CheckBankAccount = function (e) {
-           
+
             var IsActive = e.currentTarget.checked;
             var AccountId = e.currentTarget.attributes["Id"].value;
             postAjax(apiurl + 'Xero/UpdateBankAccount?AccountId=' + AccountId + '&IsActive=' + IsActive, null, function (data) {

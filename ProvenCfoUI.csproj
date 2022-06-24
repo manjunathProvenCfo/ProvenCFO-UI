@@ -1325,6 +1325,7 @@
     <Content Include="Views\Integration\GetBankAccounts.cshtml" />
     <Content Include="Views\Shared\_ReconcilationEditComment.cshtml" />
     <Content Include="Views\Reconciliation\ReconciliationQuickBookFileUploaderPartial.cshtml" />
+    <Content Include="Views\Shared\_PladLoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
