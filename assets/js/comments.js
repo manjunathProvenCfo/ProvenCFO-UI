@@ -128,10 +128,14 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
 
-        setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);
+        setCommentsHeader(response.resultData);
+       
+        getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (responseComm) {
+                LoadAllComments(responseComm.resultData.reconciliationComments);
+                
+        });       
         setScrollPosition();
         //setParticipants(response);
         //createTwilioClient();

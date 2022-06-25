@@ -409,15 +409,15 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         $('.emojionearea-editor').val("");
     }
 
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
 
-        setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);
-        var glaccount = response.resultData.reconciliationdata.gl_account_ref;
-        var tc1 = response.resultData.reconciliationdata.tracking_category_ref;
-        var tc2 = response.resultData.reconciliationdata.additional_tracking_category_ref;
-        var Action = response.resultData.reconciliationdata.ref_reconciliationAction;
-        var ReconcilationType = response.resultData.reconciliationdata.type;
+        setCommentsHeader(response.resultData);
+       
+        var glaccount = response.resultData.gl_account_ref;
+        var tc1 = response.resultData.tracking_category_ref;
+        var tc2 = response.resultData.additional_tracking_category_ref;
+        var Action = response.resultData.ref_reconciliationAction;
+        var ReconcilationType = response.resultData.type;
         if (ReconcilationType == "Unreconciled") {
             
             $communicationGLaccount.removeClass('d-none');
@@ -467,16 +467,21 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         else {
             $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
         }
-        if (tc3 != null) {
-            $tc_3_Dropdown.val(tc2);
-        }
-        else {
-            $tc_3_Dropdown.val($('#tracking_category_2  option:first').val());;
-        }
-
+        //if (tc3 != null) {
+        //    $tc_3_Dropdown.val(tc2);
+        //}
+        //else {
+        //     $tc_3_Dropdown.val($('#tracking_category_2  option:first').val());;
+        //}
+        showChatContentLoader();
+        getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (responseComm) {
+                LoadAllComments(responseComm.resultData.reconciliationComments);
+                
+        });
+        
 
         setScrollPosition();
-        hideChatContentLoader();
+        
     });
 
 
@@ -688,6 +693,7 @@ var setCommentsHeader = function (reconciliationdata) {
     $channelName.text(reconciliationdata.account_name);
 }
 var LoadAllComments = function (ReconciliationComments) {
+    showChatContentLoader();
     $channelMessages.empty();
 
     if (ReconciliationComments != null && ReconciliationComments.length > 0) {
@@ -787,7 +793,7 @@ var LoadAllComments = function (ReconciliationComments) {
         });
         var obj = 0;
     }
-
+    hideChatContentLoader();
 }
 var resetChatPage = function () {
     $participantsContainer.empty();
