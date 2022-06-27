@@ -45,7 +45,7 @@ var chat = {
     isReconciliationIconColorChanged: false
 };
 var CommentHtmls = {
-    ReconciliationHtml: `<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="loadCommentsPage('{channelUniqueNameGuid}')">
+    ReconciliationHtml: `<div class="media chat-contact hover-actions-trigger w-100" id="{id}" data-email="" data-index="1" data-channelid="{id}" data-toggle="tab" data-target="#chat" role="tab" onclick="showChatContentLoader();loadCommentsPage('{channelUniqueNameGuid}');">
                         <div class="avatar avatar-xl status-offline">
                             <img class="rounded-circle" src="/assets/img/team/default-logo.png" alt="">
                         </div>
@@ -607,7 +607,7 @@ var loadreconcilationcomments = function () {
             //ShowAlertBoxWarning("No participant exists for chat");
         }
 
-        hideChatContentLoader();
+        //hideChatContentLoader();
         /*$participants.eq(0).click();*/
     });
 

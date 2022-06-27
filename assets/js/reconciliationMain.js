@@ -31,23 +31,26 @@ $(document).ready(function () {
         }
         else {
             let reconciliaitonId = elCheckbox.attr("id");
+           
             showReconciliationChat(reconciliaitonId);
         }
     });
-    $(document).on("click", "#tblreconcilation tr", function (e) {
+    $(document).on("click", "#tblreconcilation tr",async function (e) {
         $("#tblreconcilation tr").removeClass("bg-200");
         $(this).addClass("bg-200");
 
-        if ($('#divChat:visible').length > 0) {
+        if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
             let elComment = $(this).find("#btnComment");
-            showReconciliationChat(elComment.data().id);
+            
+           await showReconciliationChat(elComment.data().id);
         }
     });
 
-    $(document).on("click", "button[id=btnComment]", function (e) {
+    $(document).on("click", "button[id=btnComment]", async function (e) {
 
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
-        showReconciliationChat(e.currentTarget.dataset.id);
+        
+       await showReconciliationChat(e.currentTarget.dataset.id);
         //$('#divFilter').hide();
         //$('#divFilter').addClass('d-none');
         //$('#divChat').show();
@@ -61,7 +64,8 @@ $(document).ready(function () {
         //}
     });
 
-    var showReconciliationChat = function (channelUniqueNameGuid) {
+    var showReconciliationChat = async function (channelUniqueNameGuid) {
+        
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
         $('#divBulkUpdate').hide();
@@ -76,7 +80,7 @@ $(document).ready(function () {
         //    loadChatPage(true, 1, true);
         //}
 
-        loadCommentsPage(channelUniqueNameGuid);
+       await loadCommentsPage(channelUniqueNameGuid);
 
     }
 
