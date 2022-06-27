@@ -168,7 +168,7 @@ $(document).ready(function () {
         var dpEndDate = '';//$('#dpEndDate').val();
         var dpDueDate = '';//$('#dpDueDate').val();
         var EstimatedHours = '';//$('#txtEstimatedHours').val();
-        var CreatedDate = $('#createNewtask_Date').text().replace('UTC','');
+        var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
         var UTCdate = getUTCDateTime(new Date(CreatedDate));
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
@@ -258,7 +258,6 @@ $(document).ready(function () {
     });
     $('.kanban-item-card').click(function (e) {
         var TaskID = 0;
-        var createUTCDate = new Date();
         var elements = e.currentTarget.children[0].children;
         ClearViewPage();
         $.each(elements, function (key, value) {
@@ -275,6 +274,8 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.Message == 'Success') {
+                    let taskCreationDate = response.Task.CreatedDate.replaceAll('/Date', '').replaceAll('/', '').replaceAll('(', '').replaceAll(')', '');
+                    let UTCdate = getUTCDateTime(new Date(Number(taskCreationDate)));
                     if (response.Task != null) {
                         $('#kanban-modal-label-title').html(response.Task.TaskTitle);
                         // setTimeout(function () {
@@ -288,7 +289,7 @@ $(document).ready(function () {
 
                         //}, 1000); 
                         $('#Reporter').html(response.Task.ReporterName);
-                        $('#createNewtask_DateOpen').text(getUTCDateTime(createUTCDate));
+                        $('#createNewtask_DateOpen').text(UTCdate);
                         addMembersOnviewLoad(response.Task.KanbanAssigneesList);
                         addAttachmentOnviewLoad(response.Task.KanbanAttachments, true, true);
                         addcommentsList(response.Task.KanbanComments);
@@ -1203,6 +1204,6 @@ function getUTCDateTime(date) {
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm ;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
     return strTime;
 }

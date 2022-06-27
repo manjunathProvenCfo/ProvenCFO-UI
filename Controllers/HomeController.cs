@@ -59,7 +59,7 @@ namespace ProvenCfoUI.Controllers
             return PartialView("_Error");
         }
 
-
+        [OutputCache(Duration = 60, VaryByParam = "none", Location = System.Web.UI.OutputCacheLocation.Server)]
         public ActionResult Login()
         {
 

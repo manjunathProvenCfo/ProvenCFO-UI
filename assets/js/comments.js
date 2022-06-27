@@ -36,6 +36,7 @@ var chat = {
     isReconciliationIconColorChanged: false,
     channelUniqueNameGuid: ''
 };
+
 var CommentHtmls = {
     datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
     commenthtml: `<div class="media p-3" data-timestamp="{date}" id="msg_{commentId}"><div class= "media-body d-flex justify-content-end">
@@ -108,8 +109,16 @@ var CommentHtmls = {
                     </div></div><div class="text-400 fs--2"><span class="font-weight-semi-bold mr-2">{userName}</span>
                     <span>{time}</span></div></div></div></div>`,
 }
-var loadCommentsPage = async function (channelUniqueNameGuid) {
+var loadcommmentconetents = async function (channelUniqueNameGuid) {
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, async function (responseComm) {
 
+        await LoadAllComments(responseComm.resultData.reconciliationComments);
+        setScrollPosition();
+        hideChatContentLoader();
+    });
+}
+var loadCommentsPage = async function(channelUniqueNameGuid) {
+   
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -127,19 +136,23 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
-    chat.channelUniqueNameGuid = channelUniqueNameGuid;
-    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
 
-        setCommentsHeader(response.resultData.reconciliationdata);
-        LoadAllComments(response.resultData.reconciliationComments);
-        setScrollPosition();
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null,async function (response) {
+        
+        setCommentsHeader(response.resultData);
+        setTimeout(async function () { 
+        await loadcommmentconetents(channelUniqueNameGuid);
+        }, 200);
+       
         //setParticipants(response);
         //createTwilioClient();
         /*$participants.eq(0).click();*/
-        hideChatContentLoader();
+        //hideChatContentLoader();
     });
+    
 
-    $btnSendMessage.unbind().click(function () {
+    $btnSendMessage.unbind().click(function() {
         
         addNewMessagetoChatwindow($('#message-body-input').val());
        
@@ -347,7 +360,7 @@ var setCommentsHeader = function (reconciliationdata) {
     $channelReconciliationAmount.html(formatAmount(reconciliationdata.amount, true));
     $channelName.text(reconciliationdata.account_name);
 }
-var LoadAllComments = function (ReconciliationComments) {
+var LoadAllComments = async function (ReconciliationComments) {
     $channelMessages.empty();
     if (ReconciliationComments != null && ReconciliationComments.length > 0) {
 
@@ -368,7 +381,7 @@ var LoadAllComments = function (ReconciliationComments) {
                 comments: dategroups[date]
             };
         });
-        $.each(commentsgroupArrays, function (index, aDates) {
+       await $.each(commentsgroupArrays, function (index, aDates) {
             var dtarray = aDates.date.split('-');
             var datestring = monthNames[parseInt(dtarray[1]) - 1] + ' ' + dtarray[2] + ', ' + dtarray[0];
             var dhtml = CommentHtmls.datehtml.replace('{id}', aDates.date.replace('-', '')).replace('{innerText}', datestring);
@@ -474,11 +487,13 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var currentdate = new Date();
     var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
     var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+    var CreatedBy = $('#topProfilePicture').attr('userId');
     var input = {
         Id: 0,
         ReconciliationId_ref: ReconciliationId,
         CommentText: InputcommentText,
-        CreatedBy: chat.userId,
+        //CreatedBy: chat.userId,
+        CreatedBy: CreatedBy,
         CreatedDate: currentdate,
         IsDeleted: false,
         AgencyId: AgencyId
