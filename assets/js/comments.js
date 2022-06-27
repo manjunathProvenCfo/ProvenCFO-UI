@@ -113,6 +113,7 @@ var loadcommmentconetents = async function (channelUniqueNameGuid) {
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, async function (responseComm) {
 
         await LoadAllComments(responseComm.resultData.reconciliationComments);
+        setScrollPosition();
         hideChatContentLoader();
     });
 }
@@ -143,7 +144,7 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
         setTimeout(async function () { 
         await loadcommmentconetents(channelUniqueNameGuid);
         }, 200);
-        setScrollPosition();
+       
         //setParticipants(response);
         //createTwilioClient();
         /*$participants.eq(0).click();*/
