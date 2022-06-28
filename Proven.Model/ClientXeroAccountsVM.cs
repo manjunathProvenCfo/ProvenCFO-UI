@@ -35,6 +35,9 @@ namespace Proven.Model
         public string IncludedAccountNumbers { get; set; }
         public bool? ReceiveQuarterlyReports { get; set; }
         public string XeroScope { get; set; }
+        public string Link_token { get; set; }
+        public string public_token { get; set; }
+        public bool? PlaidConnectionStatus { get; set; }
 
     }
     public class ClientXeroAccountsMainModel

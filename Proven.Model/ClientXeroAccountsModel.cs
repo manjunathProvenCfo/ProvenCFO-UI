@@ -30,6 +30,9 @@ namespace Proven.Model
         public DateTime? CreatedDate { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsDeleted { get; set; }
+        public string Link_token { get; set; }
+        public string public_token { get; set; }
+        public bool? PlaidConnectionStatus { get; set; }
     }
 
 }
