@@ -468,6 +468,7 @@
     <Content Include="assets\files\NeedsEmailTemplate.xml" />
     <Content Include="assets\files\NotesEmailTemplate.xml" />
     <Content Include="assets\files\ReconcilationEmailTemplate.xml" />
+    <Content Include="assets\files\ReportEmailTemplate.xml" />
     <Content Include="assets\img\chat\1.jpg" />
     <Content Include="assets\img\chat\10.jpg" />
     <Content Include="assets\img\chat\11.jpg" />
@@ -1326,6 +1327,7 @@
     <Content Include="Views\Shared\_ReconcilationEditComment.cshtml" />
     <Content Include="Views\Reconciliation\ReconciliationQuickBookFileUploaderPartial.cshtml" />
     <Content Include="Views\Shared\_PladLoginPartial.cshtml" />
+    <Content Include="Views\Shared\_ReportEmailPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

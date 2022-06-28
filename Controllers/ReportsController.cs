@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -315,5 +316,45 @@ namespace ProvenCfoUI.Controllers
                 return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public JsonResult EmailSend(string ClientName, string ClientId, string url, string sentdate)
+        {
+            try
+            {
+                using (AccountService obj = new AccountService())
+                {
+                    List<InviteUserModel> user = new List<InviteUserModel>();
+                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RCN");
+                    var Userslist = usersListwithRecPermission.ResultData;
+                    var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(Server.MapPath("~/assets/files/ReportEmailTemplate.xml"));
+
+                    string xml = System.IO.File.ReadAllText(Server.MapPath("~/assets/files/ReportEmailTemplate.xml"));
+                    var subject = doc.SelectNodes("EmailContent/subject")[0].InnerText;
+                    var body = doc.SelectNodes("EmailContent/body")[0].InnerText;
+                    var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
+                    subject = subject.Replace("{CompanyName}", ClientName);
+                    subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
+                    body = body.Replace("{url}", url);
+                    footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
+                    return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

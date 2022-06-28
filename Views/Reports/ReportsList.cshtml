@@ -36,7 +36,10 @@
                     <h5>Reports</h5>
                     <div class="d-flex align-items-center">
                         <div class="d-flex">
-                            <button class="btn btn-light"><i class="far fa-envelope"></i></button>
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                            </button>
+                            @*<button class="btn btn-light"><i class="far fa-envelope"></i></button>*@
                         </div>
                         <div class="form-group position-relative mb-0">
                             <input type="text" class="form-control" id="inputGroup" placeholder="Search">
@@ -90,6 +93,7 @@
 
             @Html.Partial("_ReportUploaderPartial")
             @Html.Partial("_ReportRenamePartial")
+            @Html.Partial("_ReportEmailPartial")
 
         </div>
     </div>
@@ -112,5 +116,6 @@
             console.log(e);
             HidelottieLoader();
         };
+        
     </script>
 }
