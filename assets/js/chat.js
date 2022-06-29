@@ -687,7 +687,7 @@ var setCommentsHeader = function (reconciliationdata) {
     $channelReconciliationCompany.html("");
     $channelReconciliationDate.html("");
     $channelReconciliationAmount.html("");
-    $channelReconciliationDescription.html(`${reconciliationdata.company}/${reconciliationdata.description}`);
+    $channelReconciliationDescription.html(`${reconciliationdata.company}/${reconciliationdata.description}<br/>${reconciliationdata.reference}`);
     $channelReconciliationDate.html(`${formatDateMMDDYYYY(reconciliationdata.date)}`);
     $channelReconciliationAmount.html(formatAmount(reconciliationdata.amount, true));
     $channelName.text(reconciliationdata.account_name);
