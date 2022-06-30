@@ -324,7 +324,7 @@ namespace ProvenCfoUI.Controllers
                 using (AccountService obj = new AccountService())
                 {
                     List<InviteUserModel> user = new List<InviteUserModel>();
-                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RCN");
+                    var usersListwithRecPermission = obj.GetRegisteredUsersByAgencyWithReqPermission(ClientId, "RPT");
                     var Userslist = usersListwithRecPermission.ResultData;
                     var Recipientssdata = Userslist.Where(x => x.IsRegistered == 1 && x.IsActive == 1.ToString()).Select(x => x.Email);
 
