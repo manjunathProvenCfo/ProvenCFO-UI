@@ -352,7 +352,7 @@ namespace ProvenCfoUI.Controllers
                                         account.HasAttachments = item.HasAttachments;
                                         account.Id = 0;
                                         gl.Add(account);
-                                    }                                   
+                                    }
                                 }
                                 else
                                 {
@@ -367,7 +367,7 @@ namespace ProvenCfoUI.Controllers
                                     acct.AccountID = Convert.ToString(item.Id);
                                     acct.Name = item.Name;
                                     acct.Status = Convert.ToString(item.Active == true ? "ACTIVE" : "INACTIVE");
-                                    acct.AgencyId_ref = ClientID;                                    
+                                    acct.AgencyId_ref = ClientID;
                                     acct.Class = Convert.ToString(item.Classification);
                                     acct.Type = Convert.ToString(item.AccountType);
                                     acct.BankAccountNumber = Convert.ToString("");
@@ -388,7 +388,7 @@ namespace ProvenCfoUI.Controllers
                         }
 
                     }
-                    
+
                     //}
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
@@ -408,6 +408,60 @@ namespace ProvenCfoUI.Controllers
             ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
             ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        [CheckSession]
+        public async Task<JsonResult> GetLinkToken(string ClientName)
+        {
+            try
+            {
+                using (Plaid plaid = new Plaid(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
+                {
+                    var result = await plaid.getLinkToken(ClientName);
+                    if (result != String.Empty)
+                    {
+
+                        return Json(new { link_token = result, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { link_token = "", Status = "Error" }, JsonRequestBehavior.AllowGet);
+                    }
+                }                              
+            }
+            catch (Exception)
+            {
+                return Json(new { link_token = "", Status = "Error" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [CheckSession]
+        public async Task<JsonResult> PostPublictoken(int ClientId,string AccountID, string public_token)
+        {
+            try
+            {
+                using (Plaid plaid = new Plaid(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
+                {
+                    var access_token = await plaid.ExchangeTokenAsync(public_token);
+                    if (access_token != null)
+                    {
+                        var access_token_enc = SecurityCommon.EncryptString(Convert.ToString(access_token));
+                        using (IntigrationService service = new IntigrationService())
+                        {
+                           var res = await  service.UpdatePlaidBankAccountDetails(AccountID, access_token_enc, true);
+                            if (res.resultData == true)
+                            {
+                                return Json(new { Status = "Success" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }                       
+                    }
+                    return Json(new { Status = "Error" }, JsonRequestBehavior.AllowGet);
+                }                 
+            }
+            catch (Exception e)
+            {
+                return Json(new { Status = "Error" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public static List<SelectListItem> getGlAccountReview()

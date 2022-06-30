@@ -115,17 +115,22 @@
                                     @Html.DisplayFor(modelItem => item.Status)
                                 </td>
                                 <td class="align-middle">
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Edit" data-toggle="modal" data-target="#myModal">
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Edit" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
                                         <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
                                     </button>
-                                  
-                                    <span class="d-none d-sm-inline-block ml-2" style="color:orangered">
-
-                                        <i class="fa fa-minus-circle"> </i>
-
-                                    </span>
+                                    @if (item.PlaidConnectionStatus == true && item.access_token != "")
+                                    {
+                                        <span class="d-none d-sm-inline-block ml-2" style="color:green">
+                                            <i class="fa fa-check"> </i>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-none d-sm-inline-block ml-2" style="color:orangered">
+                                            <i class="fa fa-minus-circle"> </i>
+                                        </span>
+                                    }
                                 </td>
-
                             </tr>
                         }
 
