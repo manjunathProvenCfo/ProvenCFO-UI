@@ -26,6 +26,11 @@ namespace ProvenCfoUI.Controllers
         public ActionResult ReportsList()
         {
             IsReadOnlyUser();
+            var userType = Convert.ToString(Session["UserType"]);
+            if (userType == "1")
+            {
+                ViewBag.IsStaffUser = true;
+            }
             return View();
         }
 
