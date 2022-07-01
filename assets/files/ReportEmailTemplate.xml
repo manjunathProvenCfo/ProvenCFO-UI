@@ -6,10 +6,16 @@
      Hi,
 	    </br>
 	    </br>
-		In order to streamline our Reports, we send out this recurring email with a link to our CFO App. Here is the link: <a href="{url}">Click here</a>
+      Each month we provide updated Financial Statements and Metrics to give you insight into your business. At a minimum we provide the following:
+      </br>
+      </br>
+      <ul> <li><a href="{notes}">ProvenCFO Notes</a></li> <li><a href="{dashboard}">Summary Dashboard</a></li> <li><a href="{report}">Monthly Financial Report</a></li> </ul>
+	
+    These items are all accessible via our <a href="{login}">CFO App</a>. Each month these reports should not only be reviewed for accuracy, but also used to identify trends and to help with decision making. The timely response to our questions in the <a href="{reconcilation}">Reconciliation tab</a>  or the <a href="{chat}">Chat tab</a> of our CFO App allows us to produce <b> relevant, reliable, and real-time</b> financial statements to help in your analysis. We're available to answer any questions or concerns you may have regarding these reports.
+
+	     
 		</br>
 		</br>
-		
     Much thanks,
     </br>
     ProvenCFO

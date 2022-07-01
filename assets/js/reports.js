@@ -551,7 +551,7 @@ function getClientDate(ClientName) {
 $(function () {
 
     $("#email").click(function () {
-        var url = window.location.href;
+        var url = window.location.host;
         var ClientName = $("#ddlclient option:selected").text();
         var ClientId = $("#ddlclient option:selected").val();
         getClientDate(ClientName);

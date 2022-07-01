@@ -342,7 +342,18 @@ namespace ProvenCfoUI.Controllers
                     var footer = doc.SelectNodes("EmailContent/footer")[0].InnerText;
                     subject = subject.Replace("{CompanyName}", ClientName);
                     subject = subject.Replace("{TodaysDate}", DateTime.Now.ToString("dd MMMM, yyyy", new System.Globalization.CultureInfo("en-US")));
-                    body = body.Replace("{url}", url);
+                    var notes = "https://" + url + "/Notes/GetNotesPage";
+                    var dashboard = "https://" + url + "/Dashboard/Dashboard";
+                    var report = "https://" + url + "/Reports/ReportsList";
+                    var login = "https://" + url + "/Home/Login";
+                    var reconcilation = "https://" + url + "/Reconciliation/ReconciliationMain";
+                    var chat = "https://" + url + "/Communication/Chat";
+                    body = body.Replace("{notes}", notes);
+                    body = body.Replace("{dashboard}", dashboard);
+                    body = body.Replace("{report}", report);
+                    body = body.Replace("{login}", login);
+                    body = body.Replace("{reconcilation}", reconcilation);
+                    body = body.Replace("{chat}", chat);
                     footer = sentdate != "null" ? footer.Replace("{LastSent}", sentdate) : "";
                     return Json(new { Subject = subject, Body = body, Recipients = Recipientssdata, Status = "Success", LastSent = footer }, JsonRequestBehavior.AllowGet);
 
