@@ -16,8 +16,8 @@
                 <br />
 
                 <div class="outer text-center">
-                     Please click on the below button, this will navigate to plaid portal to authenticate and Once it's authenticated it will bring back to the same page. 
-                    <button id="link-button" style="background-color: white;border: #0A85EA;color: black;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)">Plaid authentication </button>
+                    Please click on the below button, this will navigate to PLAID portal to authenticate and Once it's authenticated it will bring back to the same page.
+                    <button id="link-button" style="background-color: white;border: #0A85EA;color: black;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)">PLAID authentication </button>
                     @*<button id="access-button" onclick="acces_save();" style="display:none; background-color: white;border: #0A85EA;color: black;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)">Save access token</button>*@
 
                 </div>
@@ -63,10 +63,10 @@
         postAjax(`/Integration/PostPublictoken?ClientId=${ClientId}&AccountID=${AccountID}&public_token=${public_token}`, null, function (response) {
             HidelottieLoader();
             if (response.Status == "Success") {
-                ShowAlertBoxSuccess("Success", "Plaid authentication sucessfull.", function () { window.location.reload(); });
+                ShowAlertBoxSuccess("Success", "PLAID authenticated successfully.", function () { window.location.reload(); });
             }
             else {
-                ShowAlertBoxError("Error", "Error while Plaid authentication, Please try again.");
+                ShowAlertBoxError("Error", "Error while PLAID authentication, Please try again.");
             }
         });
     }
