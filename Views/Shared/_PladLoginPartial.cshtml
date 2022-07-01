@@ -1,20 +1,26 @@
-﻿<div class="modal fade " id="myModal" role="dialog">
-
+﻿<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+<div class="modal fade " id="PlaidModal" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
 
 
-                <h5 class="modal-title">This Page is Under Construction</h5>
+                <h5 class="modal-title">Plaid authentication</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
             </div>
             <div class="modal-body">
                 <h5> </h5>
-                <br/>
-                <br/>
+                <br />
+                <br />
+
+                <div class="outer text-center">
+                    Please click on the below button, this will navigate to PLAID portal to authenticate and Once it's authenticated it will bring back to the same page.
+                    <button id="link-button" style="background-color: white;border: #0A85EA;color: black;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)">PLAID authentication </button>
+                    @*<button id="access-button" onclick="acces_save();" style="display:none; background-color: white;border: #0A85EA;color: black;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)">Save access token</button>*@
+
+                </div>
             </div>
             <div class="modal-footer justify-content-center">
                 <div>
@@ -51,5 +57,51 @@
         transform: none;
     }
 </style>
+<script>
+    var postPublicToken = function (public_token, AccountID) {
+        var ClientId = $("#ddlclient option:selected").val();
+        postAjax(`/Integration/PostPublictoken?ClientId=${ClientId}&AccountID=${AccountID}&public_token=${public_token}`, null, function (response) {
+            HidelottieLoader();
+            if (response.Status == "Success") {
+                ShowAlertBoxSuccess("Success", "PLAID authenticated successfully.", function () { window.location.reload(); });
+            }
+            else {
+                ShowAlertBoxError("Error", "Error while PLAID authentication, Please try again.");
+            }
+        });
+    }
+    
+    function getLinkToken(AccountID) {
+        
+        var ClientName = $("#ddlclient option:selected").text();
+        postAjax('/Integration/GetLinkToken?ClientName=' + ClientName, null, function (response) {
+            if (response != null && response.Status == "Success") {
+               
+                var handler = Plaid.create({
+                    token: response.link_token,
+                    onSuccess: function (public_token, metadata) {                       
+                        ShowlottieLoader();
+                        postPublicToken(public_token, AccountID);
+                       console.log('public token is:', public_token);
+                    },
+                    onExit: function (err, metadata) {
+                        console.log('onexit invoked');
+                    },
+                    onEvent: function (eventName, metadata) {
+                        console.log('event name is:', eventName);
+                    }
+                });
+                $('#link-button').on('click', function (e) {                    
+                    handler.open()
+                });
+                
+            }
+            else {
+                alert(response.slink_token);
+            }
+        });
+    }
+    
+</script>
 
 

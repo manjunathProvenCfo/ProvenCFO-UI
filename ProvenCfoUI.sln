@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proven.Model", "Proven.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickBooksSharp", "QuickBooksSharp\QuickBooksSharp.csproj", "{852BF85A-E5FE-4076-9B11-442F009B22E8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plaid", "Plaid\Plaid.csproj", "{FC2C7CBB-3F42-44F6-8BCD-76A541EDFC25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{852BF85A-E5FE-4076-9B11-442F009B22E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{852BF85A-E5FE-4076-9B11-442F009B22E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{852BF85A-E5FE-4076-9B11-442F009B22E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC2C7CBB-3F42-44F6-8BCD-76A541EDFC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2C7CBB-3F42-44F6-8BCD-76A541EDFC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC2C7CBB-3F42-44F6-8BCD-76A541EDFC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2C7CBB-3F42-44F6-8BCD-76A541EDFC25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

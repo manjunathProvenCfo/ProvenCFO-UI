@@ -542,3 +542,48 @@ var renameReportOnClick = function (e, id, fileName) {
     $("#hdnPeriod").val(data.reportPeriod);
     $("#txtNewFileName").val('');
 }
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Reports/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        sessionStorage.setItem("LastMailSent", response.resultData);
+    });
+
+}
+$(function () {
+
+    $("#email").click(function () {
+        var url = window.location.host;
+        var ClientName = $("#ddlclient option:selected").text();
+        var ClientId = $("#ddlclient option:selected").val();
+        getClientDate(ClientName);
+        ClientName = encodeURIComponent(ClientName);
+        var LastMailSent = sessionStorage.getItem("LastMailSent");
+        getAjax(`/Reports/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+
+            }
+        });
+
+    });
+});
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Reports/sendReportEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
+}

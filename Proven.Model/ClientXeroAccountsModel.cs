@@ -29,7 +29,9 @@ namespace Proven.Model
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool? IsActive { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }      
+        public string access_token { get; set; }
+        public bool? PlaidConnectionStatus { get; set; }
     }
 
 }

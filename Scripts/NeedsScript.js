@@ -168,8 +168,8 @@ $(document).ready(function () {
         var dpEndDate = '';//$('#dpEndDate').val();
         var dpDueDate = '';//$('#dpDueDate').val();
         var EstimatedHours = '';//$('#txtEstimatedHours').val();
-        var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
-        var UTCdate = getUTCDateTime(new Date(CreatedDate));
+        //var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
+        //var UTCdate = getUTCDateTime(new Date(CreatedDate));
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
         }).toArray().join(', ');
@@ -177,7 +177,7 @@ $(document).ready(function () {
             return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
         }).toArray().join(', ');
 
-        var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels, CreatedDate: UTCdate };
+        var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
         $.ajax({
 
             type: "POST",
@@ -252,7 +252,7 @@ $(document).ready(function () {
 
         });
         $('#txtTaskTitle').val('');
-        $('#createNewtask_Date').text(getUTCDateTime(createUTCDate));
+        //$('#createNewtask_Date').text(getUTCDateTime(createUTCDate));
         $('#previews').empty();
 
     });
