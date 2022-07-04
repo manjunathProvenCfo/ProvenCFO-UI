@@ -61,8 +61,8 @@ $(document).ready(function () {
 
 function RenderGrossRevenueChart(Option) {
 
-    
-    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${0}`, null, function (response) {
+    var ClientID = $("#ddlclient option:selected").val();
+    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${0}&ClientID=${ClientID}`, null, function (response) {
        
         if (response.Status == 'Success') {
             response.Xdata.shift();
@@ -90,8 +90,8 @@ function Tabclick(e, type) {
     }
 }
 function RenderNetIncomeChart(Option) {
-    
-    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}`, null, function (response) {
+    var ClientID = $("#ddlclient option:selected").val();
+    getAjax(`/AgencyService/GetGrossRevenueData?Option=${Option}&cType=${1}&ClientID=${ClientID}`, null, function (response) {
         
         if (response.Status == 'Success') {
             response.Xdata.shift();
@@ -537,9 +537,9 @@ function getTeamMembersList() {
 }
 
 function GetAccountOutStanding() {
-
+    var ClientID = $("#ddlclient option:selected").val();
     $.ajax({
-        url: '/AgencyService/GetAccountOutStanding',
+        url: `/AgencyService/GetAccountOutStanding?ClientID=${ClientID}`,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",

@@ -241,7 +241,7 @@ namespace Proven.Service
             var objToken = (IXeroToken)Token;
             
             var result = await _accountinstance.GetAccountsAsync(objToken.AccessToken, TenentID);
-            var finalresult  = result._Accounts.Where(x => x.Type.ToString() == "BANK").ToList();
+            var finalresult  = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK").ToList();
             return (V)Convert.ChangeType(finalresult, typeof(V));
         }
         public override async Task<V> GetTrackingCategories(T xeroToken, string XeroTenentID)
