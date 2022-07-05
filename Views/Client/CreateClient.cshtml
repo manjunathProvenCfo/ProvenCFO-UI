@@ -186,21 +186,32 @@
                                     }
                                     else
                                     {
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email">Enable data Sync</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
-
-                                                <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
+                                        <div class="row align-items-center form-group">
+                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                                <label for="split-login-email">Enable data Sync</label>
                                             </div>
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                                <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                    @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
 
+                                                    <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    </div>
                                     }
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Enable Plaid</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                            @Html.CheckBoxFor(x => x.Plaid_Enabled, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="Plaid_Enabled">Yes, Enable Plaid</label>
+                                        </div>
 
+                                    </div>
+                                </div>
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email">Accounting Package</label>
