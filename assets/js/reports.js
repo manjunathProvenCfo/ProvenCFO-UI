@@ -113,8 +113,9 @@ $(function () {
         }
 
         $attachmentContainer.html("");
+        $attachmentContainer.empty();
         //Bind uploaer popup
-        bindUploaderAttachments(agencyId, year, period);
+        //bindUploaderAttachments(agencyId, year, period); // This is no more needed
 
         //templateHTML
         var previewNode = document.querySelector("#template");
