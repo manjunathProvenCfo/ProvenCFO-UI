@@ -115,17 +115,24 @@
                                     @Html.DisplayFor(modelItem => item.Status)
                                 </td>
                                 <td class="align-middle">
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Plaid Authentication" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
-                                        <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
-                                    </button>
+
                                     @if (item.PlaidConnectionStatus == true && item.access_token != "")
                                     {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" disabled title="Plaid Authentication" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
+                                            <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                        </button>
                                         <span class="d-none d-sm-inline-block ml-2" style="color:green">
                                             <i class="fa fa-check"> </i>
                                         </span>
+                                        <button type="button"  class="close" aria-label="Close" style="margin-right:200px;" id=" @item.AccountID" onclick="CancelAccount(event);" >
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     }
                                     else
                                     {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Plaid Authentication" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
+                                            <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                        </button>
                                         <span class="d-none d-sm-inline-block ml-2" style="color:orangered">
                                             <i class="fa fa-minus-circle"> </i>
                                         </span>
@@ -358,6 +365,19 @@
                 }
                 else {
                     ShowAlertBoxSuccess("Success!", "Bank Accounts updated successfully.", function () { window.location.reload(); });
+                }
+
+            });
+        }
+
+        var CancelAccount = function (e) {
+            var AccountId = e.currentTarget.attributes["Id"].value;
+            postAjax(apiurl + 'Xero/UpdatePlaidConnectionStatus?AccountId=' + AccountId , null, function (data) {
+                if (data.resultData === false) {
+                    ShowAlertBoxError("Error", "Can't Clear Plaid Authentication.", function () { window.location.reload(); });
+                }
+                else {
+                    ShowAlertBoxSuccess("Success!", " Clear Plaid Authentication.", function () { window.location.reload(); });
                 }
 
             });
