@@ -128,7 +128,7 @@ $(function () {
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
             url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
-            maxFilesize: 40,
+            maxFilesize: 20,
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 20,
@@ -143,6 +143,9 @@ $(function () {
                 if (response != null && response.Status == 'Success') {
                     prepareAndPrependUploaderAttachment(response.File);
                 }
+            },
+            Error: function (response) {
+                alert(response);
             }
         });
 
@@ -193,6 +196,10 @@ $(function () {
         myDropzone_view.on("complete", function (file) {
             if (file.status != "error")
                 myDropzone_view.removeFile(file);
+        });
+        myDropzone_view.on("error", function (file, message) {
+            ShowAlertBoxError('Error!', message);            
+            this.removeFile(file);
         });
 
 
