@@ -148,7 +148,7 @@ namespace ProvenCfoUI.Controllers
                 Filter.FilterType = FilterType;
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
-
+                Filter.UserID = User.UserId;
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
