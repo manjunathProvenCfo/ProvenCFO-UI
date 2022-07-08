@@ -458,15 +458,17 @@
 
         }
         function SelectClick(e) {
-
+         
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
+
+ 
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
 
-                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? (sessionStorage.getItem('SelectedRecords') + ',' + e.id) : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
 
             }
@@ -477,10 +479,12 @@
                 SelectedItems = SelectedItems.filter(function (x) {
                     return x != e.id
                 });
-                sessionStorage.setItem('SelectedRecords', SelectedItems);
-                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
-                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
 
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+                
+                var UnSelectedItems = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? (sessionStorage.getItem('UnSelectedRecords') + ',' + e.id) : e.id;
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+            
 
             }
 
@@ -740,6 +744,17 @@
             var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
+
+            //var unselectedones = "";
+
+            console.log(UnSelectedRecords);
+            //UnSelectedRecords.forEach(id => {
+            //    unselectedones += `${id},`;
+            //});
+
+            //if (unselectedones[unselectedones.length - 1] == ",") {
+            //    unselectedones=unselectedones.replace(/,$/g, "");
+            //}
 
             if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
