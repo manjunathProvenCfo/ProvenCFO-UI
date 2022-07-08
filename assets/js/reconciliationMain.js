@@ -103,17 +103,34 @@ var bindEnableAutomation = function () {
 }
     var EnableSelectedBulkUpdateButton = function () {
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
-    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+        var SelectedItems = sessionStorage.getItem('SelectedRecords');
+        var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
+  
+
     if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
         $("#ibulkupdate").attr('disabled', false);
         $("#ibulkupdate").attr('title', 'Bulk Update');
 
     }
-    else {
-        $("#ibulkupdate").attr('disabled', true);
-        $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
 
-    }
+    else {
+
+        if (unselectedItems == null) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+        if (SelectedItems == "" && unselectedItems.split(",").length < 2) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+
+     }
+
+      
 }
 
 
