@@ -747,21 +747,14 @@
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
 
-            //var unselectedones = "";
 
-            console.log(UnSelectedRecords);
-            //UnSelectedRecords.forEach(id => {
-            //    unselectedones += `${id},`;
-            //});
-
-            //if (unselectedones[unselectedones.length - 1] == ",") {
-            //    unselectedones=unselectedones.replace(/,$/g, "");
-            //}
-
-            if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
+            if (UnSelectedRecords == ''
+                &&
+                (SelectedItems == null && (IsAllSelected != true) || SelectedItems == '') || UnSelectedRecords == null && SelectedItems==null) {
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
+
             if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
@@ -775,12 +768,20 @@
             else {
                 sessionStorage.setItem('Type', 1);
             }
+
             let pdata = {
-                 GLaccount: GLaccount, TrackingCategory: TrackingCategories,
+                GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
-                AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus, Action: Action
+                AgencyID: ClientID,
+                IsAllSelected: IsAllSelected == false ?
+                    (UnSelectedRecords != null && UnSelectedRecords != '' && SelectedItems == '' ||
+                        SelectedItems.split(",").length < UnSelectedRecords.split(",").length) : IsAllSelected,
+                SelectedItems: SelectedItems,
+                UnSelectedRecords: UnSelectedRecords,
+                reconcilationStatus: reconcilationStatus,
+                Action: Action
             };
+
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
                     sessionStorage.removeItem('SelectedRecords');
