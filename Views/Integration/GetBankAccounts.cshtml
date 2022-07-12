@@ -51,8 +51,12 @@
                     <div id="dashboard-actions row">
                         <div class="dz-error-message col-12"></div>
                         @*<button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="submit" title="Update">
-                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
-                            </button>*@
+            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
+        </button>*@
+
+                        <button class="btn btn-falcon-default btn-sm mx-1" id="bankUpdate" type="button" title="Update Bank Account" disabled>
+                            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block" onclick="CheckBankAccount(event);">Update Bank Account</span>
+                        </button>
 
                         @Html.Hidden("AccountingPackageId", (object)@ViewBag.AccountingPackageId, new { @Id = "AccountingPackageId" })
                         @if (ViewBag.AccountingPackageId == 2)
@@ -96,7 +100,7 @@
                             <tr class="btn-reveal-trigger">
                                 <td class="align-middle">
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountID" value="@item.Status" checked="@item.IsActive" onclick="CheckBankAccount(event);" />
+                                        <input class="custom-control-input checkbox-bulk-select-target testt" type="checkbox" id="@item.AccountID" value="@item.AccountID" checked="@item.IsActive" />
                                         <label class="custom-control-label" for="@item.AccountID"></label>
                                         @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
                                             @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
@@ -264,8 +268,8 @@
             }
         }
 
-        $('.checkbox-bulk-select-target').click(function () {
-
+        $('.checkbox-bulk-select-target').click(function () {   
+            $('#bankUpdate').prop('disabled', false);
             if ($(this).is(":checked")) {
 
                 $(this).closest('tr').addClass('bg-300');
@@ -356,10 +360,12 @@
                     });
         }
         var CheckBankAccount = function (e) {
-
-            var IsActive = e.currentTarget.checked;
-            var AccountId = e.currentTarget.attributes["Id"].value;
-            postAjax(apiurl + 'Xero/UpdateBankAccount?AccountId=' + AccountId + '&IsActive=' + IsActive, null, function (data) {
+            //var IsActive = e.currentTarget.checked;
+            //var AccountId = e.currentTarget.attributes["Id"].value;
+            var CheckedAccountId = $(".testt:checked").map(function () { return ($(this).val()); }).get();
+            var UNCheckedAccountId = $(".testt:not(:checked)").map(function () { return ($(this).val()); }).get();
+          
+            postAjax(apiurl + 'Xero/UpdateBankAccountone?CheckedAccountId=' + CheckedAccountId + '&UNCheckedAccountId=' + UNCheckedAccountId, null, function (data) {
                 if (data.resultData === false) {
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
