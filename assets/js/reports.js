@@ -154,7 +154,7 @@ $(function () {
            
             var count = myDropzone_view.files.length;
             if (count > 5) {
-                ShowAlertBoxWarning("Warning", `You can't upload more then five file.`);
+                ShowAlertBoxWarning("Notice", `You can only upload five files at a time.`);
                 myDropzone_view.removeFile(file);
                
             }
