@@ -748,13 +748,16 @@
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
 
 
-            if (UnSelectedRecords == ''
-                &&
-                (SelectedItems == null && (IsAllSelected != true) || SelectedItems == '') || UnSelectedRecords == null && SelectedItems==null) {
+            IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
+            
+            if (
+                ((SelectedItems == null && IsAllSelected != true) || (IsAllSelected != true && SelectedItems == ''))) {
+              
+
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-
+       
             if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
@@ -773,9 +776,7 @@
                 GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
                 AgencyID: ClientID,
-                IsAllSelected: IsAllSelected == false ?
-                    (UnSelectedRecords != null && UnSelectedRecords != '' && SelectedItems == '' ||
-                        SelectedItems.split(",").length < UnSelectedRecords.split(",").length) : IsAllSelected,
+                IsAllSelected: IsAllSelected,
                 SelectedItems: SelectedItems,
                 UnSelectedRecords: UnSelectedRecords,
                 reconcilationStatus: reconcilationStatus,
@@ -1113,6 +1114,16 @@
     <script>
         $(document).ready(function () {
             HidelottieLoader();
+
+            $("#checkbox-bulk-purchases-select").click(function (e) {
+                
+                if (e.target.checked) {
+                    this.setAttribute("isSelected", "true");
+                } else {
+                    this.setAttribute("isSelected","false");
+                }
+                
+            });
         });
 
     </script>
