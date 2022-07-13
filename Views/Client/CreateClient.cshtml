@@ -341,14 +341,8 @@
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
-                                            <select class="form-control">
-                                                <option value="testing">
-                                                    
-                                                    qdwfrerfe-frfr-frfr-frf
-                                                </option>
+                                            @Html.EditorFor(model => model.APIClientID, new { htmlAttributes = new { @class = "form-control" } })
 
-                                            </select>
-                                             
                                             @Html.ValidationMessageFor(model => model.APIClientID, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
