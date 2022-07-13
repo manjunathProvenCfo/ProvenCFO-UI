@@ -29,7 +29,7 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-       
+        
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
@@ -384,7 +384,7 @@ namespace ProvenCfoUI.Controllers
             }
             return listItem;
         }
-       
+        [CheckSession]
         public ActionResult ReconciliationMain()
         {
             try

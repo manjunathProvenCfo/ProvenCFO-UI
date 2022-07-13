@@ -100,8 +100,8 @@
                             <tr class="btn-reveal-trigger">
                                 <td class="align-middle">
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input checkbox-bulk-select-target testt" type="checkbox" id="@item.AccountID" value="@item.AccountID" checked="@item.IsActive" />
-                                        <label class="custom-control-label" for="@item.AccountID"></label>
+                                        <input class="custom-control-input checkbox-bulk-select-target testt" type="checkbox" id="@item.AccountID" value="@item.AccountID" checked="@item.IsActive" onclick="CheckedAccount(this);" />
+                                        <label class="custom-control-label" for="@item.AccountID" ></label>
                                         @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
                                             @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
                                     </div>
@@ -128,7 +128,7 @@
                                         <span class="d-none d-sm-inline-block ml-2" style="color:green">
                                             <i class="fa fa-check"> </i>
                                         </span>
-                                        <button type="button"  class="close" aria-label="Close" style="margin-right:200px;" id=" @item.AccountID" onclick="CancelAccount(event);" >
+                                        <button type="button"  class="close" aria-label="Close" title="Cancel Authentication" style="margin-right:200px;" id=" @item.AccountID" onclick="CancelAccount(event);" >
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     }
@@ -359,12 +359,51 @@
                         window.location.href = '/Client/ClientList'
                     });
         }
+
+        function CheckedAccount(e) {
+            if (e.checked) {
+
+                var uncheck = sessionStorage.getItem("UnCheckedAccounts") != null ? sessionStorage.getItem("UnCheckedAccounts").split(",") : [];
+
+                var updatedUnSelected = uncheck.filter(prev => prev != e.id);
+                sessionStorage.setItem("UnCheckedAccounts", updatedUnSelected);
+                var checked = sessionStorage.getItem("checkedAccounts");
+                if (checked == null||checked=="undefined") {
+
+                    checked = e.id;
+
+
+                } else {
+                    checked += ","+e.id;
+                }
+                sessionStorage.setItem("checkedAccounts", checked);
+            } else {
+                
+                var check = sessionStorage.getItem("checkedAccounts") != null ? sessionStorage.getItem("checkedAccounts").split(",") : [];
+
+                var updatedSelected = check.filter(prev => prev != e.id);
+                sessionStorage.setItem("checkedAccounts", updatedSelected);
+
+                var unChecked = sessionStorage.getItem("UnCheckedAccounts");
+                if (unChecked == null || unChecked=="undefined") {
+
+                    unChecked = e.id;
+
+
+                } else {
+                    unChecked += "," + e.id;
+                }
+
+                sessionStorage.setItem("UnCheckedAccounts", unChecked);
+
+            }
+        }
+
         var CheckBankAccount = function (e) {
             //var IsActive = e.currentTarget.checked;
             //var AccountId = e.currentTarget.attributes["Id"].value;
-            var CheckedAccountId = $(".testt:checked").map(function () { return ($(this).val()); }).get();
-            var UNCheckedAccountId = $(".testt:not(:checked)").map(function () { return ($(this).val()); }).get();
-          
+            var UNCheckedAccountId = sessionStorage.getItem("UnCheckedAccounts");
+            var CheckedAccountId = sessionStorage.getItem("checkedAccounts");
             postAjax(apiurl + 'Xero/UpdateBankAccountone?CheckedAccountId=' + CheckedAccountId + '&UNCheckedAccountId=' + UNCheckedAccountId, null, function (data) {
                 if (data.resultData === false) {
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
