@@ -151,6 +151,7 @@
                 $('select').val("Active");    //edit kie hai
                 $(this).closest('form').find("input[type=text], textarea").val("");
             });
+            HidelottieLoader();
         });
         var ExportFileReq = function (Controller, jAction, rData) {
             if (rData == undefined) rData = "{}";
@@ -208,7 +209,10 @@
         $(document).ready(function () {
             HidelottieLoader();
         });
-
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
 
     </script>
    

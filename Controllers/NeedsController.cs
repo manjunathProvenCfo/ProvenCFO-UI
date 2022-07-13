@@ -21,6 +21,7 @@ namespace ProvenCfoUI.Controllers
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Needs
         [CheckSession]
+       
         public ActionResult NeedsMain()
         {
             try
@@ -28,14 +29,14 @@ namespace ProvenCfoUI.Controllers
                 using (NeedsService objNeeds = new NeedsService())
                 {
                     int AgencyID = 0;
-                    ViewBag.IsEditMode = false;
-                    var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                    var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    ViewBag.IsEditMode = false;
                     var SegmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData;
                     TempData["SegmentsAndTasks"] = SegmentTasks;
                     if (userType != "" && userType == "1")
@@ -107,6 +108,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         NewTasks.DueDate = Convert.ToDateTime(DateTime.ParseExact(Task.dpDueDate, "MM/dd/yyyy", CultureInfo.InvariantCulture));
                     }
+
                     NewTasks.Priority = Task.Priority;
                     NewTasks.Reporter = LoginUserid;
                     NewTasks.Assignee = Task.Assignee;
@@ -114,6 +116,7 @@ namespace ProvenCfoUI.Controllers
                     NewTasks.Labels = Task.Labels;
                     NewTasks.Status = "Active";
                     NewTasks.CreatedBy = LoginUserid;
+                    NewTasks.CreatedDate = Task.CreatedDate;
                     NewTasks.IsDeleted = false;
                     NewTasks.EstimatedHours = Task.EstimatedHours;
                     NewTasks.TaskType = Task.TaskType;

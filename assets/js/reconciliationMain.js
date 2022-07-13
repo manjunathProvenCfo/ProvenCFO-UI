@@ -7,19 +7,19 @@ $(document).ready(function () {
     bindEnableAutomation();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
-    
+
     $(".lastmodified").each(function () {
         var utctime = $(this).find('select').attr("utcdate");
         var ModifiedBy = $(this).find('select').attr("ModifiedBy");
-        
-        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {            
+
+        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
             var localtime = getLocalTime(utctime);
             var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
             $(this).attr("data-original-title", msg);
         }
         else {
             $(this).attr("data-original-title", "No Modification yet.");
-        }        
+        }
     });
 
 
@@ -31,23 +31,26 @@ $(document).ready(function () {
         }
         else {
             let reconciliaitonId = elCheckbox.attr("id");
+           
             showReconciliationChat(reconciliaitonId);
         }
     });
-    $(document).on("click", "#tblreconcilation tr", function (e) {
+    $(document).on("click", "#tblreconcilation tr",async function (e) {
         $("#tblreconcilation tr").removeClass("bg-200");
         $(this).addClass("bg-200");
 
-        if ($('#divChat:visible').length > 0) {
+        if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
             let elComment = $(this).find("#btnComment");
-            showReconciliationChat(elComment.data().id);
+            
+           await showReconciliationChat(elComment.data().id);
         }
     });
 
-    $(document).on("click", "button[id=btnComment]", function (e) {
-        
+    $(document).on("click", "button[id=btnComment]", async function (e) {
+
         //let channelUniqueNameGuid = e.currentTarget.dataset.id;
-        showReconciliationChat(e.currentTarget.dataset.id);
+        
+       await showReconciliationChat(e.currentTarget.dataset.id);
         //$('#divFilter').hide();
         //$('#divFilter').addClass('d-none');
         //$('#divChat').show();
@@ -60,8 +63,9 @@ $(document).ready(function () {
         //    loadChatPage(true, 1);
         //}
     });
-   
-    var showReconciliationChat = function (channelUniqueNameGuid) {
+
+    var showReconciliationChat = async function (channelUniqueNameGuid) {
+        
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
         $('#divBulkUpdate').hide();
@@ -76,9 +80,11 @@ $(document).ready(function () {
         //    loadChatPage(true, 1, true);
         //}
 
-        loadCommentsPage(channelUniqueNameGuid);
-        
+       await loadCommentsPage(channelUniqueNameGuid);
+
     }
+
+    function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
 });
 
 var bindEnableAutomation = function () {
@@ -95,19 +101,36 @@ var bindEnableAutomation = function () {
         }
     });
 }
-var EnableSelectedBulkUpdateButton = function () {
+    var EnableSelectedBulkUpdateButton = function () {
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
-    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+        var SelectedItems = sessionStorage.getItem('SelectedRecords');
+        var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
+  
+
     if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
         $("#ibulkupdate").attr('disabled', false);
         $("#ibulkupdate").attr('title', 'Bulk Update');
-        
+
     }
+
     else {
-        $("#ibulkupdate").attr('disabled', true);
-        $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+
+        if (unselectedItems == null) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+        if (SelectedItems == "" && unselectedItems.split(",").length < 2) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+
+     }
+
       
-    }
 }
 
 
@@ -119,10 +142,10 @@ $(document).ready(function () {
     bindNotInBooksAndBanksCount();
 
     /*bindNotInBooksAndBanksCount1();*/
-   
+
     LoadFilterData();
-   
-   
+
+
     XeroConnectionUpdate();
     var type = sessionStorage.getItem('Type');
     $('#divFilter').hide();
@@ -130,7 +153,7 @@ $(document).ready(function () {
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     if (type != null) {
-        
+
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
@@ -141,20 +164,20 @@ $(document).ready(function () {
             $('#tabNotinBanks').addClass('tabselect');
             sessionStorage.clear();
         }
-      
+
     }
 
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
-       /* window.location.reload();*/
+        /* window.location.reload();*/
     }
-   
+
 
     $('.checkbox-bulk-select-target').click(function () {
-        
+
         if ($(this).is(":checked")) {
-            
+
             $(this).closest('tr').addClass('bg-300');
         }
         else {
@@ -162,9 +185,9 @@ $(document).ready(function () {
         }
     });
     /* checkbox - bulk - purchases - select*/
-   
-    $('.checkbox-bulk-select').change(function () {  
-        if ($(this).is(":checked",true)) {
+
+    $('.checkbox-bulk-select').change(function () {
+        if ($(this).is(":checked", true)) {
 
             $(this).closest('table').addClass('bg-300');
         }
@@ -174,7 +197,7 @@ $(document).ready(function () {
         //$(".checkbox-bulk-select").attr('checked', false);
         //$(this).closest('tr').css("background-color", "#ff0000");
     });
-   
+
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
@@ -268,30 +291,78 @@ $(document).ready(function () {
         if (IsEnableAutomation === false) {
             $("#OnDemandData").attr('disabled', true);
             return;
-        }        
-            $("#Loader").removeAttr("style");
-            var ClientID = $("#ddlclient option:selected").val();
-            var RequestType = "On Demand";
-            var RequestedAtUTC = '';
-            var CurrentStatus = "New";
-            var RequestCompletedAtUTC = '';
-            var Remark = '';
+        }
+        $("#Loader").removeAttr("style");
+        var ClientID = $("#ddlclient option:selected").val();
+        var RequestType = "On Demand";
+        var RequestedAtUTC = '';
+        var CurrentStatus = "New";
+        var RequestCompletedAtUTC = '';
+        var Remark = '';
 
-            var AgencyName = '';
-            var CreatedBy = '';
-            var CreatedDate = '';
+        var AgencyName = '';
+        var CreatedBy = '';
+        var CreatedDate = '';
 
-            var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
-            postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
-                if (response.Message == 'Success') {
-                    setTimeout(() => {
-                        reconcilationonstatusDemand(response.data.Id);
-                    }, 1000);
-                }
+        var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+        postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+            if (response.Message == 'Success') {
+                setTimeout(() => {
+                    reconcilationonstatusDemand(response.data.Id);
+                }, 1000);
+            }
 
-            });
-      
+        });
+
     });
 
+    function LoadFilterData() {
+        var filterData = JSON.parse(sessionStorage.getItem('Filter'));
+        if (filterData) {
+            $('#Filter').css("background-color", "#edf2f9");
+            if (filterData.accounts != '' && filterData.accounts.split(',').length > 0) {
+                $('#filteraccounts').val(filterData.accounts.split(',')).trigger('change');
+            }
+            $("#timepicker2").val(filterData.selectedDate);
+            $("#filterMinAmount").val(filterData.amountMin);
+            $("#filterMaxAmount").val(filterData.amountMax);
+            if (filterData.Bankrule != '' && filterData.Bankrule.split(',').length > 0) {
+                $('#bankrule').val(filterData.Bankrule.split(',')).trigger('change');
+            }
+            //$("#bankrule").val(filterData.Bankrule.split(','));
+            if (filterData.TrackingCategory1 != null && filterData.TrackingCategory1 != '' && filterData.TrackingCategory1.length > 0) {
+                $("#TrackingCategories").val(filterData.TrackingCategory1).trigger('change');
+            }
+            if (filterData.TrackingCategory2 != null && filterData.TrackingCategory2 != '' && filterData.TrackingCategory2.length > 0) {
+                $("#TrackingCategories_1").val(filterData.TrackingCategory2).trigger('change');
+            }
+            if (filterData.FilterType == 0) {
+                $('#rb0').prop('checked', true);
+            }
+            else if (filterData.FilterType == 1) {
+                $('#rb1').prop('checked', true);
+            }
+            else if (filterData.FilterType == 2) {
+                $('#rb2').prop('checked', true);
+            }
+            else if (filterData.FilterType == 3) {
+                $('#rb3').prop('checked', true);
+            }
+
+        }
+
+    }
+
+    function XeroConnectionUpdate() {
+
+        var XConstatus = $('#XeroConnectionStatus');
+        $("#OnDemandData").show();
+        //if (XConstatus.val() == "True") {
+        //    $("#OnDemandData").show();
+        //}
+        //else {
+        //    $("#OnDemandData").hide()
+        //}
+    }
 
 });

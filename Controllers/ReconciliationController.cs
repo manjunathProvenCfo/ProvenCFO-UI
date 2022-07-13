@@ -29,7 +29,7 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-
+        
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
@@ -41,22 +41,16 @@ namespace ProvenCfoUI.Controllers
                 }
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-
-                    //var objResult = objReConcilation.GetReconciliationDataCountAgencyId(AgencyId);
-                    //return View(objResult.ResultData);
-
-                    int AgencyID = 0;
                     ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                     ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                    int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                    }
-
-
+                    }                  
                     if (userType == "1")
                     {
                         var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
@@ -98,25 +92,6 @@ namespace ProvenCfoUI.Controllers
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            //if (Type == "Not in Banks")
-                            //{
-                            //    ViewBag.isvisibleGlAccount = true;
-                            //    //TempData["Action"] = getAction();
-                            //}
-                            //else
-                            //{
-                            //    ViewBag.isvisibleGlAccount = false;
-                            //}
-
-                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            //if (objTCList != null && objTCList.Count > 0)
-                            //{
-                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                            //                                               group p by p.Name into g
-                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                            //    TempData["TrackingCategories"] = TCgroup;
-
-                            //}
                             TempData["BankRule"] = getBankRule();
 
                             TempData["ReconciledStatus"] = getReconciledStatus();
@@ -127,8 +102,6 @@ namespace ProvenCfoUI.Controllers
                             getallAction.ForEach(x => x.ActionName = x.ActionName);
                             ViewBag.isvisibleGlAccount = true;
                             TempData["Action"] = getallAction;
-                            //ViewBag.IsBankRuleVisible = false;
-                            //ViewBag.isvisibleGlAccount = false;
                         }
                         else
                         {
@@ -175,7 +148,7 @@ namespace ProvenCfoUI.Controllers
                 Filter.FilterType = FilterType;
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
-
+                Filter.UserID = User.UserId;
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
@@ -195,7 +168,6 @@ namespace ProvenCfoUI.Controllers
                             TempData["TrackingCategories"] = TCgroup;
                         }
                         TempData["BankRule"] = getBankRule();
-                        //TempData["Action"] = getAction();
                         TempData["ReconciledStatus"] = getReconciledStatus();
                         var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                         getallAction.ForEach(x => x.ActionName = x.ActionName);
@@ -216,13 +188,9 @@ namespace ProvenCfoUI.Controllers
                     }
                     TempData["DistinctAccount"] = getDistincAccount(Filter.AgencyID.Value, Filter.Type);
                 }
-                //TempData["BankRule"] = getBankRule();
-                //TempData["DistinctAccount"] = getDistincAccount(Filter.AgencyID.Value, Filter.Type);
                 TempData["ReconcilationData"] = objResult;
                 Session["ReconcilationData"] = objResult;
-
                 return View("ReconciliationMain", objResult);
-                // return View("ReconciliationMain", objResult.ResultData);
             }
         }
         [CheckSession]
@@ -233,7 +201,6 @@ namespace ProvenCfoUI.Controllers
                 List<string> Ids;
                 if (BPParameter.IsAllSelected == true)
                 {
-                    //var UnselectedIds = BPParameter.UnSelectedRecords.Split(',');
                     var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
                     var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
                     if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
@@ -363,32 +330,6 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
-        //public ActionResult ReconciliationMain()
-        //{
-        //    try
-        //    {
-
-        //        using (ReconcilationService objReConcilation = new ReconcilationService())
-        //        {
-        //            int AgencyID = 0;
-        //            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-        //            if (UserPref != null && UserPref.Count() > 0)
-        //            {
-        //                var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-        //                AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-        //            }
-        //            var objResult = objReConcilation.GetReconciliation(AgencyID, NotInBank, 0);
-        //            return View();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
-        //        throw ex;
-        //    }
-        //}
         public static List<SelectListItem> getBankRule()
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -414,27 +355,6 @@ namespace ProvenCfoUI.Controllers
             listItem.Add(item4);
             return listItem;
         }
-        //public static List<SelectListItem> getAction()
-        //{
-        //    List<SelectListItem> listItem = new List<SelectListItem>();
-        //    SelectListItem item = new SelectListItem();
-        //    item.Text = "Marked as reconciled";
-        //    item.Value = "1";
-        //    listItem.Add(item);
-        //    SelectListItem item1 = new SelectListItem();
-        //    item1.Text = "In Transit";
-        //    item1.Value = "2";
-        //    listItem.Add(item1);
-        //    SelectListItem item2 = new SelectListItem();
-        //    item2.Text = "Match to existing";
-        //    item2.Value = "3";
-        //    listItem.Add(item2);
-        //    SelectListItem item3 = new SelectListItem();
-        //    item3.Text = "Researching";
-        //    item3.Value = "4";
-        //    listItem.Add(item3);
-        //    return listItem;
-        //}
         public static List<SelectListItem> getReconciledStatus()
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
@@ -464,6 +384,7 @@ namespace ProvenCfoUI.Controllers
             }
             return listItem;
         }
+        [CheckSession]
         public ActionResult ReconciliationMain()
         {
             try
@@ -471,20 +392,17 @@ namespace ProvenCfoUI.Controllers
                 string RecordsType = NotInBooks;
                 ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
-
-                //  return View();
                 using (ReconcilationService objReConcilation = new ReconcilationService())
-                {
+                {                 
                     int AgencyID = 0;
-                    ViewBag.IsStaffUser = false;
-                    var userType = Convert.ToString(Session["UserType"]);
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-
+                    var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                     }
+                    ViewBag.IsStaffUser = false;            
                     var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                     getallAction.ForEach(x => x.ActionName = x.ActionName);
 
@@ -518,35 +436,15 @@ namespace ProvenCfoUI.Controllers
                                                                        select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
                             TempData["TrackingCategories"] = TCgroup;
                         }
-
                         if (userType == "1")
                         {
                             ViewBag.IsStaffUser = true;
                             ViewBag.IsBankRuleVisible = true;
-                            //if (RecordsType == "Not in Banks")
-                            //{
-                            //    ViewBag.isvisibleGlAccount = true;
-                            //    //TempData["Action"] = getAction();
-                            //}
-                            //else
-                            //{
-                            //    ViewBag.isvisibleGlAccount = false;
-                            //}
-                            //List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
-                            //if (objTCList != null && objTCList.Count > 0)
-                            //{
-                            //    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
-                            //                                               group p by p.Name into g
-                            //                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
-                            //    TempData["TrackingCategories"] = TCgroup;
-                            //}
                             TempData["BankRule"] = getBankRule();
-
                             TempData["ReconciledStatus"] = getReconciledStatus();
                         }
                         else
                         {
-
                             ViewBag.IsBankRuleVisible = false;
                         }
                         TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordsType);
@@ -589,14 +487,9 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
-                var AgencyID = 0;
+                
+                int AgencyID = Convert.ToInt32(AccountingPackageInstance.Instance.ClientModel.Id);
                 var LoginUserid = Convert.ToString(Session["UserId"].ToString());
-                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
-                if (UserPref != null && UserPref.Count() > 0)
-                {
-                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
-                    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
-                }
                 XeroReconcilationDataOnDemandRequestVM xero = new XeroReconcilationDataOnDemandRequestVM();
                 model.RequestType = "On Demand";
                 model.RequestedAtUTC = xero.RequestedAtUTC;
@@ -756,9 +649,6 @@ namespace ProvenCfoUI.Controllers
                     input.HtmlorCsvString = HTMLresult.Trim();
                     input.CompanyName = agencyName;
                     input.CompanyId = agencyId;
-
-                    //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
-
                     using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
                     {
                         var response = await service.XeroExtractionofManualImportedDatafromHtml(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
@@ -804,8 +694,6 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
-
-
         }
 
         [CheckSession]
@@ -834,7 +722,6 @@ namespace ProvenCfoUI.Controllers
                     input.Type = "Unreconciled";
                     input.AccountName = accountName;
                     //var result =  service.XeroExtractionofManualImportedDatafromHtml(input).ResultData;
-
                     using (var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(50000)))
                     {
                         var response = await service.QuickBooksExtractionofManualImportedDatafromCSV(input, tokenSource.Token).ConfigureAwait(false); //  await httpClient.GetAsync(uri, tokenSource.Token);                                           
@@ -880,12 +767,7 @@ namespace ProvenCfoUI.Controllers
                     Message = ex.Message
                 }, JsonRequestBehavior.AllowGet);
             }
-
-
         }
-
-
-
         [CheckSession]
         [HttpPost]
         public async Task<JsonResult> UploadReconcilationAttachmentAsync(HttpPostedFileBase file, string ReconciliationId, int AgencyId)
@@ -906,7 +788,6 @@ namespace ProvenCfoUI.Controllers
                         objComment.AgencyId = AgencyId;
                         ReconciliationCommentId = service.InsertReconcilationCommentsDetailsForAttachments(objComment).resultData;
                     }
-
                     ReconciliationCommentAttachments newfile = new ReconciliationCommentAttachments();
                     List<ReconciliationCommentAttachments> newfiles = new List<ReconciliationCommentAttachments>();
                     Guid objGuid = Guid.NewGuid();
@@ -916,7 +797,6 @@ namespace ProvenCfoUI.Controllers
                     string Folder_path = Server.MapPath("~/UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId);
                     string File_path_scr = "../UploadedFiles/ReconciliationCommentsAttachments/" + ReconciliationId + "/" + ReconciliationCommentId + "/" + _FileName;
                     FileInfo fi = new FileInfo(_FileName);
-
                     newfile.ReconciliationId_ref = ReconciliationId;
                     newfile.FileType = fi.Extension;
                     newfile.FileName = _FileName;
@@ -928,7 +808,6 @@ namespace ProvenCfoUI.Controllers
                     using (ReconcilationService service = new ReconcilationService())
                     {
                         await service.InsertReconciliationCommentAttachmentDetails(newfiles);
-
                     }
                     Common.SaveStreamAsFile(Folder_path, file.InputStream, _FileName);
 
@@ -938,8 +817,6 @@ namespace ProvenCfoUI.Controllers
                 {
                     return Json(new { File = "", Status = "Failur", Message = "No files are attached.." }, JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             catch (Exception)
             {
@@ -951,7 +828,6 @@ namespace ProvenCfoUI.Controllers
                     Message = "Error while sending attachment."
                 }, JsonRequestBehavior.AllowGet);
             }
-
         }
         [CheckSession]
         [HttpPost]

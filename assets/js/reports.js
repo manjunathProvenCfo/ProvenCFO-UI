@@ -24,8 +24,8 @@ var isReceiveQuarterlyReportEnable = false;
 //var $formFileUploader;
 //var $formUploader;
 Dropzone.autoDiscover = false;
-const AllowdedMimeTypes = "image/*,application/pdf,text/plain,application/json,application/csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/zip,application/x-7z-compressed,application/x-rar-compressed,application/octet-stream,application/zip,application/x-zip-compressed,multipart/x-zip";
 
+const AllowdedMimeTypes = "image/*,application/pdf,text/plain,application/json,application/csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/zip,application/x-7z-compressed,application/x-rar-compressed,application/octet-stream,application/zip,application/x-zip-compressed,multipart/x-zip";
 $(function () {
     $reportYears = $("#reportYears");
     $divPeriods = $("div[id='divPeriod']");
@@ -113,8 +113,9 @@ $(function () {
         }
 
         $attachmentContainer.html("");
+        $attachmentContainer.empty();
         //Bind uploaer popup
-        bindUploaderAttachments(agencyId, year, period);
+        //bindUploaderAttachments(agencyId, year, period); // This is no more needed
 
         //templateHTML
         var previewNode = document.querySelector("#template");
@@ -127,7 +128,7 @@ $(function () {
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
             url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
-            maxFilesize: 40,
+            maxFilesize: 20,          
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 20,
@@ -142,13 +143,24 @@ $(function () {
                 if (response != null && response.Status == 'Success') {
                     prepareAndPrependUploaderAttachment(response.File);
                 }
+            },
+            Error: function (response) {
+                alert(response);
             }
         });
 
         //view Page
         myDropzone_view.on("addedfile", function (file) {
+           
+            var count = myDropzone_view.files.length;
+            if (count > 5) {
+                ShowAlertBoxWarning("Notice", `You can only upload five files at a time.`);
+                myDropzone_view.removeFile(file);
+               
+            }
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
+               
                 let attr = $(obj).attr("src");
                 if (isEmptyOrBlank(attr)) {
                     $(obj).parent('.preview').remove();
@@ -192,6 +204,10 @@ $(function () {
         myDropzone_view.on("complete", function (file) {
             if (file.status != "error")
                 myDropzone_view.removeFile(file);
+        });
+        myDropzone_view.on("error", function (file, message) {
+            ShowAlertBoxError('Error!', message);            
+            this.removeFile(file);
         });
 
 
@@ -521,8 +537,8 @@ var monthlySummaryOnClick = function (e, id) {
     let year = data.year;
     let period = data.reportPeriod;
 
-    postAjax(`/Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}&agencyId=${agencyId}`, null, function (response) {
-        if (response.message == "success") {
+    postAjax(apiurl + `Reports/MakeItMonthlySummary?Id=${parseInt(id)}&Year=${parseInt(year)}&PeriodType=${period}&agencyId=${agencyId}`, null, function (response) {     
+        if (response.message == "Success") {
             ShowAlertBoxSuccess("", "Report has been marked as Default report!")
             bindReports(period, agencyId);
         }
@@ -541,4 +557,49 @@ var renameReportOnClick = function (e, id, fileName) {
     $("#hdnId").val(id);
     $("#hdnPeriod").val(data.reportPeriod);
     $("#txtNewFileName").val('');
+}
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Reports/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        sessionStorage.setItem("LastMailSent", response.resultData);
+    });
+
+}
+$(function () {
+
+    $("#email").click(function () {
+        var url = window.location.host;
+        var ClientName = $("#ddlclient option:selected").text();
+        var ClientId = $("#ddlclient option:selected").val();
+        getClientDate(ClientName);
+        ClientName = encodeURIComponent(ClientName);
+        var LastMailSent = sessionStorage.getItem("LastMailSent");
+        getAjax(`/Reports/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+
+            }
+        });
+
+    });
+});
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Reports/sendReportEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
 }

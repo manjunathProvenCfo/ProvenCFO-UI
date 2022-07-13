@@ -79,7 +79,11 @@ namespace Proven.Service
         public XeroTrackingCategoriesVM CreateXeroTrackingCatogories(List<XeroTrackingCategoriesVM> TrackingCategories)
         {
             return PostAsync<XeroTrackingCategoriesVM, List<XeroTrackingCategoriesVM>>("Xero/CreateXeroTracking", TrackingCategories).Result;
-        }      
+        }
+        public async Task<ReturnModel> UpdatePlaidBankAccountDetails(string AccountId,string access_token,bool PlaidConnectionStatus)
+        {
+            return await PostAsync<ReturnModel>($"Xero/UpdatePlaidBankAccountDetails?AccountId={AccountId}&access_token={access_token}&PlaidConnectionStatus={PlaidConnectionStatus}");
+        }
         public void Dispose()
         {
             Dispose(true);

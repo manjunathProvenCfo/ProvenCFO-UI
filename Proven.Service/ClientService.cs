@@ -125,7 +125,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId,int ThirdPartyAccountingApp_ref,Int64 QuickBooksCompanyId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId,int ThirdPartyAccountingApp_ref,Int64 QuickBooksCompanyId,bool Plaid_Enabled)
         {
             var form = new Dictionary<string, object>
             {
@@ -157,7 +157,9 @@ namespace Proven.Service
                 {"DashboardURLId",DashboardURLId  },
                 {"ReportId",ReportId  },
                 {"ThirdPartyAccountingApp_ref",ThirdPartyAccountingApp_ref},
-                {"QuickBooksCompanyId",QuickBooksCompanyId  }
+                {"QuickBooksCompanyId",QuickBooksCompanyId  },
+                {"Plaid_Enabled",Plaid_Enabled  }
+
             };
 
             //content = new StringContent(JsonConvert.SerializeObject(from), Encoding.UTF8, "application/json");
@@ -179,7 +181,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId, string IncludedAccountNumbers,string ExcludedAccountNumbers,int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId, string IncludedAccountNumbers,string ExcludedAccountNumbers,int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled)
         {
             var form = new Dictionary<string, object>
             {
@@ -209,7 +211,8 @@ namespace Proven.Service
                 {"IncludedAccountNumbers",IncludedAccountNumbers  },
                 {"ExcludedAccountNumbers",ExcludedAccountNumbers  },
                 {"ThirdPartyAccountingApp_ref",ThirdPartyAccountingApp_ref},
-                {"QuickBooksCompanyId",QuickBooksCompanyId}
+                {"QuickBooksCompanyId",QuickBooksCompanyId},
+                {"Plaid_Enabled", Plaid_Enabled }
 
                
                 //{"PhoneNumber",PhoneNumber },

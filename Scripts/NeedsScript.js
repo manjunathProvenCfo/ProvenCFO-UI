@@ -43,7 +43,7 @@ $(document).ready(function () {
     var myParam = location.search.split('yes=')[1];
 
     if (myParam == "1") {
-        $("#email").show(); 
+        $("#email").show();
     }
     //view Page
     myDropzone_view.on("addedfile", function (file) {
@@ -158,54 +158,56 @@ $(document).ready(function () {
     getAgencyMembersList(ClientID);
 
     $("#btnCreateNewTicket").click(function (e) {
-       
-            var TaskType = '';//$('#ddlTaskType').val();
-            var TaskTitle = $('#txtTaskTitle').val();
-            var Description = tinyMCE.activeEditor.getContent();
-            //var Assignee = '';//$('#ddlAssignee').val();
-            var Priority = 'medium';//$('#ddlPriority').val();
-            var dpStartDate = '';//$('#dpStartDate').val();
-            var dpEndDate = '';//$('#dpEndDate').val();
-            var dpDueDate = '';//$('#dpDueDate').val();
-            var EstimatedHours = '';//$('#txtEstimatedHours').val();
-            var Labels = $('#divTag span').map(function (i, opt) {
-                return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
-            }).toArray().join(', ');
-            var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
-                return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
-            }).toArray().join(', ');
 
-            var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
-            $.ajax({
+        var TaskType = '';//$('#ddlTaskType').val();
+        var TaskTitle = $('#txtTaskTitle').val();
+        var Description = tinyMCE.activeEditor.getContent();
+        //var Assignee = '';//$('#ddlAssignee').val();
+        var Priority = 'medium';//$('#ddlPriority').val();
+        var dpStartDate = '';//$('#dpStartDate').val();
+        var dpEndDate = '';//$('#dpEndDate').val();
+        var dpDueDate = '';//$('#dpDueDate').val();
+        var EstimatedHours = '';//$('#txtEstimatedHours').val();
+        //var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
+        //var UTCdate = getUTCDateTime(new Date(CreatedDate));
+        var Labels = $('#divTag span').map(function (i, opt) {
+            return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
+        }).toArray().join(', ');
+        var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
+            return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
+        }).toArray().join(', ');
 
-                type: "POST",
-                url: "/Needs/CreatNewTask",
-                data: JSON.stringify({ Task: pdata }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    if (response.Message == 'Success') {
-                        window.location.reload();
-                        $('.close-circle').click();
-                        $('.modal-backdrop').remove();
+        var pdata = { TaskTitle: TaskTitle, TaskDescription: Description, Assignee: Assignee, Priority: Priority, dpStartDate: dpStartDate, dpEndDate: dpEndDate, dpDueDate: dpDueDate, EstimatedHours: EstimatedHours, TaskType: TaskType, Labels: Labels };
+        $.ajax({
+
+            type: "POST",
+            url: "/Needs/CreatNewTask",
+            data: JSON.stringify({ Task: pdata }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.Message == 'Success') {
+                    window.location.reload();
+                    $('.close-circle').click();
+                    $('.modal-backdrop').remove();
+                }
+                else {
+                    if (response.Message == 'Exist') {
+                        ShowAlertBox('Required!', response.Message, 'warning');
                     }
                     else {
-                        if (response.Message == 'Exist') {
-                            ShowAlertBox('Required!', response.Message, 'warning');
-                        }
-                        else {
-                            ShowAlertBox('Exist!', response.Message, 'warning');
+                        ShowAlertBox('Exist!', response.Message, 'warning');
 
-                        }
                     }
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
                 }
-            });
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
     });
     $('#btnCancelComments').click(function (e) {
         $('#txtComments').val('');
@@ -230,7 +232,7 @@ $(document).ready(function () {
         $('#divEditDescription').hide();
     });
     $('#kanband-create-new-btn').click(function (e) {
-
+        var createUTCDate = new Date();
         tinymce.get("txtDescription").getContent()
         tinymce.get("txtDescription").setContent("");
         tinyMCE.activeEditor.setContent("");
@@ -250,13 +252,12 @@ $(document).ready(function () {
 
         });
         $('#txtTaskTitle').val('');
+        //$('#createNewtask_Date').text(getUTCDateTime(createUTCDate));
         $('#previews').empty();
 
     });
     $('.kanban-item-card').click(function (e) {
-
         var TaskID = 0;
-
         var elements = e.currentTarget.children[0].children;
         ClearViewPage();
         $.each(elements, function (key, value) {
@@ -273,6 +274,8 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.Message == 'Success') {
+                    let taskCreationDate = response.Task.CreatedDate.replaceAll('/Date', '').replaceAll('/', '').replaceAll('(', '').replaceAll(')', '');
+                    let UTCdate = getUTCDateTime(new Date(Number(taskCreationDate)));
                     if (response.Task != null) {
                         $('#kanban-modal-label-title').html(response.Task.TaskTitle);
                         // setTimeout(function () {
@@ -286,6 +289,7 @@ $(document).ready(function () {
 
                         //}, 1000); 
                         $('#Reporter').html(response.Task.ReporterName);
+                        $('#createNewtask_DateOpen').text(UTCdate);
                         addMembersOnviewLoad(response.Task.KanbanAssigneesList);
                         addAttachmentOnviewLoad(response.Task.KanbanAttachments, true, true);
                         addcommentsList(response.Task.KanbanComments);
@@ -387,7 +391,7 @@ function RemoveFile(e) {
     });
 }
 //function DeleteNeedsCard(TaskId) {
-   
+
 //    swal({
 //        title: "Are you sure?",
 //        text: "Do you really want to delete this Card?",
@@ -400,11 +404,11 @@ function RemoveFile(e) {
 //    },
 
 //        function () {
-           
+
 //            $.ajax({
 //                type: "POST",
 //                url: "/Needs/DeleteNeedsCard?TaskId=${TaskId}",
-                
+
 //            })
 //                .done(function (data) { 
 //                    sweetAlert
@@ -418,21 +422,21 @@ function RemoveFile(e) {
 //                            });
 
 //                })
-                
+
 //        });
 //}
-var DeleteNeedsCard = function ( TaskId) {
- 
+var DeleteNeedsCard = function (TaskId) {
+
     ShowConfirmBoxWarning("Are you sure?", "Do you really want to remove this Card?", "Yes, remove it!", function (isConfirmed) {
         if (isConfirmed == false)
             return;
-       
+
         postAjax(`/Needs/DeleteNeedsCard?TaskId=${TaskId}`, null, function (response) {
             if (response.Status == "true") {
                 ShowAlertBoxSuccess("", "card has been removed successfully!")
-               
+
             }
-           
+
         });
         window.location.reload();
     });
@@ -913,7 +917,7 @@ function addComment(data, UserFullName) {
     var commentobj = $('#divCommantsList');
     if (commentobj != null) {
         var profilePic = data.UserProfilePic != undefined && data.UserProfilePic != null && data.UserProfilePic != '' ? data.UserProfilePic : '../assets/img/team/avatar.png';
-        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" onerror="imgError(this);" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName +': </a>'+ data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
+        var commentHTMLelement = '<div class="media mb-3"> <a href="#"><div class="avatar avatar-l"><img class="rounded-circle" src="' + profilePic + '" alt="" onerror="imgError(this);" /></div></a><div class="media-body ml-2 fs--1"><p class="mb-1 bg-200 rounded-soft p-2"><a class="font-weight-semi-bold" href="#">' + UserFullName + ': </a>' + data.CommentText + '</p><a href="#!">Like</a> &bull; ' + data.CommentDuration + ' </div></div>';
         commentobj.prepend(commentHTMLelement);
         $('#txtComments').val('');
     }
@@ -1128,7 +1132,7 @@ function checkAttachment1() {
     }
     else
         $("#kanban-modal-open").modal('hide');
-   
+
 }
 function CancelForCreate() {
     $("#kanban-modal-new").modal('hide');
@@ -1136,14 +1140,14 @@ function CancelForCreate() {
 $(function () {
 
     $("#email").click(function () {
-       
+
         var url = window.location.href;
         let totalTask = 0;
         var ClientId = $("#ddlclient option:selected").val();
         var ClientName = $("#ddlclient option:selected").text();
         getClientDate(ClientName);
         ClientName = encodeURIComponent(ClientName);
-         $("#lblTotalTasksCount").text(totalTask);
+        $("#lblTotalTasksCount").text(totalTask);
         /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
         getAjax(`/Needs/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&totalTask=${totalTask}&sentdate=${text}`, null, function (response) {
             if (response.Status == 'Success') {
@@ -1185,4 +1189,21 @@ function sendMail() {
     postAjaxSync(apiurl + `Needs/sendNeedEmail`, JSON.stringify(pdata), function (response) {
         ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
     });
+}
+
+function getUTCDateTime(date) {
+
+    var dt = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var seconds = date.getSeconds()
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = month + '/' + dt + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+    return strTime;
 }

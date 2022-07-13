@@ -310,6 +310,7 @@
                 }
 
             });
+            HidelottieLoader();
         });
         var ValidateRole = function () {
             
@@ -425,6 +426,10 @@
         $(document).ready(function () {
             HidelottieLoader();
         });
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
 
     </script>
 

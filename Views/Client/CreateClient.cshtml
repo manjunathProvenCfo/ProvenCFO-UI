@@ -20,6 +20,8 @@
     }
 }
 
+
+
 <script>
     // document.getElementById("clientExist").style.display = "none";
 </script>
@@ -45,7 +47,7 @@
             @if (Model.Id == null || Model.Id == 0)
 
             {
-                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client </h3>
+                <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Create Client</h3>
             }
             else
             {
@@ -61,7 +63,6 @@
                                 <div class="input-group input-group-sm">
                                     <select class="custom-select cus" aria-label="Bulk actions">
                                         <option selected="">Bulk actions</option>
-
                                         <option value="Delete">Delete</option>
                                         <option value="Archive">Archive</option>
                                     </select>
@@ -186,21 +187,32 @@
                                     }
                                     else
                                     {
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email">Enable data Sync</label>
-                                        </div>
-                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            <div class="custom-control custom-switch custom-control-inline  mr-0">
-                                                @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
-
-                                                <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
+                                        <div class="row align-items-center form-group">
+                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                                <label for="split-login-email">Enable data Sync</label>
                                             </div>
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                                <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                                    @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input" })
 
+                                                    <label class="custom-control-label" for="EnableAutomation">Yes, Enable data Sync</label>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    </div>
                                     }
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email">Enable Plaid</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        <div class="custom-control custom-switch custom-control-inline  mr-0">
+                                            @Html.CheckBoxFor(x => x.Plaid_Enabled, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="Plaid_Enabled">Yes, Enable Plaid</label>
+                                        </div>
 
+                                    </div>
+                                </div>
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email">Accounting Package</label>
@@ -328,7 +340,9 @@
                                             <label for="split-login-email" class="mb-0"> API Client ID</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
                                             @Html.EditorFor(model => model.APIClientID, new { htmlAttributes = new { @class = "form-control" } })
+
                                             @Html.ValidationMessageFor(model => model.APIClientID, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -348,7 +362,8 @@
                                                 <label for="split-login-email" class="mb-0"> Xero ID</label>
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" style="cursor:pointer;"><path d="M10 16q-.625 0-1.062-.438Q8.5 15.125 8.5 14.5t.438-1.062Q9.375 13 10 13t1.062.438q.438.437.438 1.062t-.438 1.062Q10.625 16 10 16Zm0-4.5q-.625 0-1.062-.438Q8.5 10.625 8.5 10t.438-1.062Q9.375 8.5 10 8.5t1.062.438q.438.437.438 1.062t-.438 1.062q-.437.438-1.062.438ZM10 7q-.625 0-1.062-.438Q8.5 6.125 8.5 5.5t.438-1.062Q9.375 4 10 4t1.062.438q.438.437.438 1.062t-.438 1.062Q10.625 7 10 7Z" /></svg>
                                                 @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -511,6 +526,11 @@
         font-size: 1.2em !important;
         font-weight: bold !important;
         text-align: left !important;
+    }
+    .ClientXeroIdTextBox {
+        display: inline !important;
+        width: 92% !important;
+        user-select: none;
     }
 </style>
 

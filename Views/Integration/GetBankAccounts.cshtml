@@ -54,6 +54,10 @@
             <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Update</span>
         </button>*@
 
+                        <button class="btn btn-falcon-default btn-sm mx-1" id="bankUpdate" type="button" title="Update Bank Account" disabled>
+                            <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block" onclick="CheckBankAccount(event);">Update Bank Account</span>
+                        </button>
+
                         @Html.Hidden("AccountingPackageId", (object)@ViewBag.AccountingPackageId, new { @Id = "AccountingPackageId" })
                         @if (ViewBag.AccountingPackageId == 2)
                         {
@@ -84,44 +88,73 @@
                             <th class="sort pr-1 align-middle" width="15%">Account Number</th>
                             <th class="sort pr-1 align-middle" width="10%">Type</th>
                             <th class="sort pr-1 align-middle" width="10%">Status</th>
+                            <th class="sort pr-1 align-middle" width="10%">Actions</th>
+
 
                         </tr>
                     </thead>
                     <tbody id="purchases">
-                        
-                            @foreach (var item in Model)
-                            {
-                                <tr class="btn-reveal-trigger">
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.AccountID" value="@item.Status" checked="@item.IsActive" onclick="CheckBankAccount(event);"/>
-                                            <label class="custom-control-label" for="@item.AccountID"></label>
-                                            @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
-                            @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.BankAccountNumber)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Type)
-                                    </td>
-                                    <td class="align-middle">
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                </tr>
-                            }
-                       
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="btn-reveal-trigger">
+                                <td class="align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select-target testt" type="checkbox" id="@item.AccountID" value="@item.AccountID" checked="@item.IsActive" onclick="CheckedAccount(this);" />
+                                        <label class="custom-control-label" for="@item.AccountID" ></label>
+                                        @*@Html.HiddenFor(modelItem => item.ExcludedAccountNumbers, new { @id = "hidExcludedAccountNumbers" })
+                                            @Html.HiddenFor(modelItem => item.IncludedAccountNumbers, new { @id = "hidIncludedAccountNumbers" })*@
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.BankAccountNumber)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td class="align-middle">
+
+                                    @if (item.PlaidConnectionStatus == true && item.access_token != "")
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" disabled title="Plaid Authentication" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
+                                            <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                        </button>
+                                        <span class="d-none d-sm-inline-block ml-2" style="color:green">
+                                            <i class="fa fa-check"> </i>
+                                        </span>
+                                        <button type="button"  class="close" aria-label="Close" title="Cancel Authentication" style="margin-right:200px;" id=" @item.AccountID" onclick="CancelAccount(event);" >
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="plaidAccount" type="button" title="Plaid Authentication" data-toggle="modal" data-target="#PlaidModal" onclick="getLinkToken('@item.AccountID');">
+                                            <span class="fa fa-edit" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                        </button>
+                                        <span class="d-none d-sm-inline-block ml-2" style="color:orangered">
+                                            <i class="fa fa-minus-circle"> </i>
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
                     </tbody>
 
                 </table>
             </div>
+
         </div>
     </div>
+
 }
+@Html.Partial("_PladLoginPartial", true)
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script>
@@ -132,7 +165,7 @@
 
             }, 2000);
             $('#checkbox-bulk-purchases-select').parent().addClass("d-none");
-
+            HidelottieLoader();
         });
         //$(document).ready(function () {
         //    EnableSelectedBulkUpdateButton();
@@ -140,13 +173,13 @@
 
 
         function XeroConnectionUpdate() {
-         
+
             var XConstatus = $('#XeroConnectionStatus');
             var XMessage = $('#XeroStatusMessage');
             var XStatus = $('#XeroStatus');
             var AccountingPackageId = $('#AccountingPackageId').val();
             if (XConstatus.val() == "True") {
-               
+
                 if (AccountingPackageId != undefined && AccountingPackageId != null && AccountingPackageId == 2) {
                     XStatus.text("QuickBooks connected");
                     AccountingPackage = "QuickBooks";
@@ -165,17 +198,18 @@
                     XStatus.text('Error Connecting to QuickBooks ');
                 }
                 else {
-                   
+
                     XStatus.text('Error Connecting to Xero');
                 }
                 XStatus.css('color', 'red');
                 $('#btnSync').hide()//prop('disabled', true);
                 // $('#spanSync').prop('disabled', true);
+                HidelottieLoader();
             }
         }
 
         function AgencyDropdownPartialViewChange() {
-            
+
 
             ShowlottieLoader();
             setTimeout(function () {
@@ -205,8 +239,6 @@
             });
         }
         function XeroBankAccountSync() {
-            debugger;
-
             ShowlottieLoader();
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Integration/GetXeroBankAccountSync?ClientID=' + ClientID, null, function (data) {
@@ -214,12 +246,11 @@
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
                 else {
-                    debugger;
                     ShowAlertBoxSuccess("Success!", "Bank Accounts synced with " + AccountingPackage + " successfully.", function () { window.location.reload(); });
                 }
 
             });
-            
+
         }
 
         var EnableSelectedBulkUpdateButton = function () {
@@ -237,8 +268,8 @@
             }
         }
 
-        $('.checkbox-bulk-select-target').click(function () {
-
+        $('.checkbox-bulk-select-target').click(function () {   
+            $('#bankUpdate').prop('disabled', false);
             if ($(this).is(":checked")) {
 
                 $(this).closest('tr').addClass('bg-300');
@@ -328,11 +359,52 @@
                         window.location.href = '/Client/ClientList'
                     });
         }
+
+        function CheckedAccount(e) {
+            if (e.checked) {
+
+                var uncheck = sessionStorage.getItem("UnCheckedAccounts") != null ? sessionStorage.getItem("UnCheckedAccounts").split(",") : [];
+
+                var updatedUnSelected = uncheck.filter(prev => prev != e.id);
+                sessionStorage.setItem("UnCheckedAccounts", updatedUnSelected);
+                var checked = sessionStorage.getItem("checkedAccounts");
+                if (checked == null||checked=="undefined") {
+
+                    checked = e.id;
+
+
+                } else {
+                    checked += ","+e.id;
+                }
+                sessionStorage.setItem("checkedAccounts", checked);
+            } else {
+                
+                var check = sessionStorage.getItem("checkedAccounts") != null ? sessionStorage.getItem("checkedAccounts").split(",") : [];
+
+                var updatedSelected = check.filter(prev => prev != e.id);
+                sessionStorage.setItem("checkedAccounts", updatedSelected);
+
+                var unChecked = sessionStorage.getItem("UnCheckedAccounts");
+                if (unChecked == null || unChecked=="undefined") {
+
+                    unChecked = e.id;
+
+
+                } else {
+                    unChecked += "," + e.id;
+                }
+
+                sessionStorage.setItem("UnCheckedAccounts", unChecked);
+
+            }
+        }
+
         var CheckBankAccount = function (e) {
-           
-            var IsActive = e.currentTarget.checked;
-            var AccountId = e.currentTarget.attributes["Id"].value;
-            postAjax(apiurl + 'Xero/UpdateBankAccount?AccountId=' + AccountId + '&IsActive=' + IsActive, null, function (data) {
+            //var IsActive = e.currentTarget.checked;
+            //var AccountId = e.currentTarget.attributes["Id"].value;
+            var UNCheckedAccountId = sessionStorage.getItem("UnCheckedAccounts");
+            var CheckedAccountId = sessionStorage.getItem("checkedAccounts");
+            postAjax(apiurl + 'Xero/UpdateBankAccountone?CheckedAccountId=' + CheckedAccountId + '&UNCheckedAccountId=' + UNCheckedAccountId, null, function (data) {
                 if (data.resultData === false) {
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
@@ -342,7 +414,23 @@
 
             });
         }
-      
+
+        var CancelAccount = function (e) {
+            var AccountId = e.currentTarget.attributes["Id"].value;
+            postAjax(apiurl + 'Xero/UpdatePlaidConnectionStatus?AccountId=' + AccountId , null, function (data) {
+                if (data.resultData === false) {
+                    ShowAlertBoxError("Error", "Can't Clear Plaid Authentication.", function () { window.location.reload(); });
+                }
+                else {
+                    ShowAlertBoxSuccess("Success!", " Clear Plaid Authentication.", function () { window.location.reload(); });
+                }
+
+            });
+        }
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 
 }

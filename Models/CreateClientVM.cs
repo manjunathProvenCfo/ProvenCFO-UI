@@ -78,6 +78,8 @@ namespace ProvenCfoUI.Models
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
         public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }
+        public bool Plaid_Enabled { get; set; }
+
 
     }
 }

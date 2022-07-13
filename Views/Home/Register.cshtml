@@ -177,6 +177,7 @@
             if (email != null && email != '') {
                 $('#txtEmail').attr("disabled", "disabled");
             }
+            HidelottieLoader();
         });
     </script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -206,6 +207,10 @@
                     }
                 });
         }
+        window.onerror = function (e) {
+            console.log(e);
+            HidelottieLoader();
+        };
     </script>
 }
 
