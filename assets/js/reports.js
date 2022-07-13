@@ -24,8 +24,8 @@ var isReceiveQuarterlyReportEnable = false;
 //var $formFileUploader;
 //var $formUploader;
 Dropzone.autoDiscover = false;
-const AllowdedMimeTypes = "image/*,application/pdf,text/plain,application/json,application/csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/zip,application/x-7z-compressed,application/x-rar-compressed,application/octet-stream,application/zip,application/x-zip-compressed,multipart/x-zip";
 
+const AllowdedMimeTypes = "image/*,application/pdf,text/plain,application/json,application/csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/zip,application/x-7z-compressed,application/x-rar-compressed,application/octet-stream,application/zip,application/x-zip-compressed,multipart/x-zip";
 $(function () {
     $reportYears = $("#reportYears");
     $divPeriods = $("div[id='divPeriod']");
@@ -113,8 +113,9 @@ $(function () {
         }
 
         $attachmentContainer.html("");
+        $attachmentContainer.empty();
         //Bind uploaer popup
-        bindUploaderAttachments(agencyId, year, period);
+        //bindUploaderAttachments(agencyId, year, period); // This is no more needed
 
         //templateHTML
         var previewNode = document.querySelector("#template");
@@ -127,7 +128,7 @@ $(function () {
         myDropzone_view = new Dropzone("#reportUploader", { // Make the div a dropzone
             url: `/Reports/UploadReportAndSave?agencyId=${agencyId}&year=${year}&periodType=${period}`, // Set the url
             acceptedFiles: AllowdedMimeTypes,
-            maxFilesize: 40,
+            maxFilesize: 20,          
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 20,
@@ -142,13 +143,24 @@ $(function () {
                 if (response != null && response.Status == 'Success') {
                     prepareAndPrependUploaderAttachment(response.File);
                 }
+            },
+            Error: function (response) {
+                alert(response);
             }
         });
 
         //view Page
         myDropzone_view.on("addedfile", function (file) {
+           
+            var count = myDropzone_view.files.length;
+            if (count > 5) {
+                ShowAlertBoxWarning("Notice", `You can only upload five files at a time.`);
+                myDropzone_view.removeFile(file);
+               
+            }
             //Remove Preview Div
             $(".file-row .preview img").each(function (i, obj) {
+               
                 let attr = $(obj).attr("src");
                 if (isEmptyOrBlank(attr)) {
                     $(obj).parent('.preview').remove();
@@ -192,6 +204,10 @@ $(function () {
         myDropzone_view.on("complete", function (file) {
             if (file.status != "error")
                 myDropzone_view.removeFile(file);
+        });
+        myDropzone_view.on("error", function (file, message) {
+            ShowAlertBoxError('Error!', message);            
+            this.removeFile(file);
         });
 
 

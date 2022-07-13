@@ -458,15 +458,17 @@
 
         }
         function SelectClick(e) {
-
+         
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
+
+ 
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedRecords);
 
-                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords') + ',' + e.id : e.id;
+                var SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? (sessionStorage.getItem('SelectedRecords') + ',' + e.id) : e.id;
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
 
             }
@@ -477,14 +479,18 @@
                 SelectedItems = SelectedItems.filter(function (x) {
                     return x != e.id
                 });
-                sessionStorage.setItem('SelectedRecords', SelectedItems);
-                var UnSelectedItems = sessionStorage.getItem('UnSelectedRecords') === false ? sessionStorage.getItem('UnSelectedRecords') + ',' + e.id : e.id;
-                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
 
+                sessionStorage.setItem('SelectedRecords', SelectedItems);
+                
+                var UnSelectedItems = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? (sessionStorage.getItem('UnSelectedRecords') + ',' + e.id) : e.id;
+                sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
+            
 
             }
+   
 
-            EnableSelectedBulkUpdateButton();
+                  EnableSelectedBulkUpdateButton();
+         
         }
 
         function onCommentsClick(e, channelUniqueNameGuid) {
@@ -741,10 +747,17 @@
             var SelectedItems = sessionStorage.getItem('SelectedRecords');
             var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
 
-            if (IsAllSelected == false && (SelectedItems == null || SelectedItems == '')) {
+
+            IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
+            
+            if (
+                ((SelectedItems == null && IsAllSelected != true) || (IsAllSelected != true && SelectedItems == ''))) {
+              
+
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
+       
             if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
@@ -758,12 +771,18 @@
             else {
                 sessionStorage.setItem('Type', 1);
             }
+
             let pdata = {
-                 GLaccount: GLaccount, TrackingCategory: TrackingCategories,
+                GLaccount: GLaccount, TrackingCategory: TrackingCategories,
                 AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
-                AgencyID: ClientID, IsAllSelected: IsAllSelected, SelectedItems: SelectedItems,
-                UnSelectedRecords: UnSelectedRecords, reconcilationStatus: reconcilationStatus, Action: Action
+                AgencyID: ClientID,
+                IsAllSelected: IsAllSelected,
+                SelectedItems: SelectedItems,
+                UnSelectedRecords: UnSelectedRecords,
+                reconcilationStatus: reconcilationStatus,
+                Action: Action
             };
+
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
                     sessionStorage.removeItem('SelectedRecords');
@@ -1095,6 +1114,16 @@
     <script>
         $(document).ready(function () {
             HidelottieLoader();
+
+            $("#checkbox-bulk-purchases-select").click(function (e) {
+                
+                if (e.target.checked) {
+                    this.setAttribute("isSelected", "true");
+                } else {
+                    this.setAttribute("isSelected","false");
+                }
+                
+            });
         });
 
     </script>

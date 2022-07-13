@@ -66,13 +66,17 @@ namespace ProvenCfoUI.Controllers
                     reportsVM.CreatedBy = LoginUserid;
                     reportsVM.CreatedDate = DateTime.Now;
                     reportsVM.ModifiedDate = null;
-
-                    using (ReportsService reportsService = new ReportsService())
+                    
+                        using (ReportsService reportsService = new ReportsService())
                     {
                         var report = reportsService.SaveReport(reportsVM);
                         Common.CreateDirectory(Server.MapPath(folderPath));
                         file.SaveAs(Server.MapPath(report.FilePath));
-                        return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                        if (System.IO.File.Exists(Server.MapPath(report.FilePath)))
+                        {
+                            return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                        }
+                        return Json(new { File = report, Status = "Failed", Message = "File Not created" }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }

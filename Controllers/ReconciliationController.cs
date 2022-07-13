@@ -29,7 +29,7 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-       
+        
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
@@ -148,7 +148,7 @@ namespace ProvenCfoUI.Controllers
                 Filter.FilterType = FilterType;
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
-
+                Filter.UserID = User.UserId;
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
@@ -384,7 +384,7 @@ namespace ProvenCfoUI.Controllers
             }
             return listItem;
         }
-       
+        [CheckSession]
         public ActionResult ReconciliationMain()
         {
             try

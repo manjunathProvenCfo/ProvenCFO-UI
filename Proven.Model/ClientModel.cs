@@ -95,6 +95,8 @@ namespace Proven.Model
 
         public  Int64? QuickBooksCompanyId { get; set; }
 
+        public bool Plaid_Enabled { get; set; }
+
     }
 
     public class ClientMainModel

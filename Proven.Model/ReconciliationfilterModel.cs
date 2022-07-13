@@ -26,6 +26,8 @@ namespace CFO.Model.ViewModels
 
         public reconcilationType? FilterType { get; set; }
         public int? AgencyID { get; set; }
+
+        public string UserID { get; set; }
         public string Type { get; set; }
     }
 }
