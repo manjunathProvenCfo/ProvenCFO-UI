@@ -587,7 +587,31 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-
+        [CheckSession]
+        public JsonResult GetIsEnablePlaid(int agencyId)
+        {
+            try
+            {
+                var IsEnablePlaid = false;
+                using (ClientService objClientService = new ClientService())
+                {
+                    CreateClientVM Clientvm = new CreateClientVM();
+                    var client = objClientService.GetClientById(agencyId);
+                    IsEnablePlaid = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
+                }
+                return Json(new { Data = IsEnablePlaid, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public JsonResult EmailSend(string ClientName, string ClientId, string NotInBankUnreconciledItemsCount, string url, string sentdate)
         {
             try
