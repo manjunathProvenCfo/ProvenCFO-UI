@@ -404,11 +404,16 @@
             //var AccountId = e.currentTarget.attributes["Id"].value;
             var UNCheckedAccountId = sessionStorage.getItem("UnCheckedAccounts");
             var CheckedAccountId = sessionStorage.getItem("checkedAccounts");
+            if (UNCheckedAccountId == null || CheckedAccountId == null ) {
+                return;
+            }
             postAjax(apiurl + 'Xero/UpdateBankAccountone?CheckedAccountId=' + CheckedAccountId + '&UNCheckedAccountId=' + UNCheckedAccountId, null, function (data) {
                 if (data.resultData === false) {
+                    sessionStorage.clear();
                     ShowAlertBoxError("Error", "Bank Account not updated.", function () { window.location.reload(); });
                 }
                 else {
+                    sessionStorage.clear();
                     ShowAlertBoxSuccess("Success!", "Bank Accounts updated successfully.", function () { window.location.reload(); });
                 }
 
