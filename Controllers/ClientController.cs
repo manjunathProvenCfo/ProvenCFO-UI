@@ -57,11 +57,7 @@ namespace ProvenCfoUI.Controllers
 
 
 
-        [CheckSession]
-        public JsonResult GetXeroId()
-        {
-            return Json(new { id="1234"});
-        }
+     
         [CheckSession]
         public JsonResult ExportToExcel()
         {
