@@ -149,12 +149,16 @@ namespace ProvenCfoUI.Controllers
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
                 Filter.UserID = User.UserId;
+               
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+               var glAccountList = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+
+                    glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
+                    TempData["GLAccounts"] = glAccountList;
                     if (userType == "1")
                     {
                         ViewBag.IsStaffUser = true;

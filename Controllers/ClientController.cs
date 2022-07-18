@@ -158,6 +158,40 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
                             Clientvm.ThirdPartyAccountingApp_ref = 1;
+                            TempData["xeroscope"] = new List<SelectListItem>(){
+                                            new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                                            new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                                            new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                                            new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                                            new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
+                                            new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+                                            
+                                            new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                                            new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                                            new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
+                                            new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                                            new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                                            new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                                            new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                                            new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                                            new SelectListItem { Text = "assets", Value = "assets" },
+                                            new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                                            new SelectListItem { Text = "files", Value = "files" },
+                                            new SelectListItem { Text = "files.read", Value = "files.read" },
+                                            new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                                            new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                                            new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                                            new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                                            new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                                            new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                                            new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                                            new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                                            new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                                            new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                                            };
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                             return View(Clientvm);
                         }
@@ -207,21 +241,14 @@ namespace ProvenCfoUI.Controllers
                             if (client.StartDate != null)
                             {
                                 Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                                //   // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                                //    //Clientvm.StartDate = client.StartDate;
+                       
                             }
                             Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
-                            //else
-                            //{
-                            //    Clientvm.StartDate = client.StartDate;
-                            //   // Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                            //}
+                         
                             TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
                             Clientvm.APIScope = client.APIScope;
-                            Clientvm.APIClientID = client.APIClientID;
+                            Clientvm.APIClientID = client.APIClientID; 
                             Clientvm.APIClientSecret = client.APIClientSecret;
                             Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
                             Clientvm.XeroContactIDforProvenCfo = client.XeroContactIDforProvenCfo;
@@ -229,7 +256,7 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.EverhourId = client.EverhourId;
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
-                            //Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
+                         
                             Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
                             Clientvm.ReportId = client.ReportId;
@@ -244,7 +271,101 @@ namespace ProvenCfoUI.Controllers
                             }
                             Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
                             Clientvm.Plaid_Enabled = client.Plaid_Enabled;
-                            
+
+                            var xeroscope = new List<SelectListItem>(){
+                                            new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                                            new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                                            new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                                            new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                                            new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
+                                            new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+
+                                            new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                                            new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                                            new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true },
+                                            new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                                            new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                                            new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                                            new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                                            new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                                            new SelectListItem { Text = "assets", Value = "assets" },
+                                            new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                                            new SelectListItem { Text = "files", Value = "files" },
+                                            new SelectListItem { Text = "files.read", Value = "files.read" },
+                                            new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                                            new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                                            new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                                            new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                                            new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                                            new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                                            new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                                            new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                                            new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                                            new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                                            };
+
+                            if (Clientvm.ThirdPartyAccountingApp_ref == 1)
+                            {
+
+                                if (Clientvm.XeroScopeArray!=null) {
+
+
+                                    if (Clientvm.XeroScopeArray.Length > 2)
+                                    {
+                                        var selected = new List<SelectListItem>();
+                                        var remain = new List<SelectListItem>();
+
+                                        var temp = Clientvm.XeroScopeArray.ToList();
+
+
+
+                                        foreach (var item in temp)
+                                        {
+                                            selected.Add(new SelectListItem() { Text = item + " ", Value = item, Selected = true });
+                                        }
+
+                                        foreach (var item2 in xeroscope)
+                                        {
+                                            bool notSelected = true;
+                                            foreach (var item_ in selected)
+                                            {
+                                                if (item_.Value == item2.Value)
+                                                {
+                                                    notSelected = false;
+                                                    goto quit;
+                                                }
+
+                                            }
+                                        quit:
+                                            if (notSelected)
+                                                remain.Add(new SelectListItem() { Text = item2.Text, Value = item2.Value, Selected = false });
+                                        }
+
+                                        selected.AddRange(remain);
+
+                                        xeroscope = selected;
+
+                                    }
+                                }
+
+                                TempData["xeroscope"] = xeroscope;
+
+                            }
+                            else if (Clientvm.ThirdPartyAccountingApp_ref == 2)
+                            {
+
+                                var quikbooks = new List<SelectListItem>()  {
+                                            new SelectListItem { Text = "com.intuit.quickbooks.accounting",Value="com.intuit.quickbooks.accounting",Selected = true },
+                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
+                                            new SelectListItem { Text = "openid", Value = "openid",Selected = true },
+                                       };
+
+                                TempData["xeroscope"] = quikbooks;
+                            }
+
 
                             return View("CreateClient", Clientvm);
                         }
@@ -273,15 +394,114 @@ namespace ProvenCfoUI.Controllers
                         {
                             using (BillableEntitiesService objEntities = new BillableEntitiesService())
                             {
-                                
+
                                 CreateClientVM Clientvm = new CreateClientVM();
                                 Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
                                 var LoginUserid = Session["UserId"].ToString();
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                
-                                if (!string.IsNullOrEmpty(createClientVM.StartDateText))
+                                Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
+                                //Clientvm.XeroScopeArray = null;
+
+
+                                var xeroscope = new List<SelectListItem>(){
+                                            new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                                            new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                                            new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                                            new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                                            new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                                            new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                                            new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
+                                            new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+
+                                            new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                                            new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                                            new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                                            new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true },
+                                            new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                                            new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                                            new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                                            new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                                            new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                                            new SelectListItem { Text = "assets", Value = "assets" },
+                                            new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                                            new SelectListItem { Text = "files", Value = "files" },
+                                            new SelectListItem { Text = "files.read", Value = "files.read" },
+                                            new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                                            new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                                            new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                                            new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                                            new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                                            new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                                            new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                                            new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                                            new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                                            new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                                            };
+
+                                if (Clientvm.ThirdPartyAccountingApp_ref == 1)
+                                {
+                                    if (createClientVM.XeroScopeArray != null)
+                                    {
+
+                                    if (createClientVM.XeroScopeArray.Length > 2)
+                                    {
+                                        var selected = new List<SelectListItem>();
+                                        var remain = new List<SelectListItem>();
+
+                                        var temp = createClientVM.XeroScopeArray.ToList();
+
+                             
+
+                                        foreach (var item in temp)
+                                        {
+                                            selected.Add(new SelectListItem() { Text = item + " ", Value = item, Selected = true });
+                                        }
+
+                                        foreach (var item2 in xeroscope)
+                                        {
+                                            bool notSelected = true;
+                                            foreach (var item_ in selected)
+                                            {
+                                                if (item_.Value == item2.Value)
+                                                {
+                                                    notSelected = false;
+                                                    goto quit;
+                                                }
+
+                                            }
+                                        quit:
+                                            if (notSelected)
+                                                remain.Add(new SelectListItem() { Text = item2.Text, Value = item2.Value, Selected = false });
+                                        }
+
+                                        selected.AddRange(remain);
+
+                                        xeroscope = selected;
+
+                                    }
+                                    }
+                                    TempData["xeroscope"] = xeroscope;
+
+                                }
+                                else if (Clientvm.ThirdPartyAccountingApp_ref==2) {
+
+                                    var quikbooks = new List<SelectListItem>()  { 
+                                            new SelectListItem { Text = "com.intuit.quickbooks.accounting",Value="com.intuit.quickbooks.accounting",Selected = true },
+                                            new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
+                                            new SelectListItem { Text = "openid", Value = "openid",Selected = true },
+                                       };
+
+                                    TempData["xeroscope"] = quikbooks;
+                                }
+
+
+
+
+
+
+                            if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
                                     CultureInfo provider = CultureInfo.InvariantCulture;
                                     createClientVM.StartDate = DateTime.ParseExact(createClientVM.StartDateText, "MM/dd/yyyy", provider);
@@ -296,14 +516,11 @@ namespace ProvenCfoUI.Controllers
                                         ViewBag.ErrorMessage = "Exist";
                                         return View("CreateClient", Clientvm);
                                     }
-                                    // createClientVM.XeroScope = createClientVM.XeroScopeArray.ToString();
-                                    //string result = string.Join(".", array);
-                                    //string.Join(",", Client);s
+                            
                                     if (Clientvm.XeroScopeArray != null)
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
-                                    //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId),createClientVM.Plaid_Enabled);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
@@ -311,7 +528,6 @@ namespace ProvenCfoUI.Controllers
                                 }
                                 else
                                 {
-                                    //var exitclient = obj.GetClientById(createClientVM.Id);
                                     TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
@@ -335,10 +551,13 @@ namespace ProvenCfoUI.Controllers
 
                                     ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Updated";
+                                    Clientvm.XeroScopeArray = null;
+
                                     return View("CreateClient", createClientVM);
                                 }
+
                                 return View("CreateClient", Clientvm);
-                                //return RedirectToAction("ClientList");
+                      
                             }
 
                         }
@@ -372,6 +591,8 @@ namespace ProvenCfoUI.Controllers
                 }
             }
             catch (Exception ex)
+
+
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
                 throw ex;
