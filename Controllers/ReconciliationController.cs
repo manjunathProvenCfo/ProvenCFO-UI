@@ -154,7 +154,10 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+                    var glAccountList = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+                    glAccountList.ForEach(x => x.Name = $"{x.Code} - {x.Name}");
+                    TempData["GLAccounts"] = glAccountList;
+                    //TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
                     if (userType == "1")
                     {
                         ViewBag.IsStaffUser = true;
