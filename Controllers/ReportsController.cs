@@ -6,6 +6,7 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace ProvenCfoUI.Controllers
 
                     string fileName = Path.GetFileNameWithoutExtension(file.FileName);
                     string fileExtension = Path.GetExtension(file.FileName);
-                    string folderPath = $"~/UploadedFiles/Reports/{year}/{periodType}/";
+                    string folderPath = $"reports/{year}/{periodType}/"; //$"~/UploadedFiles/Reports/{year}/{periodType}/"
 
                     string filePath = folderPath + $"{guid}_{fileName}{fileExtension}";
 
@@ -66,18 +67,37 @@ namespace ProvenCfoUI.Controllers
                     reportsVM.CreatedBy = LoginUserid;
                     reportsVM.CreatedDate = DateTime.Now;
                     reportsVM.ModifiedDate = null;
-                    
-                        using (ReportsService reportsService = new ReportsService())
+
+                    var StorageAccountName = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountName"]);
+                    var StorageAccountKey = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountKey"]);
+                    var StorageConnection = Convert.ToString(ConfigurationManager.AppSettings["StorageConnection"]);
+                    var StorageContainerName = Convert.ToString(ConfigurationManager.AppSettings["StorageContainerName"]);
+                    using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
                     {
-                        var report = reportsService.SaveReport(reportsVM);
-                        Common.CreateDirectory(Server.MapPath(folderPath));
-                        file.SaveAs(Server.MapPath(report.FilePath));
-                        if (System.IO.File.Exists(Server.MapPath(report.FilePath)))
+                        var result = storage.UploadFile(StorageContainerName, folderPath, $"{guid}_{fileName}{fileExtension}", file);                       
+                        if (result == true)
                         {
-                            return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                            using (ReportsService reportsService = new ReportsService())
+                            {
+                                var report = reportsService.SaveReport(reportsVM);
+                                return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                            }
                         }
-                        return Json(new { File = report, Status = "Failed", Message = "File Not created" }, JsonRequestBehavior.AllowGet);
+
                     }
+                    return Json(new { File = "", Status = "Failed", Message = "File Not created" }, JsonRequestBehavior.AllowGet);
+
+                    //using (ReportsService reportsService = new ReportsService())
+                    //{
+                    //    var report = reportsService.SaveReport(reportsVM);
+                    //    Common.CreateDirectory(Server.MapPath(folderPath));
+                    //    file.SaveAs(Server.MapPath(report.FilePath));
+                    //    if (System.IO.File.Exists(Server.MapPath(report.FilePath)))
+                    //    {
+                    //        return Json(new { File = report, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                    //    }
+                    //    return Json(new { File = report, Status = "Failed", Message = "File Not created" }, JsonRequestBehavior.AllowGet);
+                    //}
                 }
             }
             catch (Exception ex)
@@ -272,13 +292,13 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
-        public JsonResult MakeItMonthlySummary(int Id, int Year, string PeriodType,int AgencyId)
+        public JsonResult MakeItMonthlySummary(int Id, int Year, string PeriodType, int AgencyId)
         {
             try
             {
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var result = reportsService.MakeItMonthlySummary(Id, Year, PeriodType,AgencyId);
+                    var result = reportsService.MakeItMonthlySummary(Id, Year, PeriodType, AgencyId);
 
                     if (result != null)
                     {

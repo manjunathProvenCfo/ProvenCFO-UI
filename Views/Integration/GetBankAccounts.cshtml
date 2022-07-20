@@ -165,7 +165,9 @@
 
             }, 2000);
             $('#checkbox-bulk-purchases-select').parent().addClass("d-none");
+            sessionStorage.clear();
             HidelottieLoader();
+
         });
         //$(document).ready(function () {
         //    EnableSelectedBulkUpdateButton();
@@ -173,7 +175,6 @@
 
 
         function XeroConnectionUpdate() {
-
             var XConstatus = $('#XeroConnectionStatus');
             var XMessage = $('#XeroStatusMessage');
             var XStatus = $('#XeroStatus');
@@ -209,8 +210,6 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-
-
             ShowlottieLoader();
             setTimeout(function () {
                 var ClientID = $("#ddlclient option:selected").val();
