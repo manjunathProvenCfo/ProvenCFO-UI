@@ -280,7 +280,8 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                
+                                Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
+
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
                                     CultureInfo provider = CultureInfo.InvariantCulture;
