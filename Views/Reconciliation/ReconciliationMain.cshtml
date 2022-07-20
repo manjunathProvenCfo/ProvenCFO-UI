@@ -244,12 +244,7 @@
                                                 @if (ViewBag.IsStaffUser == true)
                                                 {
                                                     <div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="@item.GlAccountModifiedDateUTC" ModifiedBy="@item.GlAccountModifiedBy" title="No Modification yet.">
-                                                        @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref),
-                                                       "Pick Account", new { @class = "form-control selectpicker glAccountDD",
-                                                           @onchange = "javascript:onChangeglAccount('" + item.id + "',event)",
-                                                           style = "width: 225px;", 
-                                                           @utcdate = string.Format("{0:dd MMM yyyy hh:mm:ss tt}", @item.GlAccountModifiedDateUTC),
-                                                           @ModifiedBy = @item.GlAccountModifiedBy })
+                                                        @Html.DropDownListFor(modelItem1 => item.gl_account_ref, new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name", item.gl_account_ref), "Pick Account", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeglAccount('" + item.id + "',event)", style = "width: 225px;", @utcdate = string.Format("{0:dd MMM yyyy hh:mm:ss tt}", @item.GlAccountModifiedDateUTC), @ModifiedBy = @item.GlAccountModifiedBy })
                                                     </div>
                                                 }
                                                 else
