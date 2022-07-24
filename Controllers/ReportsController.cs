@@ -288,9 +288,9 @@ namespace ProvenCfoUI.Controllers
                     var rptlist = reportsService.GetReportByIds(Ids).ResultData;
                     if (rptlist != null)
                     {
-                        foreach (var rpt in rptlist)
+                        using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
                         {
-                            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                            foreach (var rpt in rptlist)
                             {
                                 var IsDelted = storage.DeleteAzureFiles(StorageContainerName, rpt.FilePath, null);
                                 if (IsDelted == true)
@@ -298,11 +298,12 @@ namespace ProvenCfoUI.Controllers
                                     var result = reportsService.Delete(Ids).ResultData;
                                     if (result == true)
                                     {
-                                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+
                                     }
                                 }
                             }
                         }
+                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
                     }
                     return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
                 }

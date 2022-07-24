@@ -238,7 +238,7 @@ $(function () {
             if (isConfirmed == false)
                 return;
             deleteReports(deleteReportsIds, period);
-            ShowAlertBoxSuccess("", "Files has been removed successfully!")
+            
         });
     });
 
