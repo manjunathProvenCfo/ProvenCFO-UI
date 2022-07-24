@@ -12,5 +12,7 @@ namespace ProvenCfoUI.Comman
     {
         bool UploadFile(string StorageContainerName, string dirName, string fileName, HttpPostedFileBase inputfile);
         Uri GetFileSasUri(string StorageContainerName, string filePath, DateTime expiration, ShareFileSasPermissions permissions);
+        bool DeleteAzureFiles(string StorageContainerName, string dirName, string[] fileNames);
+        string RenameAzureFiles(string StorageContainerName, string FilePath, string FileName, string FileNewName);
     }
 }

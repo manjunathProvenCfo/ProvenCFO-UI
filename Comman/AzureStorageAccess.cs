@@ -19,8 +19,8 @@ namespace ProvenCfoUI.Comman
         private string _storageAccountKey;
         private string _storageAccountName;
         private string _storageConnection;
-        public AzureStorageAccess(string StorageAccountName,string StorageAccountKey,string StorageConnection)
-        { 
+        public AzureStorageAccess(string StorageAccountName, string StorageAccountKey, string StorageConnection)
+        {
             _storageAccountKey = StorageAccountKey;
             _storageAccountName = StorageAccountName;
             _storageConnection = StorageConnection;
@@ -54,7 +54,7 @@ namespace ProvenCfoUI.Comman
 
 
             // Return the URI
-            return  fileSasUri.Uri;
+            return fileSasUri.Uri;
         }
 
         public bool UploadFile(string StorageContainerName, string dirName, string fileName, HttpPostedFileBase inputfile)
@@ -62,11 +62,11 @@ namespace ProvenCfoUI.Comman
             try
             {
                 //string connectionString = ConfigurationManager.ConnectionStrings["StorageConnection"].ToString();
-                
+
                 // Get a reference to a share and then create it
                 ShareClient share = new ShareClient(_storageConnection, StorageContainerName);
                 share.CreateIfNotExistsAsync();
-               
+
 
                 // Get a reference to a directory and create it
 
@@ -79,13 +79,14 @@ namespace ProvenCfoUI.Comman
                 {
                     if (i > 0) concatFolder = concatFolder != "" ? concatFolder + "/" + Convert.ToString(nestedFolderArray[i]) : concatFolder;
                     directory = share.GetDirectoryClient(concatFolder);
-                    if(directory.Exists().Value == false)  directory.CreateIfNotExists();
-                    
+                    if (directory.Exists().Value == false) directory.CreateIfNotExists();
+
                 }
                 directory = share.GetDirectoryClient(concatFolder);
                 // Get a reference to a file and upload it
                 ShareFileClient file = directory.GetFileClient(fileName);
-                using (System.IO.Stream stream = inputfile.InputStream)  
+
+                using (System.IO.Stream stream = inputfile.InputStream)
                 {
                     file.Create(inputfile.InputStream.Length);
                     file.UploadRange(
@@ -107,6 +108,90 @@ namespace ProvenCfoUI.Comman
             {
                 return false;
             }
+        }
+        public bool DeleteAzureFiles(string StorageContainerName, string dirName, string[] fileNames)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(StorageContainerName))
+                {
+                    ShareClient share = new ShareClient(_storageConnection, StorageContainerName);
+                    if (!string.IsNullOrEmpty(dirName))
+                    {
+                        var delimiter = new char[] { '/' };
+                        var nestedFolderArray = dirName.Split(delimiter);
+                        var concatFolder = nestedFolderArray[0];
+                        ShareDirectoryClient directory;
+                        for (var i = 0; i < nestedFolderArray.Length - 1; i++)
+                        {
+                            if (i > 0) concatFolder = concatFolder != "" ? concatFolder + "/" + Convert.ToString(nestedFolderArray[i]) : concatFolder;
+                            directory = share.GetDirectoryClient(concatFolder);
+                        }
+                        directory = share.GetDirectoryClient(concatFolder);
+                        if (fileNames != null && fileNames.Length > 0)
+                        {
+                            foreach (var item in fileNames)
+                            {
+                                ShareFileClient file = directory.GetFileClient(item);
+
+                                var result = file.DeleteIfExists();
+                                return result.Value;
+
+                            }
+                        }
+                        else
+                        {
+                            ShareFileClient file = directory.GetFileClient(nestedFolderArray[nestedFolderArray.Count() - 1]);
+                            var result = file.DeleteIfExists();
+                            return result.Value;
+                        }
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+
+        }
+        public string RenameAzureFiles(string StorageContainerName,  string FilePath, string FileName, string FileNewName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(StorageContainerName))
+                {
+                    ShareClient share = new ShareClient(_storageConnection, StorageContainerName);
+                    if (!string.IsNullOrEmpty(FilePath))
+                    {
+                        var delimiter = new char[] { '/' };
+                        var nestedFolderArray = FilePath.Split(delimiter);
+                        var concatFolder = nestedFolderArray[0];
+                        ShareDirectoryClient directory;
+                        for (var i = 0; i < nestedFolderArray.Length - 1; i++)
+                        {
+                            if (i > 0) concatFolder = concatFolder != "" ? concatFolder + "/" + Convert.ToString(nestedFolderArray[i]) : concatFolder;
+                            directory = share.GetDirectoryClient(concatFolder);
+                        }
+                        directory = share.GetDirectoryClient(concatFolder);
+
+                        ShareFileClient file = directory.GetFileClient(FileNewName);
+
+                        var ssauri = GetFileSasUri(StorageContainerName, FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read);
+                        var fileRename = file.StartCopy(ssauri);
+                        DeleteAzureFiles(StorageContainerName, FilePath,new string[] { FileName });
+                        return fileRename.Value.CopyStatus.ToString();
+                    }
+                }
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty; 
+                throw;
+            }
+
         }
         public void Dispose()
         {

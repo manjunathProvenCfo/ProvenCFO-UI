@@ -19,6 +19,10 @@ namespace Proven.Service
         {
             return GetAsync<List<ReportsVM>>($"Reports/GetReports?agencyId={agencyId}&year={year}&periodType={periodType}", readResultDataProp: true).Result;
         }
+        public APIResult<List<ReportsVM>> GetReportByIds(int[] Ids)
+        {
+            return PostAsync<APIResult<List<ReportsVM>>, int[]>($"Reports/GetReportByIds", Ids).Result;
+        }
         public async Task<List<ReportsVM>> GetDashboardReports(int agencyId)
         {
             return await GetAsync<List<ReportsVM>>($"Reports/GetDashboardReports?agencyId={agencyId}", readResultDataProp: true);
@@ -40,9 +44,9 @@ namespace Proven.Service
         {
             return PostAsync<APIResult<bool>>($"Reports/MakeItMonthlySummary?Id={Id}&year={Year}&PeriodType={PeriodType}&AgencyId={AgencyId}").Result;
         }
-        public APIResult<bool> Rename(int Id, string FileName)
+        public APIResult<bool> Rename(int Id, string FileName, string NewFileName)
         {
-            return PostAsync<APIResult<bool>>($"Reports/Rename?Id={Id}&FileName={FileName}", null).Result;
+            return PostAsync<APIResult<bool>>($"Reports/Rename?Id={Id}&FileName={FileName}&NewFileName={NewFileName}", null).Result;
         }
         public void Dispose()
         {

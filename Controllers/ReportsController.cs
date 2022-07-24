@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Azure.Storage.Sas;
+using log4net;
 using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
@@ -21,6 +22,10 @@ namespace ProvenCfoUI.Controllers
     [Exception_Filters]
     public class ReportsController : BaseController
     {
+        private string StorageAccountName = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountName"]);
+        private string StorageAccountKey = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountKey"]);
+        private string StorageConnection = Convert.ToString(ConfigurationManager.AppSettings["StorageConnection"]);
+        private string StorageContainerName = Convert.ToString(ConfigurationManager.AppSettings["StorageContainerName"]);
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Reports
         [CheckSession]
@@ -74,7 +79,7 @@ namespace ProvenCfoUI.Controllers
                     var StorageContainerName = Convert.ToString(ConfigurationManager.AppSettings["StorageContainerName"]);
                     using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
                     {
-                        var result = storage.UploadFile(StorageContainerName, folderPath, $"{guid}_{fileName}{fileExtension}", file);                       
+                        var result = storage.UploadFile(StorageContainerName, folderPath, $"{guid}_{fileName}{fileExtension}", file);
                         if (result == true)
                         {
                             using (ReportsService reportsService = new ReportsService())
@@ -120,8 +125,17 @@ namespace ProvenCfoUI.Controllers
             {
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var reports = reportsService.GetReports(agencyId, year, periodType);
-                    return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+
+                    using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                    {
+                        var reports = reportsService.GetReports(agencyId, year, periodType);
+                        foreach (var item in reports)
+                        {
+                            item.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, item.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+                        }
+
+                        return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             catch (Exception ex)
@@ -268,19 +282,29 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
+
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var result = reportsService.Delete(Ids);
-
-                    if (result != null)
+                    var rptlist = reportsService.GetReportByIds(Ids).ResultData;
+                    if (rptlist != null)
                     {
-                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+                        foreach (var rpt in rptlist)
+                        {
+                            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                            {
+                                var IsDelted = storage.DeleteAzureFiles(StorageContainerName, rpt.FilePath, null);
+                                if (IsDelted == true)
+                                {
+                                    var result = reportsService.Delete(Ids).ResultData;
+                                    if (result == true)
+                                    {
+                                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                            }
+                        }
                     }
-                    else
-                    {
-                        return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
-                    }
-
+                    return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -324,9 +348,22 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
+                int[] Ids = new int[] { Id };
+                var guid = Guid.NewGuid().ToString();
+                string NewfilePath = $"{guid}_{FileName}";
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var result = reportsService.Rename(Id, FileName);
+                    using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                    {
+                        var rptlist = reportsService.GetReportByIds(Ids).ResultData;
+                        if (rptlist != null && rptlist.Count() > 0)
+                        {
+                            var dbf_File = System.IO.Path.GetFileName(rptlist[0].FilePath);
+                            NewfilePath += rptlist[0].FileExtention;
+                            storage.RenameAzureFiles(StorageContainerName, rptlist[0].FilePath, dbf_File, NewfilePath);
+                        }
+                    }
+                    var result = reportsService.Rename(Id, FileName, NewfilePath);
 
                     if (result != null)
                     {
