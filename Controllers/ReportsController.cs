@@ -182,9 +182,17 @@ namespace ProvenCfoUI.Controllers
             {
                 using (ReportsService reportsService = new ReportsService())
                 {
-                    var reports = await reportsService.GetDashboardReports(agencyId);
+                    using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                    {
+                        var reports = await reportsService.GetDashboardReports(agencyId);
+                        foreach (var rpt in reports)
+                        {
+                            rpt.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, rpt.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+                        }
 
-                    return Json(new { DataMonthly = reports.Where(x => x.PeriodType != "YearEnd"), DataYearly = reports.Where(x => x.PeriodType == "YearEnd"), Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+
+                        return Json(new { DataMonthly = reports.Where(x => x.PeriodType != "YearEnd"), DataYearly = reports.Where(x => x.PeriodType == "YearEnd"), Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             catch (Exception ex)
