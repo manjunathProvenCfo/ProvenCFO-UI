@@ -14,5 +14,7 @@ namespace ProvenCfoUI.Comman
         Uri GetFileSasUri(string StorageContainerName, string filePath, DateTime expiration, ShareFileSasPermissions permissions);
         bool DeleteAzureFiles(string StorageContainerName, string dirName, string[] fileNames);
         string RenameAzureFiles(string StorageContainerName, string FilePath, string FileName, string FileNewName);
+
+        string GetAzureFilePath(string StorageContainerName, string dirName, string fileNames);
     }
 }

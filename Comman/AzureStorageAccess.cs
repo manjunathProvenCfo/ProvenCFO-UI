@@ -86,14 +86,38 @@ namespace ProvenCfoUI.Comman
                 // Get a reference to a file and upload it
                 ShareFileClient file = directory.GetFileClient(fileName);
 
+                
+                // Max. 4MB (4194304 Bytes in binary) allowed
+                const int uploadLimit = 4194304;
+
+                // Upload the file
                 using (System.IO.Stream stream = inputfile.InputStream)
                 {
-                    file.Create(inputfile.InputStream.Length);
-                    file.UploadRange(
-                        new HttpRange(0, inputfile.InputStream.Length),
+                    file.Create(stream.Length);
+                    if (stream.Length <= uploadLimit)
+                    {
+                        file.UploadRange(
+                        new HttpRange(0, stream.Length),
                         stream);
-
+                    }
+                    else
+                    {
+                        int bytesRead;
+                        long index = 0;
+                        byte[] buffer = new byte[uploadLimit];
+                        // Stream is larger than the limit so we need to upload in chunks
+                        while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            // Create a memory stream for the buffer to upload
+                            MemoryStream ms = new MemoryStream(buffer, 0, bytesRead);
+                            file.UploadRange(new HttpRange(index, ms.Length), ms);
+                            index += ms.Length; // increment the index to the account for bytes already written
+                        }
+                    }
                 }
+
+
+
                 //using (FileStream stream = File.OpenRead(localFilePath))
                 //{
                 //    await file.CreateAsync(stream.Length);
@@ -156,7 +180,7 @@ namespace ProvenCfoUI.Comman
             }
 
         }
-        public string RenameAzureFiles(string StorageContainerName,  string FilePath, string FileName, string FileNewName)
+        public string RenameAzureFiles(string StorageContainerName, string FilePath, string FileName, string FileNewName)
         {
             try
             {
@@ -180,7 +204,7 @@ namespace ProvenCfoUI.Comman
 
                         var ssauri = GetFileSasUri(StorageContainerName, FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read);
                         var fileRename = file.StartCopy(ssauri);
-                        DeleteAzureFiles(StorageContainerName, FilePath,new string[] { FileName });
+                        DeleteAzureFiles(StorageContainerName, FilePath, new string[] { FileName });
                         return fileRename.Value.CopyStatus.ToString();
                     }
                 }
@@ -188,10 +212,56 @@ namespace ProvenCfoUI.Comman
             }
             catch (Exception ex)
             {
-                return string.Empty; 
+                return string.Empty;
                 throw;
             }
 
+        }
+        public string GetAzureFilePath(string StorageContainerName, string dirName, string fileNames)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(StorageContainerName))
+                {
+                    ShareClient share = new ShareClient(_storageConnection, StorageContainerName);
+                    if (!string.IsNullOrEmpty(dirName))
+                    {
+                        var delimiter = new char[] { '/' };
+                        var nestedFolderArray = dirName.Split(delimiter);
+                        var concatFolder = nestedFolderArray[0];
+                        ShareDirectoryClient directory;
+                        for (var i = 0; i < nestedFolderArray.Length - 1; i++)
+                        {
+                            if (i > 0) concatFolder = concatFolder != "" ? concatFolder + "/" + Convert.ToString(nestedFolderArray[i]) : concatFolder;
+                            directory = share.GetDirectoryClient(concatFolder);
+                        }
+                        directory = share.GetDirectoryClient(concatFolder);
+                        if (fileNames != null && fileNames.Length > 0)
+                        {
+                            foreach (var item in fileNames)
+                            {
+                                ShareFileClient file = directory.GetFileClient(fileNames);
+
+                                var result = file.DeleteIfExists();
+                                return string.Empty;
+
+                            }
+                        }
+                        else
+                        {
+                            ShareFileClient file = directory.GetFileClient(nestedFolderArray[nestedFolderArray.Count() - 1]);
+                            var result = file.DeleteIfExists();
+                            return string.Empty;
+                        }
+                    }
+                }
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+                throw;
+            }
         }
         public void Dispose()
         {
