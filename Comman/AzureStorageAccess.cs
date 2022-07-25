@@ -236,21 +236,18 @@ namespace ProvenCfoUI.Comman
                             directory = share.GetDirectoryClient(concatFolder);
                         }
                         directory = share.GetDirectoryClient(concatFolder);
-                        if (fileNames != null && fileNames.Length > 0)
+                        if (fileNames != null && !string.IsNullOrEmpty(fileNames))
                         {
-                            foreach (var item in fileNames)
-                            {
+                           
                                 ShareFileClient file = directory.GetFileClient(fileNames);
 
-                                var result = file.DeleteIfExists();
-                                return string.Empty;
+                                var result = file.Path;
+                                return result;
 
-                            }
+                           
                         }
                         else
-                        {
-                            ShareFileClient file = directory.GetFileClient(nestedFolderArray[nestedFolderArray.Count() - 1]);
-                            var result = file.DeleteIfExists();
+                        {                            
                             return string.Empty;
                         }
                     }
