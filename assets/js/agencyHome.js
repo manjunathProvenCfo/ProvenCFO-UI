@@ -1425,8 +1425,8 @@ var defaultReportsWidget = function () {
     });
 }
 function prepareReportMedia(report) {
-    let thumbnail = getSampleBGImageByFileExtension(report.FileExtention);
     let azureFilepath = report.AzureFileSasUri;
+    let thumbnail = getSampleBGImageByFileExtension(report.FileExtention);    
     if (isEmptyOrBlank(thumbnail))
         thumbnail = report.FilePath;
     report.FilePath = report.FilePath.replace("~/", "../../");
