@@ -5,6 +5,7 @@ var IsSeletedAll = false;
 $(document).ready(function () {
     hideParticipantsSidebar();
     bindEnableAutomation();
+    bindEnablePlaid();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
 
@@ -95,6 +96,18 @@ var bindEnableAutomation = function () {
             if (IsEnableAutomation === false) {
                 $("#OnDemandData").attr('disabled', true);
                 $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+
+            }
+
+        }
+    });
+}
+var bindEnablePlaid = function () {
+    getAjaxSync(`/Reconciliation/GetIsEnablePlaid?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
+            IsEnablePlaid = response.Data;
+            if (IsEnablePlaid === false) {
+                $("#OnDemandDataPlaid").addClass('d-none');
 
             }
 

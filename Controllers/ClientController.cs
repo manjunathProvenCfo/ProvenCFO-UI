@@ -57,11 +57,7 @@ namespace ProvenCfoUI.Controllers
 
 
 
-        [CheckSession]
-        public JsonResult GetXeroId()
-        {
-            return Json(new { id="1234"});
-        }
+     
         [CheckSession]
         public JsonResult ExportToExcel()
         {
@@ -247,8 +243,8 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.ThirdPartyAccountingApp_ref = client.ThirdPartyAccountingApp_ref;
                             }
                             Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
-                            Clientvm.Plaid_Enabled = client.Plaid_Enabled;
-                            
+                            Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
+
 
                             return View("CreateClient", Clientvm);
                         }
@@ -284,7 +280,8 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                
+                                Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
+
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
                                     CultureInfo provider = CultureInfo.InvariantCulture;
@@ -368,8 +365,9 @@ namespace ProvenCfoUI.Controllers
 
                     var client = objClientService.GetClientById(id);
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
+                    var Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                        Convert.ToString(client.DashboardId),client.DashboardURLId,client.ReportId, string.Empty,string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref),Convert.ToInt64(client.QuickBooksCompanyId),client.Plaid_Enabled);
+                        Convert.ToString(client.DashboardId),client.DashboardURLId,client.ReportId, string.Empty,string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref),Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

@@ -1,4 +1,5 @@
 ﻿using Acklann.Plaid;
+using Proven.Model;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,9 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ProvenCfoUI.Comman
+namespace Proven.Service
 {
-    public class Plaid : IDisposable
+    
+    public class PlaidBankTransaction<T, V> : BankTransctionFatory<T, V>, IDisposable
     {
         private bool isDisposed = false;
         string _ClientId;
@@ -19,7 +21,7 @@ namespace ProvenCfoUI.Comman
         string[] _countryCodes;
         public Acklann.Plaid.Environment _env;
         PlaidClient _plaidclient;
-        public Plaid(string ClientId, string ClientSecret, string Language, string[] Products,string[] CountryCodes, Acklann.Plaid.Environment environment, string CallbackUrl = "")
+        public PlaidBankTransaction(string ClientId, string ClientSecret, string Language, string[] Products, string[] CountryCodes, Acklann.Plaid.Environment environment, string CallbackUrl = "")
         {
             _ClientId = ClientId;
             _ClientSecret = ClientSecret;
@@ -30,15 +32,15 @@ namespace ProvenCfoUI.Comman
             _env = environment;
             _plaidclient = new PlaidClient(_ClientId, _ClientSecret, null, _env);
         }
-        public async Task<string> getLinkToken(string ClientName)
+        public async Task<V> getLinkToken(T ClientName)
         {
             try
             {
                 // Arrange
-                
+
                 var response = await _plaidclient.CreateLinkToken(new Acklann.Plaid.Management.CreateLinkTokenRequest
                 {
-                    ClientName = ClientName,
+                    ClientName = (string)Convert.ChangeType(ClientName, typeof(string)) ,
                     ClientId = _ClientId,
                     Secret = _ClientSecret,
                     CountryCodes = _countryCodes,
@@ -50,19 +52,20 @@ namespace ProvenCfoUI.Comman
                 });
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    return response.LinkToken.ToString();
+                    return (V)Convert.ChangeType(response.LinkToken.ToString(), typeof(V));
                 }
-                return String.Empty;
+                return (V)Convert.ChangeType(String.Empty, typeof(V));
+               
 
             }
             catch (Exception e)
             {
                 throw;
-                return String.Empty;
+                return (V)Convert.ChangeType(String.Empty, typeof(V));
             }
-            
+
         }
-        public async Task<string> ExchangeTokenAsync(string public_token)
+        public async Task<V> ExchangeTokenAsync(T public_token)
         {
             try
             {
@@ -70,23 +73,23 @@ namespace ProvenCfoUI.Comman
                 {
                     ClientId = _ClientId,
                     Secret = _ClientSecret,
-                    PublicToken = public_token
+                    PublicToken = (String)Convert.ChangeType(public_token, typeof(string))
 
                 });
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    return response.AccessToken.ToString();
+                    return (V)Convert.ChangeType(response.AccessToken.ToString(), typeof(V));
                 }
-                return String.Empty;
+                return (V)Convert.ChangeType(String.Empty, typeof(V));
             }
             catch (Exception)
             {
                 throw;
-                return String.Empty;
+                return (V)Convert.ChangeType(String.Empty, typeof(V));
             }
-            
+
         }
-        
+
         /// <summary>
         /// Function to return the paid Environment 
         /// </summary>
@@ -116,6 +119,19 @@ namespace ProvenCfoUI.Comman
             }
             return Env;
         }
+        public override async Task<V> GetBankTransactionsAsync(T Token, string TenentID, dynamic whereCause)
+        {
+            //var request = new Transactions.GetTransactionsRequest()
+            var queryParameters = (PlaidRequestModelsVM)Convert.ChangeType(whereCause, typeof(PlaidRequestModelsVM));
+            var response = await _plaidclient.FetchTransactionsAsync(new Acklann.Plaid.Transactions.GetTransactionsRequest {
+                AccessToken = (String)Convert.ChangeType(Token, typeof(string)),
+                ClientId = _ClientId,
+                Secret = _ClientSecret,
+                StartDate = queryParameters.start_date.Value,
+                EndDate = queryParameters.end_date.Value, 
+            });
+            return (V)Convert.ChangeType(response, typeof(V)); ;
+        }
         public void Dispose()
         {
             Dispose(true);
@@ -129,5 +145,7 @@ namespace ProvenCfoUI.Comman
             }
             this.isDisposed = true;
         }
+
+        
     }
 }
