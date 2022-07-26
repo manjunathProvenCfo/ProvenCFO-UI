@@ -770,6 +770,7 @@
     <Content Include="assets\img\products\9.jpg" />
     <Content Include="assets\img\Reports\excel.png" />
     <Content Include="assets\img\Reports\finance.png" />
+    <Content Include="assets\img\Reports\Image.png" />
     <Content Include="assets\img\Reports\pdf.png" />
     <Content Include="assets\img\team\default-logo.png" />
     <Content Include="assets\js\agencyHome.js" />
@@ -1289,7 +1290,6 @@
     <Content Include="assets\lib\jquery-contextmenu\jquery.contextMenu.min.js.map" />
     <Content Include="assets\lib\underscore.js\underscore-min.js.map" />
     <Content Include="assets\lib\lottie-player\lf20_fw9ijhki.json" />
-    <None Include="bundleconfig.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
