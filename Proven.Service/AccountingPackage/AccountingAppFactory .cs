@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Service.AccountingPackage
 {
-    public abstract class AccountingAppFatory<T,V>: BaseService
+    public abstract class AccountingAppFatory<T,V> :  BaseService
     {
 
         public abstract Task<T> ConnnectApp(V Token);
@@ -25,6 +25,6 @@ namespace Proven.Service.AccountingPackage
         public abstract Task<T> RefreshToken(T Token);
         public abstract ReturnModel UpdateToken(V tokenInfoVM);
         public abstract Task<T> GetBankSummary(V xeroToken, string XeroTenentID);
-        public abstract Task<V> GetInvoices(T xeroToken, string XeroTenentID);
+        public abstract Task<V> GetInvoices(T xeroToken, string XeroTenentID);        
     }
 }

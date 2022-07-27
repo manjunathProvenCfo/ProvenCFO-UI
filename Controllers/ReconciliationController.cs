@@ -154,7 +154,10 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
-                    TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+                    var glAccountList = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
+                    glAccountList.ForEach(x => x.Name = $"{x.Code} - {x.Name}");
+                    TempData["GLAccounts"] = glAccountList;
+                    //TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
                     if (userType == "1")
                     {
                         ViewBag.IsStaffUser = true;
@@ -587,7 +590,31 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
-
+        [CheckSession]
+        public JsonResult GetIsEnablePlaid(int agencyId)
+        {
+            try
+            {
+                var IsEnablePlaid = false;
+                using (ClientService objClientService = new ClientService())
+                {
+                    CreateClientVM Clientvm = new CreateClientVM();
+                    var client = objClientService.GetClientById(agencyId);
+                    IsEnablePlaid = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
+                }
+                return Json(new { Data = IsEnablePlaid, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                return Json(new
+                {
+                    File = "",
+                    Status = "Error",
+                    Message = ex.Message
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public JsonResult EmailSend(string ClientName, string ClientId, string NotInBankUnreconciledItemsCount, string url, string sentdate)
         {
             try

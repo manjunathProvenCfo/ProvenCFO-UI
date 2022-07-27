@@ -221,6 +221,9 @@ var getSampleBGImageByFileExtension = function (fileExtension) {
     else if (fileExtension == 'CSV' || fileExtension == 'csv') {
         bgimage = '../../assets/img/kanban/I_CSV.png';
     }
+    else if (fileExtension == 'PNG' || fileExtension == 'JPG' || fileExtension == 'JPEG' || fileExtension == 'TIFF' || fileExtension == 'GIF' || fileExtension == 'JFIF') {
+        bgimage = '../../assets/img/reports/Image.png';
+    }
     return bgimage;
 }
 var ConvertToUDS = function (inputAmount) {
