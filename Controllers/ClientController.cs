@@ -159,6 +159,8 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
                             Clientvm.ThirdPartyAccountingApp_ref = 1;
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
+
+                            ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
                             return View(Clientvm);
                         }
                     }
@@ -170,6 +172,8 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+
 
         [CheckSession]
         [HttpGet]
@@ -205,11 +209,14 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.ContactPersonName = client.ContactPersonName;
                             Clientvm.EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                             if (client.StartDate != null)
-                            {
+                            { 
                                 Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
                                 //   // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
                                 //    //Clientvm.StartDate = client.StartDate;
                             }
+
+
+                            ViewBag.thirdPatyAPI = objClientService.GetThirdPatyAPIDetails().list;
                             Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
                             //else
                             //{
@@ -282,6 +289,8 @@ namespace ProvenCfoUI.Controllers
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
 
+                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
+
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
                                     CultureInfo provider = CultureInfo.InvariantCulture;
@@ -300,6 +309,12 @@ namespace ProvenCfoUI.Controllers
                                     // createClientVM.XeroScope = createClientVM.XeroScopeArray.ToString();
                                     //string result = string.Join(".", array);
                                     //string.Join(",", Client);s
+
+                                    if (createClientVM.APIClientID!=null&&createClientVM.APIClientID!="")
+                                    {
+                                        createClientVM.APIClientID=createClientVM.APIClientID.Split('=')[0];
+                                    }
+
                                     if (Clientvm.XeroScopeArray != null)
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
@@ -319,6 +334,13 @@ namespace ProvenCfoUI.Controllers
                                     createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                     createClientVM.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                     createClientVM.clientXeroAccounts = obj.GetClientXeroAcccountsByAgencyId(createClientVM.Id).ResultData;
+
+
+                                    if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
+                                    {
+                                        createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
+                                    }
+
                                     if (ClientExist != null && ClientExist.Id != createClientVM.Id)
                                     {
                                         ViewBag.ErrorMessage = "Exist";
@@ -408,6 +430,29 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
+        [CheckSession]
+        [HttpGet]
+        public ActionResult GetThirdPartyDetails(int Id=0)
+        {
+
+            try
+            {
+                using (var clientServ =  new ClientService()) {
+
+
+                    return  Json(clientServ.GetThirdPatyAPIDetails().list);
+                }
+
+            }catch(Exception ex)
+            {
+
+                return Json(new { msg=ex.Message});
+            }
+         
+
+        }
+
         [CheckSession]
         public ActionResult GetClientXeroAcccountsList()
         {
@@ -422,6 +467,31 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
+                throw ex;
+            }
+        }
+
+
+
+        [HttpGet]
+        [CheckSession]
+        public ActionResult GetXeroRelatedInfo(string agencyName,string clientId,string clientSecret)
+        {
+            try
+            {
+                dynamic XeroInfo = new
+                {
+                    XeroID = "testId-qewewqdwdserwedwewew",
+                    XeroContectInfo = "qerwfefedfgwfssd",
+                    XeroShortCod = "refedfgrtrfsdf"
+                };
+
+                return Json(XeroInfo, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+                
                 throw ex;
             }
         }

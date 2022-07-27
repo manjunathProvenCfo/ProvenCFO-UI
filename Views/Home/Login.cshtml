@@ -102,9 +102,17 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        // $('#frmlogin').submit(function (event) { event.preventDefault(); });
-        $(function () {
 
+        //Put secret for selected API client Id  in API secret input field.
+        $("#apiclientid").unbind().on("change", function (e) {
+
+            var secret = e.target.selectedOptions[0].getAttribute("data-secret");
+
+            $("#APIClientSecret")[0].value = secret;
+
+        });
+
+        $(function () {
             if (localStorage.chkbx && localStorage.chkbx != '') {
                 $('#remember_me').attr('checked', 'checked');
                 $('#username').val(localStorage.usrname);
@@ -129,6 +137,10 @@
                 }
             });
         });
+
+
+
+
     </script>
 
 }
