@@ -291,7 +291,7 @@ namespace ProvenCfoUI.Controllers
             try
             {
 
-                using (ReportsService reportsService = new ReportsService())
+                using ( ReportsService reportsService = new ReportsService())
                 {
                     var rptlist = reportsService.GetReportByIds(Ids).ResultData;
                     if (rptlist != null)
@@ -301,17 +301,14 @@ namespace ProvenCfoUI.Controllers
                             foreach (var rpt in rptlist)
                             {
                                 var IsDelted = storage.DeleteAzureFiles(StorageContainerName, rpt.FilePath, null);
-                                if (IsDelted == true)
-                                {
-                                    var result = reportsService.Delete(Ids).ResultData;
-                                    if (result == true)
-                                    {
-
-                                    }
-                                }
+                            }
+                            var result = reportsService.Delete(Ids).ResultData;
+                            if (result == true)
+                            {
+                                return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
                             }
                         }
-                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+
                     }
                     return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
                 }
