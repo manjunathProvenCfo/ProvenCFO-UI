@@ -328,39 +328,50 @@
                                                 @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                             </div>
                                         }
-                                    
+
                                     </div>
+
+
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> API Client ID</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
-                                            @{ 
-                                               (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>).Add(new ThirdPartyAPIDetailsVM()
-                                               {
-                                                   ClientId = "",
-                                                   ClientSecret = "",
-                                                   Status = true
-                                                 ,
-                                                   ThirdParty = "select"
-                                               });
+                                            @{
+                                                (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>).Add(new ThirdPartyAPIDetailsVM()
+                                                {
+                                                    ClientId = "",
+                                                    ClientSecret = "",
+                                                    Status = true
+                                                  ,
+                                                    ThirdParty = "select"
+                                                });
 
+    var res = (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>)
+
+            .Where(apid => apid.ThirdParty == (Model.ThirdPartyAccountingApp_ref == 1 ? "Xero" : "QuickBook"));
+
+    var apiDetails = (@ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>);
                                             }
 
-                                            @Html.DropDownListFor(m => m.APIClientID, (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>).Select(ele => new SelectListItem()
-                                       {
-                                           Text = ele.ClientId!=""?ele.ClientId:ele.ThirdParty,
-                                           Value = ele.ClientId + "=" + ele.ClientSecret,
-                                           Selected = (Model.APIClientID==ele.ClientId?true:false)||ele.ThirdParty=="select"
-                                       }),new { @class="form-control" ,id="apiclientid" }) 
 
-                        
+
+                                            @Html.DropDownListFor(m => m.APIClientID, res.Select(ele => new SelectListItem()
+                                            {
+                                                Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
+                                                Value = ele.ClientId + "=" + ele.ClientSecret,
+                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "select"
+                                            }), new { @class = "form-control", id = "apiclientid" })
+
+
+
 
 
                                             @Html.ValidationMessageFor(model => model.APIClientID, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
+
                                     <div class="row align-items-center form-group">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> API Client Secret</label>
@@ -378,8 +389,10 @@
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
-                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch"></i>
-                                                @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
+                                             
+                                                  <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch" style="display:none;"></i>
+                                              
+                                                  @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
                                     }
@@ -545,7 +558,7 @@
 
     .ClientXeroIdTextBox {
         display: inline !important;
-        width: 92% !important;
+        width: 100% !important;
         user-select: none;
     }
 
@@ -561,7 +574,7 @@
 
 
 
-    <script>
+<script>
 
         $(function () {
             $("#ReceiveQuarterlyReports").prop('cheked', @Convert.ToString(Model.ReceiveQuarterlyReports).ToLower());
@@ -644,18 +657,34 @@
                         window.location.href = '/Client/ClientList'
                     });
         }
+
+          const apidetails = [{
+        "xero_apiclientId": "@ViewBag.thirdPatyAPI[0].ClientId",
+        "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"
+         },
+        {
+            "q_clientId": "@ViewBag.thirdPatyAPI[1].ClientId",
+            "q_secret": "@ViewBag.thirdPatyAPI[1].ClientSecret"
+        }];
+
         $(document).ready(function () {
             HidelottieLoader();
 
-            if ($(".divxeroscopeoption").hasClass("d-none")) {
+            $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
+            if (!$(".divxeroscopeoption").hasClass("d-none")) {
+            $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
+
+            }
+            else if ($(".divxeroscopeoption").hasClass("d-none")) {
 
                 $(".qbookselect").select2({ maximumSelectionLength: 10,allowClear: false });
-            } else {
-
-               $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
+            }
+            else {
+                $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
+                $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
             }
 
-       
+
 
             $("#apiclientid").unbind().on("change", function (e) {
 
@@ -672,43 +701,48 @@
                 }
             });
 
+            if (document.getElementById("xeroIDFetch")) {
 
-            $("#xeroIDFetch").unbind().on("click", function (e) {
+                $("#xeroIDFetch").unbind().on("click", function (e) {
 
-                const xerioID =     $("#XeroID")[0];
-                const xeroContect = $("#XeroContactIDforProvenCfo")[0];
-                const xeroShortCode = $("#XeroShortCode")[0];
-                const clientName = $("#ClientName")[0].value;
-                const isSelected = $("#apiclientid")[0].value != "0";
-                const apiclientId = $("#apiclientid")[0].value.split("=")[0];
-                const secret = $("#apiclientid")[0].value.split("=")[1];
+                    const xerioID = $("#XeroID")[0];
+                    const xeroContect = $("#XeroContactIDforProvenCfo")[0];
+                    const xeroShortCode = $("#XeroShortCode")[0];
+                    const clientName = $("#ClientName")[0].value;
+                    const isSelected = $("#apiclientid")[0].value != "0";
+                    const apiclientId = $("#apiclientid")[0].value.split("=")[0];
+                    const secret = $("#apiclientid")[0].value.split("=")[1];
 
 
-                if (clientName != null && clientName!= "" && isSelected) {
+                    if (clientName != null && clientName != "" && isSelected) {
 
-                    $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${clientName}&clientId=${apiclientId}&clientSecret=${secret}`, {
-                        method: "GET",
-                        contentType: "application/json",
-                        complete: function (res) {
-                            if (res.status != 200) {
-                                ShowAlertBoxError("Unable to get Xero Details!");
-                                return;
+                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${clientName}&clientId=${apiclientId}&clientSecret=${secret}`, {
+                            method: "GET",
+                            contentType: "application/json",
+                            complete: function (res) {
+                                if (res.status != 200) {
+                                    ShowAlertBoxError("Unable to get Xero Details!");
+                                    return;
+                                }
+                                xerioID.value = res.responseJSON.XeroID;
+                                xeroShortCode.value = res.responseJSON.XeroShortCod;
+                                xeroContect.value = res.responseJSON.XeroContectInfo;
                             }
-                            xerioID.value = res.responseJSON.XeroID;
-                            xeroShortCode.value = res.responseJSON.XeroShortCod;
-                            xeroContect.value = res.responseJSON.XeroContectInfo;
-                        }
-                    });
-                } else {
-                    ShowAlertBoxError("Select the API client Id or Client Name is  not selected!");
-                }
+                        });
+                    } else {
+                        ShowAlertBoxError("Select the API client Id or Client Name is  not selected!");
+                    }
 
 
 
-            });
+                });
+            }
         });
 
-        $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
+
+
+
+    $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
 
             if (this.checked && this.value == '1') {
                 $("#xeroshort").show();
@@ -716,8 +750,11 @@
                 $("#xero").show();
                 $("#xerocontact").show();
                 $('#divxeroscopeoption').removeClass('d-none');
-                $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false  });
+                $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
 
+                $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[0].xero_apiclientId}=${apidetails[0].xero_secret}`);
+                $("#apiclientid")[0].children[0].innerHTML = apidetails[0].xero_apiclientId;
+                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
                 $("#quickbookcompany").hide();
                 $("#divQuickbookscopeoption").hide();
                 $("#EnableAutomation").prop("disabled", false);
@@ -732,17 +769,23 @@
                 $("#divQuickbookscopeoption").show();
                 $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
 
-          
+
                 $('#EnableAutomation').trigger('click');
                 $("#EnableAutomation").prop("disabled", true);
                 $('#XeroScopeArray').val();
                 $("#quickbookcompany").show();
+
+
+                $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[1].q_clientId}=${apidetails[1].q_secret}`);
+                $("#apiclientid")[0].children[0].innerHTML = apidetails[1].q_clientId;
+                $("#APIClientSecret")[0].value = apidetails[1].q_secret;
+
+
             }
 
         });
 
-
-    </script>
+</script>
 
 
 }
