@@ -670,18 +670,18 @@
         $(document).ready(function () {
             HidelottieLoader();
 
-            $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
-            if (!$(".divxeroscopeoption").hasClass("d-none")) {
-            $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
+            var checkParty = "@Model.ThirdPartyAccountingApp_ref";
 
-            }
-            else if ($(".divxeroscopeoption").hasClass("d-none")) {
+            if (checkParty == "2") {
+                $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
 
-                $(".qbookselect").select2({ maximumSelectionLength: 10,allowClear: false });
+                $("#APIClientSecret")[0].value = apidetails[1].q_secret;
             }
             else {
                 $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
-                $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
+
+                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
+
             }
 
 
