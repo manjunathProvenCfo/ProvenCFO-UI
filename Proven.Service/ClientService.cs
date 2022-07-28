@@ -335,5 +335,16 @@ namespace Proven.Service
             return GetAsync<ThirdPartyAccountingAppVMModel>("Client/GetThirdPartyAccountingData").Result;
         }
 
+
+        public ThirdPartyAPIDetails GetThirdPatyAPIDetails() {
+
+
+            var result = new ThirdPartyAPIDetails();
+
+
+            result.list = GetAsync<List<ThirdPartyAPIDetailsVM>>("Client/GetThirdPartyAPIDetails").Result;
+
+            return result;
+        }
     }
 }
