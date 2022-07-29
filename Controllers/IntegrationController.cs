@@ -203,20 +203,22 @@ namespace ProvenCfoUI.Controllers
                 {
                     using (ClientService objClient = new ClientService())
                     {
+
                         var client = objClient.GetClientById(ClientID);
+                        
                         dynamic AppPackage = null;
                         dynamic Token = null;
                         switch (client.ThirdPartyAccountingApp_ref.Value)
                         {
                             case 1:
                                 AppPackage = new XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Model.Accounting.Account>>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
-                                Token = AccountingPackageInstance.Instance.XeroToken;
+                                Token = AppPackage.getSavedTokenFormat(ClientID); //AccountingPackageInstance.Instance.XeroToken;
                                 TenentID = client.XeroID;
                                 break;
                             case 2:
                                 AppPackage = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Account[]>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
-                                Token = AccountingPackageInstance.Instance.QuickBooksToken;
-                                 TenentID = Convert.ToString(client.QuickBooksCompanyId);
+                                Token = AppPackage.getSavedTokenFormat(ClientID);  //AccountingPackageInstance.Instance.QuickBooksToken;
+                                TenentID = Convert.ToString(client.QuickBooksCompanyId);
                                 break;
                             default:
                                 break;
@@ -338,7 +340,7 @@ namespace ProvenCfoUI.Controllers
                                 Token = AccountingPackageInstance.Instance.QuickBooksToken;
                                 TenentID = Convert.ToString(client.QuickBooksCompanyId);
                                 break;
-                            default:    
+                            default:
                                 break;
                         }
 
