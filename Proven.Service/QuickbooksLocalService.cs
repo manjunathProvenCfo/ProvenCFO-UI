@@ -80,7 +80,7 @@ namespace Proven.Service
 
         public override AppTokenInfoMain GetSavedToken(int AgencyID)
         {
-            var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            var response = Prodclient.GetAsync("Xero/GetSavedToken?AgencyID=" + AgencyID).Result;
             if (response.IsSuccessStatusCode)
             {
                 var _content = response.Content.ReadAsStringAsync().Result;
@@ -103,6 +103,23 @@ namespace Proven.Service
                 objToken.id_token = SavedToken.id_token;
                 objToken.access_token = SavedToken.access_token;
                 objToken.refresh_token = SavedToken.refresh_token;                             
+                return (T)Convert.ChangeType(objToken, typeof(T));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
+        public override T getSavedTokenFormat(int AgencyId)
+        {
+            try
+            {
+                var SavedToken = GetSavedToken(AgencyId).ResultData;
+                TokenResponse objToken = new TokenResponse();                
+                objToken.id_token = SavedToken.id_token;
+                objToken.access_token = SavedToken.access_token;
+                objToken.refresh_token = SavedToken.refresh_token;
                 return (T)Convert.ChangeType(objToken, typeof(T));
             }
             catch (Exception ex)

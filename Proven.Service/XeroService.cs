@@ -117,6 +117,27 @@ namespace Proven.Service
             //return await RequestClientCredentialsTokenAsync();            
 
         }
+        public override T getSavedTokenFormat(int AgencyId)
+        {
+            try
+            {
+                var SavedToken = GetSavedToken(AgencyId).ResultData;
+                IXeroToken token = new XeroOAuth2Token
+                {
+                    AccessToken = SavedToken.access_token,
+                    RefreshToken = SavedToken.refresh_token,
+
+                    IdToken = SavedToken.id_token
+                    // This is required for refresh logic down in GetCurrentValidTokenAsync.                    
+                };
+                return (T)token;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
         public override async Task<T> RefreshToken(T xeroToken)
         {
             try
@@ -136,7 +157,7 @@ namespace Proven.Service
         }
         public override AppTokenInfoMain GetSavedToken(int AgencyID)
         {
-            var response = Prodclient.GetAsync("Xero/GetXeroToken?AgencyID=" + AgencyID).Result;
+            var response = Prodclient.GetAsync("Xero/GetSavedToken?AgencyID=" + AgencyID).Result;
             if (response.IsSuccessStatusCode)
             {
                 var _content = response.Content.ReadAsStringAsync().Result;
