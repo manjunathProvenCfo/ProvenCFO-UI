@@ -1406,6 +1406,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Administrator\Data\" />
     <Folder Include="Areas\Administrator\Views\RestClient\" />
+    <Folder Include="assets\tempReports\" />
     <Folder Include="Authorization\" />
     <Folder Include="Scripts\Custom\" />
     <Folder Include="Views\Base\" />

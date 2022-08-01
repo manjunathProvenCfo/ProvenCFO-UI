@@ -295,7 +295,8 @@ namespace ProvenCfoUI.Comman
                         directory = share.GetDirectoryClient(concatFolder);
                         if (fileNames != null && !string.IsNullOrEmpty(fileNames))
                         {
-                            ShareFileClient file = directory.GetFileClient(fileNames);
+                            var fileN = dirName.Split('/')[dirName.Split('/').Length - 1];
+                            ShareFileClient file = directory.GetFileClient(fileN);
                             return file.OpenRead();                            
                         }
                         else

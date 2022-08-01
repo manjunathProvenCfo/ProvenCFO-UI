@@ -217,10 +217,33 @@ namespace ProvenCfoUI.Controllers
                     using (ReportsService reportsService = new ReportsService())
                     {
                         var reports = reportsService.GetReports(agencyId, year, periodType);
-
                         foreach (var report in reports)
                         {
-                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName + report.FileExtention);
+                            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                            {
+                                var filepath = storage.GetFileSasUri(StorageContainerName, report.FilePath, DateTime.UtcNow.AddMinutes(1), ShareFileSasPermissions.Read).AbsoluteUri;
+                               var stream = storage.GetFileStream(StorageContainerName, report.FilePath, report.FileName);
+                                var path = Server.MapPath("~/assets/tempReports/")+report.AgencyId_Ref+"\\"+report.FileName+report.FileExtention;
+                                if(!Directory.Exists(Server.MapPath("~/assets/tempReports/") + report.AgencyId_Ref + "\\"))
+                                {
+                                    Directory.CreateDirectory(Server.MapPath("~/assets/tempReports/") + report.AgencyId_Ref + "\\");
+
+                                }
+                                var tempStream = System.IO.File.Create(path);
+                                stream.Seek(0,SeekOrigin.Begin);
+                                stream.CopyTo(tempStream);
+                                stream.Close();
+                                tempStream.Close();
+                                ziparchive.CreateEntryFromFile(path,report.FileName+report.FileExtention);      
+                            }
+
+                            DirectoryInfo di = new DirectoryInfo(Server.MapPath("~/assets/tempReports/")+report.AgencyId_Ref+"\\"); 
+                            FileInfo[] files = di.GetFiles();
+                            foreach (FileInfo file in files)
+                            {
+                                file.Delete();
+                            }
+                            di.Delete();
                         }
                     }
                 }
