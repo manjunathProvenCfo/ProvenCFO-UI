@@ -118,6 +118,42 @@ namespace ProvenCfoUI.Controllers
             }
             return Json(new { File = "", Status = ViewBag.ErrorMessage, Message = "Report upload failed!!" }, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        [CheckSession]
+        [HttpGet]
+       
+        public void GetReportResource(string path,string fileName,string fileExtention)
+         {
+
+         
+            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+            {
+                long readedByteChunk = 0;
+                int  byteChunkRemain= 0;   
+                
+                Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);           
+                
+                byte[] bytes = new byte[azureStream.Length + 1];
+
+                azureStream.Seek(0, SeekOrigin.Begin);
+                byteChunkRemain = (int)azureStream.Length; 
+                
+                //for handling large files
+                readChunk:
+                readedByteChunk += azureStream.Read(bytes,(int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length- readedByteChunk))
+                {
+                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                    goto readChunk;
+                }
+                azureStream.Close();
+                Response.BinaryWrite(bytes);
+            }
+        }
+
         [CheckSession]
         public JsonResult GetReports(int agencyId, int year, string periodType)
         {
@@ -129,11 +165,12 @@ namespace ProvenCfoUI.Controllers
                     using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
                     {
                         var reports = reportsService.GetReports(agencyId, year, periodType);
+
                         foreach (var item in reports)
                         {
-                            item.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, item.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+                                   item.FileName = item.FileName.Split('_').Length>1? item.FileName.Split('_')[1]:item.FileName;
+                                   item.DownloadFileLink = @"/Reports/GetReportResource?path="+item.FilePath+"&&fileName="+item.FileName+"&&fileExtention="+item.FileExtention;
                         }
-
                         return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                     }
                 }
@@ -187,7 +224,11 @@ namespace ProvenCfoUI.Controllers
                         var reports = await reportsService.GetDashboardReports(agencyId);
                         foreach (var rpt in reports)
                         {
-                            rpt.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, rpt.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+
+
+                       
+                            rpt.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, rpt.FilePath, DateTime.Now.AddSeconds(100), ShareFileSasPermissions.All).AbsoluteUri;
+
                         }
 
 

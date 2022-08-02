@@ -347,6 +347,7 @@ var prepareAndPrependUploaderAttachment = function (obj) {
 }
 
 var getReports = function (agencyId, year, period) {
+
     getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
         if (response.Status == "Error")
             ShowAlertBoxError("Error", "Error while fethcing reports!!");
@@ -358,7 +359,7 @@ var getReports = function (agencyId, year, period) {
             $(`.report-card-body[data-report-period='${period}'] .report`).remove();
         }        
         reports.forEach(function (obj) {
-            let azureFilepath = obj.AzureFileSasUri;
+            let downloadFileLink = obj.DownloadFileLink;
             let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
             if (isEmptyOrBlank(thumbnail))
                 thumbnail = obj.FilePath;
@@ -376,14 +377,14 @@ var getReports = function (agencyId, year, period) {
                 staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
             var reportHTML = `<div class="col-2 text-center report notes-item context-menu py-2" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> 
                                 <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
-                                <a class="data-fancybox" href="${azureFilepath}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtention}">
+                                <a class="data-fancybox" href="${downloadFileLink}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtention}">
                                 <figure class="book-cover"> 
                                 <img class="img-fluid" src="${thumbnail}" alt="" /> 
                                 </figure> 
                                 </a>
                                 <p class="publish-options mb-0 d-none">
-                                <a class="d-none" href="${azureFilepath}" target="_blank" id="aView"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a>
-                                <a class="d-none" href="${azureFilepath}" download="${obj.FileName}" id="aDownload"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a>
+                                <a class="d-none" href="${downloadFileLink}" target="_blank" id="aView"><span title="View"><i class="fa fa-eye" aria-hidden="true"></i></span></a>
+                                <a class="d-none" href="${downloadFileLink}" download="${obj.FileName}" id="aDownload"><span title="Download"><i class="fa fa-download" aria-hidden="true"></i></span></a>
                                 ${deleteReportHTML}
                                 ${renameReportHTML}
                                 ${monthlySummaryReportHTML}
