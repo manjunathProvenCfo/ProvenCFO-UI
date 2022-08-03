@@ -704,8 +704,11 @@
             }
             postAjaxSync(apiurl + `Xero/UpdateAccessToken`, JSON.stringify(TokenInfoVM), function (response) {
                 var r = response;
-                if (response.resultData != null && response.resultData == true) {
+                if (response != null && response.status == true) {
                     ShowAlertBoxSuccess("Success!", "API token has been updated successfuly.", function () { $APITokenupdatepopup.modal('hide'); });
+                }
+                else {
+                    ShowAlertBoxError("Error while update the token.");
                 }
             });
         }
