@@ -276,6 +276,14 @@ namespace ProvenCfoUI.Controllers
                                 return Json(new { Xdata = Header, Ydata = Ydata, Status = "Success" }, JsonRequestBehavior.AllowGet);
                             }
                         }
+                        else if (client.ThirdPartyAccountingApp_ref == 2)
+                        {
+                            using (QuickbooksLocalService<String, QuickBooksSharp.Entities.IncomeHeader> AccountingPackageService = new QuickbooksLocalService<String, QuickBooksSharp.Entities.IncomeHeader>(client.APIClientID, client.APIClientSecret, client.APIScope))
+                            {
+                                //AccountingPackageService.GetReportProfitAndLossAsync()
+                            }
+
+                        }
                     }
                 }
                 return Json(new { Xdata = Header, Ydata = Ydata, Status = "No Data" }, JsonRequestBehavior.AllowGet);
