@@ -226,8 +226,8 @@ namespace ProvenCfoUI.Controllers
                         {
 
 
-                       
-                            rpt.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, rpt.FilePath, DateTime.Now.AddSeconds(100), ShareFileSasPermissions.All).AbsoluteUri;
+                            rpt.FileName = rpt.FileName.Split('_').Length > 1 ? rpt.FileName.Split('_')[1] : rpt.FileName;
+                            rpt.DownloadFileLink = @"/Reports/GetReportResource?path=" + rpt.FilePath + "&&fileName=" + rpt.FileName + "&&fileExtention=" + rpt.FileExtention;
 
                         }
 

@@ -1425,7 +1425,7 @@ var defaultReportsWidget = function () {
     });
 }
 function prepareReportMedia(report) {
-    let azureFilepath = report.AzureFileSasUri;
+    let DownloadFileLink = report.DownloadFileLink;
     let thumbnail = getSampleBGImageByFileExtension(report.FileExtention);    
     if (isEmptyOrBlank(thumbnail))
         thumbnail = report.FilePath;
@@ -1433,10 +1433,10 @@ function prepareReportMedia(report) {
     thumbnail = thumbnail.replace("~/", "../../");
     let reportHTML = `<div class="media align-items-center mb-3">
                                     <div class="avatar avatar-2xl">
-                                        <a class="data-fancybox" href="${azureFilepath}" data-fancybox="group"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
+                                        <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
-                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${azureFilepath}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>
+                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>
                                         <p class="text-500 fs--2 mb-0">Created <span class="ml-2 d-inline-block">${moment(report.CreatedDate).format("MMMM DD, YYYY")}</span></p>
                                     </div>
                                 </div>`;
