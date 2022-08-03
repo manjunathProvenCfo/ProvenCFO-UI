@@ -74,6 +74,7 @@ namespace Proven.Model
         public string ReportId { get; set; }
         public bool?   EnableAutomation { get; set; }
         public int? ThirdPartyAccountingApp_ref { get; set; }
+        public int? XeroTokenInfoLink_ref { get; set; }
         public int? CompanyId { get; set; }
 
 

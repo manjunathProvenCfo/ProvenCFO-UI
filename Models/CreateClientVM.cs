@@ -70,6 +70,7 @@ namespace ProvenCfoUI.Models
         public string ReportId { get; set; }
 
         public string XeroShortCode { get; set; }
+        public int? XeroTokenInfoLink_ref { get; set; }
 
         public string ExcludedAccountNumbers { get; set; }
         public string IncludedAccountNumbers { get; set; }
