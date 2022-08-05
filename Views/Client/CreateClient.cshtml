@@ -344,30 +344,30 @@
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
                                             @{
-                                                (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>).Add(new ThirdPartyAPIDetailsVM()
-                                                {
-                                                    ClientId = "",
-                                                    ClientSecret = "",
-                                                    Status = true
-                                                  ,
-                                                    ThirdParty = "select"
-                                                });
+                                                                var res = (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>)
 
-    var res = (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>)
+                                                                        .Where(apid => apid.ThirdParty == (Model.ThirdPartyAccountingApp_ref == 1 ? "Xero" : "QuickBook")).ToList();
 
-            .Where(apid => apid.ThirdParty == (Model.ThirdPartyAccountingApp_ref == 1 ? "Xero" : "QuickBook"));
+                                                                var apiDetails = (@ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>);
 
-    var apiDetails = (@ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>);
+
+                                                                 res.Add(new ThirdPartyAPIDetailsVM()
+                                                                {
+                                                                    ClientId = "",
+                                                                    ClientSecret = "",
+                                                                    Status = true,
+                                                                    ThirdParty = "select"
+                                                                });
                                             }
 
 
 
-                                            @Html.DropDownListFor(m => m.APIClientID, res.Select(ele => new SelectListItem()
-                                            {
-                                                Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
-                                                Value = ele.ClientId + "=" + ele.ClientSecret,
-                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "select"
-                                            }), new { @class = "form-control", id = "apiclientid" })
+                                                            @Html.DropDownListFor(m => m.APIClientID, res.Select(ele => new SelectListItem()
+                                                            {
+                                                                Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
+                                                                Value = ele.ClientId + "=" + ele.ClientSecret,
+                                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "select"
+                                                            }), new { @class = "form-control", id = "apiclientid" })
 
 
 
@@ -395,7 +395,7 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
 
-                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch" style="display:none;"></i>
+                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch"></i>
 
                                                 @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
@@ -438,7 +438,7 @@
                                         </div>
                                     }
                                     else
-                                    {
+                                                {
                                         <div class="row align-items-center form-group" id="quickbookcompany" style="display:none;">
                                             <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                                 <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
@@ -563,7 +563,7 @@
 
     .ClientXeroIdTextBox {
         display: inline !important;
-        width: 100% !important;
+        width: 92% !important;
         user-select: none;
     }
 
@@ -626,7 +626,7 @@
                         IncludedAccountId = IncludedAccountId != '' ? IncludedAccountId + ',' + val.id : val.id;
                     }
             });
-            }
+           }
             $('#hidExcludedAccountNumbers').val(ExcludedAccountId);
             $('#hidIncludedAccountNumbers').val(IncludedAccountId);
         }
@@ -677,10 +677,9 @@
                     });
         }
 
-          const apidetails = [{
-        "xero_apiclientId": "@ViewBag.thirdPatyAPI[0].ClientId",
-        "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"
-         },
+          const apidetails=[{
+           "xero_apiclientId":"@ViewBag.thirdPatyAPI[0].ClientId",
+           "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"},
         {
             "q_clientId": "@ViewBag.thirdPatyAPI[1].ClientId",
             "q_secret": "@ViewBag.thirdPatyAPI[1].ClientSecret"
@@ -714,20 +713,16 @@
         }
         $(document).ready(function () {
             HidelottieLoader();
-
             var checkParty = "@Model.ThirdPartyAccountingApp_ref";
 
             if (checkParty == "2") {
                 $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
 
                 $("#APIClientSecret")[0].value = apidetails[1].q_secret;
-
             }
             else {
                 $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
-
-                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
-
+                
             }
 
 
@@ -800,8 +795,14 @@
 
                 $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[0].xero_apiclientId}=${apidetails[0].xero_secret}`);
                 $("#apiclientid")[0].children[0].innerHTML = apidetails[0].xero_apiclientId;
-                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
-                $("#quickbookcompany").hide();
+
+
+                if ($("#apiclientid")[0].selectedOptions[0]
+                    .value != "=") {
+                    $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
+
+                }
+                    $("#quickbookcompany").hide();
                 $("#divQuickbookscopeoption").hide();
                 $("#EnableAutomation").prop("disabled", false);
             }
@@ -824,7 +825,12 @@
 
                 $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[1].q_clientId}=${apidetails[1].q_secret}`);
                 $("#apiclientid")[0].children[0].innerHTML = apidetails[1].q_clientId;
+
+                if ($("#apiclientid")[0].selectedOptions[0]
+                    .value != "=") {
                 $("#APIClientSecret")[0].value = apidetails[1].q_secret;
+                }
+
 
 
             }
