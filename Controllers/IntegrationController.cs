@@ -440,7 +440,7 @@ namespace ProvenCfoUI.Controllers
             {
                 using (PlaidBankTransaction<string, string> plaid = new PlaidBankTransaction<string, string>(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
                 {
-                    var result = await plaid.getLinkToken(ClientName);
+                    var result = await plaid.getLinkToken("ProvenCFO");
                     if (result != String.Empty)
                     {
 
