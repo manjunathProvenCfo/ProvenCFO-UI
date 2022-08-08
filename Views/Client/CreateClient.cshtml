@@ -395,7 +395,7 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
 
-                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch"></i>
+                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch" style="display:none;"></i>
 
                                                 @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
