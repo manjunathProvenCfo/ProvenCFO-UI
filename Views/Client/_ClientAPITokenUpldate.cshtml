@@ -8,26 +8,30 @@
             </div>
             <div class="modal-body p-0">
                 <div class="bg-light rounded-soft-top px-4 py-3">
-                    <h4 class="mb-1" id="report-modal-label-title">Update API token details</h4>
+                    <h4 class="mb-1" id="report-modal-label-title">Update API Token Details</h4>
                 </div>
                 <div class="p-4">
                     <div class="row">
                         <div class="col-sm-12">
-                            <strong style="color: red;">Get the Oauth 2.0 authenticiation token from accounting package API.</strong>
+                            <strong style=""> Oauth 2.0 tokens can be obtained from accounting package APIs.</strong>
                             <div class="clearfix">&nbsp;</div>
-                            <div><label class="form-label" for="eventTitle">Refresh token</label><input name="refreshtoken" placeholder="refresh_token" type="text" id="txt_refresh_token" class="form-control" background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"></div>
-                            <div><label class="form-label" for="description">Access token</label><textarea placeholder="access_token" rows="6" name="description" id="txt_access_token" class="form-control w-100"></textarea></div>
-                            <div id="div_IdToken"><label class="form-label" for="description">Id token</label><textarea placeholder="id_token" rows="6" name="description" id="txt_id_token" class="form-control w-100"></textarea></div>
+                            <div><label class="form-label" for="eventTitle">Refresh Token</label><input name="refreshtoken" placeholder="Refresh_Token" type="text" id="txt_refresh_token" class="form-control" background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"></div>
+                            <div><label class="form-label" for="description">Access Token</label><textarea placeholder="Access_Token" rows="6" name="description" id="txt_access_token" class="form-control w-100"></textarea></div>
+                            <div id="div_IdToken"><label class="form-label" for="description">ID Token</label><textarea placeholder="ID_Token" rows="6" name="description" id="txt_id_token" class="form-control w-100"></textarea></div>
                             <br />
                             <div class="row align-items-center form-group">
                                 <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
-                                <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                    <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" onclick="UpdatedToken();">Update</button>
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-primary btn-sm px-3 mr-2" type="submit" id="btnCreate" name="submit" onclick="UpdatedToken();">Update</button>
+
+                                    <button type="button" id="resetValue" class="btn btn-primary btn-sm px-3 mr-2" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
+                            
 
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

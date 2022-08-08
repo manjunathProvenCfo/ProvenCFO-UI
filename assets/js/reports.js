@@ -435,7 +435,12 @@ var addContextMenu = function () {
     }
     else {
         let menus = {
-
+            "view": {
+                name: "View",
+                callback: function (itemKey, opt, e) {
+                    opt.$trigger.find("#aView")[0].click();
+                }
+            },
             "download": {
                 name: "Download",
                 callback: function (itemKey, opt, e) {
