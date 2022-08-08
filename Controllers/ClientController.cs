@@ -10,7 +10,9 @@ using ProvenCfoUI.Comman;
 using System.Globalization;
 using log4net;
 using System.Threading.Tasks;
+using Xero.NetStandard.OAuth2.Token;
 using Proven.Model;
+using System.Text.RegularExpressions;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -493,25 +495,100 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-
-
         [HttpGet]
         [CheckSession]
-        public ActionResult GetXeroRelatedInfo(string agencyName, string clientId, string clientSecret)
+        public  async Task<ActionResult> GetXeroRelatedInfo(XeroDetailsVM xeroInfo)
         {
+
+            string xeroId = "",xeroShortCode  = "" ,xeroProvenCfoContactId="";
+            
+            string errorMsg = "";
+
             try
             {
-                dynamic XeroInfo = new
+                ClientModel client;
+                using (var clientService = new ClientService())
                 {
-                    XeroID = "testId-qewewqdwdserwedwewew",
-                    XeroContectInfo = "qerwfefedfgwfssd",
-                    XeroShortCod = "refedfgrtrfsdf"
-                };
+                    client = clientService.GetClientByName("ProvenCFO");
+                }
 
-                return Json(XeroInfo, JsonRequestBehavior.AllowGet);
+
+                if (errorMsg == "")
+                {
+                    using (var _xeroService = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Contacts>(
+                   xeroInfo.clientId, xeroInfo.clientSecret,
+                   AccountingPackageInstance.Instance.Scope,
+                   AccountingPackageInstance.Instance.XeroAppName))
+                    {
+                        var contacts = await _xeroService.GetContacts(AccountingPackageInstance.Instance.XeroToken, client.XeroID);
+
+                        string toMatch = xeroInfo.agencyName.Split(',')[0];
+
+
+                        var pattern = new Regex($""+toMatch,RegexOptions.IgnoreCase);
+
+                        var contact = contacts._Contacts.Where(contactInfo => pattern.IsMatch(contactInfo.Name)).ToList();
+
+                        if (contact.Count>0)
+                        {
+                            xeroProvenCfoContactId = contact[0].ContactID.ToString();
+                        }
+                    }
+                }
+                else
+                {
+
+                    errorMsg = "Issue in finding contact Id for " + xeroInfo.agencyName + "!";
+                }
+
+                using (var _xeroService = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisations>(
+                    xeroInfo.clientId, xeroInfo.clientSecret,
+                    AccountingPackageInstance.Instance.Scope,
+                    AccountingPackageInstance.Instance.XeroAppName))
+                {
+                   
+                    //Get 
+                    var organisations = await _xeroService.GetOrganisationsId(AccountingPackageInstance.Instance.XeroToken,xeroProvenCfoContactId);
+
+                    var org = organisations._Organisations
+                                                  .Where(_org => _org.Name == xeroInfo.agencyName).ToList();
+
+                    if (org.Count==1)
+                    {
+                        xeroId  = org[0].OrganisationID.ToString();
+                        xeroShortCode = org[0].ShortCode;
+
+                    }
+                    else 
+                    {
+                        errorMsg = "Not a Valid Xero Client!";
+
+                    }
+                }
+
+
+                    
+
+                    dynamic XeroInfo = new
+                    {
+                        XeroID = xeroId,
+                        XeroContectInfo = xeroProvenCfoContactId,
+                        XeroShortCod = xeroShortCode
+                    };
+
+
+                if (errorMsg!="")
+                {
+                    throw new Exception(errorMsg);
+                }
+
+
+                    return Json(XeroInfo, JsonRequestBehavior.AllowGet);
+                
             }
             catch (Exception ex)
             {
+                
                 log.Error(Utltity.Log4NetExceptionLog(ex));
 
                 throw ex;
