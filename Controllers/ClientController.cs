@@ -496,5 +496,29 @@ namespace ProvenCfoUI.Controllers
         }
 
 
+        [HttpGet]
+        [CheckSession]
+        public ActionResult GetXeroRelatedInfo(string agencyName, string clientId, string clientSecret)
+        {
+            try
+            {
+                dynamic XeroInfo = new
+                {
+                    XeroID = "testId-qewewqdwdserwedwewew",
+                    XeroContectInfo = "qerwfefedfgwfssd",
+                    XeroShortCod = "refedfgrtrfsdf"
+                };
+
+                return Json(XeroInfo, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+
+                throw ex;
+            }
+        }
+
+
     }
 }
