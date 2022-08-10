@@ -1382,6 +1382,7 @@ document = window.document || {};
                     if (e.which == 9) {
                         e.preventDefault();
                         button.click();
+                        self.hidePicker();
                     }
                     else if (e.which == 27) {
                         e.preventDefault();
