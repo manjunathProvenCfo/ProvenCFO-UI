@@ -182,6 +182,9 @@ namespace Proven.Service
             this.isDisposed = true;
         }
 
-        
+        public override Task<V> GetOrganisationsId(T xeroToken, string XeroTenentID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

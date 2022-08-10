@@ -170,6 +170,7 @@ namespace Proven.Service
 
             }
         }
+
         public override ReturnModel UpdateToken(V tokenInfoVM)
         {
             return ProdPostAsync<ReturnModel, V>("Xero/UpdateToken", tokenInfoVM).Result;
@@ -188,6 +189,12 @@ namespace Proven.Service
             IXeroToken Token = (IXeroToken)LoginAccess().Result;
             var result = await XeroClient.GetConnectionsAsync(Token);
             return (V)Convert.ChangeType(result, typeof(List<V>));
+        }
+
+        public async Task<V> GetXeroConnections(T Token)
+        {
+            var result = await XeroClient.GetConnectionsAsync((IXeroToken)Token);
+            return (V)Convert.ChangeType(result, typeof(V));
         }
         /// <summary>
         /// Requests a fully formed IXeroToken with list of tenants filled
@@ -291,6 +298,11 @@ namespace Proven.Service
             this.isDisposed = true;
         }
 
-       
+        public override async Task<V> GetOrganisationsId(T xeroToken, string XeroTenentID="")
+        {
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetOrganisationsAsync(Token.AccessToken, XeroTenentID);
+            return (V)Convert.ChangeType(result, typeof(V));
+        }
     }
 }

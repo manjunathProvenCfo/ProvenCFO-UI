@@ -101,6 +101,7 @@
     <Compile Include="UserPreferencesVM.cs" />
     <Compile Include="UserSecurityVM.cs" />
     <Compile Include="UserTypesVM.cs" />
+    <Compile Include="XeroDetailsVM.CS" />
     <Compile Include="XeroGlAccountVM.cs" />
     <Compile Include="XeroReconcilationDataOnDemandRequestVM.cs" />
     <Compile Include="XeroTokenInfoVM.cs" />
