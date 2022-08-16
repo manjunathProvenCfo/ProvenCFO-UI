@@ -14,9 +14,7 @@
     using System.Web.Mvc;
     using Xero.NetStandard.OAuth2.Token;
 
-    /// <summary>
-    /// Defines the <see cref="ClientController" />.
-    /// </summary>
+
     [CustomAuthenticationFilter]
     [Exception_Filters]
     public class ClientController : BaseController
@@ -26,11 +24,6 @@
         /// </summary>
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        // GET: Client
-        /// <summary>
-        /// The ClientList.
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         [CustomAuthorize("Staff User")]
         public ActionResult ClientList()
@@ -50,10 +43,7 @@
             }
         }
 
-        /// <summary>
-        /// The ClientUserAssociationList.
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
+  
         [CheckSession]
         public ActionResult ClientUserAssociationList()
         {
@@ -72,10 +62,6 @@
             }
         }
 
-        /// <summary>
-        /// The ExportToExcel.
-        /// </summary>
-        /// <returns>The <see cref="JsonResult"/>.</returns>
         [CheckSession]
         public JsonResult ExportToExcel()
         {
@@ -121,10 +107,6 @@
             }
         }
 
-        /// <summary>
-        /// The ExportToExcel1.
-        /// </summary>
-        /// <returns>The <see cref="JsonResult"/>.</returns>
         [CheckSession]
         public JsonResult ExportToExcel1()
         {
@@ -146,11 +128,7 @@
             }
         }
 
-        /// <summary>
-        /// The Download.
-        /// </summary>
-        /// <param name="fileName">The fileName<see cref="string"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
+
         [CheckSession]
         public ActionResult Download(string fileName)
         {
@@ -168,11 +146,6 @@
             }
         }
 
-        /// <summary>
-        /// The UpdateToken.
-        /// </summary>
-        /// <param name="Token">The Token<see cref="TokenInfoVM"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         [HttpPost]
         public ActionResult UpdateToken(TokenInfoVM Token)
@@ -189,10 +162,6 @@
             }
         }
 
-        /// <summary>
-        /// The CreateClient.
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         [HttpGet]
         public ActionResult CreateClient()
@@ -225,11 +194,7 @@
             }
         }
 
-        /// <summary>
-        /// The EditClient.
-        /// </summary>
-        /// <param name="Id">The Id<see cref="int"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
+
         [CheckSession]
         [HttpGet]
         public ActionResult EditClient(int Id)
@@ -274,13 +239,7 @@
 
                             ViewBag.thirdPatyAPI = objClientService.GetThirdPatyAPIDetails().list;
                             Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
-                            //else
-                            //{
-                            //    Clientvm.StartDate = client.StartDate;
-                            //   // Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                            //}
+                     
                             TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
                             Clientvm.APIScope = client.APIScope;
@@ -292,7 +251,6 @@
                             Clientvm.EverhourId = client.EverhourId;
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
-                            //Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
                             Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
                             Clientvm.ReportId = client.ReportId;
@@ -321,11 +279,7 @@
             }
         }
 
-        /// <summary>
-        /// The CreateClient.
-        /// </summary>
-        /// <param name="createClientVM">The createClientVM<see cref="CreateClientVM"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
+    
         [CheckSession]
         [HttpPost]
         public ActionResult CreateClient(CreateClientVM createClientVM)
@@ -374,9 +328,7 @@
                                         Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
                                         return View("CreateClient", Clientvm);
                                     }
-                                    // createClientVM.XeroScope = createClientVM.XeroScopeArray.ToString();
-                                    //string result = string.Join(".", array);
-                                    //string.Join(",", Client);s
+                            
 
                                     if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
                                     {
@@ -387,7 +339,7 @@
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
-                                    //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
+          
                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
@@ -395,7 +347,7 @@
                                 }
                                 else
                                 {
-                                    //var exitclient = obj.GetClientById(createClientVM.Id);
+                
                                     TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
@@ -429,7 +381,7 @@
                                     return View("CreateClient", createClientVM);
                                 }
                                 return View("CreateClient", Clientvm);
-                                //return RedirectToAction("ClientList");
+                          
                             }
 
                         }
@@ -444,12 +396,6 @@
             return View();
         }
 
-        /// <summary>
-        /// The DeactivateClient.
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/>.</param>
-        /// <param name="Status">The Status<see cref="string"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         public ActionResult DeactivateClient(int id, string Status)
         {
@@ -476,11 +422,6 @@
             }
         }
 
-        /// <summary>
-        /// The DeleteClient.
-        /// </summary>
-        /// <param name="id">The id<see cref="int"/>.</param>
-        /// <returns>The <see cref="JsonResult"/>.</returns>
         [CheckSession]
         public JsonResult DeleteClient(int id)
         {
@@ -511,11 +452,6 @@
             }
         }
 
-        /// <summary>
-        /// The GetThirdPartyDetails.
-        /// </summary>
-        /// <param name="Id">The Id<see cref="int"/>.</param>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         [HttpGet]
         public ActionResult GetThirdPartyDetails(int Id = 0)
@@ -538,10 +474,6 @@
             }
         }
 
-        /// <summary>
-        /// The GetClientXeroAcccountsList.
-        /// </summary>
-        /// <returns>The <see cref="ActionResult"/>.</returns>
         [CheckSession]
         public ActionResult GetClientXeroAcccountsList()
         {
@@ -560,11 +492,7 @@
             }
         }
 
-        /// <summary>
-        /// The GetXeroRelatedInfo.
-        /// </summary>
-        /// <param name="xeroInfo">The xeroInfo<see cref="XeroDetailsVM"/>.</param>
-        /// <returns>The <see cref="Task{ActionResult}"/>.</returns>
+   
         [HttpGet]
         [CheckSession]
         public async Task<ActionResult> GetXeroRelatedInfo(XeroDetailsVM xeroInfo)
