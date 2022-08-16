@@ -232,8 +232,7 @@
                             if (client.StartDate != null)
                             {
                                 Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                                //   // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                                //    //Clientvm.StartDate = client.StartDate;
+                             
                             }
 
 
@@ -242,7 +241,14 @@
                      
                             TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
-                            Clientvm.APIScope = client.APIScope;
+                            if (client.ThirdPartyAccountingApp_ref == 1)
+                            {
+                             Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                            }
+                            else
+                            {
+                                Clientvm.APIScope = client.APIScope;
+                            }
                             Clientvm.APIClientID = client.APIClientID;
                             Clientvm.APIClientSecret = client.APIClientSecret;
                             Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
@@ -265,7 +271,7 @@
                             }
                             Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
                             Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
-
+                            Clientvm.XeroScopeArray = Clientvm.APIScope.Split(' ');
 
                             return View("CreateClient", Clientvm);
                         }
@@ -564,12 +570,12 @@
                         errorMsg = "The Entered organisation is not available in xero.Kindly connect with admin to connect the organisation in xero!";
                         return Json(new
                         {
-                            XeroID = xeroId,
-                            XeroContectInfo = xeroProvenCfoContactId,
-                            XeroShortCod = xeroShortCode,
+                            XeroID = "",
+                            XeroContectInfo ="",
+                            XeroShortCod = "",
                             Status = "Error",
                             ErrorMessage = errorMsg,
-                        });
+                        }, JsonRequestBehavior.AllowGet);
                     }
 
                 }
@@ -587,7 +593,7 @@
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
 
-                return Json(new { Status="Error",ErrorMessage=ex.Message});
+                return Json(new { Status="Error",ErrorMessage=ex.Message}, JsonRequestBehavior.AllowGet);
             }
         }
     }

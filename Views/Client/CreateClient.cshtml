@@ -409,7 +409,7 @@
                                                                     ClientId = "",
                                                                     ClientSecret = "",
                                                                     Status = true,
-                                                                    ThirdParty = "select"
+                                                                    ThirdParty = "Select"
                                                                 });
                                             }
 
@@ -419,7 +419,7 @@
                                                             {
                                                                 Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
                                                                 Value = ele.ClientId + "=" + ele.ClientSecret,
-                                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "select"
+                                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "Select"
                                                             }), new { @class = "form-control", id = "apiclientid" })
 
 
@@ -435,7 +435,7 @@
                                             <label for="split-login-email" class="mb-0"> API Client Secret</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.APIClientSecret, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.APIClientSecret, new { htmlAttributes = new { @class = "form-control  readonly" } })
                                             @Html.ValidationMessageFor(model => model.APIClientSecret, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -810,6 +810,8 @@
     ];
         $(document).ready(function () {
             HidelottieLoader();
+
+            $(".readonly")[0].setAttribute("readonly", "");
             var checkParty = "@Model.ThirdPartyAccountingApp_ref";
 
 
@@ -844,7 +846,9 @@
 
             if (selected!=""&&thirdPartyService == "1") {
 
-            const selectedResult = selected.split(',').filter(ele => {
+                const selectedResult = selected.split(' ').filter(ele => {
+
+
                 return !ele.includes("quickbooks", 0);
             });
 
@@ -865,7 +869,7 @@
 
             if (selected != "" && thirdPartyService == "2") {
         
-                var selectedResult = selected.split(',');
+                var selectedResult = selected.split(' ');
 
                 if (selectedResult.length > 3) {
 
