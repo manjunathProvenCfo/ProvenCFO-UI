@@ -121,6 +121,17 @@
         $(document).ready(function () {
             HidelottieLoader();
 
+                $("#email-subject").on("focus", function (e) {
+                    e.preventDefault();
+                    e.target.removeAttribute("readonly");
+
+                });
+
+                $("#email-subject").on("blur", function (e) {
+                    e.preventDefault();
+                    e.target.setAttribute("readonly", "");
+                });
+           
 
         });
         window.onerror = function (e) {
