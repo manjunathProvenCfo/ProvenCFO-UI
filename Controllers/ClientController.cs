@@ -501,7 +501,7 @@
    
         [HttpGet]
         [CheckSession]
-        public async Task<ActionResult> GetXeroRelatedInfo(XeroDetailsVM xeroInfo)
+        public async Task<ActionResult> GetXeroRelatedInfo(XeroDetailsVM xeroInfo) //fetch xero details like xero ID and xero short code
         {
             string xeroId = "", xeroShortCode = "", xeroProvenCfoContactId = "";
             string errorMsg = "";
