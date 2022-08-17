@@ -545,9 +545,9 @@
                                 xeroShortCode = org.ShortCode;
 
                                 using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Contacts>(
-                  xeroInfo.clientId, xeroInfo.clientSecret,
-                  AccountingPackageInstance.Instance.Scope,
-                  AccountingPackageInstance.Instance.XeroAppName))
+                                                            xeroInfo.clientId, xeroInfo.clientSecret,
+                                                            AccountingPackageInstance.Instance.Scope,
+                                                            AccountingPackageInstance.Instance.XeroAppName))
                                 {
                                     var contacts = await _service.GetContacts(AccountingPackageInstance.Instance.XeroToken, xeroId);
                                     contacts._Contacts.ForEach(con =>
