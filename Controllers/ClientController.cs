@@ -329,7 +329,7 @@
                                     if (ClientExist != null)
                                     {
                                         ViewBag.ErrorMessage = "Exist";
-                                        createClientVM.APIScope = string.Join(",", createClientVM.XeroScopeArray);
+                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                         Clientvm.APIScope = createClientVM.APIScope;
                                         Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
                                         return View("CreateClient", Clientvm);
@@ -567,7 +567,7 @@
                     }
                     else
                     {
-                        errorMsg = "The Entered organisation is not available in xero.Kindly connect with admin to connect the organisation in xero!";
+                        errorMsg = "The Entered organisation is not available in Xero. Kindly connect with admin to connect the organisation in Xero!";
                         return Json(new
                         {
                             XeroID = "",
