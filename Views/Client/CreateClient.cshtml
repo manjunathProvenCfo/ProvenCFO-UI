@@ -917,7 +917,7 @@
 
                     if (clientName != null && clientName != "" && isSelected) {
 
-                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${clientName}&clientId=${apiclientId}&clientSecret=${secret}`, {
+                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${encodeURIComponent(clientName)}&clientId=${apiclientId}&clientSecret=${secret}`, {
                             method: "GET",
                             contentType: "application/json",
                             complete: function (res) {
