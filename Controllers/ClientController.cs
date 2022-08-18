@@ -1,25 +1,29 @@
-﻿using Proven.Service;
-using ProvenCfoUI.Models;
-using ProvenCfoUI.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using ProvenCfoUI.Comman;
-using System.Globalization;
-using log4net;
-using System.Threading.Tasks;
-using Proven.Model;
-
-namespace ProvenCfoUI.Controllers
+﻿namespace ProvenCfoUI.Controllers
 {
+    using log4net;
+    using Proven.Model;
+    using Proven.Service;
+    using ProvenCfoUI.Comman;
+    using ProvenCfoUI.Helper;
+    using ProvenCfoUI.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
+    using Xero.NetStandard.OAuth2.Token;
+
+
     [CustomAuthenticationFilter]
     [Exception_Filters]
     public class ClientController : BaseController
     {
+        /// <summary>
+        /// Defines the log.
+        /// </summary>
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        // GET: Client
+
         [CheckSession]
         [CustomAuthorize("Staff User")]
         public ActionResult ClientList()
@@ -39,6 +43,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+  
         [CheckSession]
         public ActionResult ClientUserAssociationList()
         {
@@ -56,9 +61,6 @@ namespace ProvenCfoUI.Controllers
                 throw;
             }
         }
-
-
-
 
         [CheckSession]
         public JsonResult ExportToExcel()
@@ -126,6 +128,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+
         [CheckSession]
         public ActionResult Download(string fileName)
         {
@@ -142,6 +145,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
         [CheckSession]
         [HttpPost]
         public ActionResult UpdateToken(TokenInfoVM Token)
@@ -157,7 +161,6 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
 
         [CheckSession]
         [HttpGet]
@@ -190,7 +193,6 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
-
 
 
         [CheckSession]
@@ -230,23 +232,23 @@ namespace ProvenCfoUI.Controllers
                             if (client.StartDate != null)
                             {
                                 Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                                //   // Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                                //    //Clientvm.StartDate = client.StartDate;
+                             
                             }
 
 
                             ViewBag.thirdPatyAPI = objClientService.GetThirdPatyAPIDetails().list;
                             Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
-                            //else
-                            //{
-                            //    Clientvm.StartDate = client.StartDate;
-                            //   // Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                            //    //Clientvm.StartDateText = Clientvm.StartDateText == "01-01-0001" ? "" : Convert.ToString(Clientvm.StartDateText);
-                            //}
+                     
                             TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
-                            Clientvm.APIScope = client.APIScope;
+                            if (client.ThirdPartyAccountingApp_ref == 1)
+                            {
+                             Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                            }
+                            else
+                            {
+                                Clientvm.APIScope = client.APIScope;
+                            }
                             Clientvm.APIClientID = client.APIClientID;
                             Clientvm.APIClientSecret = client.APIClientSecret;
                             Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
@@ -255,7 +257,6 @@ namespace ProvenCfoUI.Controllers
                             Clientvm.EverhourId = client.EverhourId;
                             Clientvm.CrmId = client.CrmId;
                             Clientvm.XeroShortCode = client.XeroShortCode;
-                            //Clientvm.DashboardId = Convert.ToInt32 (client.DashboardId);
                             Clientvm.DashboardId = client.DashboardId;
                             Clientvm.DashboardURLId = client.DashboardURLId;
                             Clientvm.ReportId = client.ReportId;
@@ -270,7 +271,7 @@ namespace ProvenCfoUI.Controllers
                             }
                             Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
                             Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
-
+                            Clientvm.XeroScopeArray = Clientvm.APIScope.Split(' ');
 
                             return View("CreateClient", Clientvm);
                         }
@@ -284,6 +285,7 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+    
         [CheckSession]
         [HttpPost]
         public ActionResult CreateClient(CreateClientVM createClientVM)
@@ -301,7 +303,10 @@ namespace ProvenCfoUI.Controllers
                             {
 
                                 CreateClientVM Clientvm = new CreateClientVM();
+
                                 Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
+
+
                                 var LoginUserid = Session["UserId"].ToString();
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
@@ -320,14 +325,16 @@ namespace ProvenCfoUI.Controllers
                                 {
                                     TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
+
                                     if (ClientExist != null)
                                     {
                                         ViewBag.ErrorMessage = "Exist";
+                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        Clientvm.APIScope = createClientVM.APIScope;
+                                        Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
                                         return View("CreateClient", Clientvm);
                                     }
-                                    // createClientVM.XeroScope = createClientVM.XeroScopeArray.ToString();
-                                    //string result = string.Join(".", array);
-                                    //string.Join(",", Client);s
+                            
 
                                     if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
                                     {
@@ -338,7 +345,7 @@ namespace ProvenCfoUI.Controllers
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
-                                    //(creteClientVM.StartDate == null ? null : Convert.ToDateTime(creteClientVM.StartDate))
+          
                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
@@ -346,7 +353,7 @@ namespace ProvenCfoUI.Controllers
                                 }
                                 else
                                 {
-                                    //var exitclient = obj.GetClientById(createClientVM.Id);
+                
                                     TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
@@ -380,7 +387,7 @@ namespace ProvenCfoUI.Controllers
                                     return View("CreateClient", createClientVM);
                                 }
                                 return View("CreateClient", Clientvm);
-                                //return RedirectToAction("ClientList");
+                          
                             }
 
                         }
@@ -421,7 +428,6 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-
         [CheckSession]
         public JsonResult DeleteClient(int id)
         {
@@ -430,6 +436,7 @@ namespace ProvenCfoUI.Controllers
                 using (ClientService objClient = new ClientService())
                 {
                     var results = objClient.IsClientInvitationAssociationByIdExists(id);
+
                     if (results == false)
                     {
                         var result = objClient.DeleteClient(id);
@@ -471,8 +478,6 @@ namespace ProvenCfoUI.Controllers
 
                 return Json(new { msg = ex.Message });
             }
-
-
         }
 
         [CheckSession]
@@ -493,30 +498,103 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
-
-
+   
         [HttpGet]
         [CheckSession]
-        public ActionResult GetXeroRelatedInfo(string agencyName, string clientId, string clientSecret)
+        public async Task<ActionResult> GetXeroRelatedInfo(XeroDetailsVM xeroInfo) //fetch xero details like xero ID and xero short code
         {
+            string xeroId = "", xeroShortCode = "", xeroProvenCfoContactId = "";
+            string errorMsg = "";
+
             try
             {
-                dynamic XeroInfo = new
+                ClientModel client;
+                using (var clientService = new ClientService())
                 {
-                    XeroID = "testId-qewewqdwdserwedwewew",
-                    XeroContectInfo = "qerwfefedfgwfssd",
-                    XeroShortCod = "refedfgrtrfsdf"
-                };
+                    client = clientService.GetClientByName("ProvenCFO");
+                }
 
-                return Json(XeroInfo, JsonRequestBehavior.AllowGet);
+                using (XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Models.Tenant>> xeroService = new XeroService<IXeroToken,
+                    List<Xero.NetStandard.OAuth2.Models.Tenant>>(xeroInfo.clientId, xeroInfo.clientSecret,
+                    AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName
+                    ))
+                {
+                    List<Xero.NetStandard.OAuth2.Models.Tenant> result = await xeroService.GetXeroConnections(AccountingPackageInstance.Instance.XeroToken);
+
+                    var orgi = (from org in result
+                                where org.TenantName == xeroInfo.agencyName
+                                select new
+                                {
+                                    Name = org.TenantName,
+                                    xeroid = org.TenantId
+                                }).FirstOrDefault();
+
+                    if (orgi != null)
+                    {
+                        xeroId = Convert.ToString(orgi.xeroid);
+                        using (var _xeroService = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisations>(
+                         xeroInfo.clientId, xeroInfo.clientSecret,
+                         AccountingPackageInstance.Instance.Scope,
+                         AccountingPackageInstance.Instance.XeroAppName))
+                        {
+                            var organisations = await _xeroService.GetOrganisationsId(AccountingPackageInstance.Instance.XeroToken, xeroId);
+                            var org = organisations._Organisations.Where(_org => _org.Name == xeroInfo.agencyName).FirstOrDefault();
+                            if (org != null)
+                            {
+                                xeroId = org.OrganisationID.ToString();
+                                xeroShortCode = org.ShortCode;
+
+                                using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Contacts>(
+                                                            xeroInfo.clientId, xeroInfo.clientSecret,
+                                                            AccountingPackageInstance.Instance.Scope,
+                                                            AccountingPackageInstance.Instance.XeroAppName))
+                                {
+                                    var contacts = await _service.GetContacts(AccountingPackageInstance.Instance.XeroToken, xeroId);
+                                    contacts._Contacts.ForEach(con =>
+                                    {
+                                        if (con.Name == "ProvenCFO")
+                                        {
+                                            xeroProvenCfoContactId = con.ContactID.ToString();
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                errorMsg = "Not a Valid Xero Client!";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        errorMsg = "The Entered organisation is not available in Xero. Kindly connect with admin to connect the organisation in Xero!";
+                        return Json(new
+                        {
+                            XeroID = "",
+                            XeroContectInfo ="",
+                            XeroShortCod = "",
+                            Status = "Error",
+                            ErrorMessage = errorMsg,
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                return Json(new
+                {
+                    XeroID = xeroId,
+                    XeroContectInfo = xeroProvenCfoContactId,
+                    XeroShortCod = xeroShortCode,
+                    Status = "Success",
+                    ErrorMessage = "",
+                }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception ex)
             {
                 log.Error(Utltity.Log4NetExceptionLog(ex));
 
-                throw ex;
+                return Json(new { Status="Error",ErrorMessage=ex.Message}, JsonRequestBehavior.AllowGet);
             }
         }
-
     }
 }

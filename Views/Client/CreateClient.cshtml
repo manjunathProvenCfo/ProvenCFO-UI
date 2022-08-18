@@ -267,74 +267,127 @@
                                     <legend class="scheduler-border col-xl-7">Accounting Package Details</legend>
                                     @*<h5 style="margin-bottom: 25px;">Accounting Package Details</h5>*@
 
-                                    <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                            <label for="split-login-email" class="mb-0"> API Client Scope</label>
-                                        </div>
-                                        @if (Model.ThirdPartyAccountingApp_ref == 2)
-                                        {
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
-                                                @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
-                                                new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
-                                                new SelectListItem { Text = "openid", Value = "openid",Selected = true },
-                                                }, new { @class = " qbookselect form-control", @multiple = "multiple" })
-                                                @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none;">
-                                                @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true  },
-                                                new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment", Selected = true  },
-                                                new SelectListItem { Text = "openid", Value = "openid" , Selected = true  },
-                                                }, new { @class = " qbookselect form-control", @multiple = "multiple" })
-                                                @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                            </div>
-                                        }
-
-                                        @if (Model.ThirdPartyAccountingApp_ref == 1)
-                                        {
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
-
-
-                                                @Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
-                                                new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
-                                                new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
-                                                new SelectListItem { Text = "email", Value = "email",Selected = true  },
-                                                new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
-                                                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
-                                                new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
-                                                new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
-                                                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read",Selected = true  },
-                                                new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
-                                                new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
-                                                new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
-                                                new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
-                                                new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
-                                                new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
-                                                new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
-                                                new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
-                                                new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
-                                                new SelectListItem { Text = "assets", Value = "assets" },
-                                                new SelectListItem { Text = "assets.read", Value = "assets.read" },
-                                                new SelectListItem { Text = "files", Value = "files" },
-                                                new SelectListItem { Text = "files.read", Value = "files.read" },
-                                                new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
-                                                new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
-                                                new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
-                                                new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
-                                                new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
-                                                new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
-                                                new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
-                                                new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
-                                                new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
-                                                new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
-                                                }, new { @class = " divxeroscopeoption form-control", @multiple = "multiple" })
-                                                @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
-                                            </div>
-                                        }
-
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0"> API Client Scope</label>
                                     </div>
+                                    @if (Model.ThirdPartyAccountingApp_ref == 2)
+                                    {
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
+                                            <select class="qbookselect form-control" name="XeroScopeArray" multiple>
+                                            </select>
+                                            @*@Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true },
+                new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment",Selected = true },
+                new SelectListItem { Text = "openid", Value = "openid",Selected = true },
+                }, new { @class = " qbookselect form-control", @multiple = "multiple" })*@
+                                            @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none;">
+                                            <select class="qbookselect form-control" name="XeroScopeArray" multiple>
+                                            </select>
+                                            @*@Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new         SelectListItem        { Text = "com.intuit.quickbooks.accounting", Value = "com.intuit.quickbooks.accounting", Selected = true  },
+                new SelectListItem { Text = "com.intuit.quickbooks.payment", Value = "com.intuit.quickbooks.payment", Selected = true  },
+                new SelectListItem { Text = "openid", Value = "openid" , Selected = true  },
+                }, new { @class = " qbookselect form-control", @multiple = "multiple" })*@
+                                            @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
+                                        </div>
+                                    }
+
+                                    @if (Model.ThirdPartyAccountingApp_ref == 1)
+                                    {
+
+
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
+
+                                            <select class="divxeroscopeoption form-control" name="XeroScopeArray" multiple>
+                                            </select>
+                                            @*@Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
+                new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read",Selected = true  },
+                new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
+                new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                new SelectListItem { Text = "assets", Value = "assets" },
+                new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                new SelectListItem { Text = "files", Value = "files" },
+                new SelectListItem { Text = "files.read", Value = "files.read" },
+                new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                }, new { @class = " divxeroscopeoption form-control", @multiple = "multiple" })
+                @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })*@
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+
+
+
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8 d-none" id="divxeroscopeoption">
+
+                                            <select class="divxeroscopeoption form-control" name="XeroScopeArray" multiple>
+                                            </select>
+                                            @*@Html.DropDownListFor(m => m.XeroScopeArray, new List<SelectListItem>()  { new SelectListItem { Text = "projects.read", Value = "projects.read" },
+                new SelectListItem { Text = "openid", Value = "openid", Selected = true   },
+                new SelectListItem { Text = "profile", Value = "profile", Selected = true  },
+                new SelectListItem { Text = "email", Value = "email",Selected = true  },
+                new SelectListItem { Text = "offline_access", Value = "offline_access",Selected = true  },
+                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read", Selected = true  },
+                new SelectListItem { Text = "accounting.transactions", Value = "accounting.transactions" ,Selected = true },
+                new SelectListItem { Text = "accounting.transactions.read", Value = "accounting.transactions.read" },
+                new SelectListItem { Text = "accounting.reports.read", Value = "accounting.reports.read",Selected = true  },
+                new SelectListItem { Text = "accounting.reports.tenninetynine.read", Value = "accounting.reports.tenninetynine.read" },
+                new SelectListItem { Text = "accounting.budgets.read", Value = "accounting.budgets.read" },
+                new SelectListItem { Text = "accounting.journals.read", Value = "accounting.journals.read" },
+                new SelectListItem { Text = "accounting.settings", Value = "accounting.settings",Selected = true  },
+                new SelectListItem { Text = "accounting.settings.read", Value = "accounting.settings.read" },
+                new SelectListItem { Text = "accounting.contacts", Value = "accounting.contacts" },
+                new SelectListItem { Text = "accounting.contacts.read", Value = "accounting.contacts.read" },
+                new SelectListItem { Text = "accounting.attachments", Value = "accounting.attachments" },
+                new SelectListItem { Text = "accounting.attachments.read", Value = "accounting.attachments.read" },
+                new SelectListItem { Text = "assets", Value = "assets" },
+                new SelectListItem { Text = "assets.read", Value = "assets.read" },
+                new SelectListItem { Text = "files", Value = "files" },
+                new SelectListItem { Text = "files.read", Value = "files.read" },
+                new SelectListItem { Text = "payroll.employees", Value = "payroll.employees" },
+                new SelectListItem { Text = "payroll.employees.read", Value = "payroll.employees.read" },
+                new SelectListItem { Text = "payroll.payruns", Value = "payroll.payruns" },
+                new SelectListItem { Text = "payroll.payruns.read", Value = "payroll.payruns.read" },
+                new SelectListItem { Text = "payroll.payslip", Value = "payroll.payslip" },
+                new SelectListItem { Text = "payroll.payslip.read", Value = "payroll.payslip.read" },
+                new SelectListItem { Text = "payroll.settings", Value = "payroll.settings" },
+                new SelectListItem { Text = "payroll.settings.read", Value = "payroll.settings.read" },
+                new SelectListItem { Text = "payroll.timesheets", Value = "payroll.timesheets" },
+                new SelectListItem { Text = "payroll.timesheets.read", Value = "payroll.timesheets.read" },
+                }, new { @class = " divxeroscopeoption form-control", @multiple = "multiple" })
+                @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })*@
+                                        </div>
+                                    }
+
+                                </div>
 
 
                                     <div class="row align-items-center form-group">
@@ -344,30 +397,30 @@
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
 
                                             @{
-                                                (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>).Add(new ThirdPartyAPIDetailsVM()
-                                                {
-                                                    ClientId = "",
-                                                    ClientSecret = "",
-                                                    Status = true
-                                                  ,
-                                                    ThirdParty = "select"
-                                                });
+                                                                var res = (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>)
 
-    var res = (ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>)
+                                                                        .Where(apid => apid.ThirdParty == (Model.ThirdPartyAccountingApp_ref == 1 ? "Xero" : "QuickBook")).ToList();
 
-            .Where(apid => apid.ThirdParty == (Model.ThirdPartyAccountingApp_ref == 1 ? "Xero" : "QuickBook"));
+                                                                var apiDetails = (@ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>);
 
-    var apiDetails = (@ViewBag.thirdPatyAPI as List<ThirdPartyAPIDetailsVM>);
+
+                                                                 res.Add(new ThirdPartyAPIDetailsVM()
+                                                                {
+                                                                    ClientId = "",
+                                                                    ClientSecret = "",
+                                                                    Status = true,
+                                                                    ThirdParty = "Select"
+                                                                });
                                             }
 
 
 
-                                            @Html.DropDownListFor(m => m.APIClientID, res.Select(ele => new SelectListItem()
-                                            {
-                                                Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
-                                                Value = ele.ClientId + "=" + ele.ClientSecret,
-                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "select"
-                                            }), new { @class = "form-control", id = "apiclientid" })
+                                                            @Html.DropDownListFor(m => m.APIClientID, res.Select(ele => new SelectListItem()
+                                                            {
+                                                                Text = ele.ClientId != "" ? ele.ClientId : ele.ThirdParty,
+                                                                Value = ele.ClientId + "=" + ele.ClientSecret,
+                                                                Selected = (Model.APIClientID == ele.ClientId ? true : false) || ele.ThirdParty == "Select"
+                                                            }), new { @class = "form-control", id = "apiclientid" })
 
 
 
@@ -382,7 +435,7 @@
                                             <label for="split-login-email" class="mb-0"> API Client Secret</label>
                                         </div>
                                         <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                            @Html.EditorFor(model => model.APIClientSecret, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.APIClientSecret, new { htmlAttributes = new { @class = "form-control  readonly" } })
                                             @Html.ValidationMessageFor(model => model.APIClientSecret, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -395,8 +448,7 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
 
-                                                <i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="xeroIDFetch" style="display:none;"></i>
-
+                                                <button id="xeroIDFetch" title="click here to get xero related information."><i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="" style="" title="click here to get xero related information."></i></button>
                                                 @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -438,7 +490,7 @@
                                         </div>
                                     }
                                     else
-                                    {
+                                                {
                                         <div class="row align-items-center form-group" id="quickbookcompany" style="display:none;">
                                             <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                                 <label for="split-login-email" class="mb-0"> QuickBooks Company ID</label>
@@ -563,7 +615,7 @@
 
     .ClientXeroIdTextBox {
         display: inline !important;
-        width: 100% !important;
+        width: 92% !important;
         user-select: none;
     }
 
@@ -626,7 +678,7 @@
                         IncludedAccountId = IncludedAccountId != '' ? IncludedAccountId + ',' + val.id : val.id;
                     }
             });
-            }
+           }
             $('#hidExcludedAccountNumbers').val(ExcludedAccountId);
             $('#hidIncludedAccountNumbers').val(IncludedAccountId);
         }
@@ -661,9 +713,10 @@
                     text: "New Client  created successfully!",
                     type: "success"
                 },
-                    function () {
+
+                    setTimeout(setTimeout(function () {
                         window.location.href = '/Client/ClientList'
-                    });
+                    }), 3000));
         }
         function UpdateAlertRole() {
             sweetAlert
@@ -672,15 +725,14 @@
                     text: "Client  updated successfully!",
                     type: "success"
                 },
-                    function () {
+                    setTimeout(setTimeout(function () {
                         window.location.href = '/Client/ClientList'
-                    });
+                    }),3000))
         }
 
-          const apidetails = [{
-        "xero_apiclientId": "@ViewBag.thirdPatyAPI[0].ClientId",
-        "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"
-         },
+          const apidetails=[{
+           "xero_apiclientId":"@ViewBag.thirdPatyAPI[0].ClientId",
+           "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"},
         {
             "q_clientId": "@ViewBag.thirdPatyAPI[1].ClientId",
             "q_secret": "@ViewBag.thirdPatyAPI[1].ClientSecret"
@@ -705,32 +757,135 @@
             postAjaxSync(apiurl + `Xero/UpdateAccessToken`, JSON.stringify(TokenInfoVM), function (response) {
                 var r = response;
                 if (response != null && response.status == true) {
-                    ShowAlertBoxSuccess("Success!", "API token has been updated successfully.", function () { $APITokenupdatepopup.modal('hide'); });
+                    
+                    ShowAlertBoxSuccess("Success!", "API token has been updated successfully.", function () {
+                        $APITokenupdatepopup.modal('hide');
+                        $('#txt_refresh_token').val('');
+                        $('#txt_access_token').val('');
+                        $('#txt_id_token').val('');});
                 }
                 else {
                     ShowAlertBoxError("Error while update the token.");
                 }
             });
-        }
+    }
+
+
+    const totalScopsXero = [
+        { data: "profile", select: true },
+        { data: "openid", select: true },
+        { data: "email", select: true },
+
+        { data: "offline_access", select: true },
+        { data: "accounting.reports.read", select: true },
+        { data: "accounting.transactions", select: true },
+        { data: "accounting.transactions.read", select: true },
+
+        { data: "accounting.reports.tenninetynine.read", select: false },
+        { data: "accounting.budgets.read", select: true },
+        { data: "accounting.journals.read", select: true },
+        { data: "accounting.settings", select: true },
+        { data: "accounting.settings.read", select: true },
+        { data: "accounting.contacts", select: false },
+        { data: "accounting.contacts.read", select: false },
+        { data: "accounting.attachments", select: false },
+        { data: "accounting.attachments.read", select: false },
+        { data: "assets", select: false },
+        { data: "assets.read", select: false },
+        { data: "files", select: false },
+        { data: "files.read", select: false },
+        { data: "payroll.employees", select: false },
+
+        { data: "payroll.employees.read", select: false },
+        { data: "payroll.payruns", select: false },
+        { data: "payroll.payruns.read", select: false },
+        { data: "payroll.payslip", select: false },
+        { data: "payroll.payslip.read", select: false },
+        { data: "payroll.settings", select: false },
+        { data: "payroll.settings.read", select: false },
+
+        { data: "payroll.timesheets", select: false },
+        { data: "payroll.timesheets.read", select: false },
+
+    ];
         $(document).ready(function () {
             HidelottieLoader();
 
+            $(".readonly")[0].setAttribute("readonly", "");
             var checkParty = "@Model.ThirdPartyAccountingApp_ref";
+
 
             if (checkParty == "2") {
                 $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
 
                 $("#APIClientSecret")[0].value = apidetails[1].q_secret;
-
             }
             else {
                 $(".divxeroscopeoption").select2({ maximumSelectionLength: 50, allowClear: false });
 
-                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
+            }
+
+            //api scope problem
+
+    
+
+            const quickBooksScops = [
+                { data: "com.intuit.quickbooks.accounting", select: true },
+                { data: "com.intuit.quickbooks.payment", select: true },
+                { data: "openid", select: true }
+            ];
+
+            const selected = "@Model.APIScope";
+            const thirdPartyService = "@Model.ThirdPartyAccountingApp_ref";
+
+
+
+            if (selected == "" && thirdPartyService=="1")
+            totalScopsXero.map(ele => $(".divxeroscopeoption").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
+
+
+            if (selected!=""&&thirdPartyService == "1") {
+
+                const selectedResult = selected.split(' ').filter(ele => {
+
+
+                return !ele.includes("quickbooks", 0);
+            });
+
+
+                var fil = totalScopsXero.map(ele => ele.data).filter(ele => !selectedResult.includes(ele));
+
+                selectedResult.map(ele => $(".divxeroscopeoption").append(new Option(ele, ele, true, true)));
+
+                fil.map(ele => $(".divxeroscopeoption").append(new Option(ele, ele, false, false)));
+
 
             }
 
 
+            if (selected == "" && thirdPartyService == "2") {
+                quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger("change"));
+            }
+
+            if (selected != "" && thirdPartyService == "2") {
+        
+                var selectedResult = selected.split(' ');
+
+                if (selectedResult.length > 3) {
+
+
+                    selectedResult = selectedResult.slice(0, 3);
+
+                }
+
+
+
+                selectedResult.map(ele => $(".qbookselect").append(new Option(ele, ele, true, true)));
+
+               }
+
+
+            /*********************************************************/
 
             $("#apiclientid").unbind().on("change", function (e) {
 
@@ -750,7 +905,7 @@
             if (document.getElementById("xeroIDFetch")) {
 
                 $("#xeroIDFetch").unbind().on("click", function (e) {
-
+                    e.preventDefault();
                     const xerioID = $("#XeroID")[0];
                     const xeroContect = $("#XeroContactIDforProvenCfo")[0];
                     const xeroShortCode = $("#XeroShortCode")[0];
@@ -762,13 +917,21 @@
 
                     if (clientName != null && clientName != "" && isSelected) {
 
-                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${clientName}&clientId=${apiclientId}&clientSecret=${secret}`, {
+                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${encodeURIComponent(clientName)}&clientId=${apiclientId}&clientSecret=${secret}`, {
                             method: "GET",
                             contentType: "application/json",
                             complete: function (res) {
                                 if (res.status != 200) {
                                     ShowAlertBoxError("Unable to get Xero Details!");
                                     return;
+                                }
+
+                                if (res.responseJSON.Status=="Error") {
+
+                                if (res.responseJSON.ErrorMessage != "") {
+                                    ShowAlertBoxError(res.responseJSON.ErrorMessage);
+                                    return;
+                                    }
                                 }
                                 xerioID.value = res.responseJSON.XeroID;
                                 xeroShortCode.value = res.responseJSON.XeroShortCod;
@@ -789,7 +952,7 @@
 
 
     $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
-
+           const selected = "@Model.APIScope";
             if (this.checked && this.value == '1') {
                 $("#xeroshort").show();
                 $("#xerocrm").show();
@@ -800,10 +963,21 @@
 
                 $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[0].xero_apiclientId}=${apidetails[0].xero_secret}`);
                 $("#apiclientid")[0].children[0].innerHTML = apidetails[0].xero_apiclientId;
-                $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
-                $("#quickbookcompany").hide();
+
+
+                if ($("#apiclientid")[0].selectedOptions[0]
+                    .value != "=") {
+                    $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
+
+                }
+                    $("#quickbookcompany").hide();
                 $("#divQuickbookscopeoption").hide();
                 $("#EnableAutomation").prop("disabled", false);
+
+   
+                    if ($(".divxeroscopeoption")[0].children.length==0)
+                    totalScopsXero.map(ele => $(".divxeroscopeoption").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
+
             }
             else {
                 $('#EnableAutomation').prop('checked', true);
@@ -824,21 +998,38 @@
 
                 $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[1].q_clientId}=${apidetails[1].q_secret}`);
                 $("#apiclientid")[0].children[0].innerHTML = apidetails[1].q_clientId;
+
+                if ($("#apiclientid")[0].selectedOptions[0]
+                    .value != "=") {
                 $("#APIClientSecret")[0].value = apidetails[1].q_secret;
+                }
 
+              
 
+                const quickBooksScops = [
+                    { data: "com.intuit.quickbooks.accounting", select: true },
+                    { data: "com.intuit.quickbooks.payment", select: true },
+                    { data: "openid", select: true }
+                ];
+
+                if ($(".qbookselect")[0].children.length<3)
+                quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, true, true)));
+
+                
             }
 
         });
 
-    
+
+
+
     $('#resetValue').on('click', function () {
         $('#txt_refresh_token').val('');
         $('#txt_access_token').val('');
         $('#txt_id_token').val('');
 
     });
-   
+
 </script>
 
 
