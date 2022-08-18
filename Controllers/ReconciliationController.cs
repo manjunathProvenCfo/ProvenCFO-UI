@@ -686,7 +686,7 @@ namespace ProvenCfoUI.Controllers
                 ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                 objOutput.Status = true;
                 objOutput.ValidationStatus = "RequestCancelation";
-                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                objOutput.ValidationMessage = "The process takes a longer time to complete. Please check the result after a few minutes.";
                 return Json(new
                 {
                     File = "",
@@ -702,7 +702,7 @@ namespace ProvenCfoUI.Controllers
                     ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                     objOutput.Status = true;
                     objOutput.ValidationStatus = "RequestCancelation";
-                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    objOutput.ValidationMessage = "The process takes a longer time to complete. Please check the result after a few minutes.";
                     return Json(new
                     {
                         File = "",
@@ -759,7 +759,7 @@ namespace ProvenCfoUI.Controllers
                 ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                 objOutput.Status = true;
                 objOutput.ValidationStatus = "RequestCancelation";
-                objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                objOutput.ValidationMessage = "The process takes a longer time to complete. Please check the result after a few minutes.";
                 return Json(new
                 {
                     File = "",
@@ -775,7 +775,7 @@ namespace ProvenCfoUI.Controllers
                     ReconciliationOutputModel objOutput = new ReconciliationOutputModel();
                     objOutput.Status = true;
                     objOutput.ValidationStatus = "RequestCancelation";
-                    objOutput.ValidationMessage = "Process takes longer time to completed. Please check the result after few minutes.";
+                    objOutput.ValidationMessage = "The process takes a longer time to complete. Please check the result after a few minutes.";
                     return Json(new
                     {
                         File = "",
