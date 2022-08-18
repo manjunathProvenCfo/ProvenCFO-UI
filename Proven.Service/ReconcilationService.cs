@@ -17,9 +17,14 @@ namespace Proven.Service
         private StringContent content;
 
 
-        public ReconciliationMainModel GetReconciliation(int ClientId, string type, int Isreconciled,string userId,string userEmail)
+        public ReconciliationMainModel GetReconciliation(int ClientId, string type, int Isreconciled, string userId, string userEmail)
         {
-            return GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled+$"&userId={userId}&userEmail={userEmail}").Result;
+            var a = GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled + $"&userId={userId}&userEmail={userEmail}").Result;
+            return a;
+        }
+        public ReconciliationMainModelPaging GetReconciliationList(int page, int size, string sort, string AgencyId, string type, string Isreconciled, string Filters, string userId)
+        {
+            return GetAsync<ReconciliationMainModelPaging>("Reconciliation/GetReconciliationPagingList?page=" + page + "&size=" + size + "&sort=" + sort + $"&AgencyId={AgencyId}&type={type}&Isreconciled={Isreconciled}&Filters={Filters}&userId={userId}").Result;
         }
         public ReconciliationMainModel GetFilteredReconcilation(ReconciliationfilterModel Filter)
         {
@@ -29,7 +34,6 @@ namespace Proven.Service
         {
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=" + AgencyId).Result;
         }
-
         public ReconciliationCountModel GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
         {
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=" + AgencyID + "&type=" + type).Result;
@@ -42,26 +46,23 @@ namespace Proven.Service
         {
             return GetAsync<ReconciliationCountModel>("Reconciliation/GetReconciliationCountAgencyId?AgencyId=" + AgencyId).Result;
         }
-
         public ReturnStringModel GetDistinctAccount(int ClientId, string Type)
         {
             return GetAsync<ReturnStringModel>("Reconciliation/GetDistinctAccount?ClientId=" + ClientId + "&Type=" + Type).Result;
         }
-        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional, int reconciliationActionId,string UserId)
+        public ReturnModel UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, int TrackingCategoryAdditional, int reconciliationActionId, string UserId)
         {
             string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}&reconciliationActionId={6}&UserId={7}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId);
             return PostAsync<ReturnModel>(result).Result;
         }
         public ReturnModel BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
-        {          
+        {
             return PostAsync<ReturnModel, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
         }
-
         public XeroReconcilationDataOnDemandRequestMainModel AddNewXeroOnDemandDataRequest(XeroReconcilationDataOnDemandRequestVM model)
         {
             return PostAsync<XeroReconcilationDataOnDemandRequestMainModel, XeroReconcilationDataOnDemandRequestVM>("Xero/AddNewXeroOnDemandDataRequest", model).Result;
         }
-
         public XeroReconcilationDataOnDemandRequestMainModel GetXeroOnDemandRequestStatus(string CurrentStatus)
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/GetXeroOnDemandRequestStatus?CurrentStatus=" + CurrentStatus).Result;
@@ -90,7 +91,7 @@ namespace Proven.Service
         {
             return GetAsync<XeroReconcilationDataOnDemandRequestMainModel>("Reconciliation/getcommentsOnreconcliationId?reconcliationId=" + reconcliationId).Result;
         }
-        public async Task<ReconciliationOutputModelMainModel>  XeroExtractionofManualImportedDatafromHtml(ReconciliationInputModel XeroInput, CancellationToken? cancellationToken= null)
+        public async Task<ReconciliationOutputModelMainModel> XeroExtractionofManualImportedDatafromHtml(ReconciliationInputModel XeroInput, CancellationToken? cancellationToken = null)
         {
             return await PostAsyncWithCancellationToken<ReconciliationOutputModelMainModel, ReconciliationInputModel>("Reconciliation/XeroExtractionofManualImportedDatafromHtml", XeroInput, cancellationToken);
         }
@@ -107,22 +108,19 @@ namespace Proven.Service
         {
             return GetAsync<ReconcilationmainActionOptionVM>("Reconciliation/GetAllReconcilationAction").Result;
         }
-        public ReconciliationCommentAttachmentsMain getReconciliationCommentAttachments(int CommentId )
+        public ReconciliationCommentAttachmentsMain getReconciliationCommentAttachments(int CommentId)
         {
             return GetAsync<ReconciliationCommentAttachmentsMain>("Reconciliation/getReconciliationCommentAttachments?reconiliationCommentId=" + CommentId).Result;
         }
-
         public ReturnModel DeleteReconciliationCommentAttachment(int CommentId)
         {
             return PostAsync<ReturnModel>("Reconciliation/DeleteReconciliationCommentAttachment?reconiliationCommentId=" + CommentId).Result;
         }
-
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
         protected virtual void Dispose(bool disposing)
         {
             if (isDisposed) return;

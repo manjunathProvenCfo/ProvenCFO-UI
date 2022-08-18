@@ -24,7 +24,7 @@ namespace Proven.Model
         public string gl_account { get; set; }
         public string reconciled { get; set; }
         public String reference { get; set; }
-        public string reference_display { get { return reference != null && reference.Length > 30 ? reference.Substring(0, 30) + "...": reference; } }
+        public string reference_display { get { return reference != null && reference.Length > 30 ? reference.Substring(0, 30) + "..." : reference; } }
         public string rule { get; set; }
         //public string type { get; set; }
         public String AgencyID { get; set; }
@@ -46,6 +46,20 @@ namespace Proven.Model
         public DateTime? GlAccountModifiedDate { get; set; }
         public string GlAccountModifiedBy { get; set; }
         public string ActionModifiedBy { get; set; }
+    }
+    public class ReconcilationVMPagination
+    {
+        public List<reconciliationVM> company_ReconciliationVMs { get; set; }
+        public int totalcount { get; set; }
+    }
+    public class ReconciliationMainModelPaging
+    {
+        public bool Status { get; set; }
+        public int statusCode { get; set; }
+        public ReconcilationVMPagination ResultData { get; set; }
+        public string Message { get; set; }
+        public object ResourceType { get; set; }
+        public object MetaData { get; set; }
     }
     public class ReconciliationMainModel
     {
