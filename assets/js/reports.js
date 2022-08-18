@@ -346,6 +346,27 @@ var prepareAndPrependUploaderAttachment = function (obj) {
     $attachmentContainer.prepend(reportAttachment);
 }
 
+function DownloadReport() {
+    const bookCover = [];
+    Array.prototype.forEach.bind($(".book-cover"))(ele => {
+        bookCover.push(ele.parentElement);
+    });
+
+    bookCover.forEach(ele => {
+        ele.addEventListener("click", function (e) {
+
+            setTimeout(_ => {
+
+                $(".fancybox-button--download")[0].setAttribute("href", (ele.href + "").replace("GetReportResource", "DownloadReportResource"));
+                $(".fancybox-button--download")[0].style.display = "inline-block";
+            }, 0);
+        });
+    });
+
+
+}
+
+
 var getReports = function (agencyId, year, period) {
 
     getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
@@ -391,6 +412,9 @@ var getReports = function (agencyId, year, period) {
                                 </p></div>`;
             $(`.report-card-body[data-report-period='${obj.PeriodType}'] .row`).append(reportHTML);
         });
+
+
+        DownloadReport();
         HidelottieLoader();
     });
 }
@@ -597,6 +621,9 @@ $(function () {
 
     });
 });
+
+
+
 function sendMail() {
     var recip = $("#email-to").val();
     var subject = $("#email-subject").val();

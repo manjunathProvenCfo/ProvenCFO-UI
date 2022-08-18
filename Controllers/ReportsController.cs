@@ -155,6 +155,43 @@ namespace ProvenCfoUI.Controllers
         }
 
         [CheckSession]
+        [HttpGet]
+
+        public FileContentResult DownloadReportResource(string path, string fileName, string fileExtention)
+        {
+
+
+            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+            {
+                long readedByteChunk = 0;
+                int byteChunkRemain = 0;
+
+                Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
+
+                byte[] bytes = new byte[azureStream.Length + 1];
+
+                azureStream.Seek(0, SeekOrigin.Begin);
+                byteChunkRemain = (int)azureStream.Length;
+
+            //for handling large files
+            readChunk:
+                readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length - readedByteChunk))
+                {
+                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                    goto readChunk;
+                }
+                azureStream.Close();
+
+
+               // Response.BinaryWrite(bytes);
+
+                return File(bytes, Response.ContentType, fileName + fileExtention);
+
+            }
+        }
+        [CheckSession]
         public JsonResult GetReports(int agencyId, int year, string periodType)
         {
             try
