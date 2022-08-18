@@ -118,6 +118,79 @@ namespace ProvenCfoUI.Controllers
             }
             return Json(new { File = "", Status = ViewBag.ErrorMessage, Message = "Report upload failed!!" }, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        [CheckSession]
+        [HttpGet]
+       
+        public void GetReportResource(string path,string fileName,string fileExtention)
+         {
+
+         
+            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+            {
+                long readedByteChunk = 0;
+                int  byteChunkRemain= 0;   
+                
+                Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);           
+                
+                byte[] bytes = new byte[azureStream.Length + 1];
+
+                azureStream.Seek(0, SeekOrigin.Begin);
+                byteChunkRemain = (int)azureStream.Length; 
+                
+                //for handling large files
+                readChunk:
+                readedByteChunk += azureStream.Read(bytes,(int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length- readedByteChunk))
+                {
+                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                    goto readChunk;
+                }
+                azureStream.Close();
+                Response.BinaryWrite(bytes);
+            }
+        }
+
+        [CheckSession]
+        [HttpGet]
+
+        public FileContentResult DownloadReportResource(string path, string fileName, string fileExtention)
+        {
+
+
+            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+            {
+                long readedByteChunk = 0;
+                int byteChunkRemain = 0;
+
+                Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
+
+                byte[] bytes = new byte[azureStream.Length + 1];
+
+                azureStream.Seek(0, SeekOrigin.Begin);
+                byteChunkRemain = (int)azureStream.Length;
+
+            //for handling large files
+            readChunk:
+                readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length - readedByteChunk))
+                {
+                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                    goto readChunk;
+                }
+                azureStream.Close();
+
+
+               // Response.BinaryWrite(bytes);
+
+                return File(bytes, Response.ContentType, fileName + fileExtention);
+
+            }
+        }
         [CheckSession]
         public JsonResult GetReports(int agencyId, int year, string periodType)
         {
@@ -129,11 +202,12 @@ namespace ProvenCfoUI.Controllers
                     using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
                     {
                         var reports = reportsService.GetReports(agencyId, year, periodType);
+
                         foreach (var item in reports)
                         {
-                            item.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, item.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+                                   item.FileName = item.FileName.Split('_').Length>1? item.FileName.Split('_')[1]:item.FileName;
+                                   item.DownloadFileLink = @"/Reports/GetReportResource?path="+item.FilePath+"&&fileName="+item.FileName+"&&fileExtention="+item.FileExtention;
                         }
-
                         return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                     }
                 }
@@ -187,7 +261,11 @@ namespace ProvenCfoUI.Controllers
                         var reports = await reportsService.GetDashboardReports(agencyId);
                         foreach (var rpt in reports)
                         {
-                            rpt.AzureFileSasUri = storage.GetFileSasUri(StorageContainerName, rpt.FilePath, DateTime.UtcNow.AddHours(24), ShareFileSasPermissions.Read).AbsoluteUri;
+
+
+                            rpt.FileName = rpt.FileName.Split('_').Length > 1 ? rpt.FileName.Split('_')[1] : rpt.FileName;
+                            rpt.DownloadFileLink = @"/Reports/GetReportResource?path=" + rpt.FilePath + "&&fileName=" + rpt.FileName + "&&fileExtention=" + rpt.FileExtention;
+
                         }
 
 
@@ -217,10 +295,33 @@ namespace ProvenCfoUI.Controllers
                     using (ReportsService reportsService = new ReportsService())
                     {
                         var reports = reportsService.GetReports(agencyId, year, periodType);
-
                         foreach (var report in reports)
                         {
-                            ziparchive.CreateEntryFromFile(Server.MapPath(report.FilePath), report.FileName + report.FileExtention);
+                            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                            {
+                                var filepath = storage.GetFileSasUri(StorageContainerName, report.FilePath, DateTime.UtcNow.AddMinutes(1), ShareFileSasPermissions.Read).AbsoluteUri;
+                               var stream = storage.GetFileStream(StorageContainerName, report.FilePath, report.FileName);
+                                var path = Server.MapPath("~/assets/tempReports/")+report.AgencyId_Ref+"\\"+report.FileName+report.FileExtention;
+                                if(!Directory.Exists(Server.MapPath("~/assets/tempReports/") + report.AgencyId_Ref + "\\"))
+                                {
+                                    Directory.CreateDirectory(Server.MapPath("~/assets/tempReports/") + report.AgencyId_Ref + "\\");
+
+                                }
+                                var tempStream = System.IO.File.Create(path);
+                                stream.Seek(0,SeekOrigin.Begin);
+                                stream.CopyTo(tempStream);
+                                stream.Close();
+                                tempStream.Close();
+                                ziparchive.CreateEntryFromFile(path,report.FileName+report.FileExtention);      
+                            }
+
+                            DirectoryInfo di = new DirectoryInfo(Server.MapPath("~/assets/tempReports/")+report.AgencyId_Ref+"\\"); 
+                            FileInfo[] files = di.GetFiles();
+                            foreach (FileInfo file in files)
+                            {
+                                file.Delete();
+                            }
+                            di.Delete();
                         }
                     }
                 }
@@ -291,7 +392,7 @@ namespace ProvenCfoUI.Controllers
             try
             {
 
-                using (ReportsService reportsService = new ReportsService())
+                using ( ReportsService reportsService = new ReportsService())
                 {
                     var rptlist = reportsService.GetReportByIds(Ids).ResultData;
                     if (rptlist != null)
@@ -301,17 +402,14 @@ namespace ProvenCfoUI.Controllers
                             foreach (var rpt in rptlist)
                             {
                                 var IsDelted = storage.DeleteAzureFiles(StorageContainerName, rpt.FilePath, null);
-                                if (IsDelted == true)
-                                {
-                                    var result = reportsService.Delete(Ids).ResultData;
-                                    if (result == true)
-                                    {
-
-                                    }
-                                }
+                            }
+                            var result = reportsService.Delete(Ids).ResultData;
+                            if (result == true)
+                            {
+                                return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
                             }
                         }
-                        return Json(new { resultData = true, message = "success" }, JsonRequestBehavior.AllowGet);
+
                     }
                     return Json(new { resultData = false, message = "error" }, JsonRequestBehavior.AllowGet);
                 }

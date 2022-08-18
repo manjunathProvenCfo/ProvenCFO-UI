@@ -197,23 +197,28 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
+                string TenentID = string.Empty;
 
                 if (AccountingPackageInstance.Instance.ConnectionStatus == true)
                 {
                     using (ClientService objClient = new ClientService())
                     {
+
                         var client = objClient.GetClientById(ClientID);
+                        
                         dynamic AppPackage = null;
                         dynamic Token = null;
                         switch (client.ThirdPartyAccountingApp_ref.Value)
                         {
                             case 1:
                                 AppPackage = new XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Model.Accounting.Account>>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
-                                Token = AccountingPackageInstance.Instance.XeroToken;
+                                Token = AppPackage.getSavedTokenFormat(ClientID); //AccountingPackageInstance.Instance.XeroToken;
+                                TenentID = client.XeroID;
                                 break;
                             case 2:
                                 AppPackage = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Account[]>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
-                                Token = AccountingPackageInstance.Instance.QuickBooksToken;
+                                Token = AppPackage.getSavedTokenFormat(ClientID);  //AccountingPackageInstance.Instance.QuickBooksToken;
+                                TenentID = Convert.ToString(client.QuickBooksCompanyId);
                                 break;
                             default:
                                 break;
@@ -221,7 +226,7 @@ namespace ProvenCfoUI.Controllers
                         //using (XeroService<IXeroToken, Accounts> AccountingPackageService = new XeroService<IXeroToken, Accounts>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.XeroTenentID, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName))
                         //{
 
-                        var result = await AppPackage.GetGLAccounts(Token, client.XeroID);
+                        var result = await AppPackage.GetGLAccounts(Token, TenentID);
                         if (result != null)
                         {
                             List<XeroGlAccountVM> gl = new List<XeroGlAccountVM>();
@@ -312,6 +317,7 @@ namespace ProvenCfoUI.Controllers
             List<ClientXeroAccountsVM> gl = new List<ClientXeroAccountsVM>();
             try
             {
+                string TenentID = string.Empty;
                 if (AccountingPackageInstance.Instance.ConnectionStatus == true)
                 {
                     using (ClientService objClient = new ClientService())
@@ -327,10 +333,12 @@ namespace ProvenCfoUI.Controllers
                             case 1:
                                 AppPackage = new XeroService<IXeroToken, List<Xero.NetStandard.OAuth2.Model.Accounting.Account>>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
                                 Token = AccountingPackageInstance.Instance.XeroToken;
+                                TenentID = client.XeroID;
                                 break;
                             case 2:
                                 AppPackage = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Account[]>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName);
                                 Token = AccountingPackageInstance.Instance.QuickBooksToken;
+                                TenentID = Convert.ToString(client.QuickBooksCompanyId);
                                 break;
                             default:
                                 break;
@@ -338,7 +346,7 @@ namespace ProvenCfoUI.Controllers
 
                         if (client != null)
                         {
-                            var result = await AppPackage.GetBankAccounts(Token, client.XeroID);
+                            var result = await AppPackage.GetBankAccounts(Token, TenentID);
                             if (result != null)
                             {
                                 switch (client.ThirdPartyAccountingApp_ref.Value)
@@ -432,7 +440,7 @@ namespace ProvenCfoUI.Controllers
             {
                 using (PlaidBankTransaction<string, string> plaid = new PlaidBankTransaction<string, string>(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
                 {
-                    var result = await plaid.getLinkToken(ClientName);
+                    var result = await plaid.getLinkToken("ProvenCFO");
                     if (result != String.Empty)
                     {
 

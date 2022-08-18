@@ -26,5 +26,7 @@ namespace Proven.Model
         public int Position { get; set; }
         public bool IsMonthlySummary { get; set; }
         public string AzureFileSasUri { get; set; }
+
+		public string DownloadFileLink { get; set; }
     }
 }

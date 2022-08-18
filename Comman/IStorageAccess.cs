@@ -16,5 +16,7 @@ namespace ProvenCfoUI.Comman
         string RenameAzureFiles(string StorageContainerName, string FilePath, string FileName, string FileNewName);
 
         string GetAzureFilePath(string StorageContainerName, string dirName, string fileNames);
+
+        System.IO.Stream GetFileStream(string StorageContainerName, string dirName, string fileNames);
     }
 }

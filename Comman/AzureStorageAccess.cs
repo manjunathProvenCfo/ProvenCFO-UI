@@ -273,5 +273,46 @@ namespace ProvenCfoUI.Comman
             }
             this.isDisposed = true;
         }
+
+        public System.IO.Stream GetFileStream(string StorageContainerName, string dirName, string fileNames)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(StorageContainerName))
+                {
+                    ShareClient share = new ShareClient(_storageConnection, StorageContainerName);
+                    if (!string.IsNullOrEmpty(dirName))
+                    {
+                        var delimiter = new char[] { '/' };
+                        var nestedFolderArray = dirName.Split(delimiter);
+                        var concatFolder = nestedFolderArray[0];
+                        ShareDirectoryClient directory;
+                        for (var i = 0; i < nestedFolderArray.Length - 1; i++)
+                        {
+                            if (i > 0) concatFolder = concatFolder != "" ? concatFolder + "/" + Convert.ToString(nestedFolderArray[i]) : concatFolder;
+                            directory = share.GetDirectoryClient(concatFolder);
+                        }
+                        directory = share.GetDirectoryClient(concatFolder);
+                        if (fileNames != null && !string.IsNullOrEmpty(fileNames))
+                        {
+                            var fileN = dirName.Split('/')[dirName.Split('/').Length - 1];
+                            ShareFileClient file = directory.GetFileClient(fileN);
+                            return file.OpenRead();                            
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+                throw;
+            }
+
+        }
     }
 }
