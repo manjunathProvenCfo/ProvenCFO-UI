@@ -152,7 +152,7 @@ body, .navbar-glass,
 }
 
 .btn-link {
-    color: #00BE82 !important;
+    color: #449DFF !important;
 }
 .info {
     background-color: #e7f3fe;
@@ -429,9 +429,9 @@ svg.svg-inline--fa.fa-plus-circle.fa-w-16 {
     color: #00BE82;
 }
 
-svg.svg-inline--fa.fa-comment.fa-w-16 {
+/*svg.svg-inline--fa.fa-comment.fa-w-16 {
     color: #449DFF;
-}
+}*/
 
 .page-item.active .page-link {
     z-index: 3;

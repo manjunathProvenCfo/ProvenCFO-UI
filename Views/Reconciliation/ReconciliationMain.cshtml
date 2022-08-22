@@ -327,13 +327,23 @@
                                         }
                                         else
                                         {
-                                            <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
-                                                <span class="far fa-comment fs--1 @(item.has_twilio_conversation==true?"":"text-dark")"></span>
+                                    <button id="btnComment" data-id="@item.id" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                        @*<span class="far fa-comment fs--1
+                                                      @(item.has_twilio_conversation==true?"":"text-dark")"></span>*@
+                                        @if (item.has_twilio_conversation == true)
+                                        {
+                                            <span class="far fa-comment fs--1"></span>
 
-                                                @*<span class="far fa-comment fs--1 text-dark"></span>
-                                                    <span class="far fa-comment fs--1"></span>
-                                                    <span class="fas fa-comment fs--1"></span>*@
-                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <span class="far fa-comment fs--1 text-dark"></span>
+                                        }
+
+                                        @*<span class="far fa-comment fs--1 text-dark"></span>
+                                            <span class="far fa-comment fs--1"></span>
+                                            <span class="fas fa-comment fs--1"></span>*@
+                                    </button>
                                         }
 
                                     </td>
@@ -375,6 +385,11 @@
     @Html.Partial("_ReconcilationEditComment", true)
 </div>
 
+<style>
+    .text-dark {
+        color: #0b1727 !important;
+    }
+</style>
 <!--<div class="position-fixed loader-circle" id="Loader" style="display:none;">
     <div class="d-flex justify-content-center align-items-center vh-100">-->
 @*<div class="spinner-border" role="status">
@@ -464,11 +479,11 @@
 
         }
         function SelectClick(e) {
-         
+
             if (e.checked) {
                 var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
 
- 
+
                 UnSelectedRecords = UnSelectedRecords.filter(function (x) {
                     return x != e.id
                 });
@@ -487,16 +502,16 @@
                 });
 
                 sessionStorage.setItem('SelectedRecords', SelectedItems);
-                
+
                 var UnSelectedItems = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? (sessionStorage.getItem('UnSelectedRecords') + ',' + e.id) : e.id;
                 sessionStorage.setItem('UnSelectedRecords', UnSelectedItems);
-            
+
 
             }
-   
+
 
                   EnableSelectedBulkUpdateButton();
-         
+
         }
 
         function onCommentsClick(e, channelUniqueNameGuid) {
@@ -566,11 +581,11 @@
                             break;
                         case 'SUCCESS':
                             msg = 'Reconciliation data extracted successfully. Please wait for page to refresh. ';
-                           
+
                             break;
                         case 'FAILED':
                             msg = 'Error while data extratction from Xero. Please try after some time. ';
-                           
+
                             break;
 
                         default:
@@ -755,15 +770,15 @@
 
 
             IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
-            
+
             if (
                 ((SelectedItems == null && IsAllSelected != true) || (IsAllSelected != true && SelectedItems == ''))) {
-              
+
 
                 ShowAlertBoxWarning("No records are selected to perform bulk action.");
                 return;
             }
-       
+
             if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
                 ShowAlertBoxWarning("No Option are selected to perform bulk action.");
                 return;
@@ -1122,13 +1137,13 @@
             HidelottieLoader();
 
             $("#checkbox-bulk-purchases-select").click(function (e) {
-                
+
                 if (e.target.checked) {
                     this.setAttribute("isSelected", "true");
                 } else {
-                    this.setAttribute("isSelected","false");
+                    this.setAttribute("isSelected", "false");
                 }
-                
+
             });
         });
 
