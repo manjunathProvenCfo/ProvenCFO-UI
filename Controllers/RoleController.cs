@@ -48,7 +48,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     ProvenCfoUI.Models.RolesViewModel result = new ProvenCfoUI.Models.RolesViewModel();
                     result.UserType = 1;
-                    result.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.Id).ToList();
+                    result.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.ParentId).ThenBy(x => x.ParentId).ToList();
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     return View(result);
                 }
@@ -69,7 +69,7 @@ namespace ProvenCfoUI.Controllers
                 using (RoleService objRole = new RoleService())
                 {
                     ProvenCfoUI.Models.RolesViewModel objvm = new ProvenCfoUI.Models.RolesViewModel();
-                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.Id).ToList();
+                    objvm.MasterFeaturesList = objRole.GetMasterFeatures().ResultData.OrderBy(x => x.ParentId).ThenBy(x => x.ParentId).ToList();
                     TempData["UserTypeList"] = objRole.GetUserTypes().ResultData;
                     var result = objRole.GetRoleById(id);
                     objvm.Id = result.Id;
