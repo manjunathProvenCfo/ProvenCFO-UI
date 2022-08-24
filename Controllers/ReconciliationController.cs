@@ -481,6 +481,22 @@ namespace ProvenCfoUI.Controllers
             }
 
         }
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> OnDemandDataRequestFromPlaid(int AgencyId)
+        {
+            using (ClientService objClientService = new ClientService())
+            {
+                var client = objClientService.GetClientById(AgencyId);
+                using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
+                {
+                    Tuple<PlaidResponceModel , PlaidResponceModel> result = await BankData.GetReconciliationByPaidXero(client);
+                    string MsgString = "Sucessfully sync the data. Total Not in books records added: " + result.Item1.TotalInsertedRecords + " and Total Not in banks records updated:" + result.Item2.TotalInsertedRecords;
+                    return Json(new { data = MsgString, Status = true, Message = MsgString }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+        }
 
         [CheckSession]
         [HttpPost]

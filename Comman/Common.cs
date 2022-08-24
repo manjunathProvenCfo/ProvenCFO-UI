@@ -18,7 +18,8 @@ namespace ProvenCfoUI.Comman
 {
     public class Common : IDisposable
     {
-        
+
+        public const string Plaid = "Plaid";
         protected static List<UserSecurityVM> _roleList;
         private bool isDisposed = false;
         public static string RegxPasswordMatch = @"(?=.*\d)(?=.*[A-Za-z]).{8,}";
@@ -446,6 +447,20 @@ namespace ProvenCfoUI.Comman
                 AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";
                 AccountingPackageInstance.Instance.ConnectionStatus = false;
             }
+        }
+        public static DateTime NextMonth(DateTime date)
+        {
+            if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
+                return date.AddMonths(1);
+            else
+                return date.AddDays(1).AddMonths(1).AddDays(-1);
+        }
+        public static DateTime PreviousMonth(DateTime date)
+        {
+            if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
+                return date.AddMonths(-1);
+            else
+                return date.AddDays(-1).AddMonths(-1).AddDays(1);
         }
 
 

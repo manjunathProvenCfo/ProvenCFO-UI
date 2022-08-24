@@ -46,6 +46,7 @@ namespace Proven.Model
         public DateTime? GlAccountModifiedDate { get; set; }
         public string GlAccountModifiedBy { get; set; }
         public string ActionModifiedBy { get; set; }
+		public string type { get; set; }
     }
     public class ReconcilationVMPagination
     {

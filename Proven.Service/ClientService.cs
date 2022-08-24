@@ -22,7 +22,7 @@ namespace Proven.Service
         public ClientMainModel GetClientList()
         {
             return GetAsync<ClientMainModel>("Client/GetClientList").Result;
-            
+
         }
         public ClientMainModel GetClientListByStatus(bool IsActive, bool IsDeleted)
         {
@@ -125,7 +125,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId,int ThirdPartyAccountingApp_ref,Int64 QuickBooksCompanyId,bool Plaid_Enabled)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled)
         {
             var form = new Dictionary<string, object>
             {
@@ -181,7 +181,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret,bool ReceiveQuarterlyReports, bool EnableAutomation,string XeroContactIDforProvenCfo,string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId,string ReportId, string IncludedAccountNumbers,string ExcludedAccountNumbers,int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, string IncludedAccountNumbers, string ExcludedAccountNumbers, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled)
         {
             var form = new Dictionary<string, object>
             {
@@ -328,22 +328,19 @@ namespace Proven.Service
         public ClientXeroAccountsMainModel GetClientXeroAcccountsByAgencyId(int AgencyId)
         {
             return GetAsync<ClientXeroAccountsMainModel>("Client/GetClientXeroAcccountsByAgencyID?AgencyID=" + AgencyId).Result;
-
         }
         public ThirdPartyAccountingAppVMModel GetThirdPartyAccountingData()
         {
             return GetAsync<ThirdPartyAccountingAppVMModel>("Client/GetThirdPartyAccountingData").Result;
         }
-
-
-        public ThirdPartyAPIDetails GetThirdPatyAPIDetails() {
-
-
+        public ThirdPartyAPIDetailsVM GetThirdPatyAPIDetails(string ThirdPartyName, bool Status)
+        {
+            return GetAsync<List<ThirdPartyAPIDetailsVM>>($"Client/GetThirdPartyAPIDetails?ThirdPartyName={ThirdPartyName}&Status={Status}").Result.FirstOrDefault();
+        }
+        public ThirdPartyAPIDetails GetThirdPatyAPIDetails()
+        {
             var result = new ThirdPartyAPIDetails();
-
-
             result.list = GetAsync<List<ThirdPartyAPIDetailsVM>>("Client/GetThirdPartyAPIDetails").Result;
-
             return result;
         }
     }

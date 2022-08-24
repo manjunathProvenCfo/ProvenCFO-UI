@@ -116,6 +116,10 @@ namespace Proven.Service
         {
             return PostAsync<ReturnModel>("Reconciliation/DeleteReconciliationCommentAttachment?reconiliationCommentId=" + CommentId).Result;
         }
+        public async Task<PlaidResponceModel> CreatePlaidReconciliation(List<company_reconciliationVM> attachmentData)
+        {
+            return await PostAsync<PlaidResponceModel>($"Reconciliation/CreatePlaidReconciliation", PreparePostContent(attachmentData));
+        }
         public void Dispose()
         {
             Dispose(true);

@@ -64,5 +64,29 @@ namespace ProvenCfoUI.Comman
                 }
             }
         }
+
+        public static string DecryptToBytesUsingCBC(byte[] toDecrypt)
+        {
+            byte[] iv = new byte[16];
+            string _key = Convert.ToString(ConfigurationManager.AppSettings["Security_Key"]);
+            byte[] src = toDecrypt;
+            byte[] dest = new byte[src.Length];
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.BlockSize = 128;
+                aes.KeySize = 128;
+                aes.IV = iv;
+                aes.Key = Encoding.UTF8.GetBytes(_key);
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.Zeros;
+                // decryption
+                using (ICryptoTransform decrypt = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    byte[] decryptedText = decrypt.TransformFinalBlock(src, 0, src.Length);
+
+                    return Encoding.UTF8.GetString(decryptedText);
+                }
+            }
+        }
     }
 }

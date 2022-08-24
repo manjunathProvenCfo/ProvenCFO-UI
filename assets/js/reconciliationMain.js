@@ -298,7 +298,29 @@ $(document).ready(function () {
             $('#divBulkUpdate').show();
         }
     });
+    $("#OnDemandDataPlaid").click(function () {
+         if (IsEnableAutomation === false) {
+            $("#OnDemandData").attr('disabled', true);
+            return;
+        }
+        $("#Loader").removeAttr("style");
+        var ClientID = $("#ddlclient option:selected").val();
+        postAjax('/Reconciliation/OnDemandDataRequestFromPlaid?AgencyId=' + ClientID, null, function (response) {
+            if (response.Status == true) {
+                sessionStorage.removeItem("NotInBooksData");
+                sessionStorage.removeItem("NotInBanksData");
+                ShowAlertBoxSuccess("Success", response.Message, function () {
+                    window.location.reload();
+                });
+            }
+            else {
+                ShowAlertBoxError("Error", response.Message, function () {
+                    window.location.reload();
+                });
+            }
 
+        });
+    });
     $("#OnDemandData").click(function () {
 
         if (IsEnableAutomation === false) {
