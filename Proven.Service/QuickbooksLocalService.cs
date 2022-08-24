@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Proven.Service
 {
-    public class QuickbooksLocalService<T, V> : AccountingAppFatory<T, V>, IDisposable
+    public class QuickbooksLocalService<T, V> : AccountingAppFatory<T, V>,  IDisposable
     {
         private bool isDisposed = false;
         string _ClientId;
@@ -18,14 +18,16 @@ namespace Proven.Service
         string _scopes;
         string _callbackurl;
         private DataService _service;
+        string _url;
         public QuickbooksLocalService(string ClientId, string ClientSecret, string scopes, string CallbackUrl = "")
         {
             _ClientId = ClientId;
             _ClientSecret = ClientSecret;
             _scopes = scopes;
             _callbackurl = CallbackUrl;
-            
-            
+            _url = Convert.ToString(ConfigurationManager.AppSettings[""]);
+
+
         }
 
         public override Task<T> ConnnectApp(V Token)
