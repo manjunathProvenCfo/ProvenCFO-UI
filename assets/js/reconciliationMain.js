@@ -314,7 +314,7 @@ $(document).ready(function () {
                 });
             }
             else {
-                ShowAlertBoxError("Error", response.Message, function () {
+                ShowAlertBoxError(response.ErrorType == null ? "Error" : response.ErrorType, response.data, function () {
                     window.location.reload();
                 });
             }

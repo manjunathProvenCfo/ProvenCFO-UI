@@ -16,8 +16,12 @@ namespace Proven.Model
 
         public int TotalUpdatedRecords { get; set; }
 
-        public string Status { get; set; }
+        public bool Status { get; set; }
 
         public string Error { get; set; }
+
+        public string ErrorDesctiption { get; set; }
+
+        public string ErrorType { get; set; }
     }
 }
