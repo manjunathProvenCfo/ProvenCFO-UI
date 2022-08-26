@@ -485,17 +485,33 @@ namespace ProvenCfoUI.Controllers
         [HttpPost]
         public async Task<JsonResult> OnDemandDataRequestFromPlaid(int AgencyId)
         {
-            using (ClientService objClientService = new ClientService())
+            try
             {
-                var client = objClientService.GetClientById(AgencyId);
-                using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
+                using (ClientService objClientService = new ClientService())
                 {
-                    Tuple<PlaidResponceModel , PlaidResponceModel> result = await BankData.GetReconciliationByPaidXero(client);
-                    string MsgString = "Sucessfully sync the data. Total Not in books records added: " + result.Item1.TotalInsertedRecords + " and Total Not in banks records updated:" + result.Item2.TotalInsertedRecords;
-                    return Json(new { data = MsgString, Status = true, Message = MsgString }, JsonRequestBehavior.AllowGet);
+                    var client = objClientService.GetClientById(AgencyId);
+                    using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
+                    {
+                        Tuple<PlaidResponceModel, PlaidResponceModel> result = await BankData.GetReconciliationByPaidXero(client);
+                        if (result.Item1.Status == true && result.Item2.Status == true)
+                        {
+                            string MsgString = "Sucessfully sync the data. Total Not in books records added: " + result.Item1.TotalInsertedRecords + " and Total Not in banks records updated:" + result.Item2.TotalInsertedRecords;
+                            return Json(new { data = MsgString, Status = true, Message = MsgString }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            log.Info("Plaid API Error :" + result.Item1.Error + " : " + result.Item1.ErrorDesctiption);
+                            return Json(new { data = result.Item1.Error, Status = false, Message = result.Item1.ErrorType != null?"Error" : result.Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                        }
+
+                    }
                 }
             }
-            return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+            catch (Exception ex)
+            {
+                return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+                log.Error(Utltity.Log4NetExceptionLog(ex));
+            }                        
         }
 
         [CheckSession]

@@ -357,7 +357,14 @@ $(document).ready(function () {
 
     })
 
-
+    $("#email-subject").on("focus", function (e) {
+        e.preventDefault();
+        e.target.removeAttribute("readonly");
+    });
+    $("#email-subject").on("blur", function (e) {
+        e.preventDefault();
+        e.target.setAttribute("readonly", "");
+    });
 });
 function ClearViewPage() {
     $('#divCommantsList').empty();
