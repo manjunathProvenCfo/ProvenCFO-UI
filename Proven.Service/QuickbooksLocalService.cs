@@ -52,6 +52,7 @@ namespace Proven.Service
 
         public override async Task<V> GetGLAccounts(T Token, string TenentID)
         {
+            Token = await this.ValidateToken(Token);
             bool IsProdEnviroment = false;
             var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
             if(TenentID == SandboxCompanyId) {
@@ -64,6 +65,7 @@ namespace Proven.Service
         }
         public override async Task<V> GetBankAccounts(T Token, string TenentID)
         {
+            Token = await this.ValidateToken(Token);
             bool IsProdEnviroment = false;
             var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
             if (TenentID == SandboxCompanyId)
@@ -75,8 +77,9 @@ namespace Proven.Service
             var res = await _service.QueryAsync<Account>("Select * from Account where AccountType = 'Bank'");
             return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
         }
-        public override Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
+        public override async Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
         {
+            //Token = await this.ValidateToken(Token);
             throw new NotImplementedException();
         }
 
@@ -148,13 +151,22 @@ namespace Proven.Service
 
         public override async Task<T> RefreshToken(T Token)
         {
-            var quickbookToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
-            var res = await new AuthenticationService().RefreshOAuthTokenAsync(_ClientId, _ClientSecret, quickbookToken.refresh_token);
+            try
+            {
+                var quickbookToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+                var res = await new AuthenticationService().RefreshOAuthTokenAsync(_ClientId, _ClientSecret, quickbookToken.refresh_token);
 
-            //if (res.refresh_token != Convert.ToString(Token))
-            //    TestHelper.PersistNewRefreshToken(res.refresh_token);
-            return (T)Convert.ChangeType(res, typeof(T));
-            //throw new NotImplementedException();
+                //if (res.refresh_token != Convert.ToString(Token))
+                //    TestHelper.PersistNewRefreshToken(res.refresh_token);
+                return (T)Convert.ChangeType(res, typeof(T));
+                //throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         public override ReturnModel UpdateToken(V tokenInfoVM)
@@ -187,6 +199,13 @@ namespace Proven.Service
         public override Task<V> GetOrganisationsId(T xeroToken, string XeroTenentID)
         {
             throw new NotImplementedException();
+        }
+
+        public override async Task<T> ValidateToken(T Token)
+        {
+            var quickbookToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            var NewToken = await this.RefreshToken(Token);
+            return (T)Convert.ChangeType(NewToken, typeof(T));
         }
     }
 }
