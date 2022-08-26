@@ -9,6 +9,7 @@
     a:hover {
         color: #00d27a !important;
     }
+
     .fancybox-button--download svg {
         color: #b7b4b4 !important;
     }
@@ -504,16 +505,16 @@
         @*@Scripts.Render("~/bundles/jqueryval");*@
         @*@Scripts.Render("~/bundles/layoutJS")*@
 
-        @Scripts.Render("~/bundles/js/chart")
-        @Scripts.Render("~/bundles/js/select")
+        @Scripts.Render("~/bundles/js/chart")?v=999990
+        @Scripts.Render("~/bundles/js/select")?v=999990
 
-        @Scripts.Render("~/bundles/js/toastr")
-        @Scripts.Render("~/bundles/js/clipboard")
-        @Scripts.Render("~/bundles/js/fancybox")
-        @Scripts.Render("~/bundles/js/agencyHome")
+        @Scripts.Render("~/bundles/js/toastr")?v=999990
+        @Scripts.Render("~/bundles/js/clipboard")?v=999990
+        @Scripts.Render("~/bundles/js/fancybox")?v=999990
+        @Scripts.Render("~/bundles/js/agencyHome")?v=999990
         @*@Scripts.Render("~/bundles/js/reconciliationMain")*@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-       
+
     }
