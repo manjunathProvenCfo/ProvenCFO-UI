@@ -23,7 +23,8 @@ namespace Proven.Service
             client.BaseAddress = new Uri(Convert.ToString(ConfigurationManager.AppSettings["provencfoapi"]));            
             Prodclient.BaseAddress = new Uri(Convert.ToString(ConfigurationManager.AppSettings["provenCfoTokenapi"]));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+            client.Timeout = TimeSpan.FromMinutes(10);
+
         }
         #region HttpClientWrapperMethods
         public StringContent PreparePostContent<T>(T model)
@@ -55,6 +56,7 @@ namespace Proven.Service
 
         private HttpResponseMessage PostBase(string url, HttpContent httpContent)
         {
+         
             return client.PostAsync(url, httpContent).Result;
         }
         private HttpResponseMessage PostBaseWithCancellationToken(string url, HttpContent httpContent, CancellationToken? cancellationToken=null)

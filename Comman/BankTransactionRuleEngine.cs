@@ -89,6 +89,7 @@ namespace ProvenCfoUI.Comman
                                 NotInBankRecords.Add(reconciliationVM);
                             }
                         }
+
                         foreach (var xero in XeroNotInBanksList)
                         {
                             company_reconciliationVM reconciliationVM = new company_reconciliationVM();
@@ -105,7 +106,6 @@ namespace ProvenCfoUI.Comman
                         }
                         using (ReconcilationService res = new ReconcilationService())
                         {
-
                             resultBooksRec = await res.CreatePlaidReconciliation(NotInBooksRecords);
                             resultBankRec = await res.CreatePlaidReconciliation(NotInBankRecords);
                         }
@@ -114,9 +114,8 @@ namespace ProvenCfoUI.Comman
                 Tuple<PlaidResponceModel, PlaidResponceModel> result = Tuple.Create(resultBooksRec, resultBankRec);
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
                 throw;
             }
         }

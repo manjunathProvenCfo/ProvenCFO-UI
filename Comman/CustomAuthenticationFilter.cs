@@ -15,8 +15,8 @@ namespace ProvenCfoUI.Comman
         public void OnAuthentication(AuthenticationContext filterContext)
         {
 
-            if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
-                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false) &&
+            if (!filterContext.ActionDescriptor.IsDefined(typeof(System.Web.Http.AllowAnonymousAttribute), false)
+                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(System.Web.Http.AllowAnonymousAttribute), false) &&
                 filterContext.HttpContext.User.Identity.IsAuthenticated == false)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
