@@ -343,7 +343,12 @@
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 $(element).select2();
             });
-          
+
+
+            $(document).on('click', ".paginate_button", function () {
+                
+                Array.prototype.forEach.bind($(".col-auto"))(ele => { var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN'); if (str.length > 1) { str[0].style.display = "none"; } });
+            })
         });
 
         $("select").select2();
