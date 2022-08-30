@@ -332,12 +332,17 @@
                     $(element).select2();
                 });
             })
+            $(document).on('click', ".custom-select", function () {
+                $(".glAccountDD").each(function (index, element) {
+                    $(this).attr('id', 'item_gl_account_ref' + index);
+                    $(element).select2();
+                });
+            })
 
             $(".glAccountDD").each(function (index, element) {
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 $(element).select2();
             });
-
           
         });
 
