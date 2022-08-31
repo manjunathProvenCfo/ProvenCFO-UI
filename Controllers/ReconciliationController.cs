@@ -452,7 +452,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
 
-                    var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
+                    //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
