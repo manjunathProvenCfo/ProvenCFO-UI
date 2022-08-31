@@ -304,5 +304,10 @@ namespace Proven.Service
             var result = await _accountinstance.GetOrganisationsAsync(Token.AccessToken, XeroTenentID);
             return (V)Convert.ChangeType(result, typeof(V));
         }
+
+        public override Task<T> ValidateToken(T xeroToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

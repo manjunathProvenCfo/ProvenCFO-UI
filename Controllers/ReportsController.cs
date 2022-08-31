@@ -20,6 +20,7 @@ namespace ProvenCfoUI.Controllers
 {
     [CustomAuthenticationFilter]
     [Exception_Filters]
+    
     public class ReportsController : BaseController
     {
         private string StorageAccountName = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountName"]);
@@ -123,28 +124,29 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpGet]
-       
-        public void GetReportResource(string path,string fileName,string fileExtention)
-         {
+        [Route("Reports/GetReportResource/{type}/{year}/{month}/{azure_fileName}/{fileName}")]
+        public void GetReportResource(string type, string year, string month, string azure_fileName, string fileName)
+     
+        {
 
-         
+            var path = $"{type}/{year}/{month}/{azure_fileName}";
             using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
             {
                 long readedByteChunk = 0;
-                int  byteChunkRemain= 0;   
-                
+                int byteChunkRemain = 0;
+
                 Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
-                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);           
-                
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
+
                 byte[] bytes = new byte[azureStream.Length + 1];
 
                 azureStream.Seek(0, SeekOrigin.Begin);
-                byteChunkRemain = (int)azureStream.Length; 
-                
-                //for handling large files
-                readChunk:
-                readedByteChunk += azureStream.Read(bytes,(int)readedByteChunk, byteChunkRemain);
-                if (0 < (azureStream.Length- readedByteChunk))
+                byteChunkRemain = (int)azureStream.Length;
+
+            //for handling large files
+            readChunk:
+                readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length - readedByteChunk))
                 {
                     byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
                     goto readChunk;
@@ -154,6 +156,43 @@ namespace ProvenCfoUI.Controllers
             }
         }
 
+        [CheckSession]
+        [HttpGet]
+
+        public FileContentResult DownloadReportResource(string path, string fileName, string fileExtention)
+        {
+
+
+            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+            {
+                long readedByteChunk = 0;
+                int byteChunkRemain = 0;
+
+                Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
+                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
+
+                byte[] bytes = new byte[azureStream.Length + 1];
+
+                azureStream.Seek(0, SeekOrigin.Begin);
+                byteChunkRemain = (int)azureStream.Length;
+
+            //for handling large files
+            readChunk:
+                readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
+                if (0 < (azureStream.Length - readedByteChunk))
+                {
+                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                    goto readChunk;
+                }
+                azureStream.Close();
+
+
+               // Response.BinaryWrite(bytes);
+
+                return File(bytes, Response.ContentType, fileName + fileExtention);
+
+            }
+        }
         [CheckSession]
         public JsonResult GetReports(int agencyId, int year, string periodType)
         {
@@ -169,7 +208,7 @@ namespace ProvenCfoUI.Controllers
                         foreach (var item in reports)
                         {
                                    item.FileName = item.FileName.Split('_').Length>1? item.FileName.Split('_')[1]:item.FileName;
-                                   item.DownloadFileLink = @"/Reports/GetReportResource?path="+item.FilePath+"&&fileName="+item.FileName+"&&fileExtention="+item.FileExtention;
+                                   item.DownloadFileLink = $@"/Reports/GetReportResource/{item.FilePath}/{item.FileName}";
                         }
                         return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                     }

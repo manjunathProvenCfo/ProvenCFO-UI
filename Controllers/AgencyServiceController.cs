@@ -278,9 +278,10 @@ namespace ProvenCfoUI.Controllers
                         }
                         else if (client.ThirdPartyAccountingApp_ref == 2)
                         {
-                            using (QuickbooksLocalService<String, QuickBooksSharp.Entities.IncomeHeader> AccountingPackageService = new QuickbooksLocalService<String, QuickBooksSharp.Entities.IncomeHeader>(client.APIClientID, client.APIClientSecret, client.APIScope))
+                            using (QuickbooksLocalService<string, QuickBooksSharp.Entities.IncomeHeader> AccountingPackageService = new QuickbooksLocalService<string, QuickBooksSharp.Entities.IncomeHeader>(client.APIClientID, client.APIClientSecret, client.APIScope))
                             {
-                                //AccountingPackageService.GetReportProfitAndLossAsync()
+
+                                  var res =   await AccountingPackageService.GetReportProfitAndLossAsync(AccountingPackageInstance.Instance.QuickBooksToken.access_token,AccountingPackageInstance.Instance.TenentID);
                             }
 
                         }

@@ -18882,13 +18882,13 @@ label {
 }
 
     .btn-reveal-trigger:hover .btn-reveal:hover, .btn-reveal-trigger:hover .btn-reveal:focus, .btn-reveal-trigger:hover .btn-reveal:active, .btn-reveal-trigger:focus .btn-reveal:hover, .btn-reveal-trigger:focus .btn-reveal:focus, .btn-reveal-trigger:focus .btn-reveal:active {
-        color: #0b1727 !important;
+      /*  color: #0b1727 !important;*/
     }
 
 .btn-reveal-trigger .btn-reveal:active:focus, .btn-reveal-trigger .btn-reveal:active, .btn-reveal-trigger .btn-reveal:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
-    color: #0b1727 !important;
+    /*color: #0b1727 !important;*/
     background-color: #e6e6e6;
     border-color: #dfdfdf;
 }

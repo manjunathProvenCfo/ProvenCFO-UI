@@ -146,6 +146,9 @@ namespace Proven.Service
             this.isDisposed = true;
         }
 
-        
+        public override Task<V> GetBankTransactionAsync(T xeroToken, string XeroTenentID, Guid bankTransactionID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

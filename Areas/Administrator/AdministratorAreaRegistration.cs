@@ -14,11 +14,11 @@ namespace ProvenCfoUI.Areas.Administrator
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
-            context.MapRoute(
-                "Administrator_default",
-                "Administrator/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+            //context.MapRoute(
+            //    "Administrator_default",
+            //    "Administrator/{controller}/{action}/{id}",
+            //    new { action = "Index", id = UrlParameter.Optional }
+            //);
         }
     }
 }

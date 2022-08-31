@@ -56,6 +56,31 @@ namespace QuickBooksSharp
             };
         }
 
+
+        public async Task<IntuitResponse<IntuitEntity>> GetProfitAndLoss(string id)
+        {
+            try
+            {
+
+
+                var url = new Url(_serviceUrl).AppendPathSegment($"reports/ProfitAndLoss").SetQueryParam("start_date", "2021-01-01");
+                
+
+                var res = await _client.GetAsync<object>(url);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return new IntuitResponse<IntuitEntity>
+            {
+
+            };
+        }
+
         public async Task<IntuitResponse<IntuitEntity>> GetAsync(string id, Type entityType)
         {
             var res = await _client.GetAsync<IntuitResponse>(new Url(_serviceUrl).AppendPathSegment(GetEntityName(entityType))
@@ -70,6 +95,9 @@ namespace QuickBooksSharp
                 Response = res.IntuitObject
             };
         }
+
+
+       
 
         public async Task<Report> GetReportAsync(string reportName, Dictionary<string, string> parameters)
         {

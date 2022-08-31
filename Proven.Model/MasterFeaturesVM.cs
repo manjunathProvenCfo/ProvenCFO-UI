@@ -27,6 +27,7 @@ namespace Proven.Model
         public bool? IsDeleted { get; set; }
 
         public bool IsChecked { get; set; }
+        public int? Priority { get; set; }
     }
     public class MasterFeaturesMainModel
     {
