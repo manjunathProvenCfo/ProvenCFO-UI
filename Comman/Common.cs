@@ -455,12 +455,12 @@ namespace ProvenCfoUI.Comman
             else
                 return date.AddDays(1).AddMonths(1).AddDays(-1);
         }
-        public static DateTime PreviousMonth(DateTime date)
+        public static DateTime PreviousMonth(DateTime date,int NumberofMonth)
         {
             if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
-                return date.AddMonths(-1);
+                return date.AddMonths(NumberofMonth);
             else
-                return date.AddDays(-1).AddMonths(-1).AddDays(1);
+                return date.AddDays(NumberofMonth).AddMonths(NumberofMonth).AddDays(1);
         }
 
 
