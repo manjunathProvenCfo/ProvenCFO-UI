@@ -8,21 +8,7 @@ $(document).ready(function () {
     bindEnablePlaid();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
-
-    $(".lastmodified").each(function () {
-        var utctime = $(this).find('select').attr("utcdate");
-        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
-
-        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
-            var localtime = getLocalTime(utctime);
-            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
-            $(this).attr("data-original-title", msg);
-        }
-        else {
-            $(this).attr("data-original-title", "No Modification yet.");
-        }
-    });
-
+    lastModify();
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -88,6 +74,21 @@ $(document).ready(function () {
     function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
 });
 
+var lastModify = function () {
+    $(".lastmodified").each(function () {
+        var utctime = $(this).find('select').attr("utcdate");
+        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
+
+        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
+            var localtime = getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            $(this).attr("data-original-title", msg);
+        }
+        else {
+            $(this).attr("data-original-title", "No Modification yet.");
+        }
+    });
+}
 var bindEnableAutomation = function () {
     getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
         if (response.Status === "Success") {

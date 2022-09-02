@@ -325,23 +325,77 @@
             chat.forReconciliationIconColor = true;
             createTwilioClient();
             $(document).on('click', ".paginate_button", function () {
+
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
                 $(".glAccountDD").each(function (index, element) {
+                    
                     let itemIndex = pageIndex + "" + index;
                     $(this).attr('id', 'item_gl_account_ref' + itemIndex);
                     $(element).select2();
                 });
+                $('.lastmodified').tooltip();
+                lastModify();
+               
+            })
+            $(document).on('click', ".custom-select", function () {
+              
+                $(".glAccountDD").each(function (index, element) {
+                    $(this).attr('id', 'item_gl_account_ref' + index);
+                    $(element).select2();
+                });
+                $('.lastmodified').tooltip();
+                lastModify();
             })
 
             $(".glAccountDD").each(function (index, element) {
+             
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 $(element).select2();
             });
 
-          
+
+            //$(document).on('click', ".paginate_button", function () {
+                
+            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
+            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN');
+
+                   
+            //        if (str.length > 1) {
+
+            //            for (let index = 1; index < str.length; index++) {
+            //                str[index].style.display = "none";
+            //            }
+
+
+            //        }
+            //    });
+
+
+            //    $(".glAccountDD").select2()
+            //})
+
+
+            //$(document).on('click', ".custom-select", function () {
+
+            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
+            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN'); if (str.length > 1) {
+
+            //            for (let index = 1; index < str.length; index++) {
+            //                str[index].style.display = "none";
+            //            }
+
+
+            //        }
+            //    });
+
+
+
+            //    $(".glAccountDD").select2()
+            //})
+
+
         });
 
-        $("select").select2();
 
         var myParam = location.search.split('yes=')[1];
 
@@ -698,7 +752,7 @@
         }
 
         function onChangeglAccount(id, event) {
-
+        
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
