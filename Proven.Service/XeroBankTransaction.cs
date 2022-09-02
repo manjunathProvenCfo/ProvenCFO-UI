@@ -57,6 +57,12 @@ namespace Proven.Service
             var result = await _accountinstance.GetBankTransactionAsync(Token.AccessToken, XeroTenentID,bankTransactionID); //"IsReconciled=false&&Status!=\"DELETED\""
             return (V)Convert.ChangeType(result, typeof(V));
         }
+        public override async Task<V> GetPaymentsAsync(T iToken, string TenentID, dynamic whereCause)
+        {
+            var Token = (IXeroToken)iToken;
+            var result = await _accountinstance.GetPaymentsAsync(Token.AccessToken, TenentID,null, Convert.ToString(whereCause));
+            return (V)Convert.ChangeType(result, typeof(V));
+        }
         public void Dispose()
         {
             Dispose(true);
