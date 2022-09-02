@@ -1212,6 +1212,8 @@ var addMentionPlugin = function () {
                 callback.call(this, responseData);
             });
         },
+         minChars:3,
+
         onCaret: true
     });
 }
