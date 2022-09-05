@@ -506,8 +506,16 @@ namespace ProvenCfoUI.Controllers
                             }
                             else
                             {
-                                log.Info("Plaid API Error :" + result[0].Item1.Error + " : " + result[0].Item1.ErrorDesctiption);
-                                return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                                if (result[0].Item1.ErrorType == "Plaid Error")
+                                {
+                                    log.Info("Plaid API Error :" + result[0].Item1.Error + " : " + result[0].Item1.ErrorDesctiption);
+                                    return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    log.Info("Plaid data Syc validation failed :" + result[0].Item1.Error + " : " + result[0].Item1.ErrorDesctiption);
+                                    return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                                }
                             }
                         }                        
                     }
