@@ -221,7 +221,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
                         $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
                     };
                     if ($('#' + id + ' a').length > 1) {
-                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                        $('#' + id + ' a').attr("onclick", "CommentDelete('" + response.resultData + "')");
                     }
                 }
             });
