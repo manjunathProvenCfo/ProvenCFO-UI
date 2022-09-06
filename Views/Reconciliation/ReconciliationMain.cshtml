@@ -328,10 +328,11 @@
 
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
                 $(".glAccountDD").each(function (index, element) {
-                    
+                   
                     let itemIndex = pageIndex + "" + index;
                     $(this).attr('id', 'item_gl_account_ref' + itemIndex);
-                    $(element).select2();
+                    if ($(element).attr('data-select2-id') == null || $(element).attr('data-select2-id') == undefined) { $(element).select2(); }
+                    //$(element).select2();
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
@@ -340,15 +341,15 @@
             $(document).on('click', ".custom-select", function () {
               
                 $(".glAccountDD").each(function (index, element) {
+                   
                     $(this).attr('id', 'item_gl_account_ref' + index);
-                    $(element).select2();
+                    if ($(element).attr('data-select2-id') == null || $(element).attr('data-select2-id') == undefined) { $(element).select2(); }
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
             })
 
-            $(".glAccountDD").each(function (index, element) {
-             
+            $(".glAccountDD").each(function (index, element) {              
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 $(element).select2();
             });
