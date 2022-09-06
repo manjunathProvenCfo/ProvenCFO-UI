@@ -492,7 +492,7 @@ namespace ProvenCfoUI.Controllers
                     var client = objClientService.GetClientById(AgencyId);
                     using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
                     {
-                        List<Tuple<PlaidResponceModel, PlaidResponceModel>> result = await BankData.GetReconciliationByPaidXero(client);
+                        List<Tuple<PlaidResponceModel, PlaidResponceModel>> result = await BankData.GetReconciliationByPaidWithAccountingPackage(client);
                         if (result.Count > 0)
                         {
                             var TotalNotinBooksInsertedRecords = result.Sum(X => X.Item1.TotalInsertedRecords);

@@ -1,10 +1,13 @@
-﻿using Proven.Model;
+﻿using Acklann.Plaid.Transactions;
+using Proven.Model;
 using Proven.Service;
+using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Xero.NetStandard.OAuth2.Model.Accounting;
 using Xero.NetStandard.OAuth2.Token;
 
 namespace ProvenCfoUI.Comman
@@ -16,14 +19,80 @@ namespace ProvenCfoUI.Comman
         {
 
         }
-        public async Task<dynamic> GetReconciliationByPaidXero(ClientModel client)
+        private async Task<Tuple<PlaidResponceModel, PlaidResponceModel>> CompilePlaidDatawithXero(ClientModel client, List<BankTransaction> XeroDataBothNotInBookNotInBanksList, List<BankTransaction> XeroNotInBanksList, ClientXeroAccountsVM account, Payments XeroPayments, ThirdPartyAPIDetailsVM PlaidAPIDetails, GetTransactionsResponse PlaidData)
+        {
+            PlaidResponceModel resultBooksRec = null;
+            PlaidResponceModel resultBankRec = null;
+            List<company_reconciliationVM> NotInBooksRecords = new List<company_reconciliationVM>();
+            List<company_reconciliationVM> NotInBankRecords = new List<company_reconciliationVM>();
+            foreach (var plaid in PlaidData.Transactions)
+            {
+                var MatchedRec = XeroDataBothNotInBookNotInBanksList.Where(x => x.Date == plaid.Date && x.Total == plaid.Amount).FirstOrDefault();
+                if (MatchedRec == null)
+                {
+                    company_reconciliationVM reconciliationVM = new company_reconciliationVM();
+                    reconciliationVM.id = Convert.ToString(plaid.TransactionId);
+                    reconciliationVM.account_name = account.Name;
+                    reconciliationVM.amount = plaid.Amount;
+                    reconciliationVM.company = client.Name;
+                    reconciliationVM.date = plaid.Date;
+                    reconciliationVM.description = string.Join(",", plaid.Categories);
+                    reconciliationVM.reference = plaid.Name;
+                    reconciliationVM.AgencyID = client.Id;
+                    reconciliationVM.type = "Unreconciled";
+                    NotInBooksRecords.Add(reconciliationVM);
+                }
+            }
+
+            foreach (var xero in XeroNotInBanksList)
+            {
+                company_reconciliationVM reconciliationVM = new company_reconciliationVM();
+                reconciliationVM.id = Convert.ToString(xero.BankTransactionID);
+                reconciliationVM.account_name = xero.BankAccount.Name;
+                reconciliationVM.amount = xero.Total.HasValue == true ? xero.Total.Value : 0;
+                reconciliationVM.company = client.Name;
+                reconciliationVM.date = xero.Date.Value;
+                reconciliationVM.description = xero.LineItems.FirstOrDefault()?.Description;
+
+                reconciliationVM.reference = xero.Reference;
+                reconciliationVM.AgencyID = client.Id;
+                reconciliationVM.type = "Outstanding Payments";
+                NotInBankRecords.Add(reconciliationVM);
+            }
+            foreach (var payment in XeroPayments._Payments)
+            {
+                company_reconciliationVM reconciliationVM = new company_reconciliationVM();
+                reconciliationVM.id = Convert.ToString(payment.PaymentID);
+                reconciliationVM.account_name = account.Name;
+                reconciliationVM.amount = payment.Amount;
+                reconciliationVM.company = client.Name;
+                reconciliationVM.date = payment.Date;
+                reconciliationVM.description = payment.Invoice.Contact.Name;
+
+                reconciliationVM.reference = payment.Reference;
+                reconciliationVM.AgencyID = client.Id;
+                reconciliationVM.type = "Outstanding Payments";
+                NotInBankRecords.Add(reconciliationVM);
+            }
+            using (ReconcilationService res = new ReconcilationService())
+            {
+                resultBooksRec = await res.CreatePlaidReconciliation(NotInBooksRecords);
+                resultBankRec = await res.CreatePlaidReconciliation(NotInBankRecords);
+            }
+            Tuple<PlaidResponceModel, PlaidResponceModel> result = Tuple.Create(resultBooksRec, resultBankRec);
+
+
+
+            return result;
+        }
+        public async Task<dynamic> GetReconciliationByPaidWithAccountingPackage(ClientModel client)
         {
             PlaidResponceModel resultBooksRec = null;
             PlaidResponceModel resultBankRec = null;
             string Access_token = String.Empty;
             dynamic BankTransactionfactory = null;
             dynamic Paymentfactory = null;
-            List<Tuple<PlaidResponceModel, PlaidResponceModel>> FinalResult = new List<Tuple<PlaidResponceModel,PlaidResponceModel>>();
+            List<Tuple<PlaidResponceModel, PlaidResponceModel>> FinalResult = new List<Tuple<PlaidResponceModel, PlaidResponceModel>>();
 
             Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions XeroDataBothNotInBookNotInBanks = null;
             List<Xero.NetStandard.OAuth2.Model.Accounting.BankTransaction> XeroDataBothNotInBookNotInBanksList = null;
@@ -50,8 +119,9 @@ namespace ProvenCfoUI.Comman
                         FinalResult.Add(errresult);
                         return FinalResult;
                     };
-                    if (ClientBankAccounts.Where(x => x.IsActive == true).Count() == 0) {
-                        resultBooksRec = GetPlaidErrorDetails(null, "Vailidation Error", "No bank account has been active. Please enable at least one bank account to sync the data.");                        
+                    if (ClientBankAccounts.Where(x => x.IsActive == true).Count() == 0)
+                    {
+                        resultBooksRec = GetPlaidErrorDetails(null, "Vailidation Error", "No bank account has been active. Please enable at least one bank account to sync the data.");
                         Tuple<PlaidResponceModel, PlaidResponceModel> errresult = Tuple.Create(resultBooksRec, resultBooksRec);
                         FinalResult.Add(errresult);
                         return FinalResult;
@@ -63,107 +133,50 @@ namespace ProvenCfoUI.Comman
                         FinalResult.Add(errresult);
                         return FinalResult;
                     }
-                    foreach (var accout in ClientBankAccounts)
+                    foreach (var account in ClientBankAccounts)
                     {
-                        if (accout.IsActive == true)
+                        if (account.IsActive == true && !string.IsNullOrEmpty(account.access_token))
                         {
-                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(accout.access_token.Replace(" ", "+"))).Replace("\t", "");
+                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(account.access_token.Replace(" ", "+"))).Replace("\t", "");
                             if (client.ThirdPartyAccountingApp_ref == 1)
                             {
                                 BankTransactionfactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions>(client.APIClientID, client.APIClientSecret, client.APIScope, "");
-
                                 Paymentfactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Payments>(client.APIClientID, client.APIClientSecret, client.APIScope, "");
 
-                                XeroDataBothNotInBookNotInBanks = await BankTransactionfactory.GetBankTransactionsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==true&&Status!=""DELETED""&&BankAccount.Code==""{0}""", accout.Code));
+                                XeroDataBothNotInBookNotInBanks = await BankTransactionfactory.GetBankTransactionsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==true&&Status!=""DELETED""&&BankAccount.Code==""{0}""", account.Code));
                                 XeroDataBothNotInBookNotInBanksList = XeroDataBothNotInBookNotInBanks._BankTransactions.ToList();
 
-                                XeroNotInBanks = await BankTransactionfactory.GetBankTransactionsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==false&&Status!=""DELETED""&&BankAccount.Code==""{0}""", accout.Code));
+                                XeroNotInBanks = await BankTransactionfactory.GetBankTransactionsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==false&&Status!=""DELETED""&&BankAccount.Code==""{0}""", account.Code));
                                 XeroNotInBanksList = XeroNotInBanks._BankTransactions.ToList();
 
-                                XeroPayments = await Paymentfactory.GetPaymentsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==false&&Status!=""DELETED""&&Account.Code==""{0}""",accout.Code));
-                            }
-                        }
-                        else
-                        {
-                            BankTransactionfactory = null;
-                        }
-                        PlaidRequestModelsVM plaidRequest = new PlaidRequestModelsVM();
-                        plaidRequest.start_date = Common.PreviousMonth(DateTime.Now,-2);
-                        plaidRequest.end_date = DateTime.Now;
-                        PlaidBankTransaction<string, Acklann.Plaid.Transactions.GetTransactionsResponse> plaidfactory = new PlaidBankTransaction<string, Acklann.Plaid.Transactions.GetTransactionsResponse>(PlaidAPIDetails.ClientId, PlaidAPIDetails.ClientSecret, "en", new string[] { "auth", "transactions" }, new string[] { "US" }, PlaidBankTransaction<string, dynamic>.GetEnvironment());
-                        var PlaidData = await plaidfactory.GetBankTransactionsAsync(Access_token, null, plaidRequest);
-                        if (PlaidData.IsSuccessStatusCode == true)
-                        {
+                                XeroPayments = await Paymentfactory.GetPaymentsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==false&&Status!=""DELETED""&&Account.Code==""{0}""", account.Code));
 
-                            List<company_reconciliationVM> NotInBooksRecords = new List<company_reconciliationVM>();
-                            List<company_reconciliationVM> NotInBankRecords = new List<company_reconciliationVM>();
-                            foreach (var plaid in PlaidData.Transactions)
-                            {
-                                var MatchedRec = XeroDataBothNotInBookNotInBanksList.Where(x => x.Date == plaid.Date && x.Total == plaid.Amount).FirstOrDefault();
-                                if (MatchedRec == null)
+                                PlaidRequestModelsVM plaidRequest = new PlaidRequestModelsVM();
+                                plaidRequest.start_date = Common.PreviousMonth(DateTime.Now, -2);
+                                plaidRequest.end_date = DateTime.Now;
+                                PlaidBankTransaction<string, Acklann.Plaid.Transactions.GetTransactionsResponse> plaidfactory = new PlaidBankTransaction<string, Acklann.Plaid.Transactions.GetTransactionsResponse>(PlaidAPIDetails.ClientId, PlaidAPIDetails.ClientSecret, "en", new string[] { "auth", "transactions" }, new string[] { "US" }, PlaidBankTransaction<string, dynamic>.GetEnvironment());
+                                var PlaidData = await plaidfactory.GetBankTransactionsAsync(Access_token, null, plaidRequest);
+                                if (PlaidData.IsSuccessStatusCode == true)
                                 {
-                                    company_reconciliationVM reconciliationVM = new company_reconciliationVM();
-                                    reconciliationVM.id = Convert.ToString(plaid.TransactionId);
-                                    reconciliationVM.account_name = accout.Name;
-                                    reconciliationVM.amount = plaid.Amount;
-                                    reconciliationVM.company = client.Name;
-                                    reconciliationVM.date = plaid.Date;
-                                    reconciliationVM.description = string.Join(",",plaid.Categories);
-                                    reconciliationVM.reference = plaid.Name;
-                                    reconciliationVM.AgencyID = client.Id;
-                                    reconciliationVM.type = "Unreconciled";
-                                    NotInBooksRecords.Add(reconciliationVM);
+                                    Tuple<PlaidResponceModel, PlaidResponceModel> result = await CompilePlaidDatawithXero(client, XeroDataBothNotInBookNotInBanksList, XeroNotInBanksList, account, XeroPayments, PlaidAPIDetails, PlaidData); //Tuple.Create(resultBooksRec, resultBankRec);
+                                    FinalResult.Add(result);
+                                }
+                                else
+                                {
+                                    resultBooksRec = GetPlaidErrorDetails(PlaidData, "Plaid Error", "Error while Plaid API data request, Please contact the administrator.");
+                                    resultBankRec = GetPlaidErrorDetails(PlaidData, "Plaid Error", "Error while Plaid API data request, Please contact the administrator.");
+                                    Tuple<PlaidResponceModel, PlaidResponceModel> errresult = Tuple.Create(resultBooksRec, resultBankRec);
+                                    return errresult;
                                 }
                             }
-                            
-                            foreach (var xero in XeroNotInBanksList)
+                            else
                             {
-                                company_reconciliationVM reconciliationVM = new company_reconciliationVM();
-                                reconciliationVM.id = Convert.ToString(xero.BankTransactionID);
-                                reconciliationVM.account_name = xero.BankAccount.Name;
-                                reconciliationVM.amount = xero.Total.HasValue == true ? xero.Total.Value : 0;
-                                reconciliationVM.company = client.Name;
-                                reconciliationVM.date = xero.Date.Value;
-                                reconciliationVM.description = xero.LineItems.FirstOrDefault()?.Description;
-
-                                reconciliationVM.reference = xero.Reference;
-                                reconciliationVM.AgencyID = client.Id;
-                                reconciliationVM.type = "Outstanding Payments";
-                                NotInBankRecords.Add(reconciliationVM);
+                                BankTransactionfactory = null;
                             }
-                            foreach (var payment in XeroPayments._Payments)
-                            {
-                                company_reconciliationVM reconciliationVM = new company_reconciliationVM();
-                                reconciliationVM.id = Convert.ToString(payment.PaymentID);
-                                reconciliationVM.account_name = accout.Name;
-                                reconciliationVM.amount = payment.Amount;
-                                reconciliationVM.company = client.Name;
-                                reconciliationVM.date = payment.Date;
-                                reconciliationVM.description = payment.Invoice.Contact.Name;
-
-                                reconciliationVM.reference = payment.Reference;
-                                reconciliationVM.AgencyID = client.Id;
-                                reconciliationVM.type = "Outstanding Payments";
-                                NotInBankRecords.Add(reconciliationVM);
-                            }
-                            using (ReconcilationService res = new ReconcilationService())
-                            {
-                                resultBooksRec = await res.CreatePlaidReconciliation(NotInBooksRecords);
-                                resultBankRec = await res.CreatePlaidReconciliation(NotInBankRecords);
-                            }
-                            Tuple<PlaidResponceModel, PlaidResponceModel> result = Tuple.Create(resultBooksRec, resultBankRec);
-                            FinalResult.Add(result);
-                        }
-                        else
-                        {
-                            resultBooksRec = GetPlaidErrorDetails(PlaidData, "Plaid Error", "Error while Plaid API data request, Please contact the administrator.");
-                            resultBankRec = GetPlaidErrorDetails(PlaidData, "Plaid Error", "Error while Plaid API data request, Please contact the administrator.");
-                            Tuple<PlaidResponceModel, PlaidResponceModel> errresult = Tuple.Create(resultBooksRec, resultBankRec);
-                            return errresult;
                         }
                     }
                 }
-                
+
                 return FinalResult;
             }
             catch (Exception ex)
@@ -171,7 +184,7 @@ namespace ProvenCfoUI.Comman
                 throw;
             }
         }
-        public PlaidResponceModel GetPlaidErrorDetails(Acklann.Plaid.Transactions.GetTransactionsResponse Plaidresponse, string ErrorType,string ErrorMsg = "")
+        public PlaidResponceModel GetPlaidErrorDetails(Acklann.Plaid.Transactions.GetTransactionsResponse Plaidresponse, string ErrorType, string ErrorMsg = "")
         {
             PlaidResponceModel resultBooksRec = new PlaidResponceModel();
             if (ErrorType == "Plaid Error")
@@ -275,7 +288,7 @@ namespace ProvenCfoUI.Comman
                 resultBooksRec.Error = ErrorMsg;
             }
 
-            
+
             return resultBooksRec;
         }
 
@@ -294,6 +307,7 @@ namespace ProvenCfoUI.Comman
             }
             this.isDisposed = true;
         }
+
 
     }
 }
