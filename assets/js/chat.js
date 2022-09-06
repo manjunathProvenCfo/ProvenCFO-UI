@@ -229,6 +229,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
     }
     var addNewMessagetoChatwindow = async function (input) {
+     
         let addNewComment = function (inputText) {
             var CurrentDate = new Date();
             var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
@@ -487,6 +488,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
 
     var addNewComment = function (inputText) {
+      
         var CurrentDate = new Date();
         var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
         var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
@@ -525,7 +527,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                         $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
                     };
                     if ($('#' + id + ' a').length > 1) {
-                        $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                        $('#' + id + ' a').attr("onclick", "CommentDelete('" + response.resultData + "')");
                     }
                 }
             });
