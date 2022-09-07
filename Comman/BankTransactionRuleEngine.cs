@@ -133,6 +133,11 @@ namespace ProvenCfoUI.Comman
                         FinalResult.Add(errresult);
                         return FinalResult;
                     }
+                    using (var reconciliation = new ReconcilationService())
+                    {
+                       await reconciliation.UpdateasReconciledallrecordsofAgency(client.Id, 1);
+                    }
+                    
                     foreach (var account in ClientBankAccounts)
                     {
                         if (account.IsActive == true && !string.IsNullOrEmpty(account.access_token))
