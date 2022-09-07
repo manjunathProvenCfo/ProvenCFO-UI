@@ -968,7 +968,8 @@
                 isPlaidTrue = "False";
         }
         var _toggle_state = [{ plaid: isPlaidTrue != "False" ? true : false, ele: plaid }, { automation: isAutomationTrue != "False" ? true : false, ele: automation }];
-            var toggle = function (e) {
+
+        var toggle = function (e) {
                 let ele = e.target;
                 if (ele.getAttribute("id") == "Plaid_Enabled" && _toggle_state[0].plaid == false) {
                         _toggle_state[0].plaid = true;
@@ -978,9 +979,20 @@
                 } else {
                     if (_toggle_state[0].plaid == true) {
                         $(_toggle_state[0].ele).click();
-                        _toggle_state[0].automation == false;
-                    } _toggle_state[1].automation = true;
-                    $(_toggle_state[1].ele).click();
+                        _toggle_state[0].plaid == false;
+
+                    }
+                    if (_toggle_state[1].automation == true) {
+                        _toggle_state[1].automation = false;
+                        $(_toggle_state[1].ele).click();
+
+                     
+                    } else {
+
+                        _toggle_state[1].automation = true;
+                        $(_toggle_state[1].ele).click();
+
+                    }
                 }
             }
             plaid.addEventListener("click", toggle);
