@@ -8,9 +8,7 @@ $(document).ready(function () {
 
             let email = $(trigger).data('clipboard-text');
             toastr.success("Email address successfully copied to your clipboard " + email);
-            /* Toast("Toast title", "Toast message here");*/
-
-            /*alert("copied to clipboard " + email);*/
+        
             return email;
         }
     });
@@ -19,11 +17,7 @@ $(document).ready(function () {
     AgencyDropdownPartialViewChange();
    /* bindNotInBooksAndBanksCountDashboard();*/
     NotesIndividualCountAndPercentageByAgencyId();
-    //KanbanCountWithIndividualPriority();
-    //defaultReportsWidget();
-   
-    //RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-    //RenderNetIncomeChart($('#dllNetIncome').val());
+ 
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -52,12 +46,7 @@ $(document).ready(function () {
 
 });
 
-//function GetMonthDifference(data.StartDate, Enddate) {
-//    var startdate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString()
-//    var enddate = new Date(Enddate)
-//    var months = enddate.getMonth() - startdate.getMonth() + (12 * (enddate.getFullYear() - startdate.getFullYear()));
-//    return months;
-//}
+
 
 function RenderGrossRevenueChart(Option) {
 
@@ -109,44 +98,7 @@ function RenderNetIncomeChart(Option) {
         }
 
     });
-    //var dom = document.getElementById("container2");
-    //var myChart = echarts.init(dom);
-    //var app = {};
 
-    //var option;
-
-
-
-    //option = {
-    //    xAxis: {
-    //        type: 'category',
-    //        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    //    },
-    //    yAxis: {
-    //        type: 'value'
-    //    },
-    //    series: [{
-    //        data: [150, 230, 224, 218, 135, 147, 260],
-    //        type: 'line',
-    //        lineStyle: {
-    //            color: '#2c7be5'
-    //        },
-    //        symbol: 'circle',
-    //        symbolSize: 10,
-    //        smooth: false,
-    //        hoverAnimation: true,
-    //    }],
-    //    grid: {
-    //        right: '28px',
-    //        left: '40px',
-    //        bottom: '15%',
-    //        top: '5%'
-    //    }
-    //};
-
-    //if (option && typeof option === 'object') {
-    //    myChart.setOption(option);
-    //}
 }
 
 var colorArrays = [];
@@ -502,11 +454,8 @@ function getTeamMembersList() {
                         else if (count == 3) {
                             $('#spJobTitle' + count).html('Accountant');
                         }
-                        //$('#spJobTitle' + count).html(String(object.Jobtitle));
                     }
-                    //if (object.Jobtitle != null && object.Jobtitle != '') {
-                    //    $('#spJobTitle' + count).html(String(object.Jobtitle));
-                    //}
+               
                     else {
                         $('#spJobTitle' + count).html(String(''));
                     }
@@ -567,11 +516,7 @@ function AgencyDropdownPartialViewChange() {
 
     ShowlottieLoader(); 
     var ClientID = $("#ddlclient option:selected").val();
-    //postAjax(`/AgencyService/XeroSwitchOrganization?ClientID=${ClientID}`, null, function (response) {
-    //    if (response && response.URL != '') {
-    //        window.location.href = response.URL;
-    //    }
-    //});
+  
 
     $.ajax({
         url: '/AgencyService/GetClientDetails?id=' + ClientID,
@@ -598,13 +543,8 @@ function AgencyDropdownPartialViewChange() {
                
                 GetReconcilationData();
                 GetReconcilationData1();
-                //GetReconcilationPostiveData();
-                //GetReconcilationNegativeData();
-                //bindNotInBooksAndBanksCountDashboard();
-                //bindNotInBooksAndBanksCountDashboard1();
                 KanbanCountWithIndividualPriority();
-                /*GetTotalNotesCount();*/
-                /*SetUserPreferencesForAgency();*/
+           
                 defaultReportsWidget();
                 let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
                 $('#spMonths').html(month);
@@ -674,77 +614,7 @@ function AgencyDropdownPartialViewChange() {
     };
 }
 
-//function GetTotalNotesCount() {
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Notes/TotalNotesCountByAgencyId?AgencyId=${ClientID}`, null, function (response) {
 
-//        if (response.Message == "Success") {
-
-//            let data = response.ResultData;
-//            let TotalNotes;
-
-//            for (var i = 0; i < data.length; i++) {
-//                TotalNotes = TotalNotes + data[i].TotalNotes;
-//            }
-//            $("#lblTotalNotes").text(TotalNotes);
-//        }
-//    });
-//}
-
-//function GetReconcilationData() {
-
-
-//    var ClientID = $("#ddlclient option:selected").val();
-
-
-//    getAjax(`/Reconciliation/GetReconciliationDataCountAgencyId?AgencyId=${ClientID}`, null, function (response) {
-
-//        if (response.Message == "Success") {
-
-
-
-//            var data = response.ResultData;
-
-
-//            let totalSum = 0;
-
-
-
-//            for (var i = 0; i < data.length; i++) {
-
-//                totalSum = totalSum + data[i].totalCount;
-//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-
-//                    $("#lblNotInBanksCount2").text(data[i].totalCount);
-//                }
-
-
-//                else if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-//                    $("#lblNotInBooksCount2").text(data[i].totalCount);
-//                }
-
-//            }
-
-//            if (data == 0) {
-
-//                //$("#lblNotInBanksCount2").text(data.totalCount);
-//                //$("#lblNotInBooksCount2").text(data.totalCount);
-//                $("#lblNotInBooksCount2").text(0);
-//                $("#lblNotInBanksCount2").text(0);
-//            }
-//            $("#lblNotInCount").text(totalSum);
-
-//        }
-
-//        error: (function (data) {
-
-//            window.location.reload();
-
-//            swal("Oops", "We couldn't connect to the server!", "error");
-//        });
-
-//    });
-//}
 var totalSum1;
 var totalSum2;
 function GetReconcilationData() {
@@ -861,139 +731,7 @@ function TotalSum(totalSum1, totalSum2) {
     }
 }
 
-//function GetReconcilationPostiveData() {
 
-
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-
-//        if (response.Message == "Success") {
-
-//            let data = response.ResultData;
-//            let totalSum = 0;
-
-//            for (var i = 0; i < data.length; i++) {
-
-//                totalSum = totalSum + data[i].amount;
-
-
-
-
-//                $("#lblNegativeInBooksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
-
-
-//                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
-
-
-//            }
-//            if (data == 0) {
-
-//                $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-//                $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-//            }
-//        }
-
-
-//    });
-
-//}
-
-//function GetReconcilationNegativeData() {
-
-
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-
-//        if (response.Message == "Success") {
-
-//            var data = response.ResultData;
-//            var totalSum = 0;
-
-//            for (var i = 0; i < data.length; i++) {
-
-
-
-//                $("#lblNegativeBanksCount").text(ConvertToUDS(data[i].amountPositive).replace('-', ''));
-
-
-
-
-//                $("#lblPostiveInBooksCount").text(ConvertToUDS(data[i].amountNegative).replace('-', ''));
-
-//            }
-//            if (data == 0) {
-
-//                $("#lblpostiveBanksCount").text(ConvertToUDS(0).replace('-', ''));
-//                $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-//            }
-
-//        }
-//        else {
-//            totalSum = totalSum + data[i].amount;
-//        }
-
-//    });
-//}
-
-
-//function bindNotInBooksAndBanksCountDashboard() {
-
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-
-//        if (response.Message == "Success") {
-
-//            let data = response.ResultData;
-
-//            let totalSum = 0;
-
-//            for (var i = 0; i < data.length; i++) {
-
-//                percentage = data[i].percentage.toFixed(0);
-
-//                totalSum = totalSum + data[i].totalCount;
-//                if (data[i].type.toLowerCase() == "Unreconciled".toLowerCase()) {
-//                    $("#lblNotInBanksCount").text(data[i].totalCount);
-//                }
-//                else {
-//                    $("#lblNotInBooksCount").text(data[i].totalCount);
-//                }
-//            }
-//            $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-//            utils.addProgressCircle("#divNotInBookPercentage1")
-
-//        }
-
-//    })
-//}
-//function bindNotInBooksAndBanksCountDashboard1() {
-
-//    var ClientID = $("#ddlclient option:selected").val();
-//    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-
-//        if (response.Message == "Success") {
-//            let data = response.ResultData;
-//            let totalSum = 0;
-//            for (var i = 0; i < data.length; i++) {
-
-//                percentage = data[i].percentage.toFixed(0);
-
-//                totalSum = totalSum + data[i].totalCount;
-//                if (data[i].type.toLowerCase() == "Outstanding Payments".toLowerCase()) {
-//                    $("#lblNotInBooksCount").text(data[i].Count);
-//                }
-//                else {
-//                    $("#divNotInBookPercentage").text(data[i].percentage);
-//                }
-//            }
-
-//            $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-//            utils.addProgressCircle("#lblNotInBankPercentage")
-
-//        }
-
-//    })
-//}
 const camelize = (str) => {
     const text = str.replace(/[-_\s.]+(.)?/g, (_, c) =>
         c ? c.toUpperCase() : ""
@@ -1361,9 +1099,6 @@ var totalSalesInitTwo = function totalSalesInitTwo() {
                 top: '5%'
             }
         };
-
-
-        //chart.echartSetOption(chart, userOptions, getDefaultOptions); // Change chart options according to the selected month
         if (getDefaultOptions && typeof getDefaultOptions === 'object') {
             chart.setOption(getDefaultOptions);
         }
@@ -1433,7 +1168,7 @@ function prepareReportMedia(report) {
     thumbnail = thumbnail.replace("~/", "../../");
     let reportHTML = `<div class="media align-items-center mb-3">
                                     <div class="avatar avatar-2xl">
-                                        <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
+                                        <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group" data-type="iframe"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
                                         <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>

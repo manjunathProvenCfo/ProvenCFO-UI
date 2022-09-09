@@ -467,7 +467,7 @@ var addDatehtml = function (input) {
 }
 
 var addNewComment = function (inputText) {
- 
+   
     var CurrentDate = new Date();
     var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
     var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
@@ -501,7 +501,7 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
         postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
             var r = response;
-            if (response.resultData != null) {               
+            if (response.resultData != null) {
                 var id = "msg_" + response.resultData;
                 $('#msg_0').attr("id", id);
                 if ($('#' + id +' a').length > 0)
@@ -509,7 +509,7 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
                     $('#' + id +' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
                 };
                 if ($('#' + id + ' a').length > 1) {
-                    $('#' + id + ' a').eq(1).attr("onclick", "CommentDelete('" + response.resultData + "')");
+                    $('#' + id + ' a').attr("onclick", "CommentDelete('" + response.resultData + "')");
                 }
             }
         });

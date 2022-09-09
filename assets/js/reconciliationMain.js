@@ -8,21 +8,7 @@ $(document).ready(function () {
     bindEnablePlaid();
     EnableSelectedBulkUpdateButton();
     //bindIsSeletedAll();
-
-    $(".lastmodified").each(function () {
-        var utctime = $(this).find('select').attr("utcdate");
-        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
-
-        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
-            var localtime = getLocalTime(utctime);
-            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
-            $(this).attr("data-original-title", msg);
-        }
-        else {
-            $(this).attr("data-original-title", "No Modification yet.");
-        }
-    });
-
+    lastModify();
 
     $("#ichat").click(function () {
         //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
@@ -88,15 +74,32 @@ $(document).ready(function () {
     function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
 });
 
+var lastModify = function () {
+    $(".lastmodified").each(function () {
+        var utctime = $(this).find('select').attr("utcdate");
+        var ModifiedBy = $(this).find('select').attr("ModifiedBy");
+
+        if (utctime != undefined && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
+            var localtime = getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            $(this).attr("data-original-title", msg);
+        }
+        else {
+            $(this).attr("data-original-title", "No Modification yet.");
+        }
+    });
+}
 var bindEnableAutomation = function () {
     getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
-        if (response.Status === "Success") {
-
+        if (response.Status === "Success") {            
             IsEnableAutomation = response.Data;
             if (IsEnableAutomation === false) {
                 $("#OnDemandData").attr('disabled', true);
                 $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
-
+                $("#OnDemandData").addClass('d-none');
+            }
+            else {
+                $("#OnDemandData").removeClass('d-none');
             }
 
         }
@@ -108,7 +111,10 @@ var bindEnablePlaid = function () {
             IsEnablePlaid = response.Data;
             if (IsEnablePlaid === false) {
                 $("#OnDemandDataPlaid").addClass('d-none');
-
+            }
+            else {
+                $("#OnDemandDataPlaid").removeClass('d-none');
+                $("#OnDemandDataPlaid").attr('title', 'Request on demand plaid data.');
             }
 
         }
@@ -299,8 +305,9 @@ $(document).ready(function () {
         }
     });
     $("#OnDemandDataPlaid").click(function () {
-         if (IsEnableAutomation === false) {
-            $("#OnDemandData").attr('disabled', true);
+       
+        if (IsEnablePlaid === false) {
+            $("#OnDemandDataPlaid").attr('disabled', true);
             return;
         }
         $("#Loader").removeAttr("style");

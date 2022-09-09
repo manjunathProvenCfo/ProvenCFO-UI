@@ -492,20 +492,35 @@ namespace ProvenCfoUI.Controllers
                     var client = objClientService.GetClientById(AgencyId);
                     using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
                     {
-                        Tuple<PlaidResponceModel, PlaidResponceModel> result = await BankData.GetReconciliationByPaidXero(client);
-                        if (result.Item1.Status == true && result.Item2.Status == true)
+                        List<Tuple<PlaidResponceModel, PlaidResponceModel>> result = await BankData.GetReconciliationByPaidWithAccountingPackage(client);
+                        if (result.Count > 0)
                         {
-                            string MsgString = "Sucessfully sync the data. Total Not in books records added: " + result.Item1.TotalInsertedRecords + " and Total Not in banks records updated:" + result.Item2.TotalInsertedRecords;
-                            return Json(new { data = MsgString, Status = true, Message = MsgString }, JsonRequestBehavior.AllowGet);
-                        }
-                        else
-                        {
-                            log.Info("Plaid API Error :" + result.Item1.Error + " : " + result.Item1.ErrorDesctiption);
-                            return Json(new { data = result.Item1.Error, Status = false, Message = result.Item1.ErrorType != null?"Error" : result.Item1.ErrorType }, JsonRequestBehavior.AllowGet);
-                        }
-
+                            var TotalNotinBooksInsertedRecords = result.Sum(X => X.Item1.TotalInsertedRecords);
+                            var TotalNotinBooksUpdatedRecords = result.Sum(X => X.Item1.TotalUpdatedRecords);
+                            var TotalNotinBanksInsertedRecords = result.Sum(X => X.Item2.TotalInsertedRecords);
+                            var TotalNotinBanksUpdatedRecords = result.Sum(X => X.Item2.TotalUpdatedRecords);
+                            if (result[0].Item1.Status == true && result[0].Item2.Status == true)
+                            {
+                                string MsgString = "Sucessfully sync the data. Total Not in books records extracted: " + TotalNotinBooksInsertedRecords + " and Total Not in banks records extracted:" + TotalNotinBanksInsertedRecords;
+                                return Json(new { data = MsgString, Status = true, Message = MsgString }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                if (result[0].Item1.ErrorType == "Plaid Error")
+                                {
+                                    log.Info("Plaid API Error :" + result[0].Item1.Error + " : " + result[0].Item1.ErrorDesctiption);
+                                    return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    log.Info("Plaid data Syc validation failed :" + result[0].Item1.Error + " : " + result[0].Item1.ErrorDesctiption);
+                                    return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }                        
                     }
                 }
+                return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

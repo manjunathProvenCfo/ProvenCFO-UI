@@ -266,7 +266,7 @@ namespace ProvenCfoUI.Controllers
 
 
                             rpt.FileName = rpt.FileName.Split('_').Length > 1 ? rpt.FileName.Split('_')[1] : rpt.FileName;
-                            rpt.DownloadFileLink = @"/Reports/GetReportResource?path=" + rpt.FilePath + "&&fileName=" + rpt.FileName + "&&fileExtention=" + rpt.FileExtention;
+                            rpt.DownloadFileLink = $@"/Reports/GetReportResource/{rpt.FilePath}/{rpt.FileName}";
 
                         }
 

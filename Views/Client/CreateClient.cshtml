@@ -757,7 +757,7 @@
             postAjaxSync(apiurl + `Xero/UpdateAccessToken`, JSON.stringify(TokenInfoVM), function (response) {
                 var r = response;
                 if (response != null && response.status == true) {
-                    
+
                     ShowAlertBoxSuccess("Success!", "API token has been updated successfully.", function () {
                         $APITokenupdatepopup.modal('hide');
                         $('#txt_refresh_token').val('');
@@ -827,7 +827,7 @@
 
             //api scope problem
 
-    
+
 
             const quickBooksScops = [
                 { data: "com.intuit.quickbooks.accounting", select: true },
@@ -868,7 +868,7 @@
             }
 
             if (selected != "" && thirdPartyService == "2") {
-        
+
                 var selectedResult = selected.split(' ');
 
                 if (selectedResult.length > 3) {
@@ -946,10 +946,58 @@
 
                 });
             }
+
+
+
+            //Toggle data sync option.only one need to be selected at one time.
+            ToggleDataSyncOption();
+
+
         });
 
 
+    function ToggleDataSyncOption() {
 
+            var plaid = $("#Plaid_Enabled")[0];
+            var automation = $("#EnableAutomation")[0];
+
+            var isAutomationTrue = "@Model.EnableAutomation";
+            var isPlaidTrue = "@Model.Plaid_Enabled";
+
+            if (isAutomationTrue != "False" && isPlaidTrue != "False") {
+                isPlaidTrue = "False";
+        }
+        var _toggle_state = [{ plaid: isPlaidTrue != "False" ? true : false, ele: plaid }, { automation: isAutomationTrue != "False" ? true : false, ele: automation }];
+
+        var toggle = function (e) {
+                let ele = e.target;
+                if (ele.getAttribute("id") == "Plaid_Enabled" && _toggle_state[0].plaid == false) {
+                        _toggle_state[0].plaid = true;
+                    $(_toggle_state[0].ele).click();
+                    if (_toggle_state[1].automation == true) { $(_toggle_state[1].ele).click(); _toggle_state[1].automation == false }
+
+                } else {
+                    if (_toggle_state[0].plaid == true) {
+                        $(_toggle_state[0].ele).click();
+                        _toggle_state[0].plaid == false;
+
+                    }
+                    if (_toggle_state[1].automation == true) {
+                        _toggle_state[1].automation = false;
+                        $(_toggle_state[1].ele).click();
+
+                     
+                    } else {
+
+                        _toggle_state[1].automation = true;
+                        $(_toggle_state[1].ele).click();
+
+                    }
+                }
+            }
+            plaid.addEventListener("click", toggle);
+            automation.addEventListener("click", toggle);
+    }
 
     $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
            const selected = "@Model.APIScope";
@@ -974,7 +1022,7 @@
                 $("#divQuickbookscopeoption").hide();
                 $("#EnableAutomation").prop("disabled", false);
 
-   
+
                     if ($(".divxeroscopeoption")[0].children.length==0)
                     totalScopsXero.map(ele => $(".divxeroscopeoption").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
 
@@ -1004,7 +1052,7 @@
                 $("#APIClientSecret")[0].value = apidetails[1].q_secret;
                 }
 
-              
+
 
                 const quickBooksScops = [
                     { data: "com.intuit.quickbooks.accounting", select: true },
@@ -1015,7 +1063,7 @@
                 if ($(".qbookselect")[0].children.length<3)
                 quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, true, true)));
 
-                
+
             }
 
         });

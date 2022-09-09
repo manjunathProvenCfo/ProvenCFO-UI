@@ -120,6 +120,10 @@ namespace Proven.Service
         {
             return await PostAsync<PlaidResponceModel>($"Reconciliation/CreatePlaidReconciliation", PreparePostContent(attachmentData));
         }
+        public async Task<PlaidResponceModel> UpdateasReconciledallrecordsofAgency(int AgencyId,int IsReconciled)
+        {
+            return await PostAsync<PlaidResponceModel>($"Reconciliation/UpdateasReconciledallrecordsofAgency?AgencyId={AgencyId}&IsReconciled={IsReconciled}");
+        }
         public void Dispose()
         {
             Dispose(true);

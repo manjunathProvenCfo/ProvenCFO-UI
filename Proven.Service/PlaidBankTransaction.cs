@@ -150,5 +150,10 @@ namespace Proven.Service
         {
             throw new NotImplementedException();
         }
+
+        public override Task<V> GetPaymentsAsync(T Token, string TenentID, dynamic whereCause)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
