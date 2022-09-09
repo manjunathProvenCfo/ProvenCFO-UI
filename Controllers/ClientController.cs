@@ -243,7 +243,15 @@
                             Clientvm.XeroID = client.XeroID;
                             if (client.ThirdPartyAccountingApp_ref == 1)
                             {
-                             Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                if (client.APIScope.Split(' ').Length <2)
+                                {
+                                    Clientvm.APIScope = client.APIScope; 
+
+                                }
+                                else { 
+                                
+                                Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                }
                             }
                             else
                             {
