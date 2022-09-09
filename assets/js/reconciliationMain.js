@@ -91,13 +91,15 @@ var lastModify = function () {
 }
 var bindEnableAutomation = function () {
     getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
-        if (response.Status === "Success") {
-
+        if (response.Status === "Success") {            
             IsEnableAutomation = response.Data;
             if (IsEnableAutomation === false) {
                 $("#OnDemandData").attr('disabled', true);
                 $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
-
+                $("#OnDemandData").addClass('d-none');
+            }
+            else {
+                $("#OnDemandData").removeClass('d-none');
             }
 
         }
@@ -109,7 +111,10 @@ var bindEnablePlaid = function () {
             IsEnablePlaid = response.Data;
             if (IsEnablePlaid === false) {
                 $("#OnDemandDataPlaid").addClass('d-none');
-
+            }
+            else {
+                $("#OnDemandDataPlaid").removeClass('d-none');
+                $("#OnDemandDataPlaid").attr('title', 'Request on demand plaid data.');
             }
 
         }
@@ -300,8 +305,9 @@ $(document).ready(function () {
         }
     });
     $("#OnDemandDataPlaid").click(function () {
-         if (IsEnableAutomation === false) {
-            $("#OnDemandData").attr('disabled', true);
+       
+        if (IsEnablePlaid === false) {
+            $("#OnDemandDataPlaid").attr('disabled', true);
             return;
         }
         $("#Loader").removeAttr("style");
