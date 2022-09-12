@@ -41,8 +41,8 @@ namespace ProvenCfoUI.Controllers
         {
             if (Session["UserId"] != null)
             {
-                return View();
-                //return RedirectToAction("AgencyHome", "AgencyService");
+               // return View();
+               return RedirectToAction("AgencyHome", "AgencyService");
             }
             else
             {

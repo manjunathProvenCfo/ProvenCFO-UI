@@ -755,7 +755,11 @@
                 if (response.Message == 'Success') {
                     sessionStorage.removeItem('SelectedRecords');
                     sessionStorage.removeItem('UnSelectedRecords');
-                    ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () {
+                        sessionStorage.clear();
+                        location.reload(true);
+                        /*window.location.reload();*/
+                    });
                 }
                 else if (response.Message == 'NoRecords')
                 {
