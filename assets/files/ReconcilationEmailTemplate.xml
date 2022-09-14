@@ -6,7 +6,7 @@
      Hi,
 	    </br>
 	    </br>
-		In order to streamline our communication, we send out this recurring email with a link to our CFO App. Here is the link: <div contentEditable="false" style ="display: inline-block"> <a href="{url}">Click here</a> </div>
+		In order to streamline our communication, we send out this recurring email with a link to our CFO App. Here is the link: <Span contentEditable="false" style ="display: inline-block"> <a href="{url}">Click here</a> </Span>
 		</br>
 		</br>
 		This week we have {NotInBankUnreconciledItemsCount} unreconciled bank transactions.
