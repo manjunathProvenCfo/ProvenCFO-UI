@@ -260,8 +260,27 @@ namespace ProvenCfoUI.Controllers
                                 Header = result.Reports[0].Rows[0].Cells.Select(x => x.Value.Replace("30 ", "").Replace("31 ", "").Replace("28 ", "").Replace("29 ", "")).ToArray();
                                 if (cType == ChartType.Revenue && result != null && result.Reports.Count > 0)
                                 {
-                                    obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
-                                    Ydata = obj;
+                                    if (result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.Count > 0)
+                                    {
+                                        obj = result.Reports[0].Rows.Where(x => x.Title == "Revenue").ToList()[0].Rows.LastOrDefault().Cells.ToArray().Select(x => x.Value).ToArray();
+                                        Ydata = obj;
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in result.Reports[0].Rows)
+                                        {
+                                            if (item.Rows != null)
+                                            {
+                                                foreach (var item1 in item.Rows)
+                                                {
+                                                    if (item1.Cells[0].Value == "Total Revenue")
+                                                    {
+                                                        Ydata = item1.Cells.Skip(1).Select(x => x.Value).ToArray();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 else if (cType == ChartType.NetIncome && result != null && result.Reports.Count > 0)
                                 {
