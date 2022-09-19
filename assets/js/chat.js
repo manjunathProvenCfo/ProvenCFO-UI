@@ -1486,7 +1486,7 @@ var LoadOnDemandCommentsPagination = async function (channelUniqueNameGuid, page
                
                 LoadAllComments(responseComm.resultData.reconciliationComments);
                 if (scrollChatState.target)
-                    setTimeout(_ => scrollChatState.target.scrollTop = 6,200);
+                    setTimeout(_ => scrollChatState.target.scrollTop = 6,350);
             
             });
 
