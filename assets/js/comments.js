@@ -406,7 +406,7 @@ var LoadAllComments = async function (ReconciliationComments) {
                 }
                 else {
                     if (acomments.fileType != null) {
-
+                        debugger;
                         var FileName = acomments.fileName;
                         var FileScrPath = acomments.fileAttachmentPath;
                         var CommentId = acomments.id;

@@ -30,6 +30,8 @@ var $communication_DropDownAction;
 var $tracking;
 var $trackingcat;
 
+
+
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -344,6 +346,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 }
 var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
 
+    resetScrollChatState(ReconcilationId);
     $(".media").removeClass("active");
     var Notification_agencyId = sessionStorage.getItem("Notification_agencyId");
     var Notification_reconciliationId = sessionStorage.getItem("Notification_reconciliationId");
@@ -365,7 +368,7 @@ var scrolltoselctedItem = function (element) {
     $(".contacts-list").animate({ scrollTop: element.position().top - 70 });
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
-
+    resetScrollChatState(channelUniqueNameGuid);
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -482,6 +485,8 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         
 
         setScrollPosition();
+
+        $('select').select2();
         
     });
 
@@ -695,7 +700,7 @@ var setCommentsHeader = function (reconciliationdata) {
     $channelName.text(reconciliationdata.account_name);
 }
 var LoadAllComments = function (ReconciliationComments) {
-    showChatContentLoader();
+   
     $channelMessages.empty();
 
     if (ReconciliationComments != null && ReconciliationComments.length > 0) {
@@ -1133,8 +1138,6 @@ Uploader.prototype.getName = function () {
     return this.file.name;
 };
 
-
-
 var removeSortedParticipantFromRemaningByChannelId = function (arr, channelId) {
     return arr.filter(function (rp) {
         return (rp.dataset.channelid ?? "") !== channelId;
@@ -1354,3 +1357,253 @@ var onChangeAditinalTc = function (e) {
 
     })
 }
+
+const scrollChatState = {
+    size: 20,
+    pageNo: 2,
+    reconciliatioId: '',
+    target: null
+};
+
+const resetScrollChatState = function (rec) {
+
+    if (rec != "" && rec != null) {
+
+        scrollChatState.reconciliationId = rec;
+
+        scrollChatState.pageNo = 2;
+        scrollChatState.size = 20;
+    };
+}
+var LoadOnDemandCommentsPagination = async function (channelUniqueNameGuid, pageNo, pageSize) {
+
+
+        $participantsContainer = $("#chatParticipants");
+        $participants = "";
+        $channelName = $(".channelName");
+        $channelParticipantEmail = $(".channelParticipantEmail");
+        $channelReconciliationDescription = $(".channelReconciliationDescription");
+        $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+        $channelReconciliationCompany = $(".channelReconciliationCompany");
+        $channelReconciliationDate = $(".channelReconciliationDate");
+        $channelReconciliationAmount = $(".channelReconciliationAmount");
+        $messageBodyInput = $("#message-body-input");
+        $chatEditorArea = $(".chat-editor-area .emojiarea");
+        $messageBodyFileUploader = $("#chat-file-upload");
+        $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+        $btnSendMessage = $("#send-message");
+        $channelMessages = $("#channel-messages");
+        $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+        $gl_accountDropdown = $('#gl_account');
+        $tc_1_Dropdown = $('#tracking_category_0');
+        $tc_2_Dropdown = $('#tracking_category_1');
+        $tc_3_Dropdown = $('#tracking_category_2');
+        $communication_DropDownAction = $('#BA_filterAction');
+        chat.channelUniqueNameGuid = channelUniqueNameGuid;
+
+        $(document).on("click", "button[id=btnComment]", function (e) {
+            showReconciliationChat(e.currentTarget.dataset.id);
+        });
+
+        $btnSendMessage.unbind().click(function () {
+
+            addNewMessagetoChatwindow($('#message-body-input').val());
+        });
+        var addNewMessagetoChatwindow = async function (input) {
+
+            if (input == "") {
+                return;
+            }
+            addNewComment(input);
+            $('#message-body-input').empty();
+            $('.emojionearea-editor').empty();
+            $('#message-body-input').val("");
+            $('.emojionearea-editor').val("");
+        }
+
+        getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+
+            setCommentsHeader(response.resultData);
+
+            var glaccount = response.resultData.gl_account_ref;
+            var tc1 = response.resultData.tracking_category_ref;
+            var tc2 = response.resultData.additional_tracking_category_ref;
+            var Action = response.resultData.ref_reconciliationAction;
+            var ReconcilationType = response.resultData.type;
+            if (ReconcilationType == "Unreconciled") {
+
+                $communicationGLaccount.removeClass('d-none');
+                $communicationTrackingCategories.removeClass('d-none');
+                $tc_2_Dropdown.removeClass('d-none');
+                $tc_1_Dropdown.removeClass('d-none');
+                $communicationAction.addClass('d-none');
+                $tracking.removeClass('d-none');
+                $trackingcat.removeClass('d-none');
+                $('#tracking_category_2').removeClass('d-none');
+                $('#trackingcat1').removeClass('d-none');
+            }
+            if (ReconcilationType == "Outstanding Payments") {
+
+                $communicationGLaccount.addClass('d-none');
+                $communicationTrackingCategories.addClass('d-none');
+                $tc_2_Dropdown.addClass('d-none');
+                $tc_1_Dropdown.addClass('d-none');
+                $communicationAction.removeClass('d-none');
+                $tracking.addClass('d-none');
+                $('#tracking_category_2').addClass('d-none');
+                $('#trackingcat1').addClass('d-none');
+                $trackingcat.addClass('d-none');
+            }
+            if (glaccount != null) {
+                $gl_accountDropdown.val(glaccount);
+            }
+            else {
+                $gl_accountDropdown.val($("#gl_account option:first").val());;
+            }
+
+            if (Action != null) {
+                $communication_DropDownAction.val(Action);
+            }
+            else {
+                $communication_DropDownAction.val($("#BA_filterAction option:first").val());;
+            }
+            if (tc1 != null) {
+                $tc_1_Dropdown.val(tc1);
+            }
+            else {
+                $tc_1_Dropdown.val($('#tracking_category_0 option:first').val());;
+            }
+            if (tc2 != null) {
+                $tc_2_Dropdown.val(tc2);
+            }
+            else {
+                $tc_2_Dropdown.val($('#tracking_category_1  option:first').val());;
+            }
+           
+            getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}&&pageNo=${pageNo}&&pageSize=${pageSize}`, null, function (responseComm) {
+
+
+               
+                LoadAllComments(responseComm.resultData.reconciliationComments);
+                if (scrollChatState.target)
+                    setTimeout(_ => scrollChatState.target.scrollTop = 6,200);
+            
+            });
+
+
+            $('select').select2();
+
+        });
+
+
+
+        var addNewComment = function (inputText) {
+
+            var CurrentDate = new Date();
+            var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+            var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+            var CurrentTimestring = getCurrentTime(new Date);
+            var DateElement = $('#channel-messages #' + CurrentDateString);
+            if (DateElement == null || DateElement == undefined || DateElement.length == 0) {
+                var dhtml = CommentHtmls.datehtml.replace('{id}', CurrentDateString).replace('{innerText}', CurrentDateStringForDisplay);
+                $channelMessages.append(dhtml);
+            }
+            var chtml = CommentHtmls.commenthtml.replace('{date}', CurrentDateString).replace('{innerText}', inputText).replace('{time}', CurrentTimestring).replace(/{commentId}/g, 0);
+            $channelMessages.append(chtml);
+            SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
+            setScrollPosition();
+            $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
+        }
+        var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
+            var currentdate = new Date();
+            var datetime = getCurrentTime(currentdate); //new Date(currentdate.getFullYear(), (currentdate.getMonth() + 1), currentdate.getDate(), currentdate.getHours(), currentdate.getMinutes(), currentdate.getSeconds() );
+            var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
+            var input = {
+                Id: 0,
+                ReconciliationId_ref: ReconciliationId,
+                CommentText: InputcommentText,
+                CreatedBy: chat.userId,
+                CreatedDate: currentdate,
+                IsDeleted: false,
+                AgencyId: AgencyId
+            }
+            if (input.CreatedBy != null && input.CreatedBy != '' && input.AgencyId != null && input.AgencyId != '') {
+                postAjaxSync(apiurl + `Reconciliation/InsertReconcilationComments`, JSON.stringify(input), function (response) {
+                    var r = response;
+                    if (response.resultData != null) {
+                        var id = "msg_" + response.resultData;
+                        $('#msg_0').attr("id", id);
+                        if ($('#' + id + ' a').length > 0) {
+                            $('#' + id + ' a:first').attr("onclick", "CommentEdit('" + response.resultData + "')")
+                        };
+                        if ($('#' + id + ' a').length > 1) {
+                            $('#' + id + ' a').attr("onclick", "CommentDelete('" + response.resultData + "')");
+                        }
+                    }
+                });
+            }
+
+        }
+        var addNewMessagetoChatwindow = async function (input) {
+
+            if (input == "") {
+                return;
+            }
+            addNewComment(input);
+            $('#message-body-input').empty();
+            $('.emojionearea-editor').empty();
+            $('#message-body-input').val("");
+            $('.emojionearea-editor').val("");
+        }
+        $chatEditorArea[0].emojioneArea.off("keydown");
+        $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+                if (event.type == "keydown") {
+                    if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                        $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                    }
+                    else {
+                        if ($editor[0].innerHTML != '')
+                            addNewMessagetoChatwindow($editor[0].innerHTML);
+                    }
+
+                }
+                else
+                    activeChannel?.typing();
+            }
+            else
+                activeChannel?.typing();
+        });
+        setTimeout(addMentionPlugin, 3000)
+}
+
+function SetupDynamicLoaderOnScroll() {
+
+    $("#channel-messages")[0].addEventListener("scroll", function (e) {
+        e.preventDefault();
+ 
+        if (e.target.scrollTop == 0) {
+            LoadOnDemandCommentsPagination(scrollChatState.reconciliationId,
+                1, scrollChatState.pageNo * scrollChatState.size);
+
+            scrollChatState.pageNo++;
+
+            scrollChatState.target = e.target;
+        }
+        scrollChatState.target = e.target;
+      
+    });
+
+
+
+    scrollChatState.pageNo = 2;
+    scrollChatState.size = 10;
+
+}
+$(document).ready(function () {
+
+    SetupDynamicLoaderOnScroll();
+  
+});
+
