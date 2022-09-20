@@ -138,12 +138,17 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
 
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
-    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null,async function (response) {
+    //debugger;
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, async function (responseComm) {
+    //getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null,async function (response) {
         
-        setCommentsHeader(response.resultData);
-        setTimeout(async function () { 
-        await loadcommmentconetents(channelUniqueNameGuid);
-        }, 200);
+        setCommentsHeader(responseComm.resultData.reconciliationdata);
+        setTimeout(async function () {
+            await LoadAllComments(responseComm.resultData.reconciliationComments);
+            setScrollPosition();
+            hideChatContentLoader();
+        //await loadcommmentconetents(channelUniqueNameGuid);
+        }, 100);
        
         //setParticipants(response);
         //createTwilioClient();
@@ -406,7 +411,7 @@ var LoadAllComments = async function (ReconciliationComments) {
                 }
                 else {
                     if (acomments.fileType != null) {
-                        debugger;
+                        //debugger;
                         var FileName = acomments.fileName;
                         var FileScrPath = acomments.fileAttachmentPath;
                         var CommentId = acomments.id;
