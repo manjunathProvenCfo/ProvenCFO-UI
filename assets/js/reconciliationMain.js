@@ -287,14 +287,18 @@ $(document).ready(function () {
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');
+            $('#divFilter').addClass('d-none');          
+            $('.chat-message').remove();
+
         }
         else if ($("#divBulkUpdate").is(":visible")) {
+           
             $('#divBulkUpdate').hide();
             $('#divBulkUpdate').addClass('d-none');
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
         }
         else {
+           
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');

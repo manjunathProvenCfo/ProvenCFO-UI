@@ -39,7 +39,7 @@ var chat = {
 
 var CommentHtmls = {
     datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
-    commentHtmlBulk:'<div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>' ,
+    commentHtmlBulk:'<div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div> <br>' ,
     commenthtml: `<div class="media p-3" data-timestamp="{date}" id="msg_{commentId}"><div class= "media-body d-flex justify-content-end">
                   <div class="w-100 w-xxl-75"><div class="hover-actions-trigger d-flex align-items-center justify-content-end">
                     <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>
