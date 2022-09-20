@@ -706,9 +706,12 @@
                 $('#tabNotinBanks').addClass('tabselect');
             }
         }
-        function BulkActionReconcilation() {
+        
 
+        function BulkActionReconcilation() {
             var GLaccount = $('#BA_filterGLaccounts').val();
+            var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
+            var CreatedBy = $('#topProfilePicture').attr('userId'); 
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
@@ -748,7 +751,10 @@
                 SelectedItems: SelectedItems,
                 UnSelectedRecords: UnSelectedRecords,
                 reconcilationStatus: reconcilationStatus,
-                Action: Action
+                Action: Action,
+                CommentText: CommentText,
+                CreatedBy: CreatedBy
+
             };
 
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {

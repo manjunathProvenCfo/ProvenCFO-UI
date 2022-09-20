@@ -39,6 +39,7 @@ var chat = {
 
 var CommentHtmls = {
     datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
+    commentHtmlBulk:'<div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>' ,
     commenthtml: `<div class="media p-3" data-timestamp="{date}" id="msg_{commentId}"><div class= "media-body d-flex justify-content-end">
                   <div class="w-100 w-xxl-75"><div class="hover-actions-trigger d-flex align-items-center justify-content-end">
                     <div class="bg-primary text-white p-2 rounded-soft chat-message">{innerText}</div>
@@ -238,6 +239,40 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
         })
     });
 }
+
+$channelMessagesBulk = $("#channel-messagesBulk");
+var $btnSendMessage;
+var $chatEditorArea;
+$chatEditorArea = $(".chat-editor-area .emojiarea");
+$btnSendMessage = $("#bulksend-message");
+$btnSendMessage.unbind().click(function () {
+    addNewMessagetoChatwindow($('#message-body-inputBulk').val());
+
+});
+var addNewCommentBulk = function (inputText) {
+    var CurrentDate = new Date();
+    var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
+    var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
+    var CurrentTimestring = getCurrentTime(new Date);
+    var DateElement = $('#channel-messages #' + CurrentDateString);
+    
+    var chtml = CommentHtmls.commentHtmlBulk.replace('{innerText}', inputText);
+    $channelMessagesBulk.append(chtml);
+    
+}
+var addNewMessagetoChatwindow = async function (input) {
+    if (input == "") {
+        return;
+    }
+    addNewCommentBulk(input);
+    $('#message-body-inputBulk').empty();
+    $('.emojionearea-editor').empty();
+    $('#message-body-inputBulk').val("");
+    $('.emojionearea-editor').val("");
+
+
+}
+setTimeout(addMentionPlugin, 3000);
 
 var CommentDelete = function (CommentId) {
    
@@ -467,7 +502,7 @@ var addDatehtml = function (input) {
 }
 
 var addNewComment = function (inputText) {
-   
+    
     var CurrentDate = new Date();
     var CurrentDateString = CurrentDate.getFullYear() + '' + ('0' + (CurrentDate.getMonth() + 1)).slice(-2) + '' + ('0' + CurrentDate.getDate()).slice(-2);
     var CurrentDateStringForDisplay = monthNames[CurrentDate.getMonth()] + ' ' + ('0' + CurrentDate.getDate()).slice(-2) + ', ' + CurrentDate.getFullYear();
