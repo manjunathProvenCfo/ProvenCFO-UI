@@ -76,7 +76,7 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
-                        glAccountList.ForEach(x => x.Name = $"{x.Code} - {x.Name}");
+                        glAccountList.ForEach(x => x.Name = x.AgencyId != null? $"{x.Code} - {x.Name}": $"{x.Name}");
                         TempData["GLAccounts"] = glAccountList;
                         List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         if (objTCList != null && objTCList.Count > 0)
@@ -155,7 +155,7 @@ namespace ProvenCfoUI.Controllers
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
                     var glAccountList = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
-                    glAccountList.ForEach(x => x.Name = $"{x.Code} - {x.Name}");
+                    glAccountList.ForEach(x => x.Name = x.AgencyId != null? $"{x.Code} - {x.Name}" : $"{x.Name}");
                     TempData["GLAccounts"] = glAccountList;
                     //TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
                     if (userType == "1")
@@ -427,7 +427,7 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
-                        glAccountList.ForEach(x => x.Name = $"{x.Code} - {x.Name}");
+                        glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                         TempData["GLAccounts"] = glAccountList;
                         List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         if (objTCList != null && objTCList.Count > 0)
