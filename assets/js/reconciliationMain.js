@@ -2,7 +2,14 @@
 var currentChannelUniqueNameGuid = "";
 var IsEnableAutomation = false;
 var IsSeletedAll = false;
+const scrollChatState = {
+    size: 20,
+    pageNo: 2,
+    reconciliatioId: '',
+    target: null
+};
 $(document).ready(function () {
+
     hideParticipantsSidebar();
     bindEnableAutomation();
     bindEnablePlaid();
@@ -11,7 +18,6 @@ $(document).ready(function () {
     lastModify();
 
     $("#ichat").click(function () {
-        //let elCheckbox = $(".checkbox-bulk-select-target:checked:first");
         let elCheckbox = $("table tr.bg-300 td:first .checkbox-bulk-select-target");
         if (elCheckbox.length === 0) {
             ShowAlertBoxWarning("Please select reconciliation row!");
@@ -20,6 +26,7 @@ $(document).ready(function () {
             let reconciliaitonId = elCheckbox.attr("id");
            
             showReconciliationChat(reconciliaitonId);
+            resetScrollChatState(reconciliaitonId);
         }
     });
     $(document).on("click", "#tblreconcilation tr",async function (e) {
@@ -28,31 +35,26 @@ $(document).ready(function () {
 
         if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
             let elComment = $(this).find("#btnComment");
-            
+
+            resetScrollChatState(elComment.data().id);
            await showReconciliationChat(elComment.data().id);
         }
     });
 
     $(document).on("click", "button[id=btnComment]", async function (e) {
 
-        //let channelUniqueNameGuid = e.currentTarget.dataset.id;
+     
         
-       await showReconciliationChat(e.currentTarget.dataset.id);
-        //$('#divFilter').hide();
-        //$('#divFilter').addClass('d-none');
-        //$('#divChat').show();
-        //$('#divChat').removeClass('d-none');
-        //$('#divTable').addClass('col-md-8').removeClass('col-md-12');
+        resetScrollChatState(e.currentTarget.dataset.id);
+        await showReconciliationChat(e.currentTarget.dataset.id);
 
-        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
-        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-        //    loadChatPage(true, 1);
-        //}
+       
+   
     });
 
     var showReconciliationChat = async function (channelUniqueNameGuid) {
-        
+
+        resetScrollChatState(channelUniqueNameGuid);
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
         $('#divBulkUpdate').hide();
@@ -61,11 +63,7 @@ $(document).ready(function () {
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-        //if (currentChannelUniqueNameGuid != channelUniqueNameGuid) {
-        //    currentChannelUniqueNameGuid = channelUniqueNameGuid;
-        //    chat.publicChannelUniqueNameGuid = channelUniqueNameGuid;
-        //    loadChatPage(true, 1, true);
-        //}
+     
 
        await loadCommentsPage(channelUniqueNameGuid);
 
@@ -155,15 +153,48 @@ var bindEnablePlaid = function () {
 
 
 
+const resetScrollChatState = function (rec) {
+   
+    if (rec != "" && rec != null) {
+
+        scrollChatState.reconciliationId = rec;
+
+        scrollChatState.pageNo = 2;
+        scrollChatState.size = 20;
+    };
+}
+function SetupDynamicLoaderOnScroll() {
+
+ 
+
+    $("#channel-messages")[0].addEventListener("scroll", function (e) {
+        e.preventDefault();
+        if (e.target.scrollTop == 0) {
+            LoadOnDemandCommentsPagination(scrollChatState.reconciliationId,
+                1, scrollChatState.pageNo * scrollChatState.size);
+
+            scrollChatState.pageNo++;
+
+            scrollChatState.target = e.target;
+        }
+    });
+
+ 
+
+        scrollChatState.pageNo = 2;
+        scrollChatState.size = 10;
+
+ }
+
 
 $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
-    /*bindNotInBooksAndBanksCount1();*/
+ 
 
     LoadFilterData();
-
+    SetupDynamicLoaderOnScroll();
 
     XeroConnectionUpdate();
     var type = sessionStorage.getItem('Type');
@@ -189,7 +220,7 @@ $(document).ready(function () {
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
-        /* window.location.reload();*/
+     
     }
 
 
@@ -203,7 +234,6 @@ $(document).ready(function () {
             $(this).closest("tr").removeClass('bg-300');
         }
     });
-    /* checkbox - bulk - purchases - select*/
 
     $('.checkbox-bulk-select').change(function () {
         if ($(this).is(":checked", true)) {
@@ -213,8 +243,6 @@ $(document).ready(function () {
         else {
             $(this).closest("table").removeClass('bg-300');
         }
-        //$(".checkbox-bulk-select").attr('checked', false);
-        //$(this).closest('tr').css("background-color", "#ff0000");
     });
 
     $('#Cancel').click(function () {
@@ -259,14 +287,18 @@ $(document).ready(function () {
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');
+            $('#divFilter').addClass('d-none');          
+            $('.chat-message').remove();
+
         }
         else if ($("#divBulkUpdate").is(":visible")) {
+           
             $('#divBulkUpdate').hide();
             $('#divBulkUpdate').addClass('d-none');
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
         }
         else {
+           
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -408,3 +440,138 @@ $(document).ready(function () {
     }
 
 });
+
+
+async function LoadPaginationContent(channelUniqueNameGuid,pageNo,pageSize) {
+
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}&&pageNo=${pageNo}&&pageSize=${pageSize}`, null, async function (responseComm) {
+
+        await LoadAllComments(responseComm.resultData.reconciliationComments);
+
+        if (scrollChatState.target) {
+
+            setTimeout(_=>scrollChatState.target.scrollTop = 4,150);
+        }
+        //setScrollPosition();
+        hideChatContentLoader();
+    });
+}
+
+function LoadOnDemandCommentsPagination(channelUniqueNameGuid,pageNo,pageSize) {
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, async function (response) {
+
+        setCommentsHeader(response.resultData);
+        setTimeout(async function () {
+            await LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize);
+        }, 200);
+
+    
+    });
+
+
+    $btnSendMessage.unbind().click(function () {
+
+        addNewMessagetoChatwindow($('#message-body-input').val());
+
+    });
+    var addNewMessagetoChatwindow = async function (input) {
+
+        if (input == "") {
+            return;
+        }
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+
+
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerHTML != '')
+
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000);
+
+    $messageBodyFileUploader.off("change");
+    $messageBodyFileUploader.on("change", function (e) {
+        var files = $(this)[0].files;
+        if (files.length === 0) {
+            ShowAlertBoxError("File uploader", "Select atleast one file.");
+            return;
+        }
+
+        if (files.length > 5) {
+            ShowAlertBoxError("File uploader", "You can upload max 5 files at a time.");
+            return;
+        }
+
+        //TODO//Add Functionality to Preview files before upload using fancy Box
+
+        //Upload
+        files.forEach(function (file) {
+            var uploader = new Uploader(file);
+            let size = uploader.getSizeInMB();
+            if (size > 20) {
+                ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
+            }
+            else {
+
+
+                addMediaMessageLocalFolder(file);
+
+                //$.ajax({
+                //    url: "/Reconciliation/UploadReconcilationAttachmentAsync",
+                //    type: "POST",
+                //    contentType: false, // Not to set any content header  
+                //    processData: false, // Not to process data  
+                //    data: formData,
+                //    success: function (result) {
+                //        alert(result);
+                //    },
+                //    error: function (err) {
+                //        alert(err.statusText);
+                //    }
+                //});
+                ///addMediaMessage(file);
+            }
+        })
+    });
+}
+

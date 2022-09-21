@@ -706,9 +706,14 @@
                 $('#tabNotinBanks').addClass('tabselect');
             }
         }
-        function BulkActionReconcilation() {
+        
 
+        function BulkActionReconcilation() {
             var GLaccount = $('#BA_filterGLaccounts').val();
+            //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();  
+            var CommentText = [];
+            Array.prototype.forEach.bind($('.chat-message'))(e => CommentText.push($(e).html()))
+            var CreatedBy = $('#topProfilePicture').attr('userId');
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
@@ -748,14 +753,21 @@
                 SelectedItems: SelectedItems,
                 UnSelectedRecords: UnSelectedRecords,
                 reconcilationStatus: reconcilationStatus,
-                Action: Action
+                Action: Action,
+                CommentText: CommentText,
+                CreatedBy: CreatedBy
+
             };
 
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
                     sessionStorage.removeItem('SelectedRecords');
                     sessionStorage.removeItem('UnSelectedRecords');
-                    ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () { window.location.reload(); });
+                    ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () {
+                        sessionStorage.clear();
+                        location.reload(true);
+                        /*window.location.reload();*/
+                    });
                 }
                 else if (response.Message == 'NoRecords')
                 {

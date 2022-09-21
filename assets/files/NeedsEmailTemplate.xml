@@ -11,7 +11,9 @@
       </br>
       {Needs Title} 
      </br>
-      Please log into the <a href="{url}">ProvenCFO App</a> and provide us with the requested information.
+      
+      Please log into the <span  contentEditable="false" style ="display: inline-block"> <a href="{url}">ProvenCFO App</a> </span> and provide us with the requested information.
+      
 		</br>
     </br>
     Much thanks,

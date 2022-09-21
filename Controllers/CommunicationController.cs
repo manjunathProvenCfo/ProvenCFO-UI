@@ -52,7 +52,7 @@ namespace ProvenCfoUI.Controllers
                 {
 
                     var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
-                    glAccountList.ForEach(x => x.Name = $"{x.Code } - {x.Name}");
+                    glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                     TempData["GLAccounts"] = glAccountList;
                     List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                     if (objTCList != null && objTCList.Count > 0)
