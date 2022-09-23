@@ -105,9 +105,18 @@ namespace Proven.Service
             {
                 TokenResponse objToken = new TokenResponse();
                 TokenInfoVM SavedToken = (TokenInfoVM)Convert.ChangeType(TokenInfo, typeof(TokenInfoVM));
+                objToken.expires_in = TimeSpan.FromSeconds(SavedToken.expires_in.Value);
                 objToken.id_token = SavedToken.id_token;
                 objToken.access_token = SavedToken.access_token;
-                objToken.refresh_token = SavedToken.refresh_token;                             
+                objToken.refresh_token = SavedToken.refresh_token;  
+                DateTime tokenExpairedAt = SavedToken.ModifiedDate.Value.AddSeconds(SavedToken.expires_in.Value);
+                if (DateTime.UtcNow >= tokenExpairedAt)
+                {
+                    dynamic token = objToken;
+                    dynamic t = RefreshToken((T)token).GetAwaiter().GetResult();
+                    return (T)Convert.ChangeType(t, typeof(T));
+                }
+
                 return (T)Convert.ChangeType(objToken, typeof(T));
             }
             catch (Exception ex)

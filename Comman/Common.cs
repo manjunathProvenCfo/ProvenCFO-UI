@@ -245,39 +245,44 @@ namespace ProvenCfoUI.Comman
                     Task.Run(async () =>
                     {
                         TokenInfoVM TokenInfoSaved = AppPackage.GetSavedToken(client.Id).ResultData;
+                        
                         if (TokenInfoSaved != null)
                         {
                             try
                             {
-                                
-                                var SavedToken = AppPackage.getTokenFormat(TokenInfoSaved);
-                                //AccountingPackageInstance.Instance.XeroService = AppPackage;
-                                var token = await AppPackage.RefreshToken(SavedToken);
-                                //CleanToken();
+                                string accessToken = string.Empty, IdToken = string.Empty, RefreshToken = string.Empty;
+                                var token = AppPackage.getTokenFormat(TokenInfoSaved);                                                                                             
                                 switch (client.ThirdPartyAccountingApp_ref.Value)
                                 {
                                     case 1:
-                                        TokenInfoSaved.access_token = token.AccessToken;
-                                        TokenInfoSaved.id_token = token.IdToken;
-                                        TokenInfoSaved.refresh_token = token.RefreshToken;
-                                        TokenInfoSaved.expires_in = (DateTime.UtcNow - token.ExpiresAtUtc).Seconds;
+                                        accessToken = token.AccessToken;
+                                        IdToken = token.IdToken;
+                                        RefreshToken = token.RefreshToken;
+                                        TokenInfoSaved.expires_in =Convert.ToInt32((token.ExpiresAtUtc - DateTime.UtcNow).TotalSeconds);
                                         AccountingPackageInstance.Instance.XeroToken = token;
                                         break;
                                     case 2:
-                                        TokenInfoSaved.access_token = Convert.ToString(token.access_token);
-                                        TokenInfoSaved.id_token = Convert.ToString(token.id_token);
-                                        TokenInfoSaved.refresh_token = Convert.ToString(token.refresh_token);
+                                        accessToken = Convert.ToString(token.access_token);
+                                        IdToken = Convert.ToString(token.id_token);
+                                        RefreshToken = Convert.ToString(token.refresh_token);
                                         TokenInfoSaved.expires_in = Convert.ToInt32(token.expires_in.TotalSeconds);
                                         AccountingPackageInstance.Instance.QuickBooksToken = token;
                                         break;
                                     default:
                                         break;
                                 }
-                                TokenInfoSaved.ModifiedDate = DateTime.Now;
-                                TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
-                                TokenInfoSaved.ConnectionStatus = "SUCCESS";
-                                TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
-                                AppPackage.UpdateToken(TokenInfoSaved);
+                                if(TokenInfoSaved.access_token != accessToken)
+                                {
+                                    TokenInfoSaved.access_token = accessToken;
+                                    TokenInfoSaved.id_token = IdToken;
+                                    TokenInfoSaved.refresh_token = RefreshToken;                                    
+                                    TokenInfoSaved.ModifiedDate = DateTime.UtcNow;
+                                    TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
+                                    TokenInfoSaved.ConnectionStatus = "SUCCESS";
+                                    TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
+                                    AppPackage.UpdateToken(TokenInfoSaved);
+                                }
+                               
                                 
                                 AccountingPackageInstance.Instance.ConnectionStatus = true;
                                 AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
@@ -293,7 +298,7 @@ namespace ProvenCfoUI.Comman
                             }
                         }
                         else
-                        {
+                            {
                             Utltity.Log4NetInfoLog("Insufficient client information");
                             CleanToken();
                             AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";
