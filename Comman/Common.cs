@@ -351,6 +351,94 @@ namespace ProvenCfoUI.Comman
             }
             return string.Empty;
         }
+        public static int NumberofRecordsOnReportOpts(ChartOptions Option)
+        {
+            int retValue = 0;
+            switch (Option)
+            {
+                case ChartOptions.Option_0:
+                    retValue = 13;
+                    break;
+                case ChartOptions.Option_1:
+                    retValue = 7;
+                    break;
+                case ChartOptions.Option_2:
+                    retValue = 4;
+                    break;
+                case ChartOptions.Option_3:
+                    break;
+                case ChartOptions.Option_4:
+                    break;
+                case ChartOptions.Option_5:
+                    break;
+                case ChartOptions.Option_6:
+                    break;
+                case ChartOptions.Option_7:
+                    break;
+                default:
+                    break;
+            }
+            return retValue;
+        }
+        public static ChartOptionsResultModel getChartOptionValuesPlaid(ChartOptions Option)
+        {
+            ChartOptionsResultModel result = new ChartOptionsResultModel();
+            DateTime datetime = DateTime.Now;
+            switch (Option)
+            {
+                case ChartOptions.Option_0:
+                    int currQuarter = (datetime.Month - 1) / 3 + 1;
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, datetime.AddYears(-1).Month, 1);  //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
+                    result.EndDate = datetime.AddMonths(1).AddDays(-1); //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "Month";                   
+                    break;
+                case ChartOptions.Option_1:
+                    //int PreviousQuarter = (datetime.Month - 1) / 3 ;
+                    result.StartDate = new DateTime(datetime.AddMonths(-6).Year, datetime.AddMonths(-6).Month, 1);//new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
+                    result.EndDate = datetime.AddMonths(1).AddDays(-1);// datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
+                    result.timeframe = "Month";                   
+                    break;
+                case ChartOptions.Option_2:
+                    result.StartDate = new DateTime(datetime.AddMonths(-3).Year, datetime.AddMonths(-3).Month, 1); ;// new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = datetime.AddMonths(1).AddDays(-1);// new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "Month";
+                    result.periods = 2;
+                    break;
+                case ChartOptions.Option_3:
+                    result.StartDate = new DateTime(datetime.Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "Month";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_4:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 3;
+                    break;
+                case ChartOptions.Option_5:
+                    result.StartDate = new DateTime(datetime.AddYears(-1).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.AddYears(-1).Year, 12, 31);
+                    result.timeframe = "Month";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_6:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "Month";
+                    result.periods = 11;
+                    break;
+                case ChartOptions.Option_7:
+                    result.StartDate = new DateTime(datetime.AddYears(-2).Year, 1, 1);
+                    result.EndDate = new DateTime(datetime.Year, 12, 31);
+                    result.timeframe = "QUARTER";
+                    result.periods = 12;
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
         public static ChartOptionsResultModel getChartOptionValues(ChartOptions Option)
         {
             ChartOptionsResultModel result = new ChartOptionsResultModel();
