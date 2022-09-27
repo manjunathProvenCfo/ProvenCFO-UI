@@ -20,7 +20,7 @@ var $typingIndicator;
 var $typingIndicatorMessage;
 var $newMessagesDiv;
 var addMessageProcessed = [];
-
+var $messageBodyInputBulk;
 var chat = {
     userId: "",
     userEmail: "test1@mailinator.com",
@@ -36,6 +36,13 @@ var chat = {
     isReconciliationIconColorChanged: false,
     channelUniqueNameGuid: ''
 };
+
+
+
+
+
+
+
 
 var CommentHtmls = {
     datehtml: '<div id="{id}" class="text-center fs--2 text-500 date-stamp"><span>{innerText}</span></div>',
@@ -159,7 +166,7 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
     
 
     $btnSendMessage.unbind().click(function() {
-        
+      
         addNewMessagetoChatwindow($('#message-body-input').val());
        
     });
@@ -178,13 +185,16 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+       
         if (event.keyCode === 13 && !event.shiftKey) {
+            
             event.preventDefault();
             if (event.type == "keydown") {
                 if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
                 else {
+                   
                     if ($editor[0].innerHTML != '')
                         
                         addNewMessagetoChatwindow($editor[0].innerHTML);
@@ -198,7 +208,7 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
             activeChannel?.typing();
     });
     setTimeout(addMentionPlugin, 3000);
-
+   
     $messageBodyFileUploader.off("change");
     $messageBodyFileUploader.on("change", function (e) {
         var files = $(this)[0].files;
@@ -247,12 +257,25 @@ var loadCommentsPage = async function(channelUniqueNameGuid) {
 
 $channelMessagesBulk = $("#channel-messagesBulk");
 var $btnSendMessage;
-var $chatEditorArea;
-$chatEditorArea = $(".chat-editor-area .emojiarea");
+
 $btnSendMessage = $("#bulksend-message");
 $btnSendMessage.unbind().click(function () {
     addNewMessagetoChatwindow($('#message-body-inputBulk').val());
 
+});
+
+$($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
+    if ($editor.keyCode === 13) {
+        let val = $('#emojionearea-editor').text();
+        if (val == '') {
+
+            val = $(".emojionearea-editor").text();
+        }
+        addNewMessagetoChatwindow(val);      
+    }
+    else {
+        activeChannel?.typing();
+    }
 });
 var addNewCommentBulk = function (inputText) {
     var CurrentDate = new Date();
@@ -266,6 +289,7 @@ var addNewCommentBulk = function (inputText) {
     
 }
 var addNewMessagetoChatwindow = async function (input) {
+   
     if (input == "") {
         return;
     }
@@ -1007,6 +1031,7 @@ function AgencyDropdownPartialViewChange() {
     SetUserPreferencesForAgency();
 }
 
+
 var addMentionPlugin = function () {
     if (chat.type === 0) {
         $(".mentions-autocomplete-list").remove();
@@ -1066,3 +1091,4 @@ var UpdateReconciliationHasStatus = function (id) {
     postAjax(`/communication/UpdateReconciliationHasStatus?id=${id}`, null, function (res) {
     });
 }
+
