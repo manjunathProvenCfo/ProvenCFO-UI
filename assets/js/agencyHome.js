@@ -1160,7 +1160,7 @@ var defaultReportsWidget = function () {
     });
 }
 function prepareReportMedia(report) {
-    let DownloadFileLink = report.DownloadFileLink;
+    let DownloadFileLink = SpecialURLEncoding(report.DownloadFileLink);
     let thumbnail = getSampleBGImageByFileExtension(report.FileExtention);    
     if (isEmptyOrBlank(thumbnail))
         thumbnail = report.FilePath;

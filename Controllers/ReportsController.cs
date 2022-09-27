@@ -128,7 +128,8 @@ namespace ProvenCfoUI.Controllers
         public void GetReportResource(string type, string year, string month, string azure_fileName, string fileName)
      
         {
-
+            azure_fileName = azure_fileName.Replace("|and|", "&");
+            fileName = fileName.Replace("|and|", "&");
             var path = $"{type}/{year}/{month}/{azure_fileName}";
             using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
             {
@@ -136,23 +137,26 @@ namespace ProvenCfoUI.Controllers
                 int byteChunkRemain = 0;
 
                 Stream azureStream = storage.GetFileStream(StorageContainerName, path, fileName);
-                Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
-
-                byte[] bytes = new byte[azureStream.Length + 1];
-
-                azureStream.Seek(0, SeekOrigin.Begin);
-                byteChunkRemain = (int)azureStream.Length;
-
-            //for handling large files
-            readChunk:
-                readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
-                if (0 < (azureStream.Length - readedByteChunk))
+                if (azureStream != null)
                 {
-                    byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
-                    goto readChunk;
+                    Response.ContentType = System.Web.MimeMapping.GetMimeMapping(path);
+
+                    byte[] bytes = new byte[azureStream.Length + 1];
+
+                    azureStream.Seek(0, SeekOrigin.Begin);
+                    byteChunkRemain = (int)azureStream.Length;
+
+                //for handling large files
+                readChunk:
+                    readedByteChunk += azureStream.Read(bytes, (int)readedByteChunk, byteChunkRemain);
+                    if (0 < (azureStream.Length - readedByteChunk))
+                    {
+                        byteChunkRemain = (int)(azureStream.Length - readedByteChunk);
+                        goto readChunk;
+                    }
+                    azureStream.Close();
+                    Response.BinaryWrite(bytes);
                 }
-                azureStream.Close();
-                Response.BinaryWrite(bytes);
             }
         }
 

@@ -779,3 +779,8 @@ function getLocalTime(utcdateString) {
     var date = new Date(utcdateString + ' UTC');
     return date.toLocaleString();
 }
+function SpecialURLEncoding(inputString) {
+    
+    var retVal = inputString.replace(/&/g, '|and|');
+    return retVal;
+}
