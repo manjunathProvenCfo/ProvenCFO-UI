@@ -142,7 +142,7 @@ namespace ProvenCfoUI.Comman
                     {
                         if (account.IsActive == true && !string.IsNullOrEmpty(account.access_token))
                         {
-                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(account.access_token.Replace(" ", "+"))).Replace("\t", "");
+                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(account.access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n","");
                             if (client.ThirdPartyAccountingApp_ref == 1)
                             {
                                 BankTransactionfactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions>(client.APIClientID, client.APIClientSecret, client.APIScope, "");

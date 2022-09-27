@@ -100,13 +100,17 @@ namespace Proven.Service
                 var Token = (TokenInfoVM)Convert.ChangeType(TokenInfoVM, typeof(TokenInfoVM));
                 IXeroToken token = new XeroOAuth2Token
                 {
-                    //AccessToken = xeroTokenInfo.access_token,
+                    AccessToken = Token.access_token,
                     RefreshToken = Token.refresh_token,
-
-                    // IdToken = xeroTokenInfo.id_token
+                    ExpiresAtUtc = Token.ModifiedDate.Value.AddSeconds(Token.expires_in.Value),
+                    IdToken = Token.id_token,                    
                     // This is required for refresh logic down in GetCurrentValidTokenAsync.
                     //ExpiresAtUtc =  DateTime.MaxValue
                 };
+                if (DateTime.UtcNow >= token.ExpiresAtUtc)
+                {
+                    token = (IXeroToken)(T)RefreshToken((T)token).GetAwaiter().GetResult();
+                }
                 return (T)token;
             }
             catch (Exception ex)
