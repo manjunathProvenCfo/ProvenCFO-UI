@@ -457,6 +457,7 @@ namespace ProvenCfoUI.Controllers
 
         [CheckSession]
         [HttpPost]
+        [Obsolete]
         public JsonResult Rename(int Id, string FileName)
         {
             try
@@ -476,7 +477,7 @@ namespace ProvenCfoUI.Controllers
                             storage.RenameAzureFiles(StorageContainerName, rptlist[0].FilePath, dbf_File, NewfilePath);
                         }
                     }
-                    var result = reportsService.Rename(Id, FileName, NewfilePath);
+                    var result = reportsService.Rename(Id, HttpUtility.UrlEncodeUnicode(FileName), HttpUtility.UrlEncodeUnicode(NewfilePath));
 
                     if (result != null)
                     {
