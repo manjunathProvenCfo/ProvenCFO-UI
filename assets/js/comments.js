@@ -268,8 +268,8 @@ $($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
     if ($editor.keyCode === 13) {
         let val = $('#emojionearea-editor').text();
         if (val == '') {
-
-            val = $(".emojionearea-editor").text();
+            var loop = Array.prototype.filter.bind($(".emojionearea-editor"))
+            val = loop(input => input.innerHTML != '')[0].innerHTML;
         }
         addNewMessagetoChatwindow(val);      
     }
