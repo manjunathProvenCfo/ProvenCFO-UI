@@ -52,7 +52,7 @@ namespace Proven.Service
 
         public override async Task<V> GetGLAccounts(T Token, string TenentID)
         {
-            Token = await this.ValidateToken(Token);
+            //Token = await this.ValidateToken(Token);
             bool IsProdEnviroment = false;
             var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
             if(TenentID == SandboxCompanyId) {
@@ -65,22 +65,39 @@ namespace Proven.Service
         }
         public override async Task<V> GetBankAccounts(T Token, string TenentID)
         {
-            Token = await this.ValidateToken(Token);
+            //Token = await this.ValidateToken(Token);
+            bool IsProdEnviroment = IsProductionEnvirnoment(TenentID);            
+            TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            _service = new DataService(objToken.access_token, Convert.ToInt64(TenentID), IsProdEnviroment);
+            var res = await _service.QueryAsync<Account>("Select * from Account where AccountType = 'Bank'");
+            return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
+        }
+        private bool IsProductionEnvirnoment(string TenentID)
+        {
             bool IsProdEnviroment = false;
             var SandboxCompanyId = ConfigurationManager.AppSettings["QuickBooks_TestEnviroment_CompanyId"].ToString();
             if (TenentID == SandboxCompanyId)
             {
                 IsProdEnviroment = true;
             }
-            TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
-            _service = new DataService(objToken.access_token, Convert.ToInt64(TenentID), IsProdEnviroment);
-            var res = await _service.QueryAsync<Account>("Select * from Account where AccountType = 'Bank'");
-            return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
+            return IsProdEnviroment;
+
         }
         public override async Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null)
         {
-            //Token = await this.ValidateToken(Token);
-            throw new NotImplementedException();
+            System.Collections.Generic.Dictionary<string, string> dic = new System. Collections.Generic.Dictionary<string, string>();
+            bool IsProdEnviroment = IsProductionEnvirnoment(TenentID);
+
+            if (fromDate != null) dic.Add("start_date", fromDate.Value.ToString("yyyy-MM-dd"));
+            if(toDate != null) dic.Add("end_date", toDate.Value.ToString("yyyy-MM-dd"));
+            if(timeframe != null) dic.Add("summarize_column_by", timeframe);
+
+            TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
+            _service = new DataService(objToken.access_token, Convert.ToInt64(TenentID), IsProdEnviroment);
+            var res = await _service.GetReportAsync("ProfitAndLoss", dic);
+
+            return (V)Convert.ChangeType(res, typeof(V));
+            
         }
 
         public override AppTokenInfoMain GetSavedToken(int AgencyID)
@@ -105,9 +122,18 @@ namespace Proven.Service
             {
                 TokenResponse objToken = new TokenResponse();
                 TokenInfoVM SavedToken = (TokenInfoVM)Convert.ChangeType(TokenInfo, typeof(TokenInfoVM));
+                objToken.expires_in = TimeSpan.FromSeconds(SavedToken.expires_in.Value);
                 objToken.id_token = SavedToken.id_token;
                 objToken.access_token = SavedToken.access_token;
-                objToken.refresh_token = SavedToken.refresh_token;                             
+                objToken.refresh_token = SavedToken.refresh_token;  
+                DateTime tokenExpairedAt = SavedToken.ModifiedDate.Value.AddSeconds(SavedToken.expires_in.Value);
+                if (DateTime.UtcNow >= tokenExpairedAt)
+                {
+                    dynamic token = objToken;
+                    dynamic t = RefreshToken((T)token).GetAwaiter().GetResult();
+                    return (T)Convert.ChangeType(t, typeof(T));
+                }
+
                 return (T)Convert.ChangeType(objToken, typeof(T));
             }
             catch (Exception ex)

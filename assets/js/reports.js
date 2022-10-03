@@ -378,13 +378,16 @@ var getReports = function (agencyId, year, period) {
         }
         else {
             $(`.report-card-body[data-report-period='${period}'] .report`).remove();
-        }        
+        }
+        
         reports.forEach(function (obj) {
-            let downloadFileLink = obj.DownloadFileLink;
+            
+            let downloadFileLink = SpecialURLEncoding(obj.DownloadFileLink);
+            
             let thumbnail = getSampleBGImageByFileExtension(obj.FileExtention);
             if (isEmptyOrBlank(thumbnail))
                 thumbnail = obj.FilePath;
-            obj.FilePath = obj.FilePath.replace("~/", "../../");
+            obj.FilePath =  obj.FilePath.replace("~/", "../../");
             thumbnail = thumbnail.replace("~/", "../../");
             let staredReportHTML = "";
             let deleteReportHTML = `<a class="d-none" id="aDelete" href="#" data-Id="${obj.Id}" onclick="deleteReportOnCliCk(event,${obj.Id})"><span title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span></a>`;

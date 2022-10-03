@@ -4,6 +4,7 @@ using Proven.Service;
 using ProvenCfoUI.Comman;
 using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
+using QuickBooksSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -249,9 +250,10 @@ namespace ProvenCfoUI.Controllers
                     using (ClientService objClient = new ClientService())
                     {
                         var client = objClient.GetClientById(ClientID);
-                        var pval = Common.getChartOptionValues(Option);
+
                         if (client.ThirdPartyAccountingApp_ref == 1)
                         {
+                            var pval = Common.getChartOptionValues(Option);
                             using (XeroService<IXeroToken, ReportWithRows> AccountingPackageService = new XeroService<IXeroToken, ReportWithRows>(client.APIClientID, client.APIClientSecret, client.APIScope, AccountingPackageInstance.Instance.XeroAppName))
                             {
 
@@ -297,10 +299,28 @@ namespace ProvenCfoUI.Controllers
                         }
                         else if (client.ThirdPartyAccountingApp_ref == 2)
                         {
-                            using (QuickbooksLocalService<string, QuickBooksSharp.Entities.IncomeHeader> AccountingPackageService = new QuickbooksLocalService<string, QuickBooksSharp.Entities.IncomeHeader>(client.APIClientID, client.APIClientSecret, client.APIScope))
+                            var pval = Common.getChartOptionValuesPlaid(Option);
+                            using (QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Report> AccountingPackageService = new QuickbooksLocalService<TokenResponse, QuickBooksSharp.Entities.Report>(client.APIClientID, client.APIClientSecret, client.APIScope))
                             {
 
-                                  var res =   await AccountingPackageService.GetReportProfitAndLossAsync(AccountingPackageInstance.Instance.QuickBooksToken.access_token,AccountingPackageInstance.Instance.TenentID);
+                                var res = await AccountingPackageService.GetReportProfitAndLossAsync(AccountingPackageInstance.Instance.QuickBooksToken, AccountingPackageInstance.Instance.TenentID, pval.StartDate, pval.EndDate, pval.periods, pval.timeframe);
+                                if (res != null)
+                                {
+                                    var NumofMonths = Common.NumberofRecordsOnReportOpts(Option);
+                                    if (cType == ChartType.Revenue)
+                                    {                                        
+                                        Header = res.Columns.Column.Skip(1).Take(NumofMonths).Select(x => x.ColTitle).Reverse().ToArray();
+                                        var RevenuData = res.Rows.Row.Where(x => x.group == "GrossProfit").FirstOrDefault().Summary;
+                                        Ydata = RevenuData.ColData.Skip(1).Take(NumofMonths).Select(x => x.value).Reverse().ToList();
+                                    }
+                                    else if (cType == ChartType.NetIncome)
+                                    {
+                                        Header = res.Columns.Column.Skip(1).Take(NumofMonths).Select(x => x.ColTitle).Reverse().ToArray();
+                                        var RevenuData = res.Rows.Row.Where(x => x.group == "NetIncome").FirstOrDefault().Summary;
+                                        Ydata = RevenuData.ColData.Skip(1).Take(NumofMonths).Select(x => x.value).Reverse().ToList();
+                                    }
+                                }
+                                return Json(new { Xdata = Header, Ydata = Ydata, Status = "Success" }, JsonRequestBehavior.AllowGet);
                             }
 
                         }
@@ -315,6 +335,7 @@ namespace ProvenCfoUI.Controllers
                 throw ex;
             }
         }
+
     }
 }
 
