@@ -265,9 +265,10 @@ $btnSendMessage.unbind().click(function () {
 });
 
 $($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
-    if ($editor.keyCode === 13) {
+    if ($editor.keyCode === 13 && !event.shiftKey) {
         let val = $('#emojionearea-editor').text();
         if (val == '') {
+           
             var loop = Array.prototype.filter.bind($(".emojionearea-editor"))
             val = loop(input => input.innerHTML != '')[0].innerHTML;
         }
@@ -289,8 +290,7 @@ var addNewCommentBulk = function (inputText) {
     
 }
 var addNewMessagetoChatwindow = async function (input) {
-   
-    if (input == "") {
+    if (input == "" || input =="<div><br></div><div><br></div>") {
         return;
     }
     addNewCommentBulk(input);

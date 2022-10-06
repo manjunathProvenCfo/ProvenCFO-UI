@@ -945,7 +945,8 @@
 
             $("#email").click(function () {
                 var url = window.location.href;
-
+                $('.text-danger').empty();
+                $("#sendbutton").attr("disabled", false);
                 var ClientName = $("#ddlclient option:selected").text();
                 var ClientId = $("#ddlclient option:selected").val();
                 getClientDate(ClientName);
