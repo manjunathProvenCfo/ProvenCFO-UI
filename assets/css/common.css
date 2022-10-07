@@ -576,7 +576,11 @@ a.ColorattachmentText
 {
     color: white !important;
 }
-
+.center {
+    margin: auto;
+    width: 50%;    
+    padding: 5px;
+}
 
 /*span#loadertext {
     padding-left: 920px;

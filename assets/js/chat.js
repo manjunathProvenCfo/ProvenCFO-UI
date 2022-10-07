@@ -199,6 +199,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         $participants.off('click');
         $participants.on('click', handleParticipantClick);
         $participantFirst = $("#chatParticipants .chat-contact:first");
+        $participantFirst.click();
     }
     var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
         var currentdate = new Date();
@@ -365,7 +366,9 @@ var loadCommentsPageOnReconcilationId = function (ReconcilationId) {
     HidelottieLoader();
 }
 var scrolltoselctedItem = function (element) {
-    $(".contacts-list").animate({ scrollTop: element.position().top - 70 });
+    if (element.position() != undefined) {
+        $(".contacts-list").animate({ scrollTop: element.position().top - 70 });
+    }    
 }
 var loadCommentsPage = async function (channelUniqueNameGuid) {
     resetScrollChatState(channelUniqueNameGuid);
@@ -414,6 +417,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     }
 
     getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, function (response) {
+        if (response.resultData == null) { return false;}
 
         setCommentsHeader(response.resultData);
        
@@ -605,6 +609,13 @@ var loadreconcilationcomments = function () {
                 $participantsContainer.append(recHtml);
             });
         }
+        else {
+            $participantsContainer.append('<div class="center" >No Record Found</div>')
+            hideChatContentLoader();
+            return;
+
+        }
+
         if ($participantsContainer.children(0)[0] != undefined) {
             // $participantsContainer.children(0)[0].click();
             // loadCommentsPage($participantsContainer.children(0)[0].id);
@@ -1151,6 +1162,7 @@ $("#divChatSiderbarFilters > button").click(function () {
     let type = el.data().type;
     if (chat.type !== type) {
         resetChatPage();
+        showChatContentLoader();
         if (type === 0) {
             chat.type = 0;
             setTimeout(function () {
@@ -1181,14 +1193,14 @@ function showHideReconcilationOptions(show) {
     if (show == true) {
         $communicationGLaccount.removeClass('d-none');
         $communicationTrackingCategories.removeClass('d-none');
-        $tc_2_Dropdown.removeClass('d-none');
+        if ($tc_2_Dropdown != undefined) $tc_2_Dropdown.removeClass('d-none');
         $communicationAction.removeClass('d-none');
         location.reload();
     }
     else {
         $communicationGLaccount.addClass('d-none');
         $communicationTrackingCategories.addClass('d-none');
-        $tc_2_Dropdown.addClass('d-none');
+        if ($tc_2_Dropdown != undefined) $tc_2_Dropdown.addClass('d-none');
         $communicationAction.addClass('d-none');
     }
 }
