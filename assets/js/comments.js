@@ -269,10 +269,16 @@ $($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
         let val = $('#emojionearea-editor').text();
         if (val == '') {
            
-            var loop = Array.prototype.filter.bind($(".emojionearea-editor"))
-            val = loop(input => input.innerHTML != '')[0].innerHTML;
+            var loop = Array.prototype.filter.bind($(".emojionearea-editor"));
+            if (loop(input => input.innerText != '').length > 0 && loop(input => input.innerText != '')[0].innerText != undefined) {
+                val = loop(input => input.innerText != '')[0].innerText;
+            }
+            
         }
-        addNewMessagetoChatwindow(val);      
+        if (val.trim() != '') {
+            addNewMessagetoChatwindow(val);
+        }
+             
     }
     else {
         activeChannel?.typing();
@@ -290,15 +296,19 @@ var addNewCommentBulk = function (inputText) {
     
 }
 var addNewMessagetoChatwindow = async function (input) {
-    if (input == "" || input =="<div><br></div><div><br></div>") {
-        return;
+    
+    if (input == "" || input == "<div><br></div><div><br></div>" || input == '<div><br></div><div><br></div><div><br></div>' ) {
+        return false;
     }
+    
+    
     addNewCommentBulk(input);
+    setTimeout(function () { 
     $('#message-body-inputBulk').empty();
     $('.emojionearea-editor').empty();
     $('#message-body-inputBulk').val("");
     $('.emojionearea-editor').val("");
-
+    }, 500);
 
 }
 setTimeout(addMentionPlugin, 3000);
