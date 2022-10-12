@@ -441,11 +441,15 @@ namespace ProvenCfoUI.Controllers
                 string access_token = string.Empty;
                 using (PlaidBankTransaction<string, string> plaid = new PlaidBankTransaction<string, string>(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
                 {
-                    using (ClientService client = new ClientService())
+                    if (IsUpdateMode == 1)
                     {
-                        access_token = client.GetClientXeroAcccountsByAgencyId(AgencyId).ResultData?.Where(x => x.AccountID == AccountID).FirstOrDefault()?.access_token;
-                        access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n", "");
+                        using (ClientService client = new ClientService())
+                        {
+                            access_token = client.GetClientXeroAcccountsByAgencyId(AgencyId).ResultData?.Where(x => x.AccountID == AccountID).FirstOrDefault()?.access_token;
+                            access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n", "");
+                        }
                     }
+                    
                     var result = await plaid.getLinkToken("ProvenCFO", IsUpdateMode, access_token);
 
 

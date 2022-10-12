@@ -70,8 +70,7 @@ namespace Proven.Service
                         User = new Acklann.Plaid.Management.CreateLinkTokenRequest.UserInfo
                         {
                             ClientUserId = Guid.NewGuid().ToString()
-                        },
-                        AccessToken = ""
+                        }                        
                     });
 
                 }
