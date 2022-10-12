@@ -71,10 +71,10 @@
         });
     }
     
-    function getLinkToken(AccountID) {
+    function getLinkToken(AccountID,IsUpdateMode) {
         
-        var ClientName = $("#ddlclient option:selected").text();
-        postAjax('/Integration/GetLinkToken?ClientName=' + ClientName, null, function (response) {
+        //var ClientName = $("#ddlclient option:selected").text();
+        postAjax(`/Integration/GetLinkToken?ClientName=${ClientName}&IsUpdateMode=${IsUpdateMode}&AgencyId=${ClientId}&AccountID=${AccountID}`, null, function (response) {
             if (response != null && response.Status == "Success") {
                
                 var handler = Plaid.create({

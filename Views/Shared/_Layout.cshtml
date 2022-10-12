@@ -75,7 +75,9 @@
 <script>
         var userEmailAddress = '@(Convert.ToString(Session["LoginName"]))';
         var sessionTime = @(Convert.ToString(Session["SessionTimeout"]));
-        var apiurl = '@(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]))';
+    var apiurl = '@(Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["provencfoapi"]))';
+    var ClientId = $("#ddlclient option:selected").val(); // thid is layout
+    var ClientName = $("#ddlclient option:selected").text();
         $(document).ready(function () {
             var timeout = sessionTime * 60000; //Convert Minutes to Milliseconds
             $(document).bind("idle.idleTimer", function () {
