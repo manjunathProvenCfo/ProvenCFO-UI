@@ -878,9 +878,12 @@
 
                 }
 
-
-
-                selectedResult.map(ele => $(".qbookselect").append(new Option(ele, ele, true, true)));
+                quickBooksScops.forEach(function (i) {
+                    if (jQuery.inArray(i.data, selectedResult) !== -1) {
+                        i.select = true;
+                    }
+                })                
+                quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, ele.select, ele.select)));
 
                }
 
