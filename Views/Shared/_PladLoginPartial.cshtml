@@ -71,8 +71,16 @@
         });
     }
     
-    function getLinkToken(AccountID,IsUpdateMode) {
-        
+    function getLinkToken(AccountID, IsUpdateMode) {
+        if (IsUpdateMode == 1) {
+            $('.modal-title').text('PLAID Authentication - Update Mode');
+            $('#link-button').text('Update PLAID Authentication');
+        }
+        else {
+            $('.modal-title').text('PLAID Authentication - Add Mode');
+            $('#link-button').text('Add PLAID Authentication');
+        }
+       
         //var ClientName = $("#ddlclient option:selected").text();
         postAjax(`/Integration/GetLinkToken?ClientName=${ClientName}&IsUpdateMode=${IsUpdateMode}&AgencyId=${ClientId}&AccountID=${AccountID}`, null, function (response) {
             if (response != null && response.Status == "Success") {
