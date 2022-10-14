@@ -256,13 +256,28 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 }
 
 $channelMessagesBulk = $("#channel-messagesBulk");
+
+// Creating a Global array which store the value of the mess.
+var CommentText = [];
 var $btnSendMessage;
 
 $btnSendMessage = $("#bulksend-message");
 $btnSendMessage.unbind().click(function () {
-    addNewMessagetoChatwindow($('#message-body-inputBulk').val());
 
+    // Getting the value of inputArea  befor send them and pussing it into the array.
+    var message = $("#message-body-inputBulk").val();
+    CommentText.push(message);
+
+    addNewMessagetoChatwindow($('#message-body-inputBulk').val());
 });
+
+// Creating the function which were called onclick of Apply.
+var bulkActionReconcilation = function () {
+
+    // Calling the function of which do update the chat and sending the CommentText array as an parameter. 
+    BulkActionReconcilation(CommentText)
+}
+
 var down = {};
 $($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
     var keycode = (event.keyCode ? event.keyCode : event.which);
