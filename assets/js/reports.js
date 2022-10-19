@@ -403,7 +403,7 @@ var getReports = function (agencyId, year, period) {
                                 <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
                                 <a class="data-fancybox" href="${downloadFileLink}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtention}" data-type="iframe">
                                 <figure class="book-cover"> 
-                                <img class="img-fluid" src="${thumbnail}" alt="" /> 
+                                <img class="img-fluid" src="${thumbnail}" alt="" onclick="imageAlign()"/>
                                 </figure> 
                                 </a>
                                 <p class="publish-options mb-0 d-none">
@@ -421,6 +421,37 @@ var getReports = function (agencyId, year, period) {
         HidelottieLoader();
     });
 }
+
+
+var imageAlign = function () {
+
+    setTimeout(() => {
+
+        var iframe = $(".fancybox-iframe")[0].contentWindow.document;
+        $(iframe).ready(function () {
+
+            setTimeout(() => {
+                // Getting the body of the iframe and applying the css on it.
+                var body = $($(".fancybox-iframe")[0].contentWindow.document).find("body")[0];
+                $(body).css({ "display": "flex", "width": "100%", "height": "100%" })
+
+                // Finding the 'img' element within iframe and appending it in iDiv as child.
+                var image = $($(".fancybox-iframe")[0].contentWindow.document).find("img")[0];
+                $(image).css({ "-webkit-user-select": "none", "width": "auto", "height": "auto", "margin": "auto" })
+
+                // Creating a Div and appending it as a child in iframe body.
+                var iDiv = document.createElement('div');
+                $(".fancybox-iframe").contents().find("body")[0].appendChild(iDiv);
+                $(iDiv).css({ "margin": "auto", "display": "flex", "width": "auto", "height": "auto" })
+
+                // Appending the image as a child in iDiv.
+                iDiv.appendChild(image);
+            }, 600)
+        });
+
+    }, 10);
+}
+
 var addContextMenu = function () {
     if (isReadonlyUser == false) {
         let menus = {

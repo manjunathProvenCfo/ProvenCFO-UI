@@ -204,6 +204,11 @@
                 $('#EmailIdExist').html('The invitation is already accepted for this agency.')
                 $('#InviteCreate').val('');
             }
+            else if (msg != undefined && msg != '' && msg == "UserAlreadyLinkedAndInActive") {
+                $('#EmailIdExist').show();
+                $('#EmailIdExist').html('The User has been registered for this Agency and current state is inActive.')
+                $('#InviteCreate').val('');
+            }
             else if (msg != undefined && msg != '' && msg == "Updated") {
                 UpdateAlertMsg();
                 $('#InviteCreate').val('');

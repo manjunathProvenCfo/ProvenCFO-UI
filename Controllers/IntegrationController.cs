@@ -46,7 +46,7 @@ namespace ProvenCfoUI.Controllers
                         ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                         ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                         ViewBag.AccountingPackageId = AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref;
-                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");                        
+                        var objResult = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE,ARCHIVED");
                         return View(objResult.ResultData.Where(x => x.AgencyId != null).ToList());
                     }
                     return View();
@@ -205,7 +205,7 @@ namespace ProvenCfoUI.Controllers
                     {
 
                         var client = objClient.GetClientById(ClientID);
-                        
+
                         dynamic AppPackage = null;
                         dynamic Token = null;
                         switch (client.ThirdPartyAccountingApp_ref.Value)
@@ -434,13 +434,25 @@ namespace ProvenCfoUI.Controllers
         }
         [HttpPost]
         [CheckSession]
-        public async Task<JsonResult> GetLinkToken(string ClientName)
+        public async Task<JsonResult> GetLinkToken(string ClientName, int IsUpdateMode, int AgencyId, string AccountID)
         {
             try
             {
+                string access_token = string.Empty;
                 using (PlaidBankTransaction<string, string> plaid = new PlaidBankTransaction<string, string>(PlaidInstance.Instance.ClientID, PlaidInstance.Instance.ClientSecret, PlaidInstance.Instance.language, PlaidInstance.Instance.products, PlaidInstance.Instance.country_codes, PlaidInstance.Instance.Environment))
                 {
-                    var result = await plaid.getLinkToken("ProvenCFO");
+                    if (IsUpdateMode == 1)
+                    {
+                        using (ClientService client = new ClientService())
+                        {
+                            access_token = client.GetClientXeroAcccountsByAgencyId(AgencyId).ResultData?.Where(x => x.AccountID == AccountID).FirstOrDefault()?.access_token;
+                            access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n", "");
+                        }
+                    }
+                    
+                    var result = await plaid.getLinkToken("ProvenCFO", IsUpdateMode, access_token);
+
+
                     if (result != String.Empty)
                     {
 

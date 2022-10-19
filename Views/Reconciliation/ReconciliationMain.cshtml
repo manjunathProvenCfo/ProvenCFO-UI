@@ -706,13 +706,13 @@
                 $('#tabNotinBanks').addClass('tabselect');
             }
         }
-        
 
-        function BulkActionReconcilation() {
+
+        function BulkActionReconcilation(CommentText) {
             var GLaccount = $('#BA_filterGLaccounts').val();
-            //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();  
-            var CommentText = [];
-            Array.prototype.forEach.bind($('.chat-message'))(e => CommentText.push($(e).html()))
+            //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
+            //var CommentText = [];
+            //Array.prototype.forEach.bind($('.chat-message'))(e => CommentText.push($(e).html()))
             var CreatedBy = $('#topProfilePicture').attr('userId');
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
@@ -785,7 +785,7 @@
         }
 
         function onChangeglAccount(id, event) {
-        
+
             var selectedValue = event.currentTarget.value;
             if (isEmptyOrBlank(selectedValue)) {
                 selectedValue = -1;
@@ -945,7 +945,8 @@
 
             $("#email").click(function () {
                 var url = window.location.href;
-
+                $('.text-danger').empty();
+                $("#sendbutton").attr("disabled", false);
                 var ClientName = $("#ddlclient option:selected").text();
                 var ClientId = $("#ddlclient option:selected").val();
                 getClientDate(ClientName);
@@ -975,6 +976,49 @@
             getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
                 sessionStorage.setItem("LastMailSent", response.resultData);
             });
+        }
+        $("#email-to").on("focus", function (e) {
+            e.preventDefault();
+            e.target.removeAttribute("readonly");
+
+        });
+        $("#email-to").on("blur", function (e) {
+            e.preventDefault();
+            e.target.setAttribute("readonly", "");
+            validateMultipleEmails($('#email-to').val());
+        });
+
+        function validateMultipleEmails(emailinput) {
+            var emails = emailinput;
+            var invalidEmails = [];
+            if (emails == "") {
+                $('.text-danger').empty();
+                $('.emailvalidation').append('<span class="text-danger">Please Enter Email </span>');
+                $("#sendbutton").attr("disabled", true);
+                return;
+            }
+            emails = emails.split(',');
+            var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
+
+           
+
+            for (var i = 0; i<emails.length; i++) {
+                //Trimming the whitespace from emails if any
+                emails[i] = emails[i].trim();
+                //Cheking the invalid emails and push them into an array
+                if (!regexs.test(emails[i])) {
+                    invalidEmails.push(emails[i]);
+                }
+            }
+            if (invalidEmails.length != 0) {
+                $('.text-danger').empty();
+                $('.emailvalidation').append('<span class="text-danger">Invalid emails: ' + invalidEmails.join(',') + '</span>');
+                $("#sendbutton").attr("disabled", true);
+            }
+            else if (invalidEmails.length == 0) {
+                $('.emailvalidation .text-danger').remove();
+                $("#sendbutton").attr("disabled", false);
+            }
         }
 
         function sendMail() {
@@ -1014,6 +1058,8 @@
             e.preventDefault();
             e.target.setAttribute("readonly", "");
         });
+
+       
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")

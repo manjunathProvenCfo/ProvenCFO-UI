@@ -1,4 +1,5 @@
 ﻿using Acklann.Plaid;
+using Acklann.Plaid.Management;
 using Proven.Model;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Web;
 
 namespace Proven.Service
 {
-    
+
     public class PlaidBankTransaction<T, V> : BankTransctionFatory<T, V>, IDisposable
     {
         private bool isDisposed = false;
@@ -32,30 +33,54 @@ namespace Proven.Service
             _env = environment;
             _plaidclient = new PlaidClient(_ClientId, _ClientSecret, null, _env);
         }
-        public async Task<V> getLinkToken(T ClientName)
+        public async Task<V> getLinkToken(T ClientName, int IsUpdateMode, string access_token)
         {
             try
             {
-                // Arrange
 
-                var response = await _plaidclient.CreateLinkToken(new Acklann.Plaid.Management.CreateLinkTokenRequest
+
+                CreateLinkTokenResponse response = new CreateLinkTokenResponse();
+                // Arrange
+                if (IsUpdateMode == 1)
                 {
-                    ClientName = (string)Convert.ChangeType(ClientName, typeof(string)) ,
-                    ClientId = _ClientId,
-                    Secret = _ClientSecret,
-                    CountryCodes = _countryCodes,
-                    Products = _products,
-                    User = new Acklann.Plaid.Management.CreateLinkTokenRequest.UserInfo
+                    response = await _plaidclient.CreateLinkToken(new Acklann.Plaid.Management.CreateLinkTokenRequest
                     {
-                        ClientUserId = Guid.NewGuid().ToString()
-                    }
-                });
+                        ClientName = (string)Convert.ChangeType(ClientName, typeof(string)),
+                        ClientId = _ClientId,
+                        Secret = _ClientSecret,
+                        CountryCodes = _countryCodes,
+                        Language = _language,
+                        //Products = _products,
+                        User = new Acklann.Plaid.Management.CreateLinkTokenRequest.UserInfo
+                        {
+                            ClientUserId = Guid.NewGuid().ToString()
+                        },
+                        AccessToken = access_token                       
+                    });
+                }
+                else
+                {
+                    response = await _plaidclient.CreateLinkToken(new Acklann.Plaid.Management.CreateLinkTokenRequest
+                    {
+                        ClientName = (string)Convert.ChangeType(ClientName, typeof(string)),
+                        ClientId = _ClientId,
+                        Secret = _ClientSecret,
+                        CountryCodes = _countryCodes,
+                        Products = _products,
+                        User = new Acklann.Plaid.Management.CreateLinkTokenRequest.UserInfo
+                        {
+                            ClientUserId = Guid.NewGuid().ToString()
+                        }                        
+                    });
+
+                }
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return (V)Convert.ChangeType(response.LinkToken.ToString(), typeof(V));
                 }
                 return (V)Convert.ChangeType(String.Empty, typeof(V));
-               
+
 
             }
             catch (Exception e)
@@ -123,12 +148,13 @@ namespace Proven.Service
         {
             //var request = new Transactions.GetTransactionsRequest()
             var queryParameters = (PlaidRequestModelsVM)Convert.ChangeType(whereCause, typeof(PlaidRequestModelsVM));
-            var response = await _plaidclient.FetchTransactionsAsync(new Acklann.Plaid.Transactions.GetTransactionsRequest {
+            var response = await _plaidclient.FetchTransactionsAsync(new Acklann.Plaid.Transactions.GetTransactionsRequest
+            {
                 AccessToken = (String)Convert.ChangeType(Token, typeof(string)),
                 ClientId = _ClientId,
                 Secret = _ClientSecret,
                 StartDate = queryParameters.start_date.Value,
-                EndDate = queryParameters.end_date.Value, 
+                EndDate = queryParameters.end_date.Value,
             });
             return (V)Convert.ChangeType(response, typeof(V)); ;
         }

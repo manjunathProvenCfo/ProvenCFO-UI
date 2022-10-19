@@ -298,9 +298,14 @@ namespace ProvenCfoUI.Controllers
                                             ViewBag.ErrorMessage = "InvitationSend";
                                             return View("InviteStaffByAgency", InviteUser);
                                         }
-                                        else if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 1).Count() > 0)
+                                        else if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1" && x.IsRegistered ==1).Count() > 0 )
                                         {
                                             ViewBag.ErrorMessage = "UserAlreadyLinked";
+                                            return View("InviteStaffByAgency", InviteUser);
+                                        }
+                                        else if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "0" && x.IsRegistered == 1).Count() > 0)
+                                        {
+                                            ViewBag.ErrorMessage = "UserAlreadyLinkedAndInActive";
                                             return View("InviteStaffByAgency", InviteUser);
                                         }
 

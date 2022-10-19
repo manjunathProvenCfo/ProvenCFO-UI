@@ -831,7 +831,7 @@
 
             const quickBooksScops = [
                 { data: "com.intuit.quickbooks.accounting", select: true },
-                { data: "com.intuit.quickbooks.payment", select: true },
+                { data: "com.intuit.quickbooks.payment", select: false },
                 { data: "openid", select: true }
             ];
 
@@ -878,9 +878,12 @@
 
                 }
 
-
-
-                selectedResult.map(ele => $(".qbookselect").append(new Option(ele, ele, true, true)));
+                quickBooksScops.forEach(function (i) {
+                    if (jQuery.inArray(i.data, selectedResult) !== -1) {
+                        i.select = true;
+                    }
+                })                
+                quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, ele.select, ele.select)));
 
                }
 
@@ -1056,12 +1059,12 @@
 
                 const quickBooksScops = [
                     { data: "com.intuit.quickbooks.accounting", select: true },
-                    { data: "com.intuit.quickbooks.payment", select: true },
+                    { data: "com.intuit.quickbooks.payment", select: false },
                     { data: "openid", select: true }
                 ];
 
-                if ($(".qbookselect")[0].children.length<3)
-                quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, true, true)));
+                if ($(".qbookselect")[0].children.length<2)
+                    quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, ele.select, ele.select)));
 
 
             }
