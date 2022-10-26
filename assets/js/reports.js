@@ -5,7 +5,6 @@ var $divReportPeriodCard;
 var $divReportPeriodYearEnd;
 var $divReportPeriodQuarters;
 var $divReportPeriodMonths;
-
 var $btnUpload;
 var $btnDownloadAll;
 var $btnDeleteAll;
@@ -139,19 +138,27 @@ $(function () {
             success: function (file, response) {
                 //Load Reports
                 bindReports(period);
-
                 if (response != null && response.Status == 'Success') {
                     prepareAndPrependUploaderAttachment(response.File);
                 }
             },
+            accept: function (file, done) {
+
+                var fileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                if (fileName.length > 50) {
+                    done("Filename exceeds 50 characters!");
+                }
+                else { done(); }
+            },
             Error: function (response) {
-                alert(response);
+                console.log(response);
+                ShowAlertBoxError("Error", "Something went wrong while uploading file!");
             }
         });
 
         //view Page
         myDropzone_view.on("addedfile", function (file) {
-           
+
             var count = myDropzone_view.files.length;
             if (count > 5) {
                 ShowAlertBoxWarning("Notice", `You can only upload five files at a time.`);
@@ -247,9 +254,17 @@ $(function () {
             ShowAlertBoxError("", "Please enter New File Name");
             return;
         }
+      
+        let newFileName = $('#txtNewFileName').val();
+        if (newFileName.length > 50) {
+            ShowAlertBoxError("Error", "Filename exceeds 50 characters!");
+            return;
+        }
+
         let period = $("#hdnPeriod").val();
         let pdata = { Id: $("#hdnId").val(), FileName: $("#txtNewFileName").val() };
         postAjax(`/Reports/Rename`, JSON.stringify(pdata), function (response) {
+
             if (!isEmptyOrBlank(period))
                 bindReports(period);
             $renameModal.modal('hide');
