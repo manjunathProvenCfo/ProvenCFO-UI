@@ -156,14 +156,11 @@
             $("#profile-image").change(function () {
                 var ext = $('#profile-image').val().split('.').pop().toLowerCase();
                 if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-
                     ValidationErrorMessage("Invalid file extension");
-
                     return;
                 }
-                if (this.files[0].size > 1000000) {
-                    ValidationErrorMessage("Please upload file less than 1MB. Thanks!!");
-
+                if (this.files[0].size > 4194304) {
+                    ValidationErrorMessage("Please upload file less than 4MB. Thanks!!");
                     return false;
                 }
 
