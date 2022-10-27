@@ -97,6 +97,8 @@ namespace Proven.Model
         public  Int64? QuickBooksCompanyId { get; set; }
 
         public bool? Plaid_Enabled { get; set; }
+        public string AppTokenStatus { get; set; }
+        public string AccountingPackage { get; set; }
 
     }
 
