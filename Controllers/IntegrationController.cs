@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Proven.Model;
 using Proven.Service;
@@ -449,7 +450,7 @@ namespace ProvenCfoUI.Controllers
                             access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n", "");
                         }
                     }
-                    
+
                     var result = await plaid.getLinkToken("ProvenCFO", IsUpdateMode, access_token);
 
 
@@ -528,6 +529,76 @@ namespace ProvenCfoUI.Controllers
             item5.Value = "Never";
             listItem.Add(item5);
             return listItem;
+        }
+        [HttpGet]
+        public async Task<JsonResult> GenerateAuthorizationPromptUrl(string Id, int ThirdPartyAccountingApp_ref)
+        {
+            string redirecturl = string.Empty;
+            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
+            Session["EditingClientId"] = Id;
+            switch (ThirdPartyAccountingApp_ref)
+            {
+                case 1:
+                    using (XeroService<string, string> Xero = new XeroService<string, string>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
+                    {
+                        redirecturl = Xero.GenerateAuthorizationPromptUrl();
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+            return Json(new { url = redirecturl, Status = "Success" }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public async Task<ActionResult> Callback(string code, string state)
+        {
+            try
+            {
+                string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
+                IXeroToken xeroToken;
+                using (XeroService<IXeroToken, string> Xero = new XeroService<IXeroToken, string>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
+                {
+                    xeroToken = await Xero.LoginXeroAccesswithCode(code);
+                }    
+                
+                if ((xeroToken.IdToken != null) && !JwtUtils.validateIdToken(xeroToken.IdToken, AccountingPackageInstance.Instance.ClientID))
+                {
+                    return Content("ID token is not valid");
+                }
+
+                if ((xeroToken.AccessToken != null) && !JwtUtils.validateAccessToken(xeroToken.AccessToken))
+                {
+                    return Content("Access token is not valid");
+                }
+                
+                using (XeroService<ReturnAsyncModel, TokenInfoVM> Xero = new XeroService<ReturnAsyncModel, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
+                {
+                    TokenInfoVM Tokennew= new TokenInfoVM();
+                    Tokennew.access_token = xeroToken.AccessToken;
+                    Tokennew.id_token = xeroToken.IdToken;
+                    Tokennew.refresh_token = xeroToken.RefreshToken;
+                    Tokennew.ModifiedDate = DateTime.UtcNow;
+                    Tokennew.AppName = AccountingPackageInstance.Instance.XeroAppName;
+                    Tokennew.ConnectionStatus = "SUCCESS";
+                    Tokennew.ThirdPartyAccountingAppId_ref = 1;
+                    Tokennew.AgencyID = Convert.ToInt16(Session["EditingClientId"]);
+                    var updateResult = Xero.UpdateAccessToken(Tokennew);
+                    if (updateResult != null && updateResult.status == true)
+                    {
+                        Session["IsTokenUpdated"] = "true";
+                    }
+                    
+                }
+                return RedirectToAction("EditClient", "Client", new { Id = Session["EditingClientId"] });
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

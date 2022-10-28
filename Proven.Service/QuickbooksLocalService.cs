@@ -5,6 +5,7 @@ using QuickBooksSharp;
 using QuickBooksSharp.Entities;
 //using QuickBooksSharp;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 
@@ -232,6 +233,18 @@ namespace Proven.Service
             var quickbookToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
             var NewToken = await this.RefreshToken(Token);
             return (T)Convert.ChangeType(NewToken, typeof(T));
+        }
+
+        public override string GenerateAuthorizationPromptUrl()
+        {
+            IEnumerable<string> scopeslist = new string[] { "com.intuit.quickbooks.accounting", "openid" };
+            var res = new AuthenticationService().GenerateAuthorizationPromptUrl(_ClientId, scopeslist, _callbackurl, "");
+            return (string)res;
+        }
+
+        public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        {
+            throw new NotImplementedException();
         }
     }
 }
