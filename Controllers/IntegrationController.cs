@@ -588,7 +588,7 @@ namespace ProvenCfoUI.Controllers
                     var updateResult = Xero.UpdateAccessToken(Tokennew);
                     if (updateResult != null && updateResult.status == true)
                     {
-                        Session["IsTokenUpdated"] = "true";
+                        TempData["IsTokenUpdated"] = "true";
                     }
                     
                 }

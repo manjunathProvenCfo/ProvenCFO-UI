@@ -822,7 +822,8 @@
 
     ];
     $(document).ready(function () {
-             var IsTokenUpdated = "@Session["IsTokenUpdated"]";
+        var IsTokenUpdated = "@TempData["IsTokenUpdated"]";
+        
             HidelottieLoader();
 
             $(".readonly")[0].setAttribute("readonly", "");
