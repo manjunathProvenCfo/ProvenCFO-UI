@@ -29,7 +29,6 @@ namespace ProvenCfoUI.Controllers
 
         // GET: Reconciliation
         [CheckSession]
-
         public ActionResult GetReconcilation(string Type)
         {
             string RecordsType = NotInBooks;
