@@ -293,7 +293,9 @@ namespace ProvenCfoUI.Controllers
                                     {
                                         var AllAgenctyInvitation = objAccount.RegisteredUserListbyAgency(Convert.ToString(inviteStaffVM.AgencyID)).ResultData;
                                         var IsExistAgencyUserInvitation = AllAgenctyInvitation.Where(x => x.Email == inviteStaffVM.Email).ToList();
-                                        if (IsExistAgencyUserInvitation != null && IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 0).Count() > 0)
+                                        if (IsExistAgencyUserInvitation != null && 
+                                            IsExistAgencyUserInvitation.Where(x => x.IsActive == "1").Count() > 0 
+                                            && IsExistAgencyUserInvitation.Where(x => x.IsRegistered == 0).Count() > 0)
                                         {
                                             ViewBag.ErrorMessage = "InvitationSend";
                                             return View("InviteStaffByAgency", InviteUser);
@@ -308,10 +310,12 @@ namespace ProvenCfoUI.Controllers
                                             ViewBag.ErrorMessage = "UserAlreadyLinkedAndInActive";
                                             return View("InviteStaffByAgency", InviteUser);
                                         }
-
                                     }
 
-                                    var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid, InviteUser.RoleId);
+                                    var result = obj.AddInvitationAgency(inviteStaffVM.FirstName, 
+                                        inviteStaffVM.LastName,
+                                        inviteStaffVM.Email, 
+                                        inviteStaffVM.SessionTimeout, Convert.ToString(inviteStaffVM.AgencyID), LoginUserid, InviteUser.RoleId);
                                     if (result == null)
                                         ViewBag.Message = "Created";
                                     ViewBag.ErrorMessage = "Created";

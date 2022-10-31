@@ -7,6 +7,7 @@ using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -214,8 +215,15 @@ namespace ProvenCfoUI.Controllers
                         Notes.CreatedBy = LoginUserid;
                         Notes.IsDeleted = false;
                     }
+
                     using (NotesService objNotes = new NotesService())
                     {
+
+                        Regex reg = new Regex(@"([^,])+");
+                        String label = Notes.Labels;
+                        var match = reg.Match(label);
+                        label = match.Value;
+                        Notes.Labels = label;
                         var result = objNotes.CreateNewNotes(Notes);
                         if (result.Status == true)
                         {

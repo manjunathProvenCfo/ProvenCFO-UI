@@ -196,6 +196,33 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                 else {
 
                     if ($editor[0].innerHTML != '')
+                        
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+
+
+    //bulk update msg input box
+    $chatEditorArea[2].emojioneArea.off("keydown");
+    $chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
+       
+        if (event.keyCode === 13 && !event.shiftKey) {
+
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+
+                    if ($editor[0].innerHTML != '')
 
                         addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
@@ -903,6 +930,10 @@ var handleParticipantClick = async function (event) {
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
 
+        $("#message-body-inputBulk").val('').focus();
+        $("#message-body-inputBulk").trigger('change');
+
+
         if (channel.IsPrivate === true) {
             $channelParticipantEmail.text(participant.Email);
             $channelReconciliationDescription.html("");
@@ -1069,12 +1100,48 @@ function AgencyDropdownPartialViewChange() {
 
 
 var addMentionPlugin = function () {
+
     if (chat.type === 0) {
         $(".mentions-autocomplete-list").remove();
         return;
     }
-    $messageBodyInput.mentionsInput({
+    $chatEditorArea = [$(".chat-editor-area .emojiarea")[0]];
+
+   
+
+        $("#message-body-input")[0].parentElement.id = "message-body-div";
+        $messageBodyInput.mentionsInput({
+            onDataRequest: function (mode, query, callback) {
+             
+                getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
+                    callback.call(this, responseData);
+                });
+            },
+            onCaret: true
+        });
+    
+}
+
+
+
+
+var addBulkMentionPlugin = function () {
+
+    if (chat.type === 0) {
+        $(".mentions-autocomplete-list").remove();
+        return;
+    }
+
+
+    Array.prototype.forEach.bind($("#message-body-div"))(x => x.id = "mention")
+
+    $("#message-body-inputBulk")[0].parentElement.id = "message-body-div";
+    var bulk = $("#message-body-inputBulk");
+    
+    $chatEditorArea = [$(".chat-editor-area .emojiarea")[2]];
+   bulk.mentionsInput({
         onDataRequest: function (mode, query, callback) {
+        
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
                 callback.call(this, responseData);
             });

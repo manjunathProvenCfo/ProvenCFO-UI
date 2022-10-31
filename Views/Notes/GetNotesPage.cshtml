@@ -493,9 +493,11 @@
                 var agencyId = $('#ClientID').val();
 
                 var isPublished = "Unpublished";
+
                 var Labels = $('#divTag span').map(function (i, opt) {
                     return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
-                }).toArray().join(', ');
+                }).toArray()[0];
+             
                 if ($("#chkPublished").prop("checked") === true) {
                     isPublished = "Published";
                 }

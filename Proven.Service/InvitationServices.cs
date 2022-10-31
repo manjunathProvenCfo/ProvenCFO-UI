@@ -252,6 +252,13 @@ namespace Proven.Service
             //}
         }
 
+
+        public List<InviteUserVMId> GetAgencyUserByEmailInvitations(string email)
+        {
+             var result =  GetAsync<List<InviteUserVMId>>("Invitation/GetAgencyUserByEmailInvitations?email=" + email, true).Result;
+
+            return result;
+        }
         public InviteUserVMId GetInvitationForVlidation(int InvitationId, int AgencyId, Guid ActivationCode)
         {
             return GetAsync<InviteUserVMId>("Invitation/GetInvitationForVlidation?InvitationId=" + InvitationId + "&AgencyId=" + AgencyId + "&ActivationCode=" + ActivationCode, true).Result;
