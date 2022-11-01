@@ -183,7 +183,6 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
             addNewMessagetoChatwindow($('#message-body-input').val());
         }
-
     });
     var addNewMessagetoChatwindow = async function (input) {
 
@@ -209,12 +208,11 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
                 else {
-
-                    if ($editor[0].innerHTML != '')
+                    var result = filterTextMessage(".emojionearea-editor")
+                    if (result != '')
 
                         addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
-
             }
             else
                 activeChannel?.typing();
@@ -227,7 +225,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     //bulk update msg input box
     $chatEditorArea[2].emojioneArea.off("keydown");
     $chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
-        debugger;
+
         if (event.keyCode === 13 && !event.shiftKey) {
 
             event.preventDefault();
@@ -241,7 +239,6 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
                         addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
-
             }
             else
                 activeChannel?.typing();
@@ -319,9 +316,9 @@ $btnSendMessage.unbind().click(function () {
     }
 });
 
-// Function which were called onclick of Apply. 
+// Function which were called onclick of Apply.
 var bulkActionReconcilation = function () {
-    BulkActionReconcilation(CommentText)
+     BulkActionReconcilation(CommentText)
 }
 
 var down = {};
@@ -1122,19 +1119,19 @@ var addMentionPlugin = function () {
     }
     $chatEditorArea = [$(".chat-editor-area .emojiarea")[0]];
 
-   
 
-        $("#message-body-input")[0].parentElement.id = "message-body-div";
-        $messageBodyInput.mentionsInput({
-            onDataRequest: function (mode, query, callback) {
-             
-                getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
-                    callback.call(this, responseData);
-                });
-            },
-            onCaret: true
-        });
-    
+
+    $("#message-body-input")[0].parentElement.id = "message-body-div";
+    $messageBodyInput.mentionsInput({
+        onDataRequest: function (mode, query, callback) {
+
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
+                callback.call(this, responseData);
+            });
+        },
+        onCaret: true
+    });
+
 }
 
 
@@ -1152,11 +1149,11 @@ var addBulkMentionPlugin = function () {
 
     $("#message-body-inputBulk")[0].parentElement.id = "message-body-div";
     var bulk = $("#message-body-inputBulk");
-    
+
     $chatEditorArea = [$(".chat-editor-area .emojiarea")[2]];
-   bulk.mentionsInput({
+    bulk.mentionsInput({
         onDataRequest: function (mode, query, callback) {
-        
+
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
                 callback.call(this, responseData);
             });

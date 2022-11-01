@@ -146,7 +146,7 @@ $(function () {
 
                 var fileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
                 if (fileName.length > 50) {
-                    done("Filename exceeds 50 characters!");
+                    done("File name exceeds 50 characters!");
                 }
                 else { done(); }
             },
@@ -257,7 +257,7 @@ $(function () {
       
         let newFileName = $('#txtNewFileName').val();
         if (newFileName.length > 50) {
-            ShowAlertBoxError("Error", "Filename exceeds 50 characters!");
+            ShowAlertBoxError("Error", "File name exceeds 50 characters!");
             return;
         }
 
@@ -440,31 +440,27 @@ var getReports = function (agencyId, year, period) {
 
 var imageAlign = function () {
 
-    setTimeout(() => {
+    $(document).ready(function () {
+
+        setTimeout(function () {
+            $(window).trigger("resize")
+        }, 600)
 
         var iframe = $(".fancybox-iframe")[0].contentWindow.document;
         $(iframe).ready(function () {
 
             setTimeout(() => {
-                // Getting the body of the iframe and applying the css on it.
-                var body = $($(".fancybox-iframe")[0].contentWindow.document).find("body")[0];
-                $(body).css({ "display": "flex", "width": "100%", "height": "100%" })
 
-                // Finding the 'img' element within iframe and appending it in iDiv as child.
+                var body = $($(".fancybox-iframe")[0].contentWindow.document).find("body")[0];
+                $(body).css({ "display": "", "width": "100%", "height": "auto" })
+
                 var image = $($(".fancybox-iframe")[0].contentWindow.document).find("img")[0];
                 $(image).css({ "-webkit-user-select": "none", "width": "auto", "height": "auto", "margin": "auto" })
 
-                // Creating a Div and appending it as a child in iframe body.
-                var iDiv = document.createElement('div');
-                $(".fancybox-iframe").contents().find("body")[0].appendChild(iDiv);
-                $(iDiv).css({ "margin": "auto", "display": "flex", "width": "auto", "height": "auto" })
-
-                // Appending the image as a child in iDiv.
-                iDiv.appendChild(image);
-            }, 600)
+            }, 700)
         });
+    })
 
-    }, 10);
 }
 
 var addContextMenu = function () {
