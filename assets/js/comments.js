@@ -171,6 +171,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         //hideChatContentLoader();
     });
 
+
     $btnSendMessage.unbind().click(function () {
 
         var result = filterTextMessage(".emojionearea-editor")
@@ -182,32 +183,38 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
             addNewMessagetoChatwindow($('#message-body-input').val());
         }
+
     });
     var addNewMessagetoChatwindow = async function (input) {
 
+        if (input == "") {
+            return;
+        }
         addNewComment(input);
         $('#message-body-input').empty();
         $('.emojionearea-editor').empty();
         $('#message-body-input').val("");
         $('.emojionearea-editor').val("");
+
+
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+
         if (event.keyCode === 13 && !event.shiftKey) {
 
             event.preventDefault();
             if (event.type == "keydown") {
-
                 if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
                 else {
 
                     if ($editor[0].innerHTML != '')
-                        
+
                         addNewMessagetoChatwindow($editor[0].innerHTML);
-                    }
                 }
+
             }
             else
                 activeChannel?.typing();
@@ -220,7 +227,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     //bulk update msg input box
     $chatEditorArea[2].emojioneArea.off("keydown");
     $chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
-       
+        debugger;
         if (event.keyCode === 13 && !event.shiftKey) {
 
             event.preventDefault();
@@ -292,7 +299,6 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
 $channelMessagesBulk = $("#channel-messagesBulk");
 
-// Creating a Global array which will store the mess.
 var CommentText = [];
 var $btnSendMessage;
 
@@ -366,8 +372,6 @@ var addNewMessagetoChatwindow = async function (input) {
     if (input == "" || input == "<div><br></div><div><br></div>" || input == '<div><br></div><div><br></div><div><br></div>') {
         return false;
     }
-
-
     addNewCommentBulk(input);
     setTimeout(function () {
         $('#message-body-inputBulk').empty();
