@@ -151,11 +151,11 @@
                         <td class="align-middle">
                             @if (item.AppTokenStatus != null && item.AppTokenStatus == "SUCCESS")
                             {
-                                <span class="badge badge-pill badge-success"> @(item.AppTokenStatus == "SUCCESS" ? "Active" : "Expaired")</span>
+                                <span class="badge badge-pill badge-success"> @(item.AppTokenStatus == "SUCCESS" ? "Active" : "Expired")</span>
                             }
                             else if (item.AppTokenStatus != null && item.AppTokenStatus == "ERROR")
                             {
-                                <span class="badge badge-pill badge-secondary"> @(item.AppTokenStatus == "ERROR" ? "Expaired" : "Active")</span>
+                                <span class="badge badge-pill badge-secondary"> @(item.AppTokenStatus == "ERROR" ? "Expired" : "Active")</span>
                             }
                             else
                             {
