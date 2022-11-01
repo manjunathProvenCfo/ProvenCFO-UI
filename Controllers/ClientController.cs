@@ -241,22 +241,26 @@
                      
                             TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
                             Clientvm.XeroID = client.XeroID;
-                            if (client.ThirdPartyAccountingApp_ref == 1)
+                            if (client.APIScope != null)
                             {
-                                if (client.APIScope.Split(' ').Length <2)
+                                if (client.ThirdPartyAccountingApp_ref == 1)
                                 {
-                                    Clientvm.APIScope = client.APIScope; 
+                                    if (client.APIScope.Split(' ').Length < 2)
+                                    {
+                                        Clientvm.APIScope = client.APIScope;
 
+                                    }
+                                    else
+                                    {
+
+                                        Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                    }
                                 }
-                                else { 
-                                
-                                Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                else
+                                {
+                                    Clientvm.APIScope = client.APIScope;
                                 }
-                            }
-                            else
-                            {
-                                Clientvm.APIScope = client.APIScope;
-                            }
+                            }                            
                             Clientvm.APIClientID = client.APIClientID;
                             Clientvm.APIClientSecret = client.APIClientSecret;
                             Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
@@ -279,7 +283,7 @@
                             }
                             Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
                             Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
-                            Clientvm.XeroScopeArray = Clientvm.APIScope.Split(' ');
+                            Clientvm.XeroScopeArray = Clientvm.APIScope != null ? Clientvm.APIScope.Split(' '): new String[0];
 
                             return View("CreateClient", Clientvm);
                         }
