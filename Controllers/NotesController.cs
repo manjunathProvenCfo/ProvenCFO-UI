@@ -232,7 +232,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Exist";
+                            ViewBag.ErrorMessage = "Label is required!";
                             return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
 
