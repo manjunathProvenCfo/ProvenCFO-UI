@@ -138,6 +138,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "Email or Password not correct.";
+                    ViewBag.Sucess = null;
                     log.Error(Utltity.Log4NetExceptionLog(ex));
                 }
             }
