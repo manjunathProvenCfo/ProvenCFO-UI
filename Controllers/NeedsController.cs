@@ -153,7 +153,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Exist";
+                            ViewBag.ErrorMessage = "Label is required !";
                             return Json(new { id = Task.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
                     }
