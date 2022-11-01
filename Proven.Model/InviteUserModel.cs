@@ -69,9 +69,7 @@ namespace Proven.Model
         [RegularExpression(@"((http(s?)://)*([a-zA-Z0-9\-])*\.|[linkedin])[linkedin/~\-]+\.[a-zA-Z0-9/~\-_,&=\?\.;]+[^\.,\s<]",
                             ErrorMessage = "Please Enter a valid LinkedIn profile URL.")]
         public string LinkedInProfile { get; set; }
-
-
-
+        public string ProfileImage { get; set; }
     }
     public class InviteUserMainModel
     {

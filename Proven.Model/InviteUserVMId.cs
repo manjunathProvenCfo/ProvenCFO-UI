@@ -40,7 +40,7 @@ namespace Proven.Model
         public string StaffId { get; set; }
 
         public string LinkedInProfile { get; set; }
-
+        public string ProfileImage { get; set; }
     }
     public class InviteUserVMMainModel
     {

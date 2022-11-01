@@ -491,7 +491,7 @@ namespace ProvenCfoUI.Controllers
                 using (InvitationServices obj = new InvitationServices())
                 {
                     using (RoleService objrole = new RoleService())
-                    {
+                    { 
                         using (SetupService objJob = new SetupService())
                         {
                             InviteUserModel InvitationUsers = new InviteUserModel();
@@ -510,7 +510,7 @@ namespace ProvenCfoUI.Controllers
                             InvitationUsers.Email = result.Email;
                             InvitationUsers.UserId = result.UserId;
                             InvitationUsers.LinkedInProfile = result.LinkedInProfile;
-
+                            InvitationUsers.ProfileImage = result.ProfileImage;
 
                             return View("EditInvitation", InvitationUsers);
                         }
@@ -618,14 +618,31 @@ namespace ProvenCfoUI.Controllers
                         {
                             using (SetupService objJob = new SetupService())
                             {
+                                string path = "";
+                                path = Server.MapPath("~/Upload/Profile/");
+
+                                var file = Request.Files[0];
+
+                                var profileImage = file.FileName;
+
+                                if (!Directory.Exists(path)) {
+                                    Directory.CreateDirectory(path);
+                                }
+                                if (file.FileName != "")
+                                {
+                                    string PathfileName = Path.Combine(path, file.FileName);
+                                    file.SaveAs(PathfileName);
+                                }
+
                                 var LoginUserid = Session["UserId"].ToString();
-                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile);
+                                var result = obj.UpdateInvite(Convert.ToString(Invite.Id), Invite.FirstName, Invite.LastName, Invite.RoleId, Convert.ToString(Invite.JobId), Convert.ToString(Invite.IsActive), Invite.UserId, LoginUserid, Invite.LinkedInProfile, file.FileName != "" ? Invite.ProfileImage = "../Upload/Profile/" + file.FileName : Invite.ProfileImage);
+
                                 result.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                                 result.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
                                 if (result == null)
                                     ViewBag.ErrorMessage = "";
                                 ViewBag.Message = "Successfull";
-                                return RedirectToAction("InviteStaffList");
+                                return Json(new  { msg="Updated" ,status=200});
                             }
                         }
                     }

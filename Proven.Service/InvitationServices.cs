@@ -220,7 +220,7 @@ namespace Proven.Service
         }
 
 
-        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile)
+        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile, string ProfileImage)
 
         {
             var form = new Dictionary<string, string>
@@ -233,7 +233,8 @@ namespace Proven.Service
                 {"IsActive",status.ToString()},
                 {"UserId",UserID },
                 {"ModifiedBy",LoginUserid},
-                {"LinkedInProfile",LinkedInProfile}
+                {"LinkedInProfile",LinkedInProfile},
+                {"ProfileImage", ProfileImage}
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/UpdateUserInvite", form).Result;

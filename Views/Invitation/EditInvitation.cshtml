@@ -33,21 +33,19 @@
 
     <div class="card">
         <div class="card-body overflow-hidden">
+
             @if (@ViewBag.Message != null)
             {
-
                 <div class="alert alert-success">
                     <p class="mb-0">@ViewBag.Message</p>
-
                 </div>
             }
-           
 
             <h3 class="font-weight-normal fs-2 fs-md-3 mb-0 border-bottom pb-2">Edit Staff User </h3>
 
             <div class="row mt-4">
                 <div class="col-12">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data" action="#" id="updateStaff-form">
 
                         <div class="row form-group custom-form-width">
                             <div class="col-12 col-lg-8 col-xl-5">
@@ -84,7 +82,7 @@
                                     </div>
                                 </div>
 
-                               
+
 
 
                                 <div class="row align-items-center form-group">
@@ -119,14 +117,14 @@
                                 </div>
 
                                 @*<div class="row align-items-center form-group">
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0">Status</label>
-                                    </div>
-                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                        @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "1" }, new SelectListItem { Text = "Inactive", Value = "0" } }, new { @class = "form-control text-box single-line" })
-                                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>*@
+                                <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                    <label for="split-login-email" class="mb-0">Status</label>
+                                </div>
+                                <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                    @Html.DropDownListFor(model => model.IsActive, new List<SelectListItem>() { new SelectListItem { Text = "Active", Value = "1" }, new SelectListItem { Text = "Inactive", Value = "0" } }, new { @class = "form-control text-box single-line" })
+                                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
 
 
                                 <div class="row form-group">
@@ -145,6 +143,19 @@
 
 
                             </div>
+
+                            <div class="col-6 col-lg-4 col-xl-5">
+
+                                <div class="center avatar avatar-5xl shadow-sm img-thumbnail rounded-circle" style="margin: 0 auto; display: block">
+                                    <div class="h-100 w-100 rounded-circle overflow-hidden">
+                                        <img src="@(!string.IsNullOrEmpty(Model.ProfileImage) ? Model.ProfileImage : "..\\assets\\img\\team\\default-logo.png")" id="previewImage" width="200" alt="" data-dz-thumbnail>
+                                        <input class="d-none" id="profile-image" name="profile_image" type="file" hidden />
+                                        @*@Html.EditorFor(model => model.ProfileImage, new { htmlAttributes = new { @class = "form-control d-non", @type ="file", @id = "profile-image", @style = "display: none" } })*@
+                                        <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span class="bg-holder overlay overlay-0"></span><span class="z-index-1 text-white text-center fs--1"><span class="fas fa-camera"></span><span class="d-block">Update</span></span></label>
+                                    </div>
+                                </div>
+                                <label style="margin-top: 1rem; display: block; text-align: center;">Profile Image</label>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -161,6 +172,72 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script>
         $(document).ready(function () {
+            $("form").on("submit", function (e) {
+
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                var file = formData.get("profile_image");
+                formData.append("profile_image", file);
+
+                fetch(document.location.href, {
+                    method: "post",
+                    body: formData
+                }).then(res => res.json()).then(
+                    
+                    data => {
+                        if (data.status == 200) {
+                            UpdateAlert();
+                        }
+                            
+                    }
+                );
+            })
+
+            function UpdateAlert() {
+
+                sweetAlert
+                    ({
+                        title: "Updated!",
+                        text: "Staff user invitation has been update successfully!.",
+                        type: "success"
+                    },
+                        function () {
+                            window.location.href = '/Invitation/InviteStaffList'
+                        });
+            }
+
+
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#previewImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#profile-image").change(function () {
+
+                var file = $("#profile-image").val();
+                if (file != '') {
+
+                    var ext = $('#profile-image').val().split('.').pop().toLowerCase();
+                    if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                        ShowAlertBoxWarning("Error", "Invalid file extension");
+                        return;
+                    }
+                    if (this.files[0].size > 4194304) {
+                        ShowAlertBoxWarning("Error", "Please upload file less than 4MB.");
+                        return;
+                    }
+                }
+                readURL(this);
+            });
+
             HidelottieLoader();
         });
     </script>
