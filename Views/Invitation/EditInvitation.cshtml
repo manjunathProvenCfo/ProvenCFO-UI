@@ -187,26 +187,16 @@
                     
                     data => {
                         if (data.status == 200) {
-                            UpdateAlert();
+                            ShowAlertBoxSuccess("Success", "Staff user has been updated successfully!", function () {
+                                window.location.href = '/Invitation/InviteStaffList'
+                            });
                         }
-                            
+                        else {
+                            ShowAlertBoxError("Error", "Something went wrong while updating the staff user!")
+                        }
                     }
                 );
             })
-
-            function UpdateAlert() {
-
-                sweetAlert
-                    ({
-                        title: "Updated!",
-                        text: "Staff user invitation has been update successfully!.",
-                        type: "success"
-                    },
-                        function () {
-                            window.location.href = '/Invitation/InviteStaffList'
-                        });
-            }
-
 
             function readURL(input) {
 
@@ -231,7 +221,7 @@
                         return;
                     }
                     if (this.files[0].size > 4194304) {
-                        ShowAlertBoxWarning("Error", "Please upload file less than 4MB.");
+                        ShowAlertBoxWarning("Error", "Please upload file less than 4 MB.");
                         return;
                     }
                 }
