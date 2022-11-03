@@ -19,7 +19,7 @@ namespace Proven.Service
     public class XeroService<T, V> :  AccountingAppFatory<T, V>, IDisposable
     {
         private bool isDisposed = false;
-        private const string Vurl = @"https://provencfoqa.codewarriorsllc.com/AgencyService/AgencyHome";
+        private const string Vurl =  @"https://appqa.provencfo.com/Integration/Callback";
         string _ClientId;
         string _ClientSecret;
         string _scopes;
@@ -33,10 +33,10 @@ namespace Proven.Service
             _ClientId = ClientId;
             _ClientSecret = ClientSecret;
             _scopes = scopes;
-            _callbackurl = CallbackUrl;
+            _callbackurl = CallbackUrl + "Integration/Callback";
             xeroConfig = new XeroConfiguration();
             xeroConfig.AppName = AppName;
-            xeroConfig.CallbackUri = new Uri(Vurl);
+            xeroConfig.CallbackUri = new Uri(CallbackUrl == ""?Vurl : _callbackurl);
             xeroConfig.ClientId = _ClientId;
             xeroConfig.ClientSecret = _ClientSecret;
             xeroConfig.Scope = _scopes;
@@ -180,6 +180,11 @@ namespace Proven.Service
             return ProdPostAsync<ReturnModel, V>("Xero/UpdateToken", tokenInfoVM).Result;
 
         }
+        public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        {
+            return ProdPostAsync<ReturnAsyncModel, V>("Xero/UpdateAccessToken", tokenInfoVM).Result;
+
+        }
 
         public override async Task<T> ConnnectApp(V Token)
         {
@@ -313,5 +318,13 @@ namespace Proven.Service
         {
             throw new NotImplementedException();
         }
+
+        public override string GenerateAuthorizationPromptUrl()
+        {
+            var clientState = Guid.NewGuid().ToString();            
+            return XeroClient.BuildLoginUri(clientState);
+        }
+
+        
     }
 }

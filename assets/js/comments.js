@@ -125,6 +125,13 @@ var loadcommmentconetents = async function (channelUniqueNameGuid) {
         hideChatContentLoader();
     });
 }
+function filterTextMessage(e) {
+    var chatMessage = Array.prototype.filter.bind($(e));
+
+    var textMessage = chatMessage(chat => chat.innerText != "")[0].innerText;
+    const result = textMessage.replace(/[\r\n]/gm, '');
+    return result;
+}
 var loadCommentsPage = async function (channelUniqueNameGuid) {
 
     showChatContentLoader();
@@ -167,8 +174,15 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
     $btnSendMessage.unbind().click(function () {
 
-        addNewMessagetoChatwindow($('#message-body-input').val());
+        var result = filterTextMessage(".emojionearea-editor")
+        if (result == '') {
+            $('#send-message').attr("disable", true);
+        } else {
 
+            $('#send-message').attr("disable", false);
+
+            addNewMessagetoChatwindow($('#message-body-input').val());
+        }
     });
     var addNewMessagetoChatwindow = async function (input) {
 
@@ -194,12 +208,37 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
                     $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
                 }
                 else {
+                    var result = filterTextMessage(".emojionearea-editor")
+                    if (result != '')
+
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+
+
+    //bulk update msg input box
+    $chatEditorArea[2].emojioneArea.off("keydown");
+    $chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
+
+        if (event.keyCode === 13 && !event.shiftKey) {
+
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
 
                     if ($editor[0].innerHTML != '')
 
                         addNewMessagetoChatwindow($editor[0].innerHTML);
                 }
-
             }
             else
                 activeChannel?.typing();
@@ -257,25 +296,29 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
 
 $channelMessagesBulk = $("#channel-messagesBulk");
 
-// Creating a Global array which store the value of the mess.
 var CommentText = [];
 var $btnSendMessage;
 
 $btnSendMessage = $("#bulksend-message");
 $btnSendMessage.unbind().click(function () {
 
-    // Getting the value of inputArea  befor send them and pussing it into the array.
-    var message = $("#message-body-inputBulk").val();
-    CommentText.push(message);
+    var result = filterTextMessage(".emojionearea-editor");
+    if (result == '') {
+        $('#bulksend-message').attr("disable", true);
+    } else {
 
-    addNewMessagetoChatwindow($('#message-body-inputBulk').val());
+        $('#bulksend-message').attr("disable", false);
+
+        var message = $("#message-body-inputBulk").val();
+        CommentText.push(message);
+
+        addNewMessagetoChatwindow($('#message-body-inputBulk').val());
+    }
 });
 
-// Creating the function which were called onclick of Apply.
+// Function which were called onclick of Apply.
 var bulkActionReconcilation = function () {
-
-    // Calling the function of which do update the chat and sending the CommentText array as an parameter. 
-    BulkActionReconcilation(CommentText)
+     BulkActionReconcilation(CommentText)
 }
 
 var down = {};
@@ -292,7 +335,6 @@ $($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
                     if (loop(input => input.innerText != '').length > 0 && loop(input => input.innerText != '')[0].innerText != undefined) {
                         val = loop(input => input.innerText != '')[0].innerText;
                     }
-
                 }
                 if (val.trim() != '') {
                     alert(val);
@@ -327,8 +369,6 @@ var addNewMessagetoChatwindow = async function (input) {
     if (input == "" || input == "<div><br></div><div><br></div>" || input == '<div><br></div><div><br></div><div><br></div>') {
         return false;
     }
-
-
     addNewCommentBulk(input);
     setTimeout(function () {
         $('#message-body-inputBulk').empty();
@@ -336,7 +376,6 @@ var addNewMessagetoChatwindow = async function (input) {
         $('#message-body-inputBulk').val("");
         $('.emojionearea-editor').val("");
     }, 500);
-
 }
 setTimeout(addMentionPlugin, 3000);
 
@@ -903,6 +942,10 @@ var handleParticipantClick = async function (event) {
         $messageBodyInput.val('').focus();
         $messageBodyInput.trigger('change');
 
+        $("#message-body-inputBulk").val('').focus();
+        $("#message-body-inputBulk").trigger('change');
+
+
         if (channel.IsPrivate === true) {
             $channelParticipantEmail.text(participant.Email);
             $channelReconciliationDescription.html("");
@@ -1069,12 +1112,48 @@ function AgencyDropdownPartialViewChange() {
 
 
 var addMentionPlugin = function () {
+
     if (chat.type === 0) {
         $(".mentions-autocomplete-list").remove();
         return;
     }
+    $chatEditorArea = [$(".chat-editor-area .emojiarea")[0]];
+
+
+
+    $("#message-body-input")[0].parentElement.id = "message-body-div";
     $messageBodyInput.mentionsInput({
         onDataRequest: function (mode, query, callback) {
+
+            getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
+                callback.call(this, responseData);
+            });
+        },
+        onCaret: true
+    });
+
+}
+
+
+
+
+var addBulkMentionPlugin = function () {
+
+    if (chat.type === 0) {
+        $(".mentions-autocomplete-list").remove();
+        return;
+    }
+
+
+    Array.prototype.forEach.bind($("#message-body-div"))(x => x.id = "mention")
+
+    $("#message-body-inputBulk")[0].parentElement.id = "message-body-div";
+    var bulk = $("#message-body-inputBulk");
+
+    $chatEditorArea = [$(".chat-editor-area .emojiarea")[2]];
+    bulk.mentionsInput({
+        onDataRequest: function (mode, query, callback) {
+
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
                 callback.call(this, responseData);
             });

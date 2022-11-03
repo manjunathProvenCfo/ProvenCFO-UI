@@ -1012,20 +1012,12 @@ function addTagOnView(TagNames) {
     }
 }
 function addTag(className, TagName, Isview = false) {
+
     var TaskId = gCurrentViewTaskId;
     var tags = $('#divTag span');
     $('#divTagView ul').empty();
     $('#divTag ul').empty();
-    var IsNotDuplicate = false
-    //$.each(tags, function (key, value) {
-    //    if (value != undefined && value.innerText == TagName) {
-    //        IsNotDuplicate = true;
-    //    }
-    //});
-    //if (IsNotDuplicate == false) {
-    //$('#divTag').prepend('<span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true">' + TagName + '</span> <div class="dropdown-menu dropdown-md px-0 py-3 show" style="position: absolute; transform: translate3d(0px, 28px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start"><span class="input-group-btn"><a class="dropdown-item" href="#!"></a><div class="dropdown-item text-danger" onclick="EnterComments();">Remove Member</div></span></div>');
-
-    // }
+    
     if (TaskId != null && TaskId !== "" && Isview == false) {
         $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
         UpdateLableForKanbanTask(TaskId, TagName);

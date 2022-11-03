@@ -7,6 +7,7 @@ using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
@@ -214,8 +215,11 @@ namespace ProvenCfoUI.Controllers
                         Notes.CreatedBy = LoginUserid;
                         Notes.IsDeleted = false;
                     }
+
                     using (NotesService objNotes = new NotesService())
                     {
+
+                       
                         var result = objNotes.CreateNewNotes(Notes);
                         if (result.Status == true)
                         {
@@ -224,7 +228,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Exist";
+                            ViewBag.ErrorMessage = "Label is required!";
                             return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
 
@@ -232,7 +236,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Exist";
+                    ViewBag.ErrorMessage = "Label is required!";
                     return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = "Notes title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
                 }
             }

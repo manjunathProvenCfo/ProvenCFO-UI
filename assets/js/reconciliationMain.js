@@ -298,10 +298,11 @@ $(document).ready(function () {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
         }
         else {
-           
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+            setTimeout(_=>addBulkMentionPlugin(),1000);
         }
     });
 

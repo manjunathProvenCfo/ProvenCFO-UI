@@ -138,6 +138,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "Email or Password not correct.";
+                    ViewBag.Sucess = null;
                     log.Error(Utltity.Log4NetExceptionLog(ex));
                 }
             }
@@ -206,6 +207,30 @@ namespace ProvenCfoUI.Controllers
             }
             return View();
         }
+
+        private bool CheckUserRegistered(string email)
+        {
+            bool status = false;
+            using (InvitationServices obj = new InvitationServices())
+            {
+
+                var AgencyUserInvitation = obj.GetAgencyUserByEmailInvitations(email);
+                if (AgencyUserInvitation != null)
+                {
+                    var registerd = (from invite in AgencyUserInvitation
+                                     where invite.IsRegistered == 1
+                                     select invite).ToList();
+                    if (registerd != null)
+                    {
+                        if (registerd.Count() > 0)
+                        {
+                            status = true;
+                        }
+                    }
+                }
+            }
+            return status;
+        }
         [HttpGet]
         public ActionResult RegisterAgencyUser(int id, string ActiveCode, int AgencyId)
         {
@@ -231,7 +256,6 @@ namespace ProvenCfoUI.Controllers
                     {
                         ViewBag.ErrorMessage = "Sorry, the Invitation in this link is expired " +
                                      "Please contact the administrators of the ProvenCFO Management Application to recive a new application";
-                        //ViewBag.ErrorMessage = "The agency user invitation link has been expired..!";
                         return PartialView("_UserAcceptAgencyInvite");
                     }
                     else if (invitation != null && invitation.IsActive == 1 && invitation.IsRegistered == 1)
@@ -255,18 +279,30 @@ namespace ProvenCfoUI.Controllers
 
                             var userdetail = objAccount.GetUserById(id).resultData;
 
-                            //var isRegisterd = obj.IsInviteRegisterd(userdetail.Email).resultData;
-                            //if (!isRegisterd)
-                            //{
-                            //    TempData["InviteType"] = "InviteRegisterd";
-                            //    return PartialView("InvalidInvite");
-                            //}
+                       
+
                             model.firstname = userdetail.FirstName;
                             model.email = userdetail.Email;
                             model.lastname = userdetail.LastName;
                             model.UserType = 2;
                             model.AgencyID = AgencyId;
+
+
+
+                            if (CheckUserRegistered(userdetail.Email))
+                            {
+                                var result = obj.ExistingAgencyUserInvitation(Convert.ToString(invitation.Id), Convert.ToString(AgencyId), Convert.ToString(ActiveCode));
+
+                                if (result.resultData == true)
+                                {
+                                    ViewBag.Sucess = "User added to new agency successfully. Please click on the below link to log in";
+
+                                    return View("_Userregisteredsuccessfully");
+                                }
+                            }
+
                         }
+
                         return View("Register", model);
                     }
                 }
@@ -298,6 +334,9 @@ namespace ProvenCfoUI.Controllers
                 try
                 {
                     AccountService obj = new AccountService();
+
+
+
                     var result = obj.Register(registerVM.email, registerVM.passwordhash, registerVM.confirmpassword, registerVM.firstname, registerVM.lastname, registerVM.UserType, registerVM.AgencyID);
                     if (result == null)
                         ViewBag.ErrorMessage = "";

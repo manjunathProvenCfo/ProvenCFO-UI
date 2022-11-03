@@ -69,9 +69,7 @@ namespace Proven.Model
         [RegularExpression(@"((http(s?)://)*([a-zA-Z0-9\-])*\.|[linkedin])[linkedin/~\-]+\.[a-zA-Z0-9/~\-_,&=\?\.;]+[^\.,\s<]",
                             ErrorMessage = "Please Enter a valid LinkedIn profile URL.")]
         public string LinkedInProfile { get; set; }
-
-
-
+        public string ProfileImage { get; set; }
     }
     public class InviteUserMainModel
     {
@@ -117,5 +115,29 @@ namespace Proven.Model
     }
 
 
+
+    public class ResultAsyncData
+    {
+        public bool result { get; set; }
+        public int id { get; set; }
+        public object exception { get; set; }
+        public int status { get; set; }
+        public bool isCanceled { get; set; }
+        public bool isCompleted { get; set; }
+        public bool isCompletedSuccessfully { get; set; }
+        public int creationOptions { get; set; }
+        public object asyncState { get; set; }
+        public bool isFaulted { get; set; }
+    }
+
+    public class ReturnAsyncModel
+    {
+        public bool status { get; set; }
+        public int statusCode { get; set; }
+        public ResultAsyncData resultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+    }
 
 }

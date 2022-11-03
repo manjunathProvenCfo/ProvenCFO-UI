@@ -78,8 +78,8 @@
     <Reference Include="Flurl, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Flurl.3.0.1\lib\net461\Flurl.dll</HintPath>
     </Reference>
-    <Reference Include="IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e7877f4675df049f, processorArchitecture=MSIL">
-      <HintPath>packages\IdentityModel.4.0.0\lib\net461\IdentityModel.dll</HintPath>
+    <Reference Include="IdentityModel, Version=5.1.0.0, Culture=neutral, PublicKeyToken=e7877f4675df049f, processorArchitecture=MSIL">
+      <HintPath>packages\IdentityModel.5.1.0\lib\net472\IdentityModel.dll</HintPath>
     </Reference>
     <Reference Include="Intuit.Ipp.Core, Version=14.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\IppDotNetSdkForQuickBooksApiV3.14.6.3\lib\net472\Intuit.Ipp.Core.dll</HintPath>
@@ -221,6 +221,15 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.9.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Extensions.Primitives.3.1.9\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.10.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.IdentityModel.JsonWebTokens.6.10.2\lib\net472\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=6.10.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.IdentityModel.Logging.6.10.2\lib\net472\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.10.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.IdentityModel.Tokens.6.10.2\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
     </Reference>
@@ -290,6 +299,9 @@
     </Reference>
     <Reference Include="System.Diagnostics.Tracing" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.10.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\System.IdentityModel.Tokens.Jwt.6.10.2\lib\net472\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -467,8 +479,8 @@
     <Reference Include="Xero.NetStandard.OAuth2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Xero.NetStandard.OAuth2.3.19.0\lib\netstandard2.0\Xero.NetStandard.OAuth2.dll</HintPath>
     </Reference>
-    <Reference Include="Xero.NetStandard.OAuth2Client, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Xero.NetStandard.OAuth2Client.1.5.0\lib\netstandard2.0\Xero.NetStandard.OAuth2Client.dll</HintPath>
+    <Reference Include="Xero.NetStandard.OAuth2Client, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Xero.NetStandard.OAuth2Client.1.6.0\lib\netstandard2.0\Xero.NetStandard.OAuth2Client.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

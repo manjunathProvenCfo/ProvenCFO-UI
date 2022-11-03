@@ -220,7 +220,7 @@ namespace Proven.Service
         }
 
 
-        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile)
+        public InviteUserModel UpdateInvite(string id, string firstname, string lastname, string rolename, string jobtitle, string status, string UserID, string LoginUserid, string LinkedInProfile, string ProfileImage)
 
         {
             var form = new Dictionary<string, string>
@@ -233,7 +233,8 @@ namespace Proven.Service
                 {"IsActive",status.ToString()},
                 {"UserId",UserID },
                 {"ModifiedBy",LoginUserid},
-                {"LinkedInProfile",LinkedInProfile}
+                {"LinkedInProfile",LinkedInProfile},
+                {"ProfileImage", ProfileImage}
            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<InviteUserModel, Dictionary<string, string>>("Invitation/UpdateUserInvite", form).Result;
@@ -252,6 +253,13 @@ namespace Proven.Service
             //}
         }
 
+
+        public List<InviteUserVMId> GetAgencyUserByEmailInvitations(string email)
+        {
+             var result =  GetAsync<List<InviteUserVMId>>("Invitation/GetAgencyUserByEmailInvitations?email=" + email, true).Result;
+
+            return result;
+        }
         public InviteUserVMId GetInvitationForVlidation(int InvitationId, int AgencyId, Guid ActivationCode)
         {
             return GetAsync<InviteUserVMId>("Invitation/GetInvitationForVlidation?InvitationId=" + InvitationId + "&AgencyId=" + AgencyId + "&ActivationCode=" + ActivationCode, true).Result;

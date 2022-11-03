@@ -769,6 +769,19 @@
                 }
             });
     }
+    var LoadAuthenticationWindow = function (type) {
+        var pClient = {
+            Id: "@Model.Id",
+            ThirdPartyAccountingApp_ref: type
+        }
+        getAjaxSync(`/Integration/GenerateAuthorizationPromptUrl`, pClient, function (response) {
+            if (response.Status === "Success") {
+                window.location.href = response.url;
+            }
+
+        });
+
+    }
 
 
     const totalScopsXero = [
@@ -808,7 +821,9 @@
         { data: "payroll.timesheets.read", select: false },
 
     ];
-        $(document).ready(function () {
+    $(document).ready(function () {
+        var IsTokenUpdated = "@TempData["IsTokenUpdated"]";
+        
             HidelottieLoader();
 
             $(".readonly")[0].setAttribute("readonly", "");
@@ -882,7 +897,7 @@
                     if (jQuery.inArray(i.data, selectedResult) !== -1) {
                         i.select = true;
                     }
-                })                
+                })
                 quickBooksScops.map(ele => $(".qbookselect").append(new Option(ele.data, ele.data, ele.select, ele.select)));
 
                }
@@ -950,7 +965,10 @@
                 });
             }
 
-
+            if (IsTokenUpdated != null && IsTokenUpdated === 'true') {
+                ShowAlertBoxSuccess("Success", "Authentication succesfull!");
+                IsTokenUpdated = 'false';
+            }
 
             //Toggle data sync option.only one need to be selected at one time.
             ToggleDataSyncOption();
@@ -989,7 +1007,7 @@
                         _toggle_state[1].automation = false;
                         $(_toggle_state[1].ele).click();
 
-                     
+
                     } else {
 
                         _toggle_state[1].automation = true;
