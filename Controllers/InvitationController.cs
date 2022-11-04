@@ -484,7 +484,8 @@ namespace ProvenCfoUI.Controllers
 
 
         [CheckSession]
-        public ActionResult EditInvitation()
+        [Route("Invitation/EditInvitation/{id}")]
+        public ActionResult EditInvitation(int id=0)
         {
             try
             {
@@ -495,7 +496,14 @@ namespace ProvenCfoUI.Controllers
                         using (SetupService objJob = new SetupService())
                         {
                             InviteUserModel InvitationUsers = new InviteUserModel();
-                            var result = obj.GetInvitationById(Convert.ToInt32(TempData["SelectediD"]));
+                            
+                            
+                            int selectionId = id;
+                           
+                            var result = obj.GetInvitationById(selectionId);
+                            
+                            
+                            
                             //InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData;
                             InvitationUsers.Rolelist = objrole.GetAllRoleInvitation().ResultData.Where(x => x.IsVisible == true && x.UserType == 1).ToList();
                             InvitationUsers.JobTitlelist = objJob.GetJobTitleListInvitation().ResultData;
