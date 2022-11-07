@@ -34,9 +34,18 @@
 
         @*The Setting Ends here*@
 
+        <li style="display: block; font-size: 0.8rem">
+            <span style="display: block;">
+                Welcome <b>@Session["LogedinUserName"]</b>
+            </span>
+            <span style="display: block;">
+                Logged as <b>@Session["LoggedInUserRole"]</b>
+            </span>
+        </li>
+
         @*Here I am Attaching the line..*@
         <li class="nav-item dropdown dropdown-on-hover">
-            <a class="nav-link notification-indicator notification-indicator-primary px-0 icon-indicator" id="navbarDropdownNotification" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell fs-4" data-fa-transform="shrink-6"></span></a>
+            <a class="nav-link notification-indicator notification-indicator-primary px-0 icon-indicator" style="margin-left: 0.5rem;" id="navbarDropdownNotification" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell fs-4" data-fa-transform="shrink-6"></span></a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-card" aria-labelledby="navbarDropdownNotification">
                 <div class="card card-notification shadow-none" style="max-width: 20rem">
                     <div class="card-header">
