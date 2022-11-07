@@ -101,6 +101,9 @@ namespace ProvenCfoUI.Controllers
                             var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
                             Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
 
+                            Session["LogedinUserName"] = result.resultData.FirstName + " " + result.resultData.LastName;
+                            Session["LoggedInUserRole"] = result.resultData.RoleName;
+
                             using (ClientService objClient = new ClientService())
                             {
                                 var client = objClient.GetClientById(Convert.ToInt32(objUserPref.FirstOrDefault().PreferanceValue));

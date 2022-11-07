@@ -24,9 +24,8 @@ namespace Proven.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ActivationCode { get; set; }
-
         public int UserType { get; set; }
-
+        public string RoleName { get; set; }
     }
 
     public class ResetPassword
