@@ -51,7 +51,8 @@ namespace ProvenCfoUI.Controllers
                         }
                         var NoteSummaryData = objNotes.GetNotesStatus();
                         TempData["NotesSummarydata"] = NoteSummaryData.ResultData;
-
+                        var NotesLabels = objNotes.GetAllNotesLabels(true);
+                        TempData["NotesLabels"] = NotesLabels.ResultData;
                         ViewBag.selectSummaryStatusText = NoteSummaryData.ResultData.Where(x => x.Id == Summary.Summaryid_ref).FirstOrDefault().SummaryData;
 
                         if (userType != "" && userType == "1")

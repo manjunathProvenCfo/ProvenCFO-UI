@@ -34,6 +34,10 @@ namespace Proven.Model
         public int TotalNotes { get; set; }
 
         public string Labels { get; set; }
+        public string LableColorCode { get; set; }
+        public string LableClass { get; set; }
+        public int? LabelId_ref { get; set; }
+        public int? CategoriesId_ref { get; set; }
 
     }
     public class NotesDescriptionMainModel

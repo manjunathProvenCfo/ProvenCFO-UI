@@ -14,8 +14,9 @@ namespace Proven.Model
         public string Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string IsDeleted { get; set; }
-        public List<NotesDescriptionModel> NotesCategoriesList { get; set; }
+        public List<NotesDescriptionModel> NotesCategoriesList { get; set; }        
     }
+    
 
     public class NotesCategoriesMainModel
     {

@@ -581,6 +581,34 @@ a.ColorattachmentText
     width: 50%;    
     padding: 5px;
 }
+.lblYellow {
+    background-color: #FFE395 !important;
+    color: #fff !important;
+}
+.lblGreen {
+    background-color: #72C0A1 !important;
+    color: #fff !important;
+}
+.lblRed {
+    background-color: #DE6057 !important;
+    color: #fff !important;
+}
+.lblOrange {
+    background-color: #FFB45B !important;
+    color: #fff !important;
+}
+.lblBlue {
+    background-color: #409EB2 !important;
+    color: #fff !important;
+}
+.lblPurple {
+    background-color: #B98FC3 !important;
+    color: #fff !important;
+}
+.lblLightBlue {
+    background-color: #A6D4DF !important;
+    color: #fff !important;
+}
 
 /*span#loadertext {
     padding-left: 920px;
