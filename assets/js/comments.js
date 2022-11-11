@@ -127,8 +127,8 @@ var loadcommmentconetents = async function (channelUniqueNameGuid) {
 }
 function filterTextMessage(e) {
     var chatMessage = Array.prototype.filter.bind($(e));
+    var textMessage = chatMessage(chat => chat.innerHTML != "")[0].innerHTML;
 
-    var textMessage = chatMessage(chat => chat.innerText != "")[0].innerText;
     const result = textMessage.replace(/[\r\n]/gm, '');
     return result;
 }
