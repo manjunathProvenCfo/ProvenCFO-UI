@@ -219,11 +219,7 @@ namespace ProvenCfoUI.Controllers
                     using (NotesService objNotes = new NotesService())
                     {
 
-                        Regex reg = new Regex(@"([^,])+");
-                        String label = Notes.Labels;
-                        var match = reg.Match(label);
-                        label = match.Value;
-                        Notes.Labels = label;
+                       
                         var result = objNotes.CreateNewNotes(Notes);
                         if (result.Status == true)
                         {
@@ -232,7 +228,7 @@ namespace ProvenCfoUI.Controllers
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "Exist";
+                            ViewBag.ErrorMessage = "Label is required!";
                             return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = result.Message }, JsonRequestBehavior.AllowGet);
                         }
 
@@ -240,7 +236,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Exist";
+                    ViewBag.ErrorMessage = "Label is required!";
                     return Json(new { id = Notes.Id, Status = ViewBag.ErrorMessage, Message = "Notes title has a required field and can't be empty." }, JsonRequestBehavior.AllowGet);
                 }
             }
