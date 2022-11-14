@@ -74,6 +74,7 @@
     <Compile Include="NotesCategoriesModel.cs" />
     <Compile Include="NotesDescriptionModel.cs" />
     <Compile Include="NotesIndividualCountWithItsPercentage.cs" />
+    <Compile Include="NotesLabelsModel.cs" />
     <Compile Include="NotesSummaryVM.cs" />
     <Compile Include="NotesUICountingsByAgencyId.cs" />
     <Compile Include="Paging.cs" />

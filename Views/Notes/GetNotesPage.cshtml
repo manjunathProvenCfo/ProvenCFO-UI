@@ -15,7 +15,6 @@
     .yellow {
         background-color: #FFDB74 !important;
     }
-   
 </style>
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
@@ -41,7 +40,7 @@
 
                             @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
 
-                         }
+                        }
 
                     </div>
 
@@ -195,24 +194,8 @@
                                                 </div>
                                             }
                                         </div>
-                                        <p> @Html.Raw(Category.Description)</p>
-                                        @if ((Category.Labels == null))
-                                        {
-                                            @Category.Labels
-                                        }
-                                        else if ((Category.Labels == "Relevant"))
-                                        {
-                                            <h6 class="badge mr-1 py-2 turquoiseblue text-white"> @Category.Labels </h6>
-                                        }
-                                        else if ((Category.Labels == "Real Time"))
-                                        {
-                                            <h6 class="badge mr-1 py-2 yellow text-white"> @Category.Labels </h6>
-                                        }
-                                        else
-                                        {
-                                            <h6 class="badge mr-1 py-2 bg-green text-white"> @Category.Labels </h6>
-                                        }
-
+                                        <p> @Html.Raw(Category.Description)</p>                                       
+                                        <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
                                             Created by: @Category.CreatedByUser, @Category.CreatedDate
                                             @if ((Category.ModifiedByUser == ""))
@@ -382,10 +365,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-           
+
             $(".v-pills-div").find(".card-body:first #moveUp").remove();
             $(".v-pills-div").find(".card-body:last #moveDown").remove();
-           
+
             $('#notes-modal-new').on('hidden.bs.modal', function () {
                 location.reload();
 
@@ -415,22 +398,22 @@
                     tagName = tagName[0];
                     switch (tagName) {
                         case 'Relevant':
-                            addTag('bg-light-blue text-white',  'Relevant', true);
+                            addTag('bg-light-blue text-white', 'Relevant', true);
                             break;
                         case 'Reliable':
-                            addTag('turquoiseblue text-white' , 'Reliable', true);
+                            addTag('turquoiseblue text-white', 'Reliable', true);
                             break;
                         case 'Real Time':
                             addTag('yellow text-white', 'Real Time', true);
                             break;
-                       
+
                         default:
                     }
                 }
             }
         }
-        function addTag(className, TagName, Isview = false) {
-            
+        function addTag(className, TagName, Isview = false,label_id) {
+           
             var NotesId = gCurrentViewTaskId;
             var tags = $('#divTag span');
             $('#divTagView ul').empty();
@@ -446,17 +429,17 @@
 
             // }
             if (NotesId != null && NotesId !== "" && Isview == false) {
-                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
-               /* UpdateLableForKanbanTask(NotesId, TagName);*/
+                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+                /* UpdateLableForKanbanTask(NotesId, TagName);*/
                 $('#' + NotesId + ' .card-body .badge').empty();
                 $('#' + NotesId + ' .card-body').prepend('<div class="mb-2"><span class="badge py-2 me-1 mb-1 ' + className + '">' + TagName + '</span></div>')
             } else if (NotesId != null && NotesId !== "" && Isview == true) {
 
-                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+                $('#divTagView').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
             }
             else {
 
-                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id  + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
             }
 
 
@@ -465,10 +448,10 @@
             $('#divTag ul').empty();
             $('#divTagView ul').empty();
         }
-       
+
         $(function () {
             $("[id='notes-create-new-btn']").click(function (e) {
-               
+
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
@@ -481,10 +464,10 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-               
-               
+
+
                 $("#Description").val(tinymce.get("Description").getContent());
-                if ($("#Title").valid() === false || $("#Description").valid() == false )
+                if ($("#Title").valid() === false || $("#Description").valid() == false)
                     return;
                 var id = $('#Id').val();
                 var title = $('#Title').val();
@@ -497,7 +480,9 @@
                 var Labels = $('#divTag span').map(function (i, opt) {
                     return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
                 }).toArray()[0];
-             
+
+                var LabelId = $('#divTag li') != undefined ? $('#divTag li').attr('label-id'):'';
+
                 if ($("#chkPublished").prop("checked") === true) {
                     isPublished = "Published";
                 }
@@ -508,7 +493,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels };
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: noteCatId, LabelId_ref: LabelId};
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -574,7 +559,7 @@
         });
 
         function openEdit(e) {
-            
+
             e.stopPropagation();
             var catDesId = e.currentTarget.attributes["descriptionId"].value;
             $("#NoteCatId").val(NoteCatId);
@@ -584,33 +569,17 @@
                 url: '/Notes/OpenExistingDescription?NotesDescriptionId=' + catDesId,
                 //cache: false,
                 success: function (response) {
-            
+
                     if (response.Message == 'Success') {
                         if (response.Description != null) {
-                           
-                            
+
+
                             let published = response.Description.IsPublished;
                             let title = response.Description.Title;
                             let tagName = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
-                            if (response.Description.Labels != null) {
-                                switch (tagName) {
-                                    case 'Relevant':
-                                        addTag('turquoiseblue text-white', 'Relevant', true);
-                                        break;
-                                    case 'Reliable':
-                                        addTag('bg-green text-white', 'Reliable', true);
-                                        break;
-                                    case 'Real Time':
-                                        addTag('yellow text-white ', 'Real Time', true);
-                                        break;
-
-                                    default:
-                                }
-                               /* addTag('bg-green', tagName);*/
-                            }
-                          
+                            addTag(response.Description.LableClass, response.Description.Labels, true, response.Description.LabelId_ref);                         
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
@@ -770,9 +739,9 @@
         $(function () {
 
             $("#email").click(function () {
-                
+
                 var url = window.location.host;
-               
+
                 let totalNotes = 0;
                 var ClientId = $("#ddlclient option:selected").val();
                 var ClientName = $("#ddlclient option:selected").text();
@@ -780,18 +749,18 @@
                 ClientName = encodeURIComponent(ClientName);
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
                 $("#lblTotalNotesCount").text(totalNotes);
-                
+
                 /* var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
                 getAjax(`/Notes/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&url=${url}&totalNotes=${totalNotes}&sentdate=${LastMailSent}`, null, function (response) {
                     if (response.Status == 'Success') {
-                      
+
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
                         $("#email-to").val(str);
                         if (str == "") {
                             $("#sendbutton").attr("disabled", true);
                         }
-                        
+
                         $("#email-subject").val(response.Subject);
                         $("#ibody").html(response.Body);
                         $("#ifooter").html(response.LastSent);

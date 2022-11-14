@@ -6,23 +6,21 @@ using System.Threading.Tasks;
 
 namespace Proven.Model
 {
-    [Serializable]
-    public class NotesCategoriesModel
+    public class NotesLabelsModel
     {
-        public string Id { get; set; }
-        public string NoteCategory { get; set; }
-        public string Status { get; set; }
+        public int? Id { get; set; }
+        public string NoteLabel { get; set; }
+        public bool? Status { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public string IsDeleted { get; set; }
-        public List<NotesDescriptionModel> NotesCategoriesList { get; set; }        
+        public bool? IsDeleted { get; set; }
+        public string colorCode { get; set; }
+        public string className { get; set; }
     }
-    
-
-    public class NotesCategoriesMainModel
+    public class NotesLabelsMainModel
     {
         public bool Status { get; set; }
         public int statusCode { get; set; }
-        public List<NotesCategoriesModel> ResultData { get; set; }
+        public List<NotesLabelsModel> ResultData { get; set; }
         public string Message { get; set; }
         public object ResourceType { get; set; }
         public object MetaData { get; set; }

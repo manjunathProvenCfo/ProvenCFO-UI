@@ -76,11 +76,20 @@
                                                     <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
                                                     <div class="dropdown-divider"></div>
                                                     <div class="px-3">
-                                                        <button class=" dropdown-item rounded mb-2 turquoiseblue text-white" type="button"  onclick="addTag('turquoiseblue text-white','Relevant');">Relevant</button>
-                                                        <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
-                                                        <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>
+                                                        @if ((IEnumerable<NotesLabelsModel>)TempData["NotesLabels"] != null)
+                                                        {
+                                                            foreach (var label in (IEnumerable<NotesLabelsModel>)TempData["NotesLabels"])
+                                                            {
+                                                        <button class=" dropdown-item rounded mb-2 @label.className" type="button" onclick="addTag('@label.className','@label.NoteLabel',false,'@label.Id');"> @label.NoteLabel                                                                                                                   
+                                                        </button>
+                                                            }
+                                                        }
 
-                                                      
+                                                        @*<button class=" dropdown-item rounded mb-2 turquoiseblue text-white" type="button" onclick="addTag('turquoiseblue text-white','Relevant');">Relevant</button>
+                                                        <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
+                                                        <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>*@
+
+
                                                     </div>
 
 
