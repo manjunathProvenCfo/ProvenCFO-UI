@@ -100,6 +100,13 @@ namespace Proven.Model
         public string AppTokenStatus { get; set; }
         public string AccountingPackage { get; set; }
 
+
+        public string DOMO_datasetId { get; set; }
+
+        public DateTime? DOMO_Last_batchrun_time { get; set; }
+
+        public int? DOMO_Batchrun_id { get; set; }
+
     }
 
     public class ClientMainModel

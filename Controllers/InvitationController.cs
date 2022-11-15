@@ -49,7 +49,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -78,7 +78,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -103,7 +103,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -132,12 +132,25 @@ namespace ProvenCfoUI.Controllers
                             InviteVM.Rolelist = inviteStaffVM.Rolelist;
                             InviteVM.Rolelist = InviteVM.Rolelist.Where(x => x.IsVisible == true).ToList();
                             InviteVM.JobTitlelist = inviteStaffVM.JobTitlelist;
+
+                            var commonService = new CommonService();
+                            var userType = commonService.FindUserByEmail(inviteStaffVM.Email);
+
+                            if (userType != null)
+                            {
+                                if (userType != null&&int.Parse(userType.result) == 2) {
+                                    ViewBag.ErrorMessage = "User email already enrolled as agency user.";
+                                    return View("InviteStaff", InviteVM);
+                                }
+                            }
                             if (inviteStaffVM.id == null || inviteStaffVM.id == 0)
                             {
                                 var Existresult = obj.GetInvitationByEmail(inviteStaffVM.Email);
+                              
                                 if (Existresult != null)
                                 {
                                     ViewBag.ErrorMessage = "Exist";
+
                                     return View("InviteStaff", InviteVM);
                                 }
                                 result = obj.AddInvitation(inviteStaffVM.FirstName, inviteStaffVM.LastName, inviteStaffVM.Email, inviteStaffVM.roleid, inviteStaffVM.jobid, inviteStaffVM.SessionTimeout ="5", LoginUserid);
@@ -162,7 +175,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "Unable to Send Invitation.";
                 Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                 return View();
@@ -187,7 +200,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -219,7 +232,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -255,7 +268,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -288,7 +301,18 @@ namespace ProvenCfoUI.Controllers
                                 if (inviteStaffVM.id == null || inviteStaffVM.id == 0)
                                 {
                                     inviteStaffVM.id = 0;
+                                    var commonService = new CommonService();
+                                    var userType = commonService.FindUserByEmail(inviteStaffVM.Email);
 
+                                    if (userType != null)
+                                    {
+                                        if (userType != null && int.Parse(userType.result) == 1)
+                                        {
+                                            ViewBag.ErrorMessage = "User email already enrolled as staff user.";
+                                         
+                                            return View("InviteStaffByAgency", InviteUser);
+                                        }
+                                    }
                                     using (AccountService objAccount = new AccountService())
                                     {
                                         var AllAgenctyInvitation = objAccount.RegisteredUserListbyAgency(Convert.ToString(inviteStaffVM.AgencyID)).ResultData;
@@ -337,7 +361,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     catch (Exception ex)
                     {
-                        log.Error(Utltity.Log4NetExceptionLog(ex));
+                         log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                         throw;
                     }
                 }
@@ -376,7 +400,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "Unable to Send Invitation.";
                 //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                 return View();
@@ -402,7 +426,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -424,7 +448,9 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 ex.Data.Add("UserId",Session["UserId"].ToString());
+
+                    log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -458,7 +484,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -477,7 +503,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -529,7 +555,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -584,7 +610,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -607,7 +633,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -657,7 +683,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -702,7 +728,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw;
             }
 
@@ -745,7 +771,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw;
             }
 
@@ -799,7 +825,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -817,7 +843,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -836,7 +862,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -855,7 +881,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -873,7 +899,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
