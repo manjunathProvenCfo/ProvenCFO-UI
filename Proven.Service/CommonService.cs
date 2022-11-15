@@ -104,5 +104,15 @@ namespace Proven.Service
             }
             isDisposed = true;
         }
+
+
+        public UserTypeVM FindUserByEmail(string email)
+        {
+            var res   = GetAsync<object>("Common/FindUserByEmail?email=" + email).Result;
+
+            var re = JsonConvert.DeserializeObject<UserTypeVM>(res.ToString());
+            return (UserTypeVM)re;
+
+        }
     }
 }
