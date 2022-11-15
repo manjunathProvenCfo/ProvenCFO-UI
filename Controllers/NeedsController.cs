@@ -48,7 +48,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -66,7 +66,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -166,7 +166,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -185,7 +185,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -223,7 +223,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -249,7 +249,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -275,7 +275,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -302,7 +302,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -329,7 +329,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -357,7 +357,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -386,7 +386,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -415,7 +415,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -459,7 +459,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -491,7 +491,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -552,7 +552,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.Message = "File upload failed!!";
                 ViewBag.ErrorMessage = "Error";
                 return Json(new { File = "", Status = ViewBag.ErrorMessage, Message = ex.Message }, JsonRequestBehavior.AllowGet);
@@ -601,7 +601,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "Error";
                 return Json(new { File = "", Status = ViewBag.ErrorMessage, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
@@ -626,7 +626,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.Message = "File remove failed!!";
                 return Json(new { Message = "Error" }, JsonRequestBehavior.AllowGet);
             }
@@ -648,7 +648,7 @@ namespace ProvenCfoUI.Controllers
         //    }
         //    catch (Exception ex)
         //    {
-        //        log.Error(Utltity.Log4NetExceptionLog(ex));
+        //         log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
         //        throw ex;
         //    }
         //}
@@ -667,7 +667,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -774,7 +774,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
 
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",

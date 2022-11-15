@@ -139,7 +139,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     ViewBag.ErrorMessage = "Email or Password not correct.";
                     ViewBag.Sucess = null;
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 }
             }
             return View();
@@ -203,7 +203,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
             }
             return View();
         }
@@ -309,7 +309,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
             }
             return View();
         }
@@ -345,7 +345,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -384,7 +384,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
                 }
@@ -432,7 +432,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "The Email Id doesn't Exist.";
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 return View();
             }
         }
@@ -480,7 +480,7 @@ namespace ProvenCfoUI.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "";
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     throw ex;
                     //Response.Write("<script>alert('Please enter your valid Email and Password.')</script>");
                     return View();
@@ -539,7 +539,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -565,7 +565,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     throw ex;
                 }
                 return View(model);
@@ -614,7 +614,7 @@ namespace ProvenCfoUI.Controllers
         //        }
         //        catch (Exception ex)
         //        {
-        //            log.Error(Utltity.Log4NetExceptionLog(ex));
+        //             log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
         //            throw ex;
         //        }
         //        return View();
@@ -647,7 +647,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     throw ex;
                 }
                 return PartialView("_TopNav");
@@ -715,7 +715,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
             return Json(replacefile, JsonRequestBehavior.AllowGet);
@@ -742,7 +742,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     throw ex;
                 }
             }
@@ -760,7 +760,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -805,7 +805,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 

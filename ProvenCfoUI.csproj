@@ -531,6 +531,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Log4NetDBAppender.cs" />
     <Compile Include="Helper\Utltity.cs" />
     <Compile Include="Models\AgencyClient.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
