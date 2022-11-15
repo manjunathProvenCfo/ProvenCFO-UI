@@ -60,6 +60,13 @@ namespace Proven.Model
 
         public string UserType { get; set; }
 
+
+        public string DOMO_datasetId { get; set; }
+
+        public DateTime DOMO_Last_batchrun_time { get; set; }
+
+        public int DOMO_Batchrun_id { get; set; }
+
     }
     public class UserMainModel
     {
@@ -86,5 +93,10 @@ namespace Proven.Model
         public string message { get; set; }
         public object resourceType { get; set; }
         public object metaData { get; set; }
+    }
+
+
+    public class UserTypeVM { 
+        public string result { get; set; }
     }
 }

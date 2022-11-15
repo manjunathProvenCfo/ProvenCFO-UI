@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ProvenCfoUI.Helper
@@ -14,7 +15,7 @@ namespace ProvenCfoUI.Helper
     public class Utltity
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private static readonly Log4NetDBAppender log4dbAppender =  new Log4NetDBAppender();
         public string ExportTOExcel(string fileName, DataTable dtt)
         {
 
@@ -100,12 +101,15 @@ namespace ProvenCfoUI.Helper
             }
         }
 
-        public static string Log4NetExceptionLog(Exception Exception)
+        public async static Task<string> Log4NetExceptionLog(Exception Exception,string userId=null)
         {
+
             var msg = string.Empty;
             var errorMessage = "Message= " + Exception.Message.ToString() + ". Method= " + Exception.TargetSite.Name.ToString();
             var errorDescription = " StackTrace : " + Exception.StackTrace.ToString() + " Source = " + Exception.Source.ToString();
             msg = errorMessage + " " + errorMessage;
+
+           await  log4dbAppender.Log4NetDBAppend(errorMessage,"error",DateTime.Now.ToString("dd/MM/yy HH:mm:ss"),"ProvenCFO.Helper.Utility.Log4NetExceptionLog",errorDescription,userId);
             return msg;
         }
         public static void Log4NetInfoLog(string Info)

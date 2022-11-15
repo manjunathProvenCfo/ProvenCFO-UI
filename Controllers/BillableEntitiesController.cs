@@ -35,7 +35,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -51,7 +51,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 ex.Data.Add("UserId",Session["UserId"].ToString()); log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -81,7 +81,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 ex.Data.Add("UserId",Session["UserId"].ToString()); log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
@@ -147,7 +147,7 @@ namespace ProvenCfoUI.Controllers
 
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -174,7 +174,7 @@ namespace ProvenCfoUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -206,7 +206,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -226,7 +226,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 ViewBag.ErrorMessage = "";
                 return View();
             }
@@ -261,7 +261,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }

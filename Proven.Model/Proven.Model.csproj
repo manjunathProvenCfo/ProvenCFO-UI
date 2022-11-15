@@ -68,6 +68,7 @@
     <Compile Include="KanbanTaskCommentsListModel.cs" />
     <Compile Include="KanbanTaskCommentsModel.cs" />
     <Compile Include="KanbanTasksModel.cs" />
+    <Compile Include="Log4NetModel.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="MasterFeaturesVM.cs" />
     <Compile Include="MentionUserVM.cs" />
