@@ -27,6 +27,10 @@ namespace Proven.Service
         {
             return GetAsync<NotesDescriptionMainModel>("Notes/GetAllNotesDescription?Status=" + Status).Result;
         }
+        public NotesLabelsMainModel GetAllNotesLabels(bool Status)
+        {
+            return GetAsync<NotesLabelsMainModel>("Notes/GetAllNotesLabels?Status=" + Status).Result;
+        }
 
         public NotesDescriptionModel GetNotesDescriptionById(int NotesDescriptionId)
         {

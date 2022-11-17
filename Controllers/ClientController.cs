@@ -38,7 +38,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 ex.Data.Add("UserId",Session["UserId"].ToString()); log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -57,7 +57,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw;
             }
         }
@@ -102,7 +102,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -123,7 +123,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -141,7 +141,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -157,7 +157,7 @@
             catch (Exception ex)
             {
 
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -189,7 +189,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -224,6 +224,10 @@
                             Clientvm.TeamId = Convert.ToInt32(client.TeamId);
                             Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+
+                            Clientvm.DOMO_datasetId = client.DOMO_datasetId;
+                   
+
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                             Clientvm.BillableEntityId = client.BillableEntityId;
                             Clientvm.ContactPersonName = client.ContactPersonName;
@@ -292,7 +296,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -324,8 +328,11 @@
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
+                                Clientvm.DomoScopeArray = createClientVM.DomoScopeArray;
+                                Clientvm.DOMO_datasetId = createClientVM.DOMO_datasetId;
 
                                 ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
+
 
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                 {
@@ -353,12 +360,17 @@
                                         createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
                                     }
 
+                                    
+                                    if (Clientvm.DomoScopeArray!=null)
+                                    {
+                                        createClientVM.APIScope = string.Join(" ", createClientVM.DomoScopeArray);
+                                    }else
                                     if (Clientvm.XeroScopeArray != null)
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
           
-                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled);
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.DOMO_datasetId);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Created";
@@ -407,7 +419,7 @@
                 }
                 catch (Exception ex)
                 {
-                    log.Error(Utltity.Log4NetExceptionLog(ex));
+                     log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                     return View();
                 }
             }
@@ -435,7 +447,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -465,7 +477,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -505,7 +517,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -603,7 +615,7 @@
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
 
                 return Json(new { Status="Error",ErrorMessage=ex.Message}, JsonRequestBehavior.AllowGet);
             }

@@ -24,7 +24,7 @@ namespace SweetAlert.Controllers
             }
             catch (Exception ex)
             {
-                log.Error(Utltity.Log4NetExceptionLog(ex));
+                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
                 throw ex;
             }
             

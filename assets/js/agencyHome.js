@@ -355,6 +355,19 @@ var colors = {
         "chartColorCode": "#27BCFE"
     }
 };
+var colorsNoteCat = {
+    "Relevant": {
+        "className": "turquoiseblue",
+        "chartColorCode": "#05768f"
+    },
+    "Real Time": {
+        "className": "yellow",
+        "chartColorCode": "#FFDB74"
+    },
+    "Reliable": {
+        "className": "bg-green",
+        "chartColorCode": "#00BE82"
+    }};
 
 function NotesIndividualCountAndPercentageByAgencyId() {
     var ClientID = $("#ddlclient option:selected").val();
@@ -362,9 +375,9 @@ function NotesIndividualCountAndPercentageByAgencyId() {
         let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
-        for (key in colors) {
+        for (key in colorsNoteCat) {
             var htmltext = `<div class="d-flex align-items-center">
-                                                                            <span class="dot ${colors[key].className}"></span>
+                                                                            <span class="dot ${colorsNoteCat[key].className}"></span>
                                                                             <span class="font-weight-semi-bold">${key}</span>
                                                                         </div>`;
 
@@ -390,7 +403,7 @@ function NotesIndividualCountAndPercentageByAgencyId() {
 
         for (key in result) {
 
-            colorsArray.push(colors[key] ? colors[key].chartColorCode : defaultChartColor)
+            colorsArray.push(colorsNoteCat[key] ? colorsNoteCat[key].chartColorCode : defaultChartColor)
         }
 
         NotesChart(Object.values(result));

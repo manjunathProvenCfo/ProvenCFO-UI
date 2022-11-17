@@ -180,7 +180,7 @@
                 var file = formData.get("profile_image");
                 formData.append("profile_image", file);
 
-                fetch(document.location.href, {
+                fetch(document.location.origin +"/Invitation/EditInvitation", {
                     method: "post",
                     body: formData
                 }).then(res => res.json()).then(

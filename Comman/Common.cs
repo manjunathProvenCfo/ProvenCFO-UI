@@ -289,7 +289,8 @@ namespace ProvenCfoUI.Comman
                             }
                             catch (Exception ex)
                             {
-                                log.Error(Utltity.Log4NetExceptionLog(ex));
+                               
+                                   log.Error(Utltity.Log4NetExceptionLog(ex));
                                 TokenInfoSaved.ConnectionStatus = "ERROR";
                                 AppPackage.UpdateToken(TokenInfoSaved);
                                 CleanToken();
