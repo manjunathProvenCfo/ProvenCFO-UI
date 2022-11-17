@@ -531,7 +531,7 @@ var LoadAllComments = async function (ReconciliationComments) {
                     localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
                     break;
                 case false:
-                    localTime = new Date(utcTimeInMilliseconds - ((-1 * timeZoneOffset) * 60000));
+                    localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
                     break;
             }
 
