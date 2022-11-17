@@ -119,7 +119,7 @@ var CommentHtmls = {
 }
 var loadcommmentconetents = async function (channelUniqueNameGuid) {
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, async function (responseComm) {
-
+        
         await LoadAllComments(responseComm.resultData.reconciliationComments);
         setScrollPosition();
         hideChatContentLoader();
@@ -489,7 +489,6 @@ var addNewAttachment = function (attachment) {
     }
 }
 
-
 var setCommentsHeader = function (reconciliationdata) {
     $channelReconciliationDescription.html("");
     $channelReconciliationCompany.html("");
@@ -503,10 +502,12 @@ var setCommentsHeader = function (reconciliationdata) {
 var LoadAllComments = async function (ReconciliationComments) {
     $channelMessages.empty();
     if (ReconciliationComments != null && ReconciliationComments.length > 0) {
-
+   
         // this gives an object with dates as keys
         const dategroups = ReconciliationComments.reduce((groups, game) => {
+        
             const date = game.createdDate.split('T')[0];
+
             if (!groups[date]) {
                 groups[date] = [];
             }
@@ -516,9 +517,28 @@ var LoadAllComments = async function (ReconciliationComments) {
 
         // Edit: to add it in the array format instead
         const commentsgroupArrays = Object.keys(dategroups).map((date) => {
+            var key = date;
+            let utcDate = dategroups[date][0].createdDateUTC;
+
+            let timeZoneOffset = new Date().getTimezoneOffset();
+            let utcServerDateTime = new Date(utcDate);
+            let utcTimeInMilliseconds = utcServerDateTime.getTime();
+            debugger;
+            var localTime;
+            
+            switch ((timeZoneOffset>0)) {
+                case true:
+                    localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
+                    break;
+                case false:
+                    localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
+                    break;
+            }
+
+            date = `${localTime.getFullYear()}-${localTime.getMonth()+1}-${localTime.getDate()}`;
             return {
-                date,
-                comments: dategroups[date]
+                date:date,
+                comments: dategroups[key]
             };
         });
         await $.each(commentsgroupArrays, function (index, aDates) {

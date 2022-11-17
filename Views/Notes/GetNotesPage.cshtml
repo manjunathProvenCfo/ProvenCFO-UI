@@ -579,7 +579,9 @@
                             let tagName = response.Description.Labels;
                             $('#Id').val(response.Description.Id);
                             $('#Title').val(title);
-                            addTag(response.Description.LableClass, response.Description.Labels, true, response.Description.LabelId_ref);                         
+                            if (response.Description.LableClass != null && response.Description.LabelId_ref != null) {
+                                addTag(response.Description.LableClass, response.Description.Labels, true, response.Description.LabelId_ref);
+                            }                                                    
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }

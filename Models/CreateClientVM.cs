@@ -44,9 +44,11 @@ namespace ProvenCfoUI.Models
         public string APIClientSecret { get; set; }
         [Required(ErrorMessage = "API Scope is a required field")]
         public string[] XeroScopeArray { get; set; }
+
+        public string[] DomoScopeArray { get; set; }
         //public string[] XeroScope { get; set; }
         //[Required(ErrorMessage = "Xero Scope is a required field.")]
-        
+
         public string APIScope { get; set; }
 
         [Required(ErrorMessage = "Start Date is a required field.")]
@@ -64,7 +66,7 @@ namespace ProvenCfoUI.Models
 
         [Range(0, 9999999999999999999, ErrorMessage = "QuickBook Company Id must be between 0 and 9999999999999999999")]
         public Int64? QuickBooksCompanyId { get; set; }
-        
+
         public int? ThirdPartyAccountingApp_ref { get; set; }
         public string DashboardURLId { get; set; }
         public string ReportId { get; set; }
@@ -74,13 +76,17 @@ namespace ProvenCfoUI.Models
 
         public string ExcludedAccountNumbers { get; set; }
         public string IncludedAccountNumbers { get; set; }
-      
+
         public int? CompanyId { get; set; }
         public List<Proven.Model.TeamsVM> TeamList { get; set; }
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
         public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }
         public bool Plaid_Enabled { get; set; }
 
+        public string DOMO_datasetId { get; set; }
 
+        public DateTime DOMO_Last_batchrun_time { get; set; }
+
+        public int DOMO_Batchrun_id {get;set;}
     }
 }

@@ -187,7 +187,7 @@
 
             //
             var msg = $('#InviteCreate') != undefined ? $('#InviteCreate').val() : '';
-         
+            debugger;
 
             if (msg != undefined && msg != '' && msg == "Created") {
                 AddAlertMsg();
@@ -217,6 +217,12 @@
 
                 $('#EmailIdExist').show();
                 $('#EmailIdExist').html('This Email id has been already taken.')
+                //ExistAlertRole();
+                $('#InviteCreate').val('');
+            }else if (msg != undefined && msg != '') {
+
+                $('#EmailIdExist').show();
+                $('#EmailIdExist').html(msg)
                 //ExistAlertRole();
                 $('#InviteCreate').val('');
             }
