@@ -197,14 +197,14 @@
                                         <p> @Html.Raw(Category.Description)</p>                                       
                                         <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
-                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            Created by: @Category.CreatedByUser, <span class="last-date">@Category.CreatedDate</span>
                                             @if ((Category.ModifiedByUser == ""))
                                             {
                                                 <span>&nbsp;</span>
                                             }
                                             else
                                             {
-                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+                                                <span>| Last Edited by: @Category.ModifiedByUser, <span class="last-date">@Category.ModifiedDate</span> </span>
 
                                             }
 
@@ -849,6 +849,40 @@
 
                     });
                 }
+
+
+                Array.prototype.forEach.bind($(".last-login"))(
+
+                    _td => {
+                        if (_td.innerText == "") {
+                            return;
+                        }
+                        let _date = _td.innerText;
+
+                        let utcDate = _date;
+
+                        let timeZoneOffset = new Date().getTimezoneOffset();
+                        let utcServerDateTime = new Date(utcDate);
+                        let utcTimeInMilliseconds = utcServerDateTime.getTime();
+
+                        var localTime;
+
+                        switch ((timeZoneOffset > 0)) {
+                            case true:
+                                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
+                                break;
+                            case false:
+                                localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
+                                break;
+                        }
+
+                        _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                        _td.innerText = _date;
+                    }
+                );
+
+
             });
 
 
