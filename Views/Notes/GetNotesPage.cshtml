@@ -455,6 +455,7 @@
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
+                $("#CategoriesId_ref").val(categoryId);
                 tinymce.get("Description").getContent()
                 tinymce.get("Description").setContent("");
                 tinyMCE.activeEditor.setContent("");
