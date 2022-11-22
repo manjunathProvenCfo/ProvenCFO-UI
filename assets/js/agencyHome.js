@@ -360,13 +360,13 @@ var colorsNoteCat = {
         "className": "turquoiseblue",
         "chartColorCode": "#05768f"
     },
-    "Real Time": {
-        "className": "yellow",
-        "chartColorCode": "#FFDB74"
-    },
     "Reliable": {
         "className": "bg-green",
         "chartColorCode": "#00BE82"
+    },
+    "Real Time": {
+        "className": "yellow",
+        "chartColorCode": "#FFDB74"
     }};
 
 function NotesIndividualCountAndPercentageByAgencyId() {
