@@ -41,15 +41,16 @@
                                     <form action="" method="post" onsubmit="return false;" id="formCreateNotes">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" for="Title"> Title </span>
-                                               
-                                                @*<input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />*@
-                                                @Html.TextBoxFor(x => x.Title, new { @style = "width:82%" })
-                                                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger w-100" })
-                                                @Html.HiddenFor(x => x.Id)
-                                                @Html.HiddenFor(x => x.NoteCatId)
-                                                @Html.HiddenFor(x => x.AgencyId)
-                                                @Html.HiddenFor(x => x.Position)
-                                           
+
+                                            @*<input class="form-control" id="txtNotesTitle" type="text" style="max-width:85%" />*@
+                                            @Html.TextBoxFor(x => x.Title, new { @style = "width:82%" })
+                                            @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger w-100" })
+                                            @Html.HiddenFor(x => x.Id)
+                                            @Html.HiddenFor(x => x.NoteCatId)
+                                            @Html.HiddenFor(x => x.AgencyId)
+                                            @Html.HiddenFor(x => x.Position)
+                                            @Html.HiddenFor(x => x.CategoriesId_ref)
+
                                         </div>
                                         <div class="form-group mb-3" >
                                            
