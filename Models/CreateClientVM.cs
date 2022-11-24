@@ -88,5 +88,6 @@ namespace ProvenCfoUI.Models
         public DateTime DOMO_Last_batchrun_time { get; set; }
 
         public int DOMO_Batchrun_id {get;set;}
+        public bool EnableDataSynTimeTrigge { get; set; }
     }
 }

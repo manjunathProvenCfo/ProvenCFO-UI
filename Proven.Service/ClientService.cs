@@ -125,7 +125,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled, string DOMO_datasetId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled, string DOMO_datasetId,bool EnableDataSynTimeTrigge=false)
         {
             var form = new Dictionary<string, object>
             {
@@ -161,7 +161,8 @@ namespace Proven.Service
                 {"Plaid_Enabled",Plaid_Enabled  },
                 {
                   "DOMO_datasetId",DOMO_datasetId
-                }
+                },
+                { "EnableDataSynTimeTrigge" ,EnableDataSynTimeTrigge}
 
             };
 
