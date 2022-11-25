@@ -360,13 +360,13 @@ var colorsNoteCat = {
         "className": "turquoiseblue",
         "chartColorCode": "#05768f"
     },
-    "Real Time": {
-        "className": "yellow",
-        "chartColorCode": "#FFDB74"
-    },
     "Reliable": {
         "className": "bg-green",
         "chartColorCode": "#00BE82"
+    },
+    "Real Time": {
+        "className": "yellow",
+        "chartColorCode": "#FFDB74"
     }};
 
 function NotesIndividualCountAndPercentageByAgencyId() {
@@ -564,7 +564,9 @@ function AgencyDropdownPartialViewChange() {
                 $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                 if (data.StartDate != null && data.StartDate != '') {
                     let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
-                    $('#spCreatedDate').html(String(stDate)); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                    let localTime = UtcDateToLocalTime(stDate).toDateString();
+           
+                    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                 }
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');

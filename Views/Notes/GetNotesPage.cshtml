@@ -197,14 +197,14 @@
                                         <p> @Html.Raw(Category.Description)</p>                                       
                                         <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
-                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            Created by: @Category.CreatedByUser, <span class="last-date">@Category.CreatedDate</span>
                                             @if ((Category.ModifiedByUser == ""))
                                             {
                                                 <span>&nbsp;</span>
                                             }
                                             else
                                             {
-                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+                                                <span>| Last Edited by: @Category.ModifiedByUser, <span class="last-date">@Category.ModifiedDate</span> </span>
 
                                             }
 
@@ -455,6 +455,7 @@
                 let btnAdd = $(this);
                 let categoryId = btnAdd.parents('.v-pills-div').data().categoryId;
                 $("#NoteCatId").val(categoryId);
+                $("#CategoriesId_ref").val(categoryId);
                 tinymce.get("Description").getContent()
                 tinymce.get("Description").setContent("");
                 tinyMCE.activeEditor.setContent("");
@@ -472,6 +473,7 @@
                 var id = $('#Id').val();
                 var title = $('#Title').val();
                 var noteCatId = $('#NoteCatId').val();
+                var CategoriesId_ref = $('#CategoriesId_ref').val();
                 var ClientID = $("#ddlclient option:selected").val();
                 var agencyId = $('#ClientID').val();
 
@@ -493,7 +495,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: noteCatId, LabelId_ref: LabelId};
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: CategoriesId_ref, LabelId_ref: LabelId};
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -597,6 +599,7 @@
                             $("#NoteCatId").val(response.Description.NoteCatId);
                             $("#AgencyId").val(response.Description.AgencyId);
                             $("#Position").val(response.Description.Position);
+                            $("#CategoriesId_ref").val(response.Description.CategoriesId_ref);
                         }
                     }
                     else {
@@ -849,6 +852,29 @@
 
                     });
                 }
+
+
+                Array.prototype.forEach.bind($(".last-login"))(
+
+                    _td => {
+                        if (_td.innerText == "") {
+                            return;
+                        }
+                        let _date = _td.innerText;
+
+                        let utcDate = _date;
+
+
+                        var localTime = UtcDateToLocalTime(utcDate);
+
+
+                        _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                        _td.innerText = _date;
+                    }
+                );
+
+
             });
 
 

@@ -142,7 +142,7 @@
                             }
 
                         </td>
-                        <td class="align-middle">
+                        <td class="utc-date align-middle">
                             @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
                             {
                                 @item.StartDate.Value.ToString("MM/dd/yyyy")
@@ -267,6 +267,28 @@
 
         $(document).ready(function () {
             HidelottieLoader();
+
+            Array.prototype.forEach.bind(document.getElementsByClassName("utc-time"))(e => {
+
+
+                _td => {
+                    if (_td.innerText == "") {
+                        return;
+                    }
+                    let _date = _td.innerText;
+
+                    let utcDate = _date;
+
+
+                    var localTime = UtcDateToLocalTime(utcDate);
+
+                    debugger;
+                    _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                    _td.innerText = _date;
+                }
+
+            });
 
 
         });
