@@ -219,11 +219,10 @@
                 $('#EmailIdExist').html('This Email id has been already taken.')
                 //ExistAlertRole();
                 $('#InviteCreate').val('');
-            }
-            else if (msg != undefined && msg != '') {
+            }else if (msg != undefined && msg != '') {
 
                 $('#EmailIdExist').show();
-                //$('#EmailIdExist').html(msg)
+                $('#EmailIdExist').html(msg)
                 //ExistAlertRole();
                 $('#InviteCreate').val('');
             }
