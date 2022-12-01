@@ -93,6 +93,7 @@ $(function () {
         bindReports("");
         HidelottieLoader();
     });
+
     $btnUpload.click(function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -149,15 +150,43 @@ $(function () {
                     done("File name exceeds 50 characters!");
                 }
                 else { done(); }
+               
+                getAjax(`/Reports/GetReports?agencyId=${agencyId}&year=${year}&periodType=${period}`, null, function (response) {
+
+                    let reports = response.Data;
+
+                    reports.forEach(function (obj) {
+                        if (obj.FileName == fileName) {
+                            debugger;
+                            var fileExtention = "." + file.name.split(".").pop();
+                            if (obj.FileExtention == fileExtention) {
+
+                                ShowAlertBoxWarning("Warning!", "Some files are already uploaded. Duplicate files cannot be uploaded!");
+                                myDropzone_view.removeFile(file);
+                            }
+                        }
+                    });
+                });
+                
             },
             Error: function (response) {
                 console.log(response);
                 ShowAlertBoxError("Error", "Something went wrong while uploading file!");
             }
         });
-
         //view Page
         myDropzone_view.on("addedfile", function (file) {
+
+            if (this.files.length) {
+                var _i, _len = this.files.length;
+                for (_i = 0; _i < _len - 1; _i++)
+                {
+                    if (this.files[_i].name === file.name && this.files[_i].size === file.size && this.files[_i].lastModifiedDate.toString() === file.lastModifiedDate.toString()) {
+                        ShowAlertBoxWarning("Warning!", "Duplicate files are not allowed!");
+                        this.removeFile(file);
+                    }
+                }
+            }
 
             var count = myDropzone_view.files.length;
             if (count > 5) {
@@ -444,7 +473,7 @@ var imageAlign = function () {
 
         setTimeout(function () {
             $(window).trigger("resize")
-        }, 600)
+        }, 900)
 
         var iframe = $(".fancybox-iframe")[0].contentWindow.document;
         $(iframe).ready(function () {
@@ -457,7 +486,7 @@ var imageAlign = function () {
                 var image = $($(".fancybox-iframe")[0].contentWindow.document).find("img")[0];
                 $(image).css({ "-webkit-user-select": "none", "width": "auto", "height": "auto", "margin": "auto" })
 
-            }, 700)
+            }, 900)
         });
     })
 

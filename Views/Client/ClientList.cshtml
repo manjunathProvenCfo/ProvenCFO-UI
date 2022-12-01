@@ -142,7 +142,7 @@
                             }
 
                         </td>
-                        <td class="utc-time align-middle">
+                        <td class="utc-date align-middle">
                             @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
                             {
                                 @item.StartDate.Value.ToString("MM/dd/yyyy")
@@ -281,22 +281,28 @@
                     let utcServerDateTime = new Date(utcDate);
                     let utcTimeInMilliseconds = utcServerDateTime.getTime();
 
-                    var localTime;
+            Array.prototype.forEach.bind(document.getElementsByClassName("utc-time"))(e => {
 
-                    switch ((timeZoneOffset > 0)) {
-                        case true:
-                            localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
-                            break;
-                        case false:
-                            localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
-                            break;
+
+                _td => {
+                    if (_td.innerText == "") {
+                        return;
                     }
+                    let _date = _td.innerText;
 
-                    _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()}`;
+                    let utcDate = _date;
+
+
+                    var localTime = UtcDateToLocalTime(utcDate);
+
+                    debugger;
+                    _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
                     _td.innerText = _date;
                 }
-            );
+
+            });
+
 
         });
 

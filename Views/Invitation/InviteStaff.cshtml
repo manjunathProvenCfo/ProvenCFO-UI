@@ -142,10 +142,11 @@
                 $('#EmailIdExist').show();
                 $('#EmailIdExist').html('This Email id has been already taken.')
                 $('#InviteCreate').val('');
-            } else if (msg != undefined&&msg!='') {
+            }
+            else if (msg != undefined && msg != '') {
 
                 $('#EmailIdExist').show();
-                $('#EmailIdExist').html(msg);
+                //$('#EmailIdExist').html(msg);
                 $('#InviteCreate').val('');
             }
 

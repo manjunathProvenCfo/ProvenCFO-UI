@@ -564,45 +564,9 @@ function AgencyDropdownPartialViewChange() {
                 $('#spClientAddress').html(data.CityName + ',' + data.StateName);
                 if (data.StartDate != null && data.StartDate != '') {
                     let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
-                    $('#spCreatedDate').html(String(stDate));
-
-                    let createDateId = "spCreatedDate";
-
-                    Array.prototype.forEach.bind(
-                        [document.getElementById(createDateId)]
-                    )
-                        (
-
-                            _td => {
-                                debugger;
-                                if (_td.innerText == "") {
-                                    return;
-                                }
-                                let _date = _td.innerText;
-
-                                let utcDate = _date;
-
-                                let timeZoneOffset = new Date().getTimezoneOffset();
-                                let utcServerDateTime = new Date(utcDate);
-                                let utcTimeInMilliseconds = utcServerDateTime.getTime();
-
-                                var localTime;
-
-                                switch ((timeZoneOffset > 0)) {
-                                    case true:
-                                        localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
-                                        break;
-                                    case false:
-                                        localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
-                                        break;
-                                }
-
-                                _date = localTime.toDateString();
-
-                                _td.innerText = _date;
-                            })
-
-                    // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                    let localTime = UtcDateToLocalTime(stDate).toDateString();
+           
+                    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                 }
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');

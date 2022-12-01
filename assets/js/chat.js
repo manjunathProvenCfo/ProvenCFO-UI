@@ -728,23 +728,11 @@ var LoadAllComments = function (ReconciliationComments) {
 
         // Edit: to add it in the array format instead
         const commentsgroupArrays = Object.keys(dategroups).map((date) => {
+
             var key = date;
             let utcDate = dategroups[date][0].createdDateUTC;
-
-            let timeZoneOffset = new Date().getTimezoneOffset();
-            let utcServerDateTime = new Date(utcDate);
-            let utcTimeInMilliseconds = utcServerDateTime.getTime();
             debugger;
-            var localTime;
-
-            switch ((timeZoneOffset > 0)) {
-                case true:
-                    localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
-                    break;
-                case false:
-                    localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
-                    break;
-            }
+            var localTime = UtcDateToLocalTime(utcDate);
 
             date = `${localTime.getFullYear()}-${localTime.getMonth() + 1}-${localTime.getDate()}`;
             return {

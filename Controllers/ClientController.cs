@@ -226,7 +226,9 @@
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
 
                             Clientvm.DOMO_datasetId = client.DOMO_datasetId;
-                            Clientvm.EnableDataSynTimeTrigge = (bool)client.EnableDataSynTimeTrigge;
+
+
+                            Clientvm.EnableDataSynTimeTrigge = client.EnableDataSynTimeTrigge == null ? false : (bool)client.EnableDataSynTimeTrigge;
                    
 
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
