@@ -731,7 +731,7 @@ var LoadAllComments = function (ReconciliationComments) {
 
             var key = date;
             let utcDate = dategroups[date][0].createdDateUTC;
-            debugger;
+       
             var localTime = UtcDateToLocalTime(utcDate);
 
             date = `${localTime.getFullYear()}-${localTime.getMonth() + 1}-${localTime.getDate()}`;

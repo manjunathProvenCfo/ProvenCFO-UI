@@ -519,7 +519,7 @@ var LoadAllComments = async function (ReconciliationComments) {
         const commentsgroupArrays = Object.keys(dategroups).map((date) => {
             var key = date;
             let utcDate = dategroups[date][0].createdDateUTC;
-            debugger;
+         
             var localTime = UtcDateToLocalTime(utcDate);
 
             date = `${localTime.getFullYear()}-${localTime.getMonth()+1}-${localTime.getDate()}`;
