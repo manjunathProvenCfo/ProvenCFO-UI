@@ -179,6 +179,7 @@
                             Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
                             Clientvm.ThirdPartyAccountingApp_ref = 1;
+                            Clientvm.IsDomoEnabled = true;
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
 
                             ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
@@ -310,7 +311,7 @@
         public ActionResult CreateClient(CreateClientVM createClientVM)
         {
 
-            if (ModelState.IsValid)
+              if (ModelState.IsValid|| ModelState.IsValidField("DOMO_datasetId")==false &&createClientVM.IsDomoEnabled==false)
             {
                 try
                 {
@@ -324,7 +325,6 @@
                                 CreateClientVM Clientvm = new CreateClientVM();
 
                                 Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
-
 
                                 var LoginUserid = Session["UserId"].ToString();
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();

@@ -107,6 +107,8 @@ namespace Proven.Model
 
         public int? DOMO_Batchrun_id { get; set; }
 
+        public bool? IsDomoEnabled { get; set; }
+
         public bool? EnableDataSynTimeTrigge { get; set; }
 
     }
