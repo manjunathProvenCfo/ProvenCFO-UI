@@ -148,7 +148,7 @@
 
                                 <div class="center avatar avatar-5xl shadow-sm img-thumbnail rounded-circle" style="margin: 0 auto; display: block">
                                     <div class="h-100 w-100 rounded-circle overflow-hidden">
-                                        <img src="@(!string.IsNullOrEmpty(Model.ProfileImage) ? Model.ProfileImage : "..\\assets\\img\\team\\default-logo.png")" id="previewImage" width="200" alt="" data-dz-thumbnail>
+                                        <img src="@(!string.IsNullOrEmpty(Model.ProfileImage) ? Model.ProfileImage : "\\assets\\img\\team\\default-logo.png")" id="previewImage" width="200" alt="" data-dz-thumbnail>
                                         <input class="d-none" id="profile-image" name="profile_image" type="file" hidden />
                                         @*@Html.EditorFor(model => model.ProfileImage, new { htmlAttributes = new { @class = "form-control d-non", @type ="file", @id = "profile-image", @style = "display: none" } })*@
                                         <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image"><span class="bg-holder overlay overlay-0"></span><span class="z-index-1 text-white text-center fs--1"><span class="fas fa-camera"></span><span class="d-block">Update</span></span></label>

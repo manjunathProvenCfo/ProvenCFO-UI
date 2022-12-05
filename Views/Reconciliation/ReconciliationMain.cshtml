@@ -36,7 +36,12 @@
 
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-
+                                @if (@Session["DOMO_Last_batchrun_time"] != null)
+                                {
+                                    <span style="margin-top: 0.3rem; text-align: center; margin-right:0.1rem">
+                                        @Session["DOMO_Last_batchrun_time"]
+                                    </span>
+                                }
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">

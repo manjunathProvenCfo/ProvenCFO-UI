@@ -544,7 +544,15 @@ namespace ProvenCfoUI.Controllers
                             InvitationUsers.Email = result.Email;
                             InvitationUsers.UserId = result.UserId;
                             InvitationUsers.LinkedInProfile = result.LinkedInProfile;
-                            InvitationUsers.ProfileImage = result.ProfileImage;
+
+                            if (!string.IsNullOrEmpty(result.ProfileImage))
+                            {
+                                InvitationUsers.ProfileImage = "" + result.ProfileImage.Substring(2);
+                            }
+                            else
+                            {
+                                InvitationUsers.ProfileImage = result.ProfileImage;
+                            }
 
                             return View("EditInvitation", InvitationUsers);
                         }

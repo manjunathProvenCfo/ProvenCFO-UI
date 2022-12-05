@@ -639,7 +639,16 @@ namespace ProvenCfoUI.Controllers
                     {
                         string userid = Session["UserId"].ToString();
                         model = obj.GetUserDetail(userid).resultData;
-                        ViewBag.ProfileUrl = model.ProfileImage;
+
+                        if (!string.IsNullOrEmpty(model.ProfileImage))
+                        {
+                            ViewBag.ProfileUrl = "" + model.ProfileImage.Substring(2);
+                        }
+                        else
+                        {
+                            ViewBag.ProfileUrl = model.ProfileImage;
+                        }
+                        
                         ViewBag.UserId = userid;
                     }
                     else
