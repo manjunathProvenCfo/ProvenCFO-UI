@@ -96,11 +96,19 @@ namespace ProvenCfoUI.Controllers
                             string userData = $"{result.resultData.Id},{result.resultData.FirstName},{loginVM.UserName},{result.resultData.FirstName + " " + result.resultData.LastName},{result.resultData.UserType}";
                             FormsAuthentication.SetAuthCookie(userData, false);
                             ViewBag.Sucess = "Login Sucessfully";
+
                             var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                             Session["LoggedInUserPreferences"] = objUserPref;
-                            var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString());
-                            Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
 
+                            //List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+
+                            var selectedAgency = objUserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                            var selectedAgencyId = Convert.ToInt32(selectedAgency.PreferanceValue);
+
+                            Session["LoggedinUserEmail"] = loginVM.UserName.ToString();
+                            var objUserRoleSec = commSrv.GetUserSecurityModels(loginVM.UserName.ToString(), selectedAgencyId);
+                            Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
+  
                             Session["LogedinUserName"] = result.resultData.FirstName + " " + result.resultData.LastName;
                             Session["LoggedInUserRole"] = result.resultData.RoleName;
 
@@ -788,7 +796,11 @@ namespace ProvenCfoUI.Controllers
                     FormsAuthentication.SetAuthCookie(userData, false);
                     var objUserPref = commSrv.GetUserPreferences(result.resultData.Id.ToString());
                     Session["LoggedInUserPreferences"] = objUserPref;
-                    var objUserRoleSec = commSrv.GetUserSecurityModels(UserName.ToString());
+
+                    var selectedAgency = objUserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    var selectedAgencyId = Convert.ToInt32(selectedAgency.PreferanceValue);
+
+                    var objUserRoleSec = commSrv.GetUserSecurityModels(UserName.ToString(), selectedAgencyId);
                     Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
                 }
                 else
