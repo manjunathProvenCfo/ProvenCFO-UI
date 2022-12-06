@@ -110,7 +110,7 @@ namespace Proven.Model
         public bool? IsDomoEnabled { get; set; }
 
         public bool? EnableDataSynTimeTrigge { get; set; }
-
+        public string RoleName { get; set; }
     }
 
     public class ClientMainModel
