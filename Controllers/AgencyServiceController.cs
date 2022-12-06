@@ -163,7 +163,6 @@ namespace ProvenCfoUI.Controllers
                                 objResult = objClient.GetClientListByStatus(true, false).ResultData;
                             }
 
-
                             TempData["ClientListActived"] = objResult;
                             objAgy.ClientList = objResult;
                         }
@@ -179,9 +178,24 @@ namespace ProvenCfoUI.Controllers
 
                     if (UserPref != null && UserPref.Count() > 0)
                     {
+
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         objAgy.SelectedClientNameID = Convert.ToInt32(selectedAgency.PreferanceValue);
 
+                        var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
+                        if (client == null)
+                        {
+                            List<ClientModel> newclient = objAgy.ClientList;
+
+                            if (!String.IsNullOrEmpty(Convert.ToString(Session["UserType"])) && Convert.ToString(Session["UserType"]).Trim() == "2")
+                            {
+                                Session["LoggedInUserRole"] = objAgy.ClientList.Select(x => x.RoleName).FirstOrDefault();
+                            }
+                        }
+                        else if (!String.IsNullOrEmpty(Convert.ToString(Session["UserType"])) && Convert.ToString(Session["UserType"]).Trim() == "2")
+                        {
+                            Session["LoggedInUserRole"] = client.RoleName;
+                        }
                     }
                     else
                     {
@@ -225,6 +239,11 @@ namespace ProvenCfoUI.Controllers
                     var userPreferencesVMs = new List<UserPreferencesVM>() { objResult };
                     //var objUserPref = commSrv.GetUserPreferences(LoginUserid);
                     Session["LoggedInUserPreferences"] = userPreferencesVMs;
+
+                    var userName = Convert.ToString(Session["LoggedinUserEmail"]);
+                    var associatedUserRole = commSrv.GetUserSecurityModels(userName, ClientId);
+                    Session["LoggedInUserUserSecurityModels"] = associatedUserRole;
+
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
             }

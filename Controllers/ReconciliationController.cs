@@ -420,6 +420,7 @@ namespace ProvenCfoUI.Controllers
                         var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
                         ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
 
+                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time; ;
                         var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
                         TempData["NotInBank"] = AccountingPackage;
                     }

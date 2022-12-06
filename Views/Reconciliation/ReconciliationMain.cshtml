@@ -26,17 +26,22 @@
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-
                         </div>
                     </div>
 
+                    <div class="col-4">
+                        @if (@Session["DOMO_Last_batchrun_time"] != null)
+                        {
+                        <span style="display: block; text-align: center">
+                            <b>Last updated on: </b>@Session["DOMO_Last_batchrun_time"]
+                        </span>
+                        }
+                    </div>
 
-
-                    <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                    <div class="col-4 col-sm-auto ml-auto text-right pl-0">
 
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">

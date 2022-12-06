@@ -63,9 +63,9 @@ namespace Proven.Service
             //}
         }
 
-        public List<UserSecurityVM> GetUserSecurityModels(string UserEmail)
+        public List<UserSecurityVM> GetUserSecurityModels(string UserEmail, int selectedClintId)
         {
-            return GetAsync<List<UserSecurityVM>>("Common/GetUserSecurityModels?userEmail=" + UserEmail, true).Result;
+            return GetAsync<List<UserSecurityVM>>("Common/GetUserSecurityModels?userEmail=" + UserEmail + "&selectedClientId=" + selectedClintId, true).Result;
             //response = client.GetAsync("Common/GetUserSecurityModels?userEmail=" + UserEmail).Result;
             //if (response.IsSuccessStatusCode)
             //{
