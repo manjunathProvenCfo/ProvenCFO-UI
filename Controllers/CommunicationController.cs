@@ -33,6 +33,11 @@ namespace ProvenCfoUI.Controllers
            
             try
             {
+                List<UserSecurityVM> _roleList = (List<UserSecurityVM>)Session["LoggedInUserUserSecurityModels"];
+                if (_roleList.Where(x => x.FeatureCode != "CHT").ToList().Count == _roleList.Count())
+                {
+                    return RedirectToAction("AgencyHome", "AgencyService");
+                }
                 ViewBag.UserId = Convert.ToString(Session["UserId"]);
                 ViewBag.UserEmail = Convert.ToString(Session["LoginName"]);
                 List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];

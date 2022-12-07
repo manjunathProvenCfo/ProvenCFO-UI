@@ -110,7 +110,6 @@ namespace ProvenCfoUI.Controllers
                             Session["LoggedInUserUserSecurityModels"] = objUserRoleSec;
   
                             Session["LogedinUserName"] = result.resultData.FirstName + " " + result.resultData.LastName;
-                            Session["LoggedInUserRole"] = result.resultData.RoleName;
 
                             using (ClientService objClient = new ClientService())
                             {

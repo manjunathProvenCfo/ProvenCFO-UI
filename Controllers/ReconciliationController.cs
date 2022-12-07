@@ -389,6 +389,12 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
+                List<UserSecurityVM> _roleList = (List<UserSecurityVM>)Session["LoggedInUserUserSecurityModels"];
+                if (_roleList.Where(x => x.FeatureCode != "RCN").ToList().Count == _roleList.Count())
+                {
+                    return RedirectToAction("AgencyHome", "AgencyService");
+                }
+
                 string RecordsType = NotInBooks;
                 ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;

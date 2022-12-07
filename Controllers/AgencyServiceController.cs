@@ -178,24 +178,8 @@ namespace ProvenCfoUI.Controllers
 
                     if (UserPref != null && UserPref.Count() > 0)
                     {
-
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         objAgy.SelectedClientNameID = Convert.ToInt32(selectedAgency.PreferanceValue);
-
-                        var client = objAgy.ClientList.Where(x => x.Id == objAgy.SelectedClientNameID).FirstOrDefault();
-                        if (client == null)
-                        {
-                            List<ClientModel> newclient = objAgy.ClientList;
-
-                            if (!String.IsNullOrEmpty(Convert.ToString(Session["UserType"])) && Convert.ToString(Session["UserType"]).Trim() == "2")
-                            {
-                                Session["LoggedInUserRole"] = objAgy.ClientList.Select(x => x.RoleName).FirstOrDefault();
-                            }
-                        }
-                        else if (!String.IsNullOrEmpty(Convert.ToString(Session["UserType"])) && Convert.ToString(Session["UserType"]).Trim() == "2")
-                        {
-                            Session["LoggedInUserRole"] = client.RoleName;
-                        }
                     }
                     else
                     {
