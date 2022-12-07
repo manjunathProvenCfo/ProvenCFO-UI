@@ -82,7 +82,7 @@ namespace ProvenCfoUI.Models
         public List<Proven.Model.BillableEntitiesVM> billableEntitiesList { get; set; }
         public List<Proven.Model.ClientXeroAccountsVM> clientXeroAccounts { get; set; }
         public bool Plaid_Enabled { get; set; }
-        [Required(ErrorMessage = "DataSet Id is a required field")]
+        [Required(ErrorMessage = "Data Set ID is a required field")]
         public string DOMO_datasetId { get; set; }
 
         public DateTime DOMO_Last_batchrun_time { get; set; }

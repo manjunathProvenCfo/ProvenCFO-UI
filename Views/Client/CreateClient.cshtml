@@ -195,13 +195,13 @@
                                     {
                                         <div class="row align-items-center form-group">
                                             <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                                <label for="split-login-email">Enable DOMO sync</label>
+                                                <label for="split-login-email">Enable on-demand data sync</label>
                                             </div>
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 <div class="custom-control custom-switch custom-control-inline  mr-0">
                                                     @Html.CheckBoxFor(x => x.EnableAutomation, new { @class = "custom-control-input domo-sync" })
 
-                                                    <label class="custom-control-label" for="EnableAutomation">Yes, Enable on-demand sync</label>
+                                                    <label class="custom-control-label" for="EnableAutomation">Yes, Enable on-demand data sync</label>
                                                 </div>
 
                                             </div>
@@ -299,7 +299,7 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
                                                 <select class="qbookselect form-control" name="XeroScopeArray" multiple>
                                                 </select>
-                                           
+
                                                 @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                             </div>
                                         }
@@ -308,13 +308,13 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none;">
                                                 <select class="qbookselect form-control" name="XeroScopeArray" multiple>
                                                 </select>
-                                          
+
                                                 @Html.ValidationMessageFor(m => m.XeroScopeArray, "", new { @class = "text-danger" })
                                             </div>
                                         }
 
 
-                                       
+
                                         @if (Model.ThirdPartyAccountingApp_ref == 1)
                                         {
 
@@ -506,32 +506,7 @@
                                     }
 
 
-                                    @if (Model.IsDomoEnabled == true)
-                                    {
-                                        <div class="row align-items-center form-group datasetId" id="domocompany">
-                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                                <label for="split-login-email" class="mb-0">DOMO Data Set ID</label>
-                                            </div>
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.DOMO_datasetId, new { htmlAttributes = new { @class = "form-control dataset" } })
-                                                @Html.ValidationMessageFor(model => model.DOMO_datasetId, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
 
-                                    }
-                                    else
-                                    {
-                                        <div class="row align-items-center form-group datasetId" id="domocompany" style="display:none">
-                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                                <label for="split-login-email" class="mb-0">DOMO Data Set ID</label>
-                                            </div>
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-                                                @Html.EditorFor(model => model.DOMO_datasetId, new { htmlAttributes = new { @class = "form-control dataset" } })
-                                                @Html.ValidationMessageFor(model => model.DOMO_datasetId, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
-
-                                    }
 
                                     @if (Model.ThirdPartyAccountingApp_ref == 2)
                                     {
@@ -558,6 +533,34 @@
                                                 @Html.ValidationMessageFor(model => model.QuickBooksCompanyId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
+                                    }
+
+
+                                    @if (Model.IsDomoEnabled == true)
+                                    {
+                                        <div class="row align-items-center form-group datasetId" id="domocompany">
+                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                                <label for="split-login-email" class="mb-0">DOMO Data Set ID</label>
+                                            </div>
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                                @Html.EditorFor(model => model.DOMO_datasetId, new { htmlAttributes = new { @class = "form-control dataset" } })
+                                                @Html.ValidationMessageFor(model => model.DOMO_datasetId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="row align-items-center form-group datasetId" id="domocompany" style="display:none">
+                                            <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                                <label for="split-login-email" class="mb-0">DOMO Data Set ID</label>
+                                            </div>
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                                @Html.EditorFor(model => model.DOMO_datasetId, new { htmlAttributes = new { @class = "form-control dataset" } })
+                                                @Html.ValidationMessageFor(model => model.DOMO_datasetId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
                                     }
                                 </fieldset>
                                 <fieldset class="scheduler-border">
@@ -1161,6 +1164,7 @@ dashboard
             return;
       }
         if (this.checked && this.value == '1') {
+            $("#domocompany").show();
             $("#domo_sync_option").hide();
                 $("#xeroshort").show();
                 $("#xerocrm").show();
@@ -1194,8 +1198,9 @@ dashboard
             }
         else {
 
+             
+            $("#domocompany").show();
             $(".domo-scope").hide();
-            $("#domocompany").hide();
 
             $('#EnableAutomation').prop('checked', true);
                 $("#xeroshort").hide();
