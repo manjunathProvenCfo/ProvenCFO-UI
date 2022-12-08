@@ -82,7 +82,6 @@ $(document).ready(function () {
 
             if (data.DOMO_Last_batchrun_time != null) {
 
-                debugger;
                 let roughDate = data.DOMO_Last_batchrun_time;
                 let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
