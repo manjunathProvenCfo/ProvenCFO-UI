@@ -30,12 +30,9 @@
                     </div>
 
                     <div class="col-4">
-                        @if (@Session["DOMO_Last_batchrun_time"] != null)
-                        {
-                        <span style="display: block; text-align: center">
-                            <b>Last updated on: </b>@Session["DOMO_Last_batchrun_time"]
-                        </span>
-                        }
+                        <div style="display: block; text-align: center" id="domoLastBatchRun">
+                            <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
+                        </div>
                     </div>
 
                     <div class="col-4 col-sm-auto ml-auto text-right pl-0">

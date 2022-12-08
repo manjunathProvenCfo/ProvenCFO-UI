@@ -70,6 +70,40 @@ $(document).ready(function () {
     }
 
     function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
+
+    var agencyId = $("#ddlclient option:selected").val();
+
+    $.ajax({
+        url: '/AgencyService/GetClientDetails?id=' + agencyId,
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+
+            if (data.DOMO_Last_batchrun_time != null) {
+
+                debugger;
+                let roughDate = data.DOMO_Last_batchrun_time;
+                let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+
+                let utcDateTime = new Date(dateTimeMill);
+                var dateTime = utcDateTime.toLocaleString();
+
+                let localDateTime = UtcDateToLocalTime(dateTime);
+                var finalDateTime = localDateTime.toLocaleString();
+
+                $('#domoLastBatchRunTime')[0].innerText = finalDateTime;
+                
+            } else {
+                
+                $('#domoLastBatchRun').remove();
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            $('#domoLastBatchRun').remove();
+        }
+    })
 });
 
 var lastModify = function () {
