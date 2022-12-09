@@ -86,12 +86,9 @@ $(document).ready(function () {
                 let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
                 let utcDateTime = new Date(dateTimeMill);
-                var dateTime = utcDateTime.toLocaleString();
+                var localDateTime = utcDateTime.toLocaleString();
 
-                let localDateTime = UtcDateToLocalTime(dateTime);
-                var finalDateTime = localDateTime.toLocaleString();
-
-                $('#domoLastBatchRunTime')[0].innerText = finalDateTime;
+                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
                 
             } else {
                 
