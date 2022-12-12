@@ -559,12 +559,14 @@ function AgencyDropdownPartialViewChange() {
                 KanbanCountWithIndividualPriority();
            
                 defaultReportsWidget();
-                let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
-                $('#spMonths').html(month);
-                $('#spClientAddress').html(data.CityName + ',' + data.StateName);
+               // let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
+               // $('#spMonths').html(month);
+                //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
+
                 if (data.StartDate != null && data.StartDate != '') {
-                    let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
-                    let localTime = UtcDateToLocalTime(stDate).toDateString();
+                    debugger;
+                    //let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
+                    let localTime = UtcDateToLocalTime(data.StartDate).toDateString();
            
                     $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                 }
