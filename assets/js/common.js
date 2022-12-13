@@ -129,6 +129,7 @@ function SetUserPreferencesForAgency(callback) {
             }
             GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
+            window.location.reload();
            // HidelottieLoader();
         },
         error: function (d) {

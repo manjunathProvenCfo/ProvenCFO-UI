@@ -389,6 +389,13 @@ namespace ProvenCfoUI.Controllers
         {
             try
             {
+                ClientModel ThirdpartyAccount = null;
+                List<UserSecurityVM> _roleList = (List<UserSecurityVM>)Session["LoggedInUserUserSecurityModels"];
+                if (_roleList.Where(x => x.FeatureCode != "RCN").ToList().Count == _roleList.Count())
+                {
+                    return RedirectToAction("AgencyHome", "AgencyService");
+                }
+
                 string RecordsType = NotInBooks;
                 ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
@@ -417,9 +424,10 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (ClientService objClientService = new ClientService())
                     {
-                        var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                       ThirdpartyAccount = objClientService.GetClientById(AgencyID);
                         ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
 
+                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time; ;
                         var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
                         TempData["NotInBank"] = AccountingPackage;
                     }
@@ -455,6 +463,11 @@ namespace ProvenCfoUI.Controllers
 
                     ViewBag.UserId = User.UserId;
                     ViewBag.UserEmail = User.LoginName;
+                    if (ThirdpartyAccount != null)
+                    {
+
+                        ViewBag.IsDomoEnabled=ThirdpartyAccount.IsDomoEnabled==null?false:ThirdpartyAccount.IsDomoEnabled;
+                    }
                     TempData["ReconcilationData"] = objResult.ResultData;
                     TempData["PaginationData"] = objResult.ResultData;
                     Session["ReconcilationData"] = objResult.ResultData;

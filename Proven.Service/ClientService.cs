@@ -75,7 +75,9 @@ namespace Proven.Service
 
         public ClientModel GetClientByName(string ClientName)
         {
-            return GetAsync<ClientModel>("Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26"), true).Result;
+
+            var xx = "Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26");
+            return GetAsync<ClientModel>(xx, true).Result;
             //response = client.GetAsync("Client/GetClientByName?ClientName=" + ClientName.ToString().Replace("&", "%26")).Result;
             //if (response.IsSuccessStatusCode)
             //{
@@ -125,7 +127,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled, string DOMO_datasetId)
+        public ClientModel CreateClient(string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope, string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled, string DOMO_datasetId, bool IsDomoEnabled,bool EnableDataSynTimeTrigge=false)
         {
             var form = new Dictionary<string, object>
             {
@@ -161,7 +163,10 @@ namespace Proven.Service
                 {"Plaid_Enabled",Plaid_Enabled  },
                 {
                   "DOMO_datasetId",DOMO_datasetId
-                }
+                },
+                { "EnableDataSynTimeTrigge" ,EnableDataSynTimeTrigge}
+                ,
+                {"IsDomoEnabled",IsDomoEnabled}
 
             };
 
@@ -184,7 +189,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, string IncludedAccountNumbers, string ExcludedAccountNumbers, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, string IncludedAccountNumbers, string ExcludedAccountNumbers, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled,bool IsDomoEnabled,string DOMO_datasetId)
         {
             var form = new Dictionary<string, object>
             {
@@ -215,7 +220,9 @@ namespace Proven.Service
                 {"ExcludedAccountNumbers",ExcludedAccountNumbers  },
                 {"ThirdPartyAccountingApp_ref",ThirdPartyAccountingApp_ref},
                 {"QuickBooksCompanyId",QuickBooksCompanyId},
-                {"Plaid_Enabled", Plaid_Enabled }
+                {"Plaid_Enabled", Plaid_Enabled },
+                { "IsDomoEnabled",IsDomoEnabled},
+                { "DOMO_datasetId",DOMO_datasetId}
 
                
                 //{"PhoneNumber",PhoneNumber },

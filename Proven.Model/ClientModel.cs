@@ -99,14 +99,11 @@ namespace Proven.Model
         public bool? Plaid_Enabled { get; set; }
         public string AppTokenStatus { get; set; }
         public string AccountingPackage { get; set; }
-
-
         public string DOMO_datasetId { get; set; }
-
         public DateTime? DOMO_Last_batchrun_time { get; set; }
-
         public int? DOMO_Batchrun_id { get; set; }
-
+        public bool? IsDomoEnabled { get; set; }
+        public bool? EnableDataSynTimeTrigge { get; set; }
     }
 
     public class ClientMainModel

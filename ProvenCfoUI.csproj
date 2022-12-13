@@ -804,6 +804,7 @@
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\Chartcommon.js" />
     <Content Include="assets\js\chat.js" />
+    <Content Include="assets\js\clientList.js" />
     <Content Include="assets\js\comments.js" />
     <Content Include="assets\js\common.js" />
     <Content Include="assets\js\config.navbar-vertical.js" />

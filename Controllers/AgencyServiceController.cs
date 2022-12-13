@@ -163,7 +163,6 @@ namespace ProvenCfoUI.Controllers
                                 objResult = objClient.GetClientListByStatus(true, false).ResultData;
                             }
 
-
                             TempData["ClientListActived"] = objResult;
                             objAgy.ClientList = objResult;
                         }
@@ -181,7 +180,6 @@ namespace ProvenCfoUI.Controllers
                     {
                         var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                         objAgy.SelectedClientNameID = Convert.ToInt32(selectedAgency.PreferanceValue);
-
                     }
                     else
                     {
@@ -225,6 +223,11 @@ namespace ProvenCfoUI.Controllers
                     var userPreferencesVMs = new List<UserPreferencesVM>() { objResult };
                     //var objUserPref = commSrv.GetUserPreferences(LoginUserid);
                     Session["LoggedInUserPreferences"] = userPreferencesVMs;
+
+                    var userName = Convert.ToString(Session["LoggedinUserEmail"]);
+                    var associatedUserRole = commSrv.GetUserSecurityModels(userName, ClientId);
+                    Session["LoggedInUserUserSecurityModels"] = associatedUserRole;
+
                     return Json(objResult, JsonRequestBehavior.AllowGet);
                 }
             }

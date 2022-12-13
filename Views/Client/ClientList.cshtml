@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Proven.Model.ClientModel>
-
+@using System.Web
 @{
     ViewBag.Title = "ClientList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -100,105 +100,105 @@
                         @*<th class="sort pr-1 align-middle text-center">Action</th>*@
 
                         @*<th class="no-sort pr-1 align-middle data-table-row-action">
-            Action
-        </th>*@
+                                Action
+                            </th>*@
                     </tr>
                 </thead>
                 <tbody id="purchases">
                     @foreach (var item in Model)
                     {
-                    <tr class="btn-reveal-trigger">
-                        <td class="align-middle">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
-                                <label class="custom-control-label" for="@item.Id"></label>
-                            </div>
-                        </td>
+                        <tr class="btn-reveal-trigger">
+                            <td class="align-middle">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select-target" type="checkbox" id="@item.Id" value="@item.Id" />
+                                    <label class="custom-control-label" for="@item.Id"></label>
+                                </div>
+                            </td>
 
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.EntityName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.AccountingPackage)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.CityName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.StateName)
-                        </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.EntityName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.AccountingPackage)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.CityName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.StateName)
+                            </td>
 
-                        <td class="align-middle">
-                            @if (item.Status == true)
-                            {
-                                <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
-                            }
-
-                        </td>
-                        <td class="align-middle">
-                            @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
-                            {
-                                @item.StartDate.Value.ToString("MM/dd/yyyy")
-                            }
-                        </td>
-                        <td class="align-middle">
-                            @if (item.AppTokenStatus != null && item.AppTokenStatus == "SUCCESS")
-                            {
-                                <span class="badge badge-pill badge-success"> @(item.AppTokenStatus == "SUCCESS" ? "Active" : "Expired")</span>
-                            }
-                            else if (item.AppTokenStatus != null && item.AppTokenStatus == "ERROR")
-                            {
-                                <span class="badge badge-pill badge-secondary"> @(item.AppTokenStatus == "ERROR" ? "Expired" : "Active")</span>
-                            }
-                            else
-                            {
-                                 <span class="badge badge-pill badge-secondary"> unauthorized </span>
-                            }
-
-                        </td>
-                        <td class="align-middle text-center pr-3">
-                            <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
-                                <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>
-                                    <i class="far fa-edit"> </i>
-                                </a>
-                            </span>
-                            <span class="d-none d-sm-inline-block ml-2">
-                                <a href="#" onclick="deleteClient('@item.Id')">
-                                    <i class="far fa-trash-alt"> </i>
-                                </a>
-                            </span>
-                            @*<span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
-                <a href="#" onclick="deleteClient('@item.Id')">
-                    <i class="far fa-trash-alt"> </i>
-                </a>
-            </span>*@
-                            <span class="d-none d-sm-inline-block ml-2">
+                            <td class="align-middle">
                                 @if (item.Status == true)
                                 {
-                                    <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Inactive"})'>
-                                        <i class="far far fas fa-power-off"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-success"> @(item.Status == true ? "Active" : "Inactive")</span>
                                 }
                                 else
                                 {
-                                    <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Active"})'>
-                                        <i class="far far fas fa-plug"> </i>
-                                    </a>
+                                    <span class="badge badge-pill badge-secondary"> @(item.Status == false ? "Inactive" : "Active")</span>
                                 }
 
-                            </span>
-                            @*<input id="Delete" onclick="deleteClient('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
-                            @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
-                        </td>
+                            </td>
+                            <td class="utc-date align-middle">
+                                @if (item.StartDate.HasValue && item.StartDate.Value.ToString("MM/dd/yyyy") != "01-01-0001")
+                                {
+                                    @item.StartDate.Value.ToString("MM/dd/yyyy")
+                                }
+                            </td>
+                            <td class="align-middle">
+                                @if (item.AppTokenStatus != null && item.AppTokenStatus == "SUCCESS")
+                                {
+                                    <span class="badge badge-pill badge-success"> @(item.AppTokenStatus == "SUCCESS" ? "Active" : "Expired")</span>
+                                }
+                                else if (item.AppTokenStatus != null && item.AppTokenStatus == "ERROR")
+                                {
+                                    <span class="badge badge-pill badge-secondary"> @(item.AppTokenStatus == "ERROR" ? "Expired" : "Active")</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-secondary"> unauthorized </span>
+                                }
 
-                    </tr>
+                            </td>
+                            <td class="align-middle text-center pr-3">
+                                <span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <a href='@Url.Action("EditClient", "Client", new { id = item.Id})'>
+                                        <i class="far fa-edit"> </i>
+                                    </a>
+                                </span>
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    <a href="#" onclick="deleteClient('@item.Id')">
+                                        <i class="far fa-trash-alt"> </i>
+                                    </a>
+                                </span>
+                                @*<span class="d-none d-sm-inline-block ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <a href="#" onclick="deleteClient('@item.Id')">
+                                            <i class="far fa-trash-alt"> </i>
+                                        </a>
+                                    </span>*@
+                                <span class="d-none d-sm-inline-block ml-2">
+                                    @if (item.Status == true)
+                                    {
+                                        <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Inactive"})'>
+                                            <i class="far far fas fa-power-off"> </i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("DeactivateClient", "Client", new { id = item.Id, Status = "Active"})'>
+                                            <i class="far far fas fa-plug"> </i>
+                                        </a>
+                                    }
+
+                                </span>
+                                @*<input id="Delete" onclick="deleteClient('@item.Id')" type="button" value="Delete" class="btn btn-danger" />*@
+                                @*<input id="Edit" onclick="editInvite('@item.Id')" type="button" value="Edit" class="btn btn-primary" />*@
+                            </td>
+
+                        </tr>
                     }
                 </tbody>
 
@@ -210,66 +210,8 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
-    <script>
+     <script src="~/assets/js/clientList.js">
 
-
-        var ExportToExcel = function () {
-
-            ExportFileReq("Client", "ExportToExcel");
-        }
-
-        var ExportFileReq = function (Controller, jAction, rData) {
-            if (rData == undefined) rData = "{}";
-            $.ajax({
-                type: "POST",
-                url: '/' + Controller + '/' + jAction,
-                contentType: "application/json; charset=utf-8",
-                data: rData,
-                dataType: "json",
-            }).done(function (FileName) {
-                //get the file name for download
-                if (FileName != "") {
-                    //use window.location.href for redirect to download action for download the file
-                    var dPath = '/Base/Download?fileName=' + FileName;
-                    window.location.href = dPath;
-
-                }
-            });
-        };
-
-        function deleteClient(Id) {
-
-            swal({
-                title: "Are you sure?",
-                text: "Do you really want to delete this Client?",
-                type: "warning",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                confirmButtonText: "Yes, delete it!",
-                confirmButtonColor: "#ec6c62"
-            },
-                function () {
-
-                    postAjax('/Client/DeleteClient/' + Id, null, function (data) {
-
-                        if (data === false) {
-                            ShowAlertBoxError("Couldn't Delete!", "This Client is associated with User", function () { window.location.reload(); });
-
-                        }
-                        else {
-                            ShowAlertBoxSuccess("Deleted!", "This Client is successfully deleted!", function () { window.location.reload(); });
-                        }
-
-                    });
-                });
-
-        }
-
-        $(document).ready(function () {
-            HidelottieLoader();
-
-
-        });
-
-    </script>
+     </script>
 }
+

@@ -297,3 +297,31 @@ function imgError(image) {
     image.src = "../assets/img/team/default-logo.png";
     return true;
 }
+
+
+function UtcDateToLocalTime(utcDate) {
+
+    if (utcDate != null) {
+        var localTime;
+        let timeZoneOffset = new Date().getTimezoneOffset();
+        let utcServerDateTime = new Date(utcDate);
+        let utcTimeInMilliseconds = utcServerDateTime.getTime();
+        debugger;
+
+        switch ((timeZoneOffset > 0)) {
+            case true:
+                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
+                break;
+            case false:
+                localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
+                break;
+        }
+
+        return localTime;
+
+
+    }
+
+    return utcDate;
+}
+

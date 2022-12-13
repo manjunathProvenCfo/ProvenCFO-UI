@@ -197,14 +197,14 @@
                                         <p> @Html.Raw(Category.Description)</p>                                       
                                         <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
-                                            Created by: @Category.CreatedByUser, @Category.CreatedDate
+                                            Created by: @Category.CreatedByUser, <span class="last-date">@Category.CreatedDate</span>
                                             @if ((Category.ModifiedByUser == ""))
                                             {
                                                 <span>&nbsp;</span>
                                             }
                                             else
                                             {
-                                                <span>| Last Edited by: @Category.ModifiedByUser, @Category.ModifiedDate </span>
+                                                <span>| Last Edited by: @Category.ModifiedByUser, <span class="last-date">@Category.ModifiedDate</span> </span>
 
                                             }
 
@@ -852,6 +852,29 @@
 
                     });
                 }
+
+
+                Array.prototype.forEach.bind($(".last-login"))(
+
+                    _td => {
+                        if (_td.innerText == "") {
+                            return;
+                        }
+                        let _date = _td.innerText;
+
+                        let utcDate = _date;
+
+
+                        var localTime = UtcDateToLocalTime(utcDate);
+
+
+                        _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                        _td.innerText = _date;
+                    }
+                );
+
+
             });
 
 

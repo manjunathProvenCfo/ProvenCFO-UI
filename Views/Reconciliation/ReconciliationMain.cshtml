@@ -13,7 +13,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <div class="row align-items-center justify-content-between">
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="row align-items-center">
                             <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
                                 <span class="fas fa-book"></span>
@@ -26,17 +26,19 @@
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
-
                         </div>
                     </div>
 
+                    <div class="col-4">
+                        <div style="display: block; text-align: center" id="domoLastBatchRun">
+                            <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
+                        </div>
+                    </div>
 
-
-                    <div class="col-6 col-sm-auto ml-auto text-right pl-0">
+                    <div class="col-4 col-sm-auto ml-auto text-right pl-0">
 
                         <div class="d-flex align-items-center">
                             <div class="d-flex">
-
                                 @if (ViewBag.IsStaffUser == true)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
@@ -55,17 +57,18 @@
                                     <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
 
-                                @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+
+                                @if (ViewBag.IsDomoEnabled == true)
+                                { }
+                                else if(ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                }
-
-
-                                @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                                }else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandDataPlaid" type="button" title="Request on-demand Plaid data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                 }
 
+                                
 
 
 

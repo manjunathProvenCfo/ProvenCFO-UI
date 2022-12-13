@@ -179,6 +179,9 @@
                             Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
                             Clientvm.ThirdPartyAccountingApp_ref = 1;
+                            Clientvm.IsDomoEnabled = true;
+                            Clientvm.EnableAutomation = true;
+                            Clientvm.EnableDataSynTimeTrigge = true;
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
 
                             ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
@@ -226,6 +229,10 @@
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
 
                             Clientvm.DOMO_datasetId = client.DOMO_datasetId;
+                            Clientvm.IsDomoEnabled    = (bool)(client.IsDomoEnabled==null?false: client.IsDomoEnabled);
+                            Clientvm.EnableAutomation = (bool)(client.EnableAutomation==null?false:client.EnableAutomation);
+
+                            Clientvm.EnableDataSynTimeTrigge = client.EnableDataSynTimeTrigge == null ? false : (bool)client.EnableDataSynTimeTrigge;
                    
 
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
@@ -307,7 +314,7 @@
         public ActionResult CreateClient(CreateClientVM createClientVM)
         {
 
-            if (ModelState.IsValid)
+              if (ModelState.IsValid|| ModelState.IsValidField("DOMO_datasetId")==false &&createClientVM.IsDomoEnabled==false)
             {
                 try
                 {
@@ -322,15 +329,17 @@
 
                                 Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
 
-
                                 var LoginUserid = Session["UserId"].ToString();
                                 Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                                 Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
                                 Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
+                                
                                 Clientvm.DomoScopeArray = createClientVM.DomoScopeArray;
                                 Clientvm.DOMO_datasetId = createClientVM.DOMO_datasetId;
 
+                                
+                                Clientvm.EnableDataSynTimeTrigge = createClientVM.EnableDataSynTimeTrigge;
                                 ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
 
 
@@ -370,7 +379,7 @@
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
           
-                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.DOMO_datasetId);
+                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.DOMO_datasetId,createClientVM.EnableDataSynTimeTrigge);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";
                                     ViewBag.ErrorMessage = "Created";
@@ -401,7 +410,7 @@
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
 
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled);
+                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.IsDomoEnabled,createClientVM.DOMO_datasetId);
 
 
 
@@ -439,7 +448,7 @@
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled);
+                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled, (bool)client.IsDomoEnabled,client.DOMO_datasetId);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

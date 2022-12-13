@@ -16,6 +16,12 @@ namespace ProvenCfoUI.Controllers
         // GET: Dashboard
         public ActionResult Dashboard()
         {
+            List<UserSecurityVM> _roleList = (List<UserSecurityVM>)Session["LoggedInUserUserSecurityModels"];
+            if (_roleList.Where(x => x.FeatureCode != "DBD").ToList().Count == _roleList.Count())
+            {
+                return RedirectToAction("AgencyHome", "AgencyService");
+            }
+
             ClientModel objClient = new ClientModel();
             List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
             if (UserPref != null && UserPref.Count() > 0)

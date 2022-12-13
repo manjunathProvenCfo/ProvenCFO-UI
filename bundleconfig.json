@@ -4,5 +4,11 @@
     "inputFiles": [
       "assets/js/agencyHome.js"
     ]
+  },
+  {
+    "outputFileName": "assets/js/wrapper.min.js",
+    "inputFiles": [
+      "assets/js/wrapper.js"
+    ]
   }
 ]

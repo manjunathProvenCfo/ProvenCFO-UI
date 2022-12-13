@@ -32,6 +32,12 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public ActionResult ReportsList()
         {
+            List<UserSecurityVM> _roleList = (List<UserSecurityVM>)Session["LoggedInUserUserSecurityModels"];
+            if (_roleList.Where(x => x.FeatureCode != "RPT").ToList().Count == _roleList.Count())
+            {
+                return RedirectToAction("AgencyHome", "AgencyService");
+            }
+
             IsReadOnlyUser();
             var userType = Convert.ToString(Session["UserType"]);
             if (userType == "1")
