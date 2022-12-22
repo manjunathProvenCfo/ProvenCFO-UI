@@ -189,7 +189,7 @@
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
-                                                    @Html.DropDownListFor(modelItem1 => item.rule, new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text", item.rule), "Set Rule", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeBankRule('" + item.id + "',event)", style = "width: 160px;" })
+                                                     @Html.CheckBox("ruleCheck", item.RuleNew == true, new { @onchange = "javascript:onChangeBankRules('" + item.id + "',this.checked)" })
                                                 </div>
                                             </div>
                                         </td>
@@ -809,6 +809,16 @@
             var Selectedvalue = event.currentTarget.value;
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + Selectedvalue + '&TrackingCategory=' + 0, null, function (response) {
+                if (response.Message == 'Success') {
+
+                }
+                else {
+                }
+            })
+        }
+        function onChangeBankRules(id, value) {
+            var ClientID = $("#ddlclient option:selected").val();
+            postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&RuleNew=' + value + '&TrackingCategory=' + 0, null, function (response) {
                 if (response.Message == 'Success') {
 
                 }

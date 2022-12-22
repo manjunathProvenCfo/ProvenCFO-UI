@@ -47,6 +47,7 @@ namespace Proven.Model
         public string GlAccountModifiedBy { get; set; }
         public string ActionModifiedBy { get; set; }
 		public string type { get; set; }
+        public bool RuleNew { get; set; }
     }
     public class ReconcilationVMPagination
     {
