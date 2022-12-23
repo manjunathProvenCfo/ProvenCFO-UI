@@ -306,7 +306,7 @@ function UtcDateToLocalTime(utcDate) {
         let timeZoneOffset = new Date().getTimezoneOffset();
         let utcServerDateTime = new Date(utcDate);
         let utcTimeInMilliseconds = utcServerDateTime.getTime();
-        debugger;
+        
 
         switch ((timeZoneOffset > 0)) {
             case true:

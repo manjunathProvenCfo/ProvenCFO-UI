@@ -151,7 +151,7 @@
                                         </div>
                                     </td>
                                     <td class="sort pr-1 align-middle col-xs-2"> @Html.DisplayFor(modelItem => item.account_name)</td>
-                                    <td class="sort pr-1 align-middle col-xs-1">@Html.DisplayFor(modelItem => item.date)</td>
+                                    <td class="sort pr-1 align-middle col-xs-1 rec-date">@Html.DisplayFor(modelItem => item.date)</td>
                                     <td class="sort pr-1 align-middle col-xs-1" data-toggle="tooltip" title="@item.description">@Html.DisplayFor(modelItem => item.description_display) </td>
                                     <td class="sort pr-1 align-middle col-xs-2" data-toggle="tooltip" title="@item.reference">@Html.DisplayFor(modelItem => item.reference_display)</td>
                                     @if (item.amount < 0)
@@ -201,8 +201,7 @@
                                             <div class="row justify-content-between">
                                                 @if (item.ActionModifiedBy != null && ViewBag.IsStaffUser == true)
                                                 {
-                                                    <div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
-
+                                                    <div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">   
                                                         @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;", @utcdate = string.Format(CultureInfo.InvariantCulture, "{0:dd MMM yyyy hh:mm:ss tt}", @item.ActionModifiedDateUTC), @ModifiedBy = @item.ActionModifiedBy })
                                                     </div>
                                                 }
@@ -768,6 +767,7 @@
                     sessionStorage.removeItem('UnSelectedRecords');
                     ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () {
                         sessionStorage.clear();
+
                         location.reload(true);
                         /*window.location.reload();*/
                     });
@@ -902,6 +902,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
+            
             var ClientID = $("#ddlclient option:selected").val();
             ShowlottieLoader();
             $.ajax({
@@ -913,9 +914,13 @@
                     if (data != null) {
                         sessionStorage.setItem("LastMailSent", data.MailSendDate)
                         // Write here what should happend once client selected
-                        SetUserPreferencesForAgency();
-                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                       
+                       var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
+                   
+                        SetUserPreferencesForAgency(null,true);
+                      
                         window.location.href = url;
+                    
                        // window.location.reload();
                     }
                     else {
@@ -1079,6 +1084,7 @@
     <script>
         $(document).ready(function () {
             HidelottieLoader();
+            
 
             $("#checkbox-bulk-purchases-select").click(function (e) {
 

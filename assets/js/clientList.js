@@ -38,7 +38,7 @@ var ExportFileReq = function (Controller, jAction, rData) {
         url: '/' + Controller + '/' + jAction,
         contentType: "application/json; charset=utf-8",
         data: rData,
-        dataType: "json",
+        dataType: "json", 
     }).done(function (FileName) {
         //get the file name for download
         if (FileName != "") {
@@ -51,3 +51,4 @@ var ExportFileReq = function (Controller, jAction, rData) {
 };
 
 
+HidelottieLoader();

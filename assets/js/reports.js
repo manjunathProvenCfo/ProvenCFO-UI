@@ -157,7 +157,7 @@ $(function () {
 
                     reports.forEach(function (obj) {
                         if (obj.FileName == fileName) {
-                            debugger;
+                            
                             var fileExtention = "." + file.name.split(".").pop();
                             if (obj.FileExtention == fileExtention) {
 

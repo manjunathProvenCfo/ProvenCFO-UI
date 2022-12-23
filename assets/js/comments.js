@@ -153,7 +153,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
 
     chat.channelUniqueNameGuid = channelUniqueNameGuid;
-    //debugger;
+    //
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}`, null, async function (responseComm) {
         //getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null,async function (response) {
 
@@ -199,7 +199,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
     }
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
-
+        
         if (event.keyCode === 13 && !event.shiftKey) {
 
             event.preventDefault();
@@ -221,31 +221,37 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
             activeChannel?.typing();
     });
 
-
+    ///////////
     //bulk update msg input box
-    $chatEditorArea[2].emojioneArea.off("keydown");
-    $chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
+    //$chatEditorArea[2].emojioneArea.off("keydown");
+    //$chatEditorArea[2].emojioneArea.on("keydown", function ($editor, event) {
 
-        if (event.keyCode === 13 && !event.shiftKey) {
+    //    if (event.keyCode === 13 && !event.shiftKey) {
 
-            event.preventDefault();
-            if (event.type == "keydown") {
-                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
-                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
-                }
-                else {
+    //        event.preventDefault();
+    //        if (event.type == "keydown") {
+    //            if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+    //                $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+    //            }
+    //            else {
 
-                    if ($editor[0].innerHTML != '')
+    //                if ($editor[0].innerHTML != '')
 
-                        addNewMessagetoChatwindow($editor[0].innerHTML);
-                }
-            }
-            else
-                activeChannel?.typing();
-        }
-        else
-            activeChannel?.typing();
-    });
+    //                    addNewMessagetoChatwindow($editor[0].innerHTML);
+    //            }
+    //        }
+    //        else
+    //            activeChannel?.typing();
+    //    }
+    //    else
+    //        activeChannel?.typing();
+    //});
+    ///////////
+
+
+
+
+
     setTimeout(addMentionPlugin, 3000);
 
     $messageBodyFileUploader.off("change");
@@ -318,36 +324,37 @@ $btnSendMessage.unbind().click(function () {
 
 // Function which were called onclick of Apply.
 var bulkActionReconcilation = function () {
+    $("#btnfilter").prop("disabled", true);
      BulkActionReconcilation(CommentText)
 }
 
 var down = {};
-$($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
-    var keycode = (event.keyCode ? event.keyCode : event.which);
-    if (keycode == '39') {
-        if (down['39'] == null) {
-            if ($editor.keyCode === 13 && !event.shiftKey) {
+//$($('.chat-editor-area')[1]).unbind().on('keydown', function ($editor) {
+//    var keycode = (event.keyCode ? event.keyCode : event.which);
+//    if (keycode == '39') {
+//        if (down['39'] == null) {
+//            if ($editor.keyCode === 13 && !event.shiftKey) {
 
-                let val = $('#emojionearea-editor').text();
-                if (val == '') {
+//                let val = $('#emojionearea-editor').text();
+//                if (val == '') {
 
-                    var loop = Array.prototype.filter.bind($(".emojionearea-editor"));
-                    if (loop(input => input.innerText != '').length > 0 && loop(input => input.innerText != '')[0].innerText != undefined) {
-                        val = loop(input => input.innerText != '')[0].innerText;
-                    }
-                }
-                if (val.trim() != '') {
-                    alert(val);
-                    addNewMessagetoChatwindow(val);
-                }
-            }
-            else {
-                activeChannel?.typing();
-            }
-            down['39'] = true;
-        }
-    }
-});
+//                    var loop = Array.prototype.filter.bind($(".emojionearea-editor"));
+//                    if (loop(input => input.innerText != '').length > 0 && loop(input => input.innerText != '')[0].innerText != undefined) {
+//                        val = loop(input => input.innerText != '')[0].innerText;
+//                    }
+//                }
+//                if (val.trim() != '') {
+//                    alert(val);
+//                    addNewMessagetoChatwindow(val);
+//                }
+//            }
+//            else {
+//                activeChannel?.typing();
+//            }
+//            down['39'] = true;
+//        }
+//    }
+//});
 $($('.chat-editor-area')[1]).unbind().on('keyup', function ($editor) {
     var keycode = (event.keyCode ? event.keyCode : event.which);
     down[keycode] = null;
@@ -553,7 +560,7 @@ var LoadAllComments = async function (ReconciliationComments) {
                 }
                 else {
                     if (acomments.fileType != null) {
-                        //debugger;
+                        //
                         var FileName = acomments.fileName;
                         var FileScrPath = acomments.fileAttachmentPath;
                         var CommentId = acomments.id;
@@ -695,7 +702,7 @@ function getUTCDateTime(date) {
 
 //var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant) {
 //    showChatContentLoader();
-//    debugger;
+//    
 //    if (isEmptyOrBlank(isPublicChatOnly))
 //        isPublicChatOnly = false;
 //    if (isEmptyOrBlank(type))
@@ -1134,7 +1141,7 @@ var addMentionPlugin = function () {
 
             getAjax(`/communication/FilterMentionUsers?searchUser=${query}&userEmail=${chat.userEmail}&chatType=${chat.type}&clientId=${getClientId()}`, null, function (responseData) {
                 callback.call(this, responseData);
-            });
+            }); 
         },
         onCaret: true
     });
