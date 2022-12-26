@@ -719,6 +719,11 @@
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
+            var ruleNewStr = $('#Rule_New').val();
+
+            if (ruleNewStr != "") {
+                var ruleNew = "true" === ruleNewStr;
+            }
             var reconcilationStatus = $('#BA_Status').val();
             var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
             var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
@@ -757,8 +762,8 @@
                 reconcilationStatus: reconcilationStatus,
                 Action: Action,
                 CommentText: CommentText,
-                CreatedBy: CreatedBy
-
+                CreatedBy: CreatedBy,
+                RuleNew: ruleNew
             };
 
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {

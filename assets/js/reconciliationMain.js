@@ -335,6 +335,32 @@ $(document).ready(function () {
             setTimeout(_=>addBulkMentionPlugin(),1000);
         }
     });
+    $('#ibulkupdate').click(function () {
+
+        $(document).ready(function () {
+            
+            $("#Rule_New").change(function () {
+
+                $("#checkbox-wrapper").fadeOut(200, function () {
+                    $(this).find("#Rule_New").attr("checked", !$(this).find("#Rule_New").attr("checked")).end().fadeIn(200);
+                });
+
+                if (this.checked) {
+                    $("label[for='Rule_New']")
+                        .css("color", "green")
+                        .fadeOut(200, function () {
+                            $(this).text("Checked!").fadeIn(200);
+                        });
+                } else {
+                    $("label[for='Rule_New']")
+                        .css("color", "red")
+                        .fadeOut(200, function () {
+                            $(this).text("Unchecked!").fadeIn(200);
+                        });
+                }
+            });
+        });
+    });
 
     $('#Cancel1').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {

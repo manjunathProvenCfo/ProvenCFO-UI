@@ -172,7 +172,7 @@ $(document).ready(function () {
         //var UTCdate = getUTCDateTime(new Date(CreatedDate));
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
-        }).toArray().join(', ');
+        })[0];
         var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
         }).toArray().join(', ');
@@ -192,12 +192,9 @@ $(document).ready(function () {
                     $('.modal-backdrop').remove();
                 }
                 else {
-                    if (response.Message == 'Exist') {
-                        ShowAlertBox('Required!', response.Message, 'warning');
-                    }
-                    else {
-                        ShowAlertBox('Exist!', response.Message, 'warning');
-
+                    if (response.Message == "Exist") {
+                        ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
+                        return;
                     }
                 }
             },
