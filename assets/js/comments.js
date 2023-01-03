@@ -324,8 +324,10 @@ $btnSendMessage.unbind().click(function () {
 
 // Function which were called onclick of Apply.
 var bulkActionReconcilation = function () {
-    $("#btnfilter").prop("disabled", true);
-     BulkActionReconcilation(CommentText)
+
+    $(".apply-btn").prop("disabled", true);
+    BulkActionReconcilation(CommentText)
+
 }
 
 var down = {};

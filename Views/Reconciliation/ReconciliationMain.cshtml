@@ -724,6 +724,9 @@
 
 
         function BulkActionReconcilation(CommentText) {
+            debugger;
+            $(".apply-btn").prop("disabled", true);
+
             var GLaccount = $('#BA_filterGLaccounts').val();
             //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
             //var CommentText = [];
@@ -779,6 +782,7 @@
                 RuleNew: ruleNew
             };
 
+            ShowlottieLoader();
             postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
                 if (response.Message == 'Success') {
                     sessionStorage.removeItem('SelectedRecords');
@@ -786,6 +790,7 @@
                     ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () {
                         sessionStorage.clear();
 
+                        HidelottieLoader();
                         location.reload(true);
                         /*window.location.reload();*/
                     });
