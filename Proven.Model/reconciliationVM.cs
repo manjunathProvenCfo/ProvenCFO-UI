@@ -17,7 +17,7 @@ namespace Proven.Model
         [DataType(DataType.Currency)]
         public decimal amount { get; set; }
         public string company { get; set; }
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime date { get; set; }
         public String description { get; set; }
         public String description_display { get { return description != null && description.Length > 30 ? description.Substring(0, 30) + "..." : description; } }

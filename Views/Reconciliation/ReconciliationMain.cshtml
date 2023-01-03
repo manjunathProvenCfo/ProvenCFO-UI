@@ -416,7 +416,20 @@
             //    $(".glAccountDD").select2()
             //})
 
+            var dateFormat = () => {
 
+                $('.rec-date').each(function () {
+                    var date = $(this).text();
+                    var formattedDate = new Date(date).toLocaleDateString('en-US', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: 'numeric'
+                    });
+                    $(this).text(formattedDate);
+                });
+            }
+
+            dateFormat();
         });
 
 
