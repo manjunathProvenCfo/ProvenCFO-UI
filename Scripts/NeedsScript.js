@@ -264,7 +264,7 @@ $(document).ready(function () {
         });
         gCurrentViewTaskId = TaskID;
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/Needs/OpenExistingTask?TaskID=" + TaskID,
             // data: JSON.stringify({ TaskID: pdata }),
             contentType: "application/json; charset=utf-8",
@@ -365,6 +365,11 @@ $(document).ready(function () {
 });
 function ClearViewPage() {
     $('#divCommantsList').empty();
+
+    $('#kanban-modal-label-title').empty();
+    $('#kanban-modal-label-description').empty();
+    $('#Reporter').empty();
+    $('#createNewtask_DateOpen').empty();
 }
 function RemoveFile(e) {
 

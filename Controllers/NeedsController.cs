@@ -129,6 +129,26 @@ namespace ProvenCfoUI.Controllers
                     NewTasks.KanbanAttachments = _AddedFiles;
                     using (NeedsService objNeeds = new NeedsService())
                     {
+
+                        var segmentTasks = objNeeds.GetAllSegments("Active", AgencyID).ResultData;
+
+                        var segmentTasksList = segmentTasks.Where(x => x.KanbanTaskList.Count() != 0).ToList();
+                        var kanbanTasksList = segmentTasksList.Select(x => x.KanbanTaskList).ToList();
+                       
+                        if (kanbanTasksList != null)
+                        {
+                            bool hasTicket = false;
+                            for (var x = 0; x < kanbanTasksList.Count(); x++)
+                            {
+                                hasTicket = kanbanTasksList[x].Any(obj => obj.TaskTitle == Task.TaskTitle);
+                            }
+
+                            if (hasTicket)
+                            {
+                                return Json(new { id = Task.Id, Message = "Exist"}, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+
                         if (NewTasks.Labels == null)
                         {
                             return Json(new { id = Task.Id, Message = "Tag is a required field." }, JsonRequestBehavior.AllowGet);
