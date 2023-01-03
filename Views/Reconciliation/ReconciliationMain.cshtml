@@ -338,27 +338,27 @@
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
-               
+                dateFormat();
             })
             $(document).on('click', ".custom-select", function () {
-              
                 $(".glAccountDD").each(function (index, element) {
-                   
+
                     $(this).attr('id', 'item_gl_account_ref' + index);
                     if ($(element).attr('data-select2-id') == null || $(element).attr('data-select2-id') == undefined) { $(element).select2(); }
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
+                dateFormat();
             })
 
             $(document).on('click', ".sorting_asc", function () {
                 $(".glAccountDD").each(function (index, element) {
-
                     $(this).attr('id', 'item_gl_account_ref' + index);
                     if ($(element).attr('data-select2-id') == null || $(element).attr('data-select2-id') == undefined) { $(element).select2(); }
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
+                dateFormat();
             })
 
             $(document).on('click', ".sorting_desc", function () {
@@ -369,6 +369,7 @@
                 });
                 $('.lastmodified').tooltip();
                 lastModify();
+                dateFormat();
             })
 
             $(".glAccountDD").each(function (index, element) {              
