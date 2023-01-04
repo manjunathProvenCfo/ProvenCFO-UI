@@ -120,7 +120,7 @@
                                     <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
                             </td>
-                            <td class="login-time align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+                            <td class="login-time align-middle" data-login-time="@item.LastLogin"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
 
 
                             <td class="align-middle text-center pr-3">
@@ -403,38 +403,31 @@
 
         $(document).ready(function () {
             HidelottieLoader();
+            var dateFormatter = () => {
+                
+                $('.login-time').each(function () {
 
+                    let tdDate = $(this).attr('data-login-time');
+                    if (tdDate == "") return;
 
-            Array.prototype.forEach.bind($(".login-time"))(
+                    var localTime = UtcDateToLocalTime(tdDate);
+                    let minutesVal = localTime.getMinutes();
 
-                _td => {
+                    let minutes = () => minutesVal > 0 ? (
+                        minutesVal > 9 ? minutesVal : "0" + minutesVal
+                    ) : "00"
 
-                    let _date = _td.innerText;
-                    if (_date == "") return;
+                    let strLocalDateTime = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
-                    let utcDate = _date;
+                    $(this).text(strLocalDateTime);
+                });
+            }
+            dateFormatter();
 
-                    let timeZoneOffset = new Date().getTimezoneOffset();
-                    let utcServerDateTime = new Date(utcDate);
-                    let utcTimeInMilliseconds = utcServerDateTime.getTime();
-
-                    var localTime;
-                   
-                    switch ((timeZoneOffset > 0)) {
-                        case true:
-                            localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
-                            break;
-                        case false:
-                            localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
-                            break;
-                    }
-
-                    _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
-             
-                    _td.innerText = _date;
-                }
-            );
-
+            $(document).on('click', '.paginate_button', function () { dateFormatter(); });
+            $(document).on('click', ".custom-select", function () { dateFormatter(); });
+            $(document).on('click', ".sorting_asc", function () { dateFormatter(); });
+            $(document).on('click', ".sorting_desc", function () { dateFormatter(); });
         });
 
     </script>
