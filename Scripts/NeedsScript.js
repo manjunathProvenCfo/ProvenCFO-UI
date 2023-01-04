@@ -253,6 +253,19 @@ $(document).ready(function () {
         $('#previews').empty();
 
     });
+    $('#kanban-modal-new').on('shown.bs.modal', function () {
+        
+        let divEditArea = $('.tox-edit-area')[1];
+        let iframeDoc = $(divEditArea).find('iframe#txtDescription_ifr')[0].contentWindow.document;
+
+        let pElements = iframeDoc.querySelectorAll('body p');
+
+        if (pElements.length != 0 && pElements[0].innerText != '\n') {
+            pElements.forEach(function (p) {
+                p.remove();
+            });
+        }
+    });
     $('.kanban-item-card').click(function (e) {
         var TaskID = 0;
         var elements = e.currentTarget.children[0].children;
