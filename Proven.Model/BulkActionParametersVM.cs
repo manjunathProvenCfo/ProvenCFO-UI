@@ -20,5 +20,6 @@ namespace CFO.Model.ViewModels
         public int Action { get; set; }
         public string[] CommentText { get; set; }
         public string CreatedBy { get; set; }
+        public bool? RuleNew { get; set; }
     }
 }

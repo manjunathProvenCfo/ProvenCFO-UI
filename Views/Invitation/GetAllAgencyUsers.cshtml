@@ -124,7 +124,7 @@
                                     <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
                             </td>
-                            <td class="align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+                            <td class="align-middle users-lastLogin" data-login-time="@item.LastLogin"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
 
 
                             @*<td class="align-middle text-center pr-3">
@@ -221,9 +221,33 @@
         };
 
         $(document).ready(function () {
+
             HidelottieLoader();
+            var dateFormater = () => {
+                
+                $('.users-lastLogin').each(function () {
+                    
+                    let tdDate = $(this).attr('data-login-time');
+                    if (tdDate == "") return;
 
+                    var localTime = UtcDateToLocalTime(tdDate);
+                    let minutesVal = localTime.getMinutes();
 
+                    let minutes = () => minutesVal > 0 ? (
+                        minutesVal > 9 ? minutesVal : "0" + minutesVal
+                    ) : "00"
+
+                    tdDate = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                    $(this).text(tdDate);
+                });
+            }
+            dateFormater();
+
+            $(document).on('click', '.paginate_button', function () { dateFormater(); });
+            $(document).on('click', '.custom-select', function () { dateFormater(); });
+            $(document).on('click', '.sorting_asc', function () { dateFormater(); });
+            $(document).on('click', '.sorting_desc', function () { dateFormater(); });
         });
     </script>
 

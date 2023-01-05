@@ -208,7 +208,7 @@
                                         </div>
                                     }
 
-                                    <div class="row align-items-center form-group">
+                                    <div class="row align-items-center form-group" style="display:none;">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email">Enable DOMO</label>
                                         </div>
@@ -533,7 +533,7 @@
 
                                     @if (Model.IsDomoEnabled == true)
                                     {
-                                        <div class="row align-items-center form-group datasetId" id="domocompany">
+                                        <div class="row align-items-center form-group datasetId" id="domocompany" style="display:none;">
                                             <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                                 <label for="split-login-email" class="mb-0">DOMO Data Set ID</label>
                                             </div>
@@ -652,7 +652,7 @@
         </div>
     </div>
 }
-@Html.Partial("_ClientAPITokenUpldate", true)
+@Html.Partial("_ClientAPITokenUpldate", Model)
 <style>
     fieldset.scheduler-border {
         border: 1px groove #ddd !important;
@@ -1126,41 +1126,41 @@ dashboard
     $('input[type=radio][name=ThirdPartyAccountingApp_ref]').change(function () {
         const selected = "@Model.APIScope";
         if (this.checked && this.value == "3") {
-            $("#domo_sync_option").show();
-            if ($(".domo-scope-select")[0].children.length == 0) {
+            //$("#domo_sync_option").show();
+          //  if ($(".domo-scope-select")[0].children.length == 0) {
 
 
-            $(".domo-scope-select").select2({ maximumSelectionLength: 7, allowClear: false,});
-            DomoScope.map(ele => $(".domo-scope-select").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
-            }
+          //  $(".domo-scope-select").select2({ maximumSelectionLength: 7, allowClear: false,});
+          //  DomoScope.map(ele => $(".domo-scope-select").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
+          //  }
 
 
            
-            $('#EnableAutomation').prop('checked', true);
-            $("#xeroshort").hide();
-            $("#xerocontact").hide();
-            $("#xero").hide();
-            $('#divxeroscopeoption').addClass('d-none');
-            $("#quickbookcompany").hide();
-            $("#divQuickbookscopeoption").hide();
-            $("#EnableAutomation").prop("disabled", false);
+          //  $('#EnableAutomation').prop('checked', true);
+          //  $("#xeroshort").hide();
+          //  $("#xerocontact").hide();
+          //  $("#xero").hide();
+          //  $('#divxeroscopeoption').addClass('d-none');
+          //  $("#quickbookcompany").hide();
+          //  $("#divQuickbookscopeoption").hide();
+          //  $("#EnableAutomation").prop("disabled", false);
 
-            $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[2].DOMO_clientId}=${apidetails[2].DOMO_secret}`);
-            $("#apiclientid")[0].children[0].innerHTML = apidetails[2].DOMO_clientId;
-            //domo
-            $("#domocompany").show();
-            $(".domo-scope").show();
+          //  $("#apiclientid")[0].children[0].setAttribute("value", `${apidetails[2].DOMO_clientId}=${apidetails[2].DOMO_secret}`);
+          //  $("#apiclientid")[0].children[0].innerHTML = apidetails[2].DOMO_clientId;
+          //  //domo
+          //  $("#domocompany").show();
+          //  $(".domo-scope").show();
 
-            if ($("#apiclientid")[0].selectedOptions[0].value != "=") {
-                $("#APIClientSecret")[0].value = apidetails[2].DOMO_secret;
+          //  if ($("#apiclientid")[0].selectedOptions[0].value != "=") {
+          //      $("#APIClientSecret")[0].value = apidetails[2].DOMO_secret;
        
-          }
+          //}
 
-            return;
+          //  return;
       }
         if (this.checked && this.value == '1') {
-            $("#domocompany").show();
-            $("#domo_sync_option").hide();
+            //$("#domocompany").show();
+            //$("#domo_sync_option").hide();
                 $("#xeroshort").show();
                 $("#xerocrm").show();
                 $("#xero").show();
@@ -1194,8 +1194,8 @@ dashboard
         else {
 
              
-            $("#domocompany").show();
-            $(".domo-scope").hide();
+          //  $("#domocompany").show();
+         //   $(".domo-scope").hide();
 
             $('#EnableAutomation').prop('checked', true);
                 $("#xeroshort").hide();

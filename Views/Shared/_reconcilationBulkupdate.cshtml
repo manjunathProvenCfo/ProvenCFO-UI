@@ -93,9 +93,12 @@
                 <div class="col-12">
                     @if (TempData["BankRule"] != null && ViewBag.isvisibleGlAccount == false)
                     {
-
-                        @Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })
-                    }
+                        @*@Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })*@
+                        <div id="checkbox-wrapper">
+                            @Html.CheckBox("Rule_New", false, new { @onchange = " this.value = this.checked", value = "" })
+                            <label for="Rule_New">Check/Uncheck</label>
+                        </div>
+                      }
                 </div>
             </div>
             <div class="row pb-1">
@@ -268,7 +271,7 @@
         <div class="card-footer bg-light">
             <div class="row">
                 <div class="col-12 text-center">
-                    <button class="btn btn-primary mr-1" id="btnfilter" onclick="bulkActionReconcilation();" type="button"> Apply  </button>
+                    <button class="btn btn-primary mr-1 apply-btn" id="btnfilter" onclick="bulkActionReconcilation();" type="button"> Apply  </button>
                     <button class="btn btn-primary ml-1" data-dismiss="modal" onclick="BulkActionCancel();" aria-label="Close" id="btnBulkActionCancel">Cancel</button>
                 </div>
             </div>

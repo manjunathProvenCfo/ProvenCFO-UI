@@ -179,7 +179,7 @@
                             Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
                             Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
                             Clientvm.ThirdPartyAccountingApp_ref = 1;
-                            Clientvm.IsDomoEnabled = true;
+                            Clientvm.IsDomoEnabled = false;
                             Clientvm.EnableAutomation = true;
                             Clientvm.EnableDataSynTimeTrigge = true;
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
@@ -229,7 +229,7 @@
                             Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
 
                             Clientvm.DOMO_datasetId = client.DOMO_datasetId;
-                            Clientvm.IsDomoEnabled    = (bool)(client.IsDomoEnabled==null?false: client.IsDomoEnabled);
+                            Clientvm.IsDomoEnabled = false;//(bool)(client.IsDomoEnabled==null?false: client.IsDomoEnabled);
                             Clientvm.EnableAutomation = (bool)(client.EnableAutomation==null?false:client.EnableAutomation);
 
                             Clientvm.EnableDataSynTimeTrigge = client.EnableDataSynTimeTrigge == null ? false : (bool)client.EnableDataSynTimeTrigge;

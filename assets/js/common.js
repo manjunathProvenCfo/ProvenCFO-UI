@@ -113,7 +113,7 @@ var AgencyDropdownPartialViewChangeGlobalWithCallback = function (callback) {
     sessionStorage.removeItem("NotInBanksData");
     SetUserPreferencesForAgency(callback);
 }
-function SetUserPreferencesForAgency(callback) {
+function SetUserPreferencesForAgency(callback, Noload = false) {
     $.ajax({
         url: '/AgencyService/SetUserPreferences?ClientId=' + getClientId(),
         type: "POST",
@@ -129,8 +129,11 @@ function SetUserPreferencesForAgency(callback) {
             }
             GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
-            window.location.reload();
-           // HidelottieLoader();
+            if (!Noload) {
+                window.location.reload();
+            } 
+
+            // HidelottieLoader();
         },
         error: function (d) {
 
@@ -158,7 +161,7 @@ var MenuOptionHideAndShow = function (AgencyId) {
                         $('#submenu_trackingCategories').addClass('d-none');
                     }
                     else {
-                        $('#submenu_trackingCategories').removeClass('d-none');
+                        
                     }
                 }
             });

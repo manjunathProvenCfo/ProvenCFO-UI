@@ -172,7 +172,7 @@ $(document).ready(function () {
         //var UTCdate = getUTCDateTime(new Date(CreatedDate));
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
-        }).toArray().join(', ');
+        })[0];
         var Assignee = $('#ulAddedMembers li').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 && $(opt)[0].id != '' && $(opt)[0].id.indexOf('li_') != -1 ? $(opt)[0].id : '';
         }).toArray().join(', ');
@@ -192,12 +192,9 @@ $(document).ready(function () {
                     $('.modal-backdrop').remove();
                 }
                 else {
-                    if (response.Message == 'Exist') {
-                        ShowAlertBox('Required!', response.Message, 'warning');
-                    }
-                    else {
-                        ShowAlertBox('Exist!', response.Message, 'warning');
-
+                    if (response.Message == "Exist") {
+                        ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
+                        return;
                     }
                 }
             },
@@ -256,6 +253,19 @@ $(document).ready(function () {
         $('#previews').empty();
 
     });
+    $('#kanban-modal-new').on('shown.bs.modal', function () {
+        
+        let divEditArea = $('.tox-edit-area')[1];
+        let iframeDoc = $(divEditArea).find('iframe#txtDescription_ifr')[0].contentWindow.document;
+
+        let pElements = iframeDoc.querySelectorAll('body p');
+
+        if (pElements.length != 0 && pElements[0].innerText != '\n') {
+            pElements.forEach(function (p) {
+                p.remove();
+            });
+        }
+    });
     $('.kanban-item-card').click(function (e) {
         var TaskID = 0;
         var elements = e.currentTarget.children[0].children;
@@ -267,7 +277,7 @@ $(document).ready(function () {
         });
         gCurrentViewTaskId = TaskID;
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/Needs/OpenExistingTask?TaskID=" + TaskID,
             // data: JSON.stringify({ TaskID: pdata }),
             contentType: "application/json; charset=utf-8",
@@ -368,6 +378,11 @@ $(document).ready(function () {
 });
 function ClearViewPage() {
     $('#divCommantsList').empty();
+
+    $('#kanban-modal-label-title').empty();
+    $('#kanban-modal-label-description').empty();
+    $('#Reporter').empty();
+    $('#createNewtask_DateOpen').empty();
 }
 function RemoveFile(e) {
 

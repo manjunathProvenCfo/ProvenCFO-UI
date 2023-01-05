@@ -306,11 +306,14 @@ function UtcDateToLocalTime(utcDate) {
         let timeZoneOffset = new Date().getTimezoneOffset();
         let utcServerDateTime = new Date(utcDate);
         let utcTimeInMilliseconds = utcServerDateTime.getTime();
-        debugger;
+        
 
+        /*
+            timeZoneOffset :minutes
+         */
         switch ((timeZoneOffset > 0)) {
             case true:
-                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
+                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000)); //in one minutes there is 60,000 milliseconds
                 break;
             case false:
                 localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));

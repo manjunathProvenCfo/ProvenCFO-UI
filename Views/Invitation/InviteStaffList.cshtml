@@ -121,7 +121,7 @@
                                     <span class="badge badge-pill badge-secondary">Inactive</span>
                                 }
                             </td>
-                            <td class="last-login align-middle"> @Html.DisplayFor(modelItem => item.LastLogin)</td>
+                            <td class="last-login align-middle" data-last-login="@item.LastLogin "> @Html.DisplayFor(modelItem => item.LastLogin)</td>
 
 
                             <td class="align-middle text-center pr-3">
@@ -351,34 +351,59 @@
             HidelottieLoader();
 
 
-            Array.prototype.forEach.bind($(".login-time"))(
+            //Array.prototype.forEach.bind($(".login-time"))(
 
-                _td => {
+            //    _td => {
 
-                    let _date = _td.innerText;
+            //        let _date = _td.innerText;
 
-                    if (_date == "") return;
-                    let utcDate = _date;
+            //        if (_date == "") return;
+            //        let utcDate = _date;
 
-                    let timeZoneOffset = new Date().getTimezoneOffset();
-                    let utcServerDateTime = new Date(utcDate);
-                    let utcTimeInMilliseconds = utcServerDateTime.getTime();
+            //        let timeZoneOffset = new Date().getTimezoneOffset();
+            //        let utcServerDateTime = new Date(utcDate);
+            //        let utcTimeInMilliseconds = utcServerDateTime.getTime();
 
-                    var localTime;
-                    switch ((timeZoneOffset > 0)) {
-                        case true:
-                            localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
-                            break;
-                        case false:
-                            localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
-                            break;
-                    }
+            //        var localTime;
+            //        switch ((timeZoneOffset > 0)) {
+            //            case true:
+            //                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000));
+            //                break;
+            //            case false:
+            //                localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
+            //                break;
+            //        }
 
-                    _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+            //        _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
-                    _td.innerText = _date;
-                }
-            );
+            //        _td.innerText = _date;
+            //    }
+            //);
+
+            var dateFormater = () => {
+
+                $('.last-login').each(function () {
+
+                    let tdDate = $(this).attr('data-last-login');
+                    if (tdDate == " ") return;
+
+                    var localTime = UtcDateToLocalTime(tdDate);
+                    let minutesVal = localTime.getMinutes();
+                    let minutes = () => minutesVal > 0 ? (
+                        minutesVal > 9 ? minutesVal : "0" + minutesVal
+                    ) : "00"
+
+                    tdDate = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+
+                    $(this).text(tdDate);
+                });
+            }
+            dateFormater();
+
+            $(document).on('click', '.paginate_button', function () { dateFormater(); });
+            $(document).on('click', '.custom-select', function () { dateFormater(); });
+            $(document).on('click', '.sorting_asc', function () { dateFormater(); });
+            $(document).on('click', '.sorting_desc', function () { dateFormater(); });
 
         });
        

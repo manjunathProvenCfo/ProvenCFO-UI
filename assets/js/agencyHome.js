@@ -564,7 +564,7 @@ function AgencyDropdownPartialViewChange() {
                 //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
 
                 if (data.StartDate != null && data.StartDate != '') {
-                    debugger;
+                    
                     //let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
                     let localTime = UtcDateToLocalTime(data.StartDate).toDateString();
            

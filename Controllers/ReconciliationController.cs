@@ -270,7 +270,7 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
         {
-            string RecordsType = NotInBooks;
+            string RecordsType = NotInBooks; 
             try
             {
                 if (RecordsType == "Not in Banks")
@@ -401,7 +401,7 @@ namespace ProvenCfoUI.Controllers
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    int AgencyID = 0;
+                    int AgencyID = 0;  
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
@@ -427,7 +427,7 @@ namespace ProvenCfoUI.Controllers
                        ThirdpartyAccount = objClientService.GetClientById(AgencyID);
                         ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
 
-                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time; ;
+                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time; 
                         var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
                         TempData["NotInBank"] = AccountingPackage;
                     }
@@ -462,6 +462,8 @@ namespace ProvenCfoUI.Controllers
                     //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
 
                     ViewBag.UserId = User.UserId;
+
+
                     ViewBag.UserEmail = User.LoginName;
                     if (ThirdpartyAccount != null)
                     {
@@ -483,15 +485,15 @@ namespace ProvenCfoUI.Controllers
         }
         [CheckSession]
         [HttpPost]
-        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, string UserId, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0)
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, string UserId, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0, bool RuleNew = false)
         {
             //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
-                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId);
+                var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId, RuleNew);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
-
+             
         }
         [CheckSession]
         [HttpPost]
