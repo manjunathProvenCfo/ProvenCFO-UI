@@ -51,30 +51,4 @@ var ExportFileReq = function (Controller, jAction, rData) {
 };
 
 
-
-
 HidelottieLoader();
-
-async function GetQbToken() {
-    var qs = window.location.href;
-
-    if (!(/((?<=[a -zA-Z0-9\_]=).[a-zA-Z0-9\%2C\+]+)+/.test(qs))) {
-        return;
-    }
-    var yt = qs.matchAll("((?<=[a-zA-Z0-9\_]=).[a-zA-Z0-9\%2C\+]+)+")
-    let index = 0;
-    var generatedCode = [{ "type": "code" }, { "type": "state" }, { "type":"realmeId"}];
-    debugger;
-
-    for (let data of yt) {
-        
-        generatedCode[index].value = data[0];
-
-        index++;
-    }
-    ShowlottieLoader();
-
-    await fetch(`POST /oauth2/v1/tokens/bearer?grant_type=authorization_code&code=${generatedCode[0].value}&redirect_uri=${window.location.origin + window.location.pathname}`);
-    
-}
-GetQbToken();
