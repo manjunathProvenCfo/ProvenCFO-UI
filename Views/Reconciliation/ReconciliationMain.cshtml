@@ -443,6 +443,8 @@
     </script>
 
     <script>
+
+       
          Dropzone.autoDiscover = false;
         var totalSum1;
         var totalSum2;
@@ -726,7 +728,8 @@
         function BulkActionReconcilation(CommentText) {
             debugger;
             $(".apply-btn").prop("disabled", true);
-
+            $(".blk-cancel").prop("disabled", true);
+            
             var GLaccount = $('#BA_filterGLaccounts').val();
             //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
             //var CommentText = [];
