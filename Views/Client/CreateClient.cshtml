@@ -785,7 +785,7 @@
                     }),3000))
         }
 
-          const apidetails=[{
+         const apidetails=[{
            "xero_apiclientId":"@ViewBag.thirdPatyAPI[0].ClientId",
            "xero_secret": "@ViewBag.thirdPatyAPI[0].ClientSecret"},
               {
@@ -863,6 +863,72 @@ dashboard
 
     ];
 
+
+    /**
+     * QuickBook OAuth2.0 token generation  
+     *************************************/
+    function GetAuthorizationCode(clientId, clientScope,redirectUrlApp,state) {
+        let scope = "";
+        let spaceCode = "%20";
+
+        if (clientScope instanceof Array) {
+
+            scope = clientScope.reduce((prevState, currentValue, currentIndex, arr) => {
+
+                if (arr.length - 1 == currentIndex) {
+                    prevState += `${currentValue.data}`
+                } else {
+                   prevState+= `${currentValue.data}${spaceCode}`
+                }
+                return prevState
+
+            }, scope);
+
+            
+            let redirectUrl = `https://appcenter.intuit.com/app/connect/oauth2/companyselection?client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUrlApp}&response_type=code&state=${state}&locale=en-us`
+            debugger;
+            window.location.href = redirectUrl;
+
+
+
+          }
+    }
+
+    function GetTokenFromAuthCode() { }
+    function RefereshToken() { }
+
+
+
+        async function QuickBookTokenGeneration() {
+        debugger;
+        var res = await fetch(window.location.origin + "/Integration/QuickBookGenerateRedirectAuthLink?agencyId=" +@Model.Id, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+               }
+        })
+        var data = await res.json();
+
+        console.log(data);
+        if (data) {
+            window.location.href = data.url;
+            
+        }
+        //production ClientId=apidetails[1].q_clientId  
+        debugger;
+        @*GetAuthorizationCode('ABt7GFxoxRdHxSP7UW0UHDXprZXP5fbc42ZwjdK775pIyYYJ8b', clientScope = [
+            { data: "com.intuit.quickbooks.accounting", select: true },
+            //{ data: "com.intuit.quickbooks.payment", select: false },
+            { data: "openid", select: true }
+        ], window.location.origin + "/Integration/QBTokenGeneration", "agencyId%20,@Model.Id," + 'ABt7GFxoxRdHxSP7UW0UHDXprZXP5fbc42ZwjdK775pIyYYJ8b' + ',' +'fgAdfqwt0gWYi1hyhWOb64gl2BquKbVze71mwbbt');*@
+
+
+} 
+    /****/
+
+
+
+
     const totalScopsXero = [
         { data: "profile", select: true },
         { data: "openid", select: true },
@@ -900,7 +966,14 @@ dashboard
         { data: "payroll.timesheets.read", select: false },
 
     ];
+
     $(document).ready(function () {
+
+
+        if ($("#auth-quick-book-btn").length > 0) {
+            $("#auth-quick-book-btn").click((e) => QuickBookTokenGeneration());
+        }
+
         var IsTokenUpdated = "@TempData["IsTokenUpdated"]";
 
             HidelottieLoader();
@@ -943,10 +1016,9 @@ dashboard
         if (selected != "" && thirdPartyService == "3") {
               totalScopsXero.map(ele => $(".divxeroscopeoption").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
 
-            var selectedResult = selected.split(' ');
+        var selectedResult = selected.split(' ');
 
-
-            DomoScope.forEach(function (i) {
+        DomoScope.forEach(function (i) {
                 if (jQuery.inArray(i.data, selectedResult) !== -1) {
                     i.select = true;
                 }
@@ -959,19 +1031,13 @@ dashboard
 
                 const selectedResult = selected.split(' ').filter(ele => {
 
-
                 return !ele.includes("quickbooks", 0);
             });
-
-
                 var fil = totalScopsXero.map(ele => ele.data).filter(ele => !selectedResult.includes(ele));
 
                 selectedResult.map(ele => $(".divxeroscopeoption").append(new Option(ele, ele, true, true)));
 
                 fil.map(ele => $(".divxeroscopeoption").append(new Option(ele, ele, false, false)));
-
-
-
 
             }
 

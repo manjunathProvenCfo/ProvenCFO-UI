@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Proven.Model;
+using QuickBooksSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +114,25 @@ namespace Proven.Service
             var re = JsonConvert.DeserializeObject<UserTypeVM>(res.ToString());
             return (UserTypeVM)re;
 
+        }
+
+        public  string QuickBookUpdateAndCreateToken(int agencyId, TokenResponse token) { 
+             //var res = GetAsync<object>("Common/QuickBookUpdateAndCreateToken?agencyId=" +agencyId).Result;
+
+            var form = new Dictionary<string, string>
+           {
+               {"access_token",Convert.ToString(token.access_token)},
+               {"id_token", token.id_token},
+               {"x_refresh_token_expires_in",token.x_refresh_token_expires_in.ToString()},
+               {"token_type", token.token_type},
+               {"refresh_token",token.refresh_token},
+               {"expires_in",token.expires_in.ToString()},
+               //{"CreatedBy",LoggedInUser}
+           };
+       var x=  PostAsync<string, Dictionary<string, string>>("Common/QuickBookUpdateAndCreateToken?agencyId=" + agencyId, form, true).Result;
+
+            //var content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
+            return x;
         }
     }
 }
