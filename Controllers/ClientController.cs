@@ -185,6 +185,7 @@
                             TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
 
                             ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
+                            
                             return View(Clientvm);
                         }
                     }

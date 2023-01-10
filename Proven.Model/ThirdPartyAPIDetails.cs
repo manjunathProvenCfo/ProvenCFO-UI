@@ -15,6 +15,9 @@ namespace ProvenCfoUI.Models
 
         public string ClientSecret { get; set; }
 
+        public string APIScope { get; set; }
+
+        public string RedirectUrl { get; set; }
         public string ThirdParty { get; set; }
 
         public int Priority { get; set; }

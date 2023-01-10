@@ -864,67 +864,10 @@ dashboard
     ];
 
 
-    /**
-     * QuickBook OAuth2.0 token generation  
-     *************************************/
-    function GetAuthorizationCode(clientId, clientScope,redirectUrlApp,state) {
-        let scope = "";
-        let spaceCode = "%20";
-
-        if (clientScope instanceof Array) {
-
-            scope = clientScope.reduce((prevState, currentValue, currentIndex, arr) => {
-
-                if (arr.length - 1 == currentIndex) {
-                    prevState += `${currentValue.data}`
-                } else {
-                   prevState+= `${currentValue.data}${spaceCode}`
-                }
-                return prevState
-
-            }, scope);
-
-            
-            let redirectUrl = `https://appcenter.intuit.com/app/connect/oauth2/companyselection?client_id=${clientId}&scope=${scope}&redirect_uri=${redirectUrlApp}&response_type=code&state=${state}&locale=en-us`
-            debugger;
-            window.location.href = redirectUrl;
+  
 
 
 
-          }
-    }
-
-    function GetTokenFromAuthCode() { }
-    function RefereshToken() { }
-
-
-
-        async function QuickBookTokenGeneration() {
-        debugger;
-        var res = await fetch(window.location.origin + "/Integration/QuickBookGenerateRedirectAuthLink?agencyId=" +@Model.Id, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-               }
-        })
-        var data = await res.json();
-
-        console.log(data);
-        if (data) {
-            window.location.href = data.url;
-            
-        }
-        //production ClientId=apidetails[1].q_clientId  
-        debugger;
-        @*GetAuthorizationCode('ABt7GFxoxRdHxSP7UW0UHDXprZXP5fbc42ZwjdK775pIyYYJ8b', clientScope = [
-            { data: "com.intuit.quickbooks.accounting", select: true },
-            //{ data: "com.intuit.quickbooks.payment", select: false },
-            { data: "openid", select: true }
-        ], window.location.origin + "/Integration/QBTokenGeneration", "agencyId%20,@Model.Id," + 'ABt7GFxoxRdHxSP7UW0UHDXprZXP5fbc42ZwjdK775pIyYYJ8b' + ',' +'fgAdfqwt0gWYi1hyhWOb64gl2BquKbVze71mwbbt');*@
-
-
-} 
-    /****/
 
 
 
@@ -969,10 +912,7 @@ dashboard
 
     $(document).ready(function () {
 
-
-        if ($("#auth-quick-book-btn").length > 0) {
-            $("#auth-quick-book-btn").click((e) => QuickBookTokenGeneration());
-        }
+     
 
         var IsTokenUpdated = "@TempData["IsTokenUpdated"]";
 
@@ -1005,7 +945,7 @@ dashboard
             const thirdPartyService = "@Model.ThirdPartyAccountingApp_ref";
 
 
-      
+
             if (selected == "" && thirdPartyService=="1")
              totalScopsXero.map(ele => $(".divxeroscopeoption").append(new Option(ele.data, ele.data, ele.select, ele.select)).trigger('change'));
 
@@ -1201,7 +1141,7 @@ dashboard
           //  }
 
 
-           
+
           //  $('#EnableAutomation').prop('checked', true);
           //  $("#xeroshort").hide();
           //  $("#xerocontact").hide();
@@ -1219,7 +1159,7 @@ dashboard
 
           //  if ($("#apiclientid")[0].selectedOptions[0].value != "=") {
           //      $("#APIClientSecret")[0].value = apidetails[2].DOMO_secret;
-       
+
           //}
 
           //  return;
@@ -1259,7 +1199,7 @@ dashboard
             }
         else {
 
-             
+
           //  $("#domocompany").show();
          //   $(".domo-scope").hide();
 
