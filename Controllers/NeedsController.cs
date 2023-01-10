@@ -141,11 +141,11 @@ namespace ProvenCfoUI.Controllers
                             for (var x = 0; x < kanbanTasksList.Count(); x++)
                             {
                                 hasTicket = kanbanTasksList[x].Any(obj => obj.TaskTitle == Task.TaskTitle);
-                            }
 
-                            if (hasTicket)
-                            {
-                                return Json(new { id = Task.Id, Message = "Exist"}, JsonRequestBehavior.AllowGet);
+                                if (hasTicket)
+                                {
+                                    return Json(new { id = Task.Id, Message = "Exist" }, JsonRequestBehavior.AllowGet);
+                                }
                             }
                         }
 
