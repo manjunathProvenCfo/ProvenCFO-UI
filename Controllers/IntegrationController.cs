@@ -662,14 +662,17 @@ namespace ProvenCfoUI.Controllers
 
             var qbService =   new   QuickBooksSharp.AuthenticationService();
 
-
+            var clientService = new ClientService();
             var data = state.Split(',');
-            
+            var apiDetails = clientService.GetThirdPatyAPIDetails();
             string clientId = data[2];
             string clientSecret = data[3];
             string agencyId = data[1];
+            var pkg = apiDetails.list.
+                                        Where(pk => pk.ThirdParty == "QuickBook").FirstOrDefault();
 
-            string redirectUrl = "https://localhost:44345/Integration/QBTokenGeneration";
+
+            string redirectUrl = pkg.RedirectUrl;
 
              var token = await qbService.GetOAuthTokenAsync(clientId,clientSecret,code,redirectUrl);
 
