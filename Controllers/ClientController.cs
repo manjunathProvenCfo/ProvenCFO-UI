@@ -341,7 +341,7 @@
 
                                 
                                 Clientvm.EnableDataSynTimeTrigge = createClientVM.EnableDataSynTimeTrigge;
-                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list.OrderBy(pkg => pkg.Id);
+                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list.OrderBy(pkg => pkg.Id).ToList();
 
 
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
@@ -385,7 +385,7 @@
                                         createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
 
                                         createClientVM.APIClientSecret= ViewBag.thirdPatyAPI[0].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope;
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope.Split(' ');
 
 
                                     }
@@ -396,7 +396,8 @@
                                         createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
 
                                         createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope;
+
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope.Split(' ');
                                     }
 
 
