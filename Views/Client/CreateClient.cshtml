@@ -1028,7 +1028,7 @@ dashboard
 
                     if (clientName != null && clientName != "" && isSelected) {
 
-                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${encodeURIComponent(clientName)}&clientId=${apiclientId}&clientSecret=${secret}`, {
+                        $.ajax(`/Client/GetXeroRelatedInfo?agencyName=${encodeURIComponent(clientName)}&clientId=""&clientSecret=""`, {
                             method: "GET",
                             contentType: "application/json",
                             complete: function (res) {

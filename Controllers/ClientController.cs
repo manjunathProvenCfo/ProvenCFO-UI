@@ -409,7 +409,8 @@
                                 }
                                 else
                                 {
-                
+               
+
                                     TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                     var ClientExist = obj.GetClientByName(createClientVM.ClientName);
                                     createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
@@ -418,10 +419,26 @@
                                     createClientVM.clientXeroAccounts = obj.GetClientXeroAcccountsByAgencyId(createClientVM.Id).ResultData;
 
 
-                                    if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
+                                    if (createClientVM.ThirdPartyAccountingApp_ref == 1)
                                     {
-                                        createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
+                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
+
+                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[0].ClientSecret;
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope.Split(' ');
+
+
                                     }
+
+                                    if (createClientVM.ThirdPartyAccountingApp_ref == 2)
+                                    {
+
+                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
+
+                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
+
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope.Split(' ');
+                                    }
+                                   
 
                                     if (ClientExist != null && ClientExist.Id != createClientVM.Id)
                                     {
@@ -561,7 +578,10 @@
         {
             string xeroId = "", xeroShortCode = "", xeroProvenCfoContactId = "";
             string errorMsg = "";
+            var apiDetails = new ClientService().GetThirdPatyAPIDetails().list.OrderBy(PK=>PK.Id).ToList().FirstOrDefault();
 
+            xeroInfo.clientId = apiDetails.ClientId;
+            xeroInfo.clientSecret = apiDetails.ClientSecret;
             try
             {
                 ClientModel client;
