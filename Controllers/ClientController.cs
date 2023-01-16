@@ -341,7 +341,7 @@
 
                                 
                                 Clientvm.EnableDataSynTimeTrigge = createClientVM.EnableDataSynTimeTrigge;
-                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
+                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list.OrderBy(pkg => pkg.Id);
 
 
                                 if (!string.IsNullOrEmpty(createClientVM.StartDateText))
@@ -370,7 +370,7 @@
                                         createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
                                     }
 
-                                    
+                                   
                                     if (Clientvm.DomoScopeArray!=null)
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.DomoScopeArray);
@@ -379,7 +379,28 @@
                                     {
                                         createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                     }
-          
+
+                                    if (createClientVM.ThirdPartyAccountingApp_ref==1)
+                                    {
+                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
+
+                                        createClientVM.APIClientSecret= ViewBag.thirdPatyAPI[0].ClientSecret;
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope;
+
+
+                                    }
+
+                                    if (createClientVM.ThirdPartyAccountingApp_ref == 2)
+                                    {
+
+                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
+
+                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope;
+                                    }
+
+
+
                                     var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.DOMO_datasetId,createClientVM.EnableDataSynTimeTrigge);
                                     if (result == null)
                                         ViewBag.ErrorMessage = "";

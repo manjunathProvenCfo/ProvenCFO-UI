@@ -221,9 +221,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div id="domo_sync_option" class="row align-items-center form-group" style="display:none;">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email">Enable data sync time trigger</label>
@@ -280,23 +277,18 @@
                                         </div>
                                     </div>
 
-
-
-
-
-
                                 </fieldset>
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border col-xl-7">Accounting Package Details</legend>
                                     @*<h5 style="margin-bottom: 25px;">Accounting Package Details</h5>*@
 
                                     <div class="row align-items-center form-group">
-                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4" style="display:none;">
                                             <label for="split-login-email" class="mb-0"> API Client Scope</label>
                                         </div>
                                         @if (Model.ThirdPartyAccountingApp_ref == 2)
                                         {
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="">
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divQuickbookscopeoption" style="display:none;">
                                                 <select class="qbookselect form-control" name="XeroScopeArray" multiple>
                                                 </select>
 
@@ -319,7 +311,7 @@
                                         {
 
 
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption">
+                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8" id="divxeroscopeoption" style="display:none;">
 
                                                 <select class="divxeroscopeoption form-control" name="XeroScopeArray" multiple>
                                                 </select>
@@ -365,7 +357,7 @@
 
 
 
-                                            <div class="col-12 col-md-8 col-lg-9 col-xl-8 d-none" id="divxeroscopeoption" style="display:none">
+                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8 d-none" id="divxeroscopeoption" style="display:none">
 
                                                 <select class="divxeroscopeoption form-control" name="XeroScopeArray" multiple>
                                                 </select>
@@ -409,7 +401,7 @@
                                     </div>
 
 
-                                    <div class="row align-items-center form-group">
+                                    <div class="row align-items-center form-group" style="display:none;">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> API Client ID</label>
                                         </div>
@@ -454,7 +446,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row align-items-center form-group">
+                                    <div class="row align-items-center form-group" style="display:none;">
                                         <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                             <label for="split-login-email" class="mb-0"> API Client Secret</label>
                                         </div>
@@ -463,6 +455,7 @@
                                             @Html.ValidationMessageFor(model => model.APIClientSecret, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
+
                                     @if (Model.ThirdPartyAccountingApp_ref == 1)
                                     {
                                         <div class="row align-items-center form-group" id="xero">
@@ -1200,9 +1193,6 @@ dashboard
         else {
 
 
-          //  $("#domocompany").show();
-         //   $(".domo-scope").hide();
-
             $('#EnableAutomation').prop('checked', true);
                 $("#xeroshort").hide();
                 $("#xerocontact").hide();
@@ -1210,7 +1200,7 @@ dashboard
 
                 $('#divxeroscopeoption').addClass('d-none');
 
-                $("#divQuickbookscopeoption").show();
+            
                 $(".qbookselect").select2({ maximumSelectionLength: 10, allowClear: false });
 
 
@@ -1241,9 +1231,7 @@ dashboard
 
 
         }
-
-
-        });
+});
 
 
 

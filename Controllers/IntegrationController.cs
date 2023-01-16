@@ -633,7 +633,7 @@ namespace ProvenCfoUI.Controllers
 
                             clientId     = pkg.ClientId;
                             clientSecret = pkg.ClientSecret;
-                            CallBackUrl = pkg.RedirectUrl;
+                            CallBackUrl =  pkg.RedirectUrl;
 
                             var quickBookService = new QuickbooksLocalService<string, string>(clientId, clientSecret, null, CallbackUrl: $"{CallBackUrl}");
 
