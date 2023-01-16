@@ -626,9 +626,13 @@
             }
             var MinAmount = $("#filterMinAmount").val();
             var MaxAmount = $("#filterMaxAmount").val();
-            var bankrule = $("#bankrule").val().join(',');
+            var bankrule = ""; //$("#bankrule").val().join(',');
             var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') :'';
-            var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined? $("#TrackingCategories_1").val().join(','):'';
+            var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined ? $("#TrackingCategories_1").val().join(',') : '';
+            var RuleNewStr = $('#Rule_New').val();
+            if (RuleNewStr != "") {
+                var ruleNew = "true" === RuleNewStr;
+            }
             var pdata = {
                 accounts: account,
                 dateRangeFrom: this.fromDate,
@@ -641,7 +645,8 @@
                 FilterType: filterReconcilationcategories,
                 AgencyID: ClientID,
                 Type: type,
-                selectedDate: datepicker
+                selectedDate: datepicker,
+                RuleNew: ruleNew
             }
             sessionStorage.setItem('Filter', JSON.stringify(pdata));
 
@@ -655,7 +660,8 @@
                               TrackingCategory2 = "_TrackingCategory2",
                               FilterType = "_FilterType",
                               AgencyID = "_AgencyID",
-                              Type = "_Type"
+                              Type = "_Type",
+                              RuleNew = "_RuleNew"
                           })';
             url = url.replace('_accounts', account);
             url = url.replace('_dateRangeFrom', this.fromDate);
@@ -668,7 +674,7 @@
             url = url.replace('_FilterType', filterReconcilationcategories);
             url = url.replace('_AgencyID', ClientID);
             url = url.replace('_Type', type);
-
+            url = url.replace('_RuleNew', ruleNew)
 
             url = replaceAll(url, '\&amp;', '&');
             url = replaceAll(url, '#', '%23');
@@ -725,12 +731,37 @@
             }
         }
 
+        $('#Filter').click(function () {
+
+            $(document).ready(function () {
+
+                $("#Rule_New").change(function () {
+                    
+                    $("#filter-checkbox-wrapper").fadeOut(200, function () {
+                        $(this).find("#Rule_New").attr("checked", !$(this).find("#Rule_New").attr("checked")).end().fadeIn(200);
+                    });
+
+                    if (this.checked) {
+                        $("label[for='Rule_New']")
+                            .css("color", "green")
+                            .fadeOut(200, function () {
+                                $(this).text("Checked✔").fadeIn(200);
+                            });
+                    } else {
+                        $("label[for='Rule_New']")
+                            .css("color", "red")
+                            .fadeOut(200, function () {
+                                $(this).text("Unchecked!").fadeIn(200);
+                            });
+                    }
+                });
+            });
+        });
 
         function BulkActionReconcilation(CommentText) {
-            debugger;
             $(".apply-btn").prop("disabled", true);
             $(".blk-cancel").prop("disabled", true);
-            
+
             var GLaccount = $('#BA_filterGLaccounts').val();
             //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
             //var CommentText = [];
