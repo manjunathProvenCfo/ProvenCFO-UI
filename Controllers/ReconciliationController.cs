@@ -128,7 +128,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         //[HttpPost]
-        public ActionResult GetFilteredReconcilationdata(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type)
+        public ActionResult GetFilteredReconcilationdata(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type, bool? RuleNew)
         {
 
             ViewBag.IsStaffUser = false;
@@ -148,6 +148,7 @@ namespace ProvenCfoUI.Controllers
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
                 Filter.UserID = User.UserId;
+                Filter.RuleNew = RuleNew;
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;

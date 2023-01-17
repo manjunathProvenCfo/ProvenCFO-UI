@@ -462,8 +462,8 @@
 
             });
             $("#btnCreateNewNotesDescription").click(function () {
-
-
+         
+                $('#btnCreateNewNotesDescription').unbind();
                 $("#Description").val(tinymce.get("Description").getContent());
                 if ($("#Title").valid() === false || $("#Description").valid() == false)
                     return;
