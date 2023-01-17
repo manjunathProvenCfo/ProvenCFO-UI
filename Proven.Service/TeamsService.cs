@@ -65,7 +65,7 @@ namespace Proven.Service
             //}
         }
 
-        public TeamsVM AddTeam(string TeamName, string status, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string userid)
+        public TeamsVM AddTeam(string TeamName, string status, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string TeamMemberId4, string userid)
         {
             var form = new Dictionary<string, string>
             {
@@ -74,6 +74,7 @@ namespace Proven.Service
                 {"TeamMemberId1", TeamMemberId1 },
                 {"TeamMemberId2", TeamMemberId2 },
                 {"TeamMemberId3", TeamMemberId3 },
+                {"TeamMemberId4", TeamMemberId4 },
                 {"CreatedBy", userid}
             };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
@@ -91,20 +92,20 @@ namespace Proven.Service
             //    throw new Exception(msg);
             //}
         }
-        public TeamsVM UpdateTeam(string Id, string TeamName, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string status, string IsDeleted, string userid)
+        public TeamsVM UpdateTeam(string Id, string TeamName, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string TeamMemberId4, string status, string IsDeleted, string userid)
         {
             var form = new Dictionary<string, string>
-           {
-               {"Id", Id},
-               {"TeamName", TeamName},
-               {"Status",status },
+            {
+                {"Id", Id},
+                {"TeamName", TeamName},
+                {"Status",status },
                 {"TeamMemberId1", TeamMemberId1 },
                 {"TeamMemberId2", TeamMemberId2 },
                 {"TeamMemberId3", TeamMemberId3 },
-               {"ModifiedBy", userid},
-               {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true).ToString()}
-
-           };
+                {"TeamMemberId4", TeamMemberId4 },
+                {"ModifiedBy", userid},
+                {"IsDeleted", (IsDeleted == null || IsDeleted == ""? false: true).ToString()}
+            };
             //content = new StringContent(JsonConvert.SerializeObject(form), Encoding.UTF8, "application/json");
             return PostAsync<TeamsVM, Dictionary<string, string>>("Teams/UpdateTeam", form).Result;
             //response = client.PostAsync("Teams/UpdateTeam", content).Result;

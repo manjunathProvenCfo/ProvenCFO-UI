@@ -421,16 +421,35 @@ function getTeamMembersList() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                var count = 1;
+                var count=0;
                 var number;
+                for (let index = 1; index <= 4; index++) {
+                    
+                    $('#email'+index).addClass("disabled-action-icons");
+                    $('#spTeamChat'+index).addClass("disabled-action-icons");
+                    $('#phoneNumber'+index).addClass("disabled-action-icons");
+                    $('#aLinkedInProfile'+index).addClass("disabled-action-icons");
+                }
                 $.each(data.TeamMembers, function (key, object) {
+                      count  = object.OrderNumber
+                    if (object.Username != null && object.Username != '') {
+                        $('#spTeamChat' + count).removeClass("disabled-action-icons");
+
+                        number = "tel:" + object.PhoneNumber;
+                        if (number != null) {
+
+                            $('#phoneNumber' + count).attr("href", number);
+                            $('#phoneNumber' + count).removeClass("disabled-action-icons");
+                        }
+                    }
 
                     if (object.Username != null && object.Username != '') {
-                        number = "tel:" + object.PhoneNumber;
-                        $('#phoneNumber' + count).attr("href", number);
-                    }
-                    if (object.Username != null && object.Username != '') {
-                        $('#email' + count).data("clipboard-text", String(object.Email));
+                        if (object.Email != null && object.Email!=undefined) {
+                            $('#email' + count).data("clipboard-text", String(object.Email));
+                            $('#email' + count).removeClass("disabled-action-icons");
+
+                        }
+
                     }
                     if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
 
@@ -443,13 +462,17 @@ function getTeamMembersList() {
                         $('#aLinkedInProfile' + count).prop('disabled', true);
                     }
                     if (object.Username != null && object.Username != '') {
-                        if (count == 1) {
+                        
+                        if ( count== 1) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                         else if (count == 2) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                         else if (count == 3) {
+                            $('#spStaffName' + count).html(String(object.Username));
+                        }
+                        else if (count == 4) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                     }
@@ -462,10 +485,13 @@ function getTeamMembersList() {
                             $('#spJobTitle' + count).html('CFO');
                         }
                         else if (count == 2) {
-                            $('#spJobTitle' + count).html('Controller');
+                            $('#spJobTitle' + count).html('Accounting Manager');
                         }
                         else if (count == 3) {
                             $('#spJobTitle' + count).html('Accountant');
+                        }
+                        else if (count == 4) {
+                            $('#spJobTitle' + count).html('Bookkeeper');
                         }
                     }
                
@@ -484,7 +510,7 @@ function getTeamMembersList() {
                     else {
                         $('#spTeamChat' + count).attr('href', '');
                     }
-                    count = count + 1;
+                   // count = count + 1;
                 });
             }
             else {
@@ -544,7 +570,6 @@ function AgencyDropdownPartialViewChange() {
                 MenuOptionHideAndShow(ClientID);
                /* }, 1000);*/
 
-                
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
                 $('#roleexist').show();
@@ -573,7 +598,6 @@ function AgencyDropdownPartialViewChange() {
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
-                
                 
 
             }
@@ -622,7 +646,7 @@ function AgencyDropdownPartialViewChange() {
           
             
         }
-      
+     
   
     }); 
     window.onerror = function (e) {

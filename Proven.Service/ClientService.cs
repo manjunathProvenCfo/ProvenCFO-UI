@@ -189,7 +189,7 @@ namespace Proven.Service
 
         }
 
-        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, string IncludedAccountNumbers, string ExcludedAccountNumbers, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled,bool IsDomoEnabled,string DOMO_datasetId)
+        public ClientModel UpdateClient(int id, string ClientName, string Email, string PhoneNumber, string Address, string ContactPersonName, string CityName, string State, string Status, string LoginUserid, string TeamId, string EntityId, DateTime? StartDate, string XeroID, string XeroScope,/*string XeroScopeArray,*/ string XeroClientID, string XeroClientSecret, bool ReceiveQuarterlyReports, bool EnableAutomation, string XeroContactIDforProvenCfo, string AsanaId, string EverhourId, string CrmId, string XeroShortCode, string DashboardId, string DashboardURLId, string ReportId, string IncludedAccountNumbers, string ExcludedAccountNumbers, int ThirdPartyAccountingApp_ref, Int64 QuickBooksCompanyId, bool Plaid_Enabled,bool IsDomoEnabled,string DOMO_datasetId, string TeamMemberId1, string TeamMemberId2, string TeamMemberId3, string TeamMemberId4)
         {
             var form = new Dictionary<string, object>
             {
@@ -222,7 +222,11 @@ namespace Proven.Service
                 {"QuickBooksCompanyId",QuickBooksCompanyId},
                 {"Plaid_Enabled", Plaid_Enabled },
                 { "IsDomoEnabled",IsDomoEnabled},
-                { "DOMO_datasetId",DOMO_datasetId}
+                { "DOMO_datasetId",DOMO_datasetId},
+                { "TeamMemberId1", TeamMemberId1},
+                { "TeamMemberId2", TeamMemberId2},
+                { "TeamMemberId3", TeamMemberId3},
+                { "TeamMemberId4", TeamMemberId4}
 
                
                 //{"PhoneNumber",PhoneNumber },

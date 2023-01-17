@@ -91,5 +91,14 @@ namespace ProvenCfoUI.Models
 
         public bool IsDomoEnabled { get; set; }
         public bool EnableDataSynTimeTrigge { get; set; }
+
+        //[Required(ErrorMessage = "Team Member 1 is a required field")]
+        public string TeamMemberId1 { get; set; }
+        //[Required(ErrorMessage = "Team Member 2 is a required field")]
+        public string TeamMemberId2 { get; set; }
+        //[Required(ErrorMessage = "Team Member 3 is a required field")]
+        public string TeamMemberId3 { get; set; }
+        public string TeamMemberId4 { get; set; }
+        public List<Proven.Model.UserModel> StaffList { get; set; }
     }
 }
