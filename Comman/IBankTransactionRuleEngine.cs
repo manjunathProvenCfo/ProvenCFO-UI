@@ -10,5 +10,6 @@ namespace ProvenCfoUI.Comman
     interface IBankTransactionRuleEngine
     {
         Task<dynamic> GetReconciliationByPaidWithAccountingPackage(ClientModel client);
+        Task<dynamic> GetReconciliationFromXero(ClientModel client);
     }
 }

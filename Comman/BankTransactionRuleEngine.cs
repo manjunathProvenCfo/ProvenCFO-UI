@@ -5,6 +5,7 @@ using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Xero.NetStandard.OAuth2.Model.Accounting;
@@ -135,14 +136,14 @@ namespace ProvenCfoUI.Comman
                     }
                     using (var reconciliation = new ReconcilationService())
                     {
-                       await reconciliation.UpdateasReconciledallrecordsofAgency(client.Id, 1);
+                        await reconciliation.UpdateasReconciledallrecordsofAgency(client.Id, 1);
                     }
-                    
+
                     foreach (var account in ClientBankAccounts)
                     {
                         if (account.IsActive == true && !string.IsNullOrEmpty(account.access_token))
                         {
-                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(account.access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n","");
+                            Access_token = SecurityCommon.DecryptToBytesUsingCBC(Convert.FromBase64String(account.access_token.Replace(" ", "+"))).Replace("\t", "").Replace("\n", "");
                             if (client.ThirdPartyAccountingApp_ref == 1)
                             {
                                 BankTransactionfactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions>(client.APIClientID, client.APIClientSecret, client.APIScope, "");
@@ -313,6 +314,62 @@ namespace ProvenCfoUI.Comman
             this.isDisposed = true;
         }
 
+        public async Task<dynamic> GetReconciliationFromXero(ClientModel iclient)
+        {
+            XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions> BankTransactionsFactory = null;
+            XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Payments> PaymentsFactory = null;
+            XeroBankTransaction<IXeroToken, BankStatements> BankStatmentFactory = null;
 
+            Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions BankTransactions = null;
+            Xero.NetStandard.OAuth2.Model.Accounting.Payments Payments = null;
+            BankStatements BankStatements = null;
+
+            List<Xero.NetStandard.OAuth2.Model.Accounting.BankTransaction> BankTransactionList = null;
+            List<Xero.NetStandard.OAuth2.Model.Accounting.Payment> PaymentList = null;
+            List<BankStatements> BankStatementsList = null;
+
+            StringBuilder retVal = new StringBuilder();
+            string fromdate = DateTime.Now.AddDays(-100).ToString("yyyy,MM,dd");
+            string todate = DateTime.Now.ToString("yyyy,MM,dd");
+
+            try
+            {
+                using (ClientService client = new ClientService())
+                {
+                    var ClientBankAccounts = client.GetClientXeroAcccountsByAgencyId(iclient.Id).ResultData.ToList();
+                    if (ClientBankAccounts == null)
+                    {
+                        retVal.Append("Please sync the bank accounts under setup menu.");
+                        return (dynamic)retVal;
+                    };
+                    if (ClientBankAccounts.Where(x => x.IsActive == true).Count() == 0)
+                    {
+                        retVal.Append("No bank account has been active. Please enable at least one bank account to sync the data.");
+                        return (dynamic)retVal;
+                    }
+                    foreach (var account in ClientBankAccounts)
+                    {
+                        if (account.IsActive == true)
+                        {
+                            BankTransactionsFactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.BankTransactions>(iclient.APIClientID, iclient.APIClientSecret, iclient.APIScope, "");
+                            PaymentsFactory = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Payments>(iclient.APIClientID, iclient.APIClientSecret, iclient.APIScope, "");
+                            BankStatmentFactory = new XeroBankTransaction<IXeroToken, BankStatements>(iclient.APIClientID, iclient.APIClientSecret, iclient.APIScope, "");
+
+
+                            BankTransactions = await BankTransactionsFactory.GetBankTransactionsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==true&&Status!=""DELETED""&&BankAccount.Code==""{0}""", account.Code));
+                            Payments = await PaymentsFactory.GetPaymentsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID, string.Format(@"IsReconciled==false&&Status!=""DELETED""&&Account.Code==""{0}""", account.Code));
+                            BankStatements = await BankStatmentFactory.GetBankStatementsAsync(AccountingPackageInstance.Instance.XeroToken, AccountingPackageInstance.Instance.TenentID,account.AccountID, fromdate,todate, string.Format(@"bankAccountID==""{0}""&&IsReconciled==false&&Status!=""DELETED""", account.AccountID), null,null,null,null);
+
+                        }
+                    }
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

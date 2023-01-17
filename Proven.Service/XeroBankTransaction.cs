@@ -63,6 +63,12 @@ namespace Proven.Service
             var result = await _accountinstance.GetPaymentsAsync(Token.AccessToken, TenentID,null, Convert.ToString(whereCause));
             return (V)Convert.ChangeType(result, typeof(V));
         }
+        public override async Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string where = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null)
+        {
+            var Token = (IXeroToken)xeroToken;
+            var result = await _accountinstance.GetBankStatements(Token.AccessToken, xeroTenantId, bankAccountID, dateFrom, dateTo, order, where, page, ifModifiedSince, status);
+            return (V)Convert.ChangeType(result, typeof(V));
+        }
         public void Dispose()
         {
             Dispose(true);

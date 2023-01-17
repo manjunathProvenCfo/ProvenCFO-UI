@@ -16,10 +16,10 @@ using Proven.Service.AccountingPackage;
 
 namespace Proven.Service
 {
-    public class XeroService<T, V> :  AccountingAppFatory<T, V>, IDisposable
+    public class XeroService<T, V> : AccountingAppFatory<T, V>, IDisposable
     {
         private bool isDisposed = false;
-        private const string Vurl =  @"https://appqa.provencfo.com/Integration/Callback";
+        private const string Vurl = @"https://appqa.provencfo.com/Integration/Callback";
         string _ClientId;
         string _ClientSecret;
         string _scopes;
@@ -36,7 +36,7 @@ namespace Proven.Service
             _callbackurl = CallbackUrl + "Integration/Callback";
             xeroConfig = new XeroConfiguration();
             xeroConfig.AppName = AppName;
-            xeroConfig.CallbackUri = new Uri(CallbackUrl == ""?Vurl : _callbackurl);
+            xeroConfig.CallbackUri = new Uri(CallbackUrl == "" ? Vurl : _callbackurl);
             xeroConfig.ClientId = _ClientId;
             xeroConfig.ClientSecret = _ClientSecret;
             xeroConfig.Scope = _scopes;
@@ -103,7 +103,7 @@ namespace Proven.Service
                     AccessToken = Token.access_token,
                     RefreshToken = Token.refresh_token,
                     ExpiresAtUtc = Token.ModifiedDate.Value.AddSeconds(Token.expires_in.Value),
-                    IdToken = Token.id_token,                    
+                    IdToken = Token.id_token,
                     // This is required for refresh logic down in GetCurrentValidTokenAsync.
                     //ExpiresAtUtc =  DateTime.MaxValue
                 };
@@ -276,9 +276,9 @@ namespace Proven.Service
         public override async Task<V> GetBankAccounts(T Token, string TenentID)
         {
             var objToken = (IXeroToken)Token;
-            
+
             var result = await _accountinstance.GetAccountsAsync(objToken.AccessToken, TenentID);
-            var finalresult  = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK").ToList();
+            var finalresult = result._Accounts.Where(x => x.Status.ToString() == "ACTIVE" && x.Type.ToString() == "BANK").ToList();
             return (V)Convert.ChangeType(finalresult, typeof(V));
         }
         public override async Task<V> GetTrackingCategories(T xeroToken, string XeroTenentID)
@@ -307,7 +307,7 @@ namespace Proven.Service
             this.isDisposed = true;
         }
 
-        public override async Task<V> GetOrganisationsId(T xeroToken, string XeroTenentID="")
+        public override async Task<V> GetOrganisationsId(T xeroToken, string XeroTenentID = "")
         {
             var Token = (IXeroToken)xeroToken;
             var result = await _accountinstance.GetOrganisationsAsync(Token.AccessToken, XeroTenentID);
@@ -321,10 +321,13 @@ namespace Proven.Service
 
         public override string GenerateAuthorizationPromptUrl()
         {
-            var clientState = Guid.NewGuid().ToString();            
+            var clientState = Guid.NewGuid().ToString();
             return XeroClient.BuildLoginUri(clientState);
         }
 
-        
+        public override Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -181,5 +181,10 @@ namespace Proven.Service
         {
             throw new NotImplementedException();
         }
+
+        public override Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string where = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

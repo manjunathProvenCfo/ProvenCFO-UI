@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIResult.cs" />
+    <Compile Include="BankStatements.cs" />
     <Compile Include="BillableEntitiesVM.cs" />
     <Compile Include="BulkActionParametersVM.cs" />
     <Compile Include="ChartOptionsResultModel.cs" />
