@@ -385,7 +385,7 @@
                                         createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
 
                                         createClientVM.APIClientSecret= ViewBag.thirdPatyAPI[0].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope.Split(' ');
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
 
 
                                     }
@@ -397,7 +397,7 @@
 
                                         createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
 
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope.Split(' ');
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
                                     }
 
 
@@ -424,7 +424,7 @@
                                         createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
 
                                         createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[0].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[0].APIScope.Split(' ');
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
 
 
                                     }
@@ -436,7 +436,7 @@
 
                                         createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
 
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPartyAPI[1].APIScope.Split(' ');
+                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
                                     }
                                    
 
