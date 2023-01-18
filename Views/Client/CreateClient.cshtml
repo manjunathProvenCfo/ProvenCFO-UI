@@ -465,7 +465,7 @@
                                             <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                                 @Html.EditorFor(model => model.XeroID, new { htmlAttributes = new { @class = "form-control ClientXeroIdTextBox" } })
 
-                                                <button id="xeroIDFetch" title="click here to get xero related information."><i class="fa fa-ellipsis-v hover-pointer" aria-hidden="true" id="" style="" title="click here to get xero related information."></i></button>
+                                                <button id="xeroIDFetch" class="btn btn-primary mt-2" style="font-size:0.8rem;" title="click here to get xero related information.">Get Xero ID</button>
                                                 @Html.ValidationMessageFor(model => model.XeroID, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
