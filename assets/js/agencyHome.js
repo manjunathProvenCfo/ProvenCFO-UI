@@ -423,15 +423,19 @@ function getTeamMembersList() {
             if (data != null) {
                 var count=0;
                 var number;
-                for (let index = 1; index <= 4; index++) {
+                for (let position = 1; position <= 4; position++) {
                     
-                    $('#email'+index).addClass("disabled-action-icons");
-                    $('#spTeamChat'+index).addClass("disabled-action-icons");
-                    $('#phoneNumber'+index).addClass("disabled-action-icons");
-                    $('#aLinkedInProfile'+index).addClass("disabled-action-icons");
+                    $('#email'+ position).addClass("disabled-action-icons");
+                    $('#spTeamChat' + position).addClass("disabled-action-icons");
+                    $('#phoneNumber' + position).addClass("disabled-action-icons");
+                    $('#aLinkedInProfile' + position).addClass("disabled-action-icons");
+
+                    $('#teamMember' + position).css({ "display": "none" });
                 }
                 $.each(data.TeamMembers, function (key, object) {
-                      count  = object.OrderNumber
+                    count = object.OrderNumber
+                    $('#teamMember' + count).css({ "display": "" })
+
                     if (object.Username != null && object.Username != '') {
                         $('#spTeamChat' + count).removeClass("disabled-action-icons");
 
@@ -449,7 +453,6 @@ function getTeamMembersList() {
                             $('#email' + count).removeClass("disabled-action-icons");
 
                         }
-
                     }
                     if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
 
@@ -629,15 +632,19 @@ function AgencyDropdownPartialViewChange() {
             $('#spStaffName1').html('');
             $('#spStaffName2').html('');
             $('#spStaffName3').html('');
+            $('#spStaffName4').html('');
             $('#spJobTitle1').html('');
             $('#spJobTitle2').html('');
             $('#spJobTitle3').html('');
+            $('#spJobTitle4').html('');
             $('#spProfileImage1').removeAttr('src');
             $('#spProfileImage2').removeAttr('src');
             $('#spProfileImage3').removeAttr('src');
+            $('#spProfileImage4').removeAttr('src');
             $('#spTeamChat1').removeAttr('href');
             $('#spTeamChat2').removeAttr('href');
             $('#spTeamChat3').removeAttr('href');
+            $('#spTeamChat4').removeAttr('href');
             $('#spStatus').html('');
             $('#spClientAddress').html('');
             $('.badge-soft-success').addClass('d-none');
