@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 
+
+
 namespace Proven.Service
 {
     public class QuickbooksLocalService<T, V> : AccountingAppFatory<T, V>,  IDisposable
@@ -246,6 +248,11 @@ namespace Proven.Service
         }
 
         public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null)
         {
             throw new NotImplementedException();
         }

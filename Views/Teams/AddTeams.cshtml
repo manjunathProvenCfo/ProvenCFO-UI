@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                        <label for="split-login-email" class="mb-0">Controller</label>
+                                        <label for="split-login-email" class="mb-0">Accounting Manager</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
                                         @Html.DropDownListFor(model => model.TeamMemberId2, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam2" })
@@ -95,6 +95,16 @@
 
                                 <div class="row align-items-center form-group">
                                     <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        <label for="split-login-email" class="mb-0">Bookkeeper</label>
+                                    </div>
+                                    <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+                                        @Html.DropDownListFor(model => model.TeamMemberId4, new SelectList(Model.StaffList, "UserId", "DisplayName"), "Select Team Member", new { @class = "form-control", @id = "DropDownListTeam4" })
+                                        @Html.ValidationMessageFor(model => model.TeamMemberId4, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
                                         <label for="split-login-email">Status</label>
                                     </div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
@@ -104,34 +114,38 @@
                                 </div>
 
 
-
-
-
-                                @*<div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
-                                        <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
-                                    </div>*@
-
-                                <div class="row align-items-center form-group mb-0">
-                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4">
-                                    </div>
+                                <div class="row align-items-center form-group">
+                                    <div class="col-12 col-md-4 col-lg-3 col-xl-4"></div>
                                     <div class="col-12 col-md-8 col-lg-9 col-xl-8">
-
-                                        @if (Model.Id == 0)
-                                        {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateTeams", "Teams")" onclick="return UniqueTeams()">Create</button>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateTeam", "Teams")" onclick="return UniqueTeams()">Update</button>
-                                        }
-                                        <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("TeamsList", "Teams")'" />
-
+                                        <span class="text-danger field-validation-error"><span id="selectTeam"></span></span>
                                     </div>
-                                    @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
-                                    @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
-                                    @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
                                 </div>
+
+                                    @*<div class="custom-control custom-checkbox">
+                <input class="custom-control-input" type="checkbox" id="basic-register-checkbox" />
+                <label class="custom-control-label" for="basic-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+            </div>*@
+
+                                    <div class="row align-items-center form-group mb-0">
+                                        <div class="col-12 col-md-4 col-lg-3 col-xl-4">
+                                        </div>
+                                        <div class="col-12 col-md-8 col-lg-9 col-xl-8">
+
+                                            @if (Model.Id == 0)
+                                            {
+                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("CreateTeams", "Teams")" onclick="return UniqueTeams()">Create</button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-primary" type="submit" id="btnCreate" name="submit" href="@Url.Action("UpdateTeam", "Teams")" onclick="return UniqueTeams()">Update</button>
+                                            }
+                                            <input type="button" value="Cancel" class="btn btn-primary ml-2" onclick="location.href='@Url.Action("TeamsList", "Teams")'" />
+
+                                        </div>
+                                        @*<button class="btn btn-primary btn-block mt-2 col-5" type="button" id="btnCreate" name="submit" href="@Url.Action("Role", "Role")">Cancel</button>*@
+                                        @*<input class="btn btn-primary btn-block mt-2 col-5 float-right" type="button" name="Cancel" id="btnClear" href=@Url.Action("Role", "Role") value="Cancel" />*@
+                                        @*<button class="btn btn-primary btn-block mt-2 col-5 float-right"  id="btnClear" href="#">Cancel</button>*@
+                                    </div>
 
                             </div>
 
@@ -204,12 +218,29 @@
             var valhere1 = $("#DropDownListTeam1").val();
             var valhere2 = $("#DropDownListTeam2").val();
             var valhere3 = $("#DropDownListTeam3").val();
+            var valhere4 = $("#DropDownListTeam4").val();
 
-            if (valhere1 == valhere2 && valhere1 != "" || valhere2 == valhere3 && valhere2 != "" || valhere1 == valhere3 && valhere1 != "") {
+            if (valhere1 == valhere2 && valhere1 != "" || valhere2 == valhere3 && valhere2 != "" || valhere3 == valhere4 && valhere3 != "" || valhere1 == valhere4 && valhere1 != "") {
                 $('#uniqueteam').html('<div class="alert alert-danger text-center"><b>Team members on a team must be unique.</b></div>');
                 return false;
             }
+            if (valhere1 == '' && valhere2 == '' && valhere3 == '' && valhere4 == '') {
+
+                $('#selectTeam').html('<div><b>Atleast one Team Member should have selected!</b></div>');
+                return false;
+            }
         }
+        $('#DropDownListTeam1, #DropDownListTeam2, #DropDownListTeam3, #DropDownListTeam4').change(function () {
+
+            var valhere1 = $("#DropDownListTeam1").val();
+            var valhere2 = $("#DropDownListTeam2").val();
+            var valhere3 = $("#DropDownListTeam3").val();
+            var valhere4 = $("#DropDownListTeam4").val();
+
+            if (valhere1 != '' || valhere2 != '' || valhere3 != '' || valhere4 != '') {
+                $('#selectTeam').empty();
+            }
+        });
 
 
         function AddAlertTeam() {

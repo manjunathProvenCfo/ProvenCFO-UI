@@ -273,6 +273,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountingApiExtention.cs" />
     <Compile Include="BankTransctionFatory.cs" />
     <Compile Include="AccountingPackage\AccountingAppFactory .cs" />
     <Compile Include="AccountingPackage\AccountingPackageData.cs" />

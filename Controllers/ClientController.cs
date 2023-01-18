@@ -174,19 +174,23 @@
                     {
                         using (BillableEntitiesService objEntities = new BillableEntitiesService())
                         {
-                            CreateClientVM Clientvm = new CreateClientVM();
-                            Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                            Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
-                            Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
-                            Clientvm.ThirdPartyAccountingApp_ref = 1;
-                            Clientvm.IsDomoEnabled = false;
-                            Clientvm.EnableAutomation = true;
-                            Clientvm.EnableDataSynTimeTrigge = true;
-                            TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
+                            using (AccountService accountService = new AccountService())
+                            {
+                                CreateClientVM Clientvm = new CreateClientVM();
+                                Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
+                                Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.Where(x => x.Status == "Active").ToList();
+                                Clientvm.ThirdPartyAccountingApp_ref = 1;
+                                Clientvm.IsDomoEnabled = false;
+                                Clientvm.EnableAutomation = true;
+                                Clientvm.EnableDataSynTimeTrigge = true;
+                                Clientvm.StaffList = accountService.GetRegisteredStaffUserList().resultData;
+                                TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
 
-                            ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
-                            
-                            return View(Clientvm);
+                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list;
+
+                                return View(Clientvm);
+                            }
                         }
                     }
                 }
@@ -211,93 +215,106 @@
                     {
                         using (BillableEntitiesService objEntities = new BillableEntitiesService())
                         {
-
-                            CreateClientVM Clientvm = new CreateClientVM();
-
-                            var client = objClientService.GetClientById(Id);
-                            Clientvm.Id = client.Id;
-                            Clientvm.PhoneNumber = client.PhoneNumber;
-                            Clientvm.StateId = client.StateId;
-                            Clientvm.Status = client.Status == true ? "Active" : "Inactive";
-                            Clientvm.Email = client.Email;
-                            Clientvm.ClientName = client.Name;
-                            Clientvm.CityName = client.CityName;
-                            Clientvm.CityId = client.CityId;
-                            Clientvm.Address = client.Address;
-                            Clientvm.StateId = client.State;
-                            Clientvm.TeamId = Convert.ToInt32(client.TeamId);
-                            Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
-                            Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-
-                            Clientvm.DOMO_datasetId = client.DOMO_datasetId;
-                            Clientvm.IsDomoEnabled = false;//(bool)(client.IsDomoEnabled==null?false: client.IsDomoEnabled);
-                            Clientvm.EnableAutomation = (bool)(client.EnableAutomation==null?false:client.EnableAutomation);
-
-                            Clientvm.EnableDataSynTimeTrigge = client.EnableDataSynTimeTrigge == null ? false : (bool)client.EnableDataSynTimeTrigge;
-                   
-
-                            Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                            Clientvm.BillableEntityId = client.BillableEntityId;
-                            Clientvm.ContactPersonName = client.ContactPersonName;
-                            Clientvm.EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
-                            Clientvm.XeroTokenInfoLink_ref = client.XeroTokenInfoLink_ref;
-                            if (client.StartDate != null)
+                            using (AccountService accountService = new AccountService())
                             {
-                                Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
-                             
-                            }
+
+                                CreateClientVM Clientvm = new CreateClientVM();
+
+                                var client = objClientService.GetClientById(Id);
+                                Clientvm.Id = client.Id;
+                                Clientvm.PhoneNumber = client.PhoneNumber;
+                                Clientvm.StateId = client.StateId;
+                                Clientvm.Status = client.Status == true ? "Active" : "Inactive";
+                                Clientvm.Email = client.Email;
+                                Clientvm.ClientName = client.Name;
+                                Clientvm.CityName = client.CityName;
+                                Clientvm.CityId = client.CityId;
+                                Clientvm.Address = client.Address;
+                                Clientvm.StateId = client.State;
+                                Clientvm.TeamId = Convert.ToInt32(client.TeamId);
+                                Clientvm.StateList = objClientService.GetAllStates().ResultData.ToList();
+                                Clientvm.TeamList = objTeamService.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+
+                                Clientvm.DOMO_datasetId = client.DOMO_datasetId;
+                                Clientvm.IsDomoEnabled = false;//(bool)(client.IsDomoEnabled==null?false: client.IsDomoEnabled);
+                                Clientvm.EnableAutomation = (bool)(client.EnableAutomation == null ? false : client.EnableAutomation);
+
+                                Clientvm.EnableDataSynTimeTrigge = client.EnableDataSynTimeTrigge == null ? false : (bool)client.EnableDataSynTimeTrigge;
 
 
-                            ViewBag.thirdPatyAPI = objClientService.GetThirdPatyAPIDetails().list;
-                            Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
-                     
-                            TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
-                            Clientvm.XeroID = client.XeroID;
-                            if (client.APIScope != null)
-                            {
-                                if (client.ThirdPartyAccountingApp_ref == 1)
+                                Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                Clientvm.BillableEntityId = client.BillableEntityId;
+                                Clientvm.ContactPersonName = client.ContactPersonName;
+                                Clientvm.EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
+                                Clientvm.XeroTokenInfoLink_ref = client.XeroTokenInfoLink_ref;
+
+                                Clientvm.StaffList = accountService.GetRegisteredStaffUserList().resultData.ToList();
+                                var teamMembers = objTeamService.GetTeamsById((int)client.TeamId);
+
+                                Clientvm.TeamMemberId1 = teamMembers.TeamMemberId1;
+                                Clientvm.TeamMemberId2 = teamMembers.TeamMemberId2;
+                                Clientvm.TeamMemberId3 = teamMembers.TeamMemberId3;
+                                Clientvm.TeamMemberId4 = teamMembers.TeamMemberId4;
+
+
+                                if (client.StartDate != null)
                                 {
-                                    if (client.APIScope.Split(' ').Length < 2)
-                                    {
-                                        Clientvm.APIScope = client.APIScope;
+                                    Clientvm.StartDateText = client.StartDate.Value.ToString("MM/dd/yyyy");
 
+                                }
+
+
+                                ViewBag.thirdPatyAPI = objClientService.GetThirdPatyAPIDetails().list;
+                                Clientvm.clientXeroAccounts = objClientService.GetClientXeroAcccountsByAgencyId(Id).ResultData;
+
+                                TempData["ThirdPartyAccountApp"] = objClientService.GetThirdPartyAccountingData().ResultData;
+                                Clientvm.XeroID = client.XeroID;
+                                if (client.APIScope != null)
+                                {
+                                    if (client.ThirdPartyAccountingApp_ref == 1)
+                                    {
+                                        if (client.APIScope.Split(' ').Length < 2)
+                                        {
+                                            Clientvm.APIScope = client.APIScope;
+
+                                        }
+                                        else
+                                        {
+
+                                            Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                        }
                                     }
                                     else
                                     {
-
-                                        Clientvm.APIScope = client.APIScope.Split(' ').Skip(1).ToArray().Aggregate((e1, e2) => { return e1 + " " + e2; });
+                                        Clientvm.APIScope = client.APIScope;
                                     }
+                                }
+                                Clientvm.APIClientID = client.APIClientID;
+                                Clientvm.APIClientSecret = client.APIClientSecret;
+                                Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
+                                Clientvm.XeroContactIDforProvenCfo = client.XeroContactIDforProvenCfo;
+                                Clientvm.AsanaId = client.AsanaId;
+                                Clientvm.EverhourId = client.EverhourId;
+                                Clientvm.CrmId = client.CrmId;
+                                Clientvm.XeroShortCode = client.XeroShortCode;
+                                Clientvm.DashboardId = client.DashboardId;
+                                Clientvm.DashboardURLId = client.DashboardURLId;
+                                Clientvm.ReportId = client.ReportId;
+                                if (client.ThirdPartyAccountingApp_ref == null)
+                                {
+                                    Clientvm.ThirdPartyAccountingApp_ref = 1;
+
                                 }
                                 else
                                 {
-                                    Clientvm.APIScope = client.APIScope;
+                                    Clientvm.ThirdPartyAccountingApp_ref = client.ThirdPartyAccountingApp_ref;
                                 }
-                            }                            
-                            Clientvm.APIClientID = client.APIClientID;
-                            Clientvm.APIClientSecret = client.APIClientSecret;
-                            Clientvm.ReceiveQuarterlyReports = client.ReceiveQuarterlyReports;
-                            Clientvm.XeroContactIDforProvenCfo = client.XeroContactIDforProvenCfo;
-                            Clientvm.AsanaId = client.AsanaId;
-                            Clientvm.EverhourId = client.EverhourId;
-                            Clientvm.CrmId = client.CrmId;
-                            Clientvm.XeroShortCode = client.XeroShortCode;
-                            Clientvm.DashboardId = client.DashboardId;
-                            Clientvm.DashboardURLId = client.DashboardURLId;
-                            Clientvm.ReportId = client.ReportId;
-                            if (client.ThirdPartyAccountingApp_ref == null)
-                            {
-                                Clientvm.ThirdPartyAccountingApp_ref = 1;
+                                Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
+                                Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
+                                Clientvm.XeroScopeArray = Clientvm.APIScope != null ? Clientvm.APIScope.Split(' ') : new String[0];
 
+                                return View("CreateClient", Clientvm);
                             }
-                            else
-                            {
-                                Clientvm.ThirdPartyAccountingApp_ref = client.ThirdPartyAccountingApp_ref;
-                            }
-                            Clientvm.QuickBooksCompanyId = client.QuickBooksCompanyId;
-                            Clientvm.Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
-                            Clientvm.XeroScopeArray = Clientvm.APIScope != null ? Clientvm.APIScope.Split(' '): new String[0];
-
-                            return View("CreateClient", Clientvm);
                         }
                     }
                 }
@@ -325,142 +342,150 @@
                         {
                             using (BillableEntitiesService objEntities = new BillableEntitiesService())
                             {
-
-                                CreateClientVM Clientvm = new CreateClientVM();
-
-                                Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
-
-                                var LoginUserid = Session["UserId"].ToString();
-                                Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
-                                Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
-                                
-                                Clientvm.DomoScopeArray = createClientVM.DomoScopeArray;
-                                Clientvm.DOMO_datasetId = createClientVM.DOMO_datasetId;
-
-                                
-                                Clientvm.EnableDataSynTimeTrigge = createClientVM.EnableDataSynTimeTrigge;
-                                ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list.OrderBy(pkg => pkg.Id).ToList();
-
-
-                                if (!string.IsNullOrEmpty(createClientVM.StartDateText))
+                                using (AccountService accountService = new AccountService())
                                 {
-                                    CultureInfo provider = CultureInfo.InvariantCulture;
-                                    createClientVM.StartDate = DateTime.ParseExact(createClientVM.StartDateText, "MM/dd/yyyy", provider);
-                                }
+                                    TeamsVM teamsVM = new TeamsVM();
+                                    CreateClientVM Clientvm = new CreateClientVM();
 
-                                if (createClientVM.Id == 0)
-                                {
-                                    TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
-                                    var ClientExist = obj.GetClientByName(createClientVM.ClientName);
+                                    Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
 
-                                    if (ClientExist != null)
-                                    {
-                                        ViewBag.ErrorMessage = "Exist";
-                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
-                                        Clientvm.APIScope = createClientVM.APIScope;
-                                        Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
-                                        return View("CreateClient", Clientvm);
-                                    }
-                            
+                                    var LoginUserid = Session["UserId"].ToString();
+                                    Clientvm.StateList = obj.GetAllStates().ResultData.ToList();
+                                    Clientvm.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                    Clientvm.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                    Clientvm.ThirdPartyAccountingApp_ref = createClientVM.ThirdPartyAccountingApp_ref;
 
-                                    if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
-                                    {
-                                        createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
-                                    }
+                                    Clientvm.DomoScopeArray = createClientVM.DomoScopeArray;
+                                    Clientvm.DOMO_datasetId = createClientVM.DOMO_datasetId;
+                                    Clientvm.StaffList = accountService.GetRegisteredStaffUserList().resultData.ToList();
 
-                                   
-                                    if (Clientvm.DomoScopeArray!=null)
+                                    Clientvm.EnableDataSynTimeTrigge = createClientVM.EnableDataSynTimeTrigge;
+                                    ViewBag.thirdPatyAPI = obj.GetThirdPatyAPIDetails().list.OrderBy(pkg => pkg.Id).ToList();
+
+
+                                    if (!string.IsNullOrEmpty(createClientVM.StartDateText))
                                     {
-                                        createClientVM.APIScope = string.Join(" ", createClientVM.DomoScopeArray);
-                                    }else
-                                    if (Clientvm.XeroScopeArray != null)
-                                    {
-                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        CultureInfo provider = CultureInfo.InvariantCulture;
+                                        createClientVM.StartDate = DateTime.ParseExact(createClientVM.StartDateText, "MM/dd/yyyy", provider);
                                     }
 
-                                    if (createClientVM.ThirdPartyAccountingApp_ref==1)
+                                    if (createClientVM.Id == 0)
                                     {
-                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
+                                        TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
+                                        var ClientExist = obj.GetClientByName(createClientVM.ClientName);
 
-                                        createClientVM.APIClientSecret= ViewBag.thirdPatyAPI[0].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
+                                        if (ClientExist != null)
+                                        {
+                                            ViewBag.ErrorMessage = "Exist";
+                                            createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                            Clientvm.APIScope = createClientVM.APIScope;
+                                            Clientvm.XeroScopeArray = createClientVM.XeroScopeArray;
+                                            return View("CreateClient", Clientvm);
+                                        }
 
 
+                                        if (createClientVM.APIClientID != null && createClientVM.APIClientID != "")
+                                        {
+                                            createClientVM.APIClientID = createClientVM.APIClientID.Split('=')[0];
+                                        }
+
+
+                                        if (Clientvm.DomoScopeArray != null)
+                                        {
+                                            createClientVM.APIScope = string.Join(" ", createClientVM.DomoScopeArray);
+                                        }
+                                        else
+                                        if (Clientvm.XeroScopeArray != null)
+                                        {
+                                            createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        }
+
+                                        if (createClientVM.ThirdPartyAccountingApp_ref == 1)
+                                        {
+                                            createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
+
+                                            createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[0].ClientSecret;
+                                            createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
+
+
+                                        }
+
+                                        if (createClientVM.ThirdPartyAccountingApp_ref == 2)
+                                        {
+
+                                            createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
+
+                                            createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
+
+                                            createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
+                                        }
+                                        var teamName = "Team - " + createClientVM.ClientName;
+                                        teamsVM = objTeams.AddTeam(teamName, "Active", createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4, LoginUserid);
+                                        teamsVM = objTeams.GetTeamsByName(teamName);
+
+                                        var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(teamsVM.Id), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.DOMO_datasetId, createClientVM.EnableDataSynTimeTrigge);
+                                        if (result == null)
+                                            ViewBag.ErrorMessage = "";
+                                        ViewBag.ErrorMessage = "Created";
                                     }
-
-                                    if (createClientVM.ThirdPartyAccountingApp_ref == 2)
+                                    else
                                     {
 
-                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
 
-                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
+                                        TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
+                                        var ClientExist = obj.GetClientByName(createClientVM.ClientName);
+                                        createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
+                                        createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                        createClientVM.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
+                                        createClientVM.clientXeroAccounts = obj.GetClientXeroAcccountsByAgencyId(createClientVM.Id).ResultData;
+                                        createClientVM.StaffList = accountService.GetRegisteredStaffUserList().resultData.ToList();
 
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
-                                    }
+                                        var client = obj.GetClientById(createClientVM.Id);
+                                        var team = objTeams.GetTeamsById((int)client.TeamId);
+
+                                        if (createClientVM.ThirdPartyAccountingApp_ref == 1)
+                                        {
+                                            createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
+
+                                            createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[0].ClientSecret;
+                                            createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
+
+
+                                        }
+
+                                        if (createClientVM.ThirdPartyAccountingApp_ref == 2)
+                                        {
+
+                                            createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
+
+                                            createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
+
+                                            createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
+                                        }
+
+
+                                        if (ClientExist != null && ClientExist.Id != createClientVM.Id)
+                                        {
+                                            ViewBag.ErrorMessage = "Exist";
+                                            return View("CreateClient", createClientVM);
+                                        }
+                                        if (Clientvm.XeroScopeArray != null)
+                                        {
+                                            createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
+                                        }
+
+                                        var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(team.Id), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.IsDomoEnabled, createClientVM.DOMO_datasetId, createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4);
 
 
 
-                                    var result = obj.CreateClient(createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), Convert.ToString(createClientVM.BillableEntityId), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, Convert.ToInt32(createClientVM.ThirdPartyAccountingApp_ref), Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.DOMO_datasetId,createClientVM.EnableDataSynTimeTrigge);
-                                    if (result == null)
+
                                         ViewBag.ErrorMessage = "";
-                                    ViewBag.ErrorMessage = "Created";
-                                }
-                                else
-                                {
-               
-
-                                    TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
-                                    var ClientExist = obj.GetClientByName(createClientVM.ClientName);
-                                    createClientVM.StateList = obj.GetAllStates().ResultData.ToList();
-                                    createClientVM.TeamList = objTeams.GetTeamsList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                    createClientVM.billableEntitiesList = objEntities.GetAllBillableEntitiesList().ResultData.ToList().Where(x => x.Status == "Active").ToList();
-                                    createClientVM.clientXeroAccounts = obj.GetClientXeroAcccountsByAgencyId(createClientVM.Id).ResultData;
-
-
-                                    if (createClientVM.ThirdPartyAccountingApp_ref == 1)
-                                    {
-                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[0].ClientId;
-
-                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[0].ClientSecret;
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[0].APIScope.Split(' ');
-
-
-                                    }
-
-                                    if (createClientVM.ThirdPartyAccountingApp_ref == 2)
-                                    {
-
-                                        createClientVM.APIClientID = ViewBag.thirdPatyAPI[1].ClientId;
-
-                                        createClientVM.APIClientSecret = ViewBag.thirdPatyAPI[1].ClientSecret;
-
-                                        createClientVM.XeroScopeArray = ViewBag.thirdPatyAPI[1].APIScope.Split(' ');
-                                    }
-                                   
-
-                                    if (ClientExist != null && ClientExist.Id != createClientVM.Id)
-                                    {
-                                        ViewBag.ErrorMessage = "Exist";
+                                        ViewBag.ErrorMessage = "Updated";
                                         return View("CreateClient", createClientVM);
                                     }
-                                    if (Clientvm.XeroScopeArray != null)
-                                    {
-                                        createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
-                                    }
+                                    return View("CreateClient", Clientvm);
 
-                                    var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, Convert.ToString(createClientVM.TeamId), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled ,createClientVM.IsDomoEnabled,createClientVM.DOMO_datasetId);
-
-
-
-
-                                    ViewBag.ErrorMessage = "";
-                                    ViewBag.ErrorMessage = "Updated";
-                                    return View("CreateClient", createClientVM);
                                 }
-                                return View("CreateClient", Clientvm);
-                          
                             }
 
                         }
@@ -488,7 +513,7 @@
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled, (bool)client.IsDomoEnabled,client.DOMO_datasetId);
+                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled, (bool)client.IsDomoEnabled, client.DOMO_datasetId, client.TeamMemberId1, client.TeamMemberId2, client.TeamMemberId3, client.TeamMemberId4);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");

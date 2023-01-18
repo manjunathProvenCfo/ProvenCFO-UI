@@ -59,6 +59,7 @@ namespace Proven.Model
         public string TeamMemberId1 { get; set; }
         public string TeamMemberId2 { get; set; }
         public string TeamMemberId3 { get; set; }
+        public string TeamMemberId4 { get; set; }
         public string JobName { get; set; }
         public string JobtitleId1 { get; set; }
         public string JobtitleId2 { get; set; }

@@ -9,6 +9,7 @@
 <div class="row">
     @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
     @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+    @Html.Hidden("AzureFunctionReconUrl", (object)@ViewBag.AzureFunctionReconUrl, new { @Id = "AzureFunctionReconUrl" })
     <div class="col-md-12" id="divTable">
         <div class="card mb-3">
             <div class="card-header">
@@ -60,15 +61,17 @@
 
                                 @if (ViewBag.IsDomoEnabled == true)
                                 { }
-                                else if(ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                                else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                                }else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+
+                                }
+                                else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
                                     <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandDataPlaid" type="button" title="Request on-demand Plaid data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
                                 }
 
-                                
+
 
 
 
@@ -189,7 +192,7 @@
                                         <td class="sort pr-1 align-middle col-xs-1">
                                             <div class="row justify-content-between">
                                                 <div class="col-auto">
-                                                     @Html.CheckBox("ruleCheck", item.RuleNew == true, new { @onchange = "javascript:onChangeBankRules('" + item.id + "',this.checked)" })
+                                                    @Html.CheckBox("ruleCheck", item.RuleNew == true, new { @onchange = "javascript:onChangeBankRules('" + item.id + "',this.checked)" })
                                                 </div>
                                             </div>
                                         </td>
@@ -201,7 +204,7 @@
                                             <div class="row justify-content-between">
                                                 @if (item.ActionModifiedBy != null && ViewBag.IsStaffUser == true)
                                                 {
-                                                    <div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">   
+                                                    <div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
                                                         @Html.DropDownListFor(modelItem1 => item.ref_ReconciliationAction, new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName", item.ref_ReconciliationAction), "Pick Action", new { @class = "form-control selectpicker glAccountDD", @onchange = "javascript:onChangeAction('" + item.id + "',event)", style = "width: 225px;", @utcdate = string.Format(CultureInfo.InvariantCulture, "{0:dd MMM yyyy hh:mm:ss tt}", @item.ActionModifiedDateUTC), @ModifiedBy = @item.ActionModifiedBy })
                                                     </div>
                                                 }

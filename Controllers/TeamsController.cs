@@ -75,6 +75,7 @@ namespace ProvenCfoUI.Controllers
                         objvm.TeamMembersList = result.TeamMembersList;
                         objvm.TeamMemberId2 = result.TeamMemberId2;
                         objvm.TeamMemberId3 = result.TeamMemberId3;
+                        objvm.TeamMemberId4 = result.TeamMemberId4;
                         objvm.Status = result.Status/*.ToString().Trim()*/;
                         objvm.CreatedBy = result.CreatedBy;
                         objvm.CreatedDate = result.CreatedDate;
@@ -116,7 +117,7 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Exist";
                                     return View("AddTeams", teamsVM);
                                 }
-                                result = obj.AddTeam(team.TeamName, team.Status.ToString().Trim(), team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, LoginUserid);
+                                result = obj.AddTeam(team.TeamName, team.Status.ToString().Trim(), team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, team.TeamMemberId4, LoginUserid);
                                 result.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
                                 result.Id = 0;
 
@@ -137,7 +138,7 @@ namespace ProvenCfoUI.Controllers
                                     ViewBag.ErrorMessage = "Exist";
                                     return View("AddTeams", teamsVM);
                                 }
-                                result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, team.Status.ToString().Trim(), Convert.ToString(team.IsDeleted), LoginUserid);
+                                result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, team.TeamMemberId4, team.Status.ToString().Trim(), Convert.ToString(team.IsDeleted), LoginUserid);
                                 result.StaffList = objAcc.GetRegisteredStaffUserList().resultData;
                                 result.Id = 0;
                                 ViewBag.ErrorMessage = "Updated";
@@ -178,7 +179,7 @@ namespace ProvenCfoUI.Controllers
                             var LoginUserid = Session["UserId"].ToString();
                             using (TeamsService obj = new TeamsService())
                             {
-                                var result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.Status, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, Convert.ToString(team.IsDeleted), LoginUserid);
+                                var result = obj.UpdateTeam(Convert.ToString(team.Id), team.TeamName, team.Status, team.TeamMemberId1, team.TeamMemberId2, team.TeamMemberId3, team.TeamMemberId4, Convert.ToString(team.IsDeleted), LoginUserid);
                                 if (result == null)
                                     ViewBag.ErrorMessage = "";
                                 return RedirectToAction("TeamsList");
