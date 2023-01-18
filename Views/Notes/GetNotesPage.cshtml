@@ -466,7 +466,7 @@
                 $("#Description").val(tinymce.get("Description").getContent());
                 if ($("#Title").valid() === false || $("#Description").valid() == false)
                     return;
-                $('#btnCreateNewNotesDescription').prop("disable", true);
+                $('#btnCreateNewNotesDescription').prop("disabled", true);
                 var id = $('#Id').val();
                 var title = $('#Title').val();
                 var noteCatId = $('#NoteCatId').val();
@@ -498,7 +498,6 @@
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
                     if (response.Message == 'Success') {
 
-                        $('#btnCreateNewNotesDescription').prop("disable", false)
                         window.location.reload();
                         $('.close-circle').click();
                         $('.modal-backdrop').remove();
@@ -506,11 +505,9 @@
                     else {
                         if (response.Message == 'Exist') {
 
-                            $('#btnCreateNewNotesDescription').prop("disable", false)
                             ShowAlertBoxWarning('Required!', response.Message);
                         }
                         else {
-                            $('#btnCreateNewNotesDescription').prop("disable", false)
                             ShowAlertBoxWarning('Exist!', response.Message);
 
                         }
