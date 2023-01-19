@@ -69,8 +69,8 @@
                         @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple" })
                     }*@
                     <div id="filter-checkbox-wrapper">
-                        @Html.CheckBox("Rule_New", false, new { @onchange = " this.value = this.checked", value = "" })
-                        <label for="Rule_New">Check/Uncheck</label>
+                        @Html.CheckBox("filterRule_New", false, new { @onchange = " this.value = this.checked", value = "" })
+                        <label for="filterRule_New">Check/Uncheck</label>
                     </div>
                 </div>
             </div>

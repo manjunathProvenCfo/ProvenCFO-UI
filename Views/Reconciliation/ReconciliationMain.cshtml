@@ -632,7 +632,7 @@
             var bankrule = ""; //$("#bankrule").val().join(',');
             var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') :'';
             var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined ? $("#TrackingCategories_1").val().join(',') : '';
-            var RuleNewStr = $('#Rule_New').val();
+            var RuleNewStr = $('#filterRule_New').val();
             if (RuleNewStr != "") {
                 var ruleNew = "true" === RuleNewStr;
             }
@@ -734,31 +734,25 @@
             }
         }
 
-        $('#Filter').click(function () {
-
-            $(document).ready(function () {
-
-                $("#Rule_New").change(function () {
-                    
-                    $("#filter-checkbox-wrapper").fadeOut(200, function () {
-                        $(this).find("#Rule_New").attr("checked", !$(this).find("#Rule_New").attr("checked")).end().fadeIn(200);
-                    });
-
-                    if (this.checked) {
-                        $("label[for='Rule_New']")
-                            .css("color", "green")
-                            .fadeOut(200, function () {
-                                $(this).text("Checked✔").fadeIn(200);
-                            });
-                    } else {
-                        $("label[for='Rule_New']")
-                            .css("color", "red")
-                            .fadeOut(200, function () {
-                                $(this).text("Unchecked!").fadeIn(200);
-                            });
-                    }
-                });
+        $("#filterRule_New").change(function () {
+            
+            $("#filter-checkbox-wrapper").fadeOut(200, function () {
+                $(this).find("#filterRule_New").attr("checked", !$(this).find("#filterRule_New").attr("checked")).end().fadeIn(200);
             });
+
+            if (this.checked) {
+                $("label[for='filterRule_New']")
+                    .css("color", "green")
+                    .fadeOut(200, function () {
+                        $(this).text("Checked✔").fadeIn(200);
+                    });
+            } else {
+                $("label[for='filterRule_New']")
+                    .css("color", "red")
+                    .fadeOut(200, function () {
+                        $(this).text("Unchecked!").fadeIn(200);
+                    });
+            }
         });
 
         function BulkActionReconcilation(CommentText) {
@@ -773,7 +767,7 @@
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
             var bankrule = $('#BA_bankrules').val();
-            var ruleNewStr = $('#Rule_New').val();
+            var ruleNewStr = $('#bulkRule_New').val();
 
             if (ruleNewStr != "") {
                 var ruleNew = "true" === ruleNewStr;

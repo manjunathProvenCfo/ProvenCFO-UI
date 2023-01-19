@@ -335,31 +335,26 @@ $(document).ready(function () {
             setTimeout(_ => addBulkMentionPlugin(), 1000);
         }
     });
-    $('#ibulkupdate').click(function () {
 
-        $(document).ready(function () {
-
-            $("#Rule_New").change(function () {
-
-                $("#checkbox-wrapper").fadeOut(200, function () {
-                    $(this).find("#Rule_New").attr("checked", !$(this).find("#Rule_New").attr("checked")).end().fadeIn(200);
-                });
-
-                if (this.checked) {
-                    $("label[for='Rule_New']")
-                        .css("color", "green")
-                        .fadeOut(200, function () {
-                            $(this).text("Checked!").fadeIn(200);
-                        });
-                } else {
-                    $("label[for='Rule_New']")
-                        .css("color", "red")
-                        .fadeOut(200, function () {
-                            $(this).text("Unchecked!").fadeIn(200);
-                        });
-                }
-            });
+    $("#bulkRule_New").change(function () {
+        
+        $("#bulk-checkbox-wrapper").fadeOut(200, function () {
+            $(this).find("#bulkRule_New").attr("checked", !$(this).find("#bulkRule_New").attr("checked")).end().fadeIn(200);
         });
+
+        if (this.checked) {
+            $("label[for='bulkRule_New']")
+                .css("color", "green")
+                .fadeOut(200, function () {
+                    $(this).text("Checked!").fadeIn(200);
+                });
+        } else {
+            $("label[for='bulkRule_New']")
+                .css("color", "red")
+                .fadeOut(200, function () {
+                    $(this).text("Unchecked!").fadeIn(200);
+                });
+        }
     });
 
     $('#Cancel1').click(function () {
@@ -469,7 +464,14 @@ $(document).ready(function () {
                     if (Azureresponse.status === true) {
                         sessionStorage.removeItem("NotInBooksData");
                         sessionStorage.removeItem("NotInBanksData");
-                        ShowAlertBoxSuccess("Success!", "Successfully synced with Xero." + Azureresponse.message, function () { window.location.reload(); });
+
+                        let azureMessageResponse = Azureresponse.message.replace("Sucess : ", "");
+                        let azureMessage = azureMessageResponse.replace(" =", "=");
+                        let convertedAzureMessage = azureMessage.replace(/=/g, ": ");
+
+                        let finalAzureMessage = convertedAzureMessage.replace(/(?<=Not)|(?<=In)/g, " ");
+
+                        ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
                     else {
                         ShowAlertBoxError("Error!", `Sorry, there was a problem getting data from Xero. Please try again later.(Req #${RequestID}"`, function () { window.location.reload(); });
