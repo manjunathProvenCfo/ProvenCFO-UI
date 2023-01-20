@@ -458,7 +458,7 @@ $(document).ready(function () {
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
-                getAjaxSync(AzureFunctionReconUrl + `?AgencyId=${getClientId()}`, null, function (Azureresponse) {
+                getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}`, null, function (Azureresponse) {
                     Azureresponse = JSON.parse(Azureresponse);
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
                     if (Azureresponse.status === true) {

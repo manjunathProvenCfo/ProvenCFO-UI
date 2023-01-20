@@ -431,6 +431,10 @@
                                     else
                                     {
 
+                                        var clientId = createClientVM.Id;
+
+                                         var clientRef = obj.GetClientById(clientId).ThirdPartyAccountingApp_ref;
+                                        createClientVM.ThirdPartyAccountingApp_ref = clientRef;
 
                                         TempData["ThirdPartyAccountApp"] = obj.GetThirdPartyAccountingData().ResultData;
                                         var ClientExist = obj.GetClientByName(createClientVM.ClientName);
@@ -474,10 +478,7 @@
                                             createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                         }
 
-                                        var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(team.Id), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.IsDomoEnabled, createClientVM.DOMO_datasetId, createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4);
-
-
-
+                                       var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(team.Id), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.IsDomoEnabled, createClientVM.DOMO_datasetId, createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4);
 
                                         ViewBag.ErrorMessage = "";
                                         ViewBag.ErrorMessage = "Updated";
