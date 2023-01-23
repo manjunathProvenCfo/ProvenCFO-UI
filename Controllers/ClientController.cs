@@ -651,7 +651,7 @@
                                                             AccountingPackageInstance.Instance.Scope,
                                                             AccountingPackageInstance.Instance.XeroAppName))
                                 {
-                                    var contacts = await _service.GetContacts(AccountingPackageInstance.Instance.XeroToken, xeroId);
+                                   var contacts = await _service.GetContacts(AccountingPackageInstance.Instance.XeroToken, xeroId);
                                     contacts._Contacts.ForEach(con =>
                                     {
                                         if (con.Name == "ProvenCFO")
@@ -669,7 +669,7 @@
                     }
                     else
                     {
-                        errorMsg = "Sorry, this organization cannot be found in Xero." +
+                        errorMsg = "Sorry, this organization cannot be found in Xero.\n" +
                                    "Please contact an admin to get this organization properly configured in Xero.";
                         return Json(new
                         {
