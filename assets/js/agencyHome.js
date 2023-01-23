@@ -578,7 +578,7 @@ function AgencyDropdownPartialViewChange() {
                 $('#roleexist').show();
                 $('.spClientName').html(String(data.Name));
                 $('.spEntityName').html(String(data.EntityName));
-                $('#spTeamName').html(String(data.TeamName));
+                //$('#spTeamName').html(String(data.TeamName));
 
                 $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                
@@ -612,7 +612,7 @@ function AgencyDropdownPartialViewChange() {
                 $('.spEntityName').html('');
                 $('#spCreatedDate').html('');
                 $('#spMonths').html('');
-                $('#spTeamName').html('');
+                //$('#spTeamName').html('');
                 $('#spStatus').html('');
                 $('#spClientAddress').html('');
                 $('.badge-soft-success').addClass('d-none');
@@ -628,7 +628,7 @@ function AgencyDropdownPartialViewChange() {
             $('.spEntityName').html('');
             $('#spCreatedDate').html('');
             $('#spMonths').html('');
-            $('#spTeamName').html('');
+            //$('#spTeamName').html('');
             $('#spStaffName1').html('');
             $('#spStaffName2').html('');
             $('#spStaffName3').html('');
