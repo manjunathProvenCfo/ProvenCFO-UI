@@ -669,7 +669,8 @@
                     }
                     else
                     {
-                        errorMsg = "The Entered organisation is not available in Xero. Kindly connect with admin to connect the organisation in Xero!";
+                        errorMsg = "Sorry, this organization cannot be found in Xero." +
+                                   "Please contact an admin to get this organization properly configured in Xero.";
                         return Json(new
                         {
                             XeroID = "",

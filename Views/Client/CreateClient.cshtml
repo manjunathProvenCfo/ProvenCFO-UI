@@ -1101,7 +1101,7 @@ dashboard
                             if (res.responseJSON.Status == "Error") {
 
                                 if (res.responseJSON.ErrorMessage != "") {
-                                    ShowAlertBoxError(res.responseJSON.ErrorMessage);
+                                    ShowAlertBoxError("Error",res.responseJSON.ErrorMessage);
                                     return;
                                 }
                             }
