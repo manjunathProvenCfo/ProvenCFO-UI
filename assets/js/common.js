@@ -222,11 +222,11 @@ function bindNotInBooksAndBanksCount() {
                 bindNotInBanksData(response.ResultData);
             }
         });
-    //}
-    //else {
-     //   let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
-      //  bindNotInBanksData(data);
-    //}
+        //}
+        //else {
+         //   let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
+          //  bindNotInBanksData(data);
+        //}
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
