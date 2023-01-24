@@ -242,7 +242,7 @@ $(document).ready(function () {
         else {
             $('#tabNotinBooks').removeClass('tabselect');
             $('#tabNotinBanks').addClass('tabselect');
-            sessionStorage.clear();
+            //sessionStorage.clear();
         }
 
     }
