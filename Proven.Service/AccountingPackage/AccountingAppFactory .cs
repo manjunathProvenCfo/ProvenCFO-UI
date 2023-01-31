@@ -31,6 +31,7 @@ namespace Proven.Service.AccountingPackage
         public abstract Task<V> GetOrganisationsId(T xeroToken,string XeroTenentID);
         public abstract Task<T> ValidateToken(T Token);
         public abstract string GenerateAuthorizationPromptUrl();
-       
+        public abstract Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null);
+
     }
 }

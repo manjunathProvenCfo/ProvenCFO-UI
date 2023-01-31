@@ -299,7 +299,7 @@ namespace ProvenCfoUI.Comman
                             }
                         }
                         else
-                            {
+                        {
                             Utltity.Log4NetInfoLog("Insufficient client information");
                             CleanToken();
                             AccountingPackageInstance.Instance.ConnectionMessage = "Insufficient client information";

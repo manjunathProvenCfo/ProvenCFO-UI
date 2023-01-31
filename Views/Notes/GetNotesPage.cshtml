@@ -134,8 +134,7 @@
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
-                            @*<div class="btn btn-light p-0"><i class="fas fa-plus"></i></div>*@
-                            @*Here I am writing new line for add button for testing*@
+                      
                             @if (ViewBag.IsEditMode == true)
                             {
                                 <div class="dropdown">
@@ -210,8 +209,6 @@
 
                                             @*<hr>*@
                                         </div>
-
-                                        @*<h6 style="color: #00BE82; "> @Category.Labels</h6>*@
 
                                     </div>
 
@@ -466,10 +463,10 @@
             });
             $("#btnCreateNewNotesDescription").click(function () {
 
-
                 $("#Description").val(tinymce.get("Description").getContent());
                 if ($("#Title").valid() === false || $("#Description").valid() == false)
                     return;
+                $('#btnCreateNewNotesDescription').prop("disabled", true);
                 var id = $('#Id').val();
                 var title = $('#Title').val();
                 var noteCatId = $('#NoteCatId').val();
@@ -500,12 +497,14 @@
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
                     if (response.Message == 'Success') {
+
                         window.location.reload();
                         $('.close-circle').click();
                         $('.modal-backdrop').remove();
                     }
                     else {
                         if (response.Message == 'Exist') {
+
                             ShowAlertBoxWarning('Required!', response.Message);
                         }
                         else {

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 
+
+
 namespace Proven.Service
 {
     public class QuickbooksLocalService<T, V> : AccountingAppFatory<T, V>,  IDisposable
@@ -126,7 +128,10 @@ namespace Proven.Service
                 objToken.expires_in = TimeSpan.FromSeconds(SavedToken.expires_in.Value);
                 objToken.id_token = SavedToken.id_token;
                 objToken.access_token = SavedToken.access_token;
-                objToken.refresh_token = SavedToken.refresh_token;  
+                objToken.refresh_token = SavedToken.refresh_token;
+                if (SavedToken.ModifiedDate == null) {
+                    SavedToken.ModifiedDate = SavedToken.CreatedDate;       
+                 }
                 DateTime tokenExpairedAt = SavedToken.ModifiedDate.Value.AddSeconds(SavedToken.expires_in.Value);
                 if (DateTime.UtcNow >= tokenExpairedAt)
                 {
@@ -237,12 +242,17 @@ namespace Proven.Service
 
         public override string GenerateAuthorizationPromptUrl()
         {
-            IEnumerable<string> scopeslist = new string[] { "com.intuit.quickbooks.accounting", "openid" };
+            IEnumerable<string> scopeslist = new string[] { "com.intuit.quickbooks.accounting", "openid", "email","profile" };
             var res = new AuthenticationService().GenerateAuthorizationPromptUrl(_ClientId, scopeslist, _callbackurl, "");
             return (string)res;
         }
 
         public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<V> GetBankStatementsAsync(T xeroToken, string xeroTenantId, string bankAccountID = null, string dateFrom = null, string dateTo = null, string order = null, int? page = null, DateTime? ifModifiedSince = null, string status = null)
         {
             throw new NotImplementedException();
         }

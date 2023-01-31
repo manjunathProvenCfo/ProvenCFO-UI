@@ -1,4 +1,4 @@
-﻿@model bool
+﻿@model bool?
 <div class="card mb-3 pr-md-0 table table-striped ">
     <div class="card-header d-flex bg-light align-items-center justify-content-between">
         <h5 class="mb-0 ml-2">Filter</h5>
@@ -64,10 +64,14 @@
 
             <div class="row pb-3">
                 <div class="col-12">
-                    @if (TempData["BankRule"] != null)
+                    @*@if (TempData["BankRule"] != null)
                     {
                         @Html.DropDownList("bankrule", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), new { @class = " selectpicker form-control", @multiple = "multiple" })
-                    }
+                    }*@
+                    <div id="filter-checkbox-wrapper">
+                        @Html.CheckBox("filterRule_New", false, new { @onchange = " this.value = this.checked", value = "" })
+                        <label for="filterRule_New">Check/Uncheck</label>
+                    </div>
                 </div>
             </div>
 

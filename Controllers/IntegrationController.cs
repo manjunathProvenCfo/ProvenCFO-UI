@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+
 using System.Web.Mvc;
 using Xero.NetStandard.OAuth2.Model.Accounting;
 using Xero.NetStandard.OAuth2.Token;
@@ -20,6 +21,7 @@ using Xero.NetStandard.OAuth2.Token;
 namespace ProvenCfoUI.Controllers
 {
     [Exception_Filters]
+    [CustomAuthenticationFilter]
     public class IntegrationController : Controller
     {
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -600,5 +602,91 @@ namespace ProvenCfoUI.Controllers
                 throw;
             }
         }
+
+
+
+
+        [HttpPost]
+        [CheckSession]
+        [CustomAuthorize("Staff User")]
+        public RedirectResult QuickBookGenerateRedirectAuthLink(int agencyId)
+        {
+            var clientService = new ClientService();
+            var apiDetails = clientService.GetThirdPatyAPIDetails();
+            var client = clientService.GetClientById(agencyId);
+
+            string clientId = "";
+            string clientSecret = "";
+            string CallBackUrl = "" ; //"https://localhost:44345/Integration/QBTokenGeneration";//development
+            string result = "";
+            string errorMsg  = "";
+
+            if (apiDetails != null)
+            {
+                if (apiDetails.list != null && apiDetails.list.Count > 0)
+                {
+                    var pkg = apiDetails.list.
+                                         Where(pk => pk.ThirdParty == "QuickBook").FirstOrDefault();
+                    switch (pkg != null&&client.ThirdPartyAccountingApp_ref==2)
+                    {
+                        case true:
+
+                            clientId     = pkg.ClientId;
+                            clientSecret = pkg.ClientSecret;
+                            CallBackUrl =  pkg.RedirectUrl;
+
+                            var quickBookService = new QuickbooksLocalService<string, string>(clientId, clientSecret, null, CallbackUrl: $"{CallBackUrl}");
+
+                            string state = $"agencyId%20,{agencyId},{clientId},{clientSecret}";
+
+                            result = quickBookService.GenerateAuthorizationPromptUrl();
+                            result += state;
+                            break;
+
+                        default:
+                            errorMsg = "Not valid client!";
+                            break;
+                    }
+
+                }
+            }
+
+            return Redirect(result);
+        }
+
+        [HttpGet]
+        public async Task<RedirectToRouteResult> QBTokenGeneration(string code, string state, string realmId)
+        {
+          
+
+
+            var qbService =   new   QuickBooksSharp.AuthenticationService();
+
+            var clientService = new ClientService();
+            var data = state.Split(',');
+            var apiDetails = clientService.GetThirdPatyAPIDetails();
+            string clientId = data[2];
+            string clientSecret = data[3];
+            string agencyId = data[1];
+            var pkg = apiDetails.list.
+                                        Where(pk => pk.ThirdParty == "QuickBook").FirstOrDefault();
+
+
+            string redirectUrl = pkg.RedirectUrl;
+
+             var token = await qbService.GetOAuthTokenAsync(clientId,clientSecret,code,redirectUrl);
+
+            var commonService = new CommonService();
+            try { 
+               commonService.QuickBookUpdateAndCreateToken(int.Parse(agencyId),token);
+            }
+            catch (Exception ex) {
+            
+              
+            }
+            return RedirectToAction("ClientList", "Client", new { area=""});
+        }
+ 
+
     }
 }

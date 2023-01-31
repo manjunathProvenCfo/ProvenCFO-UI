@@ -215,18 +215,18 @@ function bindNotInBooksAndBanksCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
 
-    if (sessionStorage.getItem("NotInBanksData") == null) {
+   // if (sessionStorage.getItem("NotInBanksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
             if (response.Message == "Success") {
-                sessionStorage.setItem("NotInBanksData", JSON.stringify(response.ResultData));
+                //sessionStorage.setItem("NotInBanksData", JSON.stringify(response.ResultData));
                 bindNotInBanksData(response.ResultData);
             }
         });
-    }
-    else {
-        let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
-        bindNotInBanksData(data);
-    }
+        //}
+        //else {
+         //   let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
+          //  bindNotInBanksData(data);
+        //}
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
@@ -247,18 +247,14 @@ var bindNotInBanksData = function (data) {
 function bindNotInBanksAndBanksCount() {
     var ClientID = $("#ddlclient option:selected").val();
 
-    if (sessionStorage.getItem("NotInBooksData") == null) {
+    
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
                 sessionStorage.setItem("NotInBooksData", JSON.stringify(response.ResultData));
                 bindNotInBooksData(response.ResultData);
             }
         });
-    }
-    else {
-        data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
-        bindNotInBooksData(data);
-    }
+    
 
 }
 var bindNotInBooksData = function (data) {

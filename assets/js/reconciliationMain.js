@@ -24,12 +24,12 @@ $(document).ready(function () {
         }
         else {
             let reconciliaitonId = elCheckbox.attr("id");
-           
+
             showReconciliationChat(reconciliaitonId);
             resetScrollChatState(reconciliaitonId);
         }
     });
-    $(document).on("click", "#tblreconcilation tr",async function (e) {
+    $(document).on("click", "#tblreconcilation tr", async function (e) {
         $("#tblreconcilation tr").removeClass("bg-200");
         $(this).addClass("bg-200");
 
@@ -37,19 +37,19 @@ $(document).ready(function () {
             let elComment = $(this).find("#btnComment");
 
             resetScrollChatState(elComment.data().id);
-           await showReconciliationChat(elComment.data().id);
+            await showReconciliationChat(elComment.data().id);
         }
     });
 
     $(document).on("click", "button[id=btnComment]", async function (e) {
 
-     
-        
+
+
         resetScrollChatState(e.currentTarget.dataset.id);
         await showReconciliationChat(e.currentTarget.dataset.id);
 
-       
-   
+
+
     });
 
     var showReconciliationChat = async function (channelUniqueNameGuid) {
@@ -63,9 +63,9 @@ $(document).ready(function () {
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-     
 
-       await loadCommentsPage(channelUniqueNameGuid);
+
+        await loadCommentsPage(channelUniqueNameGuid);
 
     }
 
@@ -89,9 +89,9 @@ $(document).ready(function () {
                 var localDateTime = utcDateTime.toLocaleString();
 
                 $('#domoLastBatchRunTime')[0].innerText = localDateTime;
-                
+
             } else {
-                
+
                 $('#domoLastBatchRun').remove();
             }
         },
@@ -119,7 +119,7 @@ var lastModify = function () {
 }
 var bindEnableAutomation = function () {
     getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
-        if (response.Status === "Success") {            
+        if (response.Status === "Success") {
             IsEnableAutomation = response.Data;
             if (IsEnableAutomation === false) {
                 $("#OnDemandData").attr('disabled', true);
@@ -148,11 +148,11 @@ var bindEnablePlaid = function () {
         }
     });
 }
-    var EnableSelectedBulkUpdateButton = function () {
+var EnableSelectedBulkUpdateButton = function () {
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
-        var SelectedItems = sessionStorage.getItem('SelectedRecords');
-        var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
-  
+    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+    var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
+
 
     if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
         $("#ibulkupdate").attr('disabled', false);
@@ -175,16 +175,16 @@ var bindEnablePlaid = function () {
         }
 
 
-     }
+    }
 
-      
+
 }
 
 
 
 
 const resetScrollChatState = function (rec) {
-   
+
     if (rec != "" && rec != null) {
 
         scrollChatState.reconciliationId = rec;
@@ -195,7 +195,7 @@ const resetScrollChatState = function (rec) {
 }
 function SetupDynamicLoaderOnScroll() {
 
- 
+
 
     $("#channel-messages")[0].addEventListener("scroll", function (e) {
         e.preventDefault();
@@ -209,19 +209,19 @@ function SetupDynamicLoaderOnScroll() {
         }
     });
 
- 
 
-        scrollChatState.pageNo = 2;
-        scrollChatState.size = 10;
 
- }
+    scrollChatState.pageNo = 2;
+    scrollChatState.size = 10;
+
+}
 
 
 $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
 
- 
+
 
     LoadFilterData();
     SetupDynamicLoaderOnScroll();
@@ -242,7 +242,7 @@ $(document).ready(function () {
         else {
             $('#tabNotinBooks').removeClass('tabselect');
             $('#tabNotinBanks').addClass('tabselect');
-            sessionStorage.clear();
+            //sessionStorage.clear();
         }
 
     }
@@ -250,7 +250,7 @@ $(document).ready(function () {
     else {
         $('#tabNotinBooks').addClass('tabselect');
         $('#tabNotinBanks').removeClass('tabselect');
-     
+
     }
 
 
@@ -317,12 +317,12 @@ $(document).ready(function () {
             $('#divBulkUpdate').show();
             $('#divBulkUpdate').removeClass('d-none');
             $('#divFilter').hide();
-            $('#divFilter').addClass('d-none');          
+            $('#divFilter').addClass('d-none');
             $('.chat-message').remove();
 
         }
         else if ($("#divBulkUpdate").is(":visible")) {
-           
+
             $('#divBulkUpdate').hide();
             $('#divBulkUpdate').addClass('d-none');
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
@@ -332,34 +332,29 @@ $(document).ready(function () {
             $('#divBulkUpdate').removeClass('d-none');
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
 
-            setTimeout(_=>addBulkMentionPlugin(),1000);
+            setTimeout(_ => addBulkMentionPlugin(), 1000);
         }
     });
-    $('#ibulkupdate').click(function () {
 
-        $(document).ready(function () {
-            
-            $("#Rule_New").change(function () {
-
-                $("#checkbox-wrapper").fadeOut(200, function () {
-                    $(this).find("#Rule_New").attr("checked", !$(this).find("#Rule_New").attr("checked")).end().fadeIn(200);
-                });
-
-                if (this.checked) {
-                    $("label[for='Rule_New']")
-                        .css("color", "green")
-                        .fadeOut(200, function () {
-                            $(this).text("Checked!").fadeIn(200);
-                        });
-                } else {
-                    $("label[for='Rule_New']")
-                        .css("color", "red")
-                        .fadeOut(200, function () {
-                            $(this).text("Unchecked!").fadeIn(200);
-                        });
-                }
-            });
+    $("#bulkRule_New").change(function () {
+        
+        $("#bulk-checkbox-wrapper").fadeOut(200, function () {
+            $(this).find("#bulkRule_New").attr("checked", !$(this).find("#bulkRule_New").attr("checked")).end().fadeIn(200);
         });
+
+        if (this.checked) {
+            $("label[for='bulkRule_New']")
+                .css("color", "green")
+                .fadeOut(200, function () {
+                    $(this).text("Checked!").fadeIn(200);
+                });
+        } else {
+            $("label[for='bulkRule_New']")
+                .css("color", "red")
+                .fadeOut(200, function () {
+                    $(this).text("Unchecked!").fadeIn(200);
+                });
+        }
     });
 
     $('#Cancel1').click(function () {
@@ -394,7 +389,7 @@ $(document).ready(function () {
         }
     });
     $("#OnDemandDataPlaid").click(function () {
-       
+
         if (IsEnablePlaid === false) {
             $("#OnDemandDataPlaid").attr('disabled', true);
             return;
@@ -417,35 +412,92 @@ $(document).ready(function () {
 
         });
     });
-    $("#OnDemandData").click(function () {
-
+    $("#OnDemandXero").click(function () {
         if (IsEnableAutomation === false) {
-            $("#OnDemandData").attr('disabled', true);
+            $("#OnDemandXero").attr('disabled', true);
             return;
         }
         $("#Loader").removeAttr("style");
         var ClientID = $("#ddlclient option:selected").val();
         var RequestType = "On Demand";
         var RequestedAtUTC = '';
-        var CurrentStatus = "New";
+        var CurrentStatus = "New Request";
+        var RequestCompletedAtUTC = '';
+        var Remark = '';
+        var AgencyName = '';
+        var CreatedBy = '';
+        var CreatedDate = '';
+        var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+        postAjax('/Reconciliation/XeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+            if (response.Message == 'Success') {
+                setTimeout(() => {
+                    reconcilationonstatusDemand(response.data.Id);
+                }, 1000);
+            }
+        });
+    });
+    $("#OnDemandData").click(function () {
+        if (IsEnableAutomation === false) {
+            $("#OnDemandData").attr('disabled', true);
+            return;
+        }
+        $("#Loader").removeAttr("style");
+        var ClientID = $("#ddlclient option:selected").val();
+        var RequestType = "On Demand Azure"; //On Demand
+        var RequestedAtUTC = '';
+        var CurrentStatus = "New_Azure"; //New
         var RequestCompletedAtUTC = '';
         var Remark = '';
 
         var AgencyName = '';
         var CreatedBy = '';
         var CreatedDate = '';
-
+        var RequestID = 0;
+        var AzureFunctionReconUrl = $('#AzureFunctionReconUrl').val();
         var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
-                setTimeout(() => {
-                    reconcilationonstatusDemand(response.data.Id);
-                }, 1000);
+                RequestID = response.data.Id;
+                getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}`, null, function (Azureresponse) {
+                    Azureresponse = JSON.parse(Azureresponse);
+                    UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
+                    if (Azureresponse.status === true && Azureresponse.statusCode == 200) {
+                        sessionStorage.removeItem("NotInBooksData");
+                        sessionStorage.removeItem("NotInBanksData");
+
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not)|(?<=In)/g, " ")).replace(/b/g,"B");
+
+                        ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
+                    }
+                    else if (Azureresponse.status === false && Azureresponse.statusCode != 500)
+                    {
+                        ShowAlertBoxError("Error!", `${Azureresponse.message}.(Req #${RequestID})`, function () { window.location.reload(); });
+                    }
+                    else {
+                        ShowAlertBoxError("Error!", `Sorry, there was a problem getting data from Xero. Please try again later.(Req #${RequestID})`, function () { window.location.reload(); });
+                    }
+                });
+
+                //setTimeout(() => {
+                //    reconcilationonstatusDemand(response.data.Id);
+                //}, 1000);
             }
 
         });
 
     });
+    function UpdateXeroonDemandDatarequestStatus(response, RequestId) {
+        var pdata = {
+            RequestId: RequestId,
+            CurrentStatus: response.status == true ? "Success" : "Failed",
+            ErrorDescription: response.message
+        };
+        postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+            if (response.Message == 'Success') {
+                return true;
+            }
+        });
+    }
 
     function LoadFilterData() {
         var filterData = JSON.parse(sessionStorage.getItem('Filter'));
@@ -488,6 +540,7 @@ $(document).ready(function () {
 
         var XConstatus = $('#XeroConnectionStatus');
         $("#OnDemandData").show();
+        $("#OnDemandDataAzureFunc").show();
         //if (XConstatus.val() == "True") {
         //    $("#OnDemandData").show();
         //}
@@ -499,7 +552,7 @@ $(document).ready(function () {
 });
 
 
-async function LoadPaginationContent(channelUniqueNameGuid,pageNo,pageSize) {
+async function LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize) {
 
     getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}&&pageNo=${pageNo}&&pageSize=${pageSize}`, null, async function (responseComm) {
 
@@ -507,14 +560,14 @@ async function LoadPaginationContent(channelUniqueNameGuid,pageNo,pageSize) {
 
         if (scrollChatState.target) {
 
-            setTimeout(_=>scrollChatState.target.scrollTop = 4,150);
+            setTimeout(_ => scrollChatState.target.scrollTop = 4, 150);
         }
         //setScrollPosition();
         hideChatContentLoader();
     });
 }
 
-function LoadOnDemandCommentsPagination(channelUniqueNameGuid,pageNo,pageSize) {
+function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize) {
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");
     $participants = "";
@@ -541,7 +594,7 @@ function LoadOnDemandCommentsPagination(channelUniqueNameGuid,pageNo,pageSize) {
             await LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize);
         }, 200);
 
-    
+
     });
 
 

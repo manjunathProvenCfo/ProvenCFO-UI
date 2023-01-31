@@ -40,9 +40,9 @@ namespace ProvenCfoUI.Models
         public string XeroID { get; set; }
         [Required(ErrorMessage = "API Client ID is a required field")]
         public string APIClientID { get; set; }
-        [Required(ErrorMessage = "API Client Secret is a required field")]
+        //[Required(ErrorMessage = "API Client Secret is a required field")]
         public string APIClientSecret { get; set; }
-        [Required(ErrorMessage = "API Scope is a required field")]
+        //[Required(ErrorMessage = "API Scope is a required field")]
         public string[] XeroScopeArray { get; set; }
 
         public string[] DomoScopeArray { get; set; }
@@ -53,7 +53,7 @@ namespace ProvenCfoUI.Models
 
         [Required(ErrorMessage = "Start Date is a required field.")]
         public string StartDateText { get; set; }
-        public List<City> CityList { get; set; }
+        public List<ProvenCfoUI.Models.City> CityList { get; set; }
         public List<State> StateList { get; set; }
         public bool EnableAutomation { get; set; }
         public bool ReceiveQuarterlyReports { get; set; }
@@ -91,5 +91,14 @@ namespace ProvenCfoUI.Models
 
         public bool IsDomoEnabled { get; set; }
         public bool EnableDataSynTimeTrigge { get; set; }
+
+        //[Required(ErrorMessage = "Team Member 1 is a required field")]
+        public string TeamMemberId1 { get; set; }
+        //[Required(ErrorMessage = "Team Member 2 is a required field")]
+        public string TeamMemberId2 { get; set; }
+        //[Required(ErrorMessage = "Team Member 3 is a required field")]
+        public string TeamMemberId3 { get; set; }
+        public string TeamMemberId4 { get; set; }
+        public List<Proven.Model.UserModel> StaffList { get; set; }
     }
 }

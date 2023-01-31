@@ -29,5 +29,6 @@ namespace CFO.Model.ViewModels
 
         public string UserID { get; set; }
         public string Type { get; set; }
+        public bool? RuleNew { get; set; }
     }
 }

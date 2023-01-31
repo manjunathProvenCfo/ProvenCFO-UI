@@ -7,6 +7,7 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                     ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                    ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
                     int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
@@ -128,7 +130,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         //[HttpPost]
-        public ActionResult GetFilteredReconcilationdata(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type)
+        public ActionResult GetFilteredReconcilationdata(string accounts, DateTime? dateRangeFrom, DateTime? dateRangeTo, decimal? amountMin, decimal? amountMax, string Bankrule, string TrackingCategory1, string TrackingCategory2, reconcilationType? FilterType, int? AgencyID, string Type, bool? RuleNew)
         {
 
             ViewBag.IsStaffUser = false;
@@ -148,6 +150,7 @@ namespace ProvenCfoUI.Controllers
                 Filter.AgencyID = AgencyID;
                 Filter.Type = Type;
                 Filter.UserID = User.UserId;
+                Filter.RuleNew = RuleNew;
 
                 var userType = Convert.ToString(Session["UserType"]);
                 var objResult = objReConcilation.GetFilteredReconcilation(Filter).ResultData;
@@ -399,6 +402,7 @@ namespace ProvenCfoUI.Controllers
                 string RecordsType = NotInBooks;
                 ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                 ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+                ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
                     int AgencyID = 0;  
@@ -541,6 +545,20 @@ namespace ProvenCfoUI.Controllers
                 return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
                  log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
             }                        
+        }
+        [CheckSession]
+        [HttpPost]
+        public async Task<JsonResult> XeroOnDemandDataRequest(XeroReconcilationDataOnDemandRequestVM model)
+        {
+            using (ClientService objClientService = new ClientService())
+            {
+                var client = objClientService.GetClientById(model.AgencyId.Value);
+                using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
+                {
+                   var result = await BankData.GetReconciliationFromXero(client);
+                }
+            }
+            return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
         }
 
         [CheckSession]

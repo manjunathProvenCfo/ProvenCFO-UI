@@ -421,16 +421,38 @@ function getTeamMembersList() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                var count = 1;
+                var count=0;
                 var number;
+                for (let position = 1; position <= 4; position++) {
+                    
+                    $('#email'+ position).addClass("disabled-action-icons");
+                    $('#spTeamChat' + position).addClass("disabled-action-icons");
+                    $('#phoneNumber' + position).addClass("disabled-action-icons");
+                    $('#aLinkedInProfile' + position).addClass("disabled-action-icons");
+
+                    $('#teamMember' + position).css({ "display": "none" });
+                }
                 $.each(data.TeamMembers, function (key, object) {
+                    count = object.OrderNumber
+                    $('#teamMember' + count).css({ "display": "" })
 
                     if (object.Username != null && object.Username != '') {
+                        $('#spTeamChat' + count).removeClass("disabled-action-icons");
+
                         number = "tel:" + object.PhoneNumber;
-                        $('#phoneNumber' + count).attr("href", number);
+                        if (number != null) {
+
+                            $('#phoneNumber' + count).attr("href", number);
+                            $('#phoneNumber' + count).removeClass("disabled-action-icons");
+                        }
                     }
+
                     if (object.Username != null && object.Username != '') {
-                        $('#email' + count).data("clipboard-text", String(object.Email));
+                        if (object.Email != null && object.Email!=undefined) {
+                            $('#email' + count).data("clipboard-text", String(object.Email));
+                            $('#email' + count).removeClass("disabled-action-icons");
+
+                        }
                     }
                     if (object.LinkedInProfile != null && object.LinkedInProfile != '') {
 
@@ -443,13 +465,17 @@ function getTeamMembersList() {
                         $('#aLinkedInProfile' + count).prop('disabled', true);
                     }
                     if (object.Username != null && object.Username != '') {
-                        if (count == 1) {
+                        
+                        if ( count== 1) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                         else if (count == 2) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                         else if (count == 3) {
+                            $('#spStaffName' + count).html(String(object.Username));
+                        }
+                        else if (count == 4) {
                             $('#spStaffName' + count).html(String(object.Username));
                         }
                     }
@@ -462,10 +488,13 @@ function getTeamMembersList() {
                             $('#spJobTitle' + count).html('CFO');
                         }
                         else if (count == 2) {
-                            $('#spJobTitle' + count).html('Controller');
+                            $('#spJobTitle' + count).html('Accounting Manager');
                         }
                         else if (count == 3) {
                             $('#spJobTitle' + count).html('Accountant');
+                        }
+                        else if (count == 4) {
+                            $('#spJobTitle' + count).html('Bookkeeper');
                         }
                     }
                
@@ -484,7 +513,7 @@ function getTeamMembersList() {
                     else {
                         $('#spTeamChat' + count).attr('href', '');
                     }
-                    count = count + 1;
+                   // count = count + 1;
                 });
             }
             else {
@@ -544,13 +573,12 @@ function AgencyDropdownPartialViewChange() {
                 MenuOptionHideAndShow(ClientID);
                /* }, 1000);*/
 
-                
                 getTeamMembersList();
                 NotesIndividualCountAndPercentageByAgencyId();
                 $('#roleexist').show();
                 $('.spClientName').html(String(data.Name));
                 $('.spEntityName').html(String(data.EntityName));
-                $('#spTeamName').html(String(data.TeamName));
+                //$('#spTeamName').html(String(data.TeamName));
 
                 $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
                
@@ -564,16 +592,15 @@ function AgencyDropdownPartialViewChange() {
                 //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
 
                 if (data.StartDate != null && data.StartDate != '') {
-                    
-                    //let stDate = new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '');//(data.StartDate);
-                    let localTime = UtcDateToLocalTime(data.StartDate).toDateString();
-           
+
+                    let roughDate = Number(data.StartDate.match(/\d+/)[0]);
+                    let localTime = UtcDateToLocalTime(roughDate).toDateString();
+
                     $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
                 }
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
-                
                 
 
             }
@@ -585,7 +612,7 @@ function AgencyDropdownPartialViewChange() {
                 $('.spEntityName').html('');
                 $('#spCreatedDate').html('');
                 $('#spMonths').html('');
-                $('#spTeamName').html('');
+                //$('#spTeamName').html('');
                 $('#spStatus').html('');
                 $('#spClientAddress').html('');
                 $('.badge-soft-success').addClass('d-none');
@@ -601,19 +628,23 @@ function AgencyDropdownPartialViewChange() {
             $('.spEntityName').html('');
             $('#spCreatedDate').html('');
             $('#spMonths').html('');
-            $('#spTeamName').html('');
+            //$('#spTeamName').html('');
             $('#spStaffName1').html('');
             $('#spStaffName2').html('');
             $('#spStaffName3').html('');
+            $('#spStaffName4').html('');
             $('#spJobTitle1').html('');
             $('#spJobTitle2').html('');
             $('#spJobTitle3').html('');
+            $('#spJobTitle4').html('');
             $('#spProfileImage1').removeAttr('src');
             $('#spProfileImage2').removeAttr('src');
             $('#spProfileImage3').removeAttr('src');
+            $('#spProfileImage4').removeAttr('src');
             $('#spTeamChat1').removeAttr('href');
             $('#spTeamChat2').removeAttr('href');
             $('#spTeamChat3').removeAttr('href');
+            $('#spTeamChat4').removeAttr('href');
             $('#spStatus').html('');
             $('#spClientAddress').html('');
             $('.badge-soft-success').addClass('d-none');
@@ -622,7 +653,7 @@ function AgencyDropdownPartialViewChange() {
           
             
         }
-      
+     
   
     }); 
     window.onerror = function (e) {
