@@ -453,12 +453,14 @@ $(document).ready(function () {
         var CreatedBy = '';
         var CreatedDate = '';
         var RequestID = 0;
+        var IsNotinBooks = $('#tabNotinBooks.tabselect').length > 0 ? 1 : 0;
+        var IsNotinBanks = $('#tabNotinBanks.tabselect').length > 0 ? 1 : 0;
         var AzureFunctionReconUrl = $('#AzureFunctionReconUrl').val();
         var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
-                getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}`, null, function (Azureresponse) {
+                getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
                     Azureresponse = JSON.parse(Azureresponse);
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
                     if (Azureresponse.status === true && Azureresponse.statusCode == 200) {
