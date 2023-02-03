@@ -386,6 +386,7 @@ namespace ProvenCfoUI.Controllers
                                         break;
                                     case 2:
                                         QuickBooksSharp.Entities.Account[] Qaccounts = (QuickBooksSharp.Entities.Account[])result;
+                                        Qaccounts = Qaccounts.Where(x => x.AccountType == AccountTypeEnum.Bank || x.AccountType == AccountTypeEnum.CreditCard).ToArray();
                                         foreach (var item in Qaccounts)
                                         {
                                             ClientXeroAccountsVM acct = new ClientXeroAccountsVM();
