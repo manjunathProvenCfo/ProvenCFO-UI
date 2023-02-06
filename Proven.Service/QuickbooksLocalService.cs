@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
-
+using System.Linq;
 
 
 namespace Proven.Service
@@ -72,8 +72,13 @@ namespace Proven.Service
             bool IsProdEnviroment = IsProductionEnvirnoment(TenentID);            
             TokenResponse objToken = (TokenResponse)Convert.ChangeType(Token, typeof(TokenResponse));
             _service = new DataService(objToken.access_token, Convert.ToInt64(TenentID), IsProdEnviroment);
-            var res = await _service.QueryAsync<Account>("Select * from Account");           
-            return (V)Convert.ChangeType(res.Response.Entities, typeof(V));
+            var resBankAccount = await _service.QueryAsync<Account>("Select * from Account where AccountType = 'Bank'");
+            var resCreditCard = await _service.QueryAsync<Account>("Select * from Account");
+            var CreditCard = resCreditCard.Response.Entities.Where(x => x.AccountType == AccountTypeEnum.CreditCard).ToArray();
+            QuickBooksSharp.Entities.Account[] CombinationOfAllAccount = new QuickBooksSharp.Entities.Account[resBankAccount.Response.Entities.Length + CreditCard.Length];
+            resBankAccount.Response.Entities.CopyTo(CombinationOfAllAccount,0);
+            CreditCard.CopyTo(CombinationOfAllAccount, resBankAccount.Response.Entities.Length);            
+            return (V)Convert.ChangeType(CombinationOfAllAccount, typeof(V));
         }
         private bool IsProductionEnvirnoment(string TenentID)
         {
