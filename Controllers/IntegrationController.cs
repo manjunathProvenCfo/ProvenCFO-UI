@@ -385,7 +385,7 @@ namespace ProvenCfoUI.Controllers
                                         }
                                         break;
                                     case 2:
-                                        QuickBooksSharp.Entities.Account[] Qaccounts = (QuickBooksSharp.Entities.Account[])result;
+                                        QuickBooksSharp.Entities.Account[] Qaccounts = (QuickBooksSharp.Entities.Account[])result;                                        
                                         foreach (var item in Qaccounts)
                                         {
                                             ClientXeroAccountsVM acct = new ClientXeroAccountsVM();
