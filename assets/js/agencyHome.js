@@ -16,7 +16,7 @@ $(document).ready(function () {
     createTwilioUser();
     AgencyDropdownPartialViewChange();
    /* bindNotInBooksAndBanksCountDashboard();*/
-    NotesIndividualCountAndPercentageByAgencyId();
+    //NotesIndividualCountAndPercentageByAgencyId(); // ----> Comment on 07-02-2023 (Reason: Already called)
  
 
     setTimeout(function () {
@@ -199,7 +199,7 @@ var color = {
 
 function KanbanCountWithIndividualPriority() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
         $("#needsCategoryDiv").children().remove();
         for (key in color) {
@@ -371,7 +371,7 @@ var colorsNoteCat = {
 
 function NotesIndividualCountAndPercentageByAgencyId() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
@@ -423,15 +423,7 @@ function getTeamMembersList() {
             if (data != null) {
                 var count=0;
                 var number;
-                for (let position = 1; position <= 4; position++) {
-                    
-                    $('#email'+ position).addClass("disabled-action-icons");
-                    $('#spTeamChat' + position).addClass("disabled-action-icons");
-                    $('#phoneNumber' + position).addClass("disabled-action-icons");
-                    $('#aLinkedInProfile' + position).addClass("disabled-action-icons");
-
-                    $('#teamMember' + position).css({ "display": "none" });
-                }
+                // ----> Removed for loop on 07-02-2022, Reason Changed the approach.
                 $.each(data.TeamMembers, function (key, object) {
                     count = object.OrderNumber
                     $('#teamMember' + count).css({ "display": "" })
@@ -464,43 +456,48 @@ function getTeamMembersList() {
                         $('#aLinkedInProfile' + count)[0].className = $('#aLinkedInProfile' + count)[0].className + ' disabled-action-icons';
                         $('#aLinkedInProfile' + count).prop('disabled', true);
                     }
-                    if (object.Username != null && object.Username != '') {
-                        
-                        if ( count== 1) {
+                    if (object.Username != null && object.Username != '' && object.Jobtitle != null && object.Jobtitle != '') {
+
+                        if (count == 1) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('CFO');
                         }
                         else if (count == 2) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Accounting Manager');
                         }
                         else if (count == 3) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Accountant');
                         }
                         else if (count == 4) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Bookkeeper');
                         }
                     }
                     else {
                         $('#spStaffName' + count).html(String(''));
-                    }
-
-                    if (object.Jobtitle != null && object.Jobtitle != '') {
-                        if (count == 1) {
-                            $('#spJobTitle' + count).html('CFO');
-                        }
-                        else if (count == 2) {
-                            $('#spJobTitle' + count).html('Accounting Manager');
-                        }
-                        else if (count == 3) {
-                            $('#spJobTitle' + count).html('Accountant');
-                        }
-                        else if (count == 4) {
-                            $('#spJobTitle' + count).html('Bookkeeper');
-                        }
-                    }
-               
-                    else {
                         $('#spJobTitle' + count).html(String(''));
                     }
+
+                    //if (object.Jobtitle != null && object.Jobtitle != '') {
+                    //    if (count == 1) {
+                    //        $('#spJobTitle' + count).html('CFO');
+                    //    }
+                    //    else if (count == 2) {
+                    //        $('#spJobTitle' + count).html('Accounting Manager');
+                    //    }
+                    //    else if (count == 3) {
+                    //        $('#spJobTitle' + count).html('Accountant');
+                    //    }
+                    //    else if (count == 4) {
+                    //        $('#spJobTitle' + count).html('Bookkeeper');
+                    //    }
+                    //}
+               
+                    //else {
+                    //    $('#spJobTitle' + count).html(String(''));
+                    //}
                     if (object.Profileimage != null && object.Profileimage != '') {
                         $('#spProfileImage' + count).attr('src', object.Profileimage);
                     }
@@ -568,36 +565,42 @@ function AgencyDropdownPartialViewChange() {
         success: function (data) {
             if (data != null) {
                /* setTimeout(function () {*/
-                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-                RenderNetIncomeChart($('#dllNetIncome').val());
                 MenuOptionHideAndShow(ClientID);
                /* }, 1000);*/
 
-                getTeamMembersList();
-                NotesIndividualCountAndPercentageByAgencyId();
-                $('#roleexist').show();
-                $('.spClientName').html(String(data.Name));
-                $('.spEntityName').html(String(data.EntityName));
-                //$('#spTeamName').html(String(data.TeamName));
-
-                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
-               
                 GetReconcilationData();
                 GetReconcilationData1();
                 KanbanCountWithIndividualPriority();
-           
-                defaultReportsWidget();
-               // let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
-               // $('#spMonths').html(month);
-                //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
+                NotesIndividualCountAndPercentageByAgencyId();
 
+                $('#roleexist').show();
+                $('.spClientName').html(String(data.Name));
+                $('.spEntityName').html(String(data.EntityName));
                 if (data.StartDate != null && data.StartDate != '') {
 
                     let roughDate = Number(data.StartDate.match(/\d+/)[0]);
                     let localTime = UtcDateToLocalTime(roughDate).toDateString();
 
-                    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                    $('#spCreatedDate').html(localTime);
                 }
+                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
+                $('#spMonths').html(month);
+
+                getTeamMembersList();
+                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+                RenderNetIncomeChart($('#dllNetIncome').val());
+                defaultReportsWidget();
+                //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
+
+                // -----> Comment on 07-02-2023 
+                //if (data.StartDate != null && data.StartDate != '') {
+
+                //    let roughDate = Number(data.StartDate.match(/\d+/)[0]);
+                //    let localTime = UtcDateToLocalTime(roughDate).toDateString();
+
+                //    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                //}
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
