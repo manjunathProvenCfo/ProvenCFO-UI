@@ -52,7 +52,7 @@ var $NotificationHtmls = {
 
 $(function () {
     //Twilio Chat
-    twilioChatGlobal();
+    //twilioChatGlobal();
     //Twilio Chat
 
     loadAllNotificationLoggedInUserPage(false);

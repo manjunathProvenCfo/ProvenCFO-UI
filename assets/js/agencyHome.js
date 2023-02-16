@@ -13,11 +13,8 @@ $(document).ready(function () {
         }
     });
 
-    createTwilioUser();
+    //createTwilioUser();
     AgencyDropdownPartialViewChange();
-   /* bindNotInBooksAndBanksCountDashboard();*/
-    //NotesIndividualCountAndPercentageByAgencyId(); // ----> Comment on 07-02-2023 (Reason: Already called)
- 
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -241,16 +238,6 @@ function KanbanCountWithIndividualPriority() {
         }
 
         NeedsChart(Object.values(results));
-        //if (response.Message == "Success") {
-
-        //    let TotalTasks = 0;
-
-        //    for (var i = 0; i < data.length; i++) {
-        //        TotalTasks = Number(data[i].totalTasks);
-        //    }
-
-        //    $("#lblTotalTasksCount").text(TotalTasks);
-        //}
     });
 }
 
@@ -480,24 +467,6 @@ function getTeamMembersList() {
                         $('#spJobTitle' + count).html(String(''));
                     }
 
-                    //if (object.Jobtitle != null && object.Jobtitle != '') {
-                    //    if (count == 1) {
-                    //        $('#spJobTitle' + count).html('CFO');
-                    //    }
-                    //    else if (count == 2) {
-                    //        $('#spJobTitle' + count).html('Accounting Manager');
-                    //    }
-                    //    else if (count == 3) {
-                    //        $('#spJobTitle' + count).html('Accountant');
-                    //    }
-                    //    else if (count == 4) {
-                    //        $('#spJobTitle' + count).html('Bookkeeper');
-                    //    }
-                    //}
-               
-                    //else {
-                    //    $('#spJobTitle' + count).html(String(''));
-                    //}
                     if (object.Profileimage != null && object.Profileimage != '') {
                         $('#spProfileImage' + count).attr('src', object.Profileimage);
                     }
@@ -564,9 +533,7 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-               /* setTimeout(function () {*/
                 MenuOptionHideAndShow(ClientID);
-               /* }, 1000);*/
 
                 GetReconcilationData();
                 GetReconcilationData1();
@@ -591,16 +558,7 @@ function AgencyDropdownPartialViewChange() {
                 RenderGrossRevenueChart($('#ddlGrossRevenue').val());
                 RenderNetIncomeChart($('#dllNetIncome').val());
                 defaultReportsWidget();
-                //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
 
-                // -----> Comment on 07-02-2023 
-                //if (data.StartDate != null && data.StartDate != '') {
-
-                //    let roughDate = Number(data.StartDate.match(/\d+/)[0]);
-                //    let localTime = UtcDateToLocalTime(roughDate).toDateString();
-
-                //    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
-                //}
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');

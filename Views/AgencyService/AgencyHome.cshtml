@@ -23,69 +23,6 @@
 @Styles.Render("~/bundles/css/fancybox")
 <div class="dashboard-frame">
 
-    <!--<div class="card mb-4 ">
-          @*@{
-              Html.RenderAction("AgencySelection", "AgencyService");
-          }*@
-          <!--<!--<div class="card-header">
-              <div class="row align-items-center justify-content-between">-->
-    <!--@*<div class="col-6 col-sm-auto d-flex align-items-center pr-0">
-            <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agency Home</h5>
-        </div>*@-->
-    <!--<!--<div class="col-6 col-sm-auto ml-auto text-right pl-0">
-        <div class="d-none" id="purchases-actions">
-            <div class="input-group input-group-sm">
-                <select class="custom-select cus" aria-label="Bulk actions">
-                    <option selected="">Bulk actions</option>
-                    <option value="Delete">Delete</option>
-                    <option value="Archive">Archive</option>
-                </select>
-                <button class="btn btn-falcon-default btn-sm ml-2" type="button">Submit</button>
-            </div>
-        </div>
-        <div id="dashboard-actions">-->
-    <!--@*<button class="btn btn-falcon-default btn-sm" type="button">
-            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
-            <span class="d-none d-sm-inline-block ml-1"><a href=@Url.Action("CreateClient", "Client")>Create</a></span>
-        </button>*@
-    @*<button class="btn btn-falcon-default btn-sm mx-2" type="button"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ml-1">Filter</span></button>*@
-    @*<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-            <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-            <span class="d-none d-sm-inline-block ml-1" onclick="ExportToExcel()">Export</span>
-        </button>*@-->
-    <!--<!--<!--<button class="btn btn-falcon-default btn-sm ml-2" type="button">
-    <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
-    <span class="d-none d-sm-inline-block ml-1">-->
-    <!---->
-    <!---->@*<a href=@Url.Action("AgencyHome", "AgencyService")>Back to dashboard</a>*@<!---->
-    <!--</span>
-    </button>-->
-    <!--</div>
-            </div>
-        </div>
-    </div>-->
-    <!--@*@Html.Partial("_AgencySelection")*@
-        @*@{
-                Html.RenderAction("AgencySelection", "AgencyService");
-            }*@
-    </div>-->
-    <!--<div class="card px-0 pt-0">
-        <div class="row no-gutters">
-
-            <div class="col-lg-3 col-xl-12 pl-lg-2 pl-xl-0 mb-3" id="divClientDetials">
-                <div class="bg-holder d-none d-xl-block bg-card">
-                </div>-->
-    <!--/.bg-holder-->
-    @*<div class="card-body">
-            <h5>Agency Details: <span id="spClientName"></span></h5>
-            <p class="fs--1" id="spClientAddress"></p>
-            <div>
-                <strong class="mr-2">Status: </strong>
-                <div class="badge badge-pill badge-soft-success fs--2 d-none">Active<span class="fas fa-check ml-1" data-fa-transform="shrink-2"></span></div>
-            </div>
-        </div>*@               @*Commented By Amit From line 61 to 67*@
-
-
         <div class="row no-gutters">
             <div class="col-md-6 col-lg-3 mb-3">
                 <div class="card h-md-100">
@@ -95,8 +32,6 @@
                             <div class="col-auto pr-2">
 
                                 <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
-                                @*<h6 class="mt-1">Not in Books </h6>*@
-
                                 <h1 id="lblNotInBooksCount2" style=" margin-left: 15px;">
                                     0
                                 </h1>
@@ -106,12 +41,6 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblPostiveInBooksCount" style=" color: white; background-color: red;">0</span><br />
                             </div>
                             <div class="col-5 col-sm-4" id="divNotInBookPercentage">
-
-                                @*<div class="progress-circle" id="lblPercentage" data-echart-responsive="true" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>
-
-
-                                    <div class="progress-circle" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
-
                             </div>
                         </div>
                     </div>
@@ -124,14 +53,6 @@
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-auto pr-2">
                                 <h6 class="mb-0 ml-2" id="tabselectBank" onclick="Tabclick(event,1)" ;><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
-                                @*<h6 class="mt-1">Not in Banks </h6>*@
-                                @*<div class="fs--2 mt-3">
-                                    <div class="d-flex flex-between-center mb-1">
-
-
-                                       <div class="d-xxl-none">993%</div>
-                                         </div>
-                                         </div>*@
                                 <h1 id="lblNotInBanksCount2" style=" margin-left: 25px;">0</h1>
 
 
@@ -142,14 +63,6 @@
                                 <span class="badge badge-pill badge-soft-danger ml-3 currency-usd" id="lblNegativeBanksCount" style="color: white; background-color: red; ">0</span>
                             </div>
                             <div class="col-5 col-sm-4" id="divNotInBankPercentage">
-
-                                @*<div class="progress-circle" data-echart-responsive="true" id="lblPercentage" data-options='{"color":"url(#gradient)","progress":93,"strokeWidth":5,"trailWidth":5}'></div>*@
-                                @*<h3 class="progressbar-text" style="position: absolute; left: 50%; top: 50%; padding: 0px; margin: 0px; transform: translate(-50%, -50%);"><span class="value" id="lblPercentage">0</span><span>%</span> </h3>*@
-                                @*<div class="absolute-centered font-weight-medium text-dark fs-2" id="lblPercentage">0</div>*@
-
-
-                                @*<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":40,"strokeWidth":5,"trailWidth":5}'></div>*@
-
                             </div>
                         </div>
                     </div>
@@ -164,8 +77,6 @@
                     <div class="card-body">
                         <div class="row h-100 justify-content-between no-gutters">
                             <div class="col-5 col-sm-6 col-xxl pr-2">
-                                @*<h6 class="mb-0 ml-2"><a href="@Url.Action("Needs", "NeedsMain", new { Type = "Not in Banks" })">Needs List</a></h6>*@
-
                                 <h6>
                                     <a class="" href=@Url.Action("NeedsMain", "Needs")>
                                         Needs List<span class=""></span>
@@ -247,15 +158,6 @@
                 <div class="card h-100">
                     <div class="card-header d-flex flex-between-center bg-light py-2">
                         <h6 class="mb-0">Overview</h6>
-                        @*<div class="dropdown text-sans-serif btn-reveal-trigger">
-                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-active-user" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                                <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="dropdown-active-user">
-                                    <div class="bg-white py-2">
-                                        <a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                                    </div>
-                                </div>
-                            </div>*@
                     </div>
                     <div class="card-body py-2 overview-content">
                         <h5 class="mb-3"> <span class="spClientName"></span></h5>
@@ -268,27 +170,14 @@
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Start Date</p>
                             <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span id="spCreatedDate"></span></p>
                         </div>
-                        @*<div class="row no-gutters mb-2 mb-md-0">
-                            <p class="col-md-5 col-xl-4 mb-2 color-dark">Team</p>
-                            <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span id="spTeamName"></span></p>
-                        </div>*@
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Status</p>
                             <p class="badge badge-success font-weight-normal mb-1"><span id="spStatus"></span></p>
-                            <!--<p class="col-md-7 col-xl-8 mb-2 color-gray-shades">-->
-                            @*<san href="#" class="badge badge-success font-weight-normal"><span id="spStatus"></span></san>*@
-                            <!--</p>-->
                         </div>
                         <div class="row no-gutters mb-2 mb-md-0">
                             <p class="col-md-5 col-xl-4 mb-2 color-dark">Months as Client</p>
                             <p class="col-md-7 col-xl-8 mb-2 color-gray-shades"><span id="spMonths"></span></p>
                         </div>
-                        @*<div class="row no-gutters mb-2 mb-md-0">
-                                <p class="col-md-5 col-xl-4 mb-2 color-dark">Outstanding Balance</p>
-                                <p class="col-md-7 col-xl-8 mb-2 color-gray-shades">
-                                    <span id="spOutSanding" class="currency-usd"></span> <a href="#" class="ml-5 badge badge-danger font-weight-normal pt-1">Pay Now</a>
-                                </p>
-                            </div>*@
                     </div>
                 </div>
             </div>
@@ -296,15 +185,6 @@
                 <div class="card h-100">
                     <div class="card-header d-flex flex-between-center bg-light py-2 mb-3">
                         <h6 class="mb-0">Your Team</h6>
-                        @*<div class="dropdown text-sans-serif btn-reveal-trigger">
-                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-active-user" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                                <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="dropdown-active-user">
-                                    <div class="bg-white py-2">
-                                        <a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                                    </div>
-                                </div>
-                            </div>*@
                     </div>
                     <div class="card-body py-3 overview-content">
                         <div class="media align-items-center mb-4" style="display: none" id="teamMember1">
@@ -339,9 +219,7 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl">
-                                        @*<img class="rounded-circle" src="../assets/img/team/2-thumb.png" alt="" />*@
                                         <img class="rounded-circle" id="spProfileImage2" onerror="imgError(this);" />
-
                                     </div>
                                     <div class="media-body ml-3">
                                         <p class="mb-0 color-gray-shades"><span id="spStaffName2"></span></p>
@@ -369,9 +247,7 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <div class="d-flex justify-content-between align-items-center flex-row">
                                     <div class="avatar avatar-2xl">
-                                        @*<img class="rounded-circle" src="../assets/img/team/3-thumb.png" alt="" />*@
                                         <img class="rounded-circle" id="spProfileImage3" onerror="imgError(this);" />
-
                                     </div>
                                     <div class="media-body ml-3">
                                         <p class="mb-0 color-gray-shades"><span id="spStaffName3"></span></p>
@@ -446,11 +322,6 @@
                                     <option value="0" selected>Last 12 Months</option>
                                     <option value="1">Last 6 Months</option>
                                     <option value="2">Last 3 Months</option>
-                                    @*<option value="3" selected>Current year by month</option>
-                                        <option value="4">Previous year by quarter</option>
-                                        <option value="5">Previous year by month</option>
-                                        <option value="6">Previous three years by month</option>
-                                        <option value="7">Previous three years by quarters</option>*@
                                 </select>
                             </div>
                         </div>
@@ -473,11 +344,6 @@
                                     <option value="0" selected>Last 12 Months</option>
                                     <option value="1">Last 6 Months</option>
                                     <option value="2">Last 3 Months</option>
-                                    @*<option value="3" selected>Current year by month</option>
-                                        <option value="4">Previous year by quarter</option>
-                                        <option value="5">Previous year by month</option>
-                                        <option value="6">Previous three years by month</option>
-                                        <option value="7">Previous three years by quarters</option>*@
                                 </select>
                             </div>
                         </div>
