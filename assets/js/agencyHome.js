@@ -479,15 +479,8 @@ function getTeamMembersList() {
                     else {
                         $('#spTeamChat' + count).attr('href', '');
                     }
-                   // count = count + 1;
                 });
             }
-            else {
-                // Write here what should happend once selected client is null
-            }
-        },
-        error: function () {
-            // Write here what should happend when action result is errored.
         }
     });
    
@@ -555,15 +548,11 @@ function AgencyDropdownPartialViewChange() {
                 $('#spMonths').html(month);
 
                 getTeamMembersList();
-                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-                RenderNetIncomeChart($('#dllNetIncome').val());
                 defaultReportsWidget();
 
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
-                
-
             }
             
             else {
@@ -1166,6 +1155,10 @@ var defaultReportsWidget = function () {
             }
         }
         HidelottieLoader();
+        if ($('#Loader').css('display') == 'none') {
+            RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+            RenderNetIncomeChart($('#dllNetIncome').val());
+        }
     });
 }
 function prepareReportMedia(report) {
