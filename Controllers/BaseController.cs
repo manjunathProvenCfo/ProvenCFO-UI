@@ -16,6 +16,7 @@ namespace ProvenCfoUI.Controllers
         //private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         //[CheckSession]
         // GET: Basess
+        //test
         protected new UserContext User => new UserContext(HttpContext?.User);
         public BaseController()
         {
