@@ -273,9 +273,7 @@ namespace ProvenCfoUI.Controllers
                         var reports = await reportsService.GetDashboardReports(agencyId);
                         foreach (var rpt in reports)
                         {
-
-
-                            rpt.FileName = rpt.FileName.Split('_').Length > 1 ? rpt.FileName.Split('_')[1] : rpt.FileName;
+                            rpt.FileName = rpt.FileName.Replace(".", "_"); //Split('_').Length > 1 ? rpt.FileName.Split('_')[1] : rpt.FileName;
                             rpt.DownloadFileLink = $@"/Reports/GetReportResource/{rpt.FilePath}/{rpt.FileName}";
 
                         }
