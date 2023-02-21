@@ -250,7 +250,7 @@ $(document).ready(() => {
              setTimeout(()=>lastModify(),0);
         },
         ajax: {
-            url: "https://localhost:44345/Reconciliation/ReconcilationPaginiation",
+            url: window.location.origin+"/Reconciliation/ReconcilationPaginiation",
             type: "POST"
         },
         processing: true,
