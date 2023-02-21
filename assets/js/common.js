@@ -121,9 +121,9 @@ function SetUserPreferencesForAgency(callback, Noload = false) {
         dataType: "json",
         success: function (data) {
             //Call Global function here
-            try {
-                twilioChatGlobal(false);
-            } catch (e) { console.log("error in twilioChatGlobal,called from SetUserPreferencesForAgency(callback)"); }
+            //try {
+            //    twilioChatGlobal(false);
+            //} catch (e) { console.log("error in twilioChatGlobal,called from SetUserPreferencesForAgency(callback)"); }
             if (isEmptyOrBlank(callback) === false) {
                 callback();
             }

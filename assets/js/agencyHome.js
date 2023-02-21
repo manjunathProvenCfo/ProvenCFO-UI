@@ -29,16 +29,16 @@ $(document).ready(function () {
         });
     }, 3000);
 
-    $('#ddlGrossRevenue').change(function () {
-        var item = $(this);
+    //$('#ddlGrossRevenue').change(function () {
+    //    var item = $(this);
         
-        RenderGrossRevenueChart(item.val());
-    });
-    $('#dllNetIncome').change(function () {
-        var item = $(this);
+    //    RenderGrossRevenueChart(item.val());
+    //});
+    //$('#dllNetIncome').change(function () {
+    //    var item = $(this);
        
-        RenderNetIncomeChart(item.val());
-    });
+    //    RenderNetIncomeChart(item.val());
+    //});
     
 
 });
@@ -1152,13 +1152,19 @@ var defaultReportsWidget = function () {
             for (var i = 0; i < response.DataYearly.length; i++) {
                 let reportHtml = prepareReportMedia(response.DataYearly[i]);
                 divYearlyReports.append(reportHtml);
+
+                let yearlyReport = document.getElementById('y-Report');
+                if (response.DataYearly[i].FileExtention === ".pdf") {
+
+                    yearlyReport.setAttribute('data-type', 'iframe')
+                }
             }
         }
         HidelottieLoader();
-        if ($('#Loader').css('display') == 'none') {
-            RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-            RenderNetIncomeChart($('#dllNetIncome').val());
-        }
+        //if ($('#Loader').css('display') == 'none') {
+        //    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+        //    RenderNetIncomeChart($('#dllNetIncome').val());
+        //}
     });
 }
 function prepareReportMedia(report) {
@@ -1173,7 +1179,7 @@ function prepareReportMedia(report) {
                                         <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group" data-type="iframe"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
-                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>
+                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group" id='y-Report'>${report.PeriodType} ${report.Year}</a></h6>
                                         <p class="text-500 fs--2 mb-0">Created <span class="ml-2 d-inline-block">${moment(report.CreatedDate).format("MMMM DD, YYYY")}</span></p>
                                     </div>
                                 </div>`;
