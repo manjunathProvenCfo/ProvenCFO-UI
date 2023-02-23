@@ -52,7 +52,7 @@ var $NotificationHtmls = {
 
 $(function () {
     //Twilio Chat
-    twilioChatGlobal();
+    //twilioChatGlobal();
     //Twilio Chat
 
     loadAllNotificationLoggedInUserPage(false);
@@ -121,13 +121,13 @@ function SetUserPreferencesForAgency(callback, Noload = false) {
         dataType: "json",
         success: function (data) {
             //Call Global function here
-            try {
-                twilioChatGlobal(false);
-            } catch (e) { console.log("error in twilioChatGlobal,called from SetUserPreferencesForAgency(callback)"); }
+            //try {
+            //    twilioChatGlobal(false);
+            //} catch (e) { console.log("error in twilioChatGlobal,called from SetUserPreferencesForAgency(callback)"); }
             if (isEmptyOrBlank(callback) === false) {
                 callback();
             }
-            GetTotalNotesCount();
+            //GetTotalNotesCount();
             setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
             if (!Noload) {
                 window.location.reload();
@@ -148,7 +148,7 @@ var MenuOptionHideAndShow = function (AgencyId) {
         var agencyJson = sessionStorage.getItem('AgencyDetails');
         var agencyInfo = JSON.parse(agencyJson);
         if (agencyInfo == null || (agencyInfo != null && agencyInfo.id != AgencyId)) {
-            getAjaxSync(apiurl + `Client/GetClientById?ClientId=${AgencyId}`, null, function (response) {
+            getAjax(apiurl + `Client/GetClientById?ClientId=${AgencyId}`, null, function (response) {
 
                 if (response.resultData != null) {
                     var agencyDetils = '{'

@@ -23,10 +23,7 @@ namespace Proven.Model
                             @"\.[0-9]{1,19}\.[0-19]{1,19}\.)|(([a-zA-Z0-9\-]+\" +
                             @".)+))([a-zA-Z]{2,19}|[0-19]{1,19})(\]?)$",
                             ErrorMessage = "Please Enter a valid Email Address")]
-        //[RegularExpression(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,9}" +
-        //                    @"\.[0-9]{1,9}\.[0-9]{1,9}\.)|(([a-zA-Z0-9\-]+\" +
-        //                    @".)+))([a-zA-Z]{2,9}|[0-9]{1,9})(\]?)$",
-        //                    ErrorMessage = "Please Enter a valid Email Address")]
+      
         public string Email { get; set; }
         public string IsActive { get; set; }
         public Guid ActivationCode { get; set; }

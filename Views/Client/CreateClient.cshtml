@@ -897,15 +897,7 @@
 
     }
 
-    /*
-     data
-workflow
-audit
-buzz
-user
-account
-dashboard
-     */
+
     const DomoScope = [
         {  data: "data",    select: true },
         {  data: "workflow",select:true },
@@ -916,14 +908,6 @@ dashboard
         {  data: "dashboard",    select: true }
 
     ];
-
-
-  
-
-
-
-
-
 
 
     const totalScopsXero = [
@@ -964,9 +948,33 @@ dashboard
 
     ];
 
+
+    function QbTokenUpdate() {
+
+        let qbForm = $(".qbForm");
+
+        qbForm.submit(function (e) {
+
+            e.preventDefault();
+        });
+
+       }
     $(document).ready(function () {
 
-     
+
+        if (sessionStorage.getItem("qbToken")) {
+            ShowAlertBoxSuccess("Success", "QuickBooks token updated successfully!");
+
+            sessionStorage.removeItem("qbToken");
+        }
+
+   
+        $("#qbForm").submit(function (e) {
+
+            sessionStorage.setItem("qbToken", "success");
+           
+
+             });
 
         var IsTokenUpdated = "@TempData["IsTokenUpdated"]";
 
@@ -1261,10 +1269,7 @@ dashboard
         if ($("#apiclientid")[0].selectedOptions[0]
                     .value != "=" ) {
                     $("#APIClientSecret")[0].value = apidetails[0].xero_secret;
-
             }
-
-
 
                $("#quickbookcompany").hide();
                $("#divQuickbookscopeoption").hide();
@@ -1319,9 +1324,6 @@ dashboard
 
         }
 });
-
-
-
 
     $('#resetValue').on('click', function () {
         $('#txt_refresh_token').val('');

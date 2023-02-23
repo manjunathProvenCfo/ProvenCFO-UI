@@ -13,11 +13,8 @@ $(document).ready(function () {
         }
     });
 
-    createTwilioUser();
+    //createTwilioUser();
     AgencyDropdownPartialViewChange();
-   /* bindNotInBooksAndBanksCountDashboard();*/
-    NotesIndividualCountAndPercentageByAgencyId();
- 
 
     setTimeout(function () {
         $('.currency-usd').each(function (key, value) {
@@ -32,16 +29,16 @@ $(document).ready(function () {
         });
     }, 3000);
 
-    $('#ddlGrossRevenue').change(function () {
-        var item = $(this);
+    //$('#ddlGrossRevenue').change(function () {
+    //    var item = $(this);
         
-        RenderGrossRevenueChart(item.val());
-    });
-    $('#dllNetIncome').change(function () {
-        var item = $(this);
+    //    RenderGrossRevenueChart(item.val());
+    //});
+    //$('#dllNetIncome').change(function () {
+    //    var item = $(this);
        
-        RenderNetIncomeChart(item.val());
-    });
+    //    RenderNetIncomeChart(item.val());
+    //});
     
 
 });
@@ -199,7 +196,7 @@ var color = {
 
 function KanbanCountWithIndividualPriority() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(apiurl + `Needs/KanbanCountWithIndividualPriority?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
         $("#needsCategoryDiv").children().remove();
         for (key in color) {
@@ -241,16 +238,6 @@ function KanbanCountWithIndividualPriority() {
         }
 
         NeedsChart(Object.values(results));
-        //if (response.Message == "Success") {
-
-        //    let TotalTasks = 0;
-
-        //    for (var i = 0; i < data.length; i++) {
-        //        TotalTasks = Number(data[i].totalTasks);
-        //    }
-
-        //    $("#lblTotalTasksCount").text(TotalTasks);
-        //}
     });
 }
 
@@ -371,7 +358,7 @@ var colorsNoteCat = {
 
 function NotesIndividualCountAndPercentageByAgencyId() {
     var ClientID = $("#ddlclient option:selected").val();
-    getAjaxSync(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
+    getAjax(apiurl + `Notes/NotesIndividualCountAndPercentageByAgencyId?AgencyId=${ClientID}`, null, function (response) {
         let data = response.resultData;
 
         $("#notesCategoryDiv").children().remove();
@@ -423,21 +410,13 @@ function getTeamMembersList() {
             if (data != null) {
                 var count=0;
                 var number;
-                for (let position = 1; position <= 4; position++) {
-                    
-                    $('#email'+ position).addClass("disabled-action-icons");
-                    $('#spTeamChat' + position).addClass("disabled-action-icons");
-                    $('#phoneNumber' + position).addClass("disabled-action-icons");
-                    $('#aLinkedInProfile' + position).addClass("disabled-action-icons");
-
-                    $('#teamMember' + position).css({ "display": "none" });
-                }
+                // ----> Removed for loop on 07-02-2022, Reason Changed the approach.
                 $.each(data.TeamMembers, function (key, object) {
                     count = object.OrderNumber
                     $('#teamMember' + count).css({ "display": "" })
 
                     if (object.Username != null && object.Username != '') {
-                        $('#spTeamChat' + count).removeClass("disabled-action-icons");
+                        //$('#spTeamChat' + count).removeClass("disabled-action-icons");
 
                         number = "tel:" + object.PhoneNumber;
                         if (number != null) {
@@ -464,64 +443,44 @@ function getTeamMembersList() {
                         $('#aLinkedInProfile' + count)[0].className = $('#aLinkedInProfile' + count)[0].className + ' disabled-action-icons';
                         $('#aLinkedInProfile' + count).prop('disabled', true);
                     }
-                    if (object.Username != null && object.Username != '') {
-                        
-                        if ( count== 1) {
+                    if (object.Username != null && object.Username != '' && object.Jobtitle != null && object.Jobtitle != '') {
+
+                        if (count == 1) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('CFO');
                         }
                         else if (count == 2) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Accounting Manager');
                         }
                         else if (count == 3) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Accountant');
                         }
                         else if (count == 4) {
                             $('#spStaffName' + count).html(String(object.Username));
+                            $('#spJobTitle' + count).html('Bookkeeper');
                         }
                     }
                     else {
                         $('#spStaffName' + count).html(String(''));
-                    }
-
-                    if (object.Jobtitle != null && object.Jobtitle != '') {
-                        if (count == 1) {
-                            $('#spJobTitle' + count).html('CFO');
-                        }
-                        else if (count == 2) {
-                            $('#spJobTitle' + count).html('Accounting Manager');
-                        }
-                        else if (count == 3) {
-                            $('#spJobTitle' + count).html('Accountant');
-                        }
-                        else if (count == 4) {
-                            $('#spJobTitle' + count).html('Bookkeeper');
-                        }
-                    }
-               
-                    else {
                         $('#spJobTitle' + count).html(String(''));
                     }
+
                     if (object.Profileimage != null && object.Profileimage != '') {
                         $('#spProfileImage' + count).attr('src', object.Profileimage);
                     }
                     else {
                         $('#spProfileImage' + count).attr('src', '../assets/img/team/default-logo.png');
                     }
-                    if (object.Email != null && object.Email != '') {
-                        $('#spTeamChat' + count).attr('href', `/Communication/Chat?WithTeamMember=${object.Email}`);
-                    }
-                    else {
-                        $('#spTeamChat' + count).attr('href', '');
-                    }
-                   // count = count + 1;
+                    //if (object.Email != null && object.Email != '') {
+                    //    $('#spTeamChat' + count).attr('href', `/Communication/Chat?WithTeamMember=${object.Email}`);
+                    //}
+                    //else {
+                    //    $('#spTeamChat' + count).attr('href', '');
+                    //}
                 });
             }
-            else {
-                // Write here what should happend once selected client is null
-            }
-        },
-        error: function () {
-            // Write here what should happend when action result is errored.
         }
     });
    
@@ -567,42 +526,33 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
-               /* setTimeout(function () {*/
-                RenderGrossRevenueChart($('#ddlGrossRevenue').val());
-                RenderNetIncomeChart($('#dllNetIncome').val());
                 MenuOptionHideAndShow(ClientID);
-               /* }, 1000);*/
 
-                getTeamMembersList();
-                NotesIndividualCountAndPercentageByAgencyId();
-                $('#roleexist').show();
-                $('.spClientName').html(String(data.Name));
-                $('.spEntityName').html(String(data.EntityName));
-                //$('#spTeamName').html(String(data.TeamName));
-
-                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
-               
                 GetReconcilationData();
                 GetReconcilationData1();
                 KanbanCountWithIndividualPriority();
-           
-                defaultReportsWidget();
-               // let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
-               // $('#spMonths').html(month);
-                //$('#spClientAddress').html(data.CityName + ',' + data.StateName);
+                NotesIndividualCountAndPercentageByAgencyId();
 
+                $('#roleexist').show();
+                $('.spClientName').html(String(data.Name));
+                $('.spEntityName').html(String(data.EntityName));
                 if (data.StartDate != null && data.StartDate != '') {
 
                     let roughDate = Number(data.StartDate.match(/\d+/)[0]);
                     let localTime = UtcDateToLocalTime(roughDate).toDateString();
 
-                    $('#spCreatedDate').html(localTime); // This is causing error $('#spCreatedDate').html(String(new Date(data.StartDate.match(/\d+/)[0] * 1).toDateString().replace(/^\S+\s/, '')));
+                    $('#spCreatedDate').html(localTime);
                 }
+                $('#spStatus').html(String(data.Status ? "Active" : "Inactive"));
+                let month = moment(new Date()).diff(moment(data.StartDate), 'months', false) + 1;
+                $('#spMonths').html(month);
+
+                getTeamMembersList();
+                defaultReportsWidget();
+
                 $('.badge-soft-success').removeClass('d-none');
                 $('.badge-success').removeClass('d-none');
                 $('.rounded-circle').removeClass('d-none');
-                
-
             }
             
             else {
@@ -1205,6 +1155,10 @@ var defaultReportsWidget = function () {
             }
         }
         HidelottieLoader();
+        //if ($('#Loader').css('display') == 'none') {
+        //    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
+        //    RenderNetIncomeChart($('#dllNetIncome').val());
+        //}
     });
 }
 function prepareReportMedia(report) {
@@ -1219,7 +1173,7 @@ function prepareReportMedia(report) {
                                         <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group" data-type="iframe"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
-                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group">${report.PeriodType} ${report.Year}</a></h6>
+                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group" data-type="iframe">${report.PeriodType} ${report.Year}</a></h6>
                                         <p class="text-500 fs--2 mb-0">Created <span class="ml-2 d-inline-block">${moment(report.CreatedDate).format("MMMM DD, YYYY")}</span></p>
                                     </div>
                                 </div>`;

@@ -444,7 +444,7 @@ var getReports = function (agencyId, year, period) {
             if (!isEmptyOrBlank(obj.IsMonthlySummary) && obj.IsMonthlySummary === true)
                 staredReportHTML = `<i class="fa fa-star mr-2"></i>`;
             var reportHTML = `<div class="col-2 text-center report notes-item context-menu py-2" id="reportItem_${obj.Id}" data-id="${obj.Id}" data-position="${obj.Position}"> 
-                                <h2 class="book-title d-flex justify-content-center">${staredReportHTML}${obj.FileName}</h2>
+                                <h2 class="book-title justify-content-center">${staredReportHTML}${obj.FileName}</h2>
                                 <a class="data-fancybox" href="${downloadFileLink}" data-fancybox="group-${obj.PeriodType.toLowerCase()}" data-caption="${obj.FileName}${obj.FileExtention}" data-type="iframe">
                                 <figure class="book-cover"> 
                                 <img class="img-fluid" src="${thumbnail}" alt="" onclick="imageAlign()"/>

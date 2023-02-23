@@ -1,5 +1,5 @@
 ﻿using log4net;
-using Microsoft.AspNetCore.Mvc;
+
 using Newtonsoft.Json;
 using Proven.Model;
 using Proven.Service;
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-
 using System.Web.Mvc;
 using Xero.NetStandard.OAuth2.Model.Accounting;
 using Xero.NetStandard.OAuth2.Token;
@@ -654,12 +653,14 @@ namespace ProvenCfoUI.Controllers
             return Redirect(result);
         }
 
-        [HttpGet]
-        public async Task<RedirectToRouteResult> QBTokenGeneration(string code, string state, string realmId)
+
+
+        
+
+        [HttpGet]   
+        public async Task<ActionResult> QBTokenGeneration(string code, string state, string realmId)
         {
           
-
-
             var qbService =   new   QuickBooksSharp.AuthenticationService();
 
             var clientService = new ClientService();
@@ -684,7 +685,7 @@ namespace ProvenCfoUI.Controllers
             
               
             }
-            return RedirectToAction("ClientList", "Client", new { area=""});
+            return   View("successQBToken"); //RedirectToAction("EditClient", "Client", new { area="",Id=agencyId});
         }
  
 

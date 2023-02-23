@@ -326,7 +326,7 @@
             //Comment Icons
             chat.type = 1;
             chat.forReconciliationIconColor = true;
-            createTwilioClient();
+            //createTwilioClient();
             $(document).on('click', ".paginate_button", function () {
 
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
@@ -341,6 +341,7 @@
                 lastModify();
                 dateFormat();
             })
+
             $(document).on('click', ".custom-select", function () {
                 $(".glAccountDD").each(function (index, element) {
 
@@ -357,8 +358,8 @@
                     $(this).attr('id', 'item_gl_account_ref' + index);
                     if ($(element).attr('data-select2-id') == null || $(element).attr('data-select2-id') == undefined) { $(element).select2(); }
                 });
-                $('.lastmodified').tooltip();
                 lastModify();
+                $('.lastmodified').tooltip();
                 dateFormat();
             })
 
