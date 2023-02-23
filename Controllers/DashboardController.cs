@@ -30,6 +30,7 @@ namespace ProvenCfoUI.Controllers
                 {
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                     var objResult = obj.GetClientById(Convert.ToInt32(selectedAgency.PreferanceValue));
+                    Session["DashboardSelectedAgencyId"] = selectedAgency.PreferanceValue;
                     if (!string.IsNullOrEmpty(objResult.DashboardURLId) && objResult.DashboardId != null && objResult.DashboardId != 0)
                     {
                         return View(objResult);
@@ -45,6 +46,15 @@ namespace ProvenCfoUI.Controllers
 
         public ActionResult DashboardError()
         {
+            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+            if (UserPref != null && UserPref.Count() > 0)
+            {
+                var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                if (Convert.ToString(Session["DashboardSelectedAgencyId"].ToString()) != selectedAgency.PreferanceValue)
+                {
+                    return RedirectToAction("Dashboard");
+                }
+            }
             return PartialView("DashboardError");
         }
     }
