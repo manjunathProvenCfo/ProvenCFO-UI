@@ -526,8 +526,8 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
+                HidelottieLoader();
                 MenuOptionHideAndShow(ClientID);
-
                 GetReconcilationData();
                 GetReconcilationData1();
                 KanbanCountWithIndividualPriority();
@@ -1154,7 +1154,6 @@ var defaultReportsWidget = function () {
                 divYearlyReports.append(reportHtml);
             }
         }
-        HidelottieLoader();
         //if ($('#Loader').css('display') == 'none') {
         //    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
         //    RenderNetIncomeChart($('#dllNetIncome').val());
