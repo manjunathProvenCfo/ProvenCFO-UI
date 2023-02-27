@@ -62,7 +62,7 @@ namespace ProvenCfoUI.Controllers
         [OutputCache(Duration = 60, VaryByParam = "none", Location = System.Web.UI.OutputCacheLocation.Server)]
         public ActionResult Login()
         {
-
+            Session["AppVersion"] = "v" + ConfigurationManager.AppSettings["webpages:Version"].ToString();
             return View();
         }
 
