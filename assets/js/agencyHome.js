@@ -416,7 +416,7 @@ function getTeamMembersList() {
                     $('#teamMember' + count).css({ "display": "" })
 
                     if (object.Username != null && object.Username != '') {
-                        $('#spTeamChat' + count).removeClass("disabled-action-icons");
+                        //$('#spTeamChat' + count).removeClass("disabled-action-icons");
 
                         number = "tel:" + object.PhoneNumber;
                         if (number != null) {
@@ -473,12 +473,12 @@ function getTeamMembersList() {
                     else {
                         $('#spProfileImage' + count).attr('src', '../assets/img/team/default-logo.png');
                     }
-                    if (object.Email != null && object.Email != '') {
-                        $('#spTeamChat' + count).attr('href', `/Communication/Chat?WithTeamMember=${object.Email}`);
-                    }
-                    else {
-                        $('#spTeamChat' + count).attr('href', '');
-                    }
+                    //if (object.Email != null && object.Email != '') {
+                    //    $('#spTeamChat' + count).attr('href', `/Communication/Chat?WithTeamMember=${object.Email}`);
+                    //}
+                    //else {
+                    //    $('#spTeamChat' + count).attr('href', '');
+                    //}
                 });
             }
         }
@@ -526,8 +526,8 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
+                HidelottieLoader();
                 MenuOptionHideAndShow(ClientID);
-
                 GetReconcilationData();
                 GetReconcilationData1();
                 KanbanCountWithIndividualPriority();
@@ -1155,15 +1155,8 @@ var defaultReportsWidget = function () {
             for (var i = 0; i < response.DataYearly.length; i++) {
                 let reportHtml = prepareReportMedia(response.DataYearly[i]);
                 divYearlyReports.append(reportHtml);
-
-                let yearlyReport = document.getElementById('y-Report');
-                if (response.DataYearly[i].FileExtention === ".pdf") {
-
-                    yearlyReport.setAttribute('data-type', 'iframe')
-                }
             }
         }
-        HidelottieLoader();
         //if ($('#Loader').css('display') == 'none') {
         //    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
         //    RenderNetIncomeChart($('#dllNetIncome').val());
@@ -1182,7 +1175,7 @@ function prepareReportMedia(report) {
                                         <a class="data-fancybox" href="${DownloadFileLink}" data-fancybox="group" data-type="iframe"><img class="rounded" src="${thumbnail}" alt="" style="height:46px;width:36px"></a>
                                     </div>
                                     <div class="media-body ml-3">
-                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group" id='y-Report'>${report.PeriodType} ${report.Year}</a></h6>
+                                        <h6 class="mb-0 font-weight-semi-bold"><a class="text-900" href="${DownloadFileLink}"data-fancybox="group" data-type="iframe">${report.PeriodType} ${report.Year}</a></h6>
                                         <p class="text-500 fs--2 mb-0">Created <span class="ml-2 d-inline-block">${moment(report.CreatedDate).format("MMMM DD, YYYY")}</span></p>
                                     </div>
                                 </div>`;

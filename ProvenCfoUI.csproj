@@ -1026,6 +1026,7 @@
     <Content Include="assets\css\jquery-ui.min.css" />
     <Content Include="assets\js\jquery-ui.min.js" />
     <Content Include="assets\js\jquery.idle-timer.js" />
+    <Content Include="assets\js\jquery.idle-timer.min.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\lottie-player.js" />
     <Content Include="assets\js\popper.min.js" />
@@ -1124,11 +1125,13 @@
     <Content Include="assets\lib\owl.carousel\owl.carousel.js" />
     <Content Include="assets\lib\perfect-scrollbar\perfect-scrollbar.css" />
     <Content Include="assets\lib\perfect-scrollbar\perfect-scrollbar.js" />
+    <Content Include="assets\lib\perfect-scrollbar\perfect-scrollbar.min.js" />
     <Content Include="assets\lib\plyr\plyr.css" />
     <Content Include="assets\lib\plyr\plyr.min.js" />
     <Content Include="assets\lib\plyr\plyr.polyfilled.min.js" />
     <Content Include="assets\lib\prismjs\prism-okaidia.css" />
     <Content Include="assets\lib\prismjs\prism.js" />
+    <Content Include="assets\lib\prismjs\prism.min.js" />
     <Content Include="assets\lib\progressbar.js\progressbar.min.js" />
     <Content Include="assets\lib\raty-js\fonts\raty.svg" />
     <Content Include="assets\lib\raty-js\images\cancel-off.png" />

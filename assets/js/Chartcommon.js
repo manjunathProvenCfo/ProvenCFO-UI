@@ -62,11 +62,11 @@ function LineChart(XseriesData,YseriesData,chartControlerId, optioncontoleid) {
                 borderColor: utils.grays["300"],
                 borderWidth: 1,
                 textStyle: { color: utils.colors.dark },
-                formatter(params) {
+                formatter: function (params) {
                     return getFormatter(params);
                 },
                 transitionDuration: 0,
-                position(pos, params, dom, rect, size) {
+                position: function (pos, params, dom, rect, size) {
                     return getPosition(pos, params, dom, rect, size);
                 },
             },

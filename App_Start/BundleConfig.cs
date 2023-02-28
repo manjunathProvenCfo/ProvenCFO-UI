@@ -23,21 +23,24 @@ namespace ProvenCfoUI
               "~/assets/lib/sticky-kit/sticky-kit.min.js",
               "~/assets/lib/is_js/is.min.js",
               "~/assets/lib/lodash/lodash.min.js",
-              "~/assets/lib/perfect-scrollbar/perfect-scrollbar.js",
+              "~/assets/lib/perfect-scrollbar/perfect-scrollbar.min.js",
               "~/assets/lib/anchor.min.js",
-              "~/assets/lib/prismjs/prism.js",
+              "~/assets/lib/prismjs/prism.min.js",
               "~/assets/lib/flatpickr/flatpickr.min.js", 
               "~/assets/lib/progressbar.js/progressbar.min.js",
               "~/assets/lib/select2/select2.min.js",
               "~/assets/lib/sweetalert/sweetalert.min.js",
               "~/assets/lib/superagent/dist/superagent.min.js",
               "~/assets/lib/waitMe/waitMe.min.js",
-              "~/assets/js/jquery.idle-timer.js"
+              "~/assets/js/jquery.idle-timer.min.js"
              ));
 
-            bundles.Add(new Bundle("~/bundles/js/developer").Include(
-             "~/assets/js/common.js",
-             "~/assets/js/wrapper.js",
+            bundles.Add(new ScriptBundle("~/bundles/js/developer").Include(
+              "~/assets/js/common.js",
+              "~/assets/js/wrapper.js"
+               ));
+
+            bundles.Add(new Bundle("~/bundles/js/lottieplayer").Include(
               "~/assets/js/lottie-player.js"
                ));
 
@@ -52,9 +55,9 @@ namespace ProvenCfoUI
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/js/chart").Include(
-               "~/assets/lib/echarts/echarts.min.js",
-               "~/assets/lib/flatpickr/flatpickr.min.js",
-                "~/assets/js/Chartcommon.js"
+               "~/assets/lib/echarts/echarts.min.js"
+               //"~/assets/lib/flatpickr/flatpickr.min.js",
+               //"~/assets/js/Chartcommon.js"
                //"~/assets/lib/chart.js/Chart.bundle.min.js",
                //"~/Content/js/theme/Utils.js"
                //"~/assets/js/utils.js"
@@ -177,23 +180,25 @@ namespace ProvenCfoUI
                      "~/Content/bootstrap.css",
                      "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/bundles/customcss").Include(
-                  "~/assets/css/common.css",
-                  "~/assets/js/config.navbar-vertical.js",
-                   "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
+            bundles.Add(new Bundle("~/bundles/customcss").Include(
                     "~/assets/lib/datatables-bs4/dataTables.bootstrap4.min.css",
-                    "~/assets/lib/datatables.net-responsive-bs4/responsive.bootstrap4.css",
-                    "~/assets/lib/leaflet/leaflet.css",
-                    "~/assets/lib/leaflet.markercluster/MarkerCluster.css",
-                    "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
                      "~/assets/lib/select2/select2.min.css",
                      "~/assets/lib/flatpickr/flatpickr.min.css",
                      "~/assets/lib/fancybox/jquery.fancybox.min.css",
                      "~/assets/lib/emojionearea/emojionearea.min.css",
                      "~/assets/lib/sweetalert/sweetalert.min.css",
-                    "~/assets/lib/waitMe/waitMe.min.css",
-                     "~/assets/css/theme.css"
+                    "~/assets/css/theme.css"
                     ));
+
+            bundles.Add(new StyleBundle("~/bundles/customcss-v2").Include(
+               "~/assets/css/common.css",
+                  "~/assets/lib/perfect-scrollbar/perfect-scrollbar.css",
+                  "~/assets/lib/datatables.net-responsive-bs4/responsive.bootstrap4.css",
+                   "~/assets/lib/leaflet/leaflet.css",
+                   "~/assets/lib/leaflet.markercluster/MarkerCluster.css",
+                   "~/assets/lib/leaflet.markercluster/MarkerCluster.Default.css",
+                   "~/assets/lib/waitMe/waitMe.min.css"
+                   ));
 
             bundles.Add(new StyleBundle("~/bundles/css/kanban").Include(
                     "~/assets/lib/dropzone/dropzone.min.css",

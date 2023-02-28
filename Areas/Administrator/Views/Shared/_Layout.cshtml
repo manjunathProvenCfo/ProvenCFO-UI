@@ -11,14 +11,14 @@
     <link rel="icon" type="image/png" sizes="32x32" href="~/assets/img/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/assets/img/favicons/favicon-16x16.png">
     <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/favicons/favicon.ico">
-    <link rel="manifest" href="~/assets/img/favicons/manifest.json">
+    @*<link rel="manifest" href="~/assets/img/favicons/manifest.json">*@
     <link href="~/assets/css/common.css" rel="stylesheet" />
     <meta name="msapplication-TileImage" content="~/assets/img/favicons/mstile-150x150.png">
     <meta name="theme-color" content="#ffffff">
 
 
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-
+    @Styles.Render("~/bundles/customcss-v2")
     @Styles.Render("~/bundles/customcss")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -33,6 +33,7 @@
     @Scripts.Render("~/bundles/layoutJS")
     <script src="~/assets/js/theme.js"></script>
     @Scripts.Render("~/bundles/js/developer")
+    @Scripts.Render("~/bundles/js/lottieplayer")
     @RenderSection("scripts", required: false)
 </body>
 </html>
