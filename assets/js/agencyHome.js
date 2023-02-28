@@ -681,7 +681,10 @@ function GetReconcilationData1() {
                     $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
                     $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                     totalSum2 = data[0].Count;
-                    percentage = data[0].percentage.toFixed(0);
+                  
+                    percentage = data[0].percentage;
+                    $("#divNotInBankPercentage").html(`<div class="progress-circle" id="divNotInBankPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                    utils.addProgressCircle("#divNotInBankkPercentage1")
                     sessionStorage.setItem("NotInBooksData", JSON.stringify(data));
                 }
                 else {
