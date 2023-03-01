@@ -10,5 +10,11 @@
     "inputFiles": [
       "assets/js/wrapper.js"
     ]
+  },
+  {
+    "outputFileName": "assets/js/bootstrap.min.js",
+    "inputFiles": [
+      "assets/js/bootstrap.js"
+    ]
   }
 ]

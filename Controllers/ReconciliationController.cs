@@ -18,9 +18,30 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using Microsoft.AspNetCore.Http;
+using DataTables.AspNetCore.Mvc.Binder;
+using System.Web.Http;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
+using RouteAttribute = System.Web.Mvc.RouteAttribute;
 
 namespace ProvenCfoUI.Controllers
 {
+
+
+
+
+    public class TestMod { 
+    
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public string Office { get; set; }
+        public string Progres { get; set;}
+        public string StartDate { get; set; }
+        public string Salary { get; set; }
+
+    
+    }
     [Exception_Filters]
     public class ReconciliationController : BaseController
     {
@@ -54,11 +75,12 @@ namespace ProvenCfoUI.Controllers
                     }
                     if (userType == "1")
                     {
-                        var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
-                        getallAction.ForEach(x => x.ActionName = x.ActionName);
+                      
 
                         if (Type == "Not in Banks")
                         {
+                            var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                            getallAction.ForEach(x => x.ActionName = x.ActionName);
                             ViewBag.isvisibleGlAccount = true;
                             TempData["Action"] = getallAction;
                         }
@@ -463,7 +485,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
 
-                    //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
+                      //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
 
                     ViewBag.UserId = User.UserId;
 
@@ -487,6 +509,105 @@ namespace ProvenCfoUI.Controllers
             }
 
         }
+
+        [HttpGet]
+        public ActionResult ReconcilationNewMain(string RecordType= NotInBooks)
+        {
+            int AgencyID = 0;
+            List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+            var userType = Convert.ToString(Session["UserType"]);
+            if (UserPref != null && UserPref.Count() > 0)
+            {
+                var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+            }
+            using (IntigrationService objIntegration = new IntigrationService())
+            {
+                if (RecordType == NotInBank)
+                {
+                    ViewBag.isvisibleGlAccount = true;
+                }
+                else
+                {
+                    ViewBag.isvisibleGlAccount = false;
+                }
+                if (userType == "1")
+                {
+                    ViewBag.IsStaffUser = true;
+                    ViewBag.IsBankRuleVisible = true;
+              
+                }
+                else
+                {
+                    ViewBag.IsBankRuleVisible = false;
+                }
+                var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
+                glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
+                TempData["GLAccounts"] = glAccountList;
+            }
+            
+            ViewBag.UserType = userType;
+            
+            Session["RecordType"] = RecordType;
+            ViewBag.RecordType = RecordType;
+
+            return View("Reconciliation_New");
+
+        }
+
+
+        [HttpPost]  
+        public JsonResult ReconcilationPaginiation() {
+            var draw = Request.Form.GetValues("draw").FirstOrDefault();
+            var start = Request.Form.GetValues("start").FirstOrDefault();
+            var length = Request.Form.GetValues("length").FirstOrDefault();
+            var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+            var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+            var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
+             
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+            string recordType = (string)Session["RecordType"];
+
+      
+            using (ReconcilationService objReConcilation = new ReconcilationService())
+            {
+
+                int AgencyID = 0;
+                List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
+                var userType = Convert.ToString(Session["UserType"]);
+                if (UserPref != null && UserPref.Count() > 0)
+                {
+                    var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
+                    AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+                }
+
+                ReconciliationMainModelPaging objResult;
+                try
+                {
+                 objResult= objReConcilation.GetReconciliationList(skip, pageSize, sortColumn, sortColumnDir, AgencyID.ToString(), recordType, "0", searchValue, User.UserId);
+
+                    return Json(new
+                    {
+                        draw = draw,
+                        recordsFiltered = searchValue!=null&&searchValue.Length>0?objResult.ResultData.company_ReconciliationVMs.Count :objResult.ResultData.totalcount,
+                        recordsTotal = objResult.ResultData.totalcount,
+                        data = objResult.ResultData.company_ReconciliationVMs
+                    });
+                }
+                catch (Exception ex) 
+                {
+
+                    log.Debug(ex.Message);
+                
+                }
+        
+             
+           return Json(new { draw = draw, recordsFiltered = 0, recordsTotal = 0, data =0
+                });
+            }
+
+        } 
         [CheckSession]
         [HttpPost]
         public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, string UserId, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0, bool RuleNew = false)

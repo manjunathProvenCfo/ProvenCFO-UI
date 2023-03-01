@@ -1,21 +1,8 @@
-﻿@{
+﻿
+@{
     Layout = "~/Views/Shared/_LayoutDefault.cshtml";
 }
 
-
-@*<!DOCTYPE html>
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>Error</title>
-    </head>
-    <body>
-        <hgroup>
-            <h1>Error.</h1>
-            <h2>An error occurred while processing your request.</h2>
-        </hgroup>
-    </body>
-    </html>*@
 @Styles.Render("~/bundles/customcss-v2")
 @Styles.Render("~/bundles/customcss")
 @Scripts.Render("~/bundles/modernizr")
@@ -30,16 +17,14 @@
             <a class="d-flex flex-center mb-4" href=@Url.Action("AgencyHome", "AgencyService")><img class="mr-2" src="~/assets/img/illustrations/falcon.png" alt="" width="150" />@*<span class="text-sans-serif font-weight-extra-bold fs-5 d-inline-block">falcon</span>*@</a>
             <div class="card">
                 <div class="card-body p-4 p-sm-5">
-                    <div class="display-1 text-500 fs-error"></div>
+                   
                     <p class="lead mt-4 text-800 text-sans-serif font-weight-semi-bold">
-                        &#x1F60a   Something went wrong!
-                        <br /> Please try again, and Contact your  
-                        <br/> System administrator if it happens
-                        <br />        again.
+                      
+                        <br /> QuickBook Token updated successfully.    
                     </p>
 
                     <hr />
-                    <p>@*Page Is Under Maintenance*@</p><a class="btn btn-primary btn-sm mt-3 text-white" href=@Url.Action("AgencyHome", "AgencyService")><span class="fas fa-home mr-2 text-white"></span>Take me home</a>
+                    <p></p><a class="btn btn-primary btn-sm mt-3 text-white" href=@Url.Action("ClientList", "Client")><span class="fas mr-2 text-white"></span>Clients Page</a>
                 </div>
             </div>
         </div>
@@ -50,3 +35,4 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 }
+

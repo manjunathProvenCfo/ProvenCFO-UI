@@ -8,6 +8,7 @@ using ProvenCfoUI.Models;
 using ProvenCfoUI.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace ProvenCfoUI.Controllers
         [OutputCache(Duration = 60, VaryByParam = "none", Location = System.Web.UI.OutputCacheLocation.Server)]
         public ActionResult Login()
         {
-
+            Session["AppVersion"] = "v" + ConfigurationManager.AppSettings["webpages:Version"].ToString();
             return View();
         }
 

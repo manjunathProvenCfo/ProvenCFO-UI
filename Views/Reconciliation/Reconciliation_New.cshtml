@@ -1,0 +1,146 @@
+﻿@using System.Globalization;
+
+
+@{ ViewBag.Title = "ReconciliationMain";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+
+
+<div class="col-md-12" id="divTable">
+    <div class="card mb-3 p-3">
+        <div class="card-header">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-4">
+                    <div class="row align-items-center">
+                        <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
+                            <span class="fas fa-book"></span>
+                            <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconcilationNewMain", "Reconciliation", new { RecordType = "Unreconciled" })">Not in Books</a></h6>
+                            <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
+                        </div>
+
+                        <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                            <span class="far fa-credit-card"></span>
+                            <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconcilationNewMain", "Reconciliation", new { RecordType = "Outstanding Payments" })">Not in Banks</a></h6>
+                            <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div style="display: block; text-align: center" id="domoLastBatchRun">
+                        <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
+                    </div>
+                </div>
+
+                <div class="col-4 col-sm-auto ml-auto text-right pl-0">
+
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex">
+                            @if (ViewBag.IsStaffUser == true)
+                            {
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                    <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                </button>
+
+
+                            }
+                            <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
+
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
+                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
+                            </button>
+
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
+                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
+                            </button>
+
+
+                            @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                            {
+                                <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+
+                            }
+                            else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                            {
+                                <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandDataPlaid" type="button" title="Request on-demand Plaid data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                            }
+
+
+
+
+
+                            <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                            <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-body px-0 pt-0">
+            <table id="example" class="display table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                            </div>
+                        </th>
+                        <th>Account</th>
+                        <th>Date</th>
+                        <th>Who</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        @if (ViewBag.isvisibleGlAccount) {
+                        
+                            <th>GL Account</th>
+                        }
+                        @if (ViewBag.IsBankRuleVisible) { 
+                        
+                             <th>Rule</th>
+                        }
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+    </div>
+    @{
+        var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
+
+
+
+    }
+
+
+    <select id="all-gl-accounts" hidden>
+        @for (var o = 0; o < gl_accounts.Count; o++)
+        {
+            <option value="@gl_accounts[o].Id">@gl_accounts[o].Name</option>
+            ;
+
+        }
+    </select>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/js/table")
+        <script>
+        //Configure permission globals
+            const UserType = "@ViewBag.UserType";
+            const RecordType= "@ViewBag.RecordType";
+            const GlAccountVisible = "@ViewBag.isvisibleGlAccount";
+            const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
+        </script>
+        <script src="~/assets/js/ReconciliationNew.js"></script>
+    }
+

@@ -19,62 +19,88 @@
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content perfect-scrollbar scrollbar">
             <ul class="navbar-nav flex-column">
-               
-                    @if (Common.IsFeatureAccessable("HOM"))
-                    {
-                        <li class="nav-item" id="menu_home">
-                            <a class="nav-link" href=@Url.Action("AgencyHome", "AgencyService") name="menu_home">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><span class="fas fa-home"></span></span><span class="nav-link-text"> Home</span>
-                                </div>
-                            </a>
-                        </li>
-                    }
-                    @if (Common.IsFeatureAccessable("RCN"))
-                    {
-                        <li class="nav-item" id="menu_reconciliation">
-                            <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation") name="menu_reconciliation">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><span class="fas fa-handshake"></span></span>
-                                    <span class="nav-link-text"> Reconciliation  <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInCount"></span></span>
-                                </div>
-                            </a>
-                        </li>
-                    }
-                    @if (Common.IsFeatureAccessable("ITG"))
-                    {
-                        <li class="nav-item" id="menu_intelligence">
-                            <a class="nav-link dropdown-indicator" href="#intelligence" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="intelligence" name="menu_intelligence">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon"><span class="fas fa-chart-line"></span></span><span class="nav-link-text">Intelligence</span>
-                                </div>
-                            </a>
-                            <ul class="nav collapse" id="intelligence" data-parent="#navbarVerticalCollapse">
-                                @if (Common.IsFeatureAccessable("DBD"))
-                                {
-                                    <li class="nav-item" id="submenu_dashboards">
-                                        <a class="nav-link" href=@Url.Action("Dashboard", "Dashboard") name="submenu_dashboards">Dashboards</a>
-                                    </li>
-                                }
-                                @if (Common.IsFeatureAccessable("RPT"))
-                                {
-                                    <li class="nav-item" id="submenu_reports">
-                                        <a class="nav-link" href=@Url.Action("ReportsList", "Reports") name="submenu_reports">Reports</a>
-                                    </li>
-                                }
-                                @if (Common.IsFeatureAccessable("NTS"))
-                                {
-                                    <li class="nav-item" id="submenu_notes">
-                                        <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">
-                                            <span class="nav-link-text">  Notes  <span class="badge badge-pill badge-soft-danger ml-3" id="lblTotalNotes"></span></span>
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-                    }
-                
-                @if (Common.IsFeatureAccessable("COM"))
+
+                @if (Common.IsFeatureAccessable("HOM"))
+                {
+                    <li class="nav-item" id="menu_home">
+                        <a class="nav-link" href=@Url.Action("AgencyHome", "AgencyService") name="menu_home">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-home"></span></span><span class="nav-link-text"> Home</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+                @if (Common.IsFeatureAccessable("RCN"))
+                {
+                    <li class="nav-item" id="menu_reconciliation">
+                        <a class="nav-link" href=@Url.Action("ReconciliationMain", "Reconciliation") name="menu_reconciliation">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-handshake"></span></span>
+                                <span class="nav-link-text"> Reconciliation  @*<span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInCount"></span>*@</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @if (Common.IsFeatureAccessable("ITG"))
+                {
+                    <li class="nav-item" id="menu_intelligence">
+                        <a class="nav-link dropdown-indicator" href="#intelligence" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="intelligence" name="menu_intelligence">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-chart-line"></span></span><span class="nav-link-text">Intelligence</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse" id="intelligence" data-parent="#navbarVerticalCollapse">
+                            @if (Common.IsFeatureAccessable("DBD"))
+                            {
+                                <li class="nav-item" id="submenu_dashboards">
+                                    <a class="nav-link" href=@Url.Action("Dashboard", "Dashboard") name="submenu_dashboards">Dashboards</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("RPT"))
+                            {
+                                <li class="nav-item" id="submenu_reports">
+                                    <a class="nav-link" href=@Url.Action("ReportsList", "Reports") name="submenu_reports">Reports</a>
+                                </li>
+                            }
+                            @if (Common.IsFeatureAccessable("NTS"))
+                            {
+                                <li class="nav-item" id="submenu_notes">
+                                    <a class="nav-link" href=@Url.Action("GetNotesPage", "Notes") name="submenu_notes">
+                                        <span class="nav-link-text">  Notes  <span class="badge badge-pill badge-soft-danger ml-3" id="lblTotalNotes"></span></span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+
+
+                @if (Common.IsFeatureAccessable("NDS"))
+                {
+                    <li class="nav-item" id="submenu_needs">
+                        <a class="nav-link" href=@Url.Action("NeedsMain", "Needs") name="menu_needs">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-copy"></span></span><span class="nav-link-text"> Needs</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @if (Common.IsFeatureAccessable("CHT"))
+                {
+                    <li class="nav-item" id="submenu_chat">
+                        <a class="nav-link" href=@Url.Action("Chat", "Communication") name="submenu_chat">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span class="fas fa-comments"></span></span><span class="nav-link-text">Chat</span>
+                            </div>
+                        </a>
+                    </li>
+                }
+
+                @*(NewChange For removing the communcication)*@
+
+                @*@if (Common.IsFeatureAccessable("COM"))
                 {
                     <li class="nav-item" id="menu_communication">
 
@@ -99,7 +125,7 @@
                             }
                         </ul>
                     </li>
-                }
+                }*@
 
                 @if (Common.IsFeatureAccessable("URS"))
                 {

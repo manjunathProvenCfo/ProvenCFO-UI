@@ -22,9 +22,9 @@ namespace Proven.Service
             var a = GetAsync<ReconciliationMainModel>("Reconciliation/GetReconciliation?ClientId=" + ClientId + "&type=" + type + "&Isreconciled=" + Isreconciled + $"&userId={userId}&userEmail={userEmail}").Result;
             return a;
         }
-        public ReconciliationMainModelPaging GetReconciliationList(int page, int size, string sort, string AgencyId, string type, string Isreconciled, string Filters, string userId)
+        public ReconciliationMainModelPaging GetReconciliationList(int page, int size, string sort, string sortOrder,string AgencyId, string type, string Isreconciled, string Filters, string userId)
         {
-            return GetAsync<ReconciliationMainModelPaging>("Reconciliation/GetReconciliationPagingList?page=" + page + "&size=" + size + "&sort=" + sort + $"&AgencyId={AgencyId}&type={type}&Isreconciled={Isreconciled}&Filters={Filters}&userId={userId}").Result;
+            return GetAsync<ReconciliationMainModelPaging>("Reconciliation/GetReconciliationPagingList?pageNo=" + page + "&pageSize=" + size + "&sortField=" + sort + $"&AgencyId={AgencyId}&type={type}&Isreconciled={Isreconciled}&Filters={Filters}&userId={userId}&sortOrder={sortOrder}").Result;
         }
         public ReconciliationMainModel GetFilteredReconcilation(ReconciliationfilterModel Filter)
         {
