@@ -83,7 +83,7 @@ namespace ProvenCfoUI.Controllers
                         ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
                         ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
                         ViewBag.AccountingPackageId = AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref;
-                        var objResult = objIntegration.GetXeroBankAccount(AgencyID, "ACTIVE");
+                        var objResult = objIntegration.GetXeroBankAccount(AgencyID, "ACTIVE,INACTIVE");
                         return View(objResult.ResultData);
                     }
                     return View();
