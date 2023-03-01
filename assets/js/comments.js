@@ -646,7 +646,7 @@ var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var CreatedBy = $('#topProfilePicture').attr('userId');
     var input = {
         Id: 0,
-        ReconciliationId_ref: ReconciliationId,
+        ReconciliationId_ref: String(ReconciliationId),
         CommentText: InputcommentText,
         //CreatedBy: chat.userId,
         CreatedBy: CreatedBy,
