@@ -207,7 +207,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
         var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
         var input = {
             Id: 0,
-            ReconciliationId_ref: ReconciliationId,
+            ReconciliationId_ref: String(ReconciliationId),
             CommentText: InputcommentText,
             CreatedBy: chat.userId,
             CreatedDate: currentdate,
@@ -519,7 +519,7 @@ var loadCommentsPage = async function (channelUniqueNameGuid) {
         var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
         var input = {
             Id: 0,
-            ReconciliationId_ref: ReconciliationId,
+            ReconciliationId_ref: String(ReconciliationId),
             CommentText: InputcommentText,
             CreatedBy: chat.userId,
             CreatedDate: currentdate,
@@ -1539,7 +1539,7 @@ var LoadOnDemandCommentsPagination = async function (channelUniqueNameGuid, page
             var AgencyId = parseInt(chat.AgencyId == undefined || chat.AgencyId == null ? $("#ddlclient option:selected").val() : chat.AgencyId);
             var input = {
                 Id: 0,
-                ReconciliationId_ref: ReconciliationId,
+                ReconciliationId_ref: String(ReconciliationId),
                 CommentText: InputcommentText,
                 CreatedBy: chat.userId,
                 CreatedDate: currentdate,
