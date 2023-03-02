@@ -43,17 +43,12 @@ $(document).ready(function () {
 
     $(document).on("click", "button[id=btnComment]", async function (e) {
 
-
-
         resetScrollChatState(e.currentTarget.dataset.id);
         await showReconciliationChat(e.currentTarget.dataset.id);
-
-
-
     });
 
     var showReconciliationChat = async function (channelUniqueNameGuid) {
-
+      
         resetScrollChatState(channelUniqueNameGuid);
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
@@ -62,8 +57,6 @@ $(document).ready(function () {
         $('#divChat').show();
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
-
 
         await loadCommentsPage(channelUniqueNameGuid);
 
@@ -668,20 +661,6 @@ function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize)
 
                 addMediaMessageLocalFolder(file);
 
-                //$.ajax({
-                //    url: "/Reconciliation/UploadReconcilationAttachmentAsync",
-                //    type: "POST",
-                //    contentType: false, // Not to set any content header  
-                //    processData: false, // Not to process data  
-                //    data: formData,
-                //    success: function (result) {
-                //        alert(result);
-                //    },
-                //    error: function (err) {
-                //        alert(err.statusText);
-                //    }
-                //});
-                ///addMediaMessage(file);
             }
         })
     });

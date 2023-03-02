@@ -284,7 +284,6 @@
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divBulkUpdate">
         @Html.Partial("_reconcilationBulkupdate", true)
-
     </div>
     @if (ViewBag.AccountingPackage == 2)
     {
@@ -308,8 +307,6 @@
     }
 </style>
 
-
-
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
@@ -323,10 +320,10 @@
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
-            //Comment Icons
+       
             chat.type = 1;
             chat.forReconciliationIconColor = true;
-            //createTwilioClient();
+           
             $(document).on('click', ".paginate_button", function () {
 
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
@@ -378,46 +375,6 @@
                 $(this).attr('id', 'item_gl_account_ref' + index);
                 $(element).select2();
             });
-
-
-            //$(document).on('click', ".paginate_button", function () {
-                
-            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
-            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN');
-
-                   
-            //        if (str.length > 1) {
-
-            //            for (let index = 1; index < str.length; index++) {
-            //                str[index].style.display = "none";
-            //            }
-
-
-            //        }
-            //    });
-
-
-            //    $(".glAccountDD").select2()
-            //})
-
-
-            //$(document).on('click', ".custom-select", function () {
-
-            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
-            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN'); if (str.length > 1) {
-
-            //            for (let index = 1; index < str.length; index++) {
-            //                str[index].style.display = "none";
-            //            }
-
-
-            //        }
-            //    });
-
-
-
-            //    $(".glAccountDD").select2()
-            //})
 
             var dateFormat = () => {
 
@@ -759,9 +716,7 @@
             $(".blk-cancel").prop("disabled", true);
 
             var GLaccount = $('#BA_filterGLaccounts').val();
-            //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
-            //var CommentText = [];
-            //Array.prototype.forEach.bind($('.chat-message'))(e => CommentText.push($(e).html()))
+
             var CreatedBy = $('#topProfilePicture').attr('userId');
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
@@ -823,7 +778,7 @@
 
                         HidelottieLoader();
                         location.reload(true);
-                        /*window.location.reload();*/
+                   
                     });
                 }
                 else if (response.Message == 'NoRecords')
@@ -1138,8 +1093,6 @@
     <script>
         $(document).ready(function () {
             HidelottieLoader();
-            
-
             $("#checkbox-bulk-purchases-select").click(function (e) {
 
                 if (e.target.checked) {

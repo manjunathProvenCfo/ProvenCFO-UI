@@ -89,6 +89,35 @@ var lastModify = function () {
     });
 }
 
+function ChatRender(r, r1, r2) {
+
+    let IsMentioned = r2.Iscurrent_user_mentioned;
+    let dataId = r2.id;
+    let has_conversation = r2.has_twilio_conversation;
+    debugger;
+    if (IsMentioned == true) {
+        return `      <button id="btnComment" data-id="${dataId}" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
+                                                <span class="fas fa-comment fs--1"></span>
+                                            </button>`;
+    } else {
+
+       var str = `<button id="btnComment" data-id="${dataId}" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">`
+
+                                                if(has_conversation == true)
+                                                {
+                                                    str +=`<span class="far fa-comment fs--1"></span>`;
+
+                                                }
+                                                else
+                                                {
+                                                    str+=`<span class="far fa-comment fs--1 text-dark"></span>`;
+                                                }
+
+        str += `</button>`;
+        return str;
+    }
+
+}
 
 var EnableSelectedBulkUpdateButton = function () {
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
@@ -163,10 +192,75 @@ function SelectClick(e) {
     }
     EnableSelectedBulkUpdateButton();
 }
+const scrollChatState = {
+    size: 20,
+    pageNo: 2,
+    reconciliatioId: '',
+    target: null
+};
+
+const resetScrollChatState = function (rec) {
+
+    if (rec != "" && rec != null) {
+
+        scrollChatState.reconciliationId = rec;
+
+        scrollChatState.pageNo = 2;
+        scrollChatState.size = 20;
+    };
+}
+
+
+
+function InitEvents() {
+    $('#Cancel').click(function () {
+        if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
+            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+            $('#divChat').hide();
+        }
+        else {
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+            $('#divChat').show();
+        }
+    });
+    $('#Cancel1').click(function () {
+        $("#Filter").trigger("click");
+    });
+    $('#Filter').click(function () {
+
+        if ($("#divChat").is(":visible") || $("#divBulkUpdate").is(":visible")) {
+            $('#divChat').hide();
+            $('#divChat').addClass('d-none');
+            $('#divBulkUpdate').hide();
+            $('#divBulkUpdate').addClass('d-none');
+            $('#divFilter').show();
+            $('#divFilter').removeClass('d-none');
+        }
+        else if ($("#divFilter").is(":visible")) {
+            $("#example").DataTable().search("").draw();
+            $('#divChat').hide();
+            $('#divChat').addClass('d-none');
+            $('#divFilter').hide();
+            $('#divFilter').addClass('d-none');
+            $('#divBulkUpdate').hide();
+            $('#divBulkUpdate').addClass('d-none');
+            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+        }
+        else {
+            $('#divFilter').show();
+            $('#divFilter').removeClass('d-none');
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+        }
+    });
+}
 
 
 $(document).ready(() => {
-    debugger;
+
+    //enable mention users in input message
+    chat.type = 1;
+
+ 
     switch (RecordType) {
    
         case "Unreconciled":
@@ -176,8 +270,8 @@ $(document).ready(() => {
             $('#tabNotinBanks').addClass('tabselect');
             break;
     } 
-     
-       
+
+    InitEvents();
     const configureColumn = function () {
 
         var column = [
@@ -215,15 +309,39 @@ $(document).ready(() => {
         if (IsBankRuleVisible == "True") {
             column = [...column, ...BankRule];
         }
+
+        //Add Chat column
+        column.push({
+            orderable: false,
+            searchable: false,
+            render: ChatRender
+        });
+
         return column;
     };
+    var showReconciliationChat = async function (channelUniqueNameGuid) {
+      
+        resetScrollChatState(channelUniqueNameGuid);
+        $('#divFilter').hide();
+        $('#divFilter').addClass('d-none');
+        $('#divBulkUpdate').hide();
+        $('#divBulkUpdate').addClass('d-none');
+        $('#divChat').show();
+        $('.chat-sidebar').addClass('d-none');
+        $('#divChat').removeClass('d-none');
+        $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+        await loadCommentsPage(channelUniqueNameGuid);
+
+    }
+
 
     $("#example").DataTable({
         paging: true,
         serverSide: true,
         pageLength: 10,
         drawCallback: function (a, b) {
-      
+            HidelottieLoader();
              Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
                 let index = 0;
                 let value = selectEle.getAttribute("data-selectedValue");
@@ -235,7 +353,6 @@ $(document).ready(() => {
                 });
 
             });
-
             $(".gl-account").trigger("change");
 
             $(".gl-account").on("change", function (e) {
@@ -247,6 +364,10 @@ $(document).ready(() => {
 
             $(".select-picker").select2();
             $('.lastmodified').tooltip();
+            $("table").on("click", "button[id=btnComment]", async function (e) {
+                resetScrollChatState(e.currentTarget.dataset.id);
+                await showReconciliationChat(e.currentTarget.dataset.id);
+            });
              setTimeout(()=>lastModify(),0);
         },
         ajax: {
