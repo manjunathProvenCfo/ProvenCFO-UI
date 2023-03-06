@@ -18,7 +18,7 @@
 
 
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-
+    @Styles.Render("~/bundles/customcss-v2")
     @Styles.Render("~/bundles/customcss")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -33,6 +33,7 @@
     @Scripts.Render("~/bundles/layoutJS")
     <script src="~/assets/js/theme.js"></script>
     @Scripts.Render("~/bundles/js/developer")
+    @Scripts.Render("~/bundles/js/lottieplayer")
     @RenderSection("scripts", required: false)
 </body>
 </html>

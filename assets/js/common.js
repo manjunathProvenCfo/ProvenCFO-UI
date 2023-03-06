@@ -22,32 +22,8 @@ const timer = ms => new Promise(res => setTimeout(res, ms));
 var Default_Profile_Image = "/assets/img/team/default-logo.png";
 const Notification_Bell_Size = 2;
 var $NotificationHtmls = {
-    UnreadNotificationHtml: ` <div class="list-group-item">
-                            <a class="notification notification-flush bg-200" href="#!">
-                                <div class="notification-avatar"> 
-                                    <div class="avatar avatar-2xl mr-3">
-                                        <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);" />
-                                    </div>
-                                </div>
-                                <div class="notification-body"  commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
-                                    <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
-                                    <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span>
-                                </div>
-                            </a>
-                        </div>  `,
-    ReadNotificaitonHtml: `<div class="list-group-item">
-						<a class="border-bottom-0 notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this);">
-                              </div>
-                            </div>
-                            <div class="notification-body" commentId="{commentId}", reconciliationId ="{reconciliationId}" agencyId="{agencyId}" onclick="ClientNotification(event);" >
-                              <p class="mb-1"><strong>{mentionedByName}</strong> {text}</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span></span>
-                            </div>
-                          </a>
-						  </div>`
+    UnreadNotificationHtml: ` <div class="list-group-item"><a class="notification notification-flush bg-200" href="#!"><div class="notification-avatar"><div class="avatar avatar-2xl mr-3"><img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this)"></div></div><div class="notification-body" commentid="{commentId}" , reconciliationid="{reconciliationId}" agencyid="{agencyId}" onclick="ClientNotification(event)"><p class="mb-1"><strong>{mentionedByName}</strong>{text}</p><span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji"></span>{datetime}</span></div></a></div>  `,
+    ReadNotificaitonHtml: `<div class="list-group-item"><a class="border-bottom-0 notification notification-flush" href="#!"><div class="notification-avatar"><div class="avatar avatar-xl me-3"><img class="rounded-circle" src="{mentionedByProfilePic}" alt="" onerror="imgError(this)"></div></div><div class="notification-body" commentid="{commentId}" , reconciliationid="{reconciliationId}" agencyid="{agencyId}" onclick="ClientNotification(event)"><p class="mb-1"><strong>{mentionedByName}</strong>{text}</p><span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">{datetime}</span></span></div></a></div> `
 }
 
 $(function () {
@@ -83,19 +59,17 @@ $(function () {
     });
     MenuOptionHideAndShow(getClientId());
 })
+//var twilioChatGlobal = function (isNotiAlreadyFetched) {
+//    if (!isEmptyOrBlank(isNotiAlreadyFetched))
+//        isNotificationsAlreadyFetched = false;
 
-var twilioChatGlobal = function (isNotiAlreadyFetched) {
-    if (!isEmptyOrBlank(isNotiAlreadyFetched))
-        isNotificationsAlreadyFetched = false;
-
-    if (userEmailAddress !== "") {
-        var filteredPages = chatPages.filter(x => (window.location.href.toLowerCase().indexOf(x) > 0 ? false : true))
-        if (filteredPages.length === chatPages.length)
-            //setTimeout(async function () { await createTwilioClientGlobal(); }, 1);
-            createTwilioClientGlobal();
-    }
-}
-
+//    if (userEmailAddress !== "") {
+//        var filteredPages = chatPages.filter(x => (window.location.href.toLowerCase().indexOf(x) > 0 ? false : true))
+//        if (filteredPages.length === chatPages.length)
+//            //setTimeout(async function () { await createTwilioClientGlobal(); }, 1);
+//            createTwilioClientGlobal();
+//    }
+//}
 var getClientId = function () {
     return $("#ddlclient option:selected").val();
 }
@@ -128,10 +102,10 @@ function SetUserPreferencesForAgency(callback, Noload = false) {
                 callback();
             }
             //GetTotalNotesCount();
-            setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
+            //setTimeout(genereateAllReconciliationTwilioConversationAndAddParticipants(), 100);
             if (!Noload) {
                 window.location.reload();
-            } 
+            }
 
             // HidelottieLoader();
         },
@@ -161,7 +135,7 @@ var MenuOptionHideAndShow = function (AgencyId) {
                         $('#submenu_trackingCategories').addClass('d-none');
                     }
                     else {
-                        
+
                     }
                 }
             });
@@ -201,7 +175,7 @@ function GetTotalNotesCount() {
             else {
                 let TotalNotes = 0;
                 $("#lblTotalNotes").text(TotalNotes);
-            }           
+            }
         }
     });
 }
@@ -215,18 +189,18 @@ function bindNotInBooksAndBanksCount() {
 
     var ClientID = $("#ddlclient option:selected").val();
 
-   // if (sessionStorage.getItem("NotInBanksData") == null) {
-        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
-            if (response.Message == "Success") {
-                //sessionStorage.setItem("NotInBanksData", JSON.stringify(response.ResultData));
-                bindNotInBanksData(response.ResultData);
-            }
-        });
-        //}
-        //else {
-         //   let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
-          //  bindNotInBanksData(data);
-        //}
+    // if (sessionStorage.getItem("NotInBanksData") == null) {
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
+        if (response.Message == "Success") {
+            //sessionStorage.setItem("NotInBanksData", JSON.stringify(response.ResultData));
+            bindNotInBanksData(response.ResultData);
+        }
+    });
+    //}
+    //else {
+    //   let data = JSON.parse(sessionStorage.getItem("NotInBanksData"))
+    //  bindNotInBanksData(data);
+    //}
 }
 var bindNotInBanksData = function (data) {
     if (data != null) {
@@ -247,14 +221,14 @@ var bindNotInBanksData = function (data) {
 function bindNotInBanksAndBanksCount() {
     var ClientID = $("#ddlclient option:selected").val();
 
-    
-        getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
-            if (response.Message == "Success") {
-                sessionStorage.setItem("NotInBooksData", JSON.stringify(response.ResultData));
-                bindNotInBooksData(response.ResultData);
-            }
-        });
-    
+
+    getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
+        if (response.Message == "Success") {
+            sessionStorage.setItem("NotInBooksData", JSON.stringify(response.ResultData));
+            bindNotInBooksData(response.ResultData);
+        }
+    });
+
 
 }
 var bindNotInBooksData = function (data) {
@@ -412,45 +386,43 @@ var ClientNotification = function (e) {
 
 
 //Global Chat with Notifications Start
-var getTwilioToken = function (email) {
-    postAjaxSync("/twilio/token?identity=" + email, null, function (response) {
-        token = response;
-    });
-}
+//var getTwilioToken = function (email) {
+//    postAjaxSync("/twilio/token?identity=" + email, null, function (response) {
+//        token = response;
+//    });
+//}
 
-var createTwilioClientGlobal = async function () {
-    getTwilioToken(userEmailAddress);
-    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
-        .then(function (createdClient) {
-            twilioClient = createdClient;
-            twilioClient.on("connectionStateChanged", async function (state) {
-                await isTwilioClientConnected();
+//var createTwilioClientGlobal = async function () {
+//    getTwilioToken(userEmailAddress);
+//    Twilio.Conversations.Client.create(token, { logLevel: 'error' })
+//        .then(function (createdClient) {
+//            twilioClient = createdClient;
+//            twilioClient.on("connectionStateChanged", async function (state) {
+//                await isTwilioClientConnected();
 
-                if (isNotificationsAlreadyFetched === false) {
-                    isNotificationsAlreadyFetched = true;
-                    await setNotificationMessageAddedListenerOnAllChannels();
+//                if (isNotificationsAlreadyFetched === false) {
+//                    isNotificationsAlreadyFetched = true;
+//                    await setNotificationMessageAddedListenerOnAllChannels();
 
-                    var isNotificationPage = isLocationUrlContains("communication/notifications")
-                    await bindNotificationMessages(isNotificationPage);
-                }
-            });
+//                    var isNotificationPage = isLocationUrlContains("communication/notifications")
+//                    await bindNotificationMessages(isNotificationPage);
+//                }
+//            });
 
-            createdClient.on('tokenAboutToExpire', () => {
-                getTwilioToken(userEmailAddress);
-                createdClient.updateToken(token);
-            });
-        });
-}
-
-var setNotificationMessageAddedListenerOnAllChannels = async function () {
-    await isConversationSyncListFetched();
-    twilioClient.conversations.conversations.forEach(function (value) {
-        value.removeListener('messageAdded', notificationMessageAddedAllChannels);
-        value.off('messageAdded', notificationMessageAddedAllChannels);
-        value.on('messageAdded', notificationMessageAddedAllChannels);
-    });
-}
-
+//            createdClient.on('tokenAboutToExpire', () => {
+//                getTwilioToken(userEmailAddress);
+//                createdClient.updateToken(token);
+//            });
+//        });
+//}
+//var setNotificationMessageAddedListenerOnAllChannels = async function () {
+//    await isConversationSyncListFetched();
+//    twilioClient.conversations.conversations.forEach(function (value) {
+//        value.removeListener('messageAdded', notificationMessageAddedAllChannels);
+//        value.off('messageAdded', notificationMessageAddedAllChannels);
+//        value.on('messageAdded', notificationMessageAddedAllChannels);
+//    });
+//}
 var notificationMessageAddedAllChannels = function (msg) {
     let msgState = msg.state;
     if (addMessageProcessedGlobal.indexOf(msgState.sid) > -1)
@@ -492,96 +464,96 @@ var notificationMessageAddedAllChannels = function (msg) {
     }
 }
 
-var bindNotificationMessages = async function (isNotificationPage) {
-    await isConversationSyncListFetched();
+//var bindNotificationMessages = async function (isNotificationPage) {
+//    await isConversationSyncListFetched();
 
-    let sortedChannels = getSortedChannels();
-    getAjaxSync(`/Communication/GetNotificationChannels?clientId=${parseInt(getClientId())}`, null, function (response) {
-        if (!isEmptyOrBlank(response)) {
-            notificationChannels = new Map(response.map(i => [i.ChannelId, i]));
-        }
-    })
-    sortedChannels = _.filter(sortedChannels, function (channel) {
-        if (!isEmptyOrBlank(notificationChannels.get(channel.sid))) return true;
-        return false;
-        //if (_.filter(notificationChannels, { ChannelId: channel.sid }GetNotificationParticipantsByEmails).length > 0) return true;
-        //return false;
-    });
+//    let sortedChannels = getSortedChannels();
+//    getAjaxSync(`/Communication/GetNotificationChannels?clientId=${parseInt(getClientId())}`, null, function (response) {
+//        if (!isEmptyOrBlank(response)) {
+//            notificationChannels = new Map(response.map(i => [i.ChannelId, i]));
+//        }
+//    })
+//    sortedChannels = _.filter(sortedChannels, function (channel) {
+//        if (!isEmptyOrBlank(notificationChannels.get(channel.sid))) return true;
+//        return false;
+//        //if (_.filter(notificationChannels, { ChannelId: channel.sid }GetNotificationParticipantsByEmails).length > 0) return true;
+//        //return false;
+//    });
 
-    getNotifications(sortedChannels, isNotificationPage).then(function (notifications, isNotiPage = isNotificationPage) {
-        let emails = _.uniq(_.map(notifications, (x) => x.messageAuthor.toLowerCase())).join(",");
-        getAjaxSync(`/Communication/GetNotificationParticipantsByEmails?emails=${emails}`, null, function (response) {
-            if (!isEmptyOrBlank(response)) {
-                notificationChannelParticipants = new Map(response.map(i => [i.Email.toLowerCase(), i]));
-            }
-        })
-        if (notifications.length > 0)
-            notifications = notifications.reverse();
-        preapreAndBindNotifications(notifications, isNotiPage);
-    });
+//    getNotifications(sortedChannels, isNotificationPage).then(function (notifications, isNotiPage = isNotificationPage) {
+//        let emails = _.uniq(_.map(notifications, (x) => x.messageAuthor.toLowerCase())).join(",");
+//        getAjaxSync(`/Communication/GetNotificationParticipantsByEmails?emails=${emails}`, null, function (response) {
+//            if (!isEmptyOrBlank(response)) {
+//                notificationChannelParticipants = new Map(response.map(i => [i.Email.toLowerCase(), i]));
+//            }
+//        })
+//        if (notifications.length > 0)
+//            notifications = notifications.reverse();
+//        preapreAndBindNotifications(notifications, isNotiPage);
+//    });
 
 
-}
+//}
 
-var getSortedChannels = function (typeOfChannel) {
-    if (isEmptyOrBlank(typeOfChannel))
-        typeOfChannel = "public reconciliation";
+//var getSortedChannels = function (typeOfChannel) {
+//    if (isEmptyOrBlank(typeOfChannel))
+//        typeOfChannel = "public reconciliation";
 
-    let allChannels = Array.from(twilioClient.conversations.conversations.values());
-    let channels = _.filter(allChannels, function (channel) {
-        return (channel.channelState?.attributes?.hasOwnProperty("type")
-            && channel.channelState.attributes.type === typeOfChannel
-            && channel.channelState.hasOwnProperty("lastMessage"))
-    });
+//    let allChannels = Array.from(twilioClient.conversations.conversations.values());
+//    let channels = _.filter(allChannels, function (channel) {
+//        return (channel.channelState?.attributes?.hasOwnProperty("type")
+//            && channel.channelState.attributes.type === typeOfChannel
+//            && channel.channelState.hasOwnProperty("lastMessage"))
+//    });
 
-    let sortedChannels = _.sortBy(channels, function (o) { return o.channelState.lastMessage?.dateCreated; });
-    sortedChannels = sortedChannels.reverse();
-    return sortedChannels;
-}
+//    let sortedChannels = _.sortBy(channels, function (o) { return o.channelState.lastMessage?.dateCreated; });
+//    sortedChannels = sortedChannels.reverse();
+//    return sortedChannels;
+//}
 
-var getNotifications = async function (sortedChannels, isNotificationPages) {
+//var getNotifications = async function (sortedChannels, isNotificationPages) {
 
-    let totalNotifications = 0;
-    let counter = (isNotificationPages ? sortedChannels.length : Notification_Bell_Size);
+//    let totalNotifications = 0;
+//    let counter = (isNotificationPages ? sortedChannels.length : Notification_Bell_Size);
 
-    for (var i = 0; i < sortedChannels.length && notifications.length < counter; i++) {
-        let mentionNotification = await findAndParseMentionInNotification(sortedChannels[i]);
-        if (mentionNotification !== null && mentionNotification.length > 0) {
-            for (var y = 0; y < mentionNotification.length; y++) {
-                let recData = notificationChannels.get(sortedChannels[i].sid);
-                notifications.push({ channelId: sortedChannels[i].sid, channelUniqueName: sortedChannels[i].channelState.uniqueName, messageId: mentionNotification[y].sid, messageBody: mentionNotification[y].body, messageAuthor: mentionNotification[y].author, messageDate: mentionNotification[y].dateUpdated, recAccNameWithDesc: `${recData.AccountName}(${recData.ReconciliationDescription})` });
-            }
-        }
-    }
-    notifications = _.flatten(notifications);
+//    for (var i = 0; i < sortedChannels.length && notifications.length < counter; i++) {
+//        let mentionNotification = await findAndParseMentionInNotification(sortedChannels[i]);
+//        if (mentionNotification !== null && mentionNotification.length > 0) {
+//            for (var y = 0; y < mentionNotification.length; y++) {
+//                let recData = notificationChannels.get(sortedChannels[i].sid);
+//                notifications.push({ channelId: sortedChannels[i].sid, channelUniqueName: sortedChannels[i].channelState.uniqueName, messageId: mentionNotification[y].sid, messageBody: mentionNotification[y].body, messageAuthor: mentionNotification[y].author, messageDate: mentionNotification[y].dateUpdated, recAccNameWithDesc: `${recData.AccountName}(${recData.ReconciliationDescription})` });
+//            }
+//        }
+//    }
+//    notifications = _.flatten(notifications);
 
-    return notifications;
-}
+//    return notifications;
+//}
 
-var findAndParseMentionInNotification = async function (channel) {
-    let lastReadMessageIndex = (channel.channelState.lastReadMessageIndex ?? 0);
-    let lastMessageIndex = (channel.channelState.lastMessage.index ?? 0);
+//var findAndParseMentionInNotification = async function (channel) {
+//    let lastReadMessageIndex = (channel.channelState.lastReadMessageIndex ?? 0);
+//    let lastMessageIndex = (channel.channelState.lastMessage.index ?? 0);
 
-    if (lastMessageIndex === lastReadMessageIndex)
-        return null;
+//    if (lastMessageIndex === lastReadMessageIndex)
+//        return null;
 
-    return await channel.getMessages(lastMessageIndex - lastReadMessageIndex).then(function (page) {
-        let msgs = page.items;
-        let allMentionedMessages = [];
-        for (var i = 0; i < msgs.length; i++) {
-            let msg = msgs[i].state;
-            if (msg.type === "text") {
-                let matches = _.flatten(findMentionInMessageBody(msg.body));
-                if (matches.length > 0 && matches.filter(x => { if (x.toLowerCase() === userEmailAddress.toLowerCase()) return true; return false; }).length > 0) {
-                    allMentionedMessages.push(msg);
-                }
-            }
-        }
-        allMentionedMessages = _.flatten(allMentionedMessages);
+//    return await channel.getMessages(lastMessageIndex - lastReadMessageIndex).then(function (page) {
+//        let msgs = page.items;
+//        let allMentionedMessages = [];
+//        for (var i = 0; i < msgs.length; i++) {
+//            let msg = msgs[i].state;
+//            if (msg.type === "text") {
+//                let matches = _.flatten(findMentionInMessageBody(msg.body));
+//                if (matches.length > 0 && matches.filter(x => { if (x.toLowerCase() === userEmailAddress.toLowerCase()) return true; return false; }).length > 0) {
+//                    allMentionedMessages.push(msg);
+//                }
+//            }
+//        }
+//        allMentionedMessages = _.flatten(allMentionedMessages);
 
-        return allMentionedMessages;
-    });
-}
+//        return allMentionedMessages;
+//    });
+//}
 $(function () {
 
     $("#MarkallRead").click(function () {
@@ -632,20 +604,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                 avatar = notificationChannelParticipant.ProfileImage;
                 userFullName = notificationChannelParticipant.FirstName + (isEmptyOrBlank(notificationChannelParticipant.LastName) ? "" : " " + notificationChannelParticipant.LastName);
             }
-            let template = `<div class="list-group-item">
-                         <a class="notification notification-flush bg-200" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
-                             <div class="notification-avatar">
-                                 <div class="avatar avatar-2xl mr-3">
-                                     <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);" />
-
-                                 </div>
-                             </div>
-                             <div class="notification-body">
-                                 <p class="mb-1"><strong>${userFullName}</strong>&nbsp;Mentioned you in a <strong>${notifications[i].recAccNameWithDesc}</strong> : "${parseMessageHtmlAndResize(notifications[i].messageBody, 30)}"</p>
-                                 <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>${moment(notifications[i].messageDate).format("MMM-DD-YYYY hh:mm a")}</span>
-                             </div>
-                         </a>
-                    </div>`;
+            let template = `<div class="list-group-item"><a class="notification notification-flush bg-200" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}"><div class="notification-avatar"><div class="avatar avatar-2xl mr-3"><img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this)"></div></div><div class="notification-body"><p class="mb-1"><strong>${userFullName}</strong>&nbsp;Mentioned you in a<strong>${notifications[i].recAccNameWithDesc}</strong>: "${parseMessageHtmlAndResize(notifications[i].messageBody, 30)}"</p><span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>${moment(notifications[i].messageDate).format("MMM-DD-YYYY hh:mm a")}</span></div></a></div>`;
             if (prepand === false) {
                 $notifictionsList.append(template);
             }
@@ -668,18 +627,7 @@ var preapreAndBindNotifications = function (notifications, isNotificationPage, p
                 avatar = notificationChannelParticipant.ProfileImage;
                 userFullName = notificationChannelParticipant.FirstName + (isEmptyOrBlank(notificationChannelParticipant.LastName) ? "" : " " + notificationChannelParticipant.LastName);
             }
-            let template = `<a class="border-bottom-0 notification rounded-0 border-x-0 border-300" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}">
-            <div class="notification-avatar">
-                <div class="avatar avatar-xl mr-3">
-                    <img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this);">
-
-                </div>
-            </div>
-            <div class="notification-body">
-                <p class="mb-1"><strong>${userFullName}</strong>&nbsp;Mentioned you in a  <strong>${notifications[i].recAccNameWithDesc}</strong> : "${parseMessageHtmlAndResize(notifications[i].messageBody, 50)}"</p>
-                <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>${moment(notifications[i].messageDate).format("MMM-DD-YYYY hh:mm a")}</span>
-            </div>
-        </a>`;
+            let template = `<a class="border-bottom-0 notification rounded-0 border-x-0 border-300" data-msg-id="${notifications[i].messageId}" data-channel-id="${notifications[i].channelId}" data-channel-uniquename="${notifications[i].channelUniqueName}" href="/communication/chat?isRecon=true&reconChannelId=${notifications[i].channelId}&msgId=${notifications[i].messageId}"><div class="notification-avatar"><div class="avatar avatar-xl mr-3"><img class="rounded-circle" src="${avatar}" alt="" onerror="imgError(this)"></div></div><div class="notification-body"><p class="mb-1"><strong>${userFullName}</strong>&nbsp;Mentioned you in a<strong>${notifications[i].recAccNameWithDesc}</strong>: "${parseMessageHtmlAndResize(notifications[i].messageBody, 50)}"</p><span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>${moment(notifications[i].messageDate).format("MMM-DD-YYYY hh:mm a")}</span></div></a>`;
             if (prepand === false)
                 $divNotificationsCardBody.append(template);
             else
@@ -699,18 +647,17 @@ var setUserOnlineOfflineStatus = function (state) {
         $notifictionsDropDown.removeClass("notification-indicator-success").addClass("notification-indicator-primary");
 }
 
-async function isConversationSyncListFetched() {
-    while (twilioClient.conversations.syncListFetched === false) {
-        await timer(1000);
-    }
-}
+//async function isConversationSyncListFetched() {
+//    while (twilioClient.conversations.syncListFetched === false) {
+//        await timer(1000);
+//    }
+//}
 
-async function isTwilioClientConnected() {
-    while (twilioClient.connectionState !== "connected") {
-        await timer(1000);
-    }
-}
-
+//async function isTwilioClientConnected() {
+//    while (twilioClient.connectionState !== "connected") {
+//        await timer(1000);
+//    }
+//}
 function isLocationUrlContains(url) {
     return (location.href.toLowerCase().indexOf(url) > -1 ? true : false);
 }
@@ -726,16 +673,16 @@ function parseMessageHtmlAndResize(message, resizeLength) {
     else
         return html_text.slice(0, resizeLength) + "...";
 }
-var genereateAllReconciliationTwilioConversationAndAddParticipants = function () {
-    if (isLocationUrlContains("reconciliation"))
-        return;
-    let keySesionStorage = `GenChannelsRecon`;
-    let arrClientIds = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? [] : sessionStorage[keySesionStorage].split(','));
-    if (arrClientIds.indexOf(getClientId()) < 0) {
-        sessionStorage[keySesionStorage] = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? "" : sessionStorage[keySesionStorage]) + getClientId() + ",";
-        postAjax(`/twilio/GenereateAllReconciliationTwilioConversationAndAddParticipants?clientId=${getClientId()}`, null, () => { });
-    }
-}
+//var genereateAllReconciliationTwilioConversationAndAddParticipants = function () {
+//    if (isLocationUrlContains("reconciliation"))
+//        return;
+//    let keySesionStorage = `GenChannelsRecon`;
+//    let arrClientIds = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? [] : sessionStorage[keySesionStorage].split(','));
+//    if (arrClientIds.indexOf(getClientId()) < 0) {
+//        sessionStorage[keySesionStorage] = (isEmptyOrBlank(sessionStorage[keySesionStorage]) ? "" : sessionStorage[keySesionStorage]) + getClientId() + ",";
+//        postAjax(`/twilio/GenereateAllReconciliationTwilioConversationAndAddParticipants?clientId=${getClientId()}`, null, () => { });
+//    }
+//}
 //Global Chat with Notifications End
 
 
@@ -780,7 +727,7 @@ function getLocalTime(utcdateString) {
     return date.toLocaleString();
 }
 function SpecialURLEncoding(inputString) {
-    
+
     var retVal = inputString.replace(/&/g, '|and|');
     return retVal;
 }

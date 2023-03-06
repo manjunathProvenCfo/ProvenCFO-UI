@@ -526,8 +526,9 @@ function AgencyDropdownPartialViewChange() {
         dataType: "json",
         success: function (data) {
             if (data != null) {
+                HidelottieLoader();
+                debugger;
                 MenuOptionHideAndShow(ClientID);
-
                 GetReconcilationData();
                 GetReconcilationData1();
                 KanbanCountWithIndividualPriority();
@@ -616,11 +617,15 @@ function AgencyDropdownPartialViewChange() {
 var totalSum1;
 var totalSum2;
 function GetReconcilationData() {
+
+
+
+
     var ClientID = $("#ddlclient option:selected").val();
   
     var percentage = 0;
     totalSum1 = 0;
-    if (sessionStorage.getItem("NotInBanksData") == null) {
+   // if (sessionStorage.getItem("NotInBanksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Outstanding Payments`, null, function (response) {
             if (response.Message == "Success") {
                
@@ -631,6 +636,9 @@ function GetReconcilationData() {
                     $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                     percentage = data[0].percentage.toFixed(0);
                     totalSum1 = data[0].Count;
+                    $("#divNotInBankPercentage").html(`<div class="progress-circle" id="divNotInBankPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+                    utils.addProgressCircle("#divNotInBankkPercentage1");
+                    debugger;
                     sessionStorage.setItem("NotInBanksData", JSON.stringify(data));
                 }
                 else {
@@ -642,26 +650,26 @@ function GetReconcilationData() {
                 TotalSum(totalSum1, totalSum2);
             }
         })
-    }
-    else {
+  //  }
+    //else {
 
-        let data = JSON.parse(sessionStorage.getItem("NotInBanksData"));
-        if (data != null && data.length > 0) {
-            $("#lblNotInBanksCount2").text(data[0].Count);
-            $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
-            $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
-            percentage = data[0].percentage.toFixed(0);
-            totalSum1 = data[0].Count;            
-        }
-        else {
-            $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-            $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-        }
-        $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-        utils.addProgressCircle("#lblNotInBankPercentage")
-        TotalSum(totalSum1, totalSum2);
+    //    let data = JSON.parse(sessionStorage.getItem("NotInBanksData"));
+    //    if (data != null && data.length > 0) {
+    //        $("#lblNotInBanksCount2").text(data[0].Count);
+    //        $("#lblpostiveBanksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+    //        $("#lblNegativeBanksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+    //        percentage = data[0].percentage.toFixed(0);
+    //        totalSum1 = data[0].Count;            
+    //    }
+    //    else {
+    //        $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+    //        $("#lblPostiveInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+    //    }
+    //    $("#divNotInBankPercentage").html(`<div class="progress-circle" id="lblNotInBankPercentage" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+    //    utils.addProgressCircle("#lblNotInBankPercentage")
+    //    TotalSum(totalSum1, totalSum2);
 
-    }
+    //}
     
 
 }
@@ -671,7 +679,7 @@ function GetReconcilationData1() {
     var totalSum = 0;
     var percentage = 0;
     totalSum2 = 0;
-    if (sessionStorage.getItem("NotInBooksData") == null) {
+    //if (sessionStorage.getItem("NotInBooksData") == null) {
         getAjax(`/Reconciliation/GetReconciliationDashboardDataAgencyId?AgencyId=${ClientID}&type=Unreconciled`, null, function (response) {
             if (response.Message == "Success") {
                 
@@ -681,7 +689,9 @@ function GetReconcilationData1() {
                     $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
                     $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
                     totalSum2 = data[0].Count;
-                    percentage = data[0].percentage.toFixed(0);
+                  
+                    percentage = data[0].percentage;
+             
                     sessionStorage.setItem("NotInBooksData", JSON.stringify(data));
                 }
                 else {
@@ -693,25 +703,26 @@ function GetReconcilationData1() {
                 TotalSum(totalSum1, totalSum2);
             }
         })
-    }
-    else {
-        var data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
-        if (data != null && data.length > 0) {
-            $("#lblNotInBooksCount2").text(data[0].Count);
-            $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
-            $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
-            totalSum2 = data[0].Count;
-            percentage = data[0].percentage.toFixed(0);
+    //}
+
+    //else {
+    //    var data = JSON.parse(sessionStorage.getItem("NotInBooksData"));
+    //    if (data != null && data.length > 0) {
+    //        $("#lblNotInBooksCount2").text(data[0].Count);
+    //        $("#lblNegativeInBooksCount").text(ConvertToUDS(data[0].amountPositive).replace('-', ''));
+    //        $("#lblPostiveInBooksCount").text(ConvertToUDS(data[0].amountNegative).replace('-', ''));
+    //        totalSum2 = data[0].Count;
+    //        percentage = data[0].percentage.toFixed(0);
            
-        }
-        else {
-            $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
-            $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
-        }
-        $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
-        utils.addProgressCircle("#divNotInBookPercentage1")
-        TotalSum(totalSum1, totalSum2);
-    }
+    //    }
+    //    else {
+    //        $("#lblNegativeBanksCount").text(ConvertToUDS(0).replace('-', ''));
+    //        $("#lblNegativeInBooksCount").text(ConvertToUDS(0).replace('-', ''));
+    //    }
+    //    $("#divNotInBookPercentage").html(`<div class="progress-circle" id="divNotInBookPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
+    //    utils.addProgressCircle("#divNotInBookPercentage1")
+    //    TotalSum(totalSum1, totalSum2);
+    //}
     
     
 }
@@ -1154,7 +1165,6 @@ var defaultReportsWidget = function () {
                 divYearlyReports.append(reportHtml);
             }
         }
-        HidelottieLoader();
         //if ($('#Loader').css('display') == 'none') {
         //    RenderGrossRevenueChart($('#ddlGrossRevenue').val());
         //    RenderNetIncomeChart($('#dllNetIncome').val());

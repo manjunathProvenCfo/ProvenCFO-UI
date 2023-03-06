@@ -1,16 +1,4 @@
-﻿/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace ProvenCfoUI.assets.css
-{
-	public class common
-	{
-	}
-}*/
-
-body, .alert, .badge, .blockquote-footer, .btn, .falcon-data-table .paging_first_last_numbers .page-link, .falcon-data-table .paging_full .page-link, .falcon-data-table .paging_full_numbers.page-link,
+﻿body, .alert, .badge, .blockquote-footer, .btn, .falcon-data-table .paging_first_last_numbers .page-link, .falcon-data-table .paging_full .page-link, .falcon-data-table .paging_full_numbers.page-link,
 .falcon-data-table .paging_numbers .page-link, .falcon-data-table .paging_simple_numbers .page-link, .invalid-feedback, .navbar, .pagination, .valid-feedback, button, input, label,
 optgroup, select, textarea, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-family: 'Averta' !important;
