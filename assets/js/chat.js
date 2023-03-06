@@ -191,7 +191,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     else {
         chat.autoSelectParticipant = true;
         getChatParticipants();
-        createTwilioClient();
+        //createTwilioClient();
     }
 
     if (chat.channels.length > 0) {
