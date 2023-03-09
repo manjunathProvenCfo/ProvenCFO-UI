@@ -17,6 +17,7 @@ namespace Proven.Service.AccountingPackage
         public abstract Task<V> GetGLAccounts(T Token, string TenentID);
         public abstract Task<V> GetBankAccounts(T Token, string TenentID);
         public abstract Task<V> GetReportProfitAndLossAsync(T Token, string TenentID, DateTime? fromDate = null, DateTime? toDate = null, int? periods = null, string timeframe = null, string trackingCategoryID = null, string trackingOptionID = null, string trackingCategoryID2 = null, string trackingOptionID2 = null, bool? standardLayout = null, bool? paymentsOnly = null);
+        public abstract Task<DateTime> GetEndOfYearLockDate(T xToken, ClientModel client);
         public abstract AppTokenInfoMain GetSavedToken(int AgencyID);
         public abstract T getTokenFormat(V TokenInfo);
         public abstract T getSavedTokenFormat(int AgencyId);

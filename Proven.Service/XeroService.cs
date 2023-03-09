@@ -13,6 +13,7 @@ using IdentityModel.Client;
 using Newtonsoft.Json;
 using Proven.Model;
 using Proven.Service.AccountingPackage;
+using Xero.NetStandard.OAuth2.Model.Accounting;
 
 namespace Proven.Service
 {
@@ -292,6 +293,23 @@ namespace Proven.Service
             var Token = (IXeroToken)xeroToken;
             var result = await _accountinstance.GetReportProfitAndLossAsync(Token.AccessToken, XeroTenentID, fromDate, toDate, periods, timeframe, trackingCategoryID, trackingCategoryID2, trackingOptionID, trackingOptionID2, standardLayout, paymentsOnly);
             return (V)Convert.ChangeType(result, typeof(V));
+        }
+        public override async Task<DateTime> GetEndOfYearLockDate(T xToken, ClientModel client)
+        {
+            DateTime? EndOfYearLockDatey = null;
+            dynamic XeroOrganization = null;
+            using (XeroOrganization = new XeroBankTransaction<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisations>(client.APIClientID, client.APIClientSecret, client.APIScope, ""))
+            {
+                Organisations org = await XeroOrganization.GetOrganisationsAsync(xToken, client.XeroID);
+                var result = org._Organisations.Where(x => x.OrganisationID == Guid.Parse(client.XeroID)).FirstOrDefault();
+                if (result != null && result.EndOfYearLockDate != null)
+                {
+                    EndOfYearLockDatey = result.EndOfYearLockDate.Value;
+                }
+
+            }
+            return (DateTime)EndOfYearLockDatey;
+
         }
         public void Dispose()
         {

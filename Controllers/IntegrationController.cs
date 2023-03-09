@@ -654,8 +654,33 @@ namespace ProvenCfoUI.Controllers
         }
 
 
+        [CheckSession]
+        [HttpGet]
+        public JsonResult GetClientConnectionStatus(int AgencyId)
+        {
+            try
+            {
+                using (ClientService objClient = new ClientService())
+                {
+                    Utltity obj = new Utltity();
+                    var objResultClient = objClient.GetClientById(AgencyId);
+                    Common.ConnectClientAccoutingPackage(objResultClient);
+                   
+                    return Json(new
+                    {
+                        ConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus,
+                        StatusMessage = AccountingPackageInstance.Instance.ConnectionMessage,
+                        AccountingPackageId = AccountingPackageInstance.Instance.ClientModel.ThirdPartyAccountingApp_ref
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
+                throw ex;
+            }
+        }
 
-        
 
         [HttpGet]   
         public async Task<ActionResult> QBTokenGeneration(string code, string state, string realmId)
