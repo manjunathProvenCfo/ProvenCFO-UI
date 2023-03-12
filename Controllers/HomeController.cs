@@ -709,7 +709,11 @@ namespace ProvenCfoUI.Controllers
 
                         if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
                         string PathfileName = Path.Combine(path, replacefile);
-                        file.SaveAs(PathfileName);
+                        //file.SaveAs(PathfileName);
+
+                        byte[] image = new byte[file.ContentLength];
+                        file.InputStream.Read(image, 0, image.Length);
+                        Common.Compressimage(PathfileName, "", image);
                         using (AccountService obj = new AccountService())
                         {
                             string userid = Session["UserId"].ToString();
@@ -741,7 +745,7 @@ namespace ProvenCfoUI.Controllers
             return Json(replacefile, JsonRequestBehavior.AllowGet);
 
         }
-
+        
         [CheckSession]
         public JsonResult UpdateProfile(UserModel model)
         {
