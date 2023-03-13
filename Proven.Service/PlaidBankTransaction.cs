@@ -186,5 +186,10 @@ namespace Proven.Service
         {
             throw new NotImplementedException();
         }
+
+        public override Task<V> GetOrganisationsAsync(T Token, string TenentID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
