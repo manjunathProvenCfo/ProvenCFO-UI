@@ -163,7 +163,7 @@
             setTimeout(function () {
                 XeroConnectionUpdate();
 
-            }, 2000);
+            }, 500);
             $('#checkbox-bulk-purchases-select').parent().addClass("d-none");
             sessionStorage.clear();
             HidelottieLoader();
@@ -207,6 +207,46 @@
                 // $('#spanSync').prop('disabled', true);
                 HidelottieLoader();
             }
+        }
+
+        function XeroConnectionUpdate() {
+            var XConstatus = $('#XeroConnectionStatus');
+            var XMessage = $('#XeroStatusMessage');
+            var XStatus = $('#XeroStatus');
+            var AccountingPackageId = $('#AccountingPackageId').val();
+            var ClientID = $("#ddlclient option:selected").val();
+            getAjaxSync(`/Integration/GetClientConnectionStatus?AgencyId=` + ClientID, null, function (response) {
+                if (response != null) {
+                    if (response.ConnectionStatus == true) {
+
+                        if (response.AccountingPackageId != undefined && response.AccountingPackageId != null && response.AccountingPackageId == 2) {
+                            XStatus.text("QuickBooks connected");
+                            AccountingPackage = "QuickBooks";
+                        }
+                        else {
+                            XStatus.text("Xero connected");
+                            AccountingPackage = "Xero";
+                        }
+                        XStatus.css('color', 'green');
+                        $('#btnSync').show();//prop('disabled', false);
+                        HidelottieLoader();
+                        //$('#spanSync').prop('disabled', false);
+                    }
+                    else {
+                        if (response.AccountingPackageId != undefined && response.AccountingPackageId != null && response.AccountingPackageId == 2) {
+                            XStatus.text('Error Connecting to QuickBooks ');
+                        }
+                        else {
+
+                            XStatus.text('Error Connecting to Xero ');
+                        }
+                        XStatus.css('color', 'red');
+                        $('#btnSync').hide()//prop('disabled', true);
+                        // $('#spanSync').prop('disabled', true);
+                        HidelottieLoader();
+                    }
+                }
+            });
         }
 
         function AgencyDropdownPartialViewChange() {

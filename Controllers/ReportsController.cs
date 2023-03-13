@@ -163,6 +163,10 @@ namespace ProvenCfoUI.Controllers
                     azureStream.Close();
                     Response.BinaryWrite(bytes);
                 }
+                else
+                {
+                    Response.StatusCode = 404;
+                }
             }
         }
 

@@ -261,5 +261,10 @@ namespace Proven.Service
         {
             throw new NotImplementedException();
         }
+
+        public override Task<DateTime> GetEndOfYearLockDate(T xToken, ClientModel client)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

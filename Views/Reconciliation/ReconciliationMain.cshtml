@@ -404,7 +404,7 @@
 
     <script>
 
-       
+
          Dropzone.autoDiscover = false;
         var totalSum1;
         var totalSum2;
@@ -691,7 +691,7 @@
         }
 
         $("#filterRule_New").change(function () {
-            
+
             $("#filter-checkbox-wrapper").fadeOut(200, function () {
                 $(this).find("#filterRule_New").attr("checked", !$(this).find("#filterRule_New").attr("checked")).end().fadeIn(200);
             });
@@ -911,7 +911,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-            
+
             var ClientID = $("#ddlclient option:selected").val();
             ShowlottieLoader();
             $.ajax({
@@ -923,13 +923,13 @@
                     if (data != null) {
                         sessionStorage.setItem("LastMailSent", data.MailSendDate)
                         // Write here what should happend once client selected
-                       
+
                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
-                   
+
                         SetUserPreferencesForAgency(null,true);
-                      
+
                         window.location.href = url;
-                    
+
                        // window.location.reload();
                     }
                     else {
@@ -971,7 +971,7 @@
         $(function () {
 
             $("#email").click(function () {
-                var url = window.location.href;
+                var chat = '@Url.Action("Chat", "Communication")';
                 $('.text-danger').empty();
                 $("#sendbutton").attr("disabled", false);
                 var ClientName = $("#ddlclient option:selected").text();
@@ -980,7 +980,7 @@
                 ClientName = encodeURIComponent(ClientName);
                 var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
+                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chat}&sentdate=${LastMailSent}`, null, function (response) {
                     if (response.Status == 'Success') {
                         var text = response.Recipients.toString().split(",");
                         var str = text.join(', ');
@@ -1027,7 +1027,7 @@
             emails = emails.split(',');
             var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
 
-           
+
 
             for (var i = 0; i<emails.length; i++) {
                 //Trimming the whitespace from emails if any
@@ -1086,7 +1086,7 @@
             e.target.setAttribute("readonly", "");
         });
 
-       
+
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
