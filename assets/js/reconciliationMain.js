@@ -464,8 +464,9 @@ $(document).ready(function () {
                         sessionStorage.removeItem("NotInBooksData");
                         sessionStorage.removeItem("NotInBanksData");
 
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not)|(?<=In)/g, " ")).replace(/b/g,"B");
-
+                        //uncampatible on safari.
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g,"B");
+                        debugger;
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
                     else if (Azureresponse.status === false && Azureresponse.statusCode != 500)

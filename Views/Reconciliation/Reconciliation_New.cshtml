@@ -112,8 +112,11 @@
     <div class="col-md-4 p-l-2 d-none" id="divFilter">
         @Html.Partial("_reconcilationFilter", true)
     </div>
-
+    <div class="col-md-4 p-l-2 d-none" id="divBulkUpdate">
+        @Html.Partial("_reconcilationBulkupdate", true)
+    </div>
 </div>
+
 @{
     var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
 }
@@ -195,7 +198,8 @@
                 Type: type,
                 selectedDate: datepicker,
                 RuleNew: ruleNew
-            }
+              }
+              debugger;
             sessionStorage.setItem('Filter', JSON.stringify(pdata));
 
             var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
@@ -232,7 +236,7 @@
               dbTable.search(`??${url}??`).draw();
 
         }
-           //Configure permission globals
+            //Configure permission globals
             const UserType = "@ViewBag.UserType";
             const RecordType= "@ViewBag.RecordType";
             const GlAccountVisible = "@ViewBag.isvisibleGlAccount";

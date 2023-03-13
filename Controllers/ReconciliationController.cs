@@ -527,9 +527,14 @@ namespace ProvenCfoUI.Controllers
             }
             using (IntigrationService objIntegration = new IntigrationService())
             {
+                    ReconcilationService objReConcilation = new ReconcilationService();
+                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                getallAction.ForEach(x => x.ActionName = x.ActionName);
+
                 if (RecordType == NotInBank)
                 {
                     ViewBag.isvisibleGlAccount = true;
+                    TempData["Action"] = getallAction;
                 }
                 else
                 {
@@ -537,9 +542,12 @@ namespace ProvenCfoUI.Controllers
                 }
                 if (userType == "1")
                 {
+
                     ViewBag.IsStaffUser = true;
                     ViewBag.IsBankRuleVisible = true;
-              
+                    TempData["BankRule"] = getBankRule();
+                    TempData["ReconciledStatus"] = getReconciledStatus();
+
                 }
                 else
                 {
@@ -548,7 +556,8 @@ namespace ProvenCfoUI.Controllers
                 var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                 glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                 TempData["GLAccounts"] = glAccountList;
-                TempData["DistinctAccount"] = getDistincAccount(AgencyID, RecordType);
+                var data= getDistincAccount(AgencyID, RecordType);
+                TempData["DistinctAccount"] = data;
                 List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                 if (objTCList != null && objTCList.Count > 0)
                 {
@@ -579,13 +588,12 @@ namespace ProvenCfoUI.Controllers
             var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
             var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
 
-            var searchValue =  Request.Form[53];
-
+            var searchValue = Request.Form.GetValues("search[value]").First();
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             string recordType = (string)Session["RecordType"];
-            //filter handle
+       
             var normalize =new Regex("=&",RegexOptions.Multiline);//=-1&
             var checkFilter = new Regex("^[?]", RegexOptions.Multiline);
             var match = new Regex(@"(?<=\=)[A-Za-z0-9\n\t\r\s-1\/#]+", RegexOptions.Multiline);
@@ -604,6 +612,7 @@ namespace ProvenCfoUI.Controllers
             string f_agencyId ="";
             string f_type = "";
             string f_ruleNew ="";
+            string accountName = "";
             if (checkFilter.IsMatch(searchValue))
             {
                 IsFilter = true;
@@ -611,7 +620,7 @@ namespace ProvenCfoUI.Controllers
 
                 var matches = match.Matches(searchValue);
 
-                string accountName = matches[0].Value;
+                  accountName = matches[0].Value;
 
                  f_dateRangeFrom = matches[1].Value;
                  f_dateRangeTo = matches[2].Value;
@@ -624,6 +633,7 @@ namespace ProvenCfoUI.Controllers
                  f_agencyId = matches[9].Value;
                  f_type = matches[10].Value;
                  f_ruleNew = matches[11].Value;
+
 
 
 
@@ -651,6 +661,7 @@ namespace ProvenCfoUI.Controllers
 
                     filter = new ReconciliationFilterVW()
                     {
+
                         pageNo = skip,
                         pageSize = pageSize,
                         sortField = sortColumn,
@@ -660,6 +671,7 @@ namespace ProvenCfoUI.Controllers
                         Isreconciled = f_type,
                         Filters = "",
                         IsFilter=true,
+                        accounts=accountName,
                         Bankrule=f_bankRule,
                         RuleNew = f_ruleNew == "" ? "false" : f_ruleNew,
                         totalcount =0,
@@ -669,9 +681,9 @@ namespace ProvenCfoUI.Controllers
                         TrackingCategory1=f_trackingCategory,
                         TrackingCategory2=f_trackingCategory2,
                         dateRangeFrom=f_dateRangeFrom,
-                        dateRangeTo  = f_dateRangeTo
-
-
+                        dateRangeTo  = f_dateRangeTo,
+                        userId = UserPref[0].UserID,
+                                type = recordType
 
                     };
                 }
@@ -685,9 +697,10 @@ namespace ProvenCfoUI.Controllers
                         sortOrder = sortColumnDir,
                         AgencyId = AgencyID,
                         type1 = recordType,
-                        Isreconciled = f_type,
+                        Isreconciled = f_type==""?"Unreconciled":f_type,
                         Filters = searchValue,
-                        IsFilter = true,
+                        IsFilter = false,
+                        accounts=accountName,
                         Bankrule = f_bankRule,
                         RuleNew = f_ruleNew==""?"false":f_ruleNew,
                         totalcount = 0,
@@ -697,9 +710,9 @@ namespace ProvenCfoUI.Controllers
                         TrackingCategory1 = f_trackingCategory,
                         TrackingCategory2 = f_trackingCategory2,
                         dateRangeFrom = f_dateRangeFrom,
-                        dateRangeTo = f_dateRangeTo
-
-
+                        dateRangeTo = f_dateRangeTo,
+                       userId = UserPref[0].UserID,
+                       type = recordType
 
                     };
 
@@ -715,7 +728,7 @@ namespace ProvenCfoUI.Controllers
                         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         objResult= JsonConvert.DeserializeObject<ReconciliationMainModelPaging>(
                             Newtonsoft.Json.Linq.JObject.Parse(content).ToString());
-                        }
+                    }
                     else
                     {
                         string msg = response.ReasonPhrase;
@@ -725,7 +738,7 @@ namespace ProvenCfoUI.Controllers
                     return Json(new
                     {
                         draw = draw,
-                        recordsFiltered = searchValue != null && searchValue.Length > 0 ? objResult.ResultData.company_ReconciliationVMs.Count : objResult.ResultData.totalcount,
+                        recordsFiltered = searchValue != null && searchValue.Length > 0 ? objResult.ResultData.totalcount : objResult.ResultData.totalcount,
                         recordsTotal = objResult.ResultData.totalcount,
                         data = objResult.ResultData.company_ReconciliationVMs
                     });

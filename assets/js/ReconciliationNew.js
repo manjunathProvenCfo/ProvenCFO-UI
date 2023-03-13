@@ -94,7 +94,7 @@ function ChatRender(r, r1, r2) {
     let IsMentioned = r2.Iscurrent_user_mentioned;
     let dataId = r2.id;
     let has_conversation = r2.has_twilio_conversation;
-    debugger;
+    
     if (IsMentioned == true) {
         return `      <button id="btnComment" data-id="${dataId}" class="btn btn-link btn-sm btn-reveal mr-3" type="button" data-boundary="html" aria-expanded="false">
                                                 <span class="fas fa-comment fs--1"></span>
@@ -150,6 +150,9 @@ var EnableSelectedBulkUpdateButton = function () {
 
 
 }
+
+
+
 function SelectAllClick(e) {
     if (e.checked == false) {
         sessionStorage.removeItem('SelectedRecords');
@@ -213,6 +216,46 @@ const resetScrollChatState = function (rec) {
 
 
 function InitEvents() {
+
+
+    $("#CancelBulkupdate").click(function () {
+
+        if ($("#divBulkUpdate").is(":visible")) {
+
+            $('#divBulkUpdate').hide();
+            $('#divBulkUpdate').addClass('d-none');
+            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+
+        }
+    });
+
+    $('#ibulkupdate').click(function () {
+        debugger;
+        if ($("#divFilter").is(":visible") || $("#divChat").is(":visible")) {
+            $('#divChat').hide();
+            $('#divChat').addClass('d-none');
+            $('#divBulkUpdate').show();
+            $('#divBulkUpdate').removeClass('d-none');
+            $('#divFilter').hide();
+            $('#divFilter').addClass('d-none');
+            $('.chat-message').remove();
+
+        }
+        else if ($("#divBulkUpdate").is(":visible")) {
+
+            $('#divBulkUpdate').hide();
+            $('#divBulkUpdate').addClass('d-none');
+            $('#divTable').addClass('col-md-12').removeClass('col-md-8');
+        }
+        else {
+            $('#divBulkUpdate').show();
+            $('#divBulkUpdate').removeClass('d-none');
+            $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+            setTimeout(_ => addBulkMentionPlugin(), 1000);
+        }
+    });
+
     $('#Cancel').click(function () {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
