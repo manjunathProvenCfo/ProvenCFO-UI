@@ -525,12 +525,24 @@ namespace ProvenCfoUI.Controllers
                 var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                 AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
             }
+
+            ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
+            ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+            ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
             using (IntigrationService objIntegration = new IntigrationService())
             {
                     ReconcilationService objReConcilation = new ReconcilationService();
                     var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                 getallAction.ForEach(x => x.ActionName = x.ActionName);
+                using (ClientService objClientService = new ClientService())
+                {
+                    var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                    ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
 
+                    Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time;
+                    var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                    TempData["NotInBank"] = AccountingPackage;
+                }
                 if (RecordType == NotInBank)
                 {
                     ViewBag.isvisibleGlAccount = true;
@@ -639,9 +651,6 @@ namespace ProvenCfoUI.Controllers
 
 
             }
-
-
-      
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
 
@@ -654,7 +663,7 @@ namespace ProvenCfoUI.Controllers
                     AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
 
                 }
-          
+                
                 ReconciliationMainModelPaging objResult;
                 if (IsFilter) {
 
@@ -762,7 +771,8 @@ namespace ProvenCfoUI.Controllers
         private static HttpResponseMessage ClientPostRequest(string RequestURI, ReconciliationFilterVW emp)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:27754/Api/");
+            var url = Convert.ToString(ConfigurationManager.AppSettings["provencfoapi"]);
+            client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = client.PostAsJsonAsync(RequestURI, emp).Result;

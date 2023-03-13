@@ -58,7 +58,7 @@
 
                                 @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
-                                    <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
 
                                 }
                                 else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
@@ -235,7 +235,9 @@
               url = url.split('?')[1];
               dbTable.search(`??${url}??`).draw();
 
-        }
+    }
+
+
             //Configure permission globals
             const UserType = "@ViewBag.UserType";
             const RecordType= "@ViewBag.RecordType";

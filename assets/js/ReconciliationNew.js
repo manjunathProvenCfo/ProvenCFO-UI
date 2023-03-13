@@ -212,10 +212,74 @@ const resetScrollChatState = function (rec) {
         scrollChatState.size = 20;
     };
 }
+var IsEnableAutomation = false;
 
-
+function UpdateXeroonDemandDatarequestStatus(response, RequestId) {
+    var pdata = {
+        RequestId: RequestId,
+        CurrentStatus: response.status == true ? "Success" : "Failed",
+        ErrorDescription: response.message
+    };
+    postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+        if (response.Message == 'Success') {
+            return true;
+        }
+    });
+}
 
 function InitEvents() {
+    $("#OnDemandData").click(function () {
+        if (IsEnableAutomation === false) {
+            $("#OnDemandData").attr('disabled', true);
+            return;
+        }
+        $("#Loader").removeAttr("style");
+        var ClientID = $("#ddlclient option:selected").val();
+        var RequestType = "On Demand Azure"; //On Demand
+        var RequestedAtUTC = '';
+        var CurrentStatus = "New_Azure"; //New
+        var RequestCompletedAtUTC = '';
+        var Remark = '';
+
+        var AgencyName = '';
+        var CreatedBy = '';
+        var CreatedDate = '';
+        var RequestID = 0;
+        var IsNotinBooks = $('#tabNotinBooks.tabselect').length > 0 ? 1 : 0;
+        var IsNotinBanks = $('#tabNotinBanks.tabselect').length > 0 ? 1 : 0;
+        var AzureFunctionReconUrl = $('#AzureFunctionReconUrl').val();
+        var pdata = { RequestType: RequestType, RequestedAtUTC: RequestedAtUTC, CurrentStatus: CurrentStatus, RequestCompletedAtUTC: RequestCompletedAtUTC, Remark: Remark, AgencyId: ClientID, AgencyName: AgencyName, CreatedBy: CreatedBy, CreatedDate: CreatedDate };
+        postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
+            if (response.Message == 'Success') {
+                RequestID = response.data.Id;
+                getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
+                    Azureresponse = JSON.parse(Azureresponse);
+                    UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
+                    if (Azureresponse.status === true && Azureresponse.statusCode == 200) {
+                        sessionStorage.removeItem("NotInBooksData");
+                        sessionStorage.removeItem("NotInBanksData");
+
+                        //uncampatible on safari.
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
+                        debugger;
+                        ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
+                    }
+                    else if (Azureresponse.status === false && Azureresponse.statusCode != 500) {
+                        ShowAlertBoxError("Error!", `${Azureresponse.message}.(Req #${RequestID})`, function () { window.location.reload(); });
+                    }
+                    else {
+                        ShowAlertBoxError("Error!", `Sorry, there was a problem getting data from Xero. Please try again later.(Req #${RequestID})`, function () { window.location.reload(); });
+                    }
+                });
+
+                //setTimeout(() => {
+                //    reconcilationonstatusDemand(response.data.Id);
+                //}, 1000);
+            }
+
+        });
+
+    });
 
 
     $("#CancelBulkupdate").click(function () {
@@ -297,12 +361,28 @@ function InitEvents() {
     });
 }
 
+var bindEnableAutomation = function () {
+    getAjaxSync(`/Reconciliation/GetIsEnableAutomation?agencyId=${getClientId()}`, null, function (response) {
+        if (response.Status === "Success") {
+            IsEnableAutomation = response.Data;
+            if (IsEnableAutomation === false) {
+                $("#OnDemandData").attr('disabled', true);
+                $("#OnDemandData").attr('title', 'Request on demand data has been disabled.');
+                $("#OnDemandData").addClass('d-none');
+            }
+            else {
+                $("#OnDemandData").removeClass('d-none');
+            }
+
+        }
+    });
+}
 
 $(document).ready(() => {
 
     //enable mention users in input message
     chat.type = 1;
-
+    bindEnableAutomation();
  
     switch (RecordType) {
    
