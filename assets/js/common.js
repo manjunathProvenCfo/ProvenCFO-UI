@@ -251,14 +251,14 @@ var bindNotInBooksData = function (data) {
 function TotalSum(totalNotInBanksData, totalNotInBooksData) {
 
     let totalsum3 = 0;
-    if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
-        $("#lblNotInCount").addClass('d-none');
-    }
-    else {
-        $("#lblNotInCount").removeClass('d-none');
-        totalsum3 = isNaN(totalNotInBanksData + totalNotInBooksData) ? 0 : Number(totalNotInBanksData + totalNotInBooksData);
-        $("#lblNotInCount").text(totalsum3);
-    }
+    //if (isNaN(totalNotInBanksData + totalNotInBooksData)) {
+    //    $("#lblNotInCount").addClass('d-none');
+    //}
+    //else {
+    //    $("#lblNotInCount").removeClass('d-none');
+    //    totalsum3 = isNaN(totalNotInBanksData + totalNotInBooksData) ? 0 : Number(totalNotInBanksData + totalNotInBooksData);
+    //    $("#lblNotInCount").text(totalsum3);
+    //}
 }
 
 

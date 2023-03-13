@@ -729,15 +729,15 @@ function GetReconcilationData1() {
 
 function TotalSum(totalSum1, totalSum2) {
     let totalsum3 = 0;
-    if (isNaN(totalSum1 + totalSum2)) {
-        $("#lblNotInCount").addClass('d-none');
-    }
-    else {
-        $("#lblNotInCount").removeClass('d-none');
-        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
-        $("#lblNotInCount").text(totalsum3);
+    //if (isNaN(totalSum1 + totalSum2)) {
+    //    $("#lblNotInCount").addClass('d-none');
+    //}
+    //else {
+    //    $("#lblNotInCount").removeClass('d-none');
+    //    totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+    //    $("#lblNotInCount").text(totalsum3);
 
-    }
+    //}
 }
 
 

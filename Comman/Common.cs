@@ -13,6 +13,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Xero.NetStandard.OAuth2.Token;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace ProvenCfoUI.Comman
 {
@@ -557,6 +560,129 @@ namespace ProvenCfoUI.Comman
                 return date.AddDays(NumberofMonth).AddMonths(NumberofMonth).AddDays(1);
         }
 
+        public static void Compressimage(string targetPath, string fileName, Byte[] byteArrayIn)
+        {
+            try
+            {
+                //System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
+
+                using (MemoryStream memstr = new MemoryStream(byteArrayIn))
+                {
+                    using (var image = Image.FromStream(memstr))
+                    {
+                        float maxHeight = 400.0f;
+                        float maxWidth = 400.0f;
+                        int newWidth;
+                        int newHeight;
+                        string extention;
+                        Bitmap originalBMP = new Bitmap(memstr);//Representing my image.
+                        int originalWidth = originalBMP.Width;
+                        int originalHeight = originalBMP.Height;
+
+                        if (originalWidth > maxWidth || originalHeight > maxHeight)
+                        {
+                            //To preserve the acpect ratio
+                            float ratioX = (float)maxWidth / (float)originalWidth;
+                            float rationY = (float)maxHeight / (float)originalHeight;
+                            float ratio = Math.Min(ratioX, rationY);
+                            newWidth = (int)(originalWidth * ratio);
+                            newHeight = (int)(originalHeight * ratio);
+                        }
+                        else
+                        {
+                            newWidth = (int)originalWidth;
+                            newHeight = (int)originalHeight;
+                        }
+                        Bitmap bitMAP1 = new Bitmap(originalBMP, newWidth, newHeight);
+                        Graphics imgGraph = Graphics.FromImage(bitMAP1);
+                        extention = Path.GetExtension(targetPath);
+                        if (extention.ToLower() == ".png" || extention.ToLower() == ".jpeg")
+                        {
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            //imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+
+                            //ImageFormat imageFormat = null;
+                            //if (extention.ToLower() == ".png")
+                            //{
+                            //    imageFormat = ImageFormat.Png;
+                            //}
+                            //else if (extention.ToLower() == ".gif")
+                            //{
+                            //    imageFormat = ImageFormat.Gif;
+                            //}
+                            //else
+                            //{
+                            //    imageFormat = ImageFormat.Jpeg;
+                            //}
+
+                            //ImageCodecInfo imgEncoder = GetEncoder(imageFormat);
+                            //System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+                            //EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            //EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 1L);
+
+                            //myEncoderParameters.Param[0] = myEncoderParameter;
+                            //bitMAP1.Save(targetPath, imgEncoder, myEncoderParameters);
+
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+                            bitMAP1.Save(targetPath, image.RawFormat);
+
+                            bitMAP1.Dispose();
+                            imgGraph.Dispose();
+                            originalBMP.Dispose();
+                        }
+                        else if (extention.ToLower() == ".jpg")
+                        {
+
+                            imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+
+                            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+                            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 20L);
+                            myEncoderParameters.Param[0] = myEncoderParameter;
+
+                            bitMAP1.Save(targetPath, jpgEncoder, myEncoderParameters);
+
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            //imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+                            //bitMAP1.Save(targetPath, image.RawFormat);
+
+                            bitMAP1.Dispose();
+                            imgGraph.Dispose();
+                            originalBMP.Dispose();
+
+                        }
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+
+            }
+        }
+
+
+        public static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
 
     }
 

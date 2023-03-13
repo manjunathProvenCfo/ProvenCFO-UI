@@ -216,18 +216,22 @@ function SetupDynamicLoaderOnScroll() {
 
 }
 
+var type = sessionStorage.getItem('Type');
+$('#ddlclient').on("change", function () {
+    sessionStorage.removeItem('Type');
+    type = 0;
+})
+$('#menu_reconciliation').on('click', function () {
+    sessionStorage.removeItem('Type');
+})
 
 $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
-
-
-
     LoadFilterData();
     SetupDynamicLoaderOnScroll();
 
     XeroConnectionUpdate();
-    var type = sessionStorage.getItem('Type');
     $('#divFilter').hide();
     $('#divChat').hide();
     sessionStorage.removeItem('SelectedRecords');
@@ -237,7 +241,7 @@ $(document).ready(function () {
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
-            sessionStorage.clear();
+            sessionStorage.removeItem('Type');
         }
         else {
             $('#tabNotinBooks').removeClass('tabselect');
