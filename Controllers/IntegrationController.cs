@@ -535,7 +535,7 @@ namespace ProvenCfoUI.Controllers
         public async Task<JsonResult> GenerateAuthorizationPromptUrl(string Id, int ThirdPartyAccountingApp_ref)
         {
             string redirecturl = string.Empty;
-            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
+            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/Integration/Callback";
             Session["EditingClientId"] = Id;
             switch (ThirdPartyAccountingApp_ref)
             {
