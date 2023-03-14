@@ -836,16 +836,16 @@
             })
         }
         function onChangeAction(id, event) {
-
+            $('select').prop('disabled', true);
             var Selectedvalue = event.currentTarget.value;
             if (isEmptyOrBlank(Selectedvalue)) {
                 Selectedvalue = -1;
             }
             var userId = $('#topProfilePicture').attr('userId');
-
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
                 if (response.Message == 'Success') {
+                    $('select').prop('disabled', false);
 
                 }
                 else {

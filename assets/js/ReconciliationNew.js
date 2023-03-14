@@ -1,5 +1,6 @@
 ﻿var glAccounts_ = document.getElementById("all-gl-accounts");
 var glAccountsOpt = "<option value='-1'>Pick Account</option>";
+HidelottieLoader();
 Array.prototype.forEach.bind(glAccounts_.children)(ele => {
     glAccountsOpt += `<option value=${ele.value}>${ele.innerText}</option>`;
 });
@@ -265,7 +266,7 @@ function InitEvents() {
 
                         //uncampatible on safari.
                         let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
-                        debugger;
+                     
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
                     else if (Azureresponse.status === false && Azureresponse.statusCode != 500) {
@@ -298,7 +299,7 @@ function InitEvents() {
     });
 
     $('#ibulkupdate').click(function () {
-        debugger;
+        
         if ($("#divFilter").is(":visible") || $("#divChat").is(":visible")) {
             $('#divChat').hide();
             $('#divChat').addClass('d-none');
@@ -483,6 +484,8 @@ $(document).ready(() => {
     //enable mention users in input message
     chat.type = 1;
     bindEnableAutomation();
+    HidelottieLoader();
+    sendEmail();
  
     switch (RecordType) {
    
@@ -607,3 +610,134 @@ $(document).ready(() => {
     );
 
 });
+
+
+function sendEmail() {
+    var chat = "/Communication/Chat";
+    let enchat = encodeURIComponent(chat);
+    $('.text-danger').empty();
+    $("#sendbutton").attr("disabled", false);
+    var ClientName = $("#ddlclient option:selected").text();
+    var ClientId = $("#ddlclient option:selected").val();
+    getClientDate(ClientName);
+    ClientName = encodeURIComponent(ClientName);
+    getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+        let CommentsCount = response.resultData.length;
+        /*var Reconciliationdata = response.resultData.slice;*/
+        let count = CommentsCount;
+        var NotInBankUnreconciledItemsCount = count;
+        var LastMailSent = sessionStorage.getItem("LastMailSent");
+        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${enchat}&sentdate=${LastMailSent}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+            }
+        });
+    });
+}
+
+/*Clientdata*/
+
+
+function getClientDate(ClientName) {
+    getAjaxSync(apiurl + `Reconciliation/getLastSentDate?ClientName=${ClientName}`, null, function (response) {
+        sessionStorage.setItem("LastMailSent", response.resultData);
+    });
+}
+$("#email-to").on("focus", function (e) {
+    e.preventDefault();
+    e.target.removeAttribute("readonly");
+
+});
+$("#email-to").on("blur", function (e) {
+    e.preventDefault();
+    e.target.setAttribute("readonly", "");
+    /*validateMultipleEmails($('#email-to').val());*/
+});
+
+function validateMultipleEmails(emailinput) {
+    var emails = emailinput;
+    var invalidEmails = [];
+    if (emails == "") {
+        $('.text-danger').empty();
+        $('.emailvalidation').append('<span class="text-danger">Please Enter Email </span>');
+        $("#sendbutton").attr("disabled", true);
+        return;
+    }
+    emails = emails.split(',');
+    var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
+
+
+
+    for (var i = 0; i < emails.length; i++) {
+        //Trimming the whitespace from emails if any
+        emails[i] = emails[i].trim();
+        //Cheking the invalid emails and push them into an array
+        if (!regexs.test(emails[i])) {
+            invalidEmails.push(emails[i]);
+        }
+    }
+    if (invalidEmails.length != 0) {
+        $('.text-danger').empty();
+        $('.emailvalidation').append('<span class="text-danger">Invalid emails: ' + invalidEmails.join(',') + '</span>');
+        $("#sendbutton").attr("disabled", true);
+    }
+    else if (invalidEmails.length == 0) {
+        $('.emailvalidation .text-danger').remove();
+        $("#sendbutton").attr("disabled", false);
+    }
+}
+
+function sendMail() {
+    var recip = $("#email-to").val();
+    var subject = $("#email-subject").val();
+    var body = $("#ibody").html();
+    var pdata = {
+        Recipents: recip,
+        Subject: subject,
+        Body: body,
+    };
+    postAjaxSync(apiurl + `Reconciliation/sendReconcilationEmail`, JSON.stringify(pdata), function (response) {
+        ShowAlertBoxSuccess("", "Email has been sent ", function () { window.location.reload(); });
+    });
+}
+
+var hideParticipantsSidebar = function () { $(".chat-sidebar").hide(); }
+
+var onChangeAditinalBA = function (e) {
+    var BankAccount = $("#QBO_AccountsFilter option:selected").text();
+    if (BankAccount == "Select Bank Account") {
+        $("#btnDropzoneUpload").attr('disabled', true);
+        $('#btnDropzoneUpload').css('cursor', 'not-allowed');
+        $("#btnDropzoneUpload").attr('title', 'Please select a bank account.');
+    }
+    else {
+        $("#btnDropzoneUpload").attr('disabled', false);
+        $('#btnDropzoneUpload').css('cursor', '');
+        $("#btnDropzoneUpload").attr('title', '');
+    }
+}
+$("#email-subject").on("focus", function (e) {
+    e.preventDefault();
+    e.target.removeAttribute("readonly");
+});
+$("#email-subject").on("blur", function (e) {
+    e.preventDefault();
+    e.target.setAttribute("readonly", "");
+});
+
+/*Impote*/
+
+var myParam = location.search.split('yes=')[1];
+
+if (myParam == "1") {
+    $("#email").show();
+    $("#btnImportReconcilition").show();
+}

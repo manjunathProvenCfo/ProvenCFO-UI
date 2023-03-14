@@ -527,7 +527,7 @@ function AgencyDropdownPartialViewChange() {
         success: function (data) {
             if (data != null) {
                 HidelottieLoader();
-                debugger;
+            
                 MenuOptionHideAndShow(ClientID);
                 GetReconcilationData();
                 GetReconcilationData1();
@@ -638,7 +638,7 @@ function GetReconcilationData() {
                     totalSum1 = data[0].Count;
                     $("#divNotInBankPercentage").html(`<div class="progress-circle" id="divNotInBankPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                     utils.addProgressCircle("#divNotInBankkPercentage1");
-                    debugger;
+                
                     sessionStorage.setItem("NotInBanksData", JSON.stringify(data));
                 }
                 else {

@@ -120,6 +120,18 @@
     </div>
 </div>
 
+@if (ViewBag.AccountingPackage == 2)
+{
+    @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+}
+else
+{
+    @Html.Partial("_ReconciliationFileUploaderPartial")
+}
+@Html.Partial("_ReconcilationEmail", true)
+@Html.Partial("_ReconcilationEditComment", true)
+
+
 @{
     var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
 }
@@ -134,6 +146,14 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
+    <script>
+        //Configure permission globals
+            const UserType = "@ViewBag.UserType";
+            const RecordType= "@ViewBag.RecordType";
+            const GlAccountVisible = "@ViewBag.isvisibleGlAccount";
+            const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
+    </script>
+
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
     <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     @Scripts.Render("~/bundles/lib/twilio-chat-lib")
@@ -141,11 +161,15 @@
     @Scripts.Render("~/bundles/js/reconcilation-comments")
     @Scripts.Render("~/bundles/js/imports")
     @Scripts.Render("~/bundles/js/toastr")
-<script>
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
+    <script>
+
     function replaceAll(string, search, replace) {
         return string.split(search).join(replace);
     }
-          function FillterReconcilation() {
+        function FillterReconcilation() {
             var account = $('#filteraccounts').val().join(',');
             var ClientID = $("#ddlclient option:selected").val();
             var fromDate, toDate;
@@ -180,8 +204,8 @@
             }
             var MinAmount = $("#filterMinAmount").val();
             var MaxAmount = $("#filterMaxAmount").val();
-            var bankrule = ""; 
-            var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') :'';
+            var bankrule = "";
+            var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') : '';
             var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined ? $("#TrackingCategories_1").val().join(',') : '';
             var RuleNewStr = $('#filterRule_New').val();
             if (RuleNewStr != "") {
@@ -201,8 +225,8 @@
                 Type: type,
                 selectedDate: datepicker,
                 RuleNew: ruleNew
-              }
-              debugger;
+            }
+
             sessionStorage.setItem('Filter', JSON.stringify(pdata));
 
             var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
@@ -232,22 +256,15 @@
             url = url.replace('_RuleNew', ruleNew)
 
             url = replaceAll(url, '\&amp;', '&');
-     
-              let dbTable = $("#example").DataTable();
 
-              url = url.split('?')[1];
-              dbTable.search(`??${url}??`).draw();
+            let dbTable = $("#example").DataTable();
 
-    }
-
-
-            //Configure permission globals
-            const UserType = "@ViewBag.UserType";
-            const RecordType= "@ViewBag.RecordType";
-            const GlAccountVisible = "@ViewBag.isvisibleGlAccount";
-            const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
-</script>
+            url = url.split('?')[1];
+            dbTable.search(`??${url}??`).draw();
+        }
+    </script>
     <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>
+    <script src="~/assets/js/reconciliationUploader.js"></script>
     <script src="~/assets/js/ReconciliationNew.js"></script>
 }
 
