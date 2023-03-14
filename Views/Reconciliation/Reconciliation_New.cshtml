@@ -7,6 +7,9 @@
 @Styles.Render("~/bundles/css/twilio-chat")
 
 <div class="row">
+    @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+    @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+    @Html.Hidden("AzureFunctionReconUrl", (object)@ViewBag.AzureFunctionReconUrl, new { @Id = "AzureFunctionReconUrl" })
     <div class="col-md-12" id="divTable">
         <div class="card mb-3 p-3">
             <div class="card-header">
