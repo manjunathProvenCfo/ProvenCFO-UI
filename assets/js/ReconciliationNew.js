@@ -158,14 +158,18 @@ function SelectAllClick(e) {
         sessionStorage.removeItem('SelectedRecords');
         sessionStorage.removeItem('UnSelectedRecords');
         $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
-
+      
+        $(".checkbox-bulk-select-target").trigger("click");
+    } else if (e.checked==true){
+    
+        $(".checkbox-bulk-select-target").trigger("click");
     }
 
     EnableSelectedBulkUpdateButton();
 
 }
 function SelectClick(e) {
-
+    debugger;
     if (e.checked) {
         var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
 
@@ -378,6 +382,102 @@ var bindEnableAutomation = function () {
     });
 }
 
+
+function BulkActionReconcilation(CommentText) {
+    $(".apply-btn").prop("disabled", true);
+    $(".blk-cancel").prop("disabled", true);
+
+    var GLaccount = $('#BA_filterGLaccounts').val();
+
+    var CreatedBy = $('#topProfilePicture').attr('userId');
+    var Action = $('#BA_filterAction').val();
+    var ClientID = $("#ddlclient option:selected").val();
+    var bankrule = $('#BA_bankrules').val();
+    var ruleNewStr = $('#bulkRule_New').val();
+
+    if (ruleNewStr != "") {
+        var ruleNew = "true" === ruleNewStr;
+    }
+    var reconcilationStatus = $('#BA_Status').val();
+    var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
+    var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+    var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
+    IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
+
+    if (
+        ((SelectedItems == null && IsAllSelected != true) || (IsAllSelected != true && SelectedItems == ''))) {
+        ShowAlertBoxWarning("No records are selected to perform bulk action.");
+        return;
+    }
+
+    if (GLaccount == '' && bankrule == '' && reconcilationStatus == '' && (TrackingCategories == '' || TrackingCategories == 0) && (AditionalTrackingCategories == '' && AditionalTrackingCategories == 0 && Action == '')) {
+        ShowAlertBoxWarning("No Option are selected to perform bulk action.");
+        return;
+    }
+    var type = 'Outstanding Payments';
+    var IsNotinBooks = $('#tabNotinBooks').hasClass('tabselect');
+    if (IsNotinBooks == true) {
+        type = 'Unreconciled';
+        sessionStorage.setItem('Type', 0);
+    }
+    else {
+        sessionStorage.setItem('Type', 1);
+    }
+
+    let pdata = {
+        GLaccount: GLaccount, TrackingCategory: TrackingCategories,
+        AditionalTrackingCategory: AditionalTrackingCategories, BankRule: bankrule,
+        AgencyID: ClientID,
+        IsAllSelected: IsAllSelected,
+        SelectedItems: SelectedItems,
+        UnSelectedRecords: UnSelectedRecords,
+        reconcilationStatus: reconcilationStatus,
+        Action: Action,
+        CommentText: CommentText,
+        CreatedBy: CreatedBy,
+        RuleNew: ruleNew
+    };
+
+    ShowlottieLoader();
+    postAjax('/Reconciliation/ReconcilationBuilAction', JSON.stringify(pdata), function (response) {
+        if (response.Message == 'Success') {
+            sessionStorage.removeItem('SelectedRecords');
+            sessionStorage.removeItem('UnSelectedRecords');
+            ShowAlertBoxSuccess("Success!", "Successfully updated " + response.UpdatedCount + " records.", function () {
+                sessionStorage.clear();
+
+                HidelottieLoader();
+                location.reload(true);
+
+            });
+        }
+        else if (response.Message == 'NoRecords') {
+            ShowAlertBoxWarning("No records are selected to perform bulk action.");
+            return;
+        }
+        else {
+            ShowAlertBoxError("Error", "Error while updating records.");
+            return;
+        }
+    })
+}
+
+function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+}
+
+function SetupBulkUpdate() {
+      
+     //All state is selected the main
+     //saved in session storage in the browser.
+     //Retrive those session storage form the browser
+     //update check box as per page changes.
+     //Make sure get all interface well with the prev functionality.
+
+}
+
 $(document).ready(() => {
 
     //enable mention users in input message
@@ -459,11 +559,14 @@ $(document).ready(() => {
     }
 
 
+
     $("#example").DataTable({
         paging: true,
         serverSide: true,
         pageLength: 10,
         drawCallback: function (a, b) {
+
+
             HidelottieLoader();
              Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
                 let index = 0;

@@ -515,7 +515,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult ReconcilationNewMain(string RecordType= NotInBooks)
+        public ActionResult ReconciliationNewMain(string RecordType= NotInBooks)
         {
             int AgencyID = 0;
             List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
