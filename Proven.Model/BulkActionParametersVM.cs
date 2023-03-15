@@ -13,6 +13,9 @@ namespace CFO.Model.ViewModels
         public int AditionalTrackingCategory { get; set; }
         public string BankRule { get; set; }
         public int AgencyID { get; set; }
+        public string UserType { get; set; }
+        public string Type { get; set; }
+        public string UserId { get; set; }
         public bool IsAllSelected { get; set; }
         public string SelectedItems { get; set; }
         public string UnSelectedRecords { get; set; }

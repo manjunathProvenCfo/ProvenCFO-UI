@@ -154,6 +154,39 @@ var EnableSelectedBulkUpdateButton = function () {
 
 
 
+var EnableSelectedBulkUpdateButton = function () {
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+    var SelectedItems = sessionStorage.getItem('SelectedRecords');
+    var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
+
+
+    if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
+        $("#ibulkupdate").attr('disabled', false);
+        $("#ibulkupdate").attr('title', 'Bulk Update');
+
+    }
+
+    else {
+
+        if (unselectedItems == null) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+        if (SelectedItems == "" && unselectedItems.split(",").length < 2) {
+
+            $("#ibulkupdate").attr('disabled', true);
+            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
+        }
+
+
+    }
+
+
+}
+
+
 function SelectAllClick(e) {
     if (e.checked == false) {
         sessionStorage.removeItem('SelectedRecords');
@@ -207,6 +240,42 @@ const scrollChatState = {
     target: null
 };
 
+
+
+function ResetCheckBoxOnPageChange() {
+
+    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
+
+    if (IsAllSelected) {
+        $(".checkbox-bulk-select-target").trigger("click");
+        return;
+    } else {
+
+        //check session and pick and select 
+        //load ids from session
+        //match from loaded elements
+        debugger;
+       let SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords')?.split(',') : [];
+
+        let checkboxs = $(".checkbox-bulk-select-target");
+        SelectedItems.forEach(id => {
+
+            Array.prototype.forEach.bind(checkboxs)(chkBox => {
+                if (chkBox.getAttribute("id") == id) {
+                    chkBox.checked = true;
+                }
+            });
+        });
+
+         
+
+        $(".checkbox-bulk-select-target").trigger("change");
+
+
+
+        
+    }
+}
 const resetScrollChatState = function (rec) {
 
     if (rec != "" && rec != null) {
@@ -233,6 +302,9 @@ function UpdateXeroonDemandDatarequestStatus(response, RequestId) {
 }
 
 function InitEvents() {
+
+
+
     $("#OnDemandData").click(function () {
         if (IsEnableAutomation === false) {
             $("#OnDemandData").attr('disabled', true);
@@ -364,6 +436,44 @@ function InitEvents() {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
         }
     });
+
+
+
+
+
+   
+}
+var agencyId="";
+function LoadLastRunDate() {
+    debugger;
+    $.ajax({
+        url: '/AgencyService/GetClientDetails?id=' + agencyId,
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+
+            if (data.DOMO_Last_batchrun_time != null) {
+
+                let roughDate = data.DOMO_Last_batchrun_time;
+                let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+
+                let utcDateTime = new Date(dateTimeMill);
+                var localDateTime = utcDateTime.toLocaleString();
+
+                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
+
+            } else {
+
+                $('#domoLastBatchRun').remove();
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            $('#domoLastBatchRun').remove();
+        }
+    })
+
 }
 
 var bindEnableAutomation = function () {
@@ -402,10 +512,11 @@ function BulkActionReconcilation(CommentText) {
     var reconcilationStatus = $('#BA_Status').val();
     var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
     var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
+    debugger;
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
     var SelectedItems = sessionStorage.getItem('SelectedRecords');
     var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
-    IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
+    //IsAllSelected = $("#checkbox-bulk-purchases-select")[0].getAttribute("isselected") == "true";
 
     if (
         ((SelectedItems == null && IsAllSelected != true) || (IsAllSelected != true && SelectedItems == ''))) {
@@ -469,27 +580,23 @@ function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
 }
 
-function SetupBulkUpdate() {
-      
-     //All state is selected the main
-     //saved in session storage in the browser.
-     //Retrive those session storage form the browser
-     //update check box as per page changes.
-     //Make sure get all interface well with the prev functionality.
 
-}
 
 $(document).ready(() => {
 
     //enable mention users in input message
+     agencyId =  $("#ddlclient option:selected").val();
+    LoadLastRunDate();
     chat.type = 1;
     bindEnableAutomation();
+    sessionStorage.removeItem('SelectedRecords');
+    sessionStorage.removeItem('UnSelectedRecords');
     HidelottieLoader();
     sendEmail();
  
     switch (RecordType) {
    
-        case "Unreconciled":
+        case "Unrepconciled":
             $('#tabNotinBooks').addClass('tabselect');
             break;
         case "Outstanding Payments":
@@ -498,6 +605,7 @@ $(document).ready(() => {
     } 
 
     InitEvents();
+   
     const configureColumn = function () {
 
         var column = [
@@ -515,10 +623,36 @@ $(document).ready(() => {
                 searchable: false
             },
             { data: "account_name", name: "account_name" },
-            { data: "fdate", name: "date" },
+            {
+                data: "fdate", name: "date", render: function (r1, r2, r3) {
+
+
+                    return ("" + r1).replace(/-/g,'/');
+                }
+            },
             { data: "description_display", name: "who" },
             { data: "reference_display", name: "description" },
-            { data: "amount", name: "amount" },
+            {
+                data: "amount", name: "amount", render: function (r1, r2, r3) {
+
+                    debugger;
+                    let num = r1;
+                    
+                    if (0>r1) {
+
+
+                        let res = (r1 + "").split('').reverse();
+                        res.pop();
+
+                        res = res.reverse();
+                        res = res.join('');
+
+                        num = `<span style="color:red">$(${res})</span>`;
+
+                    }
+                    return  num  ;
+                }
+            },
          
         ];
 
@@ -569,6 +703,7 @@ $(document).ready(() => {
         pageLength: 10,
         drawCallback: function (a, b) {
 
+            ResetCheckBoxOnPageChange();
 
             HidelottieLoader();
              Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
