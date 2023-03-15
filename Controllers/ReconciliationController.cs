@@ -612,6 +612,9 @@ namespace ProvenCfoUI.Controllers
 
             var searchValue = Request.Form.GetValues("search[value]").First();
 
+
+            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&]+");
+              
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             string recordType = (string)Session["RecordType"];
@@ -637,6 +640,13 @@ namespace ProvenCfoUI.Controllers
             string accountName = "";
             if (checkFilter.IsMatch(searchValue))
             {
+                var _account = specialCase.Match(searchValue);
+
+                var nameac = _account.Value;
+                var found = nameac.Split('&');
+
+
+
                 IsFilter = true;
                 searchValue = normalize.Replace(searchValue, @"=-1&");
 
@@ -644,7 +654,13 @@ namespace ProvenCfoUI.Controllers
 
                   accountName = matches[0].Value;
 
-                 f_dateRangeFrom = matches[1].Value;
+                if (found.Length > 2)
+                {
+
+                    accountName=found[0] + "&" + found[1];
+                }
+
+                f_dateRangeFrom = matches[1].Value;
                  f_dateRangeTo = matches[2].Value;
                  f_amountMin = matches[3].Value;
                  f_amountMax = matches[4].Value;
