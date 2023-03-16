@@ -203,7 +203,7 @@ function SelectAllClick(e) {
 
 }
 function SelectClick(e) {
-    debugger;
+    
     if (e.checked) {
         var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
 
@@ -254,7 +254,7 @@ function ResetCheckBoxOnPageChange() {
         //check session and pick and select 
         //load ids from session
         //match from loaded elements
-        debugger;
+        
        let SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords')?.split(',') : [];
 
         let checkboxs = $(".checkbox-bulk-select-target");
@@ -329,6 +329,7 @@ function InitEvents() {
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
+                debugger;
                 getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
                     Azureresponse = JSON.parse(Azureresponse);
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
@@ -337,7 +338,8 @@ function InitEvents() {
                         sessionStorage.removeItem("NotInBanksData");
 
                         //uncampatible on safari.
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
+                        debugger;
                      
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
@@ -445,7 +447,7 @@ function InitEvents() {
 }
 var agencyId="";
 function LoadLastRunDate() {
-    debugger;
+
     $.ajax({
         url: '/AgencyService/GetClientDetails?id=' + agencyId,
         type: "GET",
@@ -512,7 +514,7 @@ function BulkActionReconcilation(CommentText) {
     var reconcilationStatus = $('#BA_Status').val();
     var TrackingCategories = $("#BA_TrackingCategories").val() != undefined ? $("#BA_TrackingCategories").val() : 0;
     var AditionalTrackingCategories = $("#BA_TrackingCategories_1").val() != undefined ? $("#BA_TrackingCategories_1").val() : 0;
-    debugger;
+    
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
     var SelectedItems = sessionStorage.getItem('SelectedRecords');
     var UnSelectedRecords = sessionStorage.getItem('UnSelectedRecords');
@@ -596,7 +598,7 @@ $(document).ready(() => {
  
     switch (RecordType) {
    
-        case "Unrepconciled":
+        case "Unreconciled":
             $('#tabNotinBooks').addClass('tabselect');
             break;
         case "Outstanding Payments":
@@ -635,7 +637,7 @@ $(document).ready(() => {
             {
                 data: "amount", name: "amount", render: function (r1, r2, r3) {
 
-                    debugger;
+                    
                     let num = r1;
                     
                     if (0>r1) {
