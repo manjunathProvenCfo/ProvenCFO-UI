@@ -251,9 +251,7 @@ function ResetCheckBoxOnPageChange() {
         return;
     } else {
 
-        //check session and pick and select 
-        //load ids from session
-        //match from loaded elements
+       
         
        let SelectedItems = isEmptyOrBlank(sessionStorage.getItem('SelectedRecords')) === false ? sessionStorage.getItem('SelectedRecords')?.split(',') : [];
 
@@ -263,6 +261,8 @@ function ResetCheckBoxOnPageChange() {
             Array.prototype.forEach.bind(checkboxs)(chkBox => {
                 if (chkBox.getAttribute("id") == id) {
                     chkBox.checked = true;
+                } else {
+                    chk.checked = false;
                 }
             });
         });
@@ -445,9 +445,37 @@ function InitEvents() {
 
    
 }
-var agencyId="";
-function LoadLastRunDate() {
+var agencyId = "";
+function UtcDateToLocalTime(utcDate) {
 
+    if (utcDate != null) {
+        var localTime;
+        let timeZoneOffset = new Date().getTimezoneOffset();
+        let utcServerDateTime = new Date(utcDate);
+        let utcTimeInMilliseconds = utcServerDateTime.getTime();
+
+
+        /*
+            timeZoneOffset :minutes
+         */
+        switch ((timeZoneOffset > 0)) {
+            case true:
+                localTime = new Date(utcTimeInMilliseconds - (timeZoneOffset * 60000)); //in one minutes there is 60,000 milliseconds
+                break;
+            case false:
+                localTime = new Date(utcTimeInMilliseconds + ((-1 * timeZoneOffset) * 60000));
+                break;
+        }
+
+        return localTime;
+
+
+    }
+
+    return utcDate;
+}
+function LoadLastRunDate() {
+ 
     $.ajax({
         url: '/AgencyService/GetClientDetails?id=' + agencyId,
         type: "GET",
@@ -461,9 +489,13 @@ function LoadLastRunDate() {
                 let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
                 let utcDateTime = new Date(dateTimeMill);
-                var localDateTime = utcDateTime.toLocaleString();
+                var localTime = utcDateTime.toLocaleString();
+             
+                 localTime = UtcDateToLocalTime(localTime)
+                var _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
-                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
+                $('#domoLastBatchRunTime')[0].innerText = _date;
+
 
             } else {
 
@@ -587,7 +619,7 @@ function replaceAll(string, search, replace) {
 $(document).ready(() => {
 
     //enable mention users in input message
-     agencyId =  $("#ddlclient option:selected").val();
+    agencyId =  $("#ddlclient option:selected").val();
     LoadLastRunDate();
     chat.type = 1;
     bindEnableAutomation();
