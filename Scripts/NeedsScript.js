@@ -170,6 +170,15 @@ $(document).ready(function () {
         var EstimatedHours = '';//$('#txtEstimatedHours').val();
         //var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
         //var UTCdate = getUTCDateTime(new Date(CreatedDate));
+
+        if (TaskTitle == "") {
+            $('#titleErrorMsg').show();
+            $('#kanbanTitle').css({ "margin": "0" })
+            return false;
+        } else {
+            $('#titleErrorMsg').hide();
+            $('#kanbanTitle').css({ "margin-bottom": "1rem" })
+        }
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
         })[0];

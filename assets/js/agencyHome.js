@@ -181,8 +181,8 @@ var color = {
         "echartColorCode": "#ff0000"
     },
     "High": {
-        "className": "bg-orange",
-        "echartColorCode": "#F68F57"
+        "className": "bg-yellow",
+        "echartColorCode": "#FFDB74"
     },
     "Medium": {
         "className": "bg-light-blue",

@@ -477,14 +477,14 @@ function UtcDateToLocalTime(utcDate) {
 function LoadLastRunDate() {
  
     $.ajax({
-        url: '/AgencyService/GetClientDetails?id=' + agencyId,
+        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
 
             if (data.DOMO_Last_batchrun_time != null) {
-
+                $('#domoLastBatchRun').show();
                 let roughDate = data.DOMO_Last_batchrun_time;
                 let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
@@ -498,13 +498,27 @@ function LoadLastRunDate() {
 
 
             } else {
-
                 $('#domoLastBatchRun').remove();
+            }
+
+            if (data.End_Of_YearLockDate != null) {
+
+                $('#endOfYearLock').show();
+                let roughEndDate = data.End_Of_YearLockDate;
+                let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+
+                let utcDateTime = new Date(endDateTimeMill);
+                var localEndDateTime = utcDateTime.toLocaleDateString();
+                $('#endOfYearLockDate')[0].innerText = localEndDateTime;
+
+            } else {
+                $('#endOfYearLock').remove();
             }
         },
         error: function (error) {
             console.log(error);
             $('#domoLastBatchRun').remove();
+            $('#endOfYearLock').remove();
         }
     })
 

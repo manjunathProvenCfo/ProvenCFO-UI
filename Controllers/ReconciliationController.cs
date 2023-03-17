@@ -591,7 +591,8 @@ namespace ProvenCfoUI.Controllers
             }
             
             ViewBag.UserType = userType;
-            
+            ViewBag.UserId = User.UserId;
+
             Session["RecordType"] = RecordType;
             ViewBag.RecordType = RecordType;
 
@@ -1288,6 +1289,26 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet));
             }
 
+        }
+
+        public async Task<JsonResult> GetEndYearLockDate(int id)
+        {
+            try
+            {
+                using (ClientService objClient = new ClientService())
+                {
+                    var objResultClient = objClient.GetClientById(id);
+                    Common common = new Common();
+                    objResultClient.End_Of_YearLockDate = await common.EndOfYearLockDateAsync(objResultClient);
+
+                   return Json(objResultClient, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
+                throw ex;
+            }
         }
     }
 }

@@ -116,6 +116,10 @@ body, .navbar-glass,
     background-color: #00BE82 !important;
 }
 
+.bg-yellow {
+    background-color: #FFDB74 !important;
+}
+
 .bg-orange {
     background-color: #F68F57 !important;
 }

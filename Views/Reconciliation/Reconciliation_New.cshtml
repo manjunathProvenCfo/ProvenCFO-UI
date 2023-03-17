@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="col-4">
-                        <div style="display: block; text-align: center" id="domoLastBatchRun">
+                        <div style="display: none; text-align: center" id="domoLastBatchRun">
                             <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
                         </div>
                     </div>
@@ -73,6 +73,12 @@
                                 <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-4 text-center" id="endOfYearLock" style="display: none">
+                        <b>End Of Year Lock Date: </b><span id="endOfYearLockDate"></span>
                     </div>
                 </div>
             </div>
@@ -165,10 +171,17 @@ else
         Dropzone.autoDiscover = false;
     </script>
     <script>
+        $(document).ready(function () {
 
-    function replaceAll(string, search, replace) {
-        return string.split(search).join(replace);
-    }
+            chat.userId = "@ViewBag.UserId";
+            chat.userEmail = userEmailAddress;
+            chat.type = 1;
+            chat.forReconciliationIconColor = true;
+        })
+
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
         function FillterReconcilation() {
             var account = $('#filteraccounts').val().join(',');
             var ClientID = $("#ddlclient option:selected").val();

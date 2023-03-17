@@ -684,6 +684,24 @@ namespace ProvenCfoUI.Comman
             return null;
         }
 
+        public async Task<DateTime?> EndOfYearLockDateAsync(ClientModel objResultClient)
+        {
+            DateTime? endOfYearLockDate = null;
+            using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisation>(
+                                                      objResultClient.APIClientID, objResultClient.APIClientSecret,
+                                                      AccountingPackageInstance.Instance.Scope,
+                                                      AccountingPackageInstance.Instance.XeroAppName))
+            {
+                if (AccountingPackageInstance.Instance.XeroToken != null && objResultClient.XeroID != null)
+                {
+                    endOfYearLockDate = await _service.GetEndOfYearLockDate(AccountingPackageInstance.Instance.XeroToken, objResultClient);
+
+                }
+                return endOfYearLockDate;
+            }
+            
+        }
+
     }
 
 }

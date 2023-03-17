@@ -28,10 +28,11 @@
             <div class="modal-body p-0">
                 <div class="bg-light rounded-soft-top px-4 py-3">
 
-                    <div class="input-group mb-3">
+                    <div class="input-group" style="margin-bottom: 1rem" id="kanbanTitle">
                         <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
                         <input class="form-control" id="txtTaskTitle" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" style="max-width:85%" />
                     </div>
+                    <p class="field-validation-error text-danger" style="display:none" id="titleErrorMsg">Title is required!</p>
                     <div class="row">
                         <p class="fs--2 mb-0">Added by <a class="text-600 font-weight-semi-bold" href="#!">@Model.ReporterName</a></p>
                     </div>
