@@ -849,12 +849,14 @@
             var userId = $('#topProfilePicture').attr('userId');
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
-                if (response.Message == 'Success') {
+
+                if (response.Message == 'Success')
+                {
                     $('select').prop('disabled', false);
 
                 }
                 else {
-
+                    $('select').prop('disabled', true);
                 }
             })
         }
@@ -983,21 +985,26 @@
                 var ClientId = $("#ddlclient option:selected").val();
                 getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
-                var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
+          /*      var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chat}&sentdate=${LastMailSent}`, null, function (response) {
-                    if (response.Status == 'Success') {
-                        var text = response.Recipients.toString().split(",");
-                        var str = text.join(', ');
-                        $("#email-to").val(str);
-                        if (str == "") {
-                            $("#sendbutton").attr("disabled", true);
-                        }
-                        $("#email-subject").val(response.Subject);
-                        $("#ibody").html(response.Body);
-                        $("#ifooter").html(response.LastSent);
+                getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+                    let result = response.resultData.length;
+                    console.log(result);
+                    var NotInBankUnreconciledItemsCount = result;
+                    getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chat}&sentdate=${LastMailSent}`, null, function (response) {
+                        if (response.Status == 'Success') {
+                            var text = response.Recipients.toString().split(",");
+                            var str = text.join(', ');
+                            $("#email-to").val(str);
+                            if (str == "") {
+                                $("#sendbutton").attr("disabled", true);
+                            }
+                            $("#email-subject").val(response.Subject);
+                            $("#ibody").html(response.Body);
+                            $("#ifooter").html(response.LastSent);
 
-                    }
+                        }
+                    });
                 });
 
             });

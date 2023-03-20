@@ -267,13 +267,21 @@ else
             url = url.replace('_AgencyID', ClientID);
             url = url.replace('_Type', type);
             url = url.replace('_RuleNew', ruleNew)
-
             url = replaceAll(url, '\&amp;', '&');
+            url = replaceAll(url, '#', '%23');
+            url = replaceAll(url, '(', '%28');
+            url = replaceAll(url, ')', '%29');
+   
+            //window.location.href = url;
+            //HidelottieLoader();
+
 
             let dbTable = $("#example").DataTable();
-
             url = url.split('?')[1];
             dbTable.search(`??${url}??`).draw();
+            dbTable.search('');
+            
+     
         }
     </script>
     <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>

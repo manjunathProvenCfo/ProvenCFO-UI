@@ -339,7 +339,6 @@ function InitEvents() {
 
                         //uncampatible on safari.
                         let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
-                        debugger;
                      
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
@@ -640,8 +639,6 @@ $(document).ready(() => {
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     HidelottieLoader();
-    sendEmail();
- 
     switch (RecordType) {
    
         case "Unreconciled":
@@ -672,35 +669,35 @@ $(document).ready(() => {
             },
             { data: "account_name", name: "account_name" },
             {
-                data: "fdate", name: "date", render: function (r1, r2, r3) {
-
-
-                    return ("" + r1).replace(/-/g,'/');
+                data: "fdate", name: "date", render: function (data, type, row) {
+                    if (data) {
+                        var dateValue = moment(data);
+                        if (dateValue.isValid()) {
+                            return dateValue.format("MM/DD/YYYY");
+                        }
+                    }
+                    return "";
                 }
             },
             { data: "description_display", name: "who" },
             { data: "reference_display", name: "description" },
             {
-                data: "amount", name: "amount", render: function (r1, r2, r3) {
+                data: "amount", name: "amount", render: function (data, type, row) {
+                    if (data) {
+                        var formattedValue = "$" + Math.abs(data).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        if (data < 0) {
+                            formattedValue = "<span style='color:red;'>(" + formattedValue + ")</span>";
+                        } else {
+                            formattedValue;
+                        }
 
-                    
-                    let num = r1;
-                    
-                    if (0>r1) {
-
-
-                        let res = (r1 + "").split('').reverse();
-                        res.pop();
-
-                        res = res.reverse();
-                        res = res.join('');
-
-                        num = `<span style="color:red">$(${res})</span>`;
-
+                        return formattedValue;
                     }
-                    return  num  ;
+                    return "";
                 }
             },
+
+         
          
         ];
 
@@ -738,9 +735,7 @@ $(document).ready(() => {
         $('.chat-sidebar').addClass('d-none');
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
         await loadCommentsPage(channelUniqueNameGuid);
-
     }
 
 
@@ -794,23 +789,18 @@ $(document).ready(() => {
 
 });
 
+$(function () {
 
-function sendEmail() {
-    var chat = "/Communication/Chat";
-    let enchat = encodeURIComponent(chat);
-    $('.text-danger').empty();
-    $("#sendbutton").attr("disabled", false);
-    var ClientName = $("#ddlclient option:selected").text();
-    var ClientId = $("#ddlclient option:selected").val();
-    getClientDate(ClientName);
-    ClientName = encodeURIComponent(ClientName);
-    getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
-        let CommentsCount = response.resultData.length;
-        /*var Reconciliationdata = response.resultData.slice;*/
-        let count = CommentsCount;
-        var NotInBankUnreconciledItemsCount = count;
+    $("#email").click(function () {
+        var chat = "/Communication/Chat";
+        var enurl = encodeURIComponent(chat);
+        var ClientName = $("#ddlclient option:selected").text();
+        var ClientId = $("#ddlclient option:selected").val();
+        getClientDate(ClientName);
+        ClientName = encodeURIComponent(ClientName);
+        var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
         var LastMailSent = sessionStorage.getItem("LastMailSent");
-        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${enchat}&sentdate=${LastMailSent}`, null, function (response) {
+        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${enurl}&sentdate=${LastMailSent}`, null, function (response) {
             if (response.Status == 'Success') {
                 var text = response.Recipients.toString().split(",");
                 var str = text.join(', ');
@@ -821,10 +811,13 @@ function sendEmail() {
                 $("#email-subject").val(response.Subject);
                 $("#ibody").html(response.Body);
                 $("#ifooter").html(response.LastSent);
+
             }
         });
+
     });
-}
+});
+
 
 /*Clientdata*/
 
