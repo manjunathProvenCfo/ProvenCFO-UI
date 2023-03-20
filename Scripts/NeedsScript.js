@@ -200,11 +200,11 @@ $(document).ready(function () {
                     $('.close-circle').click();
                     $('.modal-backdrop').remove();
                 }
-                else {
-                    if (response.Message == "Exist") {
-                        ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
-                        return;
-                    }
+                if (response.Message == "Exist") {
+                    ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
+                    return;
+                } else {
+                    ShowAlertBoxWarning("Warning!", "Tag is a required field.");
                 }
             },
             failure: function (response) {
@@ -384,6 +384,10 @@ $(document).ready(function () {
         e.preventDefault();
         e.target.setAttribute("readonly", "");
     });
+});
+$("#kanban-modal-new").on('hide.bs.modal', function () {
+    $('#titleErrorMsg').hide();
+    $('#kanbanTitle').css({ "margin-bottom": "1rem" })
 });
 function ClearViewPage() {
     $('#divCommantsList').empty();

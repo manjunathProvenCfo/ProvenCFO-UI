@@ -18,13 +18,13 @@
                         <div class="row align-items-center">
                             <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
                                 <span class="fas fa-book"></span>
-                                <h6 class="mb-0 ml-2"><a href="@Url.Action(" GetReconcilation", "Reconciliation" , new { Type="Not in Books" })">Not in Books</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation" , new { Type="Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
                             </div>
 
                             <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
-                                <h6 class="mb-0 ml-2"><a href="@Url.Action(" GetReconcilation", "Reconciliation" , new { Type="Not in Banks" })">Not in Banks</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation" , new { Type="Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
                         </div>
