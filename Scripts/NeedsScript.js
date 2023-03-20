@@ -199,11 +199,10 @@ $(document).ready(function () {
                     window.location.reload();
                     $('.close-circle').click();
                     $('.modal-backdrop').remove();
-                }
-                if (response.Message == "Exist") {
+                } if (response.Message == "Exist") {
                     ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
                     return;
-                } else {
+                } if (response.Message == "Empty Tag") {
                     ShowAlertBoxWarning("Warning!", "Tag is a required field.");
                 }
             },
