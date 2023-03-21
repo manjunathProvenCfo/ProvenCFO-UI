@@ -221,8 +221,8 @@ namespace ProvenCfoUI.Controllers
 
                         foreach (var item in reports)
                         {
-                            item.FileName = item.FileName; //item.FileName.Split('_').Length>1? item.FileName.Split('_')[1]:item.FileName;
-                            item.DownloadFileLink = $@"/Reports/GetReportResource/{item.FilePath}/{item.FileName}";
+                            item.FileName = item.FileName.Replace(".", "%2E"); //item.FileName.Split('_').Length>1? item.FileName.Split('_')[1]:item.FileName;
+                            item.DownloadFileLink = $@"/Reports/GetReportResource/{item.FilePath.Replace(".", "%2E")}/{item.FileName}";
                         }
                         return Json(new { Data = reports, Status = "Success", Message = "" }, JsonRequestBehavior.AllowGet);
                     }

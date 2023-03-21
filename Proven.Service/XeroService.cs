@@ -294,7 +294,7 @@ namespace Proven.Service
             var result = await _accountinstance.GetReportProfitAndLossAsync(Token.AccessToken, XeroTenentID, fromDate, toDate, periods, timeframe, trackingCategoryID, trackingCategoryID2, trackingOptionID, trackingOptionID2, standardLayout, paymentsOnly);
             return (V)Convert.ChangeType(result, typeof(V));
         }
-        public override async Task<DateTime> GetEndOfYearLockDate(T xToken, ClientModel client)
+        public override async Task<DateTime?> GetEndOfYearLockDate(T xToken, ClientModel client)
         {
             DateTime? EndOfYearLockDatey = null;
             dynamic XeroOrganization = null;
@@ -308,7 +308,7 @@ namespace Proven.Service
                 }
 
             }
-            return (DateTime)EndOfYearLockDatey;
+            return (DateTime?)EndOfYearLockDatey;
 
         }
         public void Dispose()

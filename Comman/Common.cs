@@ -225,7 +225,7 @@ namespace ProvenCfoUI.Comman
                 }
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
-                dynamic AppPackage = null ;
+                dynamic AppPackage = null;
                 switch (client.ThirdPartyAccountingApp_ref.Value)
                 {
                     case 1:
@@ -239,7 +239,7 @@ namespace ProvenCfoUI.Comman
                     default:
                         break;
                 }
-               
+
                 //XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName)
 
 
@@ -248,20 +248,20 @@ namespace ProvenCfoUI.Comman
                     Task.Run(async () =>
                     {
                         TokenInfoVM TokenInfoSaved = AppPackage.GetSavedToken(client.Id).ResultData;
-                        
+
                         if (TokenInfoSaved != null)
                         {
                             try
                             {
                                 string accessToken = string.Empty, IdToken = string.Empty, RefreshToken = string.Empty;
-                                var token = AppPackage.getTokenFormat(TokenInfoSaved);                                                                                             
+                                var token = AppPackage.getTokenFormat(TokenInfoSaved);
                                 switch (client.ThirdPartyAccountingApp_ref.Value)
                                 {
                                     case 1:
                                         accessToken = token.AccessToken;
                                         IdToken = token.IdToken;
                                         RefreshToken = token.RefreshToken;
-                                        TokenInfoSaved.expires_in =Convert.ToInt32((token.ExpiresAtUtc - DateTime.UtcNow).TotalSeconds);
+                                        TokenInfoSaved.expires_in = Convert.ToInt32((token.ExpiresAtUtc - DateTime.UtcNow).TotalSeconds);
                                         AccountingPackageInstance.Instance.XeroToken = token;
                                         break;
                                     case 2:
@@ -274,26 +274,26 @@ namespace ProvenCfoUI.Comman
                                     default:
                                         break;
                                 }
-                                if(TokenInfoSaved.access_token != accessToken)
+                                if (TokenInfoSaved.access_token != accessToken)
                                 {
                                     TokenInfoSaved.access_token = accessToken;
                                     TokenInfoSaved.id_token = IdToken;
-                                    TokenInfoSaved.refresh_token = RefreshToken;                                    
+                                    TokenInfoSaved.refresh_token = RefreshToken;
                                     TokenInfoSaved.ModifiedDate = DateTime.UtcNow;
                                     TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
                                     TokenInfoSaved.ConnectionStatus = "SUCCESS";
                                     TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
                                     AppPackage.UpdateToken(TokenInfoSaved);
                                 }
-                               
-                                
+
+
                                 AccountingPackageInstance.Instance.ConnectionStatus = true;
                                 AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
                             }
                             catch (Exception ex)
                             {
-                               
-                                   log.Error(Utltity.Log4NetExceptionLog(ex));
+
+                                log.Error(Utltity.Log4NetExceptionLog(ex));
                                 TokenInfoSaved.ConnectionStatus = "ERROR";
                                 AppPackage.UpdateToken(TokenInfoSaved);
                                 CleanToken();
@@ -394,13 +394,13 @@ namespace ProvenCfoUI.Comman
                     int currQuarter = (datetime.Month - 1) / 3 + 1;
                     result.StartDate = new DateTime(datetime.AddYears(-1).Year, datetime.AddYears(-1).Month, 1);  //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
                     result.EndDate = datetime.AddMonths(1).AddDays(-1); //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
-                    result.timeframe = "Month";                   
+                    result.timeframe = "Month";
                     break;
                 case ChartOptions.Option_1:
                     //int PreviousQuarter = (datetime.Month - 1) / 3 ;
                     result.StartDate = new DateTime(datetime.AddMonths(-6).Year, datetime.AddMonths(-6).Month, 1);//new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
                     result.EndDate = datetime.AddMonths(1).AddDays(-1);// datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
-                    result.timeframe = "Month";                   
+                    result.timeframe = "Month";
                     break;
                 case ChartOptions.Option_2:
                     result.StartDate = new DateTime(datetime.AddMonths(-3).Year, datetime.AddMonths(-3).Month, 1); ;// new DateTime(datetime.Year, 1, 1);
@@ -552,7 +552,7 @@ namespace ProvenCfoUI.Comman
             else
                 return date.AddDays(1).AddMonths(1).AddDays(-1);
         }
-        public static DateTime PreviousMonth(DateTime date,int NumberofMonth)
+        public static DateTime PreviousMonth(DateTime date, int NumberofMonth)
         {
             if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
                 return date.AddMonths(NumberofMonth);
@@ -686,20 +686,46 @@ namespace ProvenCfoUI.Comman
 
         public async Task<DateTime?> EndOfYearLockDateAsync(ClientModel objResultClient)
         {
-            DateTime? endOfYearLockDate = null;
-            using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisation>(
-                                                      objResultClient.APIClientID, objResultClient.APIClientSecret,
-                                                      AccountingPackageInstance.Instance.Scope,
-                                                      AccountingPackageInstance.Instance.XeroAppName))
+            try
             {
-                if (AccountingPackageInstance.Instance.XeroToken != null && objResultClient.XeroID != null)
-                {
-                    endOfYearLockDate = await _service.GetEndOfYearLockDate(AccountingPackageInstance.Instance.XeroToken, objResultClient);
 
+
+                DateTime? endOfYearLockDate = null;
+                using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisation>(
+                                                          objResultClient.APIClientID, objResultClient.APIClientSecret,
+                                                          AccountingPackageInstance.Instance.Scope,
+                                                          AccountingPackageInstance.Instance.XeroAppName))
+                {
+                    if (AccountingPackageInstance.Instance.XeroToken != null && objResultClient.XeroID != null)
+                    {
+                        using (var _tokenService = new XeroService<ReturnAsyncModel, TokenInfoVM>(objResultClient.APIClientID, objResultClient.APIClientSecret,
+                                                          AccountingPackageInstance.Instance.Scope,
+                                                          AccountingPackageInstance.Instance.XeroAppName))
+                        {
+                            var token = await _service.RefreshToken(AccountingPackageInstance.Instance.XeroToken);
+                            TokenInfoVM Newtoken = new TokenInfoVM();
+                            Newtoken.access_token = token.AccessToken;
+                            Newtoken.AgencyID = objResultClient.Id;
+                            Newtoken.id_token = token.IdToken;
+                            Newtoken.refresh_token = token.RefreshToken;
+                            Newtoken.ModifiedDate = DateTime.UtcNow;
+                            Newtoken.AppName = AccountingPackageInstance.Instance.XeroAppName;
+                            Newtoken.ConnectionStatus = "SUCCESS";
+                            Newtoken.ThirdPartyAccountingAppId_ref = 1;
+                            _tokenService.UpdateToken(Newtoken);
+                            endOfYearLockDate = await _service.GetEndOfYearLockDate(token, objResultClient);
+                        }
+
+                    }
+                    return endOfYearLockDate;
                 }
-                return endOfYearLockDate;
             }
-            
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
         }
 
     }

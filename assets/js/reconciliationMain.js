@@ -99,7 +99,14 @@ $(document).ready(function () {
                 $('#endOfYearLockDate')[0].innerText = localEndDateTime;
 
             } else {
-                $('#endOfYearLock').remove();
+                if (data.ThirdPartyAccountingApp_ref != 2) {
+                    $('#endOfYearLock').show();
+                    $('#endOfYearLockDate')[0].innerText = "N/A";
+                }
+                else {
+                    $('#endOfYearLock').hide();
+                }
+                
             }
         },
         error: function (error) {
