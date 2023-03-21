@@ -978,7 +978,10 @@
         $(function () {
 
             $("#email").click(function () {
-                var chat = '@Url.Action("Chat", "Communication")';
+                //var chat = '@Url.Action("Chat", "Communication")';
+
+                let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
+
                 $('.text-danger').empty();
                 $("#sendbutton").attr("disabled", false);
                 var ClientName = $("#ddlclient option:selected").text();
@@ -991,7 +994,7 @@
                     let result = response.resultData.length;
                     console.log(result);
                     var NotInBankUnreconciledItemsCount = result;
-                    getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chat}&sentdate=${LastMailSent}`, null, function (response) {
+                    getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
                         if (response.Status == 'Success') {
                             var text = response.Recipients.toString().split(",");
                             var str = text.join(', ');

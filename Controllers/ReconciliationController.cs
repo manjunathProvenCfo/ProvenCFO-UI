@@ -224,6 +224,68 @@ namespace ProvenCfoUI.Controllers
                 return View("ReconciliationMain", objResult);
             }
         }
+        //[CheckSession]
+        //public JsonResult ReconcilationBuilAction(BulkActionParametersVM BPParameter)
+        //{
+        //    try
+        //    {
+        //        List<string> Ids;
+        //        if (BPParameter.IsAllSelected == true)
+        //        {
+        //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
+
+        //            var res =UnselectedIds.AsEnumerable().ToList();
+        //            Ids = res;
+
+        //            //var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
+        //            //if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //            //Ids = result.Select(x => x.id).ToList();
+        //            //foreach (var item in UnselectedIds)
+        //            //{
+        //            //    Ids.Remove(item);
+        //            //}
+        //        }
+        //        else
+        //        {
+        //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
+        //            Ids = BPParameter.SelectedItems.Split(',').ToList();
+        //            foreach (var item in UnselectedIds)
+        //            {
+        //                Ids.Remove(item);
+        //            }
+        //        }
+        //        if (Ids != null && Ids.Count > 0 || BPParameter.IsAllSelected==true)
+        //        {
+        //            BPParameter.Ids = Ids.ToArray();
+
+        //            string recordType = Session["RecordType"].ToString();
+        //            BPParameter.UserType = Convert.ToString(Session["UserType"]);
+        //            BPParameter.Type = recordType;
+        //            BPParameter.UserId = User.UserId;
+
+        //            using (ReconcilationService service = new ReconcilationService())
+        //            {
+        //                var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
+        //                if (returnVale>0)
+        //                    return Json(new { Message = "Success", UpdatedCount = returnVale }, JsonRequestBehavior.AllowGet);
+        //                else
+        //                    return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return Json(new { Message = "NoRecords", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //         log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+        //        throw ex;
+        //    }
+
+        //}
+
         [CheckSession]
         public JsonResult ReconcilationBuilAction(BulkActionParametersVM BPParameter)
         {
@@ -233,17 +295,13 @@ namespace ProvenCfoUI.Controllers
                 if (BPParameter.IsAllSelected == true)
                 {
                     var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
-
-                    var res =UnselectedIds.AsEnumerable().ToList();
-                    Ids = res;
-
-                    //var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
-                    //if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
-                    //Ids = result.Select(x => x.id).ToList();
-                    //foreach (var item in UnselectedIds)
-                    //{
-                    //    Ids.Remove(item);
-                    //}
+                    var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
+                    if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    Ids = result.Select(x => x.id).ToList();
+                    foreach (var item in UnselectedIds)
+                    {
+                        Ids.Remove(item);
+                    }
                 }
                 else
                 {
@@ -254,20 +312,14 @@ namespace ProvenCfoUI.Controllers
                         Ids.Remove(item);
                     }
                 }
-                if (Ids != null && Ids.Count > 0 || BPParameter.IsAllSelected==true)
+                if (Ids != null && Ids.Count > 0)
                 {
                     BPParameter.Ids = Ids.ToArray();
-
-                    string recordType = Session["RecordType"].ToString();
-                    BPParameter.UserType = Convert.ToString(Session["UserType"]);
-                    BPParameter.Type = recordType;
-                    BPParameter.UserId = User.UserId;
-
                     using (ReconcilationService service = new ReconcilationService())
                     {
                         var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
-                        if (returnVale>0)
-                            return Json(new { Message = "Success", UpdatedCount = returnVale }, JsonRequestBehavior.AllowGet);
+                        if (returnVale == true)
+                            return Json(new { Message = "Success", UpdatedCount = Ids.Count() }, JsonRequestBehavior.AllowGet);
                         else
                             return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
                     }
@@ -280,11 +332,12 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
         }
+
         [CheckSession]
         public JsonResult GetReconciliationDataCountAgencyId(string AgencyId)
         {

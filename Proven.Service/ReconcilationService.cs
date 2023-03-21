@@ -56,10 +56,16 @@ namespace Proven.Service
             string result = string.Format("Reconciliation/UpdateReconciliation?AgencyID={0}&id={1}&GLAccount={2}&BankRule={3}&TrackingCategory={4}&TrackingCategoryAdditional={5}&reconciliationActionId={6}&UserId={7}&RuleNew={8}", AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId, RuleNew);
             return PostAsync<ReturnModel>(result).Result;
         }
-        public ReturnModelBulk BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
+        //public ReturnModelBulk BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
+        //{
+        //    return PostAsync<ReturnModelBulk, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
+        //}
+
+        public ReturnModel BulkUpdateReconcilation(BulkActionParametersVM BPParameter)
         {
-            return PostAsync<ReturnModelBulk, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
+            return PostAsync<ReturnModel, BulkActionParametersVM>("Reconciliation/BulkUpdateReconcilation", BPParameter).Result;
         }
+
         public XeroReconcilationDataOnDemandRequestMainModel AddNewXeroOnDemandDataRequest(XeroReconcilationDataOnDemandRequestVM model)
         {
             return PostAsync<XeroReconcilationDataOnDemandRequestMainModel, XeroReconcilationDataOnDemandRequestVM>("Xero/AddNewXeroOnDemandDataRequest", model).Result;
