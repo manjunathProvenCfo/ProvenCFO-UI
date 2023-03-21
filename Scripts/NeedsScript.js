@@ -170,6 +170,15 @@ $(document).ready(function () {
         var EstimatedHours = '';//$('#txtEstimatedHours').val();
         //var CreatedDate = $('#createNewtask_Date').text().replace('UTC', '');
         //var UTCdate = getUTCDateTime(new Date(CreatedDate));
+
+        if (TaskTitle == "") {
+            $('#titleErrorMsg').show();
+            $('#kanbanTitle').css({ "margin": "0" })
+            return false;
+        } else {
+            $('#titleErrorMsg').hide();
+            $('#kanbanTitle').css({ "margin-bottom": "1rem" })
+        }
         var Labels = $('#divTag span').map(function (i, opt) {
             return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
         })[0];
@@ -190,12 +199,11 @@ $(document).ready(function () {
                     window.location.reload();
                     $('.close-circle').click();
                     $('.modal-backdrop').remove();
-                }
-                else {
-                    if (response.Message == "Exist") {
-                        ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
-                        return;
-                    }
+                } if (response.Message == "Exist") {
+                    ShowAlertBoxWarning("Warning!", "The title of this ticket has already been taken.");
+                    return;
+                } if (response.Message == "Empty Tag") {
+                    ShowAlertBoxWarning("Warning!", "Tag is a required field.");
                 }
             },
             failure: function (response) {
@@ -375,6 +383,10 @@ $(document).ready(function () {
         e.preventDefault();
         e.target.setAttribute("readonly", "");
     });
+});
+$("#kanban-modal-new").on('hide.bs.modal', function () {
+    $('#titleErrorMsg').hide();
+    $('#kanbanTitle').css({ "margin-bottom": "1rem" })
 });
 function ClearViewPage() {
     $('#divCommantsList').empty();

@@ -28,7 +28,7 @@ namespace Proven.Service
         }
         #region HttpClientWrapperMethods
         public StringContent PreparePostContent<T>(T model)
-        {
+        {   
             return new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
         }
         private HttpResponseMessage GetBase(string url)
@@ -75,19 +75,11 @@ namespace Proven.Service
         {
             return Prodclient.PostAsync(url, httpContent).Result;
         }
-        //public async Task<T> PostAsync<T>(string url)
-        //{
-        //    return await PostAsync<T>(url, null);
-        //}
-        //public async Task<T> PostAsyncWithCancellationToken<T>(string url,)
-        //{
-        //    return await PostAsync<T>(url, null);
-        //}
-        
+
 
         public async Task<T> PostAsync<T, C>(string url, C contentToSerialize, bool readResultDataProp = false)
         {
-            var httpContent = PreparePostContent(contentToSerialize);
+            var httpContent = new StringContent(JsonConvert.SerializeObject(contentToSerialize), Encoding.UTF8, "application/json");
             return await PostAsync<T>(url, httpContent, readResultDataProp);
         }
         public async Task<T> PostAsyncWithCancellationToken<T, C>(string url, C contentToSerialize, CancellationToken? cancellationToken=null, bool readResultDataProp = false)

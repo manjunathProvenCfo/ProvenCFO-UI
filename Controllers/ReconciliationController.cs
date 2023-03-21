@@ -24,6 +24,10 @@ using System.Web.Http;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
 using RouteAttribute = System.Web.Mvc.RouteAttribute;
+using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -220,6 +224,68 @@ namespace ProvenCfoUI.Controllers
                 return View("ReconciliationMain", objResult);
             }
         }
+        //[CheckSession]
+        //public JsonResult ReconcilationBuilAction(BulkActionParametersVM BPParameter)
+        //{
+        //    try
+        //    {
+        //        List<string> Ids;
+        //        if (BPParameter.IsAllSelected == true)
+        //        {
+        //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
+
+        //            var res =UnselectedIds.AsEnumerable().ToList();
+        //            Ids = res;
+
+        //            //var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
+        //            //if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //            //Ids = result.Select(x => x.id).ToList();
+        //            //foreach (var item in UnselectedIds)
+        //            //{
+        //            //    Ids.Remove(item);
+        //            //}
+        //        }
+        //        else
+        //        {
+        //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
+        //            Ids = BPParameter.SelectedItems.Split(',').ToList();
+        //            foreach (var item in UnselectedIds)
+        //            {
+        //                Ids.Remove(item);
+        //            }
+        //        }
+        //        if (Ids != null && Ids.Count > 0 || BPParameter.IsAllSelected==true)
+        //        {
+        //            BPParameter.Ids = Ids.ToArray();
+
+        //            string recordType = Session["RecordType"].ToString();
+        //            BPParameter.UserType = Convert.ToString(Session["UserType"]);
+        //            BPParameter.Type = recordType;
+        //            BPParameter.UserId = User.UserId;
+
+        //            using (ReconcilationService service = new ReconcilationService())
+        //            {
+        //                var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
+        //                if (returnVale>0)
+        //                    return Json(new { Message = "Success", UpdatedCount = returnVale }, JsonRequestBehavior.AllowGet);
+        //                else
+        //                    return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return Json(new { Message = "NoRecords", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //         log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+        //        throw ex;
+        //    }
+
+        //}
+
         [CheckSession]
         public JsonResult ReconcilationBuilAction(BulkActionParametersVM BPParameter)
         {
@@ -266,11 +332,12 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
         }
+
         [CheckSession]
         public JsonResult GetReconciliationDataCountAgencyId(string AgencyId)
         {
@@ -511,7 +578,7 @@ namespace ProvenCfoUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult ReconcilationNewMain(string RecordType= NotInBooks)
+        public ActionResult ReconciliationNewMain(string RecordType= NotInBooks)
         {
             int AgencyID = 0;
             List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
@@ -521,11 +588,28 @@ namespace ProvenCfoUI.Controllers
                 var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                 AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
             }
+
+            ViewBag.XeroConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus;
+            ViewBag.XeroStatusMessage = AccountingPackageInstance.Instance.ConnectionMessage;
+            ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
             using (IntigrationService objIntegration = new IntigrationService())
             {
+                    ReconcilationService objReConcilation = new ReconcilationService();
+                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                getallAction.ForEach(x => x.ActionName = x.ActionName);
+                using (ClientService objClientService = new ClientService())
+                {
+                    var ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                    ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
+
+                    Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time;
+                    var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
+                    TempData["NotInBank"] = AccountingPackage;
+                }
                 if (RecordType == NotInBank)
                 {
                     ViewBag.isvisibleGlAccount = true;
+                    TempData["Action"] = getallAction;
                 }
                 else
                 {
@@ -533,9 +617,12 @@ namespace ProvenCfoUI.Controllers
                 }
                 if (userType == "1")
                 {
+
                     ViewBag.IsStaffUser = true;
                     ViewBag.IsBankRuleVisible = true;
-              
+                    TempData["BankRule"] = getBankRule();
+                    TempData["ReconciledStatus"] = getReconciledStatus();
+
                 }
                 else
                 {
@@ -544,32 +631,106 @@ namespace ProvenCfoUI.Controllers
                 var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                 glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                 TempData["GLAccounts"] = glAccountList;
+                var data= getDistincAccount(AgencyID, RecordType);
+                TempData["DistinctAccount"] = data;
+                List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
+                if (objTCList != null && objTCList.Count > 0)
+                {
+                    List<XeroTrackingOptionGroupVM> TCgroup = (from p in objTCList
+                                                               group p by p.Name into g
+                                                               select new XeroTrackingOptionGroupVM { Name = g.Key, Options = g.ToList() }).ToList();
+                    TempData["TrackingCategories"] = TCgroup;
+                }
             }
             
             ViewBag.UserType = userType;
-            
+            ViewBag.UserId = User.UserId;
+
             Session["RecordType"] = RecordType;
             ViewBag.RecordType = RecordType;
 
             return View("Reconciliation_New");
 
-        }
+        }    
 
 
         [HttpPost]  
-        public JsonResult ReconcilationPaginiation() {
+        public async Task<JsonResult> ReconcilationPaginiation() {
+
+            ReconciliationFilterVW filter;
             var draw = Request.Form.GetValues("draw").FirstOrDefault();
             var start = Request.Form.GetValues("start").FirstOrDefault();
             var length = Request.Form.GetValues("length").FirstOrDefault();
             var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
             var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-            var searchValue = Request.Form.GetValues("search[value]").FirstOrDefault();
-             
+
+            var searchValue = Request.Form.GetValues("search[value]").First();
+
+
+            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&]+");
+              
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             string recordType = (string)Session["RecordType"];
+       
+            var normalize =new Regex("=&",RegexOptions.Multiline);//=-1&
+            var checkFilter = new Regex("^[?]", RegexOptions.Multiline);
+            var match = new Regex(@"(?<=\=)[A-Za-z0-9\n\t\r\s-1\/#]+", RegexOptions.Multiline);
+            bool IsFilter = false;
 
-      
+
+
+            string f_dateRangeFrom = "";  
+            string f_dateRangeTo = "";
+            string f_amountMin = "";
+            string f_amountMax = "";
+            string f_bankRule = "";
+            string f_trackingCategory ="";
+            string f_trackingCategory2 ="";
+            string f_filterType = "";
+            string f_agencyId ="";
+            string f_type = "";
+            string f_ruleNew ="";
+            string accountName = "";
+            if (checkFilter.IsMatch(searchValue))
+            {
+                var _account = specialCase.Match(searchValue);
+
+                var nameac = _account.Value;
+                var found = nameac.Split('&');
+
+
+
+                IsFilter = true;
+                searchValue = normalize.Replace(searchValue, @"=-1&");
+
+                var matches = match.Matches(searchValue);
+
+                  accountName = matches[0].Value;
+
+                if (found.Length > 2)
+                {
+
+                    accountName=found[0] + "&" + found[1];
+                }
+
+                f_dateRangeFrom = matches[1].Value;
+                 f_dateRangeTo = matches[2].Value;
+                 f_amountMin = matches[3].Value;
+                 f_amountMax = matches[4].Value;
+                 f_bankRule = matches[5].Value;
+                 f_trackingCategory = matches[6].Value;
+                 f_trackingCategory2 = matches[7].Value;
+                 f_filterType = matches[8].Value;
+                 f_agencyId = matches[9].Value;
+                 f_type = matches[10].Value;
+                 f_ruleNew = matches[11].Value;
+
+
+
+
+
+            }
             using (ReconcilationService objReConcilation = new ReconcilationService())
             {
 
@@ -580,20 +741,97 @@ namespace ProvenCfoUI.Controllers
                 {
                     var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                     AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
+
+                }
+                
+                ReconciliationMainModelPaging objResult;
+                if (IsFilter) {
+
+
+                    filter = new ReconciliationFilterVW()
+                    {
+
+                        pageNo = skip,
+                        pageSize = pageSize,
+                        sortField = sortColumn,
+                        sortOrder = sortColumnDir,
+                        AgencyId = AgencyID,
+                        type1 = recordType,
+                        Isreconciled = f_type,
+                        Filters = "",
+                        IsFilter=true,
+                        accounts=accountName,
+                        Bankrule=f_bankRule,
+                        RuleNew = f_ruleNew == "" ? "false" : f_ruleNew,
+                        totalcount =0,
+                        FilterType=f_filterType,
+                        amountMax= f_amountMax==""?"0":f_amountMax,
+                        amountMin = f_amountMin==""?"0":f_amountMin,
+                        TrackingCategory1=f_trackingCategory,
+                        TrackingCategory2=f_trackingCategory2,
+                        dateRangeFrom=f_dateRangeFrom,
+                        dateRangeTo  = f_dateRangeTo,
+                        userId = UserPref[0].UserID,
+                                type = recordType
+
+                    };
+                }
+                else
+                {
+                    filter = new ReconciliationFilterVW()
+                    {
+                        pageNo = skip,
+                        pageSize = pageSize,
+                        sortField = sortColumn,
+                        sortOrder = sortColumnDir,
+                        AgencyId = AgencyID,
+                        type1 = recordType,
+                        Isreconciled = f_type==""?"Unreconciled":f_type,
+                        Filters = searchValue,
+                        IsFilter = false,
+                        accounts=accountName,
+                        Bankrule = f_bankRule,
+                        RuleNew = f_ruleNew==""?"false":f_ruleNew,
+                        totalcount = 0,
+                        FilterType = f_filterType,
+                        amountMax = f_amountMax == "" ? "0" : f_amountMax,
+                        amountMin = f_amountMin == "" ? "0" : f_amountMin,
+                        TrackingCategory1 = f_trackingCategory,
+                        TrackingCategory2 = f_trackingCategory2,
+                        dateRangeFrom = f_dateRangeFrom,
+                        dateRangeTo = f_dateRangeTo,
+                       userId = UserPref[0].UserID,
+                       type = recordType
+
+                    };
+
                 }
 
-                ReconciliationMainModelPaging objResult;
                 try
                 {
-                 objResult= objReConcilation.GetReconciliationList(skip, pageSize, sortColumn, sortColumnDir, AgencyID.ToString(), recordType, "0", searchValue, User.UserId);
+
+                    var response = ReconciliationController.ClientPostRequest(@"Reconciliation/GetReconciliationPagingList", filter);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        objResult= JsonConvert.DeserializeObject<ReconciliationMainModelPaging>(
+                            Newtonsoft.Json.Linq.JObject.Parse(content).ToString());
+                    }
+                    else
+                    {
+                        string msg = response.ReasonPhrase;
+                        throw new Exception(msg);
+                    }
 
                     return Json(new
                     {
                         draw = draw,
-                        recordsFiltered = searchValue!=null&&searchValue.Length>0?objResult.ResultData.company_ReconciliationVMs.Count :objResult.ResultData.totalcount,
+                        recordsFiltered = searchValue != null && searchValue.Length > 0 ? objResult.ResultData.totalcount : objResult.ResultData.totalcount,
                         recordsTotal = objResult.ResultData.totalcount,
                         data = objResult.ResultData.company_ReconciliationVMs
                     });
+
                 }
                 catch (Exception ex) 
                 {
@@ -607,10 +845,22 @@ namespace ProvenCfoUI.Controllers
                 });
             }
 
-        } 
+        }
+
+
+        private static HttpResponseMessage ClientPostRequest(string RequestURI, ReconciliationFilterVW emp)
+        {
+            HttpClient client = new HttpClient();
+            var url = Convert.ToString(ConfigurationManager.AppSettings["provencfoapi"]);
+            client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.PostAsJsonAsync(RequestURI, emp).Result;
+            return response;
+        }
         [CheckSession]
         [HttpPost]
-        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, string UserId, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0, bool RuleNew = false)
+        public JsonResult UpdateReconciliation(int AgencyID, string id, int GLAccount, string BankRule, int TrackingCategory, string UserId, int TrackingCategoryAdditional = 0, int reconciliationActionId = 0, bool? RuleNew = null)
         {
             //BankRule = BankRule.Replace("0", "");
             using (ReconcilationService objReConcilation = new ReconcilationService())
@@ -1092,6 +1342,27 @@ namespace ProvenCfoUI.Controllers
                 }, JsonRequestBehavior.AllowGet));
             }
 
+        }
+
+        public async Task<JsonResult> GetEndYearLockDate(int id)
+        {
+            try
+            {
+                using (ClientService objClient = new ClientService())
+                {
+                    var objResultClient = objClient.GetClientById(id);
+                    Common common = new Common();
+                    objResultClient.End_Of_YearLockDate = await common.EndOfYearLockDateAsync(objResultClient);
+
+                   //return Json(objResultClient, JsonRequestBehavior.AllowGet);
+                    return Json(new { DOMO_Last_batchrun_time = objResultClient.DOMO_Last_batchrun_time, End_Of_YearLockDate = objResultClient.End_Of_YearLockDate, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
+                throw ex;
+            }
         }
     }
 }

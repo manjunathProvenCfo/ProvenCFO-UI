@@ -92,6 +92,18 @@ namespace Proven.Model
         public object resourceType { get; set; }
         public object metaData { get; set; }
     }
+
+
+    [Serializable]
+    public class ReturnModelBulk
+    {
+        public bool status { get; set; }
+        public int statusCode { get; set; }
+        public int resultData { get; set; }
+        public string message { get; set; }
+        public object resourceType { get; set; }
+        public object metaData { get; set; }
+    }
     public class ReturnStringModel
     {
         public bool status { get; set; }

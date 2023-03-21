@@ -4,143 +4,288 @@
 @{ ViewBag.Title = "ReconciliationMain";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 
+@Styles.Render("~/bundles/css/twilio-chat")
 
+<div class="row">
+    @Html.Hidden("XeroConnectionStatus", (object)@ViewBag.XeroConnectionStatus, new { @Id = "XeroConnectionStatus" })
+    @Html.Hidden("XeroStatusMessage", (object)@ViewBag.XeroStatusMessage, new { @Id = "XeroStatusMessage" })
+    @Html.Hidden("AzureFunctionReconUrl", (object)@ViewBag.AzureFunctionReconUrl, new { @Id = "AzureFunctionReconUrl" })
+    <div class="col-md-12" id="divTable">
+        <div class="card mb-3 p-3">
+            <div class="card-header">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
+                                <span class="fas fa-book"></span>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconciliationNewMain", "Reconciliation", new { RecordType = "Unreconciled" })">Not in Books</a></h6>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
+                            </div>
 
-<div class="col-md-12" id="divTable">
-    <div class="card mb-3 p-3">
-        <div class="card-header">
-            <div class="row align-items-center justify-content-between">
-                <div class="col-4">
-                    <div class="row align-items-center">
-                        <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
-                            <span class="fas fa-book"></span>
-                            <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconcilationNewMain", "Reconciliation", new { RecordType = "Unreconciled" })">Not in Books</a></h6>
-                            <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
-                        </div>
-
-                        <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
-                            <span class="far fa-credit-card"></span>
-                            <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconcilationNewMain", "Reconciliation", new { RecordType = "Outstanding Payments" })">Not in Banks</a></h6>
-                            <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
+                            <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
+                                <span class="far fa-credit-card"></span>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("ReconciliationNewMain", "Reconciliation", new { RecordType = "Outstanding Payments" })">Not in Banks</a></h6>
+                                <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-4">
-                    <div style="display: block; text-align: center" id="domoLastBatchRun">
-                        <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
+                    <div class="col-4">
+                        <div style="display: none; text-align: center" id="domoLastBatchRun">
+                            <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-4 col-sm-auto ml-auto text-right pl-0">
+                    <div class="col-4 col-sm-auto ml-auto text-right pl-0">
 
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex">
-                            @if (ViewBag.IsStaffUser == true)
-                            {
-                                <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
-                                    <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex">
+                                @if (ViewBag.IsStaffUser == true)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="email" type="button" title="Email" data-toggle="modal" data-target="#myModal">
+                                        <span class="fa fa-envelope" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block "></span>
+                                    </button>
+
+
+                                }
+                                <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
+
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
+                                    <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
+                                </button>
+
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
+                                    <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
                                 </button>
 
 
-                            }
-                            <input type="hidden" value="@ViewBag.AccountingPackage" id="hdAccointingPackage" />
+                                @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
 
-                            <button class="btn btn-falcon-default btn-sm mx-1" id="btnImportReconcilition" type="button" title="Import">
-                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Import</span>
-                            </button>
+                                }
+                                else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
+                                {
+                                    <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandDataPlaid" type="button" title="Request on-demand Plaid data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                }
 
-                            <button class="btn btn-falcon-default btn-sm mx-1" id="ibulkupdate" type="button" title="Bulk Update">
-                                <span class="" data-fa-transform="shrink-3 down-2 m-2 p"></span><span class="d-none d-sm-inline-block ">Bulk Update</span>
-                            </button>
-
-
-                            @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
-                            {
-                                <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-
-                            }
-                            else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
-                            {
-                                <button class="btn btn-falcon-default btn-sm mx-1 d-none" id="OnDemandDataPlaid" type="button" title="Request on-demand Plaid data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
-                            }
-
-
-
-
-
-                            <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
-                            <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1 d-none " id="ichat" type="button"><span class="fas fa-comment-dots" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                                <button class="btn btn-falcon-default btn-sm mx-1" id="Filter" type="button" title="Apply filter"><span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block "></span></button>
+                            </div>
                         </div>
-
-
                     </div>
+                </div>
 
-
-
-
-
+                <div class="row justify-content-center">
+                    <div class="col-4 text-center" id="endOfYearLock" style="display: none">
+                        <b>End Of Year Lock Date: </b><span id="endOfYearLockDate"></span>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="card-body px-0 pt-0">
+                <table id="example" class="display table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                </div>
+                            </th>
+                            <th>Account</th>
+                            <th>Date</th>
+                            <th>Who</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            @if (ViewBag.isvisibleGlAccount)
+                            {
 
+                                <th>GL Account</th>
+                            }
+                            @if (ViewBag.IsBankRuleVisible)
+                            {
 
-        <div class="card-body px-0 pt-0">
-            <table id="example" class="display table" style="width:100%">
-                <thead>
-                    <tr>
-                        <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
-                                <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
-                            </div>
-                        </th>
-                        <th>Account</th>
-                        <th>Date</th>
-                        <th>Who</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        @if (ViewBag.isvisibleGlAccount) {
-                        
-                            <th>GL Account</th>
-                        }
-                        @if (ViewBag.IsBankRuleVisible) { 
-                        
-                             <th>Rule</th>
-                        }
-                    </tr>
-                </thead>
+                                <th>Rule</th>
+                            }
+                            <th class="top no-sort align-middle data-table-row-action"></th>
+                        </tr>
+                    </thead>
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
+    <div class="col-md-4 p-l-2 d-none" id="divChat">
+        @Html.Partial("_communicationReconcilation", true)
     </div>
-    @{
-        var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
+    <div class="col-md-4 p-l-2 d-none" id="divFilter">
+        @Html.Partial("_reconcilationFilter", true)
+    </div>
+    <div class="col-md-4 p-l-2 d-none" id="divBulkUpdate">
+        @Html.Partial("_reconcilationBulkupdate", true)
+    </div>
+</div>
+
+@if (ViewBag.AccountingPackage == 2)
+{
+    @Html.Partial("ReconciliationQuickBookFileUploaderPartial")
+}
+else
+{
+    @Html.Partial("_ReconciliationFileUploaderPartial")
+}
+@Html.Partial("_ReconcilationEmail", true)
+@Html.Partial("_ReconcilationEditComment", true)
 
 
+@{
+    var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
+}
+<select id="all-gl-accounts" hidden>
+    @for (var o = 0; o < gl_accounts.Count; o++)
+    {
+        <option value="@gl_accounts[o].Id">@gl_accounts[o].Name</option>
+        ;
 
     }
+</select>
 
-
-    <select id="all-gl-accounts" hidden>
-        @for (var o = 0; o < gl_accounts.Count; o++)
-        {
-            <option value="@gl_accounts[o].Id">@gl_accounts[o].Name</option>
-            ;
-
-        }
-    </select>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/js/table")
-        <script>
+@section Scripts {
+    @Scripts.Render("~/bundles/js/table")
+    <script>
         //Configure permission globals
             const UserType = "@ViewBag.UserType";
             const RecordType= "@ViewBag.RecordType";
             const GlAccountVisible = "@ViewBag.isvisibleGlAccount";
             const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
-        </script>
-        <script src="~/assets/js/ReconciliationNew.js"></script>
-    }
+    </script>
+
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    @Scripts.Render("~/bundles/lib/twilio-chat-lib")
+    @Scripts.Render("~/bundles/js/kanban")
+    @Scripts.Render("~/bundles/js/reconcilation-comments")
+    @Scripts.Render("~/bundles/js/imports")
+    @Scripts.Render("~/bundles/js/toastr")
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            chat.userId = "@ViewBag.UserId";
+            chat.userEmail = userEmailAddress;
+            chat.type = 1;
+            chat.forReconciliationIconColor = true;
+        })
+
+        function replaceAll(string, search, replace) {
+            return string.split(search).join(replace);
+        }
+        function FillterReconcilation() {
+            var account = $('#filteraccounts').val().join(',');
+            var ClientID = $("#ddlclient option:selected").val();
+            var fromDate, toDate;
+            var filterReconcilationcategories = 0;
+            var IsNotinBooks = $('#tabNotinBooks').hasClass('tabselect');
+            var type = 'Outstanding Payments';
+            if (IsNotinBooks == true) {
+                type = 'Unreconciled';
+                sessionStorage.setItem('Type', 0);
+            }
+            else {
+                sessionStorage.setItem('Type', 1);
+            }
+
+            if ($('#rb1').prop('checked') == true) {
+                filterReconcilationcategories = 1;
+            }
+            else if ($('#rb2').prop('checked') == true) {
+                filterReconcilationcategories = 2;
+            }
+            else if ($('#rb3').prop('checked') == true) {
+                filterReconcilationcategories = 3;
+            }
+
+            var datepicker = $("#timepicker2").val();
+            if (datepicker.includes("to")) {
+                this.fromDate = datepicker.substring(0, datepicker.indexOf("to")).trim();
+                this.toDate = datepicker.substring(datepicker.indexOf("to") + 2).trim();
+            } else {
+                this.fromDate = datepicker;
+                this.toDate = datepicker;
+            }
+            var MinAmount = $("#filterMinAmount").val();
+            var MaxAmount = $("#filterMaxAmount").val();
+            var bankrule = "";
+            var TrackingCategories = $("#TrackingCategories").val() != undefined ? $("#TrackingCategories").val().join(',') : '';
+            var TrackingCategories_1 = $("#TrackingCategories_1").val() != undefined ? $("#TrackingCategories_1").val().join(',') : '';
+            var RuleNewStr = $('#filterRule_New').val();
+            if (RuleNewStr != "") {
+                var ruleNew = "true" === RuleNewStr;
+            }
+            var pdata = {
+                accounts: account,
+                dateRangeFrom: this.fromDate,
+                dateRangeTo: this.toDate,
+                amountMin: MinAmount,
+                amountMax: MaxAmount,
+                Bankrule: bankrule,
+                TrackingCategory1: TrackingCategories,
+                TrackingCategory2: TrackingCategories_1,
+                FilterType: filterReconcilationcategories,
+                AgencyID: ClientID,
+                Type: type,
+                selectedDate: datepicker,
+                RuleNew: ruleNew
+            }
+
+            sessionStorage.setItem('Filter', JSON.stringify(pdata));
+
+            var url = '@Url.Action("GetFilteredReconcilationdata", "Reconciliation", new { accounts = "_accounts",
+                              dateRangeFrom = "_dateRangeFrom",
+                              dateRangeTo = "_dateRangeTo",
+                              amountMin = "_amountMin",
+                              amountMax = "_amountMax",
+                              Bankrule = "_Bankrule",
+                              TrackingCategory1 = "_TrackingCategory1",
+                              TrackingCategory2 = "_TrackingCategory2",
+                              FilterType = "_FilterType",
+                              AgencyID = "_AgencyID",
+                              Type = "_Type",
+                              RuleNew = "_RuleNew"
+                          })';
+            url = url.replace('_accounts', account);
+            url = url.replace('_dateRangeFrom', this.fromDate);
+            url = url.replace('_dateRangeTo', this.toDate);
+            url = url.replace('_amountMin', MinAmount);
+            url = url.replace('_amountMax', MaxAmount);
+            url = url.replace('_Bankrule', bankrule);
+            url = url.replace('_TrackingCategory1', TrackingCategories);
+            url = url.replace('_TrackingCategory2', TrackingCategories_1);
+            url = url.replace('_FilterType', filterReconcilationcategories);
+            url = url.replace('_AgencyID', ClientID);
+            url = url.replace('_Type', type);
+            url = url.replace('_RuleNew', ruleNew)
+            url = replaceAll(url, '\&amp;', '&');
+            url = replaceAll(url, '#', '%23');
+            url = replaceAll(url, '(', '%28');
+            url = replaceAll(url, ')', '%29');
+   
+            //window.location.href = url;
+            //HidelottieLoader();
+
+
+            let dbTable = $("#example").DataTable();
+            url = url.split('?')[1];
+            dbTable.search(`??${url}??`).draw();
+            dbTable.search('');
+            
+     
+        }
+    </script>
+    <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>
+    <script src="~/assets/js/reconciliationUploader.js"></script>
+    <script src="~/assets/js/ReconciliationNew.js"></script>
+}
 

@@ -46,7 +46,7 @@ namespace Proven.Model
         public DateTime? GlAccountModifiedDate { get; set; }
         public string GlAccountModifiedBy { get; set; }
         public string ActionModifiedBy { get; set; }
-		public string type { get; set; }
+        public string type { get; set; }
         public bool? RuleNew { get; set; }
         public string fdate { get; set; }
     }
@@ -99,4 +99,46 @@ namespace Proven.Model
         public object metaData { get; set; }
 
     }
+
+    public class ReconciliationFilterVW
+    {
+        public int pageNo { get; set; }
+        public int pageSize { get; set; }
+        public string sortField { get; set; }
+        public string sortOrder { get; set; }
+        public int AgencyId { get; set; }
+        public string type1 { get; set; }
+        public string Isreconciled { get; set; }
+        public string Filters { get; set; }
+        public string userId { get; set; }
+        public int? totalcount { get; set; }
+
+        public string accounts { get; set; }
+        public string dateRangeFrom { get; set; }
+
+        public string dateRangeTo { get; set; }
+
+
+        public string amountMin { get; set; }
+
+        public string amountMax { get; set; }
+
+        public string Bankrule { get; set; }
+
+        public string TrackingCategory1 { get; set; }
+
+        public string TrackingCategory2 { get; set; }
+
+
+        public string FilterType { get; set; }
+
+
+        public string type { get; set; }
+
+        public string RuleNew { get; set; }
+
+        public bool? IsFilter { get; set; }
+
+    }
+
 }

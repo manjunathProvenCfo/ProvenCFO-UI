@@ -181,8 +181,8 @@ var color = {
         "echartColorCode": "#ff0000"
     },
     "High": {
-        "className": "bg-orange",
-        "echartColorCode": "#F68F57"
+        "className": "bg-yellow",
+        "echartColorCode": "#FFDB74"
     },
     "Medium": {
         "className": "bg-light-blue",
@@ -527,7 +527,7 @@ function AgencyDropdownPartialViewChange() {
         success: function (data) {
             if (data != null) {
                 HidelottieLoader();
-                debugger;
+            
                 MenuOptionHideAndShow(ClientID);
                 GetReconcilationData();
                 GetReconcilationData1();
@@ -638,7 +638,7 @@ function GetReconcilationData() {
                     totalSum1 = data[0].Count;
                     $("#divNotInBankPercentage").html(`<div class="progress-circle" id="divNotInBankPercentage1" data-options='{"color":"url(#gradient)","progress":${percentage},"strokeWidth":5,"trailWidth":5}'></div>`)
                     utils.addProgressCircle("#divNotInBankkPercentage1");
-                    debugger;
+                
                     sessionStorage.setItem("NotInBanksData", JSON.stringify(data));
                 }
                 else {
@@ -729,15 +729,15 @@ function GetReconcilationData1() {
 
 function TotalSum(totalSum1, totalSum2) {
     let totalsum3 = 0;
-    if (isNaN(totalSum1 + totalSum2)) {
-        $("#lblNotInCount").addClass('d-none');
-    }
-    else {
-        $("#lblNotInCount").removeClass('d-none');
-        totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
-        $("#lblNotInCount").text(totalsum3);
+    //if (isNaN(totalSum1 + totalSum2)) {
+    //    $("#lblNotInCount").addClass('d-none');
+    //}
+    //else {
+    //    $("#lblNotInCount").removeClass('d-none');
+    //    totalsum3 = isNaN(totalSum1 + totalSum2) ? 0 : Number(totalSum1 + totalSum2);
+    //    $("#lblNotInCount").text(totalsum3);
 
-    }
+    //}
 }
 
 

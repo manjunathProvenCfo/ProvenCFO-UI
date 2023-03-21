@@ -13,6 +13,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Xero.NetStandard.OAuth2.Token;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace ProvenCfoUI.Comman
 {
@@ -222,7 +225,7 @@ namespace ProvenCfoUI.Comman
                 }
                 //XeroService Xero = new XeroService("8CED4A15FB7149198DB6260147780F6D", "MHr607yAVALE1EX6QrhwOYYeCrQePcrRAfofw056YTK6qWg8", scope);
 
-                dynamic AppPackage = null ;
+                dynamic AppPackage = null;
                 switch (client.ThirdPartyAccountingApp_ref.Value)
                 {
                     case 1:
@@ -236,7 +239,7 @@ namespace ProvenCfoUI.Comman
                     default:
                         break;
                 }
-               
+
                 //XeroService<IXeroToken, TokenInfoVM> Xero = new XeroService<IXeroToken, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, AccountingPackageInstance.Instance.Scope, AccountingPackageInstance.Instance.XeroAppName)
 
 
@@ -245,20 +248,20 @@ namespace ProvenCfoUI.Comman
                     Task.Run(async () =>
                     {
                         TokenInfoVM TokenInfoSaved = AppPackage.GetSavedToken(client.Id).ResultData;
-                        
+
                         if (TokenInfoSaved != null)
                         {
                             try
                             {
                                 string accessToken = string.Empty, IdToken = string.Empty, RefreshToken = string.Empty;
-                                var token = AppPackage.getTokenFormat(TokenInfoSaved);                                                                                             
+                                var token = AppPackage.getTokenFormat(TokenInfoSaved);
                                 switch (client.ThirdPartyAccountingApp_ref.Value)
                                 {
                                     case 1:
                                         accessToken = token.AccessToken;
                                         IdToken = token.IdToken;
                                         RefreshToken = token.RefreshToken;
-                                        TokenInfoSaved.expires_in =Convert.ToInt32((token.ExpiresAtUtc - DateTime.UtcNow).TotalSeconds);
+                                        TokenInfoSaved.expires_in = Convert.ToInt32((token.ExpiresAtUtc - DateTime.UtcNow).TotalSeconds);
                                         AccountingPackageInstance.Instance.XeroToken = token;
                                         break;
                                     case 2:
@@ -271,26 +274,26 @@ namespace ProvenCfoUI.Comman
                                     default:
                                         break;
                                 }
-                                if(TokenInfoSaved.access_token != accessToken)
+                                if (TokenInfoSaved.access_token != accessToken)
                                 {
                                     TokenInfoSaved.access_token = accessToken;
                                     TokenInfoSaved.id_token = IdToken;
-                                    TokenInfoSaved.refresh_token = RefreshToken;                                    
+                                    TokenInfoSaved.refresh_token = RefreshToken;
                                     TokenInfoSaved.ModifiedDate = DateTime.UtcNow;
                                     TokenInfoSaved.AppName = AccountingPackageInstance.Instance.XeroAppName;
                                     TokenInfoSaved.ConnectionStatus = "SUCCESS";
                                     TokenInfoSaved.ThirdPartyAccountingAppId_ref = client.ThirdPartyAccountingApp_ref;
                                     AppPackage.UpdateToken(TokenInfoSaved);
                                 }
-                               
-                                
+
+
                                 AccountingPackageInstance.Instance.ConnectionStatus = true;
                                 AccountingPackageInstance.Instance.ConnectionMessage = string.Empty;
                             }
                             catch (Exception ex)
                             {
-                               
-                                   log.Error(Utltity.Log4NetExceptionLog(ex));
+
+                                log.Error(Utltity.Log4NetExceptionLog(ex));
                                 TokenInfoSaved.ConnectionStatus = "ERROR";
                                 AppPackage.UpdateToken(TokenInfoSaved);
                                 CleanToken();
@@ -391,13 +394,13 @@ namespace ProvenCfoUI.Comman
                     int currQuarter = (datetime.Month - 1) / 3 + 1;
                     result.StartDate = new DateTime(datetime.AddYears(-1).Year, datetime.AddYears(-1).Month, 1);  //new DateTime(datetime.Year, 3 * currQuarter - 2, 1);
                     result.EndDate = datetime.AddMonths(1).AddDays(-1); //datetime.AddDays(1 - datetime.Day).AddMonths(3 - (datetime.Month - 1) % 3).AddDays(-1);
-                    result.timeframe = "Month";                   
+                    result.timeframe = "Month";
                     break;
                 case ChartOptions.Option_1:
                     //int PreviousQuarter = (datetime.Month - 1) / 3 ;
                     result.StartDate = new DateTime(datetime.AddMonths(-6).Year, datetime.AddMonths(-6).Month, 1);//new DateTime(datetime.Year, 3 * PreviousQuarter - 2, 1);
                     result.EndDate = datetime.AddMonths(1).AddDays(-1);// datetime.AddDays(1 - datetime.Day).AddMonths((datetime.Month - 1) % 3).AddDays(-1);
-                    result.timeframe = "Month";                   
+                    result.timeframe = "Month";
                     break;
                 case ChartOptions.Option_2:
                     result.StartDate = new DateTime(datetime.AddMonths(-3).Year, datetime.AddMonths(-3).Month, 1); ;// new DateTime(datetime.Year, 1, 1);
@@ -549,7 +552,7 @@ namespace ProvenCfoUI.Comman
             else
                 return date.AddDays(1).AddMonths(1).AddDays(-1);
         }
-        public static DateTime PreviousMonth(DateTime date,int NumberofMonth)
+        public static DateTime PreviousMonth(DateTime date, int NumberofMonth)
         {
             if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
                 return date.AddMonths(NumberofMonth);
@@ -557,6 +560,173 @@ namespace ProvenCfoUI.Comman
                 return date.AddDays(NumberofMonth).AddMonths(NumberofMonth).AddDays(1);
         }
 
+        public static void Compressimage(string targetPath, string fileName, Byte[] byteArrayIn)
+        {
+            try
+            {
+                //System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
+
+                using (MemoryStream memstr = new MemoryStream(byteArrayIn))
+                {
+                    using (var image = Image.FromStream(memstr))
+                    {
+                        float maxHeight = 400.0f;
+                        float maxWidth = 400.0f;
+                        int newWidth;
+                        int newHeight;
+                        string extention;
+                        Bitmap originalBMP = new Bitmap(memstr);//Representing my image.
+                        int originalWidth = originalBMP.Width;
+                        int originalHeight = originalBMP.Height;
+
+                        if (originalWidth > maxWidth || originalHeight > maxHeight)
+                        {
+                            //To preserve the acpect ratio
+                            float ratioX = (float)maxWidth / (float)originalWidth;
+                            float rationY = (float)maxHeight / (float)originalHeight;
+                            float ratio = Math.Min(ratioX, rationY);
+                            newWidth = (int)(originalWidth * ratio);
+                            newHeight = (int)(originalHeight * ratio);
+                        }
+                        else
+                        {
+                            newWidth = (int)originalWidth;
+                            newHeight = (int)originalHeight;
+                        }
+                        Bitmap bitMAP1 = new Bitmap(originalBMP, newWidth, newHeight);
+                        Graphics imgGraph = Graphics.FromImage(bitMAP1);
+                        extention = Path.GetExtension(targetPath);
+                        if (extention.ToLower() == ".png" || extention.ToLower() == ".jpeg")
+                        {
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            //imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+
+                            //ImageFormat imageFormat = null;
+                            //if (extention.ToLower() == ".png")
+                            //{
+                            //    imageFormat = ImageFormat.Png;
+                            //}
+                            //else if (extention.ToLower() == ".gif")
+                            //{
+                            //    imageFormat = ImageFormat.Gif;
+                            //}
+                            //else
+                            //{
+                            //    imageFormat = ImageFormat.Jpeg;
+                            //}
+
+                            //ImageCodecInfo imgEncoder = GetEncoder(imageFormat);
+                            //System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+                            //EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            //EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 1L);
+
+                            //myEncoderParameters.Param[0] = myEncoderParameter;
+                            //bitMAP1.Save(targetPath, imgEncoder, myEncoderParameters);
+
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+                            bitMAP1.Save(targetPath, image.RawFormat);
+
+                            bitMAP1.Dispose();
+                            imgGraph.Dispose();
+                            originalBMP.Dispose();
+                        }
+                        else if (extention.ToLower() == ".jpg")
+                        {
+
+                            imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+
+                            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+                            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 20L);
+                            myEncoderParameters.Param[0] = myEncoderParameter;
+
+                            bitMAP1.Save(targetPath, jpgEncoder, myEncoderParameters);
+
+                            //imgGraph.SmoothingMode = SmoothingMode.AntiAlias;
+                            //imgGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            //imgGraph.DrawImage(originalBMP, 0, 0, newWidth, newHeight);
+                            //bitMAP1.Save(targetPath, image.RawFormat);
+
+                            bitMAP1.Dispose();
+                            imgGraph.Dispose();
+                            originalBMP.Dispose();
+
+                        }
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+
+            }
+        }
+
+
+        public static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
+        public async Task<DateTime?> EndOfYearLockDateAsync(ClientModel objResultClient)
+        {
+            try
+            {
+
+
+                DateTime? endOfYearLockDate = null;
+                using (var _service = new XeroService<IXeroToken, Xero.NetStandard.OAuth2.Model.Accounting.Organisation>(
+                                                          objResultClient.APIClientID, objResultClient.APIClientSecret,
+                                                          AccountingPackageInstance.Instance.Scope,
+                                                          AccountingPackageInstance.Instance.XeroAppName))
+                {
+                    if (AccountingPackageInstance.Instance.XeroToken != null && objResultClient.XeroID != null)
+                    {
+                        using (var _tokenService = new XeroService<ReturnAsyncModel, TokenInfoVM>(objResultClient.APIClientID, objResultClient.APIClientSecret,
+                                                          AccountingPackageInstance.Instance.Scope,
+                                                          AccountingPackageInstance.Instance.XeroAppName))
+                        {
+                            var token = await _service.RefreshToken(AccountingPackageInstance.Instance.XeroToken);
+                            TokenInfoVM Newtoken = new TokenInfoVM();
+                            Newtoken.access_token = token.AccessToken;
+                            Newtoken.AgencyID = objResultClient.Id;
+                            Newtoken.id_token = token.IdToken;
+                            Newtoken.refresh_token = token.RefreshToken;
+                            Newtoken.ModifiedDate = DateTime.UtcNow;
+                            Newtoken.AppName = AccountingPackageInstance.Instance.XeroAppName;
+                            Newtoken.ConnectionStatus = "SUCCESS";
+                            Newtoken.ThirdPartyAccountingAppId_ref = 1;
+                            _tokenService.UpdateToken(Newtoken);
+                            endOfYearLockDate = await _service.GetEndOfYearLockDate(token, objResultClient);
+                        }
+
+                    }
+                    return endOfYearLockDate;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
+        }
 
     }
 

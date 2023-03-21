@@ -43,17 +43,12 @@ $(document).ready(function () {
 
     $(document).on("click", "button[id=btnComment]", async function (e) {
 
-
-
         resetScrollChatState(e.currentTarget.dataset.id);
         await showReconciliationChat(e.currentTarget.dataset.id);
-
-
-
     });
 
     var showReconciliationChat = async function (channelUniqueNameGuid) {
-
+      
         resetScrollChatState(channelUniqueNameGuid);
         $('#divFilter').hide();
         $('#divFilter').addClass('d-none');
@@ -62,8 +57,6 @@ $(document).ready(function () {
         $('#divChat').show();
         $('#divChat').removeClass('d-none');
         $('#divTable').addClass('col-md-8').removeClass('col-md-12');
-
-
 
         await loadCommentsPage(channelUniqueNameGuid);
 
@@ -74,7 +67,7 @@ $(document).ready(function () {
     var agencyId = $("#ddlclient option:selected").val();
 
     $.ajax({
-        url: '/AgencyService/GetClientDetails?id=' + agencyId,
+        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -82,6 +75,7 @@ $(document).ready(function () {
 
             if (data.DOMO_Last_batchrun_time != null) {
 
+                $('#domoLastBatchRun').show();
                 let roughDate = data.DOMO_Last_batchrun_time;
                 let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
@@ -91,13 +85,34 @@ $(document).ready(function () {
                 $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
             } else {
-
                 $('#domoLastBatchRun').remove();
+            }
+
+            if (data.End_Of_YearLockDate != null) {
+
+                $('#endOfYearLock').show();
+                let roughEndDate = data.End_Of_YearLockDate;
+                let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+
+                let utcDateTime = new Date(endDateTimeMill);
+                var localEndDateTime = utcDateTime.toLocaleDateString();
+                $('#endOfYearLockDate')[0].innerText = localEndDateTime;
+
+            } else {
+                if (data.ThirdPartyAccountingApp_ref != 2) {
+                    $('#endOfYearLock').show();
+                    $('#endOfYearLockDate')[0].innerText = "N/A";
+                }
+                else {
+                    $('#endOfYearLock').hide();
+                }
+                
             }
         },
         error: function (error) {
             console.log(error);
             $('#domoLastBatchRun').remove();
+            $('#endOfYearLock').remove();
         }
     })
 });
@@ -216,18 +231,22 @@ function SetupDynamicLoaderOnScroll() {
 
 }
 
+var type = sessionStorage.getItem('Type');
+$('#ddlclient').on("change", function () {
+    sessionStorage.removeItem('Type');
+    type = 0;
+})
+$('#menu_reconciliation').on('click', function () {
+    sessionStorage.removeItem('Type');
+})
 
 $(document).ready(function () {
 
     bindNotInBooksAndBanksCount();
-
-
-
     LoadFilterData();
     SetupDynamicLoaderOnScroll();
 
     XeroConnectionUpdate();
-    var type = sessionStorage.getItem('Type');
     $('#divFilter').hide();
     $('#divChat').hide();
     sessionStorage.removeItem('SelectedRecords');
@@ -237,7 +256,7 @@ $(document).ready(function () {
         if (type == "0") {
             $('#tabNotinBooks').addClass('tabselect');
             $('#tabNotinBanks').removeClass('tabselect');
-            sessionStorage.clear();
+            sessionStorage.removeItem('Type');
         }
         else {
             $('#tabNotinBooks').removeClass('tabselect');
@@ -467,8 +486,10 @@ $(document).ready(function () {
                         sessionStorage.removeItem("NotInBooksData");
                         sessionStorage.removeItem("NotInBanksData");
 
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not)|(?<=In)/g, " ")).replace(/b/g,"B");
-
+                        //uncampatible on safari.
+                    /*    let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not|In)/g, " ")).replace(/b/g, "B");
+                       
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
                     else if (Azureresponse.status === false && Azureresponse.statusCode != 500)
@@ -668,20 +689,6 @@ function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize)
 
                 addMediaMessageLocalFolder(file);
 
-                //$.ajax({
-                //    url: "/Reconciliation/UploadReconcilationAttachmentAsync",
-                //    type: "POST",
-                //    contentType: false, // Not to set any content header  
-                //    processData: false, // Not to process data  
-                //    data: formData,
-                //    success: function (result) {
-                //        alert(result);
-                //    },
-                //    error: function (err) {
-                //        alert(err.statusText);
-                //    }
-                //});
-                ///addMediaMessage(file);
             }
         })
     });

@@ -18,20 +18,20 @@
                         <div class="row align-items-center">
                             <div class="d-flex align-items-center ml-2" id="tabNotinBooks" onclick="Tabclick(event,0); ">
                                 <span class="fas fa-book"></span>
-                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Books" })">Not in Books</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation" , new { Type="Not in Books" })">Not in Books</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBooksCount">0</span>
                             </div>
 
                             <div class="d-flex align-items-center ml-2" id="tabNotinBanks" onclick="Tabclick(event,1);">
                                 <span class="far fa-credit-card"></span>
-                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation", new { Type = "Not in Banks" })">Not in Banks</a></h6>
+                                <h6 class="mb-0 ml-2"><a href="@Url.Action("GetReconcilation", "Reconciliation" , new { Type="Not in Banks" })">Not in Banks</a></h6>
                                 <span class="badge badge-pill badge-soft-danger ml-3" id="lblNotInBanksCount">0</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-4">
-                        <div style="display: block; text-align: center" id="domoLastBatchRun">
+                        <div style="display: none; text-align: center" id="domoLastBatchRun">
                             <b>Last updated on: </b><span id="domoLastBatchRunTime"></span>
                         </div>
                     </div>
@@ -84,6 +84,11 @@
 
 
 
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-4 text-center" id="endOfYearLock" style="display: none">
+                        <b>End Of Year Lock Date: </b><span id="endOfYearLockDate"></span>
                     </div>
                 </div>
             </div>
@@ -284,7 +289,6 @@
     </div>
     <div class="col-md-4 p-l-2 d-none" id="divBulkUpdate">
         @Html.Partial("_reconcilationBulkupdate", true)
-
     </div>
     @if (ViewBag.AccountingPackage == 2)
     {
@@ -308,8 +312,6 @@
     }
 </style>
 
-
-
 @section Scripts {
     @Scripts.Render("~/bundles/js/table")
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
@@ -323,10 +325,10 @@
         $(document).ready(function () {
             chat.userId = "@ViewBag.UserId";
             chat.userEmail = "@ViewBag.UserEmail";
-            //Comment Icons
+       
             chat.type = 1;
             chat.forReconciliationIconColor = true;
-            //createTwilioClient();
+           
             $(document).on('click', ".paginate_button", function () {
 
                 let pageIndex = Number($(this).children('a').data("dt-idx"));
@@ -379,46 +381,6 @@
                 $(element).select2();
             });
 
-
-            //$(document).on('click', ".paginate_button", function () {
-                
-            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
-            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN');
-
-                   
-            //        if (str.length > 1) {
-
-            //            for (let index = 1; index < str.length; index++) {
-            //                str[index].style.display = "none";
-            //            }
-
-
-            //        }
-            //    });
-
-
-            //    $(".glAccountDD").select2()
-            //})
-
-
-            //$(document).on('click', ".custom-select", function () {
-
-            //    Array.prototype.forEach.bind($(".col-auto"))(ele => {
-            //        var str = Array.prototype.filter.bind(ele.children)(e => e.nodeName == 'SPAN'); if (str.length > 1) {
-
-            //            for (let index = 1; index < str.length; index++) {
-            //                str[index].style.display = "none";
-            //            }
-
-
-            //        }
-            //    });
-
-
-
-            //    $(".glAccountDD").select2()
-            //})
-
             var dateFormat = () => {
 
                 $('.rec-date').each(function () {
@@ -447,7 +409,7 @@
 
     <script>
 
-       
+
          Dropzone.autoDiscover = false;
         var totalSum1;
         var totalSum2;
@@ -734,7 +696,7 @@
         }
 
         $("#filterRule_New").change(function () {
-            
+
             $("#filter-checkbox-wrapper").fadeOut(200, function () {
                 $(this).find("#filterRule_New").attr("checked", !$(this).find("#filterRule_New").attr("checked")).end().fadeIn(200);
             });
@@ -759,9 +721,7 @@
             $(".blk-cancel").prop("disabled", true);
 
             var GLaccount = $('#BA_filterGLaccounts').val();
-            //var CommentText = $("#channel-messagesBulk").text().replace('\n\n', '').trim();
-            //var CommentText = [];
-            //Array.prototype.forEach.bind($('.chat-message'))(e => CommentText.push($(e).html()))
+
             var CreatedBy = $('#topProfilePicture').attr('userId');
             var Action = $('#BA_filterAction').val();
             var ClientID = $("#ddlclient option:selected").val();
@@ -823,7 +783,7 @@
 
                         HidelottieLoader();
                         location.reload(true);
-                        /*window.location.reload();*/
+                   
                     });
                 }
                 else if (response.Message == 'NoRecords')
@@ -881,20 +841,22 @@
             })
         }
         function onChangeAction(id, event) {
-
+            $('select').prop('disabled', true);
             var Selectedvalue = event.currentTarget.value;
             if (isEmptyOrBlank(Selectedvalue)) {
                 Selectedvalue = -1;
             }
             var userId = $('#topProfilePicture').attr('userId');
-
             var ClientID = $("#ddlclient option:selected").val();
             postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
-                if (response.Message == 'Success') {
+
+                if (response.Message == 'Success')
+                {
+                    $('select').prop('disabled', false);
 
                 }
                 else {
-
+                    $('select').prop('disabled', true);
                 }
             })
         }
@@ -956,7 +918,7 @@
         }
 
         function AgencyDropdownPartialViewChange() {
-            
+
             var ClientID = $("#ddlclient option:selected").val();
             ShowlottieLoader();
             $.ajax({
@@ -968,13 +930,13 @@
                     if (data != null) {
                         sessionStorage.setItem("LastMailSent", data.MailSendDate)
                         // Write here what should happend once client selected
-                       
+
                        var url = '@Url.Action("ReconciliationMain", "Reconciliation")';
-                   
+
                         SetUserPreferencesForAgency(null,true);
-                      
+
                         window.location.href = url;
-                    
+
                        // window.location.reload();
                     }
                     else {
@@ -1016,28 +978,36 @@
         $(function () {
 
             $("#email").click(function () {
-                var url = window.location.href;
+                //var chat = '@Url.Action("Chat", "Communication")';
+
+                let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
+
                 $('.text-danger').empty();
                 $("#sendbutton").attr("disabled", false);
                 var ClientName = $("#ddlclient option:selected").text();
                 var ClientId = $("#ddlclient option:selected").val();
                 getClientDate(ClientName);
                 ClientName = encodeURIComponent(ClientName);
-                var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
+          /*      var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
                 var LastMailSent = sessionStorage.getItem("LastMailSent");
-                getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${url}&sentdate=${LastMailSent}`, null, function (response) {
-                    if (response.Status == 'Success') {
-                        var text = response.Recipients.toString().split(",");
-                        var str = text.join(', ');
-                        $("#email-to").val(str);
-                        if (str == "") {
-                            $("#sendbutton").attr("disabled", true);
-                        }
-                        $("#email-subject").val(response.Subject);
-                        $("#ibody").html(response.Body);
-                        $("#ifooter").html(response.LastSent);
+                getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+                    let result = response.resultData.length;
+                    console.log(result);
+                    var NotInBankUnreconciledItemsCount = result;
+                    getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
+                        if (response.Status == 'Success') {
+                            var text = response.Recipients.toString().split(",");
+                            var str = text.join(', ');
+                            $("#email-to").val(str);
+                            if (str == "") {
+                                $("#sendbutton").attr("disabled", true);
+                            }
+                            $("#email-subject").val(response.Subject);
+                            $("#ibody").html(response.Body);
+                            $("#ifooter").html(response.LastSent);
 
-                    }
+                        }
+                    });
                 });
 
             });
@@ -1072,7 +1042,7 @@
             emails = emails.split(',');
             var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
 
-           
+
 
             for (var i = 0; i<emails.length; i++) {
                 //Trimming the whitespace from emails if any
@@ -1131,15 +1101,13 @@
             e.target.setAttribute("readonly", "");
         });
 
-       
+
 
     </script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     <script>
         $(document).ready(function () {
             HidelottieLoader();
-            
-
             $("#checkbox-bulk-purchases-select").click(function (e) {
 
                 if (e.target.checked) {

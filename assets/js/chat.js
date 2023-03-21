@@ -191,7 +191,7 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
     else {
         chat.autoSelectParticipant = true;
         getChatParticipants();
-        //createTwilioClient();
+       // createTwilioClient();
     }
 
     if (chat.channels.length > 0) {
@@ -862,7 +862,7 @@ var getPublicChatParticipants = function (channelUniqueNameGuid) {
     resetChatPage();
     getAjaxSync(`/Communication/getPublicChat?userId=${chat.userId}&userEmail=${chat.userEmail}&type=1&channelUniqueNameGuid=${channelUniqueNameGuid}&clientId=${chat.clientId}`, null, function (response) {
         setParticipants(response);
-        createTwilioClient();
+        //createTwilioClient();
         /*$participants.eq(0).click();*/
     });
 }
