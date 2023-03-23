@@ -185,8 +185,8 @@ var color = {
         "echartColorCode": "#FFDB74"
     },
     "Medium": {
-        "className": "bg-light-blue",
-        "echartColorCode": "#27BCFE"
+        "className": "bg-dark-blue",
+        "echartColorCode": "#248EA3"
     },
     "Low": {
         "className": "bg-green",

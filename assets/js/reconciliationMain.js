@@ -487,8 +487,8 @@ $(document).ready(function () {
                         sessionStorage.removeItem("NotInBanksData");
 
                         //uncampatible on safari.
-                    /*    let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not|In)/g, " ")).replace(/b/g, "B");
+                        /*    let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/b/g, "B")).replace(/([a-z])([A-Z])/g, '$1 $2');
                        
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
