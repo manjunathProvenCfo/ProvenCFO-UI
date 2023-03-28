@@ -108,10 +108,11 @@ namespace Proven.Service
                     // This is required for refresh logic down in GetCurrentValidTokenAsync.
                     //ExpiresAtUtc =  DateTime.MaxValue
                 };
-                if (DateTime.UtcNow >= token.ExpiresAtUtc)
-                {
-                    token = (IXeroToken)(T)RefreshToken((T)token).GetAwaiter().GetResult();
-                }
+                //if (DateTime.UtcNow >= token.ExpiresAtUtc)
+                //{
+                //    token = (IXeroToken)(T)RefreshToken((T)token).GetAwaiter().GetResult();
+                //}
+                token = (IXeroToken)(T)RefreshToken((T)token).GetAwaiter().GetResult();
                 return (T)token;
             }
             catch (Exception ex)
