@@ -57,7 +57,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -91,7 +91,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -109,7 +109,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -141,7 +141,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -189,7 +189,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -308,7 +308,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
             return Json(false, JsonRequestBehavior.AllowGet);
@@ -384,7 +384,7 @@ namespace ProvenCfoUI.Controllers
                                         }
                                         break;
                                     case 2:
-                                        QuickBooksSharp.Entities.Account[] Qaccounts = (QuickBooksSharp.Entities.Account[])result;                                        
+                                        QuickBooksSharp.Entities.Account[] Qaccounts = (QuickBooksSharp.Entities.Account[])result;
                                         foreach (var item in Qaccounts)
                                         {
                                             ClientXeroAccountsVM acct = new ClientXeroAccountsVM();
@@ -421,7 +421,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
             return Json(false, JsonRequestBehavior.AllowGet);
@@ -535,20 +535,26 @@ namespace ProvenCfoUI.Controllers
         public async Task<JsonResult> GenerateAuthorizationPromptUrl(string Id, int ThirdPartyAccountingApp_ref)
         {
             string redirecturl = string.Empty;
-            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";            
+            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
             Session["EditingClientId"] = Id;
-            switch (ThirdPartyAccountingApp_ref)
+            using (ClientService client = new ClientService())
             {
-                case 1:
-                    using (XeroService<string, string> Xero = new XeroService<string, string>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
-                    {
-                        redirecturl = Xero.GenerateAuthorizationPromptUrl();
-                    }
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
+                var clientDetails = client.GetClientById(Convert.ToInt32(Id));
+                switch (ThirdPartyAccountingApp_ref)
+                {
+                    case 1:
+                        using (XeroService<string, string> Xero = new XeroService<string, string>(clientDetails.APIClientID, clientDetails.APIClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
+                        {
+                            AccountingPackageInstance.Instance.ClientID = clientDetails.APIClientID;
+                            AccountingPackageInstance.Instance.ClientSecret = clientDetails.APIClientSecret;
+                            redirecturl = Xero.GenerateAuthorizationPromptUrl();
+                        }
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
             }
             return Json(new { url = redirecturl, Status = "Success" }, JsonRequestBehavior.AllowGet);
 
@@ -563,8 +569,8 @@ namespace ProvenCfoUI.Controllers
                 using (XeroService<IXeroToken, string> Xero = new XeroService<IXeroToken, string>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
                 {
                     xeroToken = await Xero.LoginXeroAccesswithCode(code);
-                }    
-                
+                }
+
                 if ((xeroToken.IdToken != null) && !JwtUtils.validateIdToken(xeroToken.IdToken, AccountingPackageInstance.Instance.ClientID))
                 {
                     return Content("ID token is not valid");
@@ -574,10 +580,10 @@ namespace ProvenCfoUI.Controllers
                 {
                     return Content("Access token is not valid");
                 }
-                
+
                 using (XeroService<ReturnAsyncModel, TokenInfoVM> Xero = new XeroService<ReturnAsyncModel, TokenInfoVM>(AccountingPackageInstance.Instance.ClientID, AccountingPackageInstance.Instance.ClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
                 {
-                    TokenInfoVM Tokennew= new TokenInfoVM();
+                    TokenInfoVM Tokennew = new TokenInfoVM();
                     Tokennew.access_token = xeroToken.AccessToken;
                     Tokennew.id_token = xeroToken.IdToken;
                     Tokennew.refresh_token = xeroToken.RefreshToken;
@@ -591,7 +597,7 @@ namespace ProvenCfoUI.Controllers
                     {
                         TempData["IsTokenUpdated"] = "true";
                     }
-                    
+
                 }
                 return RedirectToAction("EditClient", "Client", new { Id = Session["EditingClientId"] });
             }
@@ -616,9 +622,9 @@ namespace ProvenCfoUI.Controllers
 
             string clientId = "";
             string clientSecret = "";
-            string CallBackUrl = "" ; //"https://localhost:44345/Integration/QBTokenGeneration";//development
+            string CallBackUrl = ""; //"https://localhost:44345/Integration/QBTokenGeneration";//development
             string result = "";
-            string errorMsg  = "";
+            string errorMsg = "";
 
             if (apiDetails != null)
             {
@@ -626,13 +632,13 @@ namespace ProvenCfoUI.Controllers
                 {
                     var pkg = apiDetails.list.
                                          Where(pk => pk.ThirdParty == "QuickBook").FirstOrDefault();
-                    switch (pkg != null&&client.ThirdPartyAccountingApp_ref==2)
+                    switch (pkg != null && client.ThirdPartyAccountingApp_ref == 2)
                     {
                         case true:
 
-                            clientId     = pkg.ClientId;
+                            clientId = pkg.ClientId;
                             clientSecret = pkg.ClientSecret;
-                            CallBackUrl =  pkg.RedirectUrl;
+                            CallBackUrl = pkg.RedirectUrl;
 
                             var quickBookService = new QuickbooksLocalService<string, string>(clientId, clientSecret, null, CallbackUrl: $"{CallBackUrl}");
 
@@ -665,7 +671,7 @@ namespace ProvenCfoUI.Controllers
                     Utltity obj = new Utltity();
                     var objResultClient = objClient.GetClientById(AgencyId);
                     Common.ConnectClientAccoutingPackage(objResultClient);
-                   
+
                     return Json(new
                     {
                         ConnectionStatus = AccountingPackageInstance.Instance.ConnectionStatus,
@@ -682,11 +688,11 @@ namespace ProvenCfoUI.Controllers
         }
 
 
-        [HttpGet]   
+        [HttpGet]
         public async Task<ActionResult> QBTokenGeneration(string code, string state, string realmId)
         {
-          
-            var qbService =   new   QuickBooksSharp.AuthenticationService();
+
+            var qbService = new QuickBooksSharp.AuthenticationService();
 
             var clientService = new ClientService();
             var data = state.Split(',');
@@ -700,19 +706,21 @@ namespace ProvenCfoUI.Controllers
 
             string redirectUrl = pkg.RedirectUrl;
 
-             var token = await qbService.GetOAuthTokenAsync(clientId,clientSecret,code,redirectUrl);
+            var token = await qbService.GetOAuthTokenAsync(clientId, clientSecret, code, redirectUrl);
 
             var commonService = new CommonService();
-            try { 
-               commonService.QuickBookUpdateAndCreateToken(int.Parse(agencyId),token);
+            try
+            {
+                commonService.QuickBookUpdateAndCreateToken(int.Parse(agencyId), token);
             }
-            catch (Exception ex) {
-            
-              
+            catch (Exception ex)
+            {
+
+
             }
-            return   View("successQBToken"); //RedirectToAction("EditClient", "Client", new { area="",Id=agencyId});
+            return View("successQBToken"); //RedirectToAction("EditClient", "Client", new { area="",Id=agencyId});
         }
- 
+
 
     }
 }
