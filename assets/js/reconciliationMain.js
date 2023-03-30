@@ -67,7 +67,7 @@ $(document).ready(function () {
     var agencyId = $("#ddlclient option:selected").val();
 
     $.ajax({
-        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
+        url: '/Reconciliation/GetEndYearLockDateAsync?id=' + agencyId,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
