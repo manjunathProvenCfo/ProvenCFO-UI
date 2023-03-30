@@ -85,7 +85,11 @@ $(document).ready(function () {
                 $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
             } else {
-                $('#domoLastBatchRun').remove();
+                /*$('#domoLastBatchRun').remove();*/
+                $('#domoLastBatchRun').show();
+                $('#domoLastBatchRunTime')[0].innerText = "N/A";
+
+
             }
 
             if (data.End_Of_YearLockDate != null) {
@@ -480,7 +484,8 @@ $(document).ready(function () {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
                 getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
-                    Azureresponse = JSON.parse(Azureresponse);
+                    Azureresponse = JSON.parse(Azureresponse); 
+                    Azureresponse.message = Azureresponse.message.replace("expaired", "expired");
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
                     if (Azureresponse.status === true && Azureresponse.statusCode == 200) {
                         sessionStorage.removeItem("NotInBooksData");

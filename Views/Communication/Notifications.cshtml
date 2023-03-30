@@ -23,7 +23,17 @@
     <script>
         $(function () {
             loadAllNotificationLoggedInUserPage(true);
+            $("#MakeallRead").click(function () {
+                var userId = $('#topProfilePicture').attr('userid');
+                getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+                    if (response == true) {
+                        $('#FullNotificationList').find('.notification.notification-flush.bg-200').removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+                        location.reload();
+                    }
+                });
+            });
         });
+
     </script>
     
 }
