@@ -1347,17 +1347,17 @@ namespace ProvenCfoUI.Controllers
 
         }
 
-        public async Task<JsonResult> GetEndYearLockDateAsync(int id)
+        public JsonResult GetEndYearLockDateAsync(int id)
         {
             try
             {
                 using (ClientService objClient = new ClientService())
                 {
                     var objResultClient = objClient.GetClientById(id);
-                    Common common = new Common();
-                    objResultClient.End_Of_YearLockDate = await common.EndOfYearLockDateAsync(objResultClient);
+                    //Common common = new Common();
+                    //objResultClient.End_Of_Year_LockDate = await common.EndOfYearLockDateAsync(objResultClient);
 
-                    return Json(new { DOMO_Last_batchrun_time = objResultClient.DOMO_Last_batchrun_time, End_Of_YearLockDate = objResultClient.End_Of_YearLockDate, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { DOMO_Last_batchrun_time = objResultClient.DOMO_Last_batchrun_time, End_Of_YearLockDate = objResultClient.End_Of_Year_LockDate, Status = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
