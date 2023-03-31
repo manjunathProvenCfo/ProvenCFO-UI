@@ -66,60 +66,105 @@ $(document).ready(function () {
 
     var agencyId = $("#ddlclient option:selected").val();
 
-    $.ajax({
-        url: '/Reconciliation/GetEndYearLockDateAsync?id=' + agencyId,
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data) {
+    //$.ajax({
+    //    url: '/Reconciliation/GetEndYearLockDateAsync?id=' + agencyId,
+    //    type: "GET",
+    //    contentType: "application/json; charset=utf-8",
+    //    dataType: "json",
+    //    success: function (data) {
 
-            if (data.DOMO_Last_batchrun_time != null) {
+    //        if (data.DOMO_Last_batchrun_time != null) {
 
-                $('#domoLastBatchRun').show();
-                let roughDate = data.DOMO_Last_batchrun_time;
-                let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+    //            $('#domoLastBatchRun').show();
+    //            let roughDate = data.DOMO_Last_batchrun_time;
+    //            let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
-                let utcDateTime = new Date(dateTimeMill);
-                var localDateTime = utcDateTime.toLocaleString();
+    //            let utcDateTime = new Date(dateTimeMill);
+    //            var localDateTime = utcDateTime.toLocaleString();
 
-                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
+    //            $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
-            } else {
-                /*$('#domoLastBatchRun').remove();*/
-                $('#domoLastBatchRun').show();
-                $('#domoLastBatchRunTime')[0].innerText = "N/A";
+    //        } else {
+    //            /*$('#domoLastBatchRun').remove();*/
+    //            $('#domoLastBatchRun').show();
+    //            $('#domoLastBatchRunTime')[0].innerText = "N/A";
 
 
-            }
+    //        }
 
-            if (data.End_Of_YearLockDate != null) {
+    //        if (data.End_Of_YearLockDate != null) {
 
-                $('#endOfYearLock').show();
-                let roughEndDate = data.End_Of_YearLockDate;
-                let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+    //            $('#endOfYearLock').show();
+    //            let roughEndDate = data.End_Of_YearLockDate;
+    //            let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
 
-                let utcDateTime = new Date(endDateTimeMill);
-                var localEndDateTime = utcDateTime.toLocaleDateString();
-                $('#endOfYearLockDate')[0].innerText = localEndDateTime;
+    //            let utcDateTime = new Date(endDateTimeMill);
+    //            var localEndDateTime = utcDateTime.toLocaleDateString();
+    //            $('#endOfYearLockDate')[0].innerText = localEndDateTime;
 
-            } else {
-                if (data.ThirdPartyAccountingApp_ref != 2) {
-                    $('#endOfYearLock').show();
-                    $('#endOfYearLockDate')[0].innerText = "N/A";
-                }
-                else {
-                    $('#endOfYearLock').hide();
-                }
+    //        } else {
+    //            if (data.ThirdPartyAccountingApp_ref != 2) {
+    //                $('#endOfYearLock').show();
+    //                $('#endOfYearLockDate')[0].innerText = "N/A";
+    //            }
+    //            else {
+    //                $('#endOfYearLock').hide();
+    //            }
                 
-            }
-        },
-        error: function (error) {
-            console.log(error);
-            $('#domoLastBatchRun').remove();
-            $('#endOfYearLock').remove();
-        }
-    })
+    //        }
+    //    },
+    //    error: function (error) {
+    //        console.log(error);
+    //        $('#domoLastBatchRun').remove();
+    //        $('#endOfYearLock').remove();
+    //    }
+    //})
+    //GetAgencyLastUpdatedRec(JSON.parse(sessionStorage.getItem("AgencyDetails")));
 });
+
+
+var GetAgencyLastUpdatedRec = function (Agencydata) {
+    debugger;
+    if (Agencydata.DOMO_Last_batchrun_time != null) {
+
+        $('#domoLastBatchRun').show();
+        let roughDate = Agencydata.DOMO_Last_batchrun_time;
+        let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+
+        let utcDateTime = new Date(dateTimeMill);
+        var localDateTime = utcDateTime.toLocaleString();
+
+        $('#domoLastBatchRunTime')[0].innerText = localDateTime;
+
+    } else {
+        /*$('#domoLastBatchRun').remove();*/
+        $('#domoLastBatchRun').show();
+        $('#domoLastBatchRunTime')[0].innerText = "N/A";
+
+
+    }
+
+    if (Agencydata.End_Of_Year_LockDate != null) {
+
+        $('#endOfYearLock').show();
+        let roughEndDate = Agencydata.End_Of_Year_LockDate;
+        let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+
+        let utcDateTime = new Date(endDateTimeMill);
+        var localEndDateTime = utcDateTime.toLocaleDateString();
+        $('#endOfYearLockDate')[0].innerText = localEndDateTime;
+
+    } else {
+        if (Agencydata.ThirdPartyAccountingApp_ref != 2) {
+            $('#endOfYearLock').show();
+            $('#endOfYearLockDate')[0].innerText = "N/A";
+        }
+        else {
+            $('#endOfYearLock').hide();
+        }
+
+    }
+}
 
 var lastModify = function () {
     $(".lastmodified").each(function () {
