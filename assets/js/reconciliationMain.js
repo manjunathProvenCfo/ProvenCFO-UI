@@ -131,8 +131,8 @@ var GetAgencyLastUpdatedRec = function (Agencydata) {
         let roughDate = Agencydata.DOMO_Last_batchrun_time;
         //let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
-        let utcDateTime = new Date(roughDate);
-        var localDateTime = utcDateTime.toLocaleString();
+        let roughDateTime = new Date(roughDate).toLocaleString();
+        var localDateTime = new Date(roughDateTime + ' UTC').toLocaleString()
 
         $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
