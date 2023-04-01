@@ -128,8 +128,8 @@ var MenuOptionHideAndShow = function (AgencyId) {
                         + '"id" : ' + response.resultData.id + ','
                         + '"name"  : "' + response.resultData.name + '",'
                         + '"thirdPartyAccountingApp_ref" : "' + response.resultData.thirdPartyAccountingApp_ref + '",'
-                        + '"DOMO_Last_batchrun_time" : "' + response.resultData.DOMO_Last_batchrun_time  + '",'
-                        + '"End_Of_Year_LockDate" : "' + response.resultData.End_Of_Year_LockDate + '"'
+                        + '"DOMO_Last_batchrun_time" : "' + response.resultData.domO_Last_batchrun_time  + '",'
+                        + '"End_Of_Year_LockDate" : "' + response.resultData.end_Of_Year_LockDate + '"'
                         + '}';
                     sessionStorage.setItem("AgencyDetails", agencyDetils);
                     if (response.resultData != null && response.resultData.thirdPartyAccountingApp_ref != null && response.resultData.thirdPartyAccountingApp_ref == 2) {

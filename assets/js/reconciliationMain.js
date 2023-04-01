@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
 
-    var agencyId = $("#ddlclient option:selected").val();
+    //var agencyId = $("#ddlclient option:selected").val();
 
     //$.ajax({
     //    url: '/Reconciliation/GetEndYearLockDateAsync?id=' + agencyId,
@@ -119,19 +119,19 @@ $(document).ready(function () {
     //        $('#endOfYearLock').remove();
     //    }
     //})
-    //GetAgencyLastUpdatedRec(JSON.parse(sessionStorage.getItem("AgencyDetails")));
+    GetAgencyLastUpdatedRec(JSON.parse(sessionStorage.getItem("AgencyDetails")));
 });
 
 
 var GetAgencyLastUpdatedRec = function (Agencydata) {
-    debugger;
-    if (Agencydata.DOMO_Last_batchrun_time != null) {
+
+    if (Agencydata.DOMO_Last_batchrun_time != "null" && Agencydata.DOMO_Last_batchrun_time != null) {
 
         $('#domoLastBatchRun').show();
         let roughDate = Agencydata.DOMO_Last_batchrun_time;
-        let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+        //let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
 
-        let utcDateTime = new Date(dateTimeMill);
+        let utcDateTime = new Date(roughDate);
         var localDateTime = utcDateTime.toLocaleString();
 
         $('#domoLastBatchRunTime')[0].innerText = localDateTime;
@@ -144,13 +144,13 @@ var GetAgencyLastUpdatedRec = function (Agencydata) {
 
     }
 
-    if (Agencydata.End_Of_Year_LockDate != null) {
+    if (Agencydata.End_Of_Year_LockDate != null && Agencydata.End_Of_Year_LockDate != "null") {
 
         $('#endOfYearLock').show();
-        let roughEndDate = Agencydata.End_Of_Year_LockDate;
-        let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+        //let roughEndDate = Agencydata.End_Of_Year_LockDate;
+        //let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
 
-        let utcDateTime = new Date(endDateTimeMill);
+        let utcDateTime = new Date(Agencydata.End_Of_Year_LockDate);
         var localEndDateTime = utcDateTime.toLocaleDateString();
         $('#endOfYearLockDate')[0].innerText = localEndDateTime;
 
