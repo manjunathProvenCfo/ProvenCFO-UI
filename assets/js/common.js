@@ -123,12 +123,13 @@ var MenuOptionHideAndShow = function (AgencyId) {
         var agencyInfo = JSON.parse(agencyJson);
         if (agencyInfo == null || (agencyInfo != null && agencyInfo.id != AgencyId)) {
             getAjax(apiurl + `Client/GetClientById?ClientId=${AgencyId}`, null, function (response) {
-
                 if (response.resultData != null) {
                     var agencyDetils = '{'
                         + '"id" : ' + response.resultData.id + ','
                         + '"name"  : "' + response.resultData.name + '",'
-                        + '"thirdPartyAccountingApp_ref" : ' + response.resultData.thirdPartyAccountingApp_ref + ''
+                        + '"thirdPartyAccountingApp_ref" : "' + response.resultData.thirdPartyAccountingApp_ref + '",'
+                        + '"DOMO_Last_batchrun_time" : "' + response.resultData.domO_Last_batchrun_time  + '",'
+                        + '"End_Of_Year_LockDate" : "' + response.resultData.end_Of_Year_LockDate + '"'
                         + '}';
                     sessionStorage.setItem("AgencyDetails", agencyDetils);
                     if (response.resultData != null && response.resultData.thirdPartyAccountingApp_ref != null && response.resultData.thirdPartyAccountingApp_ref == 2) {

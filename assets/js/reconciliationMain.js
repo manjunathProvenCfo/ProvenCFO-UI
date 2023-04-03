@@ -64,10 +64,15 @@ $(document).ready(function () {
 
     function hideParticipantsSidebar() { $(".chat-sidebar").hide(); }
 
-    var agencyId = $("#ddlclient option:selected").val();
+    //GetAgencyLastUpdatedRec(JSON.parse(sessionStorage.getItem("AgencyDetails")));
+    GetAgencyLastUpdatedRec();
+});
 
+
+var GetAgencyLastUpdatedRec = function (Agencydata) {
+    var agencyId = $("#ddlclient option:selected").val();
     $.ajax({
-        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
+        url: '/Reconciliation/GetUpdatedDateTime?id=' + agencyId,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -85,7 +90,8 @@ $(document).ready(function () {
                 $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
             } else {
-                $('#domoLastBatchRun').remove();
+                $('#domoLastBatchRun').show();
+                $('#domoLastBatchRunTime')[0].innerText = "N/A";
             }
 
             if (data.End_Of_YearLockDate != null) {
@@ -106,7 +112,6 @@ $(document).ready(function () {
                 else {
                     $('#endOfYearLock').hide();
                 }
-                
             }
         },
         error: function (error) {
@@ -115,7 +120,47 @@ $(document).ready(function () {
             $('#endOfYearLock').remove();
         }
     })
-});
+
+    //if (Agencydata.DOMO_Last_batchrun_time != "null" && Agencydata.DOMO_Last_batchrun_time != null) {
+
+    //    $('#domoLastBatchRun').show();
+    //    let roughDate = Agencydata.DOMO_Last_batchrun_time;
+    //    //let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+
+    //    let roughDateTime = new Date(roughDate).toLocaleString();
+    //    var localDateTime = new Date(roughDateTime + ' UTC').toLocaleString()
+
+    //    $('#domoLastBatchRunTime')[0].innerText = localDateTime;
+
+    //} else {
+    //    /*$('#domoLastBatchRun').remove();*/
+    //    $('#domoLastBatchRun').show();
+    //    $('#domoLastBatchRunTime')[0].innerText = "N/A";
+
+
+    //}
+
+    //if (Agencydata.End_Of_Year_LockDate != null && Agencydata.End_Of_Year_LockDate != "null") {
+
+    //    $('#endOfYearLock').show();
+    //    //let roughEndDate = Agencydata.End_Of_Year_LockDate;
+    //    //let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
+
+    //    let utcDateTime = new Date(Agencydata.End_Of_Year_LockDate);
+    //    var localEndDateTime = utcDateTime.toLocaleDateString();
+    //    $('#endOfYearLockDate')[0].innerText = localEndDateTime;
+
+    //} else {
+    //    if (Agencydata.ThirdPartyAccountingApp_ref != 2) {
+    //        $('#endOfYearLock').show();
+    //        $('#endOfYearLockDate')[0].innerText = "N/A";
+    //    }
+    //    else {
+    //        $('#endOfYearLock').hide();
+    //    }
+
+    //}
+}
 
 var lastModify = function () {
     $(".lastmodified").each(function () {
@@ -480,15 +525,16 @@ $(document).ready(function () {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
                 getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
-                    Azureresponse = JSON.parse(Azureresponse);
+                    Azureresponse = JSON.parse(Azureresponse); 
+                    Azureresponse.message = Azureresponse.message.replace("expaired", "expired");
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
                     if (Azureresponse.status === true && Azureresponse.statusCode == 200) {
                         sessionStorage.removeItem("NotInBooksData");
                         sessionStorage.removeItem("NotInBanksData");
 
                         //uncampatible on safari.
-                    /*    let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?<=Not|In)/g, " ")).replace(/b/g, "B");
+                        /*    let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/b/g, "B")).replace(/([a-z])([A-Z])/g, '$1 $2');
                        
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }

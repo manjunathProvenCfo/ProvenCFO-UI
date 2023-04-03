@@ -234,7 +234,7 @@ namespace ProvenCfoUI.Controllers
         //        {
         //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
 
-        //            var res =UnselectedIds.AsEnumerable().ToList();
+        //            var res = UnselectedIds.AsEnumerable().ToList();
         //            Ids = res;
 
         //            //var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
@@ -249,12 +249,15 @@ namespace ProvenCfoUI.Controllers
         //        {
         //            var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
         //            Ids = BPParameter.SelectedItems.Split(',').ToList();
+
+        //            var x = UnselectedIds.GetType();
+
         //            foreach (var item in UnselectedIds)
         //            {
         //                Ids.Remove(item);
         //            }
         //        }
-        //        if (Ids != null && Ids.Count > 0 || BPParameter.IsAllSelected==true)
+        //        if (Ids != null && Ids.Count > 0 || BPParameter.IsAllSelected == true)
         //        {
         //            BPParameter.Ids = Ids.ToArray();
 
@@ -266,7 +269,7 @@ namespace ProvenCfoUI.Controllers
         //            using (ReconcilationService service = new ReconcilationService())
         //            {
         //                var returnVale = service.BulkUpdateReconcilation(BPParameter).resultData;
-        //                if (returnVale>0)
+        //                if (returnVale > 0)
         //                    return Json(new { Message = "Success", UpdatedCount = returnVale }, JsonRequestBehavior.AllowGet);
         //                else
         //                    return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
@@ -280,7 +283,7 @@ namespace ProvenCfoUI.Controllers
         //    }
         //    catch (Exception ex)
         //    {
-        //         log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+        //        log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
         //        throw ex;
         //    }
 
@@ -1344,18 +1347,17 @@ namespace ProvenCfoUI.Controllers
 
         }
 
-        public async Task<JsonResult> GetEndYearLockDate(int id)
+        public JsonResult GetUpdatedDateTime(int id)
         {
             try
             {
                 using (ClientService objClient = new ClientService())
                 {
                     var objResultClient = objClient.GetClientById(id);
-                    Common common = new Common();
-                    objResultClient.End_Of_YearLockDate = await common.EndOfYearLockDateAsync(objResultClient);
+                    //Common common = new Common();
+                    //objResultClient.End_Of_Year_LockDate = await common.EndOfYearLockDateAsync(objResultClient);
 
-                   //return Json(objResultClient, JsonRequestBehavior.AllowGet);
-                    return Json(new { DOMO_Last_batchrun_time = objResultClient.DOMO_Last_batchrun_time, End_Of_YearLockDate = objResultClient.End_Of_YearLockDate, Status = "Success" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { DOMO_Last_batchrun_time = objResultClient.DOMO_Last_batchrun_time, End_Of_YearLockDate = objResultClient.End_Of_Year_LockDate, Status = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)

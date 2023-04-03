@@ -182,7 +182,7 @@ else
         function replaceAll(string, search, replace) {
             return string.split(search).join(replace);
         }
-        function FillterReconcilation() {
+        function FillterReconciliation() {
             var account = $('#filteraccounts').val().join(',');
             var ClientID = $("#ddlclient option:selected").val();
             var fromDate, toDate;
@@ -282,6 +282,9 @@ else
             dbTable.search('');
             
      
+        }
+        function FillterResets() {
+            $("#example").DataTable().search("").draw();
         }
     </script>
     <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>

@@ -9,7 +9,7 @@
             <div class="col-auto">
                 <h6 class="card-header-title mb-0">Your Notifications</h6>
             </div>
-            <div class="col-auto" id="MarkallRead"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>
+            <div class="col-auto" id="MarkRead"><a class="card-link font-weight-normal" href="#">Mark all as read</a></div>
         </div>
     </div>
     <div class="list-group list-group-flush font-weight-normal fs--1 " id="FullNotificationList">
@@ -22,8 +22,19 @@
 @section Scripts {
     <script>
         $(function () {
+           
             loadAllNotificationLoggedInUserPage(true);
+            $("#MarkRead").click(function () {
+                var userId = $('#topProfilePicture').attr('userid');
+                getAjaxSync(apiurl + `Reconciliation/UpdateNotification?Userid=${userId}`, null, function (response) {
+                    if (response == true) {
+                        $('#FullNotificationList').find('.notification.notification-flush.bg-200').removeClass("notification notification-flush bg-200").addClass("notification notification-flush");
+                        location.reload();
+                    }
+                });
+            });
         });
+
     </script>
     
 }

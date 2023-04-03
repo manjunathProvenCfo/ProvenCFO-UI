@@ -108,6 +108,10 @@ body, .navbar-glass,
     background-color: #27BCFE !important;
 }
 
+.bg-dark-blue {
+    background-color: #248EA3 !important;
+}
+
 .bg-blue {
     background-color: #235EE8 !important;
 }

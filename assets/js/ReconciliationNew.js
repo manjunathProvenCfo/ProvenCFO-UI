@@ -422,7 +422,7 @@ function InitEvents() {
             $('#divFilter').removeClass('d-none');
         }
         else if ($("#divFilter").is(":visible")) {
-            $("#example").DataTable().search("").draw();
+            //$("#example").DataTable().search("").draw();
             $('#divChat').hide();
             $('#divChat').addClass('d-none');
             $('#divFilter').hide();
