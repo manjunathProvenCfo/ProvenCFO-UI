@@ -1347,7 +1347,7 @@ namespace ProvenCfoUI.Controllers
 
         }
 
-        public JsonResult GetEndYearLockDateAsync(int id)
+        public JsonResult GetUpdatedDateTime(int id)
         {
             try
             {
