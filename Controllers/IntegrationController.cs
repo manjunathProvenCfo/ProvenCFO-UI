@@ -718,7 +718,8 @@ namespace ProvenCfoUI.Controllers
 
 
             }
-            return View("successQBToken"); //RedirectToAction("EditClient", "Client", new { area="",Id=agencyId});
+            /* return View("successQBToken");*/
+           return RedirectToAction("EditClient", "Client", new { area = "", Id = agencyId });
         }
 
 
