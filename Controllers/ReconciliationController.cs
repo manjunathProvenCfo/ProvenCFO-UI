@@ -611,12 +611,12 @@ namespace ProvenCfoUI.Controllers
                 }
                 if (RecordType == NotInBank)
                 {
-                    ViewBag.isvisibleGlAccount = true;
+                    ViewBag.IsHiddenGLAccount = true;
                     TempData["Action"] = getallAction;
                 }
                 else
                 {
-                    ViewBag.isvisibleGlAccount = false;
+                    ViewBag.IsHiddenGLAccount = false;
                 }
                 if (userType == "1")
                 {
@@ -670,15 +670,15 @@ namespace ProvenCfoUI.Controllers
             var searchValue = Request.Form.GetValues("search[value]").First();
 
 
-            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&]+");
-              
+            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&\-,]+");
+
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             string recordType = (string)Session["RecordType"];
        
             var normalize =new Regex("=&",RegexOptions.Multiline);//=-1&
             var checkFilter = new Regex("^[?]", RegexOptions.Multiline);
-            var match = new Regex(@"(?<=\=)[A-Za-z0-9\n\t\r\s-1\/#]+", RegexOptions.Multiline);
+            var match = new Regex(@"(?<=\=)[A-Za-z0-9\n\t\r\s-1\/#,]+", RegexOptions.Multiline);
             bool IsFilter = false;
 
 
@@ -709,7 +709,7 @@ namespace ProvenCfoUI.Controllers
 
                 var matches = match.Matches(searchValue);
 
-                  accountName = matches[0].Value;
+                  accountName = found[0];
 
                 if (found.Length > 2)
                 {

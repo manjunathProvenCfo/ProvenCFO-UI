@@ -45,7 +45,7 @@
             </div>
         </div>*@
 
-            @if (ViewBag.isvisibleGlAccount == true)
+            @if (ViewBag.IsHiddenGLAccount == true)
             {
                 <div class="row pb-1">
                     <div class="col-12">
@@ -55,7 +55,7 @@
             }
             <div class="row pb-3">
                 <div class="col-12">
-                    @if (ViewBag.isvisibleGlAccount == true)
+                    @if (ViewBag.IsHiddenGLAccount == true)
                     {
                         @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Pick Action",
                                                                         new { @class = " selectpicker form-control" })
@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            @if (ViewBag.isvisibleGlAccount == false)
+            @if (ViewBag.IsHiddenGLAccount == false)
             {
                 <div class="row pb-1">
                     <div class="col-12">
@@ -74,14 +74,14 @@
 
             <div class="row pb-3">
                 <div class="col-12">
-                    @if (ViewBag.isvisibleGlAccount == false)
+                    @if (ViewBag.IsHiddenGLAccount == false)
                     {
                         @Html.DropDownList("BA_filterGLaccounts", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Select GL Account",
                                                                         new { @class = " selectpicker form-control" })
                     }
                 </div>
             </div>
-            @if (ViewBag.isvisibleGlAccount == false)
+            @if (ViewBag.IsHiddenGLAccount == false)
             {
                 <div class="row pb-1">
                     <div class="col-12">
@@ -91,7 +91,7 @@
             }
             <div class="row pb-3">
                 <div class="col-12">
-                    @if (TempData["BankRule"] != null && ViewBag.isvisibleGlAccount == false)
+                    @if (TempData["BankRule"] != null && ViewBag.IsHiddenGLAccount == false)
                     {
                         @*@Html.DropDownList("BA_bankrules", new SelectList((List<SelectListItem>)TempData["BankRule"], "Value", "Text"), "Select Bank Rule", new { @class = " selectpicker form-control" })*@
                         <div id="bulk-checkbox-wrapper">
@@ -118,7 +118,7 @@
 
             <div class="row pb-1">
                 <div class="col-12">
-                    @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
+                    @if (TempData["TrackingCategories"] != null && ViewBag.IsHiddenGLAccount == false)
                     {
                         <h6 class="mb-0">Tracking Categories</h6>
                     }
@@ -127,7 +127,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    @if (TempData["TrackingCategories"] != null && ViewBag.isvisibleGlAccount == false)
+                    @if (TempData["TrackingCategories"] != null && ViewBag.IsHiddenGLAccount == false)
                     {
                         int count = 0;
                         foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])

@@ -1,9 +1,74 @@
 ﻿var glAccounts_ = document.getElementById("all-gl-accounts");
 var glAccountsOpt = "<option value='-1'>Pick Account</option>";
+
+// NIBanks actions.
+var bnk_actions = document.getElementById("rcn-action");
+var bnkaction_Opt = '<option value=""> Pick Action </option>';
+
+// NIBooks tracking category.
+var tk_category = document.getElementById("item_tk_category");
+var tkcategory_Opt = '<option value=""> Select... </option>';
+
+// NIBooks tracking .
+var tk_category_ref = document.getElementById("item_tk_category_ref");
+var tkcategory_ref_Opt = '<option value=""> Select... </option>';
+
+
 HidelottieLoader();
+
+
+if (bnk_actions != null) {
+    Array.prototype.forEach.bind(bnk_actions.children)(ele => {
+        bnkaction_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
+if (tk_category != null) {
+    Array.prototype.forEach.bind(tk_category.children)(ele => {
+        tkcategory_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
+if (tk_category_ref != null) {
+    Array.prototype.forEach.bind(tk_category_ref.children)(ele => {
+        tkcategory_ref_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
 Array.prototype.forEach.bind(glAccounts_.children)(ele => {
     glAccountsOpt += `<option value=${ele.value}>${ele.innerText}</option>`;
 });
+
+function RenderAction(data, type, row) {
+
+    var selectAction = `<div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
+                                                       <select class="select-picker bnk-action" data-reconciliationId=${row.id} utcdate=${row.ActionModifiedDateUTC} ModifiedBy=${row.ActionModifiedBy}  data-selectedValue=${data} style="width:90%;">${bnkaction_Opt}</select>
+                                                    </div>`;
+
+    return selectAction;
+}
+
+function track_category(data, type, row) {
+
+    var selectCategory = `<div class="row justify-content-between">
+                                                    <div class="col-auto">
+                                                         <select class="select-picker track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_Opt}</select>
+                                                    </div>
+                                                </div>`;
+
+    return selectCategory;
+}
+
+function addi_track_category(data, type, row) {
+    
+    var selectCategoryRef = `<div class="row justify-content-between">
+                                                    <div class="col-auto">
+                                                         <select class="select-picker addi-track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_ref_Opt}</select>
+                                                    </div>
+                                                </div>`;
+
+    return selectCategoryRef;
+}
 
 function RenderBankRule(r, r1, r3) {
     if (r == true) {
@@ -63,6 +128,60 @@ function onChangeglAccount(id, event) {
         }
     })
 }
+
+// On change of actions
+function onChangeAction(id, event) {
+    $('select').prop('disabled', true);
+    var Selectedvalue = event.currentTarget.value;
+    if (isEmptyOrBlank(Selectedvalue)) {
+        Selectedvalue = -1;
+    }
+    var userId = $('#topProfilePicture').attr('userId');
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
+
+        if (response.Message == 'Success') {
+            $('select').prop('disabled', false);
+
+        }
+        else {
+            $('select').prop('disabled', true);
+        }
+    })
+}
+
+// On change of tracking_category
+function onChangeTc(id, event) {
+
+    var selectedValue = event.currentTarget.value;
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+}
+
+// On change of addi_trackingCategory
+function onChangeAditinalTc(id, event) {
+    var Selectedvalue = event.currentTarget.value;
+    if (isEmptyOrBlank(Selectedvalue)) {
+        Selectedvalue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+    });
+}
+
 
 var lastModify = function () {
     $(".lastmodified").each(function () {
@@ -329,7 +448,6 @@ function InitEvents() {
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
-                debugger;
                 getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
                     Azureresponse = JSON.parse(Azureresponse);
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
@@ -475,52 +593,42 @@ function UtcDateToLocalTime(utcDate) {
 }
 function LoadLastRunDate() {
  
-    $.ajax({
-        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data) {
+    getAjax(apiurl + `Client/GetClientById?ClientId=${agencyId}`, null, function (response) {
+        if (response.resultData != null) {
+            if (response.resultData.domO_Last_batchrun_time != "null" && response.resultData.domO_Last_batchrun_time != null) {
 
-            if (data.DOMO_Last_batchrun_time != null) {
                 $('#domoLastBatchRun').show();
-                let roughDate = data.DOMO_Last_batchrun_time;
-                let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+                let roughDate = response.resultData.domO_Last_batchrun_time;
 
-                let utcDateTime = new Date(dateTimeMill);
-                var localTime = utcDateTime.toLocaleString();
-             
-                 localTime = UtcDateToLocalTime(localTime)
-                var _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+                let roughDateTime = new Date(roughDate).toLocaleString();
+                var localDateTime = new Date(roughDateTime + ' UTC').toLocaleString()
 
-                $('#domoLastBatchRunTime')[0].innerText = _date;
-
+                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
             } else {
-                $('#domoLastBatchRun').remove();
+                $('#domoLastBatchRun').show();
+                $('#domoLastBatchRunTime')[0].innerText = "N/A";
             }
 
-            if (data.End_Of_YearLockDate != null) {
+            if (response.resultData.end_Of_Year_LockDate != null && response.resultData.end_Of_Year_LockDate != "null") {
 
                 $('#endOfYearLock').show();
-                let roughEndDate = data.End_Of_YearLockDate;
-                let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
 
-                let utcDateTime = new Date(endDateTimeMill);
+                let utcDateTime = new Date(response.resultData.end_Of_Year_LockDate);
                 var localEndDateTime = utcDateTime.toLocaleDateString();
                 $('#endOfYearLockDate')[0].innerText = localEndDateTime;
 
             } else {
-                $('#endOfYearLock').remove();
+                if (response.resultData.thirdPartyAccountingApp_ref != 2) {
+                    $('#endOfYearLock').show();
+                    $('#endOfYearLockDate')[0].innerText = "N/A";
+                }
+                else {
+                    $('#endOfYearLock').hide();
+                }
             }
-        },
-        error: function (error) {
-            console.log(error);
-            $('#domoLastBatchRun').remove();
-            $('#endOfYearLock').remove();
         }
-    })
-
+    });
 }
 
 var bindEnableAutomation = function () {
@@ -647,7 +755,7 @@ $(document).ready(() => {
         case "Outstanding Payments":
             $('#tabNotinBanks').addClass('tabselect');
             break;
-    } 
+    }
 
     InitEvents();
    
@@ -703,16 +811,42 @@ $(document).ready(() => {
 
         const GLColumn = [
             { data: "gl_account_ref", name: "gl_account_ref", render: GLAccountsRender },
-           ];
+        ];
+        const BnkAction = [
+            { data: "ref_ReconciliationAction", name: "ref_ReconciliationAction", render: RenderAction },
+        ];
         const BankRule = [{
             data: "RuleNew", name: "RuleNew", render: RenderBankRule
         }];
+        const tracking_category = [
+            { data: "tracking_category_ref", name: "tracking_category_ref", render: track_category },
+        ];
+        const ad_tracking_category = [
+            { data: "additional_tracking_category_ref", name: "additional_tracking_category_ref", render: addi_track_category },
+        ];
 
-        if (GlAccountVisible == "True") {
+
+        if (GlAccountVisible == "False") {
             column = [...column, ...GLColumn];
         }
+
+        if (GlAccountVisible == "True") {
+            column = [...column, ...BnkAction]
+        }
+
         if (IsBankRuleVisible == "True") {
             column = [...column, ...BankRule];
+        }
+
+        const tkSpanElement = document.getElementById('track_category_count');
+        const tk_value = tkSpanElement.getAttribute('value');
+
+        // Setting tracking categories.
+        if (GlAccountVisible == "False" && tk_value == 2) {
+            column = [...column, ...tracking_category];
+            column = [...column, ...ad_tracking_category];
+        } else if (GlAccountVisible == "False" && tk_value == 1) {
+            column = [...column, ...tracking_category];
         }
 
         //Add Chat column
@@ -738,8 +872,6 @@ $(document).ready(() => {
         await loadCommentsPage(channelUniqueNameGuid);
     }
 
-
-
     $("#example").DataTable({
         paging: true,
         serverSide: true,
@@ -749,7 +881,42 @@ $(document).ready(() => {
             ResetCheckBoxOnPageChange();
 
             HidelottieLoader();
-             Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
+
+            // -> addi-track-category on change.
+            $(".track-category").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeTc(Id, e);
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.addi-track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
+            Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
                 let index = 0;
                 let value = selectEle.getAttribute("data-selectedValue");
                 Array.prototype.forEach.bind($(selectEle.children))(opt => {
@@ -769,6 +936,48 @@ $(document).ready(() => {
                 onChangeglAccount(Id, e);
             })
 
+            // -> Selected Action.
+            Array.prototype.forEach.bind($(".bnk-action"))(selectEle => {
+                let index = 0;
+                let value = selectEle.getAttribute("data-selectedValue");
+                Array.prototype.forEach.bind($(selectEle.children))(opt => {
+                    index++;
+                    if (opt.value == value) {
+                        selectEle.selectedIndex = index - 1;
+                    }
+                });
+            });
+
+            // -> Actions on change.
+            $(".bnk-action").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeAction(Id, e);
+            });
+
+
+            // -> addi-track-category on change.
+            $(".addi-track-category").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeAditinalTc(Id, e);
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.addi-track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+                
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
             $(".select-picker").select2();
             $('.lastmodified').tooltip();
             $("table").on("click", "button[id=btnComment]", async function (e) {
@@ -783,10 +992,9 @@ $(document).ready(() => {
         },
         processing: true,
         columns: configureColumn()
-    }
+    });
 
-    );
-
+    $('.col-sm-12').eq(2).addClass('table-responsive');
 });
 
 $(function () {
