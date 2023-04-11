@@ -20510,7 +20510,7 @@ label {
 
     .dataTables_wrapper .data-table.dataTable td,
     .dataTables_wrapper .data-table.dataTable th {
-        white-space: nowrap;
+     /*   white-space: nowrap;*/
     }
 
 .dataTables_wrapper .dataTables_filter input {

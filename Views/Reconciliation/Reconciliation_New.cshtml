@@ -347,7 +347,10 @@ else
 
             let dbTable = $("#example").DataTable();
             url = url.split('?')[1];
-            dbTable.search(`??${url}??`).draw();
+            let dbData = url;
+            dbTable.search(`??${dbData}??`).draw();
+            $(".dataTables_filter input").val('');
+
             //dbTable.search('');
 
 

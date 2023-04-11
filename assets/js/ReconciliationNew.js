@@ -1000,32 +1000,40 @@ $(document).ready(() => {
 $(function () {
 
     $("#email").click(function () {
-        var chat = "/Communication/Chat";
-        var enurl = encodeURIComponent(chat);
-        var ClientName = $("#ddlclient option:selected").text();
-        var ClientId = $("#ddlclient option:selected").val();
-        getClientDate(ClientName);
-        ClientName = encodeURIComponent(ClientName);
-        var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
-        var LastMailSent = sessionStorage.getItem("LastMailSent");
-        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${enurl}&sentdate=${LastMailSent}`, null, function (response) {
-            if (response.Status == 'Success') {
-                var text = response.Recipients.toString().split(",");
-                var str = text.join(', ');
-                $("#email-to").val(str);
-                if (str == "") {
-                    $("#sendbutton").attr("disabled", true);
-                }
-                $("#email-subject").val(response.Subject);
-                $("#ibody").html(response.Body);
-                $("#ifooter").html(response.LastSent);
+        //var chat = '@Url.Action("Chat", "Communication")';
 
-            }
-        });
+     //   let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
 
+     //   $('.text-danger').empty();
+     //   $("#sendbutton").attr("disabled", false);
+     //   var ClientName = $("#ddlclient option:selected").text();
+     //   var ClientId = $("#ddlclient option:selected").val();
+     //   getClientDate(ClientName);
+     //   ClientName = encodeURIComponent(ClientName);
+     //   /*      var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+     //   var LastMailSent = sessionStorage.getItem("LastMailSent");
+     //   getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+     //       let result = response.resultData.length;
+     ///*       console.log(result);*/
+     //       var NotInBankUnreconciledItemsCount = result;
+     //       getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
+     //           if (response.Status == 'Success') {
+     //               var text = response.Recipients.toString().split(",");
+     //               var str = text.join(', ');
+     //               $("#email-to").val(str);
+     //               if (str == "") {
+     //                   $("#sendbutton").attr("disabled", true);
+     //               }
+     //               $("#email-subject").val(response.Subject);
+     //               $("#ibody").html(response.Body);
+     //               $("#ifooter").html(response.LastSent);
+
+     //           }
+     //       });
+     //   });
+        sendEmail();
     });
 });
-
 
 /*Clientdata*/
 
@@ -1125,3 +1133,58 @@ if (myParam == "1") {
     $("#email").show();
     $("#btnImportReconcilition").show();
 }
+
+//$("table").on("click", "button[id=btnComment]", async function (e) {
+//    let currRow = $(this).closest("tr");
+//    $("tr.bg-200").removeClass("bg-200");
+//    currRow.addClass("bg-200");
+//    if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
+//        let elComment = $(this).find("#btnComment");
+//        resetScrollChatState(elComment.data().id);
+//        await showReconciliationChat(elComment.data().id);
+//    }
+//});
+/*sendEmail*/
+function sendEmail() {
+    let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
+    $('.text-danger').empty();
+    $("#sendbutton").attr("disabled", false);
+    var ClientName = $("#ddlclient option:selected").text();
+    var ClientId = $("#ddlclient option:selected").val();
+    getClientDate(ClientName);
+    ClientName = encodeURIComponent(ClientName);
+    var LastMailSent = sessionStorage.getItem("LastMailSent");
+    getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+        let result = response.resultData.length;
+        var NotInBankUnreconciledItemsCount = result;
+        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+            }
+        });
+    });
+}
+$(document).on("click", ".odd,.even", async function (e) {
+    $(".odd,.even").removeClass("bg-200");
+    $(this).addClass("bg-200");
+
+    if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
+        let elComment = $(this).find("button[id=btnComment]");
+
+        resetScrollChatState(elComment.data().id);
+        await showReconciliationChat(elComment.data().id);
+    }
+});
+$(document).on("click", "button[id=btnComment]", async function (e) {
+
+    resetScrollChatState(e.currentTarget.dataset.id);
+    await showReconciliationChat(e.currentTarget.dataset.id);
+});

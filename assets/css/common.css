@@ -498,6 +498,9 @@ svg.svg-inline--fa.fa-plus-circle.fa-w-16 {
 .tabselect {
     text-decoration: underline;
 }
+.selected {
+    background-color: #e6e6e6;
+}
 
 .loader-circle {
     top: 0;
