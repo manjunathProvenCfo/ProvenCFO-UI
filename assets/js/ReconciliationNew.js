@@ -381,7 +381,7 @@ function ResetCheckBoxOnPageChange() {
                 if (chkBox.getAttribute("id") == id) {
                     chkBox.checked = true;
                 } else {
-                    chk.checked = false;
+                    chkBox.checked = false;
                 }
             });
         });

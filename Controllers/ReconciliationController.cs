@@ -35,16 +35,17 @@ namespace ProvenCfoUI.Controllers
 
 
 
-    public class TestMod { 
-    
+    public class TestMod
+    {
+
         public string Name { get; set; }
         public string Position { get; set; }
         public string Office { get; set; }
-        public string Progres { get; set;}
+        public string Progres { get; set; }
         public string StartDate { get; set; }
         public string Salary { get; set; }
 
-    
+
     }
     [Exception_Filters]
     public class ReconciliationController : BaseController
@@ -79,7 +80,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     if (userType == "1")
                     {
-                      
+
 
                         if (Type == "Not in Banks")
                         {
@@ -103,7 +104,7 @@ namespace ProvenCfoUI.Controllers
                     using (IntigrationService objIntegration = new IntigrationService())
                     {
                         var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
-                        glAccountList.ForEach(x => x.Name = x.AgencyId != null? $"{x.Code} - {x.Name}": $"{x.Name}");
+                        glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                         TempData["GLAccounts"] = glAccountList;
                         List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                         if (objTCList != null && objTCList.Count > 0)
@@ -150,7 +151,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -183,7 +184,7 @@ namespace ProvenCfoUI.Controllers
                 using (IntigrationService objIntegration = new IntigrationService())
                 {
                     var glAccountList = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
-                    glAccountList.ForEach(x => x.Name = x.AgencyId != null? $"{x.Code} - {x.Name}" : $"{x.Name}");
+                    glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                     TempData["GLAccounts"] = glAccountList;
                     //TempData["GLAccounts"] = objIntegration.GetXeroGlAccount(Filter.AgencyID.Value, "ACTIVE").ResultData;
                     if (userType == "1")
@@ -298,11 +299,13 @@ namespace ProvenCfoUI.Controllers
                 if (BPParameter.IsAllSelected == true)
                 {
                     var UnselectedIds = !string.IsNullOrEmpty(BPParameter.UnSelectedRecords) ? BPParameter.UnSelectedRecords.Split(',') : new string[0];
-                    var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
-                    if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
-                    Ids = result.Select(x => x.id).ToList();
+                    //var result = (List<Proven.Model.reconciliationVM>)Session["ReconcilationData"];
+                    //if (result == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    //Ids = result.Select(x => x.id).ToList();
+                    if(Session["AllReconcilationIds"] == null) return Json(new { Message = "Error", UpdatedCount = 0 }, JsonRequestBehavior.AllowGet);
+                    Ids = Convert.ToString(Session["AllReconcilationIds"]).Split(',').ToList() ;
                     foreach (var item in UnselectedIds)
-                    {
+                    {                        
                         Ids.Remove(item);
                     }
                 }
@@ -356,7 +359,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -365,7 +368,7 @@ namespace ProvenCfoUI.Controllers
         [CheckSession]
         public JsonResult GetReconciliationDashboardDataAgencyId(string AgencyID, string type)
         {
-            string RecordsType = NotInBooks; 
+            string RecordsType = NotInBooks;
             try
             {
                 if (RecordsType == "Not in Banks")
@@ -382,7 +385,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -401,7 +404,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -421,7 +424,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -497,7 +500,7 @@ namespace ProvenCfoUI.Controllers
                 ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
                 using (ReconcilationService objReConcilation = new ReconcilationService())
                 {
-                    int AgencyID = 0;  
+                    int AgencyID = 0;
                     List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
                     var userType = Convert.ToString(Session["UserType"]);
                     if (UserPref != null && UserPref.Count() > 0)
@@ -520,10 +523,10 @@ namespace ProvenCfoUI.Controllers
                     }
                     using (ClientService objClientService = new ClientService())
                     {
-                       ThirdpartyAccount = objClientService.GetClientById(AgencyID);
+                        ThirdpartyAccount = objClientService.GetClientById(AgencyID);
                         ViewBag.AccountingPackage = ThirdpartyAccount.ThirdPartyAccountingApp_ref;
 
-                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time; 
+                        Session["DOMO_Last_batchrun_time"] = ThirdpartyAccount.DOMO_Last_batchrun_time;
                         var AccountingPackage = objClientService.GetClientXeroAcccountsByAgencyId(AgencyID).ResultData;
                         TempData["NotInBank"] = AccountingPackage;
                     }
@@ -555,7 +558,7 @@ namespace ProvenCfoUI.Controllers
                     }
                     var objResult = objReConcilation.GetReconciliation(AgencyID, RecordsType, 0, User.UserId, User.LoginName);
 
-                      //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
+                    //var objResult1 = objReConcilation.GetReconciliationList(0, 10, "account_name asc", AgencyID.ToString(), RecordsType, "0", "", User.UserId);
 
                     ViewBag.UserId = User.UserId;
 
@@ -564,7 +567,7 @@ namespace ProvenCfoUI.Controllers
                     if (ThirdpartyAccount != null)
                     {
 
-                        ViewBag.IsDomoEnabled=ThirdpartyAccount.IsDomoEnabled==null?false:ThirdpartyAccount.IsDomoEnabled;
+                        ViewBag.IsDomoEnabled = ThirdpartyAccount.IsDomoEnabled == null ? false : ThirdpartyAccount.IsDomoEnabled;
                     }
                     TempData["ReconcilationData"] = objResult.ResultData;
                     TempData["PaginationData"] = objResult.ResultData;
@@ -574,14 +577,14 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
 
         }
 
         [HttpGet]
-        public ActionResult ReconciliationNewMain(string RecordType= NotInBooks)
+        public ActionResult ReconciliationNewMain(string RecordType = NotInBooks)
         {
             int AgencyID = 0;
             List<UserPreferencesVM> UserPref = (List<UserPreferencesVM>)Session["LoggedInUserPreferences"];
@@ -597,8 +600,8 @@ namespace ProvenCfoUI.Controllers
             ViewBag.AzureFunctionReconUrl = Convert.ToString(ConfigurationManager.AppSettings["AzureFunctionReconUrl"]);
             using (IntigrationService objIntegration = new IntigrationService())
             {
-                    ReconcilationService objReConcilation = new ReconcilationService();
-                    var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
+                ReconcilationService objReConcilation = new ReconcilationService();
+                var getallAction = objReConcilation.GetAllReconcilationAction().ResultData;
                 getallAction.ForEach(x => x.ActionName = x.ActionName);
                 using (ClientService objClientService = new ClientService())
                 {
@@ -634,7 +637,7 @@ namespace ProvenCfoUI.Controllers
                 var glAccountList = objIntegration.GetXeroGlAccount(AgencyID, "ACTIVE").ResultData;
                 glAccountList.ForEach(x => x.Name = x.AgencyId != null ? $"{x.Code} - {x.Name}" : $"{x.Name}");
                 TempData["GLAccounts"] = glAccountList;
-                var data= getDistincAccount(AgencyID, RecordType);
+                var data = getDistincAccount(AgencyID, RecordType);
                 TempData["DistinctAccount"] = data;
                 List<XeroTrackingCategoriesVM> objTCList = objIntegration.GetXeroTracking(AgencyID).ResultData;
                 if (objTCList != null && objTCList.Count > 0)
@@ -645,7 +648,7 @@ namespace ProvenCfoUI.Controllers
                     TempData["TrackingCategories"] = TCgroup;
                 }
             }
-            
+
             ViewBag.UserType = userType;
             ViewBag.UserId = User.UserId;
 
@@ -654,11 +657,12 @@ namespace ProvenCfoUI.Controllers
 
             return View("Reconciliation_New");
 
-        }    
+        }
 
 
-        [HttpPost]  
-        public async Task<JsonResult> ReconcilationPaginiation() {
+        [HttpPost]
+        public async Task<JsonResult> ReconcilationPaginiation()
+        {
 
             ReconciliationFilterVW filter;
             var draw = Request.Form.GetValues("draw").FirstOrDefault();
@@ -675,25 +679,25 @@ namespace ProvenCfoUI.Controllers
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             string recordType = (string)Session["RecordType"];
-       
-            var normalize =new Regex("=&",RegexOptions.Multiline);//=-1&
+
+            var normalize = new Regex("=&", RegexOptions.Multiline);//=-1&
             var checkFilter = new Regex("^[?]", RegexOptions.Multiline);
             var match = new Regex(@"(?<=\=)[A-Za-z0-9\n\t\r\s-1\/#,]+", RegexOptions.Multiline);
             bool IsFilter = false;
 
 
 
-            string f_dateRangeFrom = "";  
+            string f_dateRangeFrom = "";
             string f_dateRangeTo = "";
             string f_amountMin = "";
             string f_amountMax = "";
             string f_bankRule = "";
-            string f_trackingCategory ="";
-            string f_trackingCategory2 ="";
+            string f_trackingCategory = "";
+            string f_trackingCategory2 = "";
             string f_filterType = "";
-            string f_agencyId ="";
+            string f_agencyId = "";
             string f_type = "";
-            string f_ruleNew ="";
+            string f_ruleNew = "";
             string accountName = "";
             if (checkFilter.IsMatch(searchValue))
             {
@@ -709,25 +713,25 @@ namespace ProvenCfoUI.Controllers
 
                 var matches = match.Matches(searchValue);
 
-                  accountName = found[0];
+                accountName = found[0];
 
                 if (found.Length > 2)
                 {
 
-                    accountName=found[0] + "&" + found[1];
+                    accountName = found[0] + "&" + found[1];
                 }
 
                 f_dateRangeFrom = matches[1].Value;
-                 f_dateRangeTo = matches[2].Value;
-                 f_amountMin = matches[3].Value;
-                 f_amountMax = matches[4].Value;
-                 f_bankRule = matches[5].Value;
-                 f_trackingCategory = matches[6].Value;
-                 f_trackingCategory2 = matches[7].Value;
-                 f_filterType = matches[8].Value;
-                 f_agencyId = matches[9].Value;
-                 f_type = matches[10].Value;
-                 f_ruleNew = matches[11].Value;
+                f_dateRangeTo = matches[2].Value;
+                f_amountMin = matches[3].Value;
+                f_amountMax = matches[4].Value;
+                f_bankRule = matches[5].Value;
+                f_trackingCategory = matches[6].Value;
+                f_trackingCategory2 = matches[7].Value;
+                f_filterType = matches[8].Value;
+                f_agencyId = matches[9].Value;
+                f_type = matches[10].Value;
+                f_ruleNew = matches[11].Value;
 
 
 
@@ -746,9 +750,10 @@ namespace ProvenCfoUI.Controllers
                     AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
 
                 }
-                
+
                 ReconciliationMainModelPaging objResult;
-                if (IsFilter) {
+                if (IsFilter)
+                {
 
 
                     filter = new ReconciliationFilterVW()
@@ -762,20 +767,20 @@ namespace ProvenCfoUI.Controllers
                         type1 = recordType,
                         Isreconciled = f_type,
                         Filters = "",
-                        IsFilter=true,
-                        accounts=accountName,
-                        Bankrule=f_bankRule,
+                        IsFilter = true,
+                        accounts = accountName,
+                        Bankrule = f_bankRule,
                         RuleNew = f_ruleNew == "" ? "false" : f_ruleNew,
-                        totalcount =0,
-                        FilterType=f_filterType,
-                        amountMax= f_amountMax==""?"0":f_amountMax,
-                        amountMin = f_amountMin==""?"0":f_amountMin,
-                        TrackingCategory1=f_trackingCategory,
-                        TrackingCategory2=f_trackingCategory2,
-                        dateRangeFrom=f_dateRangeFrom,
-                        dateRangeTo  = f_dateRangeTo,
+                        totalcount = 0,
+                        FilterType = f_filterType,
+                        amountMax = f_amountMax == "" ? "0" : f_amountMax,
+                        amountMin = f_amountMin == "" ? "0" : f_amountMin,
+                        TrackingCategory1 = f_trackingCategory,
+                        TrackingCategory2 = f_trackingCategory2,
+                        dateRangeFrom = f_dateRangeFrom,
+                        dateRangeTo = f_dateRangeTo,
                         userId = UserPref[0].UserID,
-                                type = recordType
+                        type = recordType
 
                     };
                 }
@@ -789,12 +794,12 @@ namespace ProvenCfoUI.Controllers
                         sortOrder = sortColumnDir,
                         AgencyId = AgencyID,
                         type1 = recordType,
-                        Isreconciled = f_type==""?"Unreconciled":f_type,
+                        Isreconciled = f_type == "" ? "Unreconciled" : f_type,
                         Filters = searchValue,
                         IsFilter = false,
-                        accounts=accountName,
+                        accounts = accountName,
                         Bankrule = f_bankRule,
-                        RuleNew = f_ruleNew==""?"false":f_ruleNew,
+                        RuleNew = f_ruleNew == "" ? "false" : f_ruleNew,
                         totalcount = 0,
                         FilterType = f_filterType,
                         amountMax = f_amountMax == "" ? "0" : f_amountMax,
@@ -803,48 +808,54 @@ namespace ProvenCfoUI.Controllers
                         TrackingCategory2 = f_trackingCategory2,
                         dateRangeFrom = f_dateRangeFrom,
                         dateRangeTo = f_dateRangeTo,
-                       userId = UserPref[0].UserID,
-                       type = recordType
+                        userId = UserPref[0].UserID,
+                        type = recordType
 
                     };
-
                 }
-
                 try
                 {
-
-                    var response = ReconciliationController.ClientPostRequest(@"Reconciliation/GetReconciliationPagingList", filter);
-
-                    if (response.IsSuccessStatusCode)
+                    //var response = ReconciliationController.ClientPostRequest(@"Reconciliation/GetReconciliationPagingList", filter);
+                    using (ReconcilationService recoonservice = new ReconcilationService())
                     {
-                        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        objResult= JsonConvert.DeserializeObject<ReconciliationMainModelPaging>(
-                            Newtonsoft.Json.Linq.JObject.Parse(content).ToString());
+                        var response = recoonservice.GetReconciliationList(filter);
+                        if (response.Status == true)
+                        {
+                            objResult = response;
+                            //var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            //objResult = JsonConvert.DeserializeObject<ReconciliationMainModelPaging>(
+                            //    Newtonsoft.Json.Linq.JObject.Parse(content).ToString());
+                        }
+                        else
+                        {
+                            string msg = response.Message;
+                            throw new Exception(msg);
+                        }
+                        Session["AllReconcilationIds"] = objResult.ResultData.AllReconcilationIds;
+                        return Json(new
+                        {
+                            draw = draw,
+                            recordsFiltered = searchValue != null && searchValue.Length > 0 ? response.ResultData.totalcount : objResult.ResultData.totalcount,
+                            recordsTotal = objResult.ResultData.totalcount,
+                            data = objResult.ResultData.company_ReconciliationVMs
+                        });
                     }
-                    else
-                    {
-                        string msg = response.ReasonPhrase;
-                        throw new Exception(msg);
-                    }
-
-                    return Json(new
-                    {
-                        draw = draw,
-                        recordsFiltered = searchValue != null && searchValue.Length > 0 ? objResult.ResultData.totalcount : objResult.ResultData.totalcount,
-                        recordsTotal = objResult.ResultData.totalcount,
-                        data = objResult.ResultData.company_ReconciliationVMs
-                    });
 
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
 
                     log.Debug(ex.Message);
-                
+
                 }
-        
-             
-           return Json(new { draw = draw, recordsFiltered = 0, recordsTotal = 0, data =0
+
+
+                return Json(new
+                {
+                    draw = draw,
+                    recordsFiltered = 0,
+                    recordsTotal = 0,
+                    data = 0
                 });
             }
 
@@ -871,7 +882,7 @@ namespace ProvenCfoUI.Controllers
                 var objResult = objReConcilation.UpdateReconciliation(AgencyID, id, GLAccount, BankRule, TrackingCategory, TrackingCategoryAdditional, reconciliationActionId, UserId, RuleNew);
                 return Json(new { Message = objResult.message }, JsonRequestBehavior.AllowGet);
             }
-             
+
         }
         [CheckSession]
         [HttpPost]
@@ -909,7 +920,7 @@ namespace ProvenCfoUI.Controllers
                                     return Json(new { data = result[0].Item1.Error, Status = false, Message = result[0].Item1.ErrorType != null ? "Error" : result[0].Item1.ErrorType }, JsonRequestBehavior.AllowGet);
                                 }
                             }
-                        }                        
+                        }
                     }
                 }
                 return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
@@ -917,8 +928,8 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
                 return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
-            }                        
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
+            }
         }
         [CheckSession]
         [HttpPost]
@@ -929,7 +940,7 @@ namespace ProvenCfoUI.Controllers
                 var client = objClientService.GetClientById(model.AgencyId.Value);
                 using (BankTransactionRuleEngine BankData = new BankTransactionRuleEngine())
                 {
-                   var result = await BankData.GetReconciliationFromXero(client);
+                    var result = await BankData.GetReconciliationFromXero(client);
                 }
             }
             return Json(new { data = "Error while data sync.", Status = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
@@ -971,7 +982,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -993,7 +1004,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -1012,7 +1023,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 throw ex;
             }
         }
@@ -1032,7 +1043,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",
@@ -1057,7 +1068,7 @@ namespace ProvenCfoUI.Controllers
             }
             catch (Exception ex)
             {
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",
@@ -1096,7 +1107,7 @@ namespace ProvenCfoUI.Controllers
             catch (Exception ex)
             {
 
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",
@@ -1164,7 +1175,7 @@ namespace ProvenCfoUI.Controllers
                         FileName = fileName
                     }, JsonRequestBehavior.AllowGet);
                 }
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",
@@ -1237,7 +1248,7 @@ namespace ProvenCfoUI.Controllers
                         FileName = fileName
                     }, JsonRequestBehavior.AllowGet);
                 }
-                 log.Error(Utltity.Log4NetExceptionLog(ex,Convert.ToString(Session["UserId"])));
+                log.Error(Utltity.Log4NetExceptionLog(ex, Convert.ToString(Session["UserId"])));
                 return Json(new
                 {
                     File = "",
