@@ -647,6 +647,28 @@ var bindEnableAutomation = function () {
         }
     });
 }
+function SetupDynamicLoaderOnScroll() {
+
+
+
+    $("#channel-messages")[0].addEventListener("scroll", function (e) {
+        e.preventDefault();
+        if (e.target.scrollTop == 0) {
+            LoadOnDemandCommentsPagination(scrollChatState.reconciliationId,
+                1, scrollChatState.pageNo * scrollChatState.size);
+
+            scrollChatState.pageNo++;
+
+            scrollChatState.target = e.target;
+        }
+    });
+
+
+
+    scrollChatState.pageNo = 2;
+    scrollChatState.size = 10;
+
+}
 
 
 function BulkActionReconcilation(CommentText) {
@@ -744,6 +766,7 @@ $(document).ready(() => {
     LoadLastRunDate();
     chat.type = 1;
     bindEnableAutomation();
+    SetupDynamicLoaderOnScroll();
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     HidelottieLoader();
@@ -997,6 +1020,7 @@ $(document).ready(() => {
     $('.col-sm-12').eq(2).addClass('table-responsive');
 });
 
+
 $(function () {
 
     $("#email").click(function () {
@@ -1032,6 +1056,8 @@ $(function () {
      //       });
      //   });
         sendEmail();
+
+       
     });
 });
 
@@ -1188,3 +1214,120 @@ $(document).on("click", "button[id=btnComment]", async function (e) {
     resetScrollChatState(e.currentTarget.dataset.id);
     await showReconciliationChat(e.currentTarget.dataset.id);
 });
+async function LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize) {
+
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}&&pageNo=${pageNo}&&pageSize=${pageSize}`, null, async function (responseComm) {
+
+        await LoadAllComments(responseComm.resultData.reconciliationComments);
+
+        if (scrollChatState.target) {
+
+            setTimeout(_ => scrollChatState.target.scrollTop = 4, 150);
+        }
+        //setScrollPosition();
+        hideChatContentLoader();
+    });
+}
+function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize) {
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, async function (response) {
+
+        setCommentsHeader(response.resultData);
+        setTimeout(async function () {
+            await LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize);
+        }, 200);
+
+
+    });
+
+
+    $btnSendMessage.unbind().click(function () {
+
+        addNewMessagetoChatwindow($('#message-body-input').val());
+
+    });
+    var addNewMessagetoChatwindow = async function (input) {
+
+        if (input == "") {
+            return;
+        }
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+
+
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerHTML != '')
+
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000);
+
+    $messageBodyFileUploader.off("change");
+    $messageBodyFileUploader.on("change", function (e) {
+        var files = $(this)[0].files;
+        if (files.length === 0) {
+            ShowAlertBoxError("File uploader", "Select atleast one file.");
+            return;
+        }
+
+        if (files.length > 5) {
+            ShowAlertBoxError("File uploader", "You can upload max 5 files at a time.");
+            return;
+        }
+
+        //TODO//Add Functionality to Preview files before upload using fancy Box
+
+        //Upload
+        files.forEach(function (file) {
+            var uploader = new Uploader(file);
+            let size = uploader.getSizeInMB();
+            if (size > 20) {
+                ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
+            }
+            else {
+
+
+                addMediaMessageLocalFolder(file);
+
+            }
+        })
+    });
+}
