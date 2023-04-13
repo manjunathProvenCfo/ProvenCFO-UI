@@ -600,35 +600,59 @@ var loadreconcilationcomments = function () {
     $channelMessages.empty();
     $messageBodyInput.val('').focus();
     $messageBodyInput.trigger('change');
-    getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${chat.clientId}&MaxCount=${0}`, null, function (response) {
 
-        var Reconciliationdata = response;
-        if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
-            $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
-                var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g, aReconciliation.id);
-                $participantsContainer.append(recHtml);
-            });
-        }
-        else {
-            $participantsContainer.append('<div class="center" >No Record Found</div>')
-            hideChatContentLoader();
-            return;
+    if (chat.type === 1) {
 
-        }
+        getAjaxSync(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${chat.clientId}&MaxCount=${0}`, null, function (response) {
 
-        if ($participantsContainer.children(0)[0] != undefined) {
-            // $participantsContainer.children(0)[0].click();
-            // loadCommentsPage($participantsContainer.children(0)[0].id);
-            loadCommentsPageOnReconcilationId($participantsContainer.children(0)[0].id);
-        }
-        else {
-            //ShowAlertBoxWarning("No participant exists for chat");
-        }
+            var Reconciliationdata = response;
+            if (Reconciliationdata.resultData && Reconciliationdata.resultData.length > 0) {
+                $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
+                    var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g, aReconciliation.id);
+                    $participantsContainer.append(recHtml);
+                });
+            }
+            else {
+                $participantsContainer.append('<div class="center" >No Record Found</div>')
+                hideChatContentLoader();
+                return;
 
-        //hideChatContentLoader();
-        /*$participants.eq(0).click();*/
-    });
+            }
 
+            if ($participantsContainer.children(0)[0] != undefined) {
+                // $participantsContainer.children(0)[0].click();
+                // loadCommentsPage($participantsContainer.children(0)[0].id);
+                loadCommentsPageOnReconcilationId($participantsContainer.children(0)[0].id);
+            }
+            else {
+                //ShowAlertBoxWarning("No participant exists for chat");
+            }
+
+            //hideChatContentLoader();
+            /*$participants.eq(0).click();*/
+        });
+    } else {
+
+        getAjaxSync(apiurl + `Reconciliation/getMentionCommentedReconciliations?AgencyID=${chat.clientId}&UserId=${chat.userId}`, null, function (response) {
+
+            var Reconciliationdata = response;
+            if (Reconciliationdata.resultData != null && Reconciliationdata.resultData.length > 0) {
+                $.each(Reconciliationdata.resultData, function (index, aReconciliation) {
+                    var recHtml = CommentHtmls.ReconciliationHtml.replaceAll(/{account}/g, aReconciliation.account_name).replace('{agencyName}', aReconciliation.company).replace('{description}', aReconciliation.description).replaceAll(/{id}/g, aReconciliation.id).replaceAll(/{channelUniqueNameGuid}/g, aReconciliation.id);
+                    $participantsContainer.append(recHtml);
+                });
+            }
+            else {
+                $participantsContainer.append('<div class="center" >No Record Found</div>')
+                hideChatContentLoader();
+                return;
+            }
+
+            if ($participantsContainer.children(0)[0] != undefined) {
+                loadCommentsPageOnReconcilationId($participantsContainer.children(0)[0].id);
+            }
+        });
+    }
 }
 
 var addMediaMessageLocalFolder = function (file) {
@@ -883,29 +907,31 @@ var getChatParticipants = function () {
     }
     else {
 
-        getAjaxSync(participantsURL, null, function (response) {
-            if (response.length > 0) {
-                chat.channels = response;
-                let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
-                chat.participants = [];
-                arrParticipants.forEach(x => {
-                    if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
-                        chat.participants.push(x);
-                    }
-                });
-                for (var i = 0; i < chat.channels.length; i++) {
-                    if (chat.channels[i].IsPrivate === true) {
-                        chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
-                    }
-                    else {
-                        chat.channels[i].ChannelImage = Default_Profile_Image;
-                    }
-                }
+        loadreconcilationcomments();
 
-                setOnlineOfflineMembersArray();
-                renderParticipants();
-            }
-        });
+        //getAjaxSync(participantsURL, null, function (response) {
+        //    if (response.length > 0) {
+        //        chat.channels = response;
+        //        let arrParticipants = Array.prototype.concat.apply([], chat.channels.map(x => x.ChatParticipants));
+        //        chat.participants = [];
+        //        arrParticipants.forEach(x => {
+        //            if (chat.participants.findIndex(i => i.Email === x.Email) == -1) {
+        //                chat.participants.push(x);
+        //            }
+        //        });
+        //        for (var i = 0; i < chat.channels.length; i++) {
+        //            if (chat.channels[i].IsPrivate === true) {
+        //                chat.channels[i].ChannelImage = (isEmptyOrBlank(chat.channels[i].ChatParticipants[0].ProfileImage) === true ? Default_Profile_Image : chat.channels[i].ChatParticipants[0].ProfileImage);
+        //            }
+        //            else {
+        //                chat.channels[i].ChannelImage = Default_Profile_Image;
+        //            }
+        //        }
+
+        //        setOnlineOfflineMembersArray();
+        //        renderParticipants();
+        //    }
+        //});
     }
 }
 var setParticipants = function (response, type) {
