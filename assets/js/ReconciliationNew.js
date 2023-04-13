@@ -477,7 +477,9 @@ function InitEvents() {
 
     });
 
-
+    $("#btnConnectToXero").click(function () {
+        LoadAuthenticationWindow(1, true);
+    });
     $("#CancelBulkupdate").click(function () {
 
         if ($("#divBulkUpdate").is(":visible")) {
@@ -1198,6 +1200,20 @@ function sendEmail() {
         });
     });
 }
+var LoadAuthenticationWindow = function (type, IsFromReconPage) {
+    var pClient = {
+        Id: ClientId ,
+        ThirdPartyAccountingApp_ref: type,
+        IsFromReconPage: IsFromReconPage
+    }
+    getAjaxSync(`/Integration/GenerateAuthorizationPromptUrl`, pClient, function (response) {
+        if (response.Status === "Success") {
+            window.location.href = response.url;
+        }
+
+    });
+
+}
 $(document).on("click", ".odd,.even", async function (e) {
     $(".odd,.even").removeClass("bg-200");
     $(this).addClass("bg-200");
@@ -1228,6 +1244,7 @@ async function LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize) {
         hideChatContentLoader();
     });
 }
+
 function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize) {
     showChatContentLoader();
     $participantsContainer = $("#chatParticipants");

@@ -61,7 +61,17 @@
 
                                 @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                    if (ViewBag.AppTokenStatus == true)
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="btnConnectToXero" type="button" title="Connect to Xero" >
+                                            <img src="~/assets/img/icons/connect-white.svg" alt="Connect to Xero button" width="170">
+                                        </button>
+
+                                    }
 
                                 }
                                 else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
