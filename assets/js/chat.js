@@ -633,7 +633,7 @@ var loadreconcilationcomments = function () {
         });
     } else {
 
-        getAjaxSync(apiurl + `Reconciliation/getMentionCommentedReconciliations?AgencyID=${chat.clientId}&UserId=${chat.userId}`, null, function (response) {
+        getAjaxSync(apiurl + `Reconciliation/GetUserMentionedComments?AgencyID=${chat.clientId}&UserId=${chat.userId}`, null, function (response) {
 
             var Reconciliationdata = response;
             if (Reconciliationdata.resultData != null && Reconciliationdata.resultData.length > 0) {
