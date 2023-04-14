@@ -308,33 +308,46 @@ var loadChatPage = async function (isPublicChatOnly, type, autoSelectParticipant
 
     $messageBodyFileUploader.off("change");
     $messageBodyFileUploader.on("change", function (e) {
-        var files = $(this)[0].files;
-        if (files.length === 0) {
+        var chatFiles = $(this)[0].files;
+        if (chatFiles.length === 0) {
             ShowAlertBoxError("File uploader", "Select atleast one file.");
             return;
         }
 
-        if (files.length > 5) {
+        if (chatFiles.length > 5) {
             ShowAlertBoxError("File uploader", "You can upload max 5 files at a time.");
             return;
         }
 
         //TODO//Add Functionality to Preview files before upload using fancy Box
 
-        //Upload
-        files.forEach(function (file) {
-            var uploader = new Uploader(file);
-            let size = uploader.getSizeInMB();
+        //Upload -- Commented on 14-04-2023.
+        //files.forEach(function (file) {
+        //    var uploader = new Uploader(file);
+        //    let size = uploader.getSizeInMB();
+        //    if (size > 20) {
+        //        ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
+        //    }
+        //    else {
+        //        addMediaMessageLocalFolder(file);
+        //        //addMediaMessage(file);
+        //    }
+        //})
+
+        for (var index = 0; index < chatFiles.length; index++) {
+            var upload = new Uploader(chatFiles[index]);
+            let size = upload.getSizeInMB();
+
             if (size > 20) {
                 ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
             }
             else {
-                addMediaMessageLocalFolder(file);
-                //addMediaMessage(file);
+                addMediaMessageLocalFolder(chatFiles[index]);
             }
-        })
-    });
+        }
 
+    });
+        
     //Notification Reconciliation chat selection
     if (isEmptyOrBlank(getParameterByName("isRecon")) === false && getParameterByName("isRecon") === "true") {
         $("#divChatSiderbarFilters > button[data-type=1]").click();
