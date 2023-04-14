@@ -456,7 +456,9 @@ function InitEvents() {
                         sessionStorage.removeItem("NotInBanksData");
 
                         //uncampatible on safari.
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
+                        /*  let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/b/g, "B")).replace(/([a-z])([A-Z])/g, '$1 $2');
+
                      
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
@@ -522,6 +524,8 @@ function InitEvents() {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
             $('#divChat').hide();
+            $('#example').DataTable().draw();
+            
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -1220,6 +1224,7 @@ $(document).on("click", ".odd,.even", async function (e) {
 
     if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
         let elComment = $(this).find("button[id=btnComment]");
+        $(this).addClass('bg-200');
 
         resetScrollChatState(elComment.data().id);
         await showReconciliationChat(elComment.data().id);
