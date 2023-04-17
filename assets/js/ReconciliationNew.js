@@ -1217,6 +1217,19 @@ var LoadAuthenticationWindow = function (type, IsFromReconPage) {
 
     });
 
+var showReconciliationChat = async function (channelUniqueNameGuid) {
+
+    resetScrollChatState(channelUniqueNameGuid);
+    $('#divFilter').hide();
+    $('#divFilter').addClass('d-none');
+    $('#divBulkUpdate').hide();
+    $('#divBulkUpdate').addClass('d-none');
+    $('#divChat').show();
+    $('#divChat').removeClass('d-none');
+    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+    await loadCommentsPage(channelUniqueNameGuid);
+
 }
 $(document).on("click", ".odd,.even", async function (e) {
     $(".odd,.even").removeClass("bg-200");
