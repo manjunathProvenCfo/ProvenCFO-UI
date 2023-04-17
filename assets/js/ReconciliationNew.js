@@ -773,6 +773,7 @@ $(document).ready(() => {
     chat.type = 1;
     bindEnableAutomation();
     SetupDynamicLoaderOnScroll();
+  
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     HidelottieLoader();
@@ -1204,6 +1205,7 @@ function sendEmail() {
         });
     });
 }
+
 var LoadAuthenticationWindow = function (type, IsFromReconPage) {
     var pClient = {
         Id: ClientId ,
@@ -1216,6 +1218,9 @@ var LoadAuthenticationWindow = function (type, IsFromReconPage) {
         }
 
     });
+
+}
+
 
 var showReconciliationChat = async function (channelUniqueNameGuid) {
 
