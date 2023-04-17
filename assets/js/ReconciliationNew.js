@@ -42,7 +42,7 @@ Array.prototype.forEach.bind(glAccounts_.children)(ele => {
 function RenderAction(data, type, row) {
 
     var selectAction = `<div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
-                                                       <select class="select-picker bnk-action" data-reconciliationId=${row.id} utcdate=${row.ActionModifiedDateUTC} ModifiedBy=${row.ActionModifiedBy}  data-selectedValue=${data} style="width:90%;">${bnkaction_Opt}</select>
+                                                       <select class="select-picker bnk-action" data-reconciliationId=${row.id} utcdate=${row.ActionModifiedDateUTC} ModifiedBy=${row.ActionModifiedBy}  data-selectedValue=${data} style="width:180px;">${bnkaction_Opt}</select>
                                                     </div>`;
 
     return selectAction;
