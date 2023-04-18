@@ -674,7 +674,7 @@ namespace ProvenCfoUI.Controllers
             var searchValue = Request.Form.GetValues("search[value]").First();
 
 
-            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&\-,]+");
+            var specialCase = new Regex(@"(?<=accounts=)[A-Za-z0-9\s\&\-,%/()]+");
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -755,6 +755,7 @@ namespace ProvenCfoUI.Controllers
                 if (IsFilter)
                 {
 
+                    accountName = accountName.Replace("%23", "#").Replace("%28", "(").Replace("%29", ")");
 
                     filter = new ReconciliationFilterVW()
                     {

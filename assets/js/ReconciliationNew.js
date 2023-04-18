@@ -72,7 +72,7 @@ function addi_track_category(data, type, row) {
 
 function RenderBankRule(r, r1, r3) {
     if (r == true) {
-        return `<div class="row justify-content-between">
+        return `<div class="row justify-content-between" style="margin: 0">
                                                         <div class="col-auto">
                                                             <input id="ruleCheck" name="ruleCheck" onchange="javascript:onChangeBankRules('${r3.id}',this.checked,this)" checked="true" type="checkbox" value="true">
 
@@ -80,7 +80,7 @@ function RenderBankRule(r, r1, r3) {
                                                     </div>`;
 
     }
-    return `<div class="row justify-content-between">
+    return `<div class="row justify-content-between" style="margin: 0">
                                                         <div class="col-auto">
                                                             <input id="ruleCheck" name="ruleCheck" onchange="javascript:onChangeBankRules('${r3.id}',this.checked,this)"  type="checkbox" value="false">
 
@@ -89,8 +89,12 @@ function RenderBankRule(r, r1, r3) {
 }
 function GLAccountsRender(r, r1, r3) {  //value,name,row
 
-    var select = `<div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
-  <select class="select-picker gl-account"  utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:90%;">${glAccountsOpt}</select></div>`;
+    var select = `<div class="row justify-content-between">
+                       <div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
+
+                            <select class="select-picker gl-account" utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:180px;">${glAccountsOpt}</select>
+                      </div>
+                  </div>`;
 
     return select;
 }
@@ -1021,9 +1025,12 @@ $(document).ready(() => {
             type: "POST"
         },
         processing: true,
-        columns: configureColumn()
+        columns: configureColumn(),
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('btn-reveal-trigger cursor-pointer');
+            $(row).find('td').addClass('sort pr-1 align-middle col-xs-1'); 
+        }
     });
-
     $('.col-sm-12').eq(2).addClass('table-responsive');
 });
 
