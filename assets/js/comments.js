@@ -637,10 +637,7 @@ var addNewComment = function (inputText) {
     $channelMessages.append(chtml);
     SaveNewcommenttoDB(inputText, chat.channelUniqueNameGuid);
     setScrollPosition();
-    $("button[data-id*='" + chat.channelUniqueNameGuid + "'] svg").removeClass('text-dark');
-    $('#example').DataTable().draw();
-   
-    
+    $("button[data-id*='" + chat.channelUniqueNameGuid + "'] span").removeClass('text-dark');
 }
 var SaveNewcommenttoDB = function (InputcommentText, ReconciliationId) {
     var currentdate = new Date();

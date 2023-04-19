@@ -528,7 +528,6 @@ function InitEvents() {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
             $('#divChat').hide();
-            $('#example').DataTable().draw();
             
         }
         else {
@@ -1091,7 +1090,7 @@ $("#email-to").on("focus", function (e) {
 $("#email-to").on("blur", function (e) {
     e.preventDefault();
     e.target.setAttribute("readonly", "");
-    /*validateMultipleEmails($('#email-to').val());*/
+    validateMultipleEmails($('#email-to').val());
 });
 
 function validateMultipleEmails(emailinput) {
@@ -1104,7 +1103,7 @@ function validateMultipleEmails(emailinput) {
         return;
     }
     emails = emails.split(',');
-    var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
+    var regexs = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
 
 
 
