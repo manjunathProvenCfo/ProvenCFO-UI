@@ -668,9 +668,30 @@ namespace ProvenCfoUI.Controllers
             var draw = Request.Form.GetValues("draw").FirstOrDefault();
             var start = Request.Form.GetValues("start").FirstOrDefault();
             var length = Request.Form.GetValues("length").FirstOrDefault();
-            var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
-            var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+            //var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
 
+            var sortColumnIndex = Request.Form.GetValues("order[0][column]").FirstOrDefault();
+            var sortColumn = "";
+
+            if (sortColumnIndex == "0")
+            {
+                sortColumn = Request.Form.GetValues("columns[2][name]").FirstOrDefault();
+            }
+            else
+            {
+                sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+            }
+            //var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+
+            var sortColumnDir = "";
+            if (sortColumnIndex == "0")
+            {
+                sortColumnDir = "desc";
+            }
+            else
+            {
+                sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+            }
             var searchValue = Request.Form.GetValues("search[value]").First();
 
 

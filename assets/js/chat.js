@@ -1212,7 +1212,7 @@ $("#divChatSiderbarFilters > button").click(function () {
         if (type === 0) {
             chat.type = 0;
             setTimeout(function () {
-                $(".chat-content-header span").text('');
+                //$(".chat-content-header span").text('');
                 activeChannel = null;
                 chat.selectedRecentParticipantOnce = false;
                 addMessageProcessed = [];

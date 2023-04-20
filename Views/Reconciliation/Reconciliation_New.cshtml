@@ -103,25 +103,25 @@
                                         <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
                                     </div>
                                 </th>
-                                <th>Account</th>
-                                <th>Date</th>
-                                <th>Who</th>
-                                <th>Description</th>
-                                <th>Amount</th>
+                                <th class="sort pr-1 align-middle">Account</th>
+                                <th class="sort pr-1 align-middle">Date</th>
+                                <th class="sort pr-1 align-middle">Who</th>
+                                <th class="sort pr-1 align-middle">Description</th>
+                                <th class="sort pr-1 align-middle">Amount</th>
 
                                 @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.IsHiddenGLAccount == false)
                                 {
 
-                                    <th>GL Account</th>
+                                    <th class="sort pr-1 align-middle">GL Account</th>
                                 }
                                 @if (ViewBag.IsHiddenGLAccount == true)
                                 {
-                                    <th> Action </th>
+                                    <th class="sort pr-1 align-middle"> Action </th>
                                 }
                                 @if (ViewBag.IsBankRuleVisible)
                                 {
 
-                                    <th>Rule</th>
+                                    <th class="sort pr-1 align-middle">Rule</th>
                                 }
 
                                 @if (TempData["TrackingCategories"] != null && ViewBag.IsHiddenGLAccount == false)
@@ -354,19 +354,20 @@ else
             url = replaceAll(url, ')', '%29');
             //window.location.href = url;
             //HidelottieLoader();
-
+            
             let dbTable = $("#example").DataTable();
             url = url.split('?')[1];
             let dbData = url;
             dbTable.search(`??${dbData}??`).draw();
             $(".dataTables_filter input").val('');
 
+            $("#Filter").trigger("click");
             //dbTable.search('');
 
 
         }
         function FillterResets() {
-            $("#example").DataTable().search("").draw();
+            window.location.reload();
         }
         $("#filterRule_New").change(function () {
 

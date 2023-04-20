@@ -41,7 +41,7 @@ Array.prototype.forEach.bind(glAccounts_.children)(ele => {
 
 function RenderAction(data, type, row) {
 
-    var selectAction = `<div class="col-auto lastmodified" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
+    var selectAction = `<div class="col-auto lastmodified renderAc" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
                                                        <select class="select-picker bnk-action" data-reconciliationId=${row.id} utcdate=${row.ActionModifiedDateUTC} ModifiedBy=${row.ActionModifiedBy}  data-selectedValue=${data} style="width:180px;">${bnkaction_Opt}</select>
                                                     </div>`;
 
@@ -51,7 +51,7 @@ function RenderAction(data, type, row) {
 function track_category(data, type, row) {
 
     var selectCategory = `<div class="row justify-content-between">
-                                                    <div class="col-auto">
+                                                    <div class="col-auto trackCa1">
                                                          <select class="select-picker track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_Opt}</select>
                                                     </div>
                                                 </div>`;
@@ -62,7 +62,7 @@ function track_category(data, type, row) {
 function addi_track_category(data, type, row) {
     
     var selectCategoryRef = `<div class="row justify-content-between">
-                                                    <div class="col-auto">
+                                                    <div class="col-auto trackCa2">
                                                          <select class="select-picker addi-track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_ref_Opt}</select>
                                                     </div>
                                                 </div>`;
@@ -90,9 +90,9 @@ function RenderBankRule(r, r1, r3) {
 function GLAccountsRender(r, r1, r3) {  //value,name,row
 
     var select = `<div class="row justify-content-between">
-                       <div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
+                       <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
 
-                            <select class="select-picker gl-account" utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:180px;">${glAccountsOpt}</select>
+                            <select class="select-picker gl-account" utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:250px;">${glAccountsOpt}</select>
                       </div>
                   </div>`;
 
@@ -1017,7 +1017,11 @@ $(document).ready(() => {
                 resetScrollChatState(e.currentTarget.dataset.id);
                 await showReconciliationChat(e.currentTarget.dataset.id);
             });
-             setTimeout(()=>lastModify(),0);
+            setTimeout(() => lastModify(), 0);
+
+            $('.glACCOUNTS, .trackCa2, .trackCa1, .renderAc').on('click', function () {
+                $('.select2-results__options li').css('font-size', '13px');
+            })
         },
         ajax: {
             url: window.location.origin+"/Reconciliation/ReconcilationPaginiation",
@@ -1032,7 +1036,6 @@ $(document).ready(() => {
     });
     $('.col-sm-12').eq(2).addClass('table-responsive');
 });
-
 
 $(function () {
 
