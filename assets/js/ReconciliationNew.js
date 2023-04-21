@@ -88,15 +88,21 @@ function RenderBankRule(r, r1, r3) {
                                                     </div>`;
 }
 function GLAccountsRender(r, r1, r3) {  //value,name,row
-
-    var select = `<div class="row justify-content-between">
+    var dateFormated = getLocalTime(formatDateTime(r3.GlAccountModifiedDateUTC, 'DD MMM YYYY hh:mm:ss A'));
+    var select =
+        `<div class="row justify-content-between">
                        <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
 
-                            <select class="select-picker gl-account" utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:250px;">${glAccountsOpt}</select>
+                            <select class="select-picker gl-account" utcdate="${dateFormated}" ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:250px;">${glAccountsOpt}</select>
                       </div>
                   </div>`;
 
     return select;
+}
+var formatDateTime = function (date, format) {
+    if (isEmptyOrBlank(date))
+        return '';
+    return moment(date).format(format);
 }
 
 function onChangeBankRules(id, value, obj) {
