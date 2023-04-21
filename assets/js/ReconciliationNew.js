@@ -276,40 +276,6 @@ var EnableSelectedBulkUpdateButton = function () {
 }
 
 
-
-var EnableSelectedBulkUpdateButton = function () {
-    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
-    var SelectedItems = sessionStorage.getItem('SelectedRecords');
-    var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
-
-
-    if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
-        $("#ibulkupdate").attr('disabled', false);
-        $("#ibulkupdate").attr('title', 'Bulk Update');
-
-    }
-
-    else {
-
-        if (unselectedItems == null) {
-
-            $("#ibulkupdate").attr('disabled', true);
-            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
-        }
-
-        if (SelectedItems == "" && unselectedItems.split(",").length < 2) {
-
-            $("#ibulkupdate").attr('disabled', true);
-            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
-        }
-
-
-    }
-
-
-}
-
-
 function SelectAllClick(e) {
     if (e.checked == false) {
         sessionStorage.removeItem('SelectedRecords');
@@ -317,16 +283,19 @@ function SelectAllClick(e) {
         $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
       
         $(".checkbox-bulk-select-target").trigger("click");
-    } else if (e.checked==true){
-    
-        $(".checkbox-bulk-select-target").trigger("click");
-    }
+    } else if (e.checked == true) {
 
+        $(".checkbox-bulk-select-target").each(function () {
+            if (!$(this).is(":checked")) {
+                $(this).trigger("click");
+            }
+        });
+
+    }
     EnableSelectedBulkUpdateButton();
 
 }
 function SelectClick(e) {
-    
     if (e.checked) {
         var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
 
@@ -366,7 +335,6 @@ const scrollChatState = {
 
 
 function ResetCheckBoxOnPageChange() {
-
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
 
     if (IsAllSelected) {
@@ -385,18 +353,13 @@ function ResetCheckBoxOnPageChange() {
                 if (chkBox.getAttribute("id") == id) {
                     chkBox.checked = true;
                 } else {
-                    chkBox.checked = false;
+                    if (chkBox.checked == false) {
+                        chkBox.checked = false;
+                    }
                 }
             });
         });
-
-         
-
         $(".checkbox-bulk-select-target").trigger("change");
-
-
-
-        
     }
 }
 const resetScrollChatState = function (rec) {
@@ -797,7 +760,6 @@ $(document).ready(() => {
         var column = [
             {
                 data: "id", name: "id", sortable: false, render: (r1, r2, r3) => {
-
                     return `<div class="custom-control custom-checkbox">
                                             <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="${r1}" value="${r1}" />
 

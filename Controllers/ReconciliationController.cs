@@ -672,26 +672,19 @@ namespace ProvenCfoUI.Controllers
 
             var sortColumnIndex = Request.Form.GetValues("order[0][column]").FirstOrDefault();
             var sortColumn = "";
-
-            if (sortColumnIndex == "0")
-            {
-                sortColumn = Request.Form.GetValues("columns[2][name]").FirstOrDefault();
-            }
-            else
-            {
-                sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
-            }
-            //var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
-
             var sortColumnDir = "";
             if (sortColumnIndex == "0")
             {
+                sortColumn = Request.Form.GetValues("columns[2][name]").FirstOrDefault();
                 sortColumnDir = "desc";
             }
             else
             {
+                sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
                 sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
             }
+            //var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+
             var searchValue = Request.Form.GetValues("search[value]").First();
 
 
