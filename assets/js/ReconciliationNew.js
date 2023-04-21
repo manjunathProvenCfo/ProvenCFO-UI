@@ -89,7 +89,7 @@ function RenderBankRule(r, r1, r3) {
 }
 function GLAccountsRender(r, r1, r3) {  //value,name,row
     var dateFormated = formatDateTime(r3.GlAccountModifiedDateUTC, 'DD MMM YYYY hh:mm:ss A');
-    dateFormated = getLocalTime(dateFormated);
+    
     var select =`<div class="row justify-content-between">
                        <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
 
