@@ -89,9 +89,28 @@ function RenderBankRule(r, r1, r3) {
 }
 function GLAccountsRender(r, r1, r3) {  //value,name,row
     var dateFormated = formatDateTime(r3.GlAccountModifiedDateUTC, 'DD MMM YYYY hh:mm:ss A');
+    var utctime = dateFormated;
+    var ModifiedBy = r3.GlAccountModifiedBy;
+    var imsg = 'No Modification yet.';
+    if (utctime != null && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
+        var mod = (utctime + "").match(/([0-9]+)/g);
+        if (mod == null) {
+
+            imsg = "No Modification yet.";
+        } else {
+
+            let modified = mod.length > 0 ? mod[0] : "";
+            var localtime = getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            imsg =  msg;
+        }
+    }
+    else {
+        imsg ="No Modification yet.";
+    }
     
     var select =`<div class="row justify-content-between">
-                       <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${dateFormated}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
+                       <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${dateFormated}" ModifiedBy="${r3.GlAccountModifiedBy}" title="${imsg}">
 
                             <select class="select-picker gl-account" utcdate="${dateFormated}" ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:250px;">${glAccountsOpt}</select>
                       </div>
@@ -985,7 +1004,7 @@ $(document).ready(() => {
                 resetScrollChatState(e.currentTarget.dataset.id);
                 await showReconciliationChat(e.currentTarget.dataset.id);
             });
-            setTimeout(() => lastModify(), 0);
+            //setTimeout(() => lastModify(), 2000);
 
             $('.glACCOUNTS, .trackCa2, .trackCa1, .renderAc').on('click', function () {
                 $('.select2-results__options li').css('font-size', '13px');
