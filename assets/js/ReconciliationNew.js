@@ -100,7 +100,7 @@ function GLAccountsRender(r, r1, r3) {  //value,name,row
         } else {
 
             let modified = mod.length > 0 ? mod[0] : "";
-            var localtime = getLocalTime(utctime);
+            var localtime =utctime ///getLocalTime(utctime);
             var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
             imsg =  msg;
         }
