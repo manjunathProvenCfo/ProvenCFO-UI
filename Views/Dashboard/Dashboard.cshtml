@@ -36,6 +36,7 @@
     </div>
 </div>
 @section scripts{
+   <script>HidelottieLoader();</script>
     @Scripts.Render("~/bundles/js/reconciliationMain")
     @Scripts.Render("~/bundles/js/kanban")
     <script>showWaitMeLoader('.dashboard-frame');</script>
@@ -66,8 +67,6 @@
             SetUserPreferencesForAgency();
             window.location.reload();
         }
-        $(document).ready(function () {
-            HidelottieLoader();
-        });
+     
     </script>
 }

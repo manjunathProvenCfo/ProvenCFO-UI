@@ -61,7 +61,17 @@
 
                                 @if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
                                 {
-                                    <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                    if (ViewBag.AppTokenStatus == true)
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="OnDemandData" type="button" title="Request on-demand data"><span class="fa fa-undo" data-fa-transform="shrink-3 down-2 m-2 p"></span></button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-falcon-default btn-sm mx-1" id="btnConnectToXero" type="button" title="Connect to Xero" >
+                                            <img src="~/assets/img/icons/connect-white.svg" alt="Connect to Xero button" width="170">
+                                        </button>
+
+                                    }
 
                                 }
                                 else if (ViewBag.IsStaffUser == true && ViewBag.AccountingPackage != 2)
@@ -83,35 +93,51 @@
                 </div>
             </div>
             <div class="card-body px-0 pt-0">
-                <table id="example" class="display table" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
-                                <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
-                                    <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
-                                </div>
-                            </th>
-                            <th>Account</th>
-                            <th>Date</th>
-                            <th>Who</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            @if (ViewBag.isvisibleGlAccount)
-                            {
+                <div class="dashboard-data-table">
+                    <table id="example" class="display table table-sm table-dashboard fs--1 border-bottom" style="width:100%" data-options='{"responsive":true,"pagingType":"simple","lengthChange":true,"searching":true,"pageLength":8,"columnDefs":[{"targets":[0,8],"orderable":true,"width":10%}],"language":{"info":"_START_ to _END_ Items of _TOTAL_ — <a href=\"#!\" class=\"font-weight-semi-bold\"> A Cherry Blossom <span class=\"fas fa-angle-right\" data-fa-transform=\"down-1\"></span> </a>"},"buttons":["copy","excel"]}'>
+                        <thead class="bg-200 text-900">
+                            <tr>
+                                <th class="no-sort pr-1 align-middle data-table-row-bulk-select">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input checkbox-bulk-select" id="checkbox-bulk-purchases-select" onchange="SelectAllClick(this);" type="checkbox" data-checkbox-body="#purchases" data-checkbox-actions="#purchases-actions" data-checkbox-replaced-element="#dashboard-actions" />
+                                        <label class="custom-control-label" for="checkbox-bulk-purchases-select"></label>
+                                    </div>
+                                </th>
+                                <th class="sort pr-1 align-middle">Account</th>
+                                <th class="sort pr-1 align-middle">Date</th>
+                                <th class="sort pr-1 align-middle">Who</th>
+                                <th class="sort pr-1 align-middle">Description</th>
+                                <th class="sort pr-1 align-middle">Amount</th>
 
-                                <th>GL Account</th>
-                            }
-                            @if (ViewBag.IsBankRuleVisible)
-                            {
+                                @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0 && ViewBag.IsHiddenGLAccount == false)
+                                {
 
-                                <th>Rule</th>
-                            }
-                            <th class="top no-sort align-middle data-table-row-action"></th>
-                        </tr>
-                    </thead>
+                                    <th class="sort pr-1 align-middle">GL Account</th>
+                                }
+                                @if (ViewBag.IsHiddenGLAccount == true)
+                                {
+                                    <th class="sort pr-1 align-middle"> Action </th>
+                                }
+                                @if (ViewBag.IsBankRuleVisible)
+                                {
 
-                </table>
+                                    <th class="sort pr-1 align-middle">Rule</th>
+                                }
+
+                                @if (TempData["TrackingCategories"] != null && ViewBag.IsHiddenGLAccount == false)
+                                {
+                                    foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
+                                    {
+                                        <th class="sort pr-10 align-center ">@tcgroup.Name</th>
+                                    }
+
+                                }
+                                <th class="top no-sort align-middle data-table-row-action"></th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -125,6 +151,7 @@
         @Html.Partial("_reconcilationBulkupdate", true)
     </div>
 </div>
+@*table-sm table-dashboard fs--1 border-bottom*@
 
 @if (ViewBag.AccountingPackage == 2)
 {
@@ -140,7 +167,60 @@ else
 
 @{
     var gl_accounts = (List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"];
+    var rcn_action = (List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"];
+
+    List<Proven.Model.XeroTrackingOptionGroupVM> track_category = new List<Proven.Model.XeroTrackingOptionGroupVM>();
+    if (TempData["TrackingCategories"] != null)
+    {
+        track_category = (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"];
+    }
+
 }
+
+<span id="track_category_count" value="@track_category.Count()" hidden></span>
+
+@if (rcn_action != null)
+{
+    <select id="rcn-action" hidden>
+        @for (var x = 0; x < rcn_action.Count; x++)
+        {
+            <option value="@rcn_action[x].Id">@rcn_action[x].ActionName</option>
+
+        }
+    </select>
+}
+
+@if (track_category != null)
+{
+    var count = 0;
+    foreach (var tk_category in track_category)
+    {
+        if (count == 0)
+        {
+            <select id="item_tk_category" hidden>
+                @for (var x = 0; x < tk_category.Options.Count; x++)
+                {
+                    <option value="@tk_category.Options[x].Id">@tk_category.Options[x].Option</option>
+
+                }
+            </select>
+        }
+        else
+        {
+            <select id="item_tk_category_ref" hidden>
+                @for (var x = 0; x < tk_category.Options.Count; x++)
+                {
+                    <option value="@tk_category.Options[x].Id">@tk_category.Options[x].Option</option>
+
+                }
+            </select>
+        }
+        count++;
+    }
+
+}
+
+
 <select id="all-gl-accounts" hidden>
     @for (var o = 0; o < gl_accounts.Count; o++)
     {
@@ -154,10 +234,11 @@ else
     @Scripts.Render("~/bundles/js/table")
     <script>
         //Configure permission globals
-            const UserType = "@ViewBag.UserType";
-            const RecordType= "@ViewBag.RecordType";
-            const GlAccountVisible = "@ViewBag.isvisibleGlAccount";
-            const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
+        const UserType = "@ViewBag.UserType";
+        const RecordType= "@ViewBag.RecordType";
+        const GlAccountVisible = "@ViewBag.IsHiddenGLAccount";
+        const IsBankRuleVisible = "@ViewBag.IsBankRuleVisible";
+        const TracingCategory = "@TempData["TrackingCategories"]";
     </script>
 
     <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
@@ -271,21 +352,43 @@ else
             url = replaceAll(url, '#', '%23');
             url = replaceAll(url, '(', '%28');
             url = replaceAll(url, ')', '%29');
-   
             //window.location.href = url;
             //HidelottieLoader();
-
-
+            
             let dbTable = $("#example").DataTable();
             url = url.split('?')[1];
-            dbTable.search(`??${url}??`).draw();
-            dbTable.search('');
-            
-     
+            let dbData = url;
+            dbTable.search(`??${dbData}??`).draw();
+            $(".dataTables_filter input").val('');
+
+            $("#Filter").trigger("click");
+            //dbTable.search('');
+
+
         }
         function FillterResets() {
-            $("#example").DataTable().search("").draw();
+            window.location.reload();
         }
+        $("#filterRule_New").change(function () {
+
+            $("#filter-checkbox-wrapper").fadeOut(200, function () {
+                $(this).find("#filterRule_New").attr("checked", !$(this).find("#filterRule_New").attr("checked")).end().fadeIn(200);
+            });
+
+            if (this.checked) {
+                $("label[for='filterRule_New']")
+                    .css("color", "green")
+                    .fadeOut(200, function () {
+                        $(this).text("Checked✔").fadeIn(200);
+                    });
+            } else {
+                $("label[for='filterRule_New']")
+                    .css("color", "red")
+                    .fadeOut(200, function () {
+                        $(this).text("Unchecked!").fadeIn(200);
+                    });
+            }
+        });
     </script>
     <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>
     <script src="~/assets/js/reconciliationUploader.js"></script>

@@ -75,7 +75,7 @@
                         @*<th class="sort pr-5 align-middle">Role</th>*@
                         @*<td class="sort pr-6 align-middle" style="max-width:5% !important">LinkedIn Profile </td>*@
                         <th class="sort pr-7 align-middle">Status </th>
-                        <th class="sort pr-1 align-middle">Last Login (UTC)</th>
+                        <th class="sort pr-1 align-middle">Last Login </th>
                         <th class="no-sort align-middle text-center pr-3">Actions</th>
 
 
@@ -401,11 +401,16 @@
             dateFormater();
 
             $(document).on('click', '.paginate_button', function () { dateFormater(); });
-            $(document).on('click', '.custom-select', function () { dateFormater(); });
+            $(document).on('click', '.custom-select', function () {  dateFormater(); });
             $(document).on('click', '.sorting_asc', function () { dateFormater(); });
             $(document).on('click', '.sorting_desc', function () { dateFormater(); });
+            $(document).on('click', '.dataTables_filter', function () {  dateFormater(); });
+            $(document).on('keyup', '.dataTables_filter', function () {  dateFormater(); });
+            $(document).on('keydown', '.dataTables_filter', function () {  dateFormater(); });
+      
+            
 
-        });
+        });     
        
     </script>
 }

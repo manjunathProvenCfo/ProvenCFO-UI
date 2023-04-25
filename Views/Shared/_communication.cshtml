@@ -36,97 +36,97 @@
                     {
                         <button class="close btn btn-sm close-circle d-flex flex-center transition-base position-sticky" id="Cancel" data-dismiss="modal" aria-label="Close"><svg class="svg-inline--fa fa-times fa-w-11" data-fa-transform="shrink-6 right-0.3 down-0.3" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" data-fa-i2svg="" style="transform-origin: 0.3625em 0.51875em;"><g transform="translate(176 256)"><g transform="translate(9.6, 9.6)  scale(0.625, 0.625)  rotate(0 0 0)"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" transform="translate(-176 -256)"></path></g></g></svg><!-- <span class="fas fa-times" data-fa-transform="shrink-6 right-0.3 down-0.3"></span> Font Awesome fontawesome.com --></button>
                     }
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-3 col-sm-3 d-flex align-items-center">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-3 col-sm-3 d-flex align-items-center">
+                        <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
+                            <div class="fas fa-chevron-left"></div>
+                        </a>
+                        <div class="min-w-0">
+                            <h5 class="mb-0 text-truncate fs-0"><span class="channelName"></span></h5>
+                            <div class="fs--2 text-400">
+                                <span class="channelParticipantActive"></span>
+                                <span class="channelParticipantEmail"></span>
+                                <span class="channelReconciliationDescription"></span>
+                                <span class="channelReconciliationCompany"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0)
+                    {
+                        <div class="col-2 col-sm-2 d-flex align-items-center" id="comAction">
                             <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
                                 <div class="fas fa-chevron-left"></div>
                             </a>
                             <div class="min-w-0">
-                                <h5 class="mb-0 text-truncate fs-0"><span class="channelName"></span></h5>
+                                <h5 class="mb-0 text-truncate fs-0"><span class="">Action</span></h5>
                                 <div class="fs--2 text-400">
-                                    <span class="channelParticipantActive"></span>
-                                    <span class="channelParticipantEmail"></span>
-                                    <span class="channelReconciliationDescription"></span>
-                                    <span class="channelReconciliationCompany"></span>
+
+                                    @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Pick Action ", new { @class = "form-control", @onchange = "javascript:onChangeAction(event)", style = "width: 180px;" })
+
                                 </div>
                             </div>
                         </div>
+                    }
+                    @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
+                    {
+                        <div class="col-2 col-sm-2 d-flex align-items-center" id="comGLaccount">
+                            <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
+                                <div class="fas fa-chevron-left"></div>
+                            </a>
+                            <div class="min-w-0">
+                                <h5 class="mb-0 text-truncate fs-0"><span class="">GL Account</span></h5>
+                                <div class="fs--2 text-400">
+                                    @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" })
+                                </div>
+                            </div>
+                        </div>
+                    }
 
-                        @if (TempData["Action"] != null && ((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"]).Count > 0)
+                    @if (TempData["TrackingCategories"] != null)
+                    {
+                        int count = 0;
+                        foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
                         {
-                            <div class="col-2 col-sm-2 d-flex align-items-center" id="comAction">
+                            <div class="col-2 col-sm-2 d-flex align-items-center" id="comTrackingCategories">
                                 <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
                                     <div class="fas fa-chevron-left"></div>
                                 </a>
                                 <div class="min-w-0">
-                                    <h5 class="mb-0 text-truncate fs-0"><span class="">Action</span></h5>
+
                                     <div class="fs--2 text-400">
+                                        @if (count == 0)
+                                        {
+                                            <h5 class="mb-0 text-truncate fs-0 " id="tracking" style=""><span class="">@tcgroup.Name  </span></h5>
 
-                                        @Html.DropDownList("BA_filterAction", new SelectList((List<Proven.Model.ReconcilationActionOptionVM>)TempData["Action"], "Id", "ActionName"), "Pick Action ", new { @class = "form-control", @onchange = "javascript:onChangeAction(event)", style = "width: 180px;" })
+                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc(event)", style = "width: 180px;" }) }
+                                        else if (count == 1)
+                                        {
+                                            <h5 class="mb-0 text-truncate fs-0" id="trackingcat" style=""><span class="">@tcgroup.Name  </span></h5>
+
+                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}
+                                        else
+                                        {
+                                            <h5 class="mb-0 text-truncate fs-0" id="trackingcat1" style=""><span class="">@tcgroup.Name  </span></h5>
+
+                                            @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc1(event)", style = "width: 180px;" })}
 
                                     </div>
                                 </div>
                             </div>
-                        }
-                        @if (TempData["GLAccounts"] != null && ((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"]).Count > 0)
-                        {
-                            <div class="col-2 col-sm-2 d-flex align-items-center" id="comGLaccount">
-                                <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
-                                    <div class="fas fa-chevron-left"></div>
-                                </a>
-                                <div class="min-w-0">
-                                    <h5 class="mb-0 text-truncate fs-0"><span class="">GL Account</span></h5>
-                                    <div class="fs--2 text-400">
-                                        @Html.DropDownList("gl_account", new SelectList((List<Proven.Model.XeroGlAccountVM>)TempData["GLAccounts"], "Id", "Name"), "Pick Account ", new { @class = "form-control", @onchange = "javascript:onChangeglAccount(event)", style = "width: 180px;" })
-                                    </div>
-                                </div>
-                            </div>
+                            count++;
                         }
 
-                        @if (TempData["TrackingCategories"] != null)
-                        {
-                            int count = 0;
-                            foreach (var tcgroup in (List<Proven.Model.XeroTrackingOptionGroupVM>)TempData["TrackingCategories"])
-                            {
-                                <div class="col-2 col-sm-2 d-flex align-items-center" id="comTrackingCategories">
-                                    <a class="pr-3 text-700 d-md-none contacts-list-show" href="#!">
-                                        <div class="fas fa-chevron-left"></div>
-                                    </a>
-                                    <div class="min-w-0">
-
-                                        <div class="fs--2 text-400">
-                                            @if (count == 0)
-                                            {
-                                                <h5 class="mb-0 text-truncate fs-0 " id="tracking" style=""><span class="">@tcgroup.Name  </span></h5>
-
-                                                @Html.DropDownList("tracking_category_" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeTc(event)", style = "width: 180px;" }) }
-                                            else if (count == 1)
-                                            {
-                                                <h5 class="mb-0 text-truncate fs-0" id="trackingcat" style=""><span class="">@tcgroup.Name  </span></h5>
-
-                                                @Html.DropDownList("tracking_category_1" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc(event)", style = "width: 180px;" })}
-                                            else
-                                            {
-                                                <h5 class="mb-0 text-truncate fs-0" id="trackingcat1" style=""><span class="">@tcgroup.Name  </span></h5>
-
-                                                @Html.DropDownList("tracking_category_2" + count, new SelectList(tcgroup.Options, "Id", "Option"), "Select " + @tcgroup.Name, new { @class = "form-control", @onchange = "javascript:onChangeAditinalTc1(event)", style = "width: 180px;" })}
-
-                                        </div>
-                                    </div>
-                                </div>
-                                count++;
-                            }
-
-                        }
-                        <div class="d-flex align-items-center">
-                            <div class="col-12">
-                                <h6 class="mb-0 ml-2"> <span class="channelReconciliationAmount"></span></h6>
-                                <div class="mb-0 ml-2 text-400 fs--2"><span class="channelReconciliationDate"></span></div>
-                            </div>
-                        </div>
-                        <div class="col-auto">                          
+                    }
+                    <div class="d-flex align-items-center">
+                        <div class="col-12">
+                            <h6 class="mb-0 ml-2"> <span class="channelReconciliationAmount"></span></h6>
+                            <div class="mb-0 ml-2 text-400 fs--2"><span class="channelReconciliationDate"></span></div>
                         </div>
                     </div>
+                    <div class="col-auto">
+                    </div>
+                </div>
                 </div>
                 <div class="chat-content-body" style="display: inherit;">
                     <div class="chat-content-scroll-area scrollbar perfect-scrollbar" id="channel-messages">

@@ -1,13 +1,78 @@
 ﻿var glAccounts_ = document.getElementById("all-gl-accounts");
 var glAccountsOpt = "<option value='-1'>Pick Account</option>";
+
+// NIBanks actions.
+var bnk_actions = document.getElementById("rcn-action");
+var bnkaction_Opt = '<option value=""> Pick Action </option>';
+
+// NIBooks tracking category.
+var tk_category = document.getElementById("item_tk_category");
+var tkcategory_Opt = '<option value=""> Select... </option>';
+
+// NIBooks tracking .
+var tk_category_ref = document.getElementById("item_tk_category_ref");
+var tkcategory_ref_Opt = '<option value=""> Select... </option>';
+
+
 HidelottieLoader();
+
+
+if (bnk_actions != null) {
+    Array.prototype.forEach.bind(bnk_actions.children)(ele => {
+        bnkaction_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
+if (tk_category != null) {
+    Array.prototype.forEach.bind(tk_category.children)(ele => {
+        tkcategory_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
+if (tk_category_ref != null) {
+    Array.prototype.forEach.bind(tk_category_ref.children)(ele => {
+        tkcategory_ref_Opt += `<option value=${ele.value}>${ele.innerText}</option>`;
+    });
+}
+
 Array.prototype.forEach.bind(glAccounts_.children)(ele => {
     glAccountsOpt += `<option value=${ele.value}>${ele.innerText}</option>`;
 });
 
+function RenderAction(data, type, row) {
+
+    var selectAction = `<div class="col-auto lastmodified renderAc" id="Actiontoggel" data-toggle="tooltip" data-html="true" title="No Modification yet.">
+                                                       <select class="select-picker bnk-action" data-reconciliationId=${row.id} utcdate=${row.ActionModifiedDateUTC} ModifiedBy=${row.ActionModifiedBy}  data-selectedValue=${data} style="width:180px;">${bnkaction_Opt}</select>
+                                                    </div>`;
+
+    return selectAction;
+}
+
+function track_category(data, type, row) {
+
+    var selectCategory = `<div class="row justify-content-between">
+                                                    <div class="col-auto trackCa1">
+                                                         <select class="select-picker track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_Opt}</select>
+                                                    </div>
+                                                </div>`;
+
+    return selectCategory;
+}
+
+function addi_track_category(data, type, row) {
+    
+    var selectCategoryRef = `<div class="row justify-content-between">
+                                                    <div class="col-auto trackCa2">
+                                                         <select class="select-picker addi-track-category" data-reconciliationId=${row.id} data-selectedValue=${data} style="width:180px;">${tkcategory_ref_Opt}</select>
+                                                    </div>
+                                                </div>`;
+
+    return selectCategoryRef;
+}
+
 function RenderBankRule(r, r1, r3) {
     if (r == true) {
-        return `<div class="row justify-content-between">
+        return `<div class="row justify-content-between" style="margin: 0">
                                                         <div class="col-auto">
                                                             <input id="ruleCheck" name="ruleCheck" onchange="javascript:onChangeBankRules('${r3.id}',this.checked,this)" checked="true" type="checkbox" value="true">
 
@@ -15,7 +80,7 @@ function RenderBankRule(r, r1, r3) {
                                                     </div>`;
 
     }
-    return `<div class="row justify-content-between">
+    return `<div class="row justify-content-between" style="margin: 0">
                                                         <div class="col-auto">
                                                             <input id="ruleCheck" name="ruleCheck" onchange="javascript:onChangeBankRules('${r3.id}',this.checked,this)"  type="checkbox" value="false">
 
@@ -23,11 +88,40 @@ function RenderBankRule(r, r1, r3) {
                                                     </div>`;
 }
 function GLAccountsRender(r, r1, r3) {  //value,name,row
+    var dateFormated = formatDateTime(r3.GlAccountModifiedDateUTC, 'DD MMM YYYY hh:mm:ss A');
+    var utctime = dateFormated;
+    var ModifiedBy = r3.GlAccountModifiedBy;
+    var imsg = 'No Modification yet.';
+    if (utctime != null && ModifiedBy != undefined && utctime != '' && ModifiedBy != '') {
+        var mod = (utctime + "").match(/([0-9]+)/g);
+        if (mod == null) {
 
-    var select = `<div class="col-auto lastmodified" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${r3.GlAccountModifiedDateUTC}" ModifiedBy="${r3.GlAccountModifiedBy}" title="No Modification yet.">
-  <select class="select-picker gl-account"  utcdate=${r3.GlAccountModifiedDateUTC} ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:90%;">${glAccountsOpt}</select></div>`;
+            imsg = "No Modification yet.";
+        } else {
+
+            let modified = mod.length > 0 ? mod[0] : "";
+            var localtime =utctime ///getLocalTime(utctime);
+            var msg = "Last Modified by <br> " + ModifiedBy + " <br> " + localtime;
+            imsg =  msg;
+        }
+    }
+    else {
+        imsg ="No Modification yet.";
+    }
+    
+    var select =`<div class="row justify-content-between">
+                       <div class="col-auto lastmodified glACCOUNTS" id="Gltoggel" data-toggle="tooltip" data-html="true" utc="${dateFormated}" ModifiedBy="${r3.GlAccountModifiedBy}" title="${imsg}">
+
+                            <select class="select-picker gl-account" utcdate="${dateFormated}" ModifiedBy=${r3.GlAccountModifiedBy} data-reconciliationId=${r3.id} data-selectedValue=${r} style="width:250px;">${glAccountsOpt}</select>
+                      </div>
+                  </div>`;
 
     return select;
+}
+var formatDateTime = function (date, format) {
+    if (isEmptyOrBlank(date))
+        return '';
+    return moment(date).format(format);
 }
 
 function onChangeBankRules(id, value, obj) {
@@ -63,6 +157,60 @@ function onChangeglAccount(id, event) {
         }
     })
 }
+
+// On change of actions
+function onChangeAction(id, event) {
+    $('select').prop('disabled', true);
+    var Selectedvalue = event.currentTarget.value;
+    if (isEmptyOrBlank(Selectedvalue)) {
+        Selectedvalue = -1;
+    }
+    var userId = $('#topProfilePicture').attr('userId');
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&reconciliationActionId=' + Selectedvalue + '&userId=' + userId, null, function (response) {
+
+        if (response.Message == 'Success') {
+            $('select').prop('disabled', false);
+
+        }
+        else {
+            $('select').prop('disabled', true);
+        }
+    })
+}
+
+// On change of tracking_category
+function onChangeTc(id, event) {
+
+    var selectedValue = event.currentTarget.value;
+    if (isEmptyOrBlank(selectedValue)) {
+        selectedValue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + selectedValue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+        else {
+
+        }
+    })
+}
+
+// On change of addi_trackingCategory
+function onChangeAditinalTc(id, event) {
+    var Selectedvalue = event.currentTarget.value;
+    if (isEmptyOrBlank(Selectedvalue)) {
+        Selectedvalue = -1;
+    }
+    var ClientID = $("#ddlclient option:selected").val();
+    postAjax('/Reconciliation/UpdateReconciliation?AgencyID=' + ClientID + '&id=' + id + '&GLAccount=' + 0 + '&BankRule=' + 0 + '&TrackingCategory=' + 0 + '&TrackingCategoryAdditional=' + Selectedvalue, null, function (response) {
+        if (response.Message == 'Success') {
+
+        }
+    });
+}
+
 
 var lastModify = function () {
     $(".lastmodified").each(function () {
@@ -153,40 +301,6 @@ var EnableSelectedBulkUpdateButton = function () {
 }
 
 
-
-var EnableSelectedBulkUpdateButton = function () {
-    var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
-    var SelectedItems = sessionStorage.getItem('SelectedRecords');
-    var unselectedItems = sessionStorage.getItem("UnSelectedRecords");
-
-
-    if ((SelectedItems != null && SelectedItems != '') || IsAllSelected == true) {
-        $("#ibulkupdate").attr('disabled', false);
-        $("#ibulkupdate").attr('title', 'Bulk Update');
-
-    }
-
-    else {
-
-        if (unselectedItems == null) {
-
-            $("#ibulkupdate").attr('disabled', true);
-            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
-        }
-
-        if (SelectedItems == "" && unselectedItems.split(",").length < 2) {
-
-            $("#ibulkupdate").attr('disabled', true);
-            $("#ibulkupdate").attr('title', 'Select A Row to perform BulkUpdate.');
-        }
-
-
-    }
-
-
-}
-
-
 function SelectAllClick(e) {
     if (e.checked == false) {
         sessionStorage.removeItem('SelectedRecords');
@@ -194,16 +308,19 @@ function SelectAllClick(e) {
         $('.checkbox-bulk-select-target').closest("tr").removeClass('bg-300');
       
         $(".checkbox-bulk-select-target").trigger("click");
-    } else if (e.checked==true){
-    
-        $(".checkbox-bulk-select-target").trigger("click");
-    }
+    } else if (e.checked == true) {
 
+        $(".checkbox-bulk-select-target").each(function () {
+            if (!$(this).is(":checked")) {
+                $(this).trigger("click");
+            }
+        });
+
+    }
     EnableSelectedBulkUpdateButton();
 
 }
 function SelectClick(e) {
-    
     if (e.checked) {
         var UnSelectedRecords = isEmptyOrBlank(sessionStorage.getItem('UnSelectedRecords')) === false ? sessionStorage.getItem('UnSelectedRecords')?.split(',') : [];
 
@@ -243,7 +360,6 @@ const scrollChatState = {
 
 
 function ResetCheckBoxOnPageChange() {
-
     var IsAllSelected = $('#checkbox-bulk-purchases-select')[0].checked;
 
     if (IsAllSelected) {
@@ -262,18 +378,13 @@ function ResetCheckBoxOnPageChange() {
                 if (chkBox.getAttribute("id") == id) {
                     chkBox.checked = true;
                 } else {
-                    chk.checked = false;
+                    if (chkBox.checked == false) {
+                        chkBox.checked = false;
+                    }
                 }
             });
         });
-
-         
-
         $(".checkbox-bulk-select-target").trigger("change");
-
-
-
-        
     }
 }
 const resetScrollChatState = function (rec) {
@@ -329,7 +440,6 @@ function InitEvents() {
         postAjax('/Reconciliation/AddNewXeroOnDemandDataRequest', JSON.stringify(pdata), function (response) {
             if (response.Message == 'Success') {
                 RequestID = response.data.Id;
-                debugger;
                 getAjax(AzureFunctionReconUrl + `?AgencyId=${getClientId()}&NotInbooks=${IsNotinBooks}&NotInbanks=${IsNotinBanks}`, null, function (Azureresponse) {
                     Azureresponse = JSON.parse(Azureresponse);
                     UpdateXeroonDemandDatarequestStatus(Azureresponse, RequestID);
@@ -338,7 +448,9 @@ function InitEvents() {
                         sessionStorage.removeItem("NotInBanksData");
 
                         //uncampatible on safari.
-                        let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");
+                        /*  let finalAzureMessage = ((((Azureresponse.message.replace("Success : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/(?=Not)|(?=In)/g, " ")).replace(/b/g, "B");*/
+                        let finalAzureMessage = ((((Azureresponse.message.replace("Sucess : ", "")).replace(" =", "=")).replace(/=/g, ": ")).replace(/b/g, "B")).replace(/([a-z])([A-Z])/g, '$1 $2');
+
                      
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
@@ -359,7 +471,9 @@ function InitEvents() {
 
     });
 
-
+    $("#btnConnectToXero").click(function () {
+        LoadAuthenticationWindow(1, true);
+    });
     $("#CancelBulkupdate").click(function () {
 
         if ($("#divBulkUpdate").is(":visible")) {
@@ -402,6 +516,7 @@ function InitEvents() {
         if ($('#divTable')[0].className.indexOf('col-md-8') != -1) {
             $('#divTable').addClass('col-md-12').removeClass('col-md-8');
             $('#divChat').hide();
+            
         }
         else {
             $('#divTable').addClass('col-md-8').removeClass('col-md-12');
@@ -475,52 +590,42 @@ function UtcDateToLocalTime(utcDate) {
 }
 function LoadLastRunDate() {
  
-    $.ajax({
-        url: '/Reconciliation/GetEndYearLockDate?id=' + agencyId,
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data) {
+    getAjax(apiurl + `Client/GetClientById?ClientId=${agencyId}`, null, function (response) {
+        if (response.resultData != null) {
+            if (response.resultData.domO_Last_batchrun_time != "null" && response.resultData.domO_Last_batchrun_time != null) {
 
-            if (data.DOMO_Last_batchrun_time != null) {
                 $('#domoLastBatchRun').show();
-                let roughDate = data.DOMO_Last_batchrun_time;
-                let dateTimeMill = Number(roughDate.match(/\d+/)[0]);
+                let roughDate = response.resultData.domO_Last_batchrun_time;
 
-                let utcDateTime = new Date(dateTimeMill);
-                var localTime = utcDateTime.toLocaleString();
-             
-                 localTime = UtcDateToLocalTime(localTime)
-                var _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${localTime.getMinutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+                let roughDateTime = new Date(roughDate).toLocaleString();
+                var localDateTime = new Date(roughDateTime + ' UTC').toLocaleString()
 
-                $('#domoLastBatchRunTime')[0].innerText = _date;
-
+                $('#domoLastBatchRunTime')[0].innerText = localDateTime;
 
             } else {
-                $('#domoLastBatchRun').remove();
+                $('#domoLastBatchRun').show();
+                $('#domoLastBatchRunTime')[0].innerText = "N/A";
             }
 
-            if (data.End_Of_YearLockDate != null) {
+            if (response.resultData.end_Of_Year_LockDate != null && response.resultData.end_Of_Year_LockDate != "null") {
 
                 $('#endOfYearLock').show();
-                let roughEndDate = data.End_Of_YearLockDate;
-                let endDateTimeMill = Number(roughEndDate.match(/\d+/)[0]);
 
-                let utcDateTime = new Date(endDateTimeMill);
+                let utcDateTime = new Date(response.resultData.end_Of_Year_LockDate);
                 var localEndDateTime = utcDateTime.toLocaleDateString();
                 $('#endOfYearLockDate')[0].innerText = localEndDateTime;
 
             } else {
-                $('#endOfYearLock').remove();
+                if (response.resultData.thirdPartyAccountingApp_ref != 2) {
+                    $('#endOfYearLock').show();
+                    $('#endOfYearLockDate')[0].innerText = "N/A";
+                }
+                else {
+                    $('#endOfYearLock').hide();
+                }
             }
-        },
-        error: function (error) {
-            console.log(error);
-            $('#domoLastBatchRun').remove();
-            $('#endOfYearLock').remove();
         }
-    })
-
+    });
 }
 
 var bindEnableAutomation = function () {
@@ -538,6 +643,28 @@ var bindEnableAutomation = function () {
 
         }
     });
+}
+function SetupDynamicLoaderOnScroll() {
+
+
+
+    $("#channel-messages")[0].addEventListener("scroll", function (e) {
+        e.preventDefault();
+        if (e.target.scrollTop == 0) {
+            LoadOnDemandCommentsPagination(scrollChatState.reconciliationId,
+                1, scrollChatState.pageNo * scrollChatState.size);
+
+            scrollChatState.pageNo++;
+
+            scrollChatState.target = e.target;
+        }
+    });
+
+
+
+    scrollChatState.pageNo = 2;
+    scrollChatState.size = 10;
+
 }
 
 
@@ -636,6 +763,8 @@ $(document).ready(() => {
     LoadLastRunDate();
     chat.type = 1;
     bindEnableAutomation();
+    SetupDynamicLoaderOnScroll();
+  
     sessionStorage.removeItem('SelectedRecords');
     sessionStorage.removeItem('UnSelectedRecords');
     HidelottieLoader();
@@ -647,7 +776,7 @@ $(document).ready(() => {
         case "Outstanding Payments":
             $('#tabNotinBanks').addClass('tabselect');
             break;
-    } 
+    }
 
     InitEvents();
    
@@ -656,7 +785,6 @@ $(document).ready(() => {
         var column = [
             {
                 data: "id", name: "id", sortable: false, render: (r1, r2, r3) => {
-
                     return `<div class="custom-control custom-checkbox">
                                             <input class="custom-control-input checkbox-bulk-select-target" onclick="SelectClick(this);" type="checkbox" id="${r1}" value="${r1}" />
 
@@ -703,16 +831,42 @@ $(document).ready(() => {
 
         const GLColumn = [
             { data: "gl_account_ref", name: "gl_account_ref", render: GLAccountsRender },
-           ];
+        ];
+        const BnkAction = [
+            { data: "ref_ReconciliationAction", name: "ref_ReconciliationAction", render: RenderAction },
+        ];
         const BankRule = [{
             data: "RuleNew", name: "RuleNew", render: RenderBankRule
         }];
+        const tracking_category = [
+            { data: "tracking_category_ref", name: "tracking_category_ref", render: track_category },
+        ];
+        const ad_tracking_category = [
+            { data: "additional_tracking_category_ref", name: "additional_tracking_category_ref", render: addi_track_category },
+        ];
 
-        if (GlAccountVisible == "True") {
+
+        if (GlAccountVisible == "False") {
             column = [...column, ...GLColumn];
         }
+
+        if (GlAccountVisible == "True") {
+            column = [...column, ...BnkAction]
+        }
+
         if (IsBankRuleVisible == "True") {
             column = [...column, ...BankRule];
+        }
+
+        const tkSpanElement = document.getElementById('track_category_count');
+        const tk_value = tkSpanElement.getAttribute('value');
+
+        // Setting tracking categories.
+        if (GlAccountVisible == "False" && tk_value == 2) {
+            column = [...column, ...tracking_category];
+            column = [...column, ...ad_tracking_category];
+        } else if (GlAccountVisible == "False" && tk_value == 1) {
+            column = [...column, ...tracking_category];
         }
 
         //Add Chat column
@@ -738,8 +892,6 @@ $(document).ready(() => {
         await loadCommentsPage(channelUniqueNameGuid);
     }
 
-
-
     $("#example").DataTable({
         paging: true,
         serverSide: true,
@@ -749,7 +901,42 @@ $(document).ready(() => {
             ResetCheckBoxOnPageChange();
 
             HidelottieLoader();
-             Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
+
+            // -> addi-track-category on change.
+            $(".track-category").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeTc(Id, e);
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.addi-track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
+            Array.prototype.forEach.bind($(".gl-account"))(selectEle => {
                 let index = 0;
                 let value = selectEle.getAttribute("data-selectedValue");
                 Array.prototype.forEach.bind($(selectEle.children))(opt => {
@@ -769,55 +956,113 @@ $(document).ready(() => {
                 onChangeglAccount(Id, e);
             })
 
+            // -> Selected Action.
+            Array.prototype.forEach.bind($(".bnk-action"))(selectEle => {
+                let index = 0;
+                let value = selectEle.getAttribute("data-selectedValue");
+                Array.prototype.forEach.bind($(selectEle.children))(opt => {
+                    index++;
+                    if (opt.value == value) {
+                        selectEle.selectedIndex = index - 1;
+                    }
+                });
+            });
+
+            // -> Actions on change.
+            $(".bnk-action").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeAction(Id, e);
+            });
+
+
+            // -> addi-track-category on change.
+            $(".addi-track-category").on("change", function (e) {
+                var self = e.currentTarget;
+                let Id = self.getAttribute("data-reconciliationId");
+
+                onChangeAditinalTc(Id, e);
+            });
+
+            // Selected addi-track-category.
+            Array.prototype.forEach.bind($('.addi-track-category'))(element => {
+                let indx = 0;
+                let selectedItem = element.getAttribute('data-selectedValue');
+                
+                Array.prototype.forEach.bind($(element.children))(opt => {
+                    indx++;
+                    if (opt.value == selectedItem) {
+                        element.selectedIndex = indx - 1;
+                    }
+                });
+            });
+
             $(".select-picker").select2();
             $('.lastmodified').tooltip();
             $("table").on("click", "button[id=btnComment]", async function (e) {
                 resetScrollChatState(e.currentTarget.dataset.id);
                 await showReconciliationChat(e.currentTarget.dataset.id);
             });
-             setTimeout(()=>lastModify(),0);
+            //setTimeout(() => lastModify(), 2000);
+
+            $('.glACCOUNTS, .trackCa2, .trackCa1, .renderAc').on('click', function () {
+                $('.select2-results__options li').css('font-size', '13px');
+            })
         },
         ajax: {
             url: window.location.origin+"/Reconciliation/ReconcilationPaginiation",
             type: "POST"
         },
         processing: true,
-        columns: configureColumn()
-    }
-
-    );
-
+        columns: configureColumn(),
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('btn-reveal-trigger cursor-pointer');
+            $(row).find('td').addClass('sort pr-1 align-middle col-xs-1'); 
+        }
+    });
+    $('.col-sm-12').eq(2).addClass('table-responsive');
 });
 
 $(function () {
 
     $("#email").click(function () {
-        var chat = "/Communication/Chat";
-        var enurl = encodeURIComponent(chat);
-        var ClientName = $("#ddlclient option:selected").text();
-        var ClientId = $("#ddlclient option:selected").val();
-        getClientDate(ClientName);
-        ClientName = encodeURIComponent(ClientName);
-        var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();
-        var LastMailSent = sessionStorage.getItem("LastMailSent");
-        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${enurl}&sentdate=${LastMailSent}`, null, function (response) {
-            if (response.Status == 'Success') {
-                var text = response.Recipients.toString().split(",");
-                var str = text.join(', ');
-                $("#email-to").val(str);
-                if (str == "") {
-                    $("#sendbutton").attr("disabled", true);
-                }
-                $("#email-subject").val(response.Subject);
-                $("#ibody").html(response.Body);
-                $("#ifooter").html(response.LastSent);
+        //var chat = '@Url.Action("Chat", "Communication")';
 
-            }
-        });
+     //   let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
 
+     //   $('.text-danger').empty();
+     //   $("#sendbutton").attr("disabled", false);
+     //   var ClientName = $("#ddlclient option:selected").text();
+     //   var ClientId = $("#ddlclient option:selected").val();
+     //   getClientDate(ClientName);
+     //   ClientName = encodeURIComponent(ClientName);
+     //   /*      var NotInBankUnreconciledItemsCount = $("#lblNotInBooksCount").text();*/
+     //   var LastMailSent = sessionStorage.getItem("LastMailSent");
+     //   getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+     //       let result = response.resultData.length;
+     ///*       console.log(result);*/
+     //       var NotInBankUnreconciledItemsCount = result;
+     //       getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
+     //           if (response.Status == 'Success') {
+     //               var text = response.Recipients.toString().split(",");
+     //               var str = text.join(', ');
+     //               $("#email-to").val(str);
+     //               if (str == "") {
+     //                   $("#sendbutton").attr("disabled", true);
+     //               }
+     //               $("#email-subject").val(response.Subject);
+     //               $("#ibody").html(response.Body);
+     //               $("#ifooter").html(response.LastSent);
+
+     //           }
+     //       });
+     //   });
+        sendEmail();
+
+       
     });
 });
-
 
 /*Clientdata*/
 
@@ -835,7 +1080,7 @@ $("#email-to").on("focus", function (e) {
 $("#email-to").on("blur", function (e) {
     e.preventDefault();
     e.target.setAttribute("readonly", "");
-    /*validateMultipleEmails($('#email-to').val());*/
+    validateMultipleEmails($('#email-to').val());
 });
 
 function validateMultipleEmails(emailinput) {
@@ -848,7 +1093,7 @@ function validateMultipleEmails(emailinput) {
         return;
     }
     emails = emails.split(',');
-    var regexs = /^([A-Za-z0-9_\-\.])+\@@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
+    var regexs = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;;
 
 
 
@@ -916,4 +1161,209 @@ var myParam = location.search.split('yes=')[1];
 if (myParam == "1") {
     $("#email").show();
     $("#btnImportReconcilition").show();
+}
+
+//$("table").on("click", "button[id=btnComment]", async function (e) {
+//    let currRow = $(this).closest("tr");
+//    $("tr.bg-200").removeClass("bg-200");
+//    currRow.addClass("bg-200");
+//    if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
+//        let elComment = $(this).find("#btnComment");
+//        resetScrollChatState(elComment.data().id);
+//        await showReconciliationChat(elComment.data().id);
+//    }
+//});
+/*sendEmail*/
+function sendEmail() {
+    let chatURL = window.location.protocol + "//" + window.location.host + "/Communication/Chat";
+    $('.text-danger').empty();
+    $("#sendbutton").attr("disabled", false);
+    var ClientName = $("#ddlclient option:selected").text();
+    var ClientId = $("#ddlclient option:selected").val();
+    getClientDate(ClientName);
+    ClientName = encodeURIComponent(ClientName);
+    var LastMailSent = sessionStorage.getItem("LastMailSent");
+    getAjax(apiurl + `Reconciliation/GetAllCommentedReconciliations?AgencyID=${ClientId}&MaxCount=${0}`, null, function (response) {
+        let result = response.resultData.length;
+        var NotInBankUnreconciledItemsCount = result;
+        getAjax(`/Reconciliation/EmailSend?ClientName=${ClientName}&ClientId=${ClientId}&NotInBankUnreconciledItemsCount=${NotInBankUnreconciledItemsCount}&url=${chatURL}&sentdate=${LastMailSent}`, null, function (response) {
+            if (response.Status == 'Success') {
+                var text = response.Recipients.toString().split(",");
+                var str = text.join(', ');
+                $("#email-to").val(str);
+                if (str == "") {
+                    $("#sendbutton").attr("disabled", true);
+                }
+                $("#email-subject").val(response.Subject);
+                $("#ibody").html(response.Body);
+                $("#ifooter").html(response.LastSent);
+            }
+        });
+    });
+}
+
+var LoadAuthenticationWindow = function (type, IsFromReconPage) {
+    var pClient = {
+        Id: ClientId ,
+        ThirdPartyAccountingApp_ref: type,
+        IsFromReconPage: IsFromReconPage
+    }
+    getAjaxSync(`/Integration/GenerateAuthorizationPromptUrl`, pClient, function (response) {
+        if (response.Status === "Success") {
+            window.location.href = response.url;
+        }
+
+    });
+
+}
+
+
+var showReconciliationChat = async function (channelUniqueNameGuid) {
+
+    resetScrollChatState(channelUniqueNameGuid);
+    $('#divFilter').hide();
+    $('#divFilter').addClass('d-none');
+    $('#divBulkUpdate').hide();
+    $('#divBulkUpdate').addClass('d-none');
+    $('#divChat').show();
+    $('#divChat').removeClass('d-none');
+    $('#divTable').addClass('col-md-8').removeClass('col-md-12');
+
+    await loadCommentsPage(channelUniqueNameGuid);
+
+}
+$(document).on("click", ".odd,.even", async function (e) {
+    $(".odd,.even").removeClass("bg-200");
+    $(this).addClass("bg-200");
+
+    if ($('#divChat:visible').length > 0 && e.target.nodeName != "svg") {
+        let elComment = $(this).find("button[id=btnComment]");
+        $(this).addClass('bg-200');
+
+        resetScrollChatState(elComment.data().id);
+        await showReconciliationChat(elComment.data().id);
+    }
+});
+$(document).on("click", "button[id=btnComment]", async function (e) {
+
+    resetScrollChatState(e.currentTarget.dataset.id);
+    await showReconciliationChat(e.currentTarget.dataset.id);
+});
+async function LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize) {
+
+    getAjaxSync(apiurl + `Reconciliation/getcommentsOnreconcliationId?reconcliationId=${channelUniqueNameGuid}&&pageNo=${pageNo}&&pageSize=${pageSize}`, null, async function (responseComm) {
+
+        await LoadAllComments(responseComm.resultData.reconciliationComments);
+
+        if (scrollChatState.target) {
+
+            setTimeout(_ => scrollChatState.target.scrollTop = 4, 150);
+        }
+        //setScrollPosition();
+        hideChatContentLoader();
+    });
+}
+
+function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize) {
+    showChatContentLoader();
+    $participantsContainer = $("#chatParticipants");
+    $participants = "";
+    $channelName = $(".channelName");
+    $channelParticipantEmail = $(".channelParticipantEmail");
+    $channelReconciliationDescription = $(".channelReconciliationDescription");
+    $channelReconciliationDescriptionSidebar = $(".channelReconciliationDescriptionSidebar");
+    $channelReconciliationCompany = $(".channelReconciliationCompany");
+    $channelReconciliationDate = $(".channelReconciliationDate");
+    $channelReconciliationAmount = $(".channelReconciliationAmount");
+    $messageBodyInput = $("#message-body-input");
+    $chatEditorArea = $(".chat-editor-area .emojiarea");
+    $messageBodyFileUploader = $("#chat-file-upload");
+    $messageBodyFilePreviewerModal = $("#chat-file-previewer-modal");
+    $btnSendMessage = $("#send-message");
+    $channelMessages = $("#channel-messages");
+    $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
+
+    chat.channelUniqueNameGuid = channelUniqueNameGuid;
+    getAjaxSync(apiurl + `Reconciliation/getreconciliationInfoOnId?reconcliationId=${channelUniqueNameGuid}`, null, async function (response) {
+
+        setCommentsHeader(response.resultData);
+        setTimeout(async function () {
+            await LoadPaginationContent(channelUniqueNameGuid, pageNo, pageSize);
+        }, 200);
+
+
+    });
+
+
+    $btnSendMessage.unbind().click(function () {
+
+        addNewMessagetoChatwindow($('#message-body-input').val());
+
+    });
+    var addNewMessagetoChatwindow = async function (input) {
+
+        if (input == "") {
+            return;
+        }
+        addNewComment(input);
+        $('#message-body-input').empty();
+        $('.emojionearea-editor').empty();
+        $('#message-body-input').val("");
+        $('.emojionearea-editor').val("");
+
+
+    }
+    $chatEditorArea[0].emojioneArea.off("keydown");
+    $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+            if (event.type == "keydown") {
+                if ($('.mentions-autocomplete-list:visible li.active').length > 0) {
+                    $('.mentions-autocomplete-list:visible li.active').trigger('mousedown');
+                }
+                else {
+                    if ($editor[0].innerHTML != '')
+
+                        addNewMessagetoChatwindow($editor[0].innerHTML);
+                }
+
+            }
+            else
+                activeChannel?.typing();
+        }
+        else
+            activeChannel?.typing();
+    });
+    setTimeout(addMentionPlugin, 3000);
+
+    $messageBodyFileUploader.off("change");
+    $messageBodyFileUploader.on("change", function (e) {
+        var files = $(this)[0].files;
+        if (files.length === 0) {
+            ShowAlertBoxError("File uploader", "Select atleast one file.");
+            return;
+        }
+
+        if (files.length > 5) {
+            ShowAlertBoxError("File uploader", "You can upload max 5 files at a time.");
+            return;
+        }
+
+        //TODO//Add Functionality to Preview files before upload using fancy Box
+
+        //Upload
+        files.forEach(function (file) {
+            var uploader = new Uploader(file);
+            let size = uploader.getSizeInMB();
+            if (size > 20) {
+                ShowAlertBoxError("File size exceeded", `${uploader.getName()} file size is ${size} MB. Allowded file size is less than or equal to 20 MB`);
+            }
+            else {
+
+
+                addMediaMessageLocalFolder(file);
+
+            }
+        })
+    });
 }

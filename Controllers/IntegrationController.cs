@@ -532,32 +532,42 @@ namespace ProvenCfoUI.Controllers
             return listItem;
         }
         [HttpGet]
-        public async Task<JsonResult> GenerateAuthorizationPromptUrl(string Id, int ThirdPartyAccountingApp_ref)
+        public async Task<JsonResult> GenerateAuthorizationPromptUrl(string Id, int ThirdPartyAccountingApp_ref, bool IsFromReconPage = false)
         {
-            string redirecturl = string.Empty;
-            string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
-            Session["EditingClientId"] = Id;
-            using (ClientService client = new ClientService())
+            try
             {
-                var clientDetails = client.GetClientById(Convert.ToInt32(Id));
-                switch (ThirdPartyAccountingApp_ref)
-                {
-                    case 1:
-                        using (XeroService<string, string> Xero = new XeroService<string, string>(clientDetails.APIClientID, clientDetails.APIClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
-                        {
-                            AccountingPackageInstance.Instance.ClientID = clientDetails.APIClientID;
-                            AccountingPackageInstance.Instance.ClientSecret = clientDetails.APIClientSecret;
-                            redirecturl = Xero.GenerateAuthorizationPromptUrl();
-                        }
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return Json(new { url = redirecturl, Status = "Success" }, JsonRequestBehavior.AllowGet);
 
+
+                string redirecturl = string.Empty;
+                string callbackurl = $"https://{ HttpContext.Request.Url.Authority}/";
+                Session["EditingClientId"] = Id;
+                using (ClientService client = new ClientService())
+                {
+                    var clientDetails = client.GetClientById(Convert.ToInt32(Id));
+                    switch (ThirdPartyAccountingApp_ref)
+                    {
+                        case 1:
+                            using (XeroService<string, string> Xero = new XeroService<string, string>(clientDetails.APIClientID, clientDetails.APIClientSecret, "offline_access openid profile email files accounting.transactions accounting.settings accounting.contacts accounting.attachments  payroll.employees payroll.payruns payroll.payslip payroll.settings payroll.timesheets assets projects projects.read", AccountingPackageInstance.Instance.XeroAppName, callbackurl))
+                            {
+                                AccountingPackageInstance.Instance.ClientID = clientDetails.APIClientID;
+                                AccountingPackageInstance.Instance.ClientSecret = clientDetails.APIClientSecret;
+                                redirecturl = Xero.GenerateAuthorizationPromptUrl();
+                                Session["IsFromReconPage"] = IsFromReconPage;
+                            }
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return Json(new { url = redirecturl, Status = "Success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<ActionResult> Callback(string code, string state)
@@ -599,7 +609,15 @@ namespace ProvenCfoUI.Controllers
                     }
 
                 }
-                return RedirectToAction("EditClient", "Client", new { Id = Session["EditingClientId"] });
+                if (Session["IsFromReconPage"] != null && Convert.ToBoolean(Session["IsFromReconPage"]) == true)
+                {
+                    return RedirectToAction("ReconciliationNewMain", "Reconciliation", new { RecordType = "Unreconciled" });
+                }
+                else
+                {
+                    return RedirectToAction("EditClient", "Client", new { Id = Session["EditingClientId"] });
+                }
+
             }
             catch (Exception ex)
             {
@@ -718,7 +736,8 @@ namespace ProvenCfoUI.Controllers
 
 
             }
-            return View("successQBToken"); //RedirectToAction("EditClient", "Client", new { area="",Id=agencyId});
+            /* return View("successQBToken");*/
+            return RedirectToAction("EditClient", "Client", new { area = "", Id = agencyId });
         }
 
 

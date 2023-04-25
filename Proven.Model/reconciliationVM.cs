@@ -54,6 +54,7 @@ namespace Proven.Model
     {
         public List<reconciliationVM> company_ReconciliationVMs { get; set; }
         public int totalcount { get; set; }
+        public string AllReconcilationIds { get; set; }
     }
     public class ReconciliationMainModelPaging
     {

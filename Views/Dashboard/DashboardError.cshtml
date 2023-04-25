@@ -24,13 +24,14 @@
 </div>
 
 @section Scripts {
+    <script>HidelottieLoader();</script>
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/js/reconciliationMain")
     @Scripts.Render("~/bundles/js/kanban")
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            HidelottieLoader();
-        });
-    </script>
+    @*<script>
+        //$(document).ready(function () {
+        //    HidelottieLoader();
+        //});
+    </script>*@
 }
