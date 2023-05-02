@@ -723,7 +723,8 @@ function BulkActionReconcilation(CommentText) {
         Action: Action,
         CommentText: CommentText,
         CreatedBy: CreatedBy,
-        RuleNew: ruleNew
+        RuleNew: ruleNew,
+        UserId: CreatedBy,
     };
 
     ShowlottieLoader();
