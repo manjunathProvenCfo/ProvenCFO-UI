@@ -309,13 +309,66 @@
         //    })
         //});
 
+        $('#imageNotesModal, #imagemodal').on('shown.bs.modal', function () {
+            var modal = $(this);
+            var image = modal.find('.imagepreview');
+            var src = image.attr('src');
+            var img = new Image();
+            img.src = src;
+            img.onload = function () {
+                var width = img.width;
+                var height = img.height;
+                modal.find('.modal-dialog').animate({ 'max-width': width, 'max-height': height }, 500);
+                image.css({ 'width': '100%', 'height': 'auto' }).animate({ opacity: 1 }, 500);
+            }
+        });
+
+        function OpenNotesModal(src) {
+            debugger;
+            $('.imagepreview').attr('src', src);
+            $('#imageNotesModal').modal('show');
+        }
+
+        $('img').on("click", function () {
+            debugger;
+            var src = $(this).attr('src')
+            if (src.includes('NotesImages.png')) {
+
+                OpenNotesModal(src);
+            }
+        });
+
+        function OpenModalOnClick(src) {
+            debugger;
+            $('.imagepreview').attr('src', src);
+            $('#imagemodal').modal('show');
+        }
+
+        tinymce.init({
+            selector: 'textarea',
+            branding: false,
+            statusbar: false,
+            height: 600,
+            setup: function (editor) {
+                editor.on('click', function (e) {
+                    debugger;
+                    if (e.target.nodeName === 'IMG') {
+
+                        let tinyImgSrc = e.target.getAttribute('src')
+                        OpenModalOnClick(tinyImgSrc);
+                    }
+                });
+            }
+        });
+
+
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
 
             ShowlottieLoader();
             if (ClientID != null && ClientID != undefined && ClientID != '') {
                 $.ajax({
-                    url: '/AgencyService/GetClientDetails?id=' + ClientID ,
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

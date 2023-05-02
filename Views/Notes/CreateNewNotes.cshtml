@@ -4,6 +4,26 @@
     ViewBag.Title = "Create New Note Description";
 }
 <style>
+   /* .boxSep {
+        background-color: #f7f7f7;
+        border: 2px solid #ccc;
+        margin: 10px;
+        display: inline-block;
+    }*/
+
+    .imgNoFill {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .imgNoFill img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: none;
+        }
+
     .tox-toolbar-overlord {
         background-color: #fff;
         display: flex;
@@ -12,13 +32,15 @@
     .turquoiseblue {
         background-color: #05768f !important;
     }
+
     .yellow {
         background-color: #FFDB74 !important;
     }
+
     .col-1.col-md-2.col-lg-2.col-xl-2 {
         margin-left: 20px;
     }
-   /* button#btnCreateNewNotesDescription {
+    /* button#btnCreateNewNotesDescription {
         padding-left: 10px;
     }*/
 </style>
@@ -52,51 +74,52 @@
                                             @Html.HiddenFor(x => x.CategoriesId_ref)
 
                                         </div>
-                                        <div class="form-group mb-3" >
-                                           
-                                                <div class="col-md-2 custom-switch custom-control-inline  mr-0 ">                  
-                                                    
-                                                        <label class="abc" style="padding-right:70px;">Publish</label> 
-                                                    
+                                        <div class="form-group mb-3">
 
-                                                    <input class="custom-control-input" id="chkPublished" type="checkbox"                      checked>
-                                                    <label class="custom-control-label" for="chkPublished"></label>
-                                                </div>
-                                            
+                                            <div class="col-md-2 custom-switch custom-control-inline  mr-0 ">
+
+                                                <label class="abc" style="padding-right:70px;">Publish</label>
+
+
+                                                <input class="custom-control-input" id="chkPublished" type="checkbox" checked>
+                                                <label class="custom-control-label" for="chkPublished"></label>
+                                            </div>
+
                                         </div>
                                         <div class="media-body">
-                                            <h5 class="mb-2 fs-0" >Tags</h5>
+                                            <h5 class="mb-2 fs-0">Tags</h5>
                                             <div class="d-flex" id="divTag">
-                                            <div class="dropdown dropright">
+                                                <div class="dropdown dropright">
 
-                                                <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle                                     dropdown-caret-none" data-toggle="dropdown" aria-haspopup="true" aria-
-                                                        expanded="false">
-                                                    <span class="fas fa-plus" style="font-size: 20px;"></span>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
-                                                    <div class="dropdown-divider"></div>
-                                                    <div class="px-3">
-                                                        @if ((IEnumerable<NotesLabelsModel>)TempData["NotesLabels"] != null)
-                                                        {
-                                                            foreach (var label in (IEnumerable<NotesLabelsModel>)TempData["NotesLabels"])
+                                                    <button class="btn btn-sm btn-secondary px-2 fsp-75 bg-400 border-400 dropdown-toggle                                     dropdown-caret-none" data-toggle="dropdown" aria-haspopup="true" aria-
+                                                            expanded="false">
+                                                        <span class="fas fa-plus" style="font-size: 20px;"></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <h6 class="dropdown-header py-0 px-3 mb-0">Select Tags</h6>
+                                                        <div class="dropdown-divider"></div>
+                                                        <div class="px-3">
+                                                            @if ((IEnumerable<NotesLabelsModel>)TempData["NotesLabels"] != null)
                                                             {
-                                                        <button class=" dropdown-item rounded mb-2 @label.className" type="button" onclick="addTag('@label.className','@label.NoteLabel',false,'@label.Id');"> @label.NoteLabel                                                                                                                   
-                                                        </button>
+                                                                foreach (var label in (IEnumerable<NotesLabelsModel>)TempData["NotesLabels"])
+                                                                {
+                                                                    <button class=" dropdown-item rounded mb-2 @label.className" type="button" onclick="addTag('@label.className','@label.NoteLabel',false,'@label.Id');">
+                                                                        @label.NoteLabel
+                                                                    </button>
+                                                                }
                                                             }
-                                                        }
 
-                                                        @*<button class=" dropdown-item rounded mb-2 turquoiseblue text-white" type="button" onclick="addTag('turquoiseblue text-white','Relevant');">Relevant</button>
-                                                        <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
-                                                        <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>*@
+                                                            @*<button class=" dropdown-item rounded mb-2 turquoiseblue text-white" type="button" onclick="addTag('turquoiseblue text-white','Relevant');">Relevant</button>
+                <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
+                <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>*@
+
+
+                                                        </div>
 
 
                                                     </div>
-
-
                                                 </div>
                                             </div>
-                                                </div>
                                             <br />
                                             @*</div>*@
                                             @*<hr class="my-4" />*@
@@ -109,6 +132,27 @@
                                                 @Html.TextAreaFor(x => x.Description, new { @class = "tinymce border" })
                                                 @*<textarea class="tinymce border" name="Description" id="Description" data-val="true" data-val-required="This field cannot be blank." required></textarea>*@
                                                 @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger w-100" })
+
+
+                                                @*<div class="boxSep">
+                                                    <div class="imgNoFill imgLiquid popi" style="width:203px; height:203px;">
+                                                        <img alt="" src="~/assets/img/team/1.jpg" height="190" />
+                                                    </div>
+                                                </div>*@
+
+
+                                                <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body" style="padding:0; padding-bottom:20px">
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                                 <img src="" class="imagepreview" style="width: 100%;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>

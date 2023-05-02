@@ -6,6 +6,7 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -209,6 +210,42 @@ namespace ProvenCfoUI.Controllers
                 if (ModelState.IsValid)
                 {
 
+
+                    string html = Notes.Description;/*"<p>This is ,1st text</p>\n<p><img src=\"data:image/png;base64,xYz=\" alt=\"\" /></p><p>This is 2nd, text</p>\n<p><img src=\"data:image/png;base64,lMn=\" alt=\"\" /></p>";*/
+
+                    string[] parts = html.Split(new string[] { "<img src=\"data:image/png;base64,", "\" alt=\"\" /></p>" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        string base64Data = parts[i];
+
+                        string pattern = "^[a-zA-Z0-9+/]*={0,2}$";
+                        Regex regex = new Regex(pattern);
+                        bool isBase64 = regex.IsMatch(base64Data);
+
+                        if (isBase64)
+                        {
+                            byte[] bytes = Convert.FromBase64String(base64Data);
+
+                            string filename = Guid.NewGuid().ToString() + "-" + "NotesImages" + ".png";
+                            //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+
+
+                            string path = Server.MapPath("~/Upload/Profile/");
+
+                            string PathfileName = Path.Combine(path, filename);
+
+                            using (FileStream file = new FileStream(PathfileName, FileMode.Create))
+                            {
+                                file.Write(bytes, 0, bytes.Length);
+                            }
+
+                            string newSrc = "../Upload/Profile/" + filename;
+                            html = html.Replace($"data:image/png;base64,{base64Data}", newSrc);
+                        }
+                    }
+
+
                     var LoginUserid = Session["UserId"].ToString();
 
                     if (Notes.Id != null)
@@ -225,7 +262,7 @@ namespace ProvenCfoUI.Controllers
                     using (NotesService objNotes = new NotesService())
                     {
 
-                       
+                        Notes.Description = html;
                         var result = objNotes.CreateNewNotes(Notes);
                         if (result.Status == true)
                         {
