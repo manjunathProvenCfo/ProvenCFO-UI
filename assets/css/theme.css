@@ -23107,7 +23107,7 @@ span.flatpickr-weekday,
 }
 
 .white-space-nowrap {
-    width: 1px;
+   /* width: 1px;*/
     white-space: nowrap;
 }
 

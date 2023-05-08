@@ -39,9 +39,9 @@
 
 
                             @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
-                          
+
                         }
-                         
+
                     </div>
 
                 </div>
@@ -134,7 +134,7 @@
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <h3>@Categories.NoteCategory</h3>
-                      
+
                             @if (ViewBag.IsEditMode == true)
                             {
                                 <div class="dropdown">
@@ -171,6 +171,44 @@
                                                         }
                                                         <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
                                                     </div>
+
+                                                    <div id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+
+
+
+
+                                                        @switch (Category.ChatStatus)
+                                                        {
+                                                            case 0:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1 text-dark"></span>
+                                                                </button>
+                                                                break;
+                                                            case 1:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1"></span>
+
+
+
+                                                                </button>
+                                                                break;
+                                                            case 2:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="fas fa-comment fs--1"></span>
+
+                                                                </button>
+                                                                break;
+                                                            default:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1 text-dark"></span>
+                                                                </button>
+                                                                break;
+                                                        }
+
+
+
+
+                                                    </div>
                                                     <div class="ml-2" style=" font-size : 24px">
                                                         <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
                                                             <a class="dropdown" id="dividerExample" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:24px;">
@@ -193,7 +231,7 @@
                                                 </div>
                                             }
                                         </div>
-                                        <p> @Html.Raw(Category.Description)</p>                                       
+                                        <p> @Html.Raw(Category.Description)</p>
                                         <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
                                             Created by: @Category.CreatedByUser, <span class="last-date">@Category.CreatedDate</span>
@@ -281,7 +319,7 @@
         });
         //$(document).ready(function () {
         //    $('#NoteId').click(function () {
-        //        
+        //
         //        var ClientID = $("#ddlclient option:selected").val();
         //        var NoteID = $("#NoteId option:selected").val();
         //        if (ClientID != null && ClientID != undefined && ClientID != '') {
@@ -462,8 +500,8 @@
                 }
             }
         }
-        function addTag(className, TagName, Isview = false,label_id) {
-           
+        function addTag(className, TagName, Isview = false, label_id) {
+
             var NotesId = gCurrentViewTaskId;
             var tags = $('#divTag span');
             $('#divTagView ul').empty();
@@ -489,7 +527,7 @@
             }
             else {
 
-                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id  + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
             }
 
 
@@ -533,7 +571,7 @@
                     return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
                 }).toArray()[0];
 
-                var LabelId = $('#divTag li') != undefined ? $('#divTag li').attr('label-id'):'';
+                var LabelId = $('#divTag li') != undefined ? $('#divTag li').attr('label-id') : '';
 
                 if ($("#chkPublished").prop("checked") === true) {
                     isPublished = "Published";
@@ -545,7 +583,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: CategoriesId_ref, LabelId_ref: LabelId};
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: CategoriesId_ref, LabelId_ref: LabelId };
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -635,7 +673,7 @@
                             $('#Title').val(title);
                             if (response.Description.LableClass != null && response.Description.LabelId_ref != null) {
                                 addTag(response.Description.LableClass, response.Description.Labels, true, response.Description.LabelId_ref);
-                            }                                                    
+                            }
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
@@ -920,8 +958,8 @@
                         var localTime = UtcDateToLocalTime(utcDate);
                         let minutesVal = localTime.getMinutes();
                         let minutes = () => minutesVal > 0 ? (
-                            minutesVal > 9 ? minutesVal : "0"+minutesVal
-                        ): "00"
+                            minutesVal > 9 ? minutesVal : "0" + minutesVal
+                        ) : "00"
 
                         _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
