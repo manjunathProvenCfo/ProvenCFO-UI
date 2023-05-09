@@ -362,13 +362,11 @@
         });
 
         function OpenNotesModal(src) {
-            debugger;
             $('.imagepreview').attr('src', src);
             $('#imageNotesModal').modal('show');
         }
 
         $('img').on("click", function () {
-            debugger;
             var src = $(this).attr('src')
             if (src.includes('NotesImages.png')) {
 
@@ -377,7 +375,6 @@
         });
 
         function OpenModalOnClick(src) {
-            debugger;
             $('.imagepreview').attr('src', src);
             $('#imagemodal').modal('show');
         }
@@ -389,7 +386,6 @@
             height: 600,
             setup: function (editor) {
                 editor.on('click', function (e) {
-                    debugger;
                     if (e.target.nodeName === 'IMG') {
 
                         let tinyImgSrc = e.target.getAttribute('src')

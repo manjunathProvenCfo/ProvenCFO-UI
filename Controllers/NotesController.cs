@@ -1,4 +1,10 @@
-﻿using log4net;
+﻿using Azure.Storage.Sas;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.VariantTypes;
+using log4net;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using Proven.Model;
 using Proven.Service;
 using ProvenCfoUI.Comman;
@@ -6,12 +12,15 @@ using ProvenCfoUI.Helper;
 using ProvenCfoUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using Xero.NetStandard.OAuth2.Model.Accounting;
 
 namespace ProvenCfoUI.Controllers
 {
@@ -19,6 +28,10 @@ namespace ProvenCfoUI.Controllers
     [Exception_Filters]
     public class NotesController : BaseController
     {
+        private string StorageAccountName = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountName"]);
+        private string StorageAccountKey = Convert.ToString(ConfigurationManager.AppSettings["StorageAccountKey"]);
+        private string StorageConnection = Convert.ToString(ConfigurationManager.AppSettings["StorageConnection"]);
+        private string StorageContainerName = Convert.ToString(ConfigurationManager.AppSettings["StorageContainerName"]);
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         // GET: Notes
         [CheckSession]
@@ -48,6 +61,64 @@ namespace ProvenCfoUI.Controllers
                             AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                         }
                         var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
+
+
+                        for (var x = 0; x < Categories.Count; x++) // Relevant, Reliable and Real Time.
+                        {
+                            var noteCategory = Categories[x];
+
+                            if (noteCategory.NotesCategoriesList.Count > 0)
+                            {
+                                for (var y = 0; y < noteCategory.NotesCategoriesList.Count; y++) // For Description.
+                                {
+                                    string[] imagesParts = noteCategory.NotesCategoriesList[y].Description.Split(new string[] { "<img src=\"https://", "\" alt=\"\" /></p>" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                    for (var i = 0; i < imagesParts.Length; i++)
+                                    {
+                                        string substr = "saprovencfodb.file.core.windows.net";
+
+                                        if (imagesParts[i].Contains(substr))
+                                        {
+                                            var imageSRC = imagesParts[i];
+                                            string pattern = @"[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}";
+
+                                            Regex regex = new Regex(pattern);
+                                            Match match = regex.Match(imagesParts[i]);
+
+                                            if (match.Success)
+                                            {
+                                                string guidStr = match.Value;
+
+                                                var noteCategoryType = "";
+                                                switch (noteCategory.NoteCategory)
+                                                {
+                                                    case "Real Time":
+                                                        noteCategoryType = "Real Time";
+                                                        break;
+                                                    case "Relevant":
+                                                        noteCategoryType = "Relevant";
+                                                        break;
+                                                    default:
+                                                        noteCategoryType = "Reliable";
+                                                        break;
+                                                }
+
+                                                string filename = guidStr + "_" + "NotesImages" + ".png";
+                                                string folderPath = $"Notes/Assets/{noteCategoryType}";
+
+                                                using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                                                {
+                                                    var updatedFilePath = storage.GetFileSasUri(StorageContainerName, folderPath + $"/{filename}", DateTime.UtcNow.AddMinutes(20), ShareFileSasPermissions.Read).AbsoluteUri;
+
+                                                    noteCategory.NotesCategoriesList[y].Description = noteCategory.NotesCategoriesList[y].Description.Replace($"https://{imageSRC}", updatedFilePath);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         TempData["CategoriesAndNotes"] = Categories;
                         var Summary = objClient.GetClientById(AgencyID);
                         TempData["NotesSummary"] = Summary;
@@ -111,8 +182,53 @@ namespace ProvenCfoUI.Controllers
                     TempData["SelectedDescription"] = result.Description;
                     TempData["Selectedtag"] = result.Labels;
                     Session["SelectedDescriptionId"] = result.Id;
-                    //Session["Selectedtag"] =  result.Labels;
-                    return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
+
+                    string[] imagesParts = result.Description.Split(new string[] { "<img src=\"https://", "\" alt=\"\" /></p>" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    for (var i = 0; i < imagesParts.Length; i++)
+                    {
+                        string substr = "saprovencfodb.file.core.windows.net";
+
+                        if (imagesParts[i].Contains(substr))
+                        {
+                            var imageSRC = imagesParts[i];
+                            string pattern = @"[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}";
+
+                            Regex regex = new Regex(pattern);
+                            Match match = regex.Match(imagesParts[i]);
+
+                            if (match.Success)
+                            {
+                                string guidStr = match.Value;
+
+                                var noteCategory = "";
+                                switch (result.NoteCatId)
+                                {
+                                    case "1":
+                                        noteCategory = "Real Time";
+                                        break;
+                                    case "2":
+                                        noteCategory = "Relevant";
+                                        break;
+                                    default:
+                                        noteCategory = "Reliable";
+                                        break;
+                                }
+
+                                string filename = guidStr + "_" + "NotesImages" + ".png";
+                                string folderPath = $"Notes/Assets/{noteCategory}";
+
+                                using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                                {
+                                    var updatedFilePath = storage.GetFileSasUri(StorageContainerName, folderPath + $"/{filename}", DateTime.UtcNow.AddMinutes(5), ShareFileSasPermissions.Read).AbsoluteUri;
+
+                                    result.Description = result.Description.Replace($"https://{imageSRC}", updatedFilePath);
+                                }
+                            }
+                        }
+                    }
+                        //Session["Selectedtag"] =  result.Labels;
+                        return Json(new { Description = result, Message = "Success" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
@@ -209,9 +325,7 @@ namespace ProvenCfoUI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
-
-                    string html = Notes.Description;/*"<p>This is ,1st text</p>\n<p><img src=\"data:image/png;base64,xYz=\" alt=\"\" /></p><p>This is 2nd, text</p>\n<p><img src=\"data:image/png;base64,lMn=\" alt=\"\" /></p>";*/
+                    string html = Notes.Description;
 
                     string[] parts = html.Split(new string[] { "<img src=\"data:image/png;base64,", "\" alt=\"\" /></p>" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -226,22 +340,37 @@ namespace ProvenCfoUI.Controllers
                         if (isBase64)
                         {
                             byte[] bytes = Convert.FromBase64String(base64Data);
+                            var GUID = Guid.NewGuid().ToString();
 
-                            string filename = Guid.NewGuid().ToString() + "-" + "NotesImages" + ".png";
-                            //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
-
-
-                            string path = Server.MapPath("~/Upload/Profile/");
-
-                            string PathfileName = Path.Combine(path, filename);
-
-                            using (FileStream file = new FileStream(PathfileName, FileMode.Create))
+                            var noteCategory = "";
+                            switch (Notes.NoteCatId)
                             {
-                                file.Write(bytes, 0, bytes.Length);
+                                case "1":
+                                    noteCategory = "Real Time";
+                                    break;
+                                case "2":
+                                    noteCategory = "Relevant";
+                                    break;
+                                default:
+                                    noteCategory = "Reliable";
+                                    break;
                             }
 
-                            string newSrc = "../Upload/Profile/" + filename;
-                            html = html.Replace($"data:image/png;base64,{base64Data}", newSrc);
+                            string filename =  GUID + "_" + "NotesImages" + ".png";
+                            string folderPath = $"Notes/Assets/{noteCategory}";
+                            
+                            HttpPostedFileBase sigFile = (HttpPostedFileBase)new CustomPostedFiles(bytes, filename);
+                            
+                            using (IStorageAccess storage = new AzureStorageAccess(StorageAccountName, StorageAccountKey, StorageConnection))
+                            {
+                                var result = storage.UploadFile(StorageContainerName, folderPath, filename, sigFile);
+                                if (result == true)
+                                {
+                                    var filepath = storage.GetFileSasUri(StorageContainerName, folderPath + $"/{filename}", DateTime.UtcNow.AddMinutes(20), ShareFileSasPermissions.Read).AbsoluteUri;
+
+                                    html = html.Replace($"data:image/png;base64,{base64Data}", filepath);
+                                }
+                            }
                         }
                     }
 

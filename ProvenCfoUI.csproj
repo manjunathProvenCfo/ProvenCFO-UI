@@ -714,6 +714,7 @@
     <Compile Include="Comman\CustomAuthenticationFilter.cs" />
     <Compile Include="Comman\CustomAuthorizeAttribute.cs" />
     <Compile Include="Comman\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Comman\CustomPostedFiles.cs" />
     <Compile Include="Comman\Exception_Filters.cs" />
     <Compile Include="Comman\IBankTransactionRuleEngine.cs" />
     <Compile Include="Comman\IStorageAccess.cs" />
