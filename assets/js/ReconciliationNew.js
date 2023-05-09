@@ -455,7 +455,8 @@ function InitEvents() {
                         ShowAlertBoxSuccess("Success!", "Successfully synced with Xero. \n" + finalAzureMessage, function () { window.location.reload(); });
                     }
                     else if (Azureresponse.status === false && Azureresponse.statusCode != 500) {
-                        ShowAlertBoxError("Error!", `${Azureresponse.message}.(Req #${RequestID})`, function () { window.location.reload(); });
+                        ShowAlertBoxError("Error!", `${Azureresponse.message.replace("expaired", "expired")}.(Req #${RequestID})`, function () { window.location.reload(); });
+
                     }
                     else {
                         ShowAlertBoxError("Error!", `Sorry, there was a problem getting data from Xero. Please try again later.(Req #${RequestID})`, function () { window.location.reload(); });
