@@ -374,6 +374,10 @@
             }
         });
 
+        $('#imagemodal').on('hidden.bs.modal', function (e) {
+            $('#notes-modal-new').css('overflow', 'auto');
+        });
+
         function OpenNotesModal(src) {
             $('.imagepreview').attr('src', src);
             $('#imageNotesModal').modal('show');
@@ -385,6 +389,12 @@
 
                 OpenNotesModal(src);
             }
+        });
+
+        $(function () {
+            $(".custom-close").on('click', function () {
+                $('#imagemodal').modal('hide');
+            });
         });
 
         function OpenModalOnClick(src) {
@@ -408,6 +418,12 @@
             }
         });
 
+        $(function () {
+            var imgElements = $('img[src*=saprovencfodb]');
+            for (var x = 0; x < imgElements.length; x++) { 
+                imgElements[x].style.maxWidth = '1180px'
+            }
+        });
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
