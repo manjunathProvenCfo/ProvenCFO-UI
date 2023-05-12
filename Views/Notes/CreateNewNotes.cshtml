@@ -4,25 +4,19 @@
     ViewBag.Title = "Create New Note Description";
 }
 <style>
-   /* .boxSep {
-        background-color: #f7f7f7;
-        border: 2px solid #ccc;
-        margin: 10px;
-        display: inline-block;
-    }*/
-
+ 
     .imgNoFill {
         position: relative;
         overflow: hidden;
     }
 
-        .imgNoFill img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: none;
-        }
+    .imgNoFill img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: none;
+    }
 
     .tox-toolbar-overlord {
         background-color: #fff;
@@ -110,8 +104,8 @@
                                                             }
 
                                                             @*<button class=" dropdown-item rounded mb-2 turquoiseblue text-white" type="button" onclick="addTag('turquoiseblue text-white','Relevant');">Relevant</button>
-                <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
-                <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>*@
+                                                                <button class=" dropdown-item rounded mb-2 bg-green text-white" type="button" onclick="addTag(' bg-green text-white','Reliable');">Reliable</button>
+                                                                <button class=" dropdown-item rounded mb-2 yellow text-white" type="button" onclick="addTag(' yellow text-white ','Real Time');">Real Time</button>*@
 
 
                                                         </div>
@@ -135,10 +129,24 @@
 
 
                                                 @*<div class="boxSep">
-                                                    <div class="imgNoFill imgLiquid popi" style="width:203px; height:203px;">
-                                                        <img alt="" src="~/assets/img/team/1.jpg" height="190" />
+                                                        <div class="imgNoFill imgLiquid popi" style="width:203px; height:203px;">
+                                                            <img alt="" src="~/assets/img/team/1.jpg" height="190" />
+                                                        </div>
+                                                    </div>*@
+
+
+                                                <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body" style="padding:0; padding-bottom:20px">
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                                <img src="" class="imagepreview" style="width: 100%;">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -169,18 +177,6 @@
 
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body" style="padding:0; padding-bottom:20px">
-                <button type="button" class="close custom-close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <img src="" class="imagepreview" style="width: 100%;">
             </div>
         </div>
     </div>
