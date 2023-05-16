@@ -473,6 +473,10 @@
             }
         });
 
+        $('#imagemodal').on('hidden.bs.modal', function (e) {
+            $('#notes-modal-new').css('overflow', 'auto');
+        });
+
         function OpenNotesModal(src) {
             $('.imagepreview').attr('src', src);
             $('#imageNotesModal').modal('show');
@@ -486,6 +490,11 @@
             }
         });
 
+        $(function () {
+            $(".custom-close").on('click', function () {
+                $('#imagemodal').modal('hide');
+            });
+        });
 
         function OpenModalOnClick(src) {
             $('.imagepreview').attr('src', src);
