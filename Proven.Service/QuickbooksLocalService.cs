@@ -252,7 +252,7 @@ namespace Proven.Service
             return (string)res;
         }
 
-        public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        public override ReturnModel UpdateAccessToken(V tokenInfoVM)
         {
             throw new NotImplementedException();
         }

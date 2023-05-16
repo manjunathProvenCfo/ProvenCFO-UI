@@ -182,9 +182,9 @@ namespace Proven.Service
             return ProdPostAsync<ReturnModel, V>("Xero/UpdateToken", tokenInfoVM).Result;
 
         }
-        public override ReturnAsyncModel UpdateAccessToken(V tokenInfoVM)
+        public override ReturnModel UpdateAccessToken(V tokenInfoVM)
         {
-            return ProdPostAsync<ReturnAsyncModel, V>("Xero/UpdateAccessToken", tokenInfoVM).Result;
+            return ProdPostAsync<ReturnModel, V>("Xero/UpdateAccessToken", tokenInfoVM).Result;
 
         }
 
