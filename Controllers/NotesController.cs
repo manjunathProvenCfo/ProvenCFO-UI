@@ -60,7 +60,8 @@ namespace ProvenCfoUI.Controllers
                             var selectedAgency = UserPref.Where(x => x.PreferenceCategory == "Agency" && x.Sub_Category == "ID").FirstOrDefault();
                             AgencyID = Convert.ToInt32(selectedAgency.PreferanceValue);
                         }
-                        var Categories = objNotes.GetAllNotesCategories("Active", AgencyID).ResultData;
+                        var UserId = Convert.ToString(Session["UserId"]);
+                        var Categories = objNotes.GetAllNotesCategories("Active", AgencyID,UserId).ResultData;
 
 
                         for (var x = 0; x < Categories.Count; x++) // Relevant, Reliable and Real Time.

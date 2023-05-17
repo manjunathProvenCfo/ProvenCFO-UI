@@ -17,9 +17,9 @@ namespace Proven.Service
 
 
 
-        public NotesCategoriesMainModel GetAllNotesCategories(string Status, int AgencyID)
+        public NotesCategoriesMainModel GetAllNotesCategories(string Status, int AgencyID,string UserId)
         {
-            return GetAsync<NotesCategoriesMainModel>("Notes/GetAllNotesCategories?Status=" + Status + "&AgencyID=" + AgencyID).Result;
+            return GetAsync<NotesCategoriesMainModel>("Notes/GetAllNotesCategories?Status=" + Status + "&AgencyID=" + AgencyID +"&UserId=" +UserId ).Result;
         }
 
 
