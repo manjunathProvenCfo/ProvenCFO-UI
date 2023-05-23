@@ -15,7 +15,17 @@
     .yellow {
         background-color: #FFDB74 !important;
     }
+/*
+    .scrollable-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollable-container::-webkit-scrollbar-track {
+        background-color: #f1f1
+    }*/
 </style>
+@Styles.Render("~/bundles/css/twilio-chat")
+
 <div class="container-fluid p-0" data-layout="container">
     <div class="mb-3 v-pills-div notes-container">
         @{var summary = (ClientModel)TempData["NotesSummary"];}
@@ -39,9 +49,9 @@
 
 
                             @*<h5 class="mb-0 text-right" id="notes-updatesummary-new-btn"><span class="fas fa-edit"></span></h5>*@
-                          
+
                         }
-                         
+
                     </div>
 
                 </div>
@@ -105,24 +115,86 @@
 
     <div class="row scrollspy-listing">
 
-        <div class="col-3 order-2">
+        <div class="col-4 order-2">
 
-            <div class="sticky-top sticky-kit right-nav-pills bg-white">
+            <div class="accordion" id="accordionExample">
+                <div class="card">
 
-                <div class="nav flex-column nav-pills">
-                    @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
-                    {
-                        @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
 
-                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
+                            <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                
+                                <div class="row">
+                                    <div class="col-10">
+                                        Relevant/ Reliable/ Real Time
+                                    </div>
+                                    <div class="col-2" id="_acOne"></div>
+                                </div>
+                            </button>
+                        </h2>
+                    </div>
 
-                    }
+                    <div class="sticky-top sticky-kit bg-white">
 
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="right-nav-pills">
+                                <div class="nav flex-column nav-pills">
+                                    @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
+                                    {
+                                        @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
+
+                                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*</div>*@
+
+
+                @*<div class="accordion" >*@
+                <div class="card" id="accordionExample2" hidden>
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                
+                                <div class="row">
+                                    <div class="col-10">
+                                        Notes Chat
+                                    </div>
+                                    <div class="col-2" id="_acTwo"></div>
+                                </div>
+
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+                        <div class="card-body" id="divNChat" style="padding: 0">
+                            @Html.Partial("_notesCommunication", true)
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-9 order-1">
+        <div class="modal fade" id="imageNotesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding:0; padding-bottom:20px">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <img src="" class="imagepreview" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8 order-1" id="notesSection">
             @{int containerCounter = 0;}
 
             @{ int counter = 0; }
@@ -133,8 +205,8 @@
                 <div class="mb-3 v-pills-div notes-container" id="v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id">
                     <div class="card notes-items-container" id="@("notes-items-container"+containerCounter)">
                         <div class="card-header d-flex align-items-center justify-content-between">
-                            <h3>@Categories.NoteCategory</h3>
-                      
+                            <h3 data-categoryid="@Categories.Id" id="noteCategory">@Categories.NoteCategory</h3>
+
                             @if (ViewBag.IsEditMode == true)
                             {
                                 <div class="dropdown">
@@ -155,7 +227,7 @@
                                 {
                                     <div class="card-body notes-item shadow-sm" data-id="@Category.Id" data-position="@Category.Position">
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <h6 style="color: #00BE82; "> @Category.Title</h6>
+                                            <h6 data-id="@Category.Id" style="color: #00BE82; "> @Category.Title</h6>
                                             @if (ViewBag.IsEditMode == true)
                                             {
                                                 <div class="d-flex align-items-center">
@@ -170,6 +242,44 @@
                                                             <input class="custom-control-input" type="checkbox" id="@($"chkIsPublished{counter}")" data-id="@Category.Id">
                                                         }
                                                         <label class="custom-control-label" for="@($"chkIsPublished{counter}")"></label>
+                                                    </div>
+
+                                                    <div id="tdComments" class="no-sort pr-1 align-middle white-space-nowrap">
+
+
+
+
+                                                        @switch (Category.ChatStatus)
+                                                        {
+                                                            case 0:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1 text-dark"></span>
+                                                                </button>
+                                                                break;
+                                                            case 1:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1"></span>
+
+
+
+                                                                </button>
+                                                                break;
+                                                            case 2:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="fas fa-comment fs--1"></span>
+
+                                                                </button>
+                                                                break;
+                                                            default:
+                                                                <button id="btnNotesComment" class="btn btn-link btn-sm btn-reveal  openNotesChat" type="button" data-id="@Category.Id" data-notesCategory="@Categories.Id" data-boundary="html" aria-expanded="false">
+                                                                    <span class="far fa-comment fs--1 text-dark"></span>
+                                                                </button>
+                                                                break;
+                                                        }
+
+
+
+
                                                     </div>
                                                     <div class="ml-2" style=" font-size : 24px">
                                                         <div class="nav-item dropdown dropdown-on-hover dots-dropdown" style="list-style: none;">
@@ -193,7 +303,12 @@
                                                 </div>
                                             }
                                         </div>
-                                        <p> @Html.Raw(Category.Description)</p>                                       
+                                        <!--<div class="scrollable-container" style="width: 100%; overflow-x: auto;">-->
+                                            <!-- Card-body content here -->
+
+                                        <!--</div>-->
+                                        <p> @Html.Raw(Category.Description)</p> @*Here it is*@
+
                                         <h6 class="badge mr-1 py-2 @Category.LableClass"> @Category.Labels </h6>
                                         <div class="Words">
                                             Created by: @Category.CreatedByUser, <span class="last-date">@Category.CreatedDate</span>
@@ -206,10 +321,7 @@
                                                 <span>| Last Edited by: @Category.ModifiedByUser, <span class="last-date">@Category.ModifiedDate</span> </span>
 
                                             }
-
-                                            @*<hr>*@
                                         </div>
-
                                     </div>
 
                                 }
@@ -237,7 +349,14 @@
 </div>
 
 @section Scripts{
+    <script src="~/assets/lib/emojionearea/emojionearea.js"></script>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    
+    @Scripts.Render("~/bundles/js/toastr")
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/lib/twilio-chat-lib")
+    @Scripts.Render("~/bundles/js/kanban")
+
     <script src="~/assets/lib/tinymce/tinymce.min.js"></script>
     <script src="~/assets/lib/shopify-draggable/draggable.bundle.js"></script>
 
@@ -247,13 +366,44 @@
 
         var $formValidator;
         $(document).ready(function () {
-            var ClientID = $("#ddlclient option:selected").val();
+
+            nchat.userId = $('#topProfilePicture').attr('userId');
+            nchat.userEmail = userEmailAddress;
+            nchat.clientId = $("#ddlclient option:selected").val();
+
+            SetupDynamicLoaderOnNotesScroll();
+
+            document.getElementById("_acOne").innerHTML = `<i style="padding-left:8px" class="fa fa-arrow-left"></i>`; // minus
+            document.getElementById("_acTwo").innerHTML = `<i style="padding-left:8px" class="fa fa-arrow-down"></i>`; // plus
+
+            $('#accordionExample .card .btn-link').on("click", function () {
+
+                if ($(this).find('i').find('svg').hasClass('fa-arrow-left')) {
+                    $(this).find('i').find('svg').removeClass('fa-arrow-left');
+                    $(this).find('i').find('svg').addClass('fa-arrow-down');
+                }
+                else if ($(this).find('i').find('svg').hasClass('fa-arrow-down')) {
+                    $(this).find('i').find('svg').removeClass('fa-arrow-down');
+                    $(this).find('i').find('svg').addClass('fa-arrow-left');
+                }
+
+                if ($(this).parents(".card").siblings().find(".card-header .btn-link i").find('svg').hasClass('fa-arrow-left')) {
+
+                    $(this).parents(".card").siblings().find(".card-header .btn-link i").find('svg').removeClass('fa-arrow-left');
+                    $(this).parents(".card").siblings().find(".card-header .btn-link i").find('svg').addClass('fa-arrow-down');
+                }
+                else {
+                    $(this).parents(".card").siblings().find(".card-header .btn-link i").find('svg').removeClass('fa-arrow-down');
+                    $(this).parents(".card").siblings().find(".card-header .btn-link i").find('svg').addClass('fa-arrow-left');
+                }
+            });
+
             //getAgencyMembersList(ClientID);
-          /*  GetTotalNotesCount();*/
+            /*  GetTotalNotesCount();*/
             $formValidator = $("#formCreateNotes").validate(
-                {
-                    ignore: ""
-                });
+            {
+                ignore: ""
+            });
             $formValidator.settings.ignore = "";
             $("#ddlSummary").val(@(summary?.Summaryid_ref));
 
@@ -281,7 +431,7 @@
         });
         //$(document).ready(function () {
         //    $('#NoteId').click(function () {
-        //        
+        //
         //        var ClientID = $("#ddlclient option:selected").val();
         //        var NoteID = $("#NoteId option:selected").val();
         //        if (ClientID != null && ClientID != undefined && ClientID != '') {
@@ -309,13 +459,72 @@
         //    })
         //});
 
+        $('#imageNotesModal, #imagemodal').on('shown.bs.modal', function () {
+            var modal = $(this);
+            var image = modal.find('.imagepreview');
+            var src = image.attr('src');
+            var img = new Image();
+            img.src = src;
+            img.onload = function () {
+                var width = img.width;
+                var height = img.height;
+                modal.find('.modal-dialog').animate({ 'max-width': width, 'max-height': height }, 500);
+                image.css({ 'width': '100%', 'height': 'auto' }).animate({ opacity: 1 }, 500);
+            }
+        });
+
+        $('#imagemodal').on('hidden.bs.modal', function (e) {
+            $('#notes-modal-new').css('overflow', 'auto');
+        });
+
+        function OpenNotesModal(src) {
+            $('.imagepreview').attr('src', src);
+            $('#imageNotesModal').modal('show');
+        }
+
+        $('img').on("click", function () {
+            var src = $(this).attr('src')
+            if (src.includes('NotesImages.png')) {
+
+                OpenNotesModal(src);
+            }
+        });
+
+        $(function () {
+            $(".custom-close").on('click', function () {
+                $('#imagemodal').modal('hide');
+            });
+        });
+
+        function OpenModalOnClick(src) {
+            $('.imagepreview').attr('src', src);
+            $('#imagemodal').modal('show');
+        }
+
+        tinymce.init({
+            selector: 'textarea',
+            branding: false,
+            statusbar: false,
+            height: 600,
+            setup: function (editor) {
+                editor.on('click', function (e) {
+                    if (e.target.nodeName === 'IMG') {
+
+                        let tinyImgSrc = e.target.getAttribute('src')
+                        OpenModalOnClick(tinyImgSrc);
+                    }
+                });
+            }
+        });
+
+
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();
 
             ShowlottieLoader();
             if (ClientID != null && ClientID != undefined && ClientID != '') {
                 $.ajax({
-                    url: '/AgencyService/GetClientDetails?id=' + ClientID ,
+                    url: '/AgencyService/GetClientDetails?id=' + ClientID,
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -409,8 +618,8 @@
                 }
             }
         }
-        function addTag(className, TagName, Isview = false,label_id) {
-           
+        function addTag(className, TagName, Isview = false, label_id) {
+
             var NotesId = gCurrentViewTaskId;
             var tags = $('#divTag span');
             $('#divTagView ul').empty();
@@ -436,7 +645,7 @@
             }
             else {
 
-                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id  + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
+                $('#divTag').prepend('<ul class="nav avatar-group mb-0"><li label-id=' + label_id + ' class="nav-item dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#" class="nav-link p-0 dropdown-toggle dropdown-caret-none ms-n1"><span class="badge mr-1 py-2 ' + className + '" data-toggle="dropdown" aria-expanded="true" onclick="taggaleRemoveOption()">' + TagName + '</span></a><div class="dropdown-menu dropdown-md px-0 py-3" style="" id="divShowRemove"><a class="dropdown-item text-danger" href="#!" onclick="RemoveTags();">Remove Tag</a></div></li></ul>');
             }
 
 
@@ -480,7 +689,7 @@
                     return $(opt) != null && $(opt).length > 0 ? $(opt)[0].innerText : '';
                 }).toArray()[0];
 
-                var LabelId = $('#divTag li') != undefined ? $('#divTag li').attr('label-id'):'';
+                var LabelId = $('#divTag li') != undefined ? $('#divTag li').attr('label-id') : '';
 
                 if ($("#chkPublished").prop("checked") === true) {
                     isPublished = "Published";
@@ -492,7 +701,7 @@
 
                 $("#btnCreateNewNotesDescription").prop('create', 'Save');
 
-                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: CategoriesId_ref, LabelId_ref: LabelId};
+                var pdata = { Id: id, Title: title, Description: description, NoteCatId: noteCatId, AgencyId: ClientID, IsPublished: isPublished, Position: position, Status: status, Labels: Labels, CategoriesId_ref: CategoriesId_ref, LabelId_ref: LabelId };
                 let json = JSON.stringify({ Notes: pdata });
 
                 postAjax('/Notes/CreateNewNotes', JSON.stringify({ Notes: pdata }), function (response) {
@@ -582,7 +791,7 @@
                             $('#Title').val(title);
                             if (response.Description.LableClass != null && response.Description.LabelId_ref != null) {
                                 addTag(response.Description.LableClass, response.Description.Labels, true, response.Description.LabelId_ref);
-                            }                                                    
+                            }
                             if (published.toLowerCase() == "published") {
                                 $("#chkPublished").prop('checked', true);
                             }
@@ -867,8 +1076,8 @@
                         var localTime = UtcDateToLocalTime(utcDate);
                         let minutesVal = localTime.getMinutes();
                         let minutes = () => minutesVal > 0 ? (
-                            minutesVal > 9 ? minutesVal : "0"+minutesVal
-                        ): "00"
+                            minutesVal > 9 ? minutesVal : "0" + minutesVal
+                        ) : "00"
 
                         _date = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
 
@@ -884,4 +1093,7 @@
 
         </script>
     }
+
+    <script src="~/assets/lib/jquery.mentionsInput/jquery.mentionsInput.js"></script>
+    <script src="~/assets/js/notesPage.js"></script>
 }

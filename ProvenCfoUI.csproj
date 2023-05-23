@@ -714,6 +714,7 @@
     <Compile Include="Comman\CustomAuthenticationFilter.cs" />
     <Compile Include="Comman\CustomAuthorizeAttribute.cs" />
     <Compile Include="Comman\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Comman\CustomPostedFiles.cs" />
     <Compile Include="Comman\Exception_Filters.cs" />
     <Compile Include="Comman\IBankTransactionRuleEngine.cs" />
     <Compile Include="Comman\IStorageAccess.cs" />
@@ -1029,6 +1030,7 @@
     <Content Include="assets\js\jquery.idle-timer.min.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="assets\js\lottie-player.js" />
+    <Content Include="assets\js\notesPage.js" />
     <Content Include="assets\js\popper.min.js" />
     <Content Include="assets\js\reconciliationMain.js" />
     <Content Include="assets\js\ReconciliationNew.js" />
@@ -1650,6 +1652,7 @@
     <Content Include="Views\Client\_ClientAPITokenUpldate.cshtml" />
     <Content Include="Views\Reconciliation\Reconciliation_New.cshtml" />
     <Content Include="Views\Shared\successQBToken.cshtml" />
+    <Content Include="Views\Shared\_notesCommunication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -38,6 +38,7 @@ namespace Proven.Model
         public string LableClass { get; set; }
         public int? LabelId_ref { get; set; }
         public int? CategoriesId_ref { get; set; }
+        public int? ChatStatus { get; set; }
 
     }
     public class NotesDescriptionMainModel

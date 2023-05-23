@@ -26,7 +26,7 @@ namespace Proven.Service.AccountingPackage
         public abstract Task<T> LoginXeroAccesswithCode(string code);
         public abstract Task<T> RefreshToken(T Token);
         public abstract ReturnModel UpdateToken(V tokenInfoVM);
-        public abstract ReturnAsyncModel UpdateAccessToken(V tokenInfoVM);        
+        public abstract ReturnModel UpdateAccessToken(V tokenInfoVM);        
         public abstract Task<T> GetBankSummary(V xeroToken, string XeroTenentID);
         public abstract Task<V> GetInvoices(T xeroToken, string XeroTenentID);
         public abstract Task<V> GetOrganisationsId(T xeroToken,string XeroTenentID);
