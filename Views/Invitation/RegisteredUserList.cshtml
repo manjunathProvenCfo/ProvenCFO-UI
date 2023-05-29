@@ -410,14 +410,15 @@
                     let tdDate = $(this).attr('data-login-time');
                     if (tdDate == "") return;
 
-                    var localTime = UtcDateToLocalTime(tdDate);
+                    var localTime = UtcDateToLocalTime(tdDate);3
                     let minutesVal = localTime.getMinutes();
 
                     let minutes = () => minutesVal > 0 ? (
                         minutesVal > 9 ? minutesVal : "0" + minutesVal
                     ) : "00"
 
-                    let strLocalDateTime = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+                    //let strLocalDateTime = `${localTime.getMonth() + 1}/${localTime.getDate()}/${localTime.getFullYear()} ${localTime.getHours()}:${minutes()} ${(localTime.getHours() >= 12 ? "PM" : "AM")}`;
+                    let strUTCDatetime = `${utcTime.getUTCMonth() + 1}/${utcTime.getUTCDate()}/${utcTime.getUTCFullYear()} ${utcTime.getUTCHours()}:${minutes()} ${(utcTime.getUTCHours() >= 12 ? "PM" : "AM")}`;
 
                     $(this).text(strLocalDateTime);
                 });
