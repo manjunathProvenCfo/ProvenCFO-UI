@@ -106,6 +106,8 @@ namespace Proven.Model
         public bool? IsDomoEnabled { get; set; }
         public bool? EnableDataSynTimeTrigge { get; set; }
         public DateTime? End_Of_Year_LockDate { get; set; }
+
+        public bool IsUpdate { get; set; }
     }
 
     public class ClientMainModel

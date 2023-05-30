@@ -100,5 +100,6 @@ namespace ProvenCfoUI.Models
         public string TeamMemberId3 { get; set; }
         public string TeamMemberId4 { get; set; }
         public List<Proven.Model.UserModel> StaffList { get; set; }
+        public bool IsUpdate { get; set; }
     }
 }

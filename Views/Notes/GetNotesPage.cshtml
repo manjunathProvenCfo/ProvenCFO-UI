@@ -15,6 +15,12 @@
     .yellow {
         background-color: #FFDB74 !important;
     }
+    div.ak-Bhramster {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 72px;
+        font-size: 18px;
+    }
 /*
     .scrollable-container::-webkit-scrollbar {
         width: 8px;
@@ -117,64 +123,66 @@
 
         <div class="col-4 order-2">
 
-            <div class="accordion" id="accordionExample">
-                <div class="card">
+            <div class="ak-Bhramster">
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
 
-                    <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
 
-                            <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                
-                                <div class="row">
-                                    <div class="col-10">
-                                        Relevant/ Reliable/ Real Time
+                                <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+
+                                    <div class="row">
+                                        <div class="col-10">
+                                            Relevant/ Reliable/ Real Time
+                                        </div>
+                                        <div class="col-2" id="_acOne"></div>
                                     </div>
-                                    <div class="col-2" id="_acOne"></div>
-                                </div>
-                            </button>
-                        </h2>
-                    </div>
+                                </button>
+                            </h2>
+                        </div>
 
-                    <div class="sticky-top sticky-kit bg-white">
+                        <div class="sticky-top sticky-kit bg-white">
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                            <div class="right-nav-pills">
-                                <div class="nav flex-column nav-pills">
-                                    @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
-                                    {
-                                        @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="right-nav-pills">
+                                    <div class="nav flex-column nav-pills">
+                                        @foreach (var Categories in (IEnumerable<NotesCategoriesModel>)TempData["CategoriesAndNotes"])
+                                        {
+                                            @*<a class="nav-link active" href="#v-pills-@Categories.NoteCategory" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>*@
 
-                                        <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
+                                            <a class="nav-link active" href="#v-pills-@Categories.NoteCategory.Replace(@" ","")" data-category-id="@Categories.Id" data-fancyscroll data-offset="30">@Categories.NoteCategory</a>
 
-                                    }
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                @*</div>*@
+                    @*</div>*@
 
 
-                @*<div class="accordion" >*@
-                <div class="card" id="accordionExample2" hidden>
-                    <div class="card-header" id="headingTwo">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                
-                                <div class="row">
-                                    <div class="col-10">
-                                        Notes Chat
+                    @*<div class="accordion" >*@
+                    <div class="card" id="accordionExample2" hidden>
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" style="border-color: #e1dada" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+
+                                    <div class="row">
+                                        <div class="col-10">
+                                            Notes Chat
+                                        </div>
+                                        <div class="col-2" id="_acTwo"></div>
                                     </div>
-                                    <div class="col-2" id="_acTwo"></div>
-                                </div>
 
-                            </button>
-                        </h2>
-                    </div>
+                                </button>
+                            </h2>
+                        </div>
 
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample2">
-                        <div class="card-body" id="divNChat" style="padding: 0">
-                            @Html.Partial("_notesCommunication", true)
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+                            <div class="card-body" id="divNChat" style="padding: 0">
+                                @Html.Partial("_notesCommunication", true)
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -516,7 +524,15 @@
                 });
             }
         });
-
+        
+        $(function () {
+            var imgElements = $('img[src*=saprovencfodb]');
+            for (var x = 0; x < imgElements.length; x++) {
+                let divW = document.getElementById('notesSection');
+                var newWidth = divW.offsetWidth - 70;
+                imgElements[x].style.maxWidth = newWidth.toString() + 'px';
+            }
+        });
 
         function AgencyDropdownPartialViewChange() {
             var ClientID = $("#ddlclient option:selected").val();

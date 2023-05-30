@@ -477,8 +477,9 @@
                                         {
                                             createClientVM.APIScope = string.Join(" ", createClientVM.XeroScopeArray);
                                         }
-
-                                       var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(team.Id), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.IsDomoEnabled, createClientVM.DOMO_datasetId, createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4);
+                                        
+                                        createClientVM.IsUpdate = true;
+                                        var result = obj.UpdateClient(createClientVM.Id, createClientVM.ClientName, createClientVM.Email, createClientVM.PhoneNumber, createClientVM.Address, createClientVM.ContactPersonName, createClientVM.CityName, Convert.ToString(createClientVM.StateId), createClientVM.Status, LoginUserid, /*Convert.ToString(createClientVM.TeamId)*/ Convert.ToString(team.Id), createClientVM.BillableEntityId.ToString(), createClientVM.StartDate ?? null, createClientVM.XeroID, createClientVM.APIScope, createClientVM.APIClientID, createClientVM.APIClientSecret, createClientVM.ReceiveQuarterlyReports, createClientVM.EnableAutomation, createClientVM.XeroContactIDforProvenCfo, createClientVM.AsanaId, createClientVM.EverhourId, createClientVM.CrmId, createClientVM.XeroShortCode, Convert.ToString(createClientVM.DashboardId), createClientVM.DashboardURLId, createClientVM.ReportId, createClientVM.IncludedAccountNumbers, createClientVM.ExcludedAccountNumbers, 0, Convert.ToInt64(createClientVM.QuickBooksCompanyId), createClientVM.Plaid_Enabled, createClientVM.IsDomoEnabled, createClientVM.DOMO_datasetId, createClientVM.TeamMemberId1, createClientVM.TeamMemberId2, createClientVM.TeamMemberId3, createClientVM.TeamMemberId4, createClientVM.IsUpdate);
 
                                         ViewBag.ErrorMessage = "";
                                         ViewBag.ErrorMessage = "Updated";
@@ -509,12 +510,13 @@
                 using (ClientService objClientService = new ClientService())
                 {
                     var LoginUserid = Session["UserId"].ToString();
-
                     var client = objClientService.GetClientById(id);
+                    client.IsUpdate = false;
+
                     var EnableAutomation = client.EnableAutomation.HasValue ? client.EnableAutomation.Value : false;
                     var Plaid_Enabled = client.Plaid_Enabled.HasValue ? client.Plaid_Enabled.Value : false;
                     var result = objClientService.UpdateClient(client.Id, client.Name, client.Email, client.PhoneNumber, client.Address, client.ContactPersonName, client.CityName, client.State.ToString(), Status, LoginUserid, client.TeamId.ToString(), client.BillableEntityId.ToString(), Convert.ToDateTime(client.StartDate), client.XeroID, client.APIScope, client.APIClientSecret, client.APIClientSecret, client.ReceiveQuarterlyReports, EnableAutomation, client.XeroContactIDforProvenCfo, client.AsanaId, client.EverhourId, client.CrmId, client.XeroShortCode,
-                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled, (bool)client.IsDomoEnabled, client.DOMO_datasetId, client.TeamMemberId1, client.TeamMemberId2, client.TeamMemberId3, client.TeamMemberId4);
+                        Convert.ToString(client.DashboardId), client.DashboardURLId, client.ReportId, string.Empty, string.Empty, Convert.ToInt32(client.ThirdPartyAccountingApp_ref), Convert.ToInt64(client.QuickBooksCompanyId), Plaid_Enabled, (bool)client.IsDomoEnabled, client.DOMO_datasetId, client.TeamMemberId1, client.TeamMemberId2, client.TeamMemberId3, client.TeamMemberId4, client.IsUpdate);
                     if (result == null)
                         ViewBag.ErrorMessage = "";
                     return RedirectToAction("ClientList");
