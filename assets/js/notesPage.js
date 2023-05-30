@@ -57,12 +57,11 @@ noteChatsSec();
 // On open of chat.
 $('.openNotesChat').on("click", function (e) {
 
-    //debugger;
     //$('#accordionExample2').removeAttr('hidden');
     $('#collapseTwo').addClass('show');
     $('#collapseOne').removeClass('show');
-    $("html, body").animate({ scrollTop: "0" }, 1500);
-    //debugger;
+    //$("html, body").animate({ scrollTop: "0" }, 1500);
+
     var targetCategoryType = e.currentTarget.dataset.notescategory;
     $targetedCategoryId = e.currentTarget.dataset.id;
 
@@ -109,7 +108,7 @@ const scrollNotesChatState = {
 $("#channel-messages")[0].addEventListener("scroll", function (e) {
     e.preventDefault();
     if (e.target.scrollTop == 0) {
-        //debugger;
+
         LoadOnDemandCommentsPagination(scrollNotesChatState.notesDescriptionId,
             1, scrollNotesChatState.pageNo * scrollNotesChatState.size);
 
@@ -124,7 +123,7 @@ function SetupDynamicLoaderOnNotesScroll() {
 }
 
 var setScrollPosition = function () {
-    //debugger;
+
     let scrollPositionSet = false;
     if (isEmptyOrBlank(getParameterByName('msgId')) === false) {
         let elMediaMessage = $(`#${getParameterByName('msgId')}`);
@@ -144,7 +143,6 @@ var setScrollPosition = function () {
 
 // ---> To do.
 var CommentDelete = function (CommentId) {
-    debugger;
     $('#msg_' + CommentId).remove();
     if (CommentId > 0) { DeleteNotesComment(CommentId) };
 }
@@ -165,7 +163,7 @@ var DeleteNotesComment = function (commentId) {
 // ---> To do end here.
 
 var SaveNoteCommentsToDB = function (InputcommentText, NoteDesId) {
-    //debugger;
+
     var currentdate = new Date();
     var datetime = getCurrentTime(currentdate);
     var AgencyId = parseInt(nchat.clientId == undefined || nchat.clientId == null ? $("#ddlclient option:selected").val() : nchat.clientId);
@@ -226,7 +224,7 @@ function filterTextMessage(e) {
 
 // -- New code v2 starting here --
 var loadNotesCommentsPage = async function (channelUniqueNameGuid) {
-    //debugger;
+
     showChatContentLoader();
     $channelName = $(".channelName");
     $channelParticipantEmail = $(".channelParticipantEmail");
@@ -242,7 +240,7 @@ var loadNotesCommentsPage = async function (channelUniqueNameGuid) {
     $btnSendMessage = $("#send-message");
     $channelMessages = $("#channel-messages");
     $chatSiderbarFilterButtons = $("#divChatSiderbarFilters > button");
-    //debugger;
+
     getAjaxSync(apiurl + `Notes/GetNotesCommentsOnNotesDescriptionId?NotesDescriptionId=${channelUniqueNameGuid}&&AgencyId=${nchat.clientId}`, null, async function (responseComm) {
         //setCommentsHeader(responseComm.resultData.reconciliationdata);
         setTimeout(async function () {
@@ -254,7 +252,7 @@ var loadNotesCommentsPage = async function (channelUniqueNameGuid) {
 
 
     $btnSendNMessage.unbind().click(function () {
-        //debugger;
+
         var result = filterTextMessage(".emojionearea-editor")
         if (result == '') {
             $('#send-nmessage').attr("disable", true);
@@ -282,7 +280,6 @@ var loadNotesCommentsPage = async function (channelUniqueNameGuid) {
     //// ---> To do.
     $chatEditorArea[0].emojioneArea.off("keydown");
     $chatEditorArea[0].emojioneArea.on("keydown", function ($editor, event) {
-        //debugger;
         if (event.keyCode === 13 && !event.shiftKey) {
 
             event.preventDefault();
@@ -488,8 +485,6 @@ function LoadOnDemandCommentsPagination(channelUniqueNameGuid, pageNo, pageSize)
 window.onload = function () {
 
     if ($('.openNotesChat').length > 0) {
-
-        //debugger;
         $('#collapseOne').on('shown.bs.collapse', function () {
 
             $('#collapseTwo').removeClass('show');

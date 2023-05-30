@@ -527,8 +527,10 @@
         
         $(function () {
             var imgElements = $('img[src*=saprovencfodb]');
-            for (var x = 0; x < imgElements.length; x++) { 
-                imgElements[x].style.maxWidth = '1180px'
+            for (var x = 0; x < imgElements.length; x++) {
+                let divW = document.getElementById('notesSection');
+                var newWidth = divW.offsetWidth - 70;
+                imgElements[x].style.maxWidth = newWidth.toString() + 'px';
             }
         });
 
